@@ -1,0 +1,20 @@
+/* vDesk.Search.ResultList.Item */
+.ResultList > .Item {
+    height: 20px;
+    width: 100%;
+    border-bottom: 1px solid;
+}
+
+.ResultList > .Item > .Icon {
+    width: 16px;
+    height: 16px;
+    margin: 2px;
+    float: left;
+}
+
+.ResultList > .Item > .Name {
+    width: calc(100% - 20px);
+    float: left;
+    overflow: hidden;
+    white-space: nowrap;
+}

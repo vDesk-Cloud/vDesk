@@ -1,0 +1,70 @@
+/* vDesk.Controls.ContextMenu.Group */
+.ContextMenu .Item > .Group {
+    position: absolute;
+    background-color: #eee;
+    box-shadow: 2px 2px 5px 0 rgba(51, 51, 51, 0.75);
+    width: 190px;
+    z-index: 300;
+    border: 1px solid #333;
+    display: none;
+    user-select: none;
+}
+
+.ContextMenu .Item > .Group.Left {
+    margin-left: -192px;
+}
+
+.ContextMenu .Item > .Group.Right {
+    margin-left: 190px;
+}
+
+.ContextMenu .Item > .Group.Top {
+    margin-bottom: 0;
+}
+
+.ContextMenu .Item > .Group.Bottom {
+    margin-bottom: 100%;
+}
+
+.ContextMenu .Item > .Group:hover {
+    background: linear-gradient(to bottom, rgba(247, 251, 252, 0.35) 0%, rgba(217, 237, 242, 0.43) 40%, rgba(173, 217, 228, 0.55) 100%);
+    border-radius: 5px;
+}
+
+.ContextMenu .Item > .Group.Right {
+    margin-left: 190px;
+}
+
+.ContextMenu .Item > .Group.Left {
+    margin-left: -192px;
+}
+
+.ContextMenu .Item > .Group.Visible {
+    display: list-item;
+}
+
+.ContextMenu .Item > .Group > .Title {
+    border-left: 1px solid #bbbbbb;
+    font-family: var(--Font);
+    color: var(--FontDark);
+    height: 20px;
+    font-size: 14px;
+    display: inline-block;
+    position: absolute;
+    padding-left: 2px;
+}
+
+.ContextMenu .Item > .Group > .Icon {
+    width: 16px;
+    height: 16px;
+    margin: 2px;
+    float: left;
+}
+
+.ContextMenu .Item > .Group > .Items {
+    list-style: none;
+    width: 198px;
+    margin: 0;
+    display: block;
+    padding: 0;
+}

@@ -1,0 +1,30 @@
+/*
+    Client.Menu.Item
+*/
+.MainMenu > .Container > .List > .Item {
+    height: 30px;
+    vertical-align: baseline;
+    text-align: left;
+    line-height: 30px;
+    border-bottom: 1px solid #999;
+    user-select: none;
+    -moz-user-select: none;
+    cursor: pointer;
+}
+
+.MainMenu > .Container > .List > .Item:hover {
+    background-color: #3BD8F7;
+}
+
+.MainMenu > .Container > .List > .Item > .Icon {
+    width: 16px;
+    height: 16px;
+    margin: 7px;
+    float: left;
+}
+
+.MainMenu > .Container > .List > .Item > .Name {
+    vertical-align: baseline;
+    text-align: left;
+    line-height: 30px;
+}

@@ -1,0 +1,12 @@
+/* vDesk.Calendar.Event.Editor.Window */
+.EventEditorWindow .EventEditor {
+    height: calc(100% - 127px);
+    width: calc(100% - 12px);
+    float: left;
+}
+
+.EventEditorWindow .AccessControlListEditor {
+    height: calc(100% - 100px);
+    width: 100%;
+    float: left;
+}

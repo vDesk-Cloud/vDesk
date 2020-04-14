@@ -1,0 +1,52 @@
+.PinBoard .Attachment:hover {
+    background-image: linear-gradient(to bottom, transparent 0px, rgba(161, 219, 255, 0.4) 0px, rgba(161, 219, 255, 0.4) 100%);
+    border: 1px solid #a1dbff;
+}
+
+.PinBoard .Attachment:active {
+    background-image: linear-gradient(to bottom, transparent 0px, rgba(161, 219, 255, 0.6) 0px, rgba(161, 219, 255, 0.6) 100%);
+}
+
+.PinBoard .Attachment.Selected {
+    background-image: linear-gradient(to bottom, transparent 0px, rgba(124, 207, 255, 0.6) 0px, rgba(124, 207, 255, 0.6) 100%);
+    border: 1px solid #a1dbff;
+    border-bottom: 1px solid transparent !important;
+    overflow: visible !important;
+}
+
+.PinBoard .Attachment .Icon {
+    width: 40px;
+    height: 40px;
+    left: 20px;
+    top: 20px;
+    position: absolute;
+    z-index: 201;
+}
+
+.PinBoard .Attachment .Name {
+    font-size: 11px;
+    text-align: center;
+    position: absolute;
+    width: inherit;
+    max-width: 80px;
+    z-index: 202;
+    pointer-events: none;
+    border: none;
+    background-color: transparent;
+    top: 66px;
+    resize: none;
+    margin-left: -1px;
+    word-wrap: break-word !important;
+    white-space: normal;
+}
+
+.PinBoard .Attachment .Name.Selected {
+    overflow: visible !important;
+    width: inherit;
+    height: auto;
+    border: 1px solid #a1dbff;
+    border-top: none;
+    background-repeat: no-repeat;
+    background-image: inherit;
+    background-position: center 15px;
+}

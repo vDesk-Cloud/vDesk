@@ -1,0 +1,80 @@
+/* vDesk.Controls.Calendar.View.Day */
+.Day {
+    height: 100%;
+    width: 100%;
+}
+
+.Day > .FullTime {
+    width: 100%;
+    height: 63px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.Day > .FullTime > .List {
+    display: block;
+    width: 100%;
+    height: calc(100% - 1px);
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid;
+}
+
+.Day > .Time {
+    width: 100%;
+    height: calc(100% - 63px);
+    overflow-x: auto;
+}
+
+.Day > .Time > .Hours {
+    float: left;
+    list-style: none;
+    display: block;
+    height: 100%;
+    min-height: 960px;
+    width: 49px;
+    border-right: 1px solid;
+    margin: 0;
+    padding: 0;
+}
+
+.Day > .Time > .Hours > .Cell {
+    width: 100%;
+    height: calc(4.166666666666667% - 1px);
+    min-height: 39px;
+    border-bottom: 1px solid;
+    cursor: default;
+}
+
+.Day > .Time > .Hours > .Cell:last-child {
+    border: none;
+}
+
+.Day > .Time > .Hours > .Cell:hover {
+    text-shadow: none;
+    box-shadow: none;
+}
+
+.Day > .Time > .HalfHours {
+    float: left;
+    list-style: none;
+    display: block;
+    height: 100%;
+    min-height: 960px;
+    width: calc(100% - 50px);
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.Day > .Time > .HalfHours > .Cell {
+    width: 100%;
+    height: calc(2.083333333333333% - 1px);
+    min-height: 19px;
+    border-bottom: 1px solid;
+}
+
+.Day > .Time > .HalfHours > .Cell:last-child {
+    border: none;
+}

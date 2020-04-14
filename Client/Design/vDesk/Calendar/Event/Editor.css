@@ -1,0 +1,31 @@
+/*
+    Calendar.Event.Editor
+*/
+.EventEditor {
+    width: calc(100% - 12px);
+    height: calc(100% - 27px);
+}
+
+.EventEditor .EditControl {
+    width: 100%;
+}
+
+.EventEditor .Owner, .EventEditor .EditControl.Color, .EventEditor .End {
+    width: 100%;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid;
+}
+
+.EventEditor .Title, .EventEditor .Start, .EventEditor .FullTime {
+    margin-bottom: 5px;
+}
+
+.EventEditor .Content > .Label {
+    display: none;
+}
+
+.EventEditor .Content > .Editor.Text {
+    width: calc(100% - 4px);
+    min-height: 66px;
+}

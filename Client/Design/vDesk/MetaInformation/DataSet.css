@@ -1,0 +1,9 @@
+/* vDesk.MetaInformation.DataSet */
+.DataSet {
+    float: left;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    list-style: none;
+}

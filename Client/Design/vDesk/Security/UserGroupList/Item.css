@@ -1,0 +1,38 @@
+/* vDesk.Security.UserGroupList.Item */
+.UserGroupList > .Item {
+    display: block;
+    border-bottom: 1px solid;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    height: 21px;
+    cursor: grab;
+    user-select: none;
+    float: left;
+    width: calc(100% - 2px);
+}
+
+.UserGroupList > .Item:hover {
+    background-color: var(--ControlHover, #2AB0ED);
+    color: #fff;
+    border-top: 1px solid;
+    margin-top: -1px;
+}
+
+.UserGroupList > .Item > .Icon {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin: 2px;
+}
+
+.UserGroupList > .Item > .Name {
+    float: left;
+    width: calc(100% - 26px);
+    height: 18px;
+    padding: 2px;
+    line-height: 20px;
+}
+
+.UserGroupList > .Item.Selected {
+    background-color: var(--ControlSelected, #FFCF32);
+}

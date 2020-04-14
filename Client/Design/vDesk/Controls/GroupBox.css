@@ -1,0 +1,37 @@
+/* vDesk.Controls.GroupBox */
+.GroupBox {
+    border: 1px solid #999;
+    border-radius: 5px;
+    padding: 0;
+    margin: 20px 5px 5px 5px;
+    height: auto;
+    width: auto;
+}
+
+.GroupBox > .Header {
+    margin-top: -12px;
+    margin-left: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+    float: left;
+    display: block;
+    height: auto;
+    width: auto;
+    color: var(--BorderLight, #999999);
+    background-color: var(--Background, #FFFFFF);
+}
+
+.GroupBox > .Expander {
+    margin-top: -12px;
+    margin-right: 5px;
+    float: right;
+    display: none;
+}
+
+.GroupBox > .Content {
+    padding: 0;
+    margin: 10px;
+    overflow: auto;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+}

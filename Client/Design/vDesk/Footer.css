@@ -1,0 +1,10 @@
+/* vDesk.Footer */
+.vDesk > .Footer {
+    text-align: center;
+    float: left;
+    width: 100%;
+    height: 50px;
+    color: #fff;
+    bottom: 0;
+    position: relative;
+}

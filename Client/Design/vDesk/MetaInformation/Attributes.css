@@ -1,0 +1,27 @@
+/* vDesk.MetaInformation.Attributes */
+.Attributes {
+    width: 100%;
+    height: 100%;
+}
+
+.Attributes > .MaskList {
+    float: left;
+    height: calc(100% - 32px) !important;
+}
+
+.Attributes > .DataSet.Editor {
+    height: calc(100% - 30px);
+    width: calc(100% - 202px);
+    float: left;
+}
+
+.Attributes > .Controls {
+    float: left;
+    width: 100%;
+    height: 30px;
+}
+
+.Attributes > .Controls > .Button {
+    margin-left: 20px;
+    margin-top: 4px;
+}

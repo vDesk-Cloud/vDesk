@@ -1,0 +1,40 @@
+/* vDesk.Messenger.Groups.Message */
+.Groups.Message {
+    padding: 5px;
+    margin: 5px;
+    width: 70%;
+    min-height: 22px;
+    position: relative;
+}
+
+.Groups.Message.Group {
+    padding: 20px 5px 5px 5px;
+    border-radius: 0 10px 10px 10px;
+    background-color: var(--Foreground, #2AB0ED);
+    float: left;
+    color: var(--FontLight, white);
+}
+
+.Groups.Message.Group > .User {
+    position: absolute;
+    top: 0;
+    left: 5px;
+}
+
+.Groups.Message > .Date {
+    float: right;
+    width: 18px;
+    height: 18px;
+    padding: 2px;
+}
+
+.Groups.Message.Sender {
+    border-radius: 10px 10px 0 10px;
+    background-color: var(--FontDisabled, #999999);
+    float: right;
+    color: var(--FontDark, black);
+}
+
+.Groups.Message.Sender > .User {
+    display: none;
+}

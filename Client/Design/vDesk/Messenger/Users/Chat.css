@@ -1,0 +1,37 @@
+/* vDesk.Messenger.Users.Chat */
+.Users.Chats .Chat {
+    width: 100%;
+    border-bottom: 1px solid;
+    height: 20px;
+    user-select: none;
+    cursor: pointer;
+}
+
+.Users.Chats .Chat:hover {
+    background-color: var(--ControlHover, #2AB0ED);
+    color: var(--FontLight, #FFFFFF);
+}
+
+.Users.Chats .Chat:active {
+    background-color: var(--ControlPress, #468CCF);
+}
+
+.Users.Chats .Chat.Selected {
+    background-color: var(--ControlSelected, #FFCF32);
+}
+
+.Users.Chats .Chat.Disabled {
+    color: var(--FontDisabled, #999999);
+}
+
+.Users.Chats .Chat.Disabled:hover {
+    color: #999;
+    background-color: #fff;
+}
+.Users.Chats .Chat > .Name {
+    padding-left: 3px;
+}
+.Users.Chats .Chat > .Unread {
+    float: right;
+    margin-right: 3px;
+}

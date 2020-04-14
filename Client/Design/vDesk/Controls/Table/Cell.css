@@ -1,0 +1,12 @@
+/* vDesk.Controls.Table.Cell */
+.Table .Row .Cell {
+    border: 1px solid;
+}
+
+.Table .Row .Cell .Input {
+    border: none;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+}

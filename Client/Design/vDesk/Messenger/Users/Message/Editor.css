@@ -1,0 +1,27 @@
+/* vDesk.Messenger.Users.Message.Editor */
+.Users.MessageEditor {
+    position: relative;
+}
+
+.Users.MessageEditor > .Text {
+    margin: 5px;
+    height: calc(100% - 14px);
+    width: calc(100% - 114px);
+    float: left;
+}
+
+.Users.MessageEditor > .Controls {
+    width: 100px;
+    position: absolute;
+    bottom: 6px;
+    right: 0;
+}
+
+.Users.MessageEditor > .Controls > .EmojiPicker {
+    float: left;
+    margin-right: -1px;
+}
+
+.Users.MessageEditor > .Controls > .Send {
+    float: left;
+}

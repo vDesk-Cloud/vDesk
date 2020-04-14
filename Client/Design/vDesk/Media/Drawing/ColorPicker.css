@@ -1,0 +1,120 @@
+/*
+    vDesk.Visual.Drawing.ColorPicker
+*/
+.ColorPicker {
+    width: 370px;
+    height: 250px;
+    background-color: #fff;
+    border: 1px solid #333;
+    padding: 5px;
+}
+
+.ColorPicker > .SaturationLightness {
+    float: left;
+    margin-bottom: 5px;
+    height: 200px;
+    width: 200px;
+    position: relative;
+}
+
+.ColorPicker > .SaturationLightness > .Indicator {
+    position: absolute;
+    cursor: crosshair;
+    height: 1px;
+    width: 1px;
+    padding: 4px;
+    margin: -5px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    top: 0;
+    left: 0;
+}
+
+.ColorPicker > .SaturationLightness > .Indicator:hover {
+    border-color: #aaa;
+}
+
+.ColorPicker > .SaturationLightness > .Canvas {
+    width: 200px;
+    height: 200px;
+    cursor: crosshair;
+}
+
+.ColorPicker > .Selection {
+    float: left;
+    width: calc(100% - 200px);
+    height: calc(100% - 40px);
+}
+
+.ColorPicker > .Selection > .Canvas {
+    float: left;
+    width: calc(100% - 10px);
+    margin: 4px;
+    height: 15px;
+    border: solid 1px #777;
+}
+
+.ColorPicker > .Selection > .Values {
+    float: left;
+    width: 100%;
+    list-style: none;
+    height: calc(100% - 15px);
+    margin: 0;
+    padding: 0;
+}
+
+.ColorPicker > .Selection > .Values > .Row {
+    width: 100%;
+    height: 25px;
+}
+
+.ColorPicker > .Selection > .Values > .Row > .Label {
+    width: 20px;
+    float: left;
+    text-align: center;
+}
+
+.ColorPicker > .Selection > .Values > .Row > .TextBox {
+    width: calc(100% - 30px);
+    float: right;
+}
+
+.ColorPicker > .Hue {
+    float: left;
+    margin-top: 5px;
+    height: 30px;
+    position: relative;
+    cursor: pointer;
+}
+
+.ColorPicker > .Hue > .Indicator {
+    position: absolute;
+    cursor: pointer;
+    height: 20px;
+    width: 1px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: -5px;
+    margin-right: -5px;
+    left: 0;
+}
+
+.ColorPicker > .Hue > .Indicator:after, .ColorPicker > .Hue > .Indicator:before {
+    border: solid transparent;
+    content: " ";
+    position: absolute;
+    height: 14px;
+}
+
+.ColorPicker > .Hue > .Indicator:before {
+    border-top-color: #000;
+    border-width: 6px;
+    margin-left: -6px;
+    top: -6px;
+}
+
+.ColorPicker > .Hue > .Indicator:after {
+    border-bottom-color: #000;
+    border-width: 6px;
+    margin-left: -6px;
+}

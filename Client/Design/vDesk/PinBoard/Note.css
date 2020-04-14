@@ -1,0 +1,21 @@
+/*
+    PinBoard.Note
+*/
+.PinBoard .Note {
+    box-shadow: 3px 3px 5px #333;
+}
+
+.PinBoard .Note > .Header {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.PinBoard .Note .Header:hover {
+
+}
+
+.PinBoard .Note .Header:active {
+
+}
+
+.PinBoard .Note > .Content {
+}

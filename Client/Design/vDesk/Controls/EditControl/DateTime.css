@@ -1,0 +1,14 @@
+/* vDesk.Controls.EditControl.DateTime */
+.EditControl > .DateTime {
+    display: inline-block;
+    width: 70%;
+}
+
+.EditControl > .DateTime > .DatePicker, .EditControl > .DateTime > .TimePicker {
+    width: 50%;
+    float: left;
+}
+.EditControl > .DateTime  .TextBox {
+    width: calc(100% - 24px);
+    margin-right: -1px;
+}

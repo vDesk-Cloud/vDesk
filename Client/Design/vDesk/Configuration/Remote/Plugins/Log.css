@@ -1,0 +1,44 @@
+/* vDesk.Configuration.Remote.Plugins.Log */
+.Log {
+    width: 100%;
+    height: 100%;
+}
+
+.Log > .Table {
+    display: block;
+    width: calc(100% - 2px) !important;
+    height: calc(100% - 32px) !important;
+    overflow: auto;
+    float: left;
+}
+
+.Log  > .Table .Row td:first-child {
+    font-weight: bold;
+}
+
+.Log > .Table .Row.Error td:first-child {
+    color: #F73A18;
+}
+
+.Log > .Table .Row.Warn td:first-child {
+    color: #FFCF32;
+}
+
+.Log > .Table .Row.Info td:first-child {
+    color: #2AB0ED;
+}
+
+.Log > .Table .Row.Debug td:first-child {
+    color: #409040;
+}
+
+.Log > .Controls {
+    float: left;
+    width: 100%;
+    height: 30px;
+}
+
+.Log > .Controls > .Button {
+    margin-left: 20px;
+    margin-top: 4px;
+}

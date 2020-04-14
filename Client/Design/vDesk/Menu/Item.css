@@ -1,0 +1,22 @@
+/* vDesk.Menu.Item */
+.vDesk > .Header > .Menu > .Item {
+    height: 20px;
+}
+
+.vDesk > .Header > .Menu > .Item > .Icon {
+    height: 100%;
+    float: left;
+    display: block;
+}
+
+.vDesk > .Header > .Menu > .Item > .Name {
+    height: 100%;
+    float: left;
+    display: block;
+}
+
+.vDesk > .Header > .Menu > .Item > * {
+    height: 100%;
+    float: left;
+    display: block;
+}

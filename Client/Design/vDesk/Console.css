@@ -1,0 +1,60 @@
+/* Modules.Console */
+.Console {
+    background-color: black;
+    width: 100%;
+    height: 100%;
+    font-family: Courier New, monospace;
+    overflow: auto;
+    color: #99ff66;
+}
+
+.Console.Visible, .ConsoleResizer.Visible {
+    display: block;
+}
+
+.Console > .IO {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.Console > .IO > .Input, .Console > .IO > .Output {
+    word-break: break-all;
+}
+
+.Console > .IO > .Input {
+}
+
+.Console > .IO > .Output {
+    margin-bottom: 18px;
+}
+
+.Console > .Input {
+    width: 100%;
+    height: 22px;
+}
+
+.Console > .Input > .Text {
+    max-width: 90%;
+    height: 22px;
+    border: none;
+    font-family: Courier New, monospace !important;
+}
+
+.Console > .Input > .Text:focus {
+    outline: none;
+}
+
+.ConsoleResizer {
+    display: none;
+}
+
+.Console > .Input > .Message::selection,
+.Console > .Input > .Text::selection,
+.Console > .IO > .Input > .Message::selection,
+.Console > .IO > .Input > .Text::selection,
+.Console > .IO > .Output > .Text::selection {
+    color: black;
+    background: #99ff66;
+}

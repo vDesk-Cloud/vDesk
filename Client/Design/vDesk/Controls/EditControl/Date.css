@@ -1,0 +1,9 @@
+/* vDesk.Controls.EditControl.Date */
+.EditControl > .Date {
+    display: inline-block;
+    width: 70%;
+}
+.EditControl > .Date  .TextBox {
+    width: calc(100% - 24px);
+    margin-right: -1px;
+}

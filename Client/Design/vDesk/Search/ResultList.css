@@ -1,0 +1,29 @@
+/* vDesk.Search.ResultList */
+.ResultList {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    list-style: none;
+}
+
+.ResultList .Header {
+    height: 20px;
+    width: 100%;
+    border-bottom: 1px solid;
+}
+
+.ResultList .Header .Button {
+    height: 20px;
+    border: none;
+    width: calc(50% - 1px);
+}
+
+.ResultList .Header .Button.Type {
+    border-right: 1px solid;
+}
+
+.ResultList .Header .Button.Name {
+    border-left: 1px solid;
+}

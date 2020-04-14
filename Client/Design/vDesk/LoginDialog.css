@@ -1,0 +1,62 @@
+/* vDesk.LoginDialog */
+.LoginDialog.Overlay {
+    position: fixed;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 5000;
+    display: block;
+    top: 0;
+    left: 0;
+    margin: 0;
+    background-color: var(--Background, #FFFFFF);
+    font-size: 14px;
+    line-height: 25px;
+    border: none;
+}
+
+.LoginDialog {
+    width: 500px !important;
+    height: 176px !important;
+    position: relative;
+    margin: auto auto !important;
+    z-index: 5001;
+    top: 40%;
+}
+
+.LoginDialog .Char {
+    color: var(--Foreground, #2AB0ED);
+}
+
+.LoginDialog .EditControl {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.LoginDialog .EditControl.Server {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--BorderLight, #999999);
+}
+
+.LoginDialog .EditControl.KeepLoggedIn {
+    margin-bottom: 0;
+    float: right;
+    width: 30%;
+}
+
+.LoginDialog .EditControl.KeepLoggedIn  > .Editor{
+    width: 22px;
+    float: right;
+}
+
+.LoginDialog .Status {
+    display: inline-block;
+    height: 22px;
+    width: 100%;
+    text-align: center;
+}
+
+.LoginDialog .Login {
+    margin-left: calc(50% - 31px);
+    float: left;
+}

@@ -1,0 +1,6 @@
+/* vDesk.Controls.EditControl.Enum*/
+
+.EditControl > .Enum {
+    height: 100%;
+    width: calc(70% - 1px);
+}

@@ -1,0 +1,26 @@
+/* vDesk.Color.Configuration */
+.ColorsConfiguration {
+    height: 100%;
+    width: 100%;
+}
+
+.ColorsConfiguration > .Colors {
+    width: 100%;
+    height: calc(100% - 30px);
+    overflow: auto;
+}
+
+.ColorsConfiguration > .Colors > .GroupBox > .Content > .EditControl {
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+.ColorsConfiguration > .ConfirmReset {
+    height: 30px;
+    width: 100%;
+}
+
+.ColorsConfiguration > .ConfirmReset > .Button {
+    margin-left: 20px;
+    margin-top: 3px;
+}

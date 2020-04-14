@@ -1,0 +1,17 @@
+/* vDesk.Contacts.Company.Editor */
+.CompanyEditor {
+    width: calc(100% - 12px);
+    height: calc(100% - 27px);
+}
+
+.CompanyEditor .EditControl {
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+.CompanyEditor .EditControl.Name, .CompanyEditor .EditControl.Country {
+    width: 100%;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid;
+}
