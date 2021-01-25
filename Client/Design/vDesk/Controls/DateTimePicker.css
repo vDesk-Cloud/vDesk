@@ -1,8 +1,0 @@
-/* vDesk.Controls.DateTimePicker */
-.DateTimePicker {
-    display: inline-block;
-    text-align: center;
-}
-.DateTimePicker .TimePicker {
-    margin-left: -1px;
-}

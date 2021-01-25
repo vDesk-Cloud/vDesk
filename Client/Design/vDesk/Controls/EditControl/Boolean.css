@@ -1,7 +1,0 @@
-/* vDesk.Controls.EditControl.Boolean*/
-
-.EditControl > .Boolean {
-    margin: 0;
-    height: 100%;
-    width: calc(70% - 23px);
-}

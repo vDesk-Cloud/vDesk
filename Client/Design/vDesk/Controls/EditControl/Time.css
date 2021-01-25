@@ -1,9 +1,0 @@
-/* vDesk.Controls.EditControl.Time */
-.EditControl > .Time {
-    display: inline-block;
-    width: 70%;
-}
-.EditControl > .Time  .TextBox {
-    width: calc(100% - 24px);
-    margin-right: -1px;
-}

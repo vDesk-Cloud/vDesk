@@ -1,8 +1,0 @@
-/* vDesk.Security.User.Configuration */
-.UserConfiguration .EditControl.KeepLoggedIn {
-    width: 100%;
-    border-bottom: 1px solid;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
-    float: left;
-}

@@ -11,7 +11,7 @@ The core-packages of vDesk are licensed under the Ms-PL-license.
 The licensetext is provided within the software.
 
 ## Requirements
-- PHP >= 7.4.0
+- PHP >= 8.0
 - Webserver (Apache2.4 recommended)
 - MySQL >= 5.6 compatible SQL server
 - ECMAScript >= 6 compatible browser
