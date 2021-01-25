@@ -1,0 +1,91 @@
+/* vDesk.Controls.DynamicBox */
+.DynamicBox > .Corner {
+    width: 5px;
+    height: 5px;
+    position: absolute;
+}
+
+.DynamicBox > .Border {
+    min-width: 5px;
+    min-height: 5px;
+    position: absolute;
+}
+
+.DynamicBox > .Corner.Top.Left {
+    top: 0;
+    left: 0;
+    cursor: nw-resize;
+}
+
+.DynamicBox > .Border.Top {
+    float: none;
+    top: 0;
+    left: 5px;
+    cursor: ns-resize;
+    width: calc(100% - 10px);
+    height: 5px;
+}
+
+.DynamicBox > .Corner.Top.Right {
+    top: 0;
+    right: 0;
+    cursor: ne-resize;
+}
+
+.DynamicBox > .Border.Left {
+    float: left;
+    top: 5px;
+    left: 0;
+    cursor: ew-resize;
+    height: calc(100% - 10px);
+    width: 5px;
+}
+
+.DynamicBox > .Header {
+    width: calc(100% - 10px);
+    top: 5px;
+    left: 5px;
+    overflow: hidden;
+    height: 25px;
+    cursor: grab;
+    position: absolute;
+}
+
+.DynamicBox > .Content {
+    position: absolute;
+    top: 30px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    overflow: auto;
+}
+
+.DynamicBox > .Border.Right {
+    float: right;
+    top: 5px;
+    right: 0;
+    cursor: ew-resize;
+    height: calc(100% - 10px);
+    width: 5px;
+}
+
+.DynamicBox > .Corner.Bottom.Left {
+    bottom: 0;
+    left: 0;
+    cursor: sw-resize;
+}
+
+.DynamicBox > .Border.Bottom {
+    float: none;
+    left: 5px;
+    bottom: 0;
+    cursor: ns-resize;
+    width: calc(100% - 10px);
+    height: 5px;
+}
+
+.DynamicBox > .Corner.Bottom.Right {
+    bottom: 0;
+    right: 0;
+    cursor: se-resize;
+}

@@ -1,0 +1,24 @@
+/* Modules.Messenger */
+.Messenger .Conversations {
+    width: 100%;
+    height: 100%;
+}
+
+.Messenger .Conversations > .Chats {
+    float: left;
+    display: block;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    width: 200px;
+    height: calc(100% - 2px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid;
+}
+
+.Messenger .Conversations > .Conversation {
+    float: left;
+    width: calc(100% - 202px);
+    height: 100%;
+}

@@ -1,0 +1,27 @@
+/* vDesk.Updates.Administration */
+.UpdateAdministration {
+    width: 100%;
+    height: 100%;
+}
+
+.UpdateAdministration > .UpdateList {
+    float: left;
+    height: calc(100% - 32px);
+}
+
+.UpdateAdministration > .Container {
+    float: left;
+    width: calc(100% - 202px);
+    height: calc(100% - 30px);
+}
+
+.UpdateAdministration > .Controls {
+    height: 30px;
+    float: left;
+    width: 100%;
+}
+
+.UpdateAdministration > .Controls > .Button {
+    margin-left: 20px;
+    margin-top: 4px;
+}

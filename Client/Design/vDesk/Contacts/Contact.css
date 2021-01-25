@@ -1,0 +1,8 @@
+/* vDesk.Contacts.Contact */
+.Contacts .Contact {
+    cursor: pointer;
+}
+
+.Contacts .Contact.Selected {
+    background-color: #FFCF32;
+}

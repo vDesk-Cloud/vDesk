@@ -1,0 +1,30 @@
+/* vDesk.Packages.Administration */
+.MachineAdministration {
+    width: 100%;
+    height: 100%;
+}
+
+.MachineAdministration > .Container {
+    width: 100%;
+    height: calc(100% - 30px);
+}
+
+.MachineAdministration > .Container > .Table {
+    width: 100%;
+}
+
+.MachineAdministration > .Controls {
+    height: 30px;
+    float: left;
+    width: 100%;
+}
+
+.MachineAdministration > .Controls > .EditControl {
+    float: left;
+    width: 50%;
+}
+
+.MachineAdministration > .Controls > .Button {
+    margin-left: 20px;
+    margin-top: 4px;
+}

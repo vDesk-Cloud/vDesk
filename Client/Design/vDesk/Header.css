@@ -1,0 +1,12 @@
+/* vDesk.Header */
+.vDesk > .Header {
+    width: 100%;
+    height: 100px;
+    top: 0;
+    left: 0;
+    display: block;
+}
+
+.vDesk > .Header > .ToolBar {
+    float: left;
+}

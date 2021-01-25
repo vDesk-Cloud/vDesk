@@ -1,0 +1,116 @@
+.FadeIn {
+    animation: FadeIn;
+    animation-fill-mode: forwards;
+    display: block;
+    visibility: visible;
+    opacity: 1;
+}
+
+.FadeOut {
+    animation: FadeOut;
+    animation-fill-mode: forwards;
+    display: block;
+    animation-delay: 3s;
+    visibility: visible;
+    opacity: 1;
+}
+
+@keyframes FadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes FadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.SlideIn {
+    visibility: hidden;
+    opacity: 0;
+    animation-duration: 1s;
+}
+
+.SlideIn.Top {
+    animation: SlideInTop;
+    animation-fill-mode: forwards;
+    visibility: visible;
+}
+
+.SlideIn.Right {
+    animation: SlideInRight;
+    animation-fill-mode: forwards;
+    visibility: visible;
+}
+
+.SlideIn.Bottom {
+    animation: SlideInBottom;
+    animation-fill-mode: forwards;
+    visibility: visible;
+}
+
+.SlideIn.Left {
+    animation: SlideInLeft;
+    animation-fill-mode: forwards;
+    visibility: visible;
+}
+
+@keyframes SlideInTop {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes SlideInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(25%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes SlideInBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(50%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes SlideInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-25%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.Running {
+    animation-play-state: running !important;
+}
+
+.Paused {
+    animation-play-state: paused !important;
+}

@@ -1,0 +1,22 @@
+/* vDesk.Controls.EditControl.Color */
+.EditControl > .Color {
+    display: inline-block;
+    width: 70%;
+}
+
+.EditControl > .Color > .TextBox {
+    width: calc(100% - 26px);
+    margin-right: -1px;
+}
+
+.EditControl > .Color > .Button {
+    text-align: center;
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    padding: 0;
+}
+
+.EditControl > .Color > .ColorPicker {
+    z-index: 1;
+}

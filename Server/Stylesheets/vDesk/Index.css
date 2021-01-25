@@ -1,0 +1,263 @@
+h2 > img {
+    height: 1em;
+    vertical-align: text-top;
+}
+
+
+.Crumbs > .Crumb:first-of-type {
+    animation-delay: 1s !important;
+}
+
+.Crumbs > .Crumb:last-of-type {
+    animation-delay: 0.75s !important;
+}
+
+.Box {
+    width: calc(33% - 60px);
+    padding: 10px;
+    margin: 20px;
+    border: 1px solid #999;
+    border-radius: 5px;
+    text-align: center;
+    background-color: white;
+    box-shadow: 5px 5px 10px #111;
+    z-index: 4;
+    position: relative;
+}
+
+a.Button {
+    background-color: #2AB0ED;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: bold;
+}
+
+a.Button:hover {
+    background-color: #468CCF;
+}
+
+a.Button:active {
+    margin: 1px -1px -1px 1px;
+    background-color: #2161ba;
+}
+
+#vDesk, #Features, #Requirements, #Customizable, #Development {
+    animation-duration: 1s;
+}
+
+#vDesk {
+    overflow: hidden;
+    height: 50%;
+}
+
+#vDesk h2 {
+    font-size: 3em;
+}
+
+#vDesk > .Box.Left {
+    left: 10%;
+    bottom: 5em;
+    animation-duration: 1s;
+    animation-delay: 0.5s;
+    position: absolute;
+}
+
+#vDesk > .Box.Bottom {
+    right: 10%;
+    bottom: 2em;
+    animation-duration: 1s;
+    animation-delay: 0.7s;
+    position: absolute;
+}
+
+#vDesk img {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    opacity: 0.75;
+    box-shadow: inset 0 0 30px 40px rgb(255, 255, 255);
+}
+
+.Preview > h2 {
+    top: 5% !important;
+    right: 25px !important;
+    position: absolute;
+    z-index: 10;
+    height: 5%;
+}
+
+.Preview > img {
+    max-height: 100%;
+    max-width: 100%;
+    position: relative;
+}
+
+#Archive > .Box {
+    right: 2em;
+    bottom: 0;
+    position: absolute;
+}
+
+#Calendar > .Box {
+    left: 2em;
+    bottom: 2em;
+    position: absolute;
+}
+
+#Contacts > .Box {
+    right: 6em;
+    bottom: 0;
+    position: absolute;
+}
+
+#Pinboard > .Box {
+    left: 5em;
+    bottom: 3em;
+    position: absolute;
+}
+
+#Search > .Box {
+    left: 2em;
+    bottom: 3em;
+    position: absolute;
+}
+
+#Messenger > .Box {
+    right: 5em;
+    top: 40%;
+    position: absolute;
+}
+
+#Colors > .Box {
+    left: 3em;
+    bottom: 5em;
+    position: absolute;
+}
+
+#Requirements > header {
+    position: relative;
+}
+
+#Requirements {
+    padding: 10px 10% 10px 10% !important;
+    min-height: 60% !important;
+}
+
+#Requirements > .Box {
+    top: 0;
+    animation-duration: 1s !important;
+}
+
+
+.Browsers > img, .Technologies > img, .OperatingSystems > img {
+    position: relative;
+    animation-duration: 1s !important;
+}
+
+#Customizable > img {
+    max-width: calc(60% - 10px);
+    padding: 10px;
+    position: relative;
+    float: left;
+}
+
+#Customizable > div {
+    max-width: 40%;
+    float: right;
+}
+
+#Customizable .Box {
+    float: right;
+    animation-duration: 1s;
+}
+
+#PackageSystem {
+    top: 0;
+}
+
+#Packages {
+    top: 40%;
+}
+
+#OpenSource {
+    bottom: 0;
+}
+
+#Development {
+    padding: 10px 10% 10px 10% !important;
+}
+
+#Development .Box {
+    position: absolute;
+}
+
+#Development > .Code {
+    display: flex !important;
+}
+
+#Development > .SlideShow {
+    height: 100%;
+}
+
+#Development > .Code > pre {
+    float: left;
+    width: 40%;
+    margin: 5%;
+    height: 90%;
+}
+
+#Development > .Code > pre > code {
+    font-size: 14px;
+}
+
+#Development > .Code > img {
+    float: left;
+    max-width: 40%;
+    padding: 5%;
+}
+
+#Interfaces {
+    position: relative;
+}
+
+#Interfaces > .Box {
+    position: absolute;
+    top: 2em;
+    right: 2em;
+}
+
+#Interfaces > pre {
+    width: 100%;
+}
+
+#Interfaces > img {
+    max-width: 45%;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+#Expressions > pre {
+    width: calc(50% - 42px);
+    float: left;
+    margin: 10px;
+}
+
+#Expressions .Box {
+    bottom: 2em;
+    right: 2em;
+}
+
+#CollectionsDictionaries > .Box {
+    right: 2em;
+    top: 2em;
+    position: absolute;
+}
+
+#RapidDevelopment > .Box {
+    right: 2em;
+    top: 2em;
+    position: absolute;
+}

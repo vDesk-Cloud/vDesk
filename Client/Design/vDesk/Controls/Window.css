@@ -1,0 +1,94 @@
+/* vDesk.Controls.Window */
+.Window {
+    border-radius: 0;
+    border: 1px solid #000;
+    box-shadow: 5px 5px 5px #333 !important;
+    padding: 0;
+}
+
+.Window .Border {
+    background-color: var(--Foreground, #2AB0ED);
+}
+
+.Window .Corner {
+    background-color: var(--Foreground, #2AB0ED);
+}
+
+.Window > .Header {
+    overflow: visible !important;
+    height: 25px;
+}
+
+.Window > .Header:active {
+    cursor: move;
+}
+
+.Window > .Header .Icon {
+    height: 20px;
+    max-width: 20px;
+    display: block;
+    float: left;
+}
+
+.Window > .Header .Title {
+    margin-left: 10px;
+    float: left;
+}
+
+.Window > .Header .Button {
+    border: none;
+    cursor: pointer;
+    float: right;
+    padding: 0;
+    min-height: 20px;
+    right: 0;
+    width: 50px;
+    height: 20px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 50px 20px;
+}
+
+.Window > .Header .Button:focus {
+    border: none;
+}
+
+.Window > .Header .Button:active {
+    border: none;
+}
+
+.Window > .Header .Button.Minimize {
+    background-color: transparent;
+}
+
+.Window > .Header .Button.Minimize:hover {
+    background-color: var(--ButtonHover, rgba(153, 153, 153, 1));
+}
+
+.Window > .Header .Button.MaximizeRestore {
+    background-color: transparent;
+}
+
+.Window > .Header .Button.MaximizeRestore:hover {
+    background-color: var(--ButtonHover, rgba(153, 153, 153, 1));
+}
+
+.Window > .Header .Button.Close {
+    background-color: transparent;
+}
+
+.Window > .Header .Button.Close:hover {
+    background-color: var(--TextBoxError, #FF3300);
+}
+
+.Window.Modal > .Header .Button.Minimize {
+    display: none;
+}
+
+.Window > .Content {
+    overflow: auto;
+    padding: 0;
+}
+
+
+

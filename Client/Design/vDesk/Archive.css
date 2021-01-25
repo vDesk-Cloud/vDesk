@@ -1,0 +1,64 @@
+/* Modules.Archive */
+.Archive {
+    float: left;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 100;
+}
+
+.Archive > .Header {
+    height: 29px;
+    width: 100%;
+    float: left;
+    border-bottom: 1px solid;
+    text-align: center;
+}
+
+.Archive > .Header > .History {
+    float: left;
+}
+
+.Archive > .Header > .Title {
+    vertical-align: middle;
+    line-height: 1.8;
+}
+
+.Archive > .Header > .Sort {
+    height: 100%;
+    float: right;
+}
+
+.Archive > .Header > .Sort > .Button {
+    width: 26px;
+    height: 26px;
+    float: left;
+    margin: 1px;
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: center center;
+    margin-right: 5px;
+}
+
+
+.Archive > .Resizer {
+    height: calc(100% - 30px);
+    width: 5px;
+    float: left;
+    cursor: ew-resize;
+}
+
+.Archive > .Resizer > .Rule {
+    height: 100%;
+    width: 1px;
+    background-color: var(--BorderLight, #999999);
+    margin: 0 2px 0 2px;
+}
+
+.Visible {
+    display: block;
+}
+
+.Hidden {
+    display: none;
+}

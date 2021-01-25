@@ -1,0 +1,20 @@
+/* vDesk.Archive.Attributes.Permissions*/
+.Attributes .Permissions {
+    width: 100%;
+    height: 100%;
+}
+
+.Attributes .Permissions > .AccessControlListEditor {
+    width: 100%;
+    height: calc(100% - 30px);
+}
+
+.Attributes .Permissions > .Controls {
+    width: 100%;
+    height: 30px;
+}
+
+.Attributes .Permissions > .Controls > .Button {
+    margin-left: 20px;
+    margin-top: 4px;
+}

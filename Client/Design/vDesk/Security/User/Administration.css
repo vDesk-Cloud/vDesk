@@ -1,0 +1,34 @@
+/* vDesk.Security.User.Administration */
+.UserAdministration {
+    width: 100%;
+    height: 100%;
+}
+
+.UserAdministration > .UserList {
+    float: left;
+    height: calc(100% - 32px) !important;
+}
+
+.UserAdministration > .UserEditor {
+    float: left;
+    width: calc(100% - 212px) !important;
+    height: 160px !important;
+}
+
+.UserAdministration > .MembershipEditor {
+    float: left;
+    width: calc(100% - 224px) !important;
+    margin-left: 10px !important;
+    height: calc(100% - 202px) !important;
+}
+
+.UserAdministration > .Controls {
+    float: left;
+    width: 100%;
+    height: 30px;
+}
+
+.UserAdministration > .Controls > .Button {
+    margin-left: 20px;
+    margin-top: 4px;
+}

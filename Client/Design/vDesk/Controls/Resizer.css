@@ -1,0 +1,27 @@
+.Resizer.Horizontal {
+    height: calc(100% - 30px);
+    width: 5px;
+    float: left;
+    cursor: ew-resize;
+}
+
+.Resizer.Horizontal > .Rule {
+    height: 100%;
+    width: 1px;
+    background-color: var(--BorderLight, #999999);
+    margin: 0 2px 0 2px;
+}
+
+.Resizer.Vertical {
+    width: calc(100% - 30px);
+    height: 5px;
+    float: left;
+    cursor: ns-resize;
+}
+
+.Resizer.Vertical > .Rule {
+    width: 100%;
+    height: 1px;
+    background-color: var(--BorderLight, #999999);
+    margin: 2px 0 2px 0;
+}

@@ -1,0 +1,14 @@
+/*
+    vDesk.Archive.TreeView
+*/
+.Archive .TreeView {
+    width: 20%;
+    height: calc(100% - 30px);
+    margin: 0;
+    padding: 0;
+    float: left;
+    -moz-user-select: none;
+    list-style: outside none none;
+    overflow: auto;
+}
+

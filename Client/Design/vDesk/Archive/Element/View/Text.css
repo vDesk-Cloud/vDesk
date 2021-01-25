@@ -1,0 +1,6 @@
+.ElementViewer.Text {
+    margin: 0;
+    padding: 5px;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+}

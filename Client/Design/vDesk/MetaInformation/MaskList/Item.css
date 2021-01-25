@@ -1,0 +1,20 @@
+/* vDesk.MetaInformation.MaskList.Item */
+.MaskList .Item {
+    width: 100%;
+    border-bottom: 1px solid;
+    height: 20px;
+    padding-left: 3px;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    cursor: pointer;
+}
+
+.MaskList .Item:hover {
+    background-color: var(--ControlHover, #2AB0ED);
+    color: #fff;
+}
+
+.MaskList .Item.Selected {
+    background-color: var(--ControlSelected, #FFCF32);
+}

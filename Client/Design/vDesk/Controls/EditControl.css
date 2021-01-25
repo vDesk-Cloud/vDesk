@@ -1,0 +1,22 @@
+/* vDesk.Controls.EditControl */
+.EditControl {
+    height: 22px;
+}
+
+.EditControl > .Label {
+    float: left;
+    width: calc(30% - 4px);
+    height: calc(100% - 4px);
+    line-height: 1.3em;
+    padding: 2px;
+}
+
+.EditControl > .Editor {
+    display: inline-block;
+    width: calc(70% - 4px);
+    float: right;
+}
+
+.EditControl input:invalid {
+    box-shadow: none;
+}

@@ -1,0 +1,20 @@
+/*
+    Archive.History
+*/
+.History {
+    padding: 2px;
+}
+
+/* Historybutton */
+.History > .Button {
+    margin: 2px;
+    float: left;
+}
+
+.History > .Spacer {
+    width: 1px;
+    height: 30px;
+    margin-top: -2px;
+    float: left;
+    border-left: 1px solid;
+}

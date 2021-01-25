@@ -1,0 +1,35 @@
+/* vDesk.TaskBar.Item */
+.vDesk > .Footer > .TaskBar > .Item {
+    float: left;
+    height: calc(100% - 22px);
+    margin: 10px 1px 10px 1px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0);
+    width: 200px;
+    overflow: hidden;
+}
+
+.vDesk > .Footer > .TaskBar > .Item:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.vDesk > .Footer > .TaskBar > .Item.Focus {
+    background-color: rgba(255, 238, 0, 0.25);
+    border: 1px solid rgba(255, 238, 0, 0.5)
+}
+
+.vDesk > .Footer > .TaskBar > .Item > .Icon {
+    width: 26px;
+    height: 26px;
+    margin: 1px;
+    float: left;
+}
+
+.vDesk > .Footer > .TaskBar > .Item > .Title {
+    display: block;
+    width: calc(100% - 36px);
+    white-space: nowrap;
+    margin-top: 4px;
+    overflow: hidden;
+}

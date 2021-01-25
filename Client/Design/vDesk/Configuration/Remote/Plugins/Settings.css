@@ -1,0 +1,39 @@
+/* vDesk.Configuration.Remote.Plugins.Settings */
+.Settings {
+    width: calc(100% - 12px);
+    height: calc(100% - 27px);
+}
+
+.Settings .GroupBox > .Content {
+    overflow: hidden;
+}
+
+.Settings .Setting {
+    width: 100%;
+    border-bottom: 1px solid;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    float: left;
+}
+
+.Settings .Setting:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.Settings .Setting > .EditControl {
+    width: calc(100% - 22px);
+    margin-right: -1px;
+    float: left;
+}
+
+.Settings .Setting > .Button {
+    float: left;
+    width: 22px;
+    padding: 0 !important;
+}
+
+.Settings .Setting > .Button:hover {
+    border: 1px solid #2AB0ED;
+}

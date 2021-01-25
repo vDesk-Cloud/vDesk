@@ -1,0 +1,17 @@
+/* vDesk.Controls.EditControl.Money*/
+
+.EditControl > .Money {
+}
+
+.EditControl > .Money > .Amount {
+    width: calc(100% - 26px);
+    margin-top: -1px;
+}
+
+.EditControl > .Money > .Currency {
+    text-align: center;
+    width: 22px;
+    height: 22px;
+    line-height: 1.3em;
+    display: inline-block;
+}

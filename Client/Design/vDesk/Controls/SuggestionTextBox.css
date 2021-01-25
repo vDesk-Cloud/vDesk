@@ -1,0 +1,45 @@
+/* vDesk.Controls.SuggestionTextBox */
+.SuggestionTextBox .TextBox {
+    width: 5.5em;
+    text-align: center;
+}
+
+.SuggestionTextBox .Button {
+    width: 22px;
+    padding: 0;
+    margin-left: -1px;
+}
+
+.SuggestionTextBox > .List {
+    width: calc(100% - 2px);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    z-index: 99999;
+    box-shadow: 5px 5px 20px #777 !important;
+    border: 1px solid;
+    float: left;
+    max-height: 300px;
+    overflow-y: auto;
+    position: absolute;
+    top: 22px;
+}
+
+.SuggestionTextBox > .List > .Item {
+    width: 100%;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.SuggestionTextBox > .List > .Item:hover {
+    background-color: #2AB0ED;
+    color: #fff;
+}
+
+.SuggestionTextBox > .List > .Item.Selected {
+    background-color: #FFCF32;
+}
+
+.SuggestionTextBox > .List > .Item.Selected:hover {
+    color: #fff;
+}

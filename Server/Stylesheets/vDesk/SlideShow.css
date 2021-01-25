@@ -1,0 +1,166 @@
+@keyframes Show {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes ShowLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes Hide {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+@keyframes HideLeft {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+}
+
+.SlideShow {
+    position: relative;
+    background-color: #DDDDDD;
+    overflow: hidden;
+}
+
+.SlideShow > .Slide {
+    animation-duration: 0.7s;
+    z-index: 0;
+    left: 0;
+    display: none;
+    visibility: hidden;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
+.Show {
+    animation: Show;
+    animation-fill-mode: forwards;
+    display: block !important;
+    visibility: visible !important;
+}
+
+.ShowLeft {
+    animation: ShowLeft;
+    animation-fill-mode: forwards;
+    display: block !important;
+    visibility: visible !important;
+}
+
+.SlideShow > .Code.Slide {
+    height: 800px;
+    max-width: calc(100% - 20px);
+    padding: 20px;
+    overflow: hidden;
+}
+
+.Hide {
+    animation: Hide;
+    animation-fill-mode: forwards;
+    animation-delay: 3s;
+    display: block !important;
+    visibility: visible !important;
+}
+
+.HideLeft {
+    animation: HideLeft;
+    animation-fill-mode: forwards;
+    animation-delay: 3s;
+    display: block !important;
+    visibility: visible !important;
+}
+
+.SlideShow > .Code.Slide {
+    height: 800px;
+    max-width: calc(100% - 20px);
+    padding: 20px;
+    overflow: hidden;
+}
+
+.SlideShow > .Frame {
+    box-shadow: inset 0 0 30px 40px rgb(255, 255, 255);
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+}
+
+.SlideShow > button {
+    z-index: 3;
+    position: absolute;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 300%;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+    opacity: 0.5;
+}
+
+.SlideShow > button:hover {
+    opacity: 0.9;
+}
+
+.SlideShow > button.PlayState {
+    width: 10%;
+    height: 10%;
+    top: 45%;
+    left: 45%;
+}
+
+.SlideShow > button.PlayState:hover {
+    background: radial-gradient(rgba(51, 51, 51, 0.3) 0%, transparent 100%);
+}
+
+.SlideShow > button.Previous {
+    z-index: 3;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 5%;
+}
+
+.SlideShow > button.Previous:hover {
+    background: linear-gradient(to right, rgba(51, 51, 51, 0.3) 0%, transparent 100%);
+}
+
+.SlideShow > button.Next {
+    z-index: 3;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 5%;
+}
+
+.SlideShow > button.Next:hover {
+    background: linear-gradient(to right, transparent 0%, rgba(51, 51, 51, 0.3) 100%);
+}

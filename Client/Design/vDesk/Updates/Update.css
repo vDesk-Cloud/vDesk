@@ -1,0 +1,30 @@
+/* vDesk.Packages.Package */
+.UpdateAdministration > .Container > .Update {
+    list-style: none;
+    padding: 0;
+    margin: 10px;
+    float: left;
+    height: calc(100% - 20px);
+    width: calc(100% - 20px);
+}
+
+.UpdateAdministration > .Container > .Update > .Row {
+    width: 100%;
+    float: left;
+}
+
+.UpdateAdministration > .Container > .Update > .Row > .Label {
+    width: 100%;
+    float: left;
+    height: 25px;
+    text-decoration: underline;
+}
+
+.UpdateAdministration > .Container > .Update > .Row > .Text {
+    width: 100%;
+    float: left;
+    padding-bottom: 10px;
+    white-space: pre-wrap;
+    font-size: 14px;
+    margin: 0;
+}

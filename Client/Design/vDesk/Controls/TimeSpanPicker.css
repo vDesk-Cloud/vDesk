@@ -1,0 +1,76 @@
+/* vDesk.Controls.TimeSpanPicker */
+.TimeSpanPicker {
+    width: 202px;
+    height: 24px;
+}
+
+.TimeSpanPicker .TextBox {
+    min-width: 5.5em;
+    text-align: center;
+}
+
+.TimeSpanPicker .Toggle {
+    width: 22px;
+    padding: 0;
+    margin-left: -1px;
+}
+
+.TimeSpanPicker > .Picker {
+    height: 76px;
+    overflow: visible;
+    border: 1px solid #999;
+    border-radius: 3px;
+    box-shadow: 1px 2px 5px #333;
+    position: absolute;
+    background-color: #fff;
+}
+
+.TimeSpanPicker > .Picker > .Hour,
+.TimeSpanPicker > .Picker > .Minute,
+.TimeSpanPicker > .Picker > .Second {
+    padding: 5px;
+    height: 100%;
+    float: left;
+}
+
+.TimeSpanPicker > .Picker > .Hour > .Button {
+    width: 37px;
+    display: block;
+    margin: auto;
+    padding: 0;
+}
+
+.TimeSpanPicker > .Picker > .Hour > .Row {
+    height: 24px;
+    text-align: center;
+    width: 100%;
+    cursor: all-scroll;
+}
+
+.TimeSpanPicker > .Picker > .Minute > .Button {
+    width: 37px;
+    display: block;
+    margin: auto;
+    padding: 0;
+}
+
+.TimeSpanPicker > .Picker > .Minute > .Row {
+    height: 24px;
+    text-align: center;
+    width: 100%;
+    cursor: all-scroll;
+}
+
+.TimeSpanPicker > .Picker > .Second > .Button {
+    width: 37px;
+    display: block;
+    margin: auto;
+    padding: 0;
+}
+
+.TimeSpanPicker > .Picker > .Second > .Row {
+    height: 24px;
+    text-align: center;
+    width: 100%;
+    cursor: all-scroll;
+}

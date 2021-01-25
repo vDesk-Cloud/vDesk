@@ -1,0 +1,20 @@
+/* vDesk.Messenger.Users.Chat.Conversation */
+.Users.Conversation {
+    width: 100%;
+    height: 100%;
+    float: left;
+}
+
+.Users.Conversation > .Messages {
+    height: 70%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow: auto;
+}
+
+.Users.Conversation > .MessageEditor {
+    height: 30%;
+    width: 100%;
+}

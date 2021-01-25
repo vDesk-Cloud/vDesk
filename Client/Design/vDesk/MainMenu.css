@@ -1,0 +1,63 @@
+/* vDesk.MainMenu */
+.MainMenu {
+    width: 100px;
+    float: left;
+    height: 100%;
+}
+
+.MainMenu > button {
+    border: none;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 6px 24px;
+    text-decoration: none;
+    z-index: 300 !important;
+    overflow: hidden;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+
+.MainMenu > button:hover {
+    background-color: #468ccf !important;
+}
+
+.MainMenu > button:active {
+    top: 1px;
+}
+
+.MainMenu > .Container {
+    width: 500px;
+    height: 200px;
+    z-index: 200 !important;
+    overflow: hidden;
+    display: block;
+    position: absolute;
+    left: 0px;
+    top: 17px;
+    padding-top: 15px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    box-shadow: 5px 5px 5px #333;
+}
+
+.MainMenu > .Container > .List {
+    list-style: outside none none;
+    padding: 0px;
+    width: 200px;
+    margin: 0px;
+    height: 100%;
+    display: block;
+    border-right: 1px solid #999;
+    float: left;
+}
+
+.MainMenu > .Container > .Description {
+    padding: 5px;
+    float: left;
+    height: calc(100% - 10px);
+    width: calc(100% - 211px);
+}

@@ -1,0 +1,39 @@
+/* vDesk.Messenger.Users.Message */
+.Users.Message {
+    padding: 5px;
+    margin: 5px;
+    width: 70%;
+    min-height: 22px;
+}
+
+.Users.Message > .Date {
+    float: right;
+    width: 18px;
+    height: 18px;
+    padding: 2px;
+}
+
+.Users.Message.Sender {
+    border-radius: 10px 10px 0 10px;
+    background-color: var(--FontDisabled, #999999);
+    float: right;
+}
+
+.Users.Message.Sender > .Status {
+    float: right;
+    color: var(--FontDark, #000000);
+}
+
+.Users.Message.Sender > .Status.Read {
+    color: var(--Foreground, #2AB0ED);
+}
+
+.Users.Message.Recipient {
+    border-radius: 0 10px 10px 10px;
+    background-color: var(--Foreground, #2AB0ED);
+    float: left;
+}
+
+.Users.Message.Recipient > .Status {
+    display: none;
+}

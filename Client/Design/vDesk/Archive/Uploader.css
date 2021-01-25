@@ -1,0 +1,35 @@
+/*
+    Upload prograssbar
+*/
+.Upload {
+    width: calc(100% - 2px);
+    height: calc(100% - 2px);
+    z-index: 0 !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.Upload.Pending::-moz-progress-bar {
+    background: yellow;
+}
+
+.Upload.Pending::-webkit-progress-value {
+    background: yellow;
+}
+
+.Upload.Finished::-moz-progress-bar {
+    background: greenyellow;
+}
+
+.Upload.Finished::-webkit-progress-value {
+    background: greenyellow;
+}
+
+.Upload.Error::-moz-progress-bar {
+    background: red;
+}
+
+.Upload.Error::-webkit-progress-value {
+    background: red;
+}

@@ -1,0 +1,52 @@
+/* Modules.Contacts */
+.Contacts {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.Contacts > .Alphabet {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    float: left;
+    width: 50px;
+    list-style: none;
+    border-right: 1px solid #999;
+}
+
+.Contacts > .Alphabet > .Char {
+    height: calc(3.703703703703704% - 1px);
+    text-align: center;
+    border-bottom: 1px solid #999;
+    line-height: 1.8;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.Contacts > .Alphabet > .Char.Selected {
+    background-color: #FFCF32 !important;
+}
+
+.Contacts > .Alphabet > .Char:hover {
+    color: #fff;
+    background-color: #2AB0ED;
+}
+
+.Contacts > .TabControl {
+    float: left;
+    width: calc(100% - 51px);
+}
+
+.Contacts .Table {
+    width: 100% !important;
+}
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,30 @@
+/* vDesk.Controls.Calendar.View.Decade */
+.Decade {
+    height: 100%;
+    width: 100%;
+}
+
+.Decade > .Row {
+    list-style: none;
+    display: block;
+    width: 100%;
+    height: calc(33.333333333% - 1px);
+    margin: 0px;
+    padding: 0px;
+    border-bottom: 1px solid;
+}
+
+.Decade > .Row:last-child {
+    border: none !important;
+}
+
+.Decade > .Row > .Cell {
+    width: calc(25% - 1px);
+    height: 100%;
+    border-right: 1px solid;
+    float: left;
+}
+
+.Decade > .Row .Cell:last-child {
+    border: none !important;
+}

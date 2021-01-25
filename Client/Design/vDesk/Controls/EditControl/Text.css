@@ -1,0 +1,9 @@
+/* vDesk.Controls.EditControl.Text */
+.EditControl.text {
+    height: auto;
+    min-height: 58px;
+}
+
+.EditControl > .Text {
+    max-width: calc(70% - 4px);
+}

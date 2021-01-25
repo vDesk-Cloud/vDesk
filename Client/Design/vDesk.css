@@ -1,0 +1,107 @@
+/*
+    This files contains general global classes which can be used across the client.
+*/
+html {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.vDesk {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    background-color: #000;
+    min-width: 1248px;
+    min-height: 600px;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
+.Font {
+    font-family: var(--Font, Arial);
+}
+
+.Font.Dark {
+    color: var(--FontDark, #000000);
+}
+
+.Font.Light {
+    color: var(--FontLight, #FFFFFF);
+}
+
+.Font.Disabled {
+    color: var(--FontDisabled, #999999);
+}
+
+.Control {
+    font-size: 10px;
+    height: 80px;
+    width: 90px;
+    float: left;
+    background-size: 25px auto;
+    background-position: center 15px;
+    background-repeat: no-repeat;
+    padding-top: 30px;
+    font-weight: bold;
+}
+
+.Button {
+    border: 1px solid var(--BorderDark, #000000);
+    min-height: 22px;
+    min-width: 22px;
+    padding: 2px;
+    line-height: 16px;
+    background-color: var(--ButtonBackground, #DBDBDB);
+    font-family: var(--Font, Arial);
+    color: var(--FontDark, #000000);
+    vertical-align: middle;
+}
+
+.Button.Icon {
+    background-size: 16px;
+    background-repeat: no-repeat;
+    padding-left: 22px;
+    background-position: 2px center;
+}
+
+.Button.Arrow {
+    cursor: pointer;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    padding: 0;
+    text-align: center;
+}
+
+.Button.Icon:hover:enabled {
+    border-color: #468CCF;
+}
+
+.Button:disabled, .TextBox:disabled {
+    border-color: var(--BorderLight, #999999) !important;
+    color: var(--FontDisabled, #999999) !important;
+}
+
+.Button.Icon:active:enabled {
+    border-color: #2161ba;
+    padding: 0.15em 0.6em 0.15em 1.9em;
+    background-position: 0.3em center;
+}
+
+.TextBox {
+    border: 1px solid var(--BorderDark, #000000);
+    background-color: var(--Background, #FFFFFF);
+    color: var(--FontDark, #000000);
+    font-family: var(--Font, Arial);
+    min-height: 18px;
+    padding: 1px;
+    vertical-align: middle;
+    font-size: 0.9em;
+}
+
+.TextBox.Error {
+    border-color: var(--TextBoxError, #FF3300) !important;
+}

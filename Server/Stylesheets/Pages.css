@@ -1,0 +1,37 @@
+html, body, article {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    height: 50px;
+    background-color: #2AB0ED;
+    width: calc(100% - 10px);
+    padding: 5px;
+    margin: 0;
+}
+
+nav > a {
+    display: inline-block;
+    height: calc(100% - 10px);
+    padding: 5px;
+    line-height: 40px;
+    text-decoration: none;
+    font-family: Arial, serif;
+    color: white;
+}
+
+nav > a.Current {
+    text-decoration: underline;
+}
+
+nav > a:hover {
+    color: lightgray;
+}
+
+article {
+    font-family: Arial, serif;
+    color: black;
+}

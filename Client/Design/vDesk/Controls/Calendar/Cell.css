@@ -1,0 +1,21 @@
+/* vDesk.Controls.Cell */
+.Calendar .Cell {
+    cursor: pointer;
+}
+
+.Calendar .Cell:hover {
+    text-shadow: 0px 0px 3px #FFCF32;
+    box-shadow: inset 0px 0px 10px #FFCF32;
+}
+
+.Calendar .Cell.Selected {
+    background-color: #FFCF32;
+}
+
+.Calendar .Cell.Now {
+    background-color: #3BD8F7;
+}
+
+.Calendar .Cell.Outer {
+    color: var(--FontDisabled, #999999) !important;
+}

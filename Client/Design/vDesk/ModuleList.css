@@ -1,0 +1,9 @@
+/* vDesk.ModuleList */
+.vDesk > .WorkSpace > .ModuleList {
+    height: calc(100% - 34px);
+    width: 90px;
+    padding: 2px;
+    border-right: 1px solid;
+    float: left;
+    margin: 0;
+}

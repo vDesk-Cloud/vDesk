@@ -1,0 +1,43 @@
+/* vDesk.Contacts.Company.Viewer */
+.CompanyViewer {
+
+}
+
+.CompanyViewer > h2 {
+    text-align: center;
+}
+
+.CompanyViewer .Address {
+    list-style: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.CompanyViewer .Address > .Row {
+    width: 100%;
+    height: 25px;
+}
+
+.CompanyViewer .Options {
+    list-style: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.CompanyViewer .Options > .Row {
+    width: 100%;
+    height: 25px;
+}
+
+.CompanyViewer .Options > .Row > .Label {
+    float: left;
+    min-width: 30%;
+}
+
+.CompanyViewer .Options > .Row > .Text {
+    float: left;
+}

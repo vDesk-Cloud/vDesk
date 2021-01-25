@@ -1,0 +1,30 @@
+/* vDesk.Configuration.Setting */
+.Setting {
+    width: 100%;
+    border-bottom: 1px solid;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    float: left;
+}
+
+.Setting:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.Setting > .EditControl {
+    width: calc(100% - 22px);
+    margin-right: -1px;
+    float: left;
+}
+
+.Setting > .Button {
+    float: left;
+    width: 22px;
+    padding: 0 !important;
+}
+
+.Setting > .Button:hover {
+    border: 1px solid #2AB0ED;
+}

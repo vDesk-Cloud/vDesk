@@ -1,0 +1,16 @@
+/* vDesk.Controls.ToolBar.Item */
+.ToolBar .Group .Item {
+    font-size: 10px;
+    height: 80px;
+    width: 90px;
+    float: left;
+    background-size: 25px auto;
+    background-position: center 15px;
+    background-repeat: no-repeat;
+    padding-top: 30px;
+    font-weight: bold;
+    border: medium none;
+}
+.ToolBar .Group .Item:hover {
+    background-color: var(--ControlHover, rgba(42, 176, 237, 1));
+}

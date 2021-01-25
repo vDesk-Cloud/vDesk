@@ -1,0 +1,8 @@
+/* vDesk.Contacts.Contact */
+.Machine {
+    cursor: pointer;
+}
+
+.Machine.Selected {
+    background-color: var(--ControlSelected);
+}

@@ -1,0 +1,66 @@
+/* vDesk.Updates.UpdateList.Item */
+.UpdateList .Item {
+    width: 100%;
+    border-bottom: 1px solid #999;
+    height: 20px;
+    padding-left: 3px;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    position: relative;
+}
+
+.UpdateList .Item:hover {
+    background-color: var(--ControlHover, #2AB0ED);
+    color: var(--FontLight, #FFFFFF);
+}
+
+.UpdateList .Item:active {
+    background-color: var(--ControlPress, #468CCF);
+}
+
+.UpdateList .Item.Selected {
+    background-color: var(--ControlSelected, #FFCF32);
+}
+
+.UpdateList .Item.Disabled {
+    color: var(--FontDisabled, #999999);
+}
+
+.UpdateList .Item > span {
+    z-index: 1;
+    position: relative;
+}
+
+.UpdateList .Item > progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.UpdateList .Item > progress.Pending::-moz-progress-bar {
+    background: yellow;
+}
+
+.UpdateList .Item > progress.Pending::-webkit-progress-value {
+    background: yellow;
+}
+
+.UpdateList .Item > progress.Finished::-moz-progress-bar {
+    background: greenyellow;
+}
+
+.UpdateList .Item > progress.Finished::-webkit-progress-value {
+    background: greenyellow;
+}
+
+.UpdateList .Item > progress.Error::-moz-progress-bar {
+    background: red;
+}
+
+.UpdateList .Item > progress.Error::-webkit-progress-value {
+    background: red;
+}
