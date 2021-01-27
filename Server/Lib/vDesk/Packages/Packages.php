@@ -66,8 +66,6 @@ final class Packages extends Package implements IPackage {
                 "Packages.php"
             ],
             self::Lib     => [
-                "vDesk/Package.php",
-                "vDesk/Package",
                 "vDesk/Packages"
             ]
         ]
