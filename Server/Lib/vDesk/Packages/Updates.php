@@ -62,8 +62,8 @@ final class Updates extends Package implements IPackage {
                 "Updates.php"
             ],
             self::Lib     => [
-                "vDesk/Updates.php",
-                "vDesk/Updates"
+                "vDesk/Updates/Update.php",
+                "vDesk/Updates/IModule.php"
             ]
         ]
     ];
