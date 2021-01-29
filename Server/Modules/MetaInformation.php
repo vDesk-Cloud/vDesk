@@ -66,11 +66,11 @@ final class MetaInformation extends Module {
                 new Mask\Row(
                     null,
                     $Mask,
-                    $Row->Index,
-                    $Row->Name,
-                    $Row->Type,
-                    $Row->Required,
-                    $Row->Validator ?? null
+                    $Row["Index"],
+                    $Row["Name"],
+                    $Row["Type"],
+                    $Row["Required"],
+                    $Row["Validator"] ?? null
                 )
             );
         }
@@ -109,12 +109,12 @@ final class MetaInformation extends Module {
         
         //Update changed rows.
         foreach($Update ?? Command::$Parameters["Update"] as $Updated) {
-            $MaskRow            = $Mask->Find(static fn(Mask\Row $Row): bool => $Row->ID === $Updated->ID);
-            $MaskRow->Index     = $Updated->Index;
-            $MaskRow->Name      = $Updated->Name;
-            $MaskRow->Type      = $Updated->Type;
-            $MaskRow->Required  = $Updated->Required;
-            $MaskRow->Validator = $Updated->Validator ?? null;
+            $MaskRow            = $Mask->Find(static fn(Mask\Row $Row): bool => $Row->ID === $Updated["ID"]);
+            $MaskRow->Index     = $Updated["Index"];
+            $MaskRow->Name      = $Updated["Name"];
+            $MaskRow->Type      = $Updated["Type"];
+            $MaskRow->Required  = $Updated["Required"];
+            $MaskRow->Validator = $Updated["Validator"] ?? null;
         }
         
         //Append added rows.
@@ -123,11 +123,11 @@ final class MetaInformation extends Module {
                 new Mask\Row(
                     null,
                     $Mask,
-                    $Added->Index,
-                    $Added->Name,
-                    $Added->Type,
-                    $Added->Required,
-                    $Added->Validator ?? null
+                    $Added["Index"],
+                    $Added["Name"],
+                    $Added["Type"],
+                    $Added["Required"],
+                    $Added["Validator"] ?? null
                 )
             );
         }
@@ -141,11 +141,10 @@ final class MetaInformation extends Module {
     /**
      * Deletes a Mask.
      *
-     * @param int $ID The ID of the Mask to delete.
+     * @param null|int $ID The ID of the Mask to delete.
      *
      * @return bool True if the Mask has been successfully deleted.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to delete Masks.
-     *
      */
     public static function DeleteMask(int $ID = null): bool {
         if(!\vDesk::$User->Permissions["DeleteMask"]) {
@@ -165,7 +164,6 @@ final class MetaInformation extends Module {
      *
      * @return string|\vDesk\MetaInformation\DataSet The DataSet of the specified Element; otherwise, null.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to read DataSets.
-     *
      */
     public static function GetDataSet(Element $Element = null): ?DataSet {
         if(!\vDesk::$User->Permissions["ReadDataSet"]) {
@@ -184,7 +182,7 @@ final class MetaInformation extends Module {
                 [],
                 (int)$DataSet["ID"],
                 $Element,
-                new Mask(null, (int)$DataSet["Mask"])
+                new Mask([], (int)$DataSet["Mask"])
             ))->Fill();
         }
         return null;
@@ -199,7 +197,6 @@ final class MetaInformation extends Module {
      *
      * @return \vDesk\MetaInformation\DataSet The newly create DataSet.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to create new DataSets.
-     *
      */
     public static function CreateDataSet(Element $Element = null, Mask $Mask = null, array $Rows = null): DataSet {
         if(!\vDesk::$User->Permissions["CreateDataSet"]) {
@@ -213,11 +210,11 @@ final class MetaInformation extends Module {
         //Set values.
         foreach($Rows ?? Command::$Parameters["Rows"] as $Row) {
             /** @var DataSet\Row $DataSetRow */
-            $DataSetRow = $DataSet->Find(static fn(DataSet\Row $DataRow): bool => $DataRow->Row->ID === $Row->Row);
+            $DataSetRow = $DataSet->Find(static fn(DataSet\Row $DataRow): bool => $DataRow->Row->ID === $Row["Row"]);
             if($DataSetRow === null) {
                 throw new \InvalidArgumentException("Missing argument for Row '{$DataSetRow->Row->Name}'!");
             }
-            $DataSetRow->Value = $Row->Value;
+            $DataSetRow->Value = $Row["Value"];
         }
         
         $DataSet->Save();
@@ -233,7 +230,6 @@ final class MetaInformation extends Module {
      *
      * @return \vDesk\MetaInformation\DataSet The updated DataSet.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update DataSets.
-     *
      */
     public static function UpdateDataSet(int $ID = null, array $Rows = null): DataSet {
         if(!\vDesk::$User->Permissions["UpdateDataSet"]) {
@@ -246,11 +242,11 @@ final class MetaInformation extends Module {
         //Set values.
         foreach($Rows ?? Command::$Parameters["Rows"] as $Row) {
             /** @var DataSet\Row $DataSetRow */
-            $DataSetRow = $DataSet->Find(static fn(DataSet\Row $DataRow): bool => $DataRow->ID === $Row->ID);
+            $DataSetRow = $DataSet->Find(static fn(DataSet\Row $DataRow): bool => $DataRow->ID === $Row["ID"]);
             if($DataSetRow === null) {
                 throw new \InvalidArgumentException("Missing argument for Row '{$DataSetRow->Row->Name}'!");
             }
-            $DataSetRow->Value = $Row->Value;
+            $DataSetRow->Value = $Row["Value"];
         }
         
         $DataSet->Save();
@@ -265,7 +261,6 @@ final class MetaInformation extends Module {
      *
      * @return bool True if the DataSet has been successfully deleted.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to delete DataSets.
-     *
      */
     public static function DeleteDataSet(int $ID = null): bool {
         if(!\vDesk::$User->Permissions["DeleteDataSet"]) {
@@ -286,13 +281,12 @@ final class MetaInformation extends Module {
      * @param bool|null     $All    Determines whether if all values must match the value of any DataSet\Row. Defaults to false if omitted.
      * @param bool|null     $Strict Determines whether every passed value must exactly match the value of it's desired DataSet\Row.
      *
-     * @return \vDesk\Search\Results
+     * @return \vDesk\Search\Results The found DatSets.
      */
     public static function Search(int $ID = null, array $Values = null, bool $All = null, bool $Strict = null): Results {
-        
-        $Results = new Results();
         $Values  ??= Command::$Parameters["Values"];
         $Strict  ??= Command::$Parameters["Strict"] ?? false;
+        $Results = new Results();
         
         $Expression = Expression::Select()
                                 ->Distinct(
@@ -311,12 +305,12 @@ final class MetaInformation extends Module {
         
         if($All ?? Command::$Parameters["All"] ?? false) {
             foreach($Values as $Row) {
-                $Expression->InnerJoin("MetaInformation.DataSetRows", $Alias = "Row{$Row->ID}")
+                $Expression->InnerJoin("MetaInformation.DataSetRows", $Alias = "Row{$Row["ID"]}")
                            ->On([
                                "DataSets.ID"    => "{$Alias}.DataSet",
                                "{$Alias}.Value" => $Strict
-                                   ? $Row->Value
-                                   : ["LIKE" => "%{$Row->Value}%"]
+                                   ? $Row["Value"]
+                                   : ["LIKE" => "%{$Row["Value"]}%"]
                            ]);
             }
         } else {
@@ -325,10 +319,10 @@ final class MetaInformation extends Module {
                            "DataSets.ID" => "DataSetRows.DataSet",
                            \array_map(
                                static fn($Value): array => [
-                                   "DataSetRows.Row"   => $Value->ID,
+                                   "DataSetRows.Row"   => $Value["ID"],
                                    "DataSetRows.Value" => $Strict
-                                       ? $Value->Value
-                                       : ["LIKE" => "%{$Value->Value}%"]
+                                       ? $Value["Value"]
+                                       : ["LIKE" => "%{$Value["Value"]}%"]
                                ],
                                $Values
                            )
