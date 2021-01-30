@@ -2,8 +2,10 @@
 .Mask.Editor > .Rows > .Row.Editor > .Cell > .Validator.Money > .EditControl.Min,
 .Mask.Editor > .Rows > .Row.Editor > .Cell > .Validator.Money > .EditControl.Max {
     width: 25%;
+    float: left;
 }
 
 .Mask.Editor > .Rows > .Row.Editor > .Cell > .Validator.Money > .EditControl.Currency {
     width: 50%;
+    float: left;
 }
