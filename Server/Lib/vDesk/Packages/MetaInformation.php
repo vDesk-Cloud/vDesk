@@ -8,15 +8,14 @@ use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
 use vDesk\Locale;
 use vDesk\Events;
-
 use vDesk\Modules\Module\Command;
 use vDesk\Modules\Module\Command\Parameter;
 use vDesk\Struct\Collections\Observable\Collection;
 
 /**
- * Class MetaInformation represents ...
+ * MetaInformation Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\MetaInformation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class MetaInformation extends Package implements Locale\IPackage, Events\IPackage {

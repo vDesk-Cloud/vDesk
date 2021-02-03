@@ -17,8 +17,7 @@ vDesk.Load.Masks = {
             )
         );
         if(Response.Status) {
-            vDesk.MetaInformation.Masks.splice(0, this.length);
-            Response.Data.forEach(Mask => vDesk.MetaInformation.Masks.push(vDesk.MetaInformation.Mask.FromDataView(Mask)));
+            vDesk.MetaInformation.Masks = Response.Data.map(Mask => vDesk.MetaInformation.Mask.FromDataView(Mask));
         }
     }
 };

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace vDesk\MetaInformation;
 
 use vDesk\Archive\Element;
+use vDesk\Data\Model;
 use vDesk\DataProvider\Expression;
 use vDesk\DataProvider\MappedGetter;
 use vDesk\Data\IDNullException;
@@ -126,14 +127,16 @@ class DataSet extends Collection implements ICollectionModel {
         ) {
             
             $MaskRow = $this->Mask->Find(static fn(Mask\Row $MaskRow): bool => $MaskRow->ID === (int)$Row["Row"]);
-            
             //Convert value to proper type.
-            $Value = match ($MaskRow->Type) {
-                Type::Int => (int)$Row["Value"],
-                Type::Float => (float)$Row["Value"],
-                Type::Bool => (bool)$Row["Value"],
-                Extension\Type::Date, Extension\Type::Time, Extension\Type::DateTime => new \DateTime($Row["Value"]),
-                default => $Row["Value"]
+            $Value   = match ($Row["Value"]) {
+                null => null,
+                default => match ($MaskRow->Type) {
+                    Type::Int => (int)$Row["Value"],
+                    Type::Float => (float)$Row["Value"],
+                    Type::Bool => (bool)$Row["Value"],
+                    Extension\Type::Date, Extension\Type::Time, Extension\Type::DateTime => new \DateTime($Row["Value"]),
+                    default => $Row["Value"]
+                }
             };
             
             $this->Add(new Row((int)$Row["ID"], $this, $MaskRow, $Value));
@@ -163,30 +166,32 @@ class DataSet extends Collection implements ICollectionModel {
                 }
             }
             
-        } else if(
-            $this->ID === null
-            && $this->Element !== null
-            && $this->Mask !== null
-        ) {
-            $this->ID = Expression::Insert()
-                                  ->Into("MetaInformation.DataSets")
-                                  ->Values([
-                                      "ID"      => null,
-                                      "Element" => $this->Element->ID,
-                                      "Mask"    => $this->Mask->ID
-                                  ])
-                                  ->ID();
-            
-            foreach($this->Elements as $DataSetRow) {
-                //Retrieve ID.
-                $DataSetRow->ID = Expression::Insert()
-                                            ->Into("MetaInformation.DataSetRows")
-                                            ->Values([
-                                                "DataSet" => $this->ID,
-                                                "Row"     => $DataSetRow->Row,
-                                                "Value"   => $DataSetRow->Value
-                                            ])
-                                            ->ID();
+        } else {
+            if(
+                $this->ID === null
+                && $this->Element !== null
+                && $this->Mask !== null
+            ) {
+                $this->ID = Expression::Insert()
+                                      ->Into("MetaInformation.DataSets")
+                                      ->Values([
+                                          "ID"      => null,
+                                          "Element" => $this->Element->ID,
+                                          "Mask"    => $this->Mask->ID
+                                      ])
+                                      ->ID();
+                
+                foreach($this->Elements as $DataSetRow) {
+                    //Retrieve ID.
+                    $DataSetRow->ID = Expression::Insert()
+                                                ->Into("MetaInformation.DataSetRows")
+                                                ->Values([
+                                                    "DataSet" => $this->ID,
+                                                    "Row"     => $DataSetRow->Row,
+                                                    "Value"   => $DataSetRow->Value
+                                                ])
+                                                ->ID();
+                }
             }
         }
     }
@@ -245,7 +250,7 @@ class DataSet extends Collection implements ICollectionModel {
             ? ["ID" => $this->ID]
             : [
                 "ID"   => $this->ID,
-                "Mask" => $this->Mask->ID,
+                "Mask" => $this->Mask?->ToDataView(true),
                 "Rows" => $this->Reduce(
                     static function(array $Rows, Row $Row): array {
                         $Rows[] = $Row->ToDataView();

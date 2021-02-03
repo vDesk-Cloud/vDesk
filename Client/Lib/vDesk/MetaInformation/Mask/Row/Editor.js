@@ -293,7 +293,7 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
      */
     const NumericOption = document.createElement("option");
     NumericOption.text = vDesk.Locale.MetaInformation.Numeric;
-    NumericOption.id = "int";
+    NumericOption.id = vDesk.Struct.Type.Int;
 
     /**
      * The decimal option of the Editor.
@@ -301,7 +301,7 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
      */
     const NumericDecimalOption = document.createElement("option");
     NumericDecimalOption.text = `${vDesk.Locale.MetaInformation.Numeric}(${vDesk.Locale.MetaInformation.Decimal})`;
-    NumericDecimalOption.id = "float";
+    NumericDecimalOption.id = vDesk.Struct.Type.Float;
 
     /**
      * The text option of the Editor.
@@ -317,7 +317,7 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
      */
     const BoolOption = document.createElement("option");
     BoolOption.text = vDesk.Locale.MetaInformation.Boolean;
-    BoolOption.id = "bool";
+    BoolOption.id = vDesk.Struct.Type.Bool;
 
     /**
      * The money option of the Editor.
@@ -325,7 +325,7 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
      */
     const MoneyOption = document.createElement("option");
     MoneyOption.text = vDesk.Locale.MetaInformation.Money;
-    MoneyOption.id = "money";
+    MoneyOption.id = Extension.Type.Money;
 
     /**
      * The email option of the Editor.
@@ -333,7 +333,15 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
      */
     const EmailOption = document.createElement("option");
     EmailOption.text = vDesk.Locale.Security.Email;
-    EmailOption.id = "mail";
+    EmailOption.id = Extension.Type.Email;
+
+    /**
+     * The URL option of the Editor.
+     * @type {HTMLOptionElement}
+     */
+    const URLOption = document.createElement("option");
+    URLOption.text = "URL";
+    URLOption.id = Extension.Type.URL;
 
     /**
      * The date option of the Editor.
@@ -341,7 +349,7 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
      */
     const DateOption = document.createElement("option");
     DateOption.text = vDesk.Locale.MetaInformation.Date;
-    DateOption.id = "date";
+    DateOption.id = Extension.Type.Date;
 
     /**
      * The time option of the Editor.
@@ -349,7 +357,7 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
      */
     const TimeOption = document.createElement("option");
     TimeOption.text = vDesk.Locale.MetaInformation.Time;
-    TimeOption.id = "time";
+    TimeOption.id = Extension.Type.Time;
 
     /**
      * The datetime option of the Editor.
@@ -357,7 +365,7 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
      */
     const DateTimeOption = document.createElement("option");
     DateTimeOption.text = vDesk.Locale.MetaInformation.DateTime;
-    DateTimeOption.id = "datetime";
+    DateTimeOption.id = Extension.Type.DateTime;
 
     TypeSelect.add(NumericOption);
     TypeSelect.add(NumericDecimalOption);
@@ -365,6 +373,7 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
     TypeSelect.add(BoolOption);
     TypeSelect.add(MoneyOption);
     TypeSelect.add(EmailOption);
+    TypeSelect.add(URLOption);
     TypeSelect.add(DateOption);
     TypeSelect.add(TimeOption);
     TypeSelect.add(DateTimeOption);

@@ -131,11 +131,11 @@ vDesk.MetaInformation.DataSet = function DataSet(Mask, ID = null, Rows = [], Ena
 
     /**
      * Returns the Row of the DataSet which matches the given MaskRowID.
-     * @param {Number} MaskRowID The ID of the MaskRow the Row to search belongs to.
+     * @param {Number} ID The ID of the MaskRow the Row to search belongs to.
      * @return {vDesk.MetaInformation.DataSet.Row|null} The Row whose MaskRowID equals the search value, else null.
      */
-    this.Find = function(MaskRowID) {
-        return Rows.find(DataRow => DataRow.Row.ID === MaskRowID) ?? null;
+    this.Find = function(ID) {
+        return Rows.find(DataRow => DataRow.Row.ID === ID) ?? null;
     };
 
     /**
@@ -144,6 +144,7 @@ vDesk.MetaInformation.DataSet = function DataSet(Mask, ID = null, Rows = [], Ena
      */
     const Control = document.createElement("ul");
     Control.className = "DataSet";
+    Control.addEventListener("select", Event => Event.stopPropagation());
 
     //Fill DataSet with empty DataSet.Rows.
     Mask.Rows.forEach(MaskRow => {
@@ -162,16 +163,15 @@ vDesk.MetaInformation.DataSet = function DataSet(Mask, ID = null, Rows = [], Ena
  * Factory method that creates a DataSet from a JSON-encoded representation.
  * @param {Object} DataView The Data to use to create an instance of the DataSet.
  * @return {vDesk.MetaInformation.DataSet} A DataSet filled with the provided data.
- * @todo Evaluate returning dependent models (in the entire system) as {Mask: {ID: 12}} instead of {Mask: 12}.
  */
 vDesk.MetaInformation.DataSet.FromDataView = function(DataView) {
-    const Mask = vDesk.MetaInformation.Masks.find(Mask => Mask.ID === DataView.Mask?.ID ?? DataView.Mask);
+    const Mask = vDesk.MetaInformation.Masks.find(Mask => Mask.ID === DataView.Mask?.ID);
     return new vDesk.MetaInformation.DataSet(
         Mask,
         DataView?.ID ?? null,
         DataView?.Rows?.map(
             Row => new vDesk.MetaInformation.DataSet.Row(
-                Mask.Rows.find(MaskRow => MaskRow.ID === Row.Row?.ID ?? Row.Row),
+                Mask.Rows.find(MaskRow => MaskRow.ID === Row.Row?.ID),
         Row?.ID ?? null,
         Row?.Value ?? null
             )

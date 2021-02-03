@@ -1,11 +1,41 @@
 "use strict";
 /**
+ * Fired if the current edited DataSet of the Editor has been changed.
+ * @event vDesk.MetaInformation.DataSet.Editor#change
+ * @type {CustomEvent}
+ * @property {Object} detail The arguments of the 'change' event.
+ * @property {vDesk.MetaInformation.DataSet.Editor} detail.sender The current instance of the Editor.
+ */
+/**
+ * Fired if a new DataSet has been created.
+ * @event vDesk.MetaInformation.DataSet.Editor#create
+ * @type {CustomEvent}
+ * @property {Object} detail The arguments of the 'create' event.
+ * @property {vDesk.MetaInformation.DataSet.Editor} detail.sender The current instance of the Editor.
+ * @property {vDesk.MetaInformation.DataSet} detail.dataset The newly created DataSet.
+ */
+/**
+ * Fired if the current edited DataSet of the Editor has been updated.
+ * @event vDesk.MetaInformation.DataSet.Editor#update
+ * @type {CustomEvent}
+ * @property {Object} detail The arguments of the 'update' event.
+ * @property {vDesk.MetaInformation.DataSet.Editor} detail.sender The current instance of the Editor.
+ * @property {vDesk.MetaInformation.DataSet} detail.dataset The updated DataSet.
+ */
+/**
+ * Fired if the current edited DataSet of the Editor has been deleted.
+ * @event vDesk.MetaInformation.DataSet.Editor#delete
+ * @type {CustomEvent}
+ * @property {Object} detail The arguments of the 'delete' event.
+ * @property {vDesk.MetaInformation.DataSet.Editor} detail.sender The current instance of the Editor.
+ * @property {vDesk.MetaInformation.DataSet} detail.dataset The deleted DataSet.
+ */
+/**
  * Initializes a new instance of the Editor class.
  * @class Represents an editor for modifying or creating DataSets of metainformations.
  * @param {vDesk.Archive.Element} Element Initializes the Editor with the specified Element to tag with metadata.
  * @param {vDesk.MetaInformation.DataSet} DataSet Initializes the Editor with the specified DataSet to edit.
  * @param {Boolean} [Enabled=false]
- *
  * @property {HTMLElement} Control Gets the underlying DOM-Node.
  * @property {vDesk.Archive.Element} Element Gets or sets the Element of the Editor.
  * @property {?vDesk.MetaInformation.DataSet} DataSet Gets or sets the current edited DataSet of the Editor.
@@ -110,7 +140,7 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
 
     /**
      * Eventhandler that listens on the 'click' event.
-     * @fires vDesk.MetaInformation.Mask.Editor#change
+     * @fires vDesk.MetaInformation.DataSet.Editor#change
      */
     const OnAdd = Event => {
         Event.stopPropagation();
@@ -196,11 +226,13 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
                     Response => {
                         if(Response.Status) {
                             this.DataSet = vDesk.MetaInformation.DataSet.FromDataView(Response.Data);
-                            Enabled = false;
+                            this.Enabled = false;
+                            Control.removeEventListener("update", OnUpdate);
                             new vDesk.Events.BubblingEvent("update", {
                                 sender:  this,
                                 dataset: DataSet
                             }).Dispatch(Control);
+                            Control.addEventListener("update", OnUpdate);
                         } else {
                             alert(Response.Data);
                             this.Reset();
@@ -248,7 +280,7 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
                     //Check if the Command has been successfully executed and populate data to a new DataSet.
                     if(Response.Status) {
                         this.DataSet = vDesk.MetaInformation.DataSet.FromDataView(Response.Data);
-                        Enabled = false;
+                        this.Enabled = false;
                         new vDesk.Events.BubblingEvent("create", {
                             sender:  this,
                             dataset: DataSet
@@ -303,9 +335,9 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
      */
     const Control = document.createElement("div");
     Control.className = "DataSet Editor Font Dark";
-    Control.addEventListener("add", OnAdd, false);
-    Control.addEventListener("update", OnUpdate, false);
-    Control.addEventListener("delete", OnDelete, false);
+    Control.addEventListener("add", OnAdd);
+    Control.addEventListener("update", OnUpdate);
+    Control.addEventListener("delete", OnDelete);
 
     if(DataSet !== null) {
         PreviousDataSet = vDesk.MetaInformation.DataSet.FromDataView(DataSet);

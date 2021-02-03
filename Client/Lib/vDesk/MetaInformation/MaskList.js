@@ -50,12 +50,14 @@ vDesk.MetaInformation.MaskList = function MaskList(Items = [], Enabled = true) {
             enumerable: true,
             get:        () => Selected,
             set:        Value => {
-                Ensure.Property(Value, vDesk.MetaInformation.MaskList.Item, "Selected");
+                Ensure.Property(Value, vDesk.MetaInformation.MaskList.Item, "Selected", true);
                 if(Selected !== null) {
                     Selected.Selected = false;
                 }
                 Selected = Value;
-                Selected.Selected = true;
+                if(Value !== null){
+                    Selected.Selected = true;
+                }
             }
         },
         Enabled:  {
@@ -83,13 +85,13 @@ vDesk.MetaInformation.MaskList = function MaskList(Items = [], Enabled = true) {
         Selected = Event.detail.sender;
         Selected.Selected = true;
 
-        Control.removeEventListener("select", OnSelect, false);
+        Control.removeEventListener("select", OnSelect, true);
         new vDesk.Events.BubblingEvent("select", {
             sender: this,
             mask:   Event.detail.sender.Mask,
             item:   Event.detail.sender
         }).Dispatch(Control);
-        Control.addEventListener("select", OnSelect, false);
+        Control.addEventListener("select", OnSelect, true);
     };
 
     /**
@@ -136,7 +138,7 @@ vDesk.MetaInformation.MaskList = function MaskList(Items = [], Enabled = true) {
      */
     const Control = document.createElement("ul");
     Control.className = "MaskList BorderLight";
-    Control.addEventListener("select", OnSelect, false);
+    Control.addEventListener("select", OnSelect, true);
 
     //Fill MaskList.
     Items.forEach(Item => {

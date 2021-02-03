@@ -30,21 +30,27 @@ vDesk.MetaInformation.Attributes = function Attributes(Element) {
     const OnSelect = Event => {
         if(
             DataSetEditor.DataSet !== null
-            && DataSetEditor.DataSet.ID !== null
-            && confirm(vDesk.Locale.MetaInformation.ChangeMask)
+            && DataSetEditor?.DataSet?.ID !== null
         ) {
-            ResetButton.disabled = false;
+            if(
+                DataSetEditor?.DataSet?.Mask !== Event.detail.mask
+                && confirm(vDesk.Locale.MetaInformation.ChangeMask)
+            ) {
+                ResetButton.disabled = false;
+                DataSetEditor.DataSet = new vDesk.MetaInformation.DataSet(Event.detail.mask);
+            } else {
+                MaskList.Selected = MaskList.Find(DataSetEditor.DataSet.Mask.ID);
+            }
+        }else{
+            DataSetEditor.DataSet = new vDesk.MetaInformation.DataSet(Event.detail.mask);
         }
-        DataSetEditor.DataSet = new vDesk.MetaInformation.DataSet(Event.detail.mask);
     };
 
     /**
      * Eventhandler that listens on the 'change' event.
-     * @param {CustomEvent} Event
-     * @listens vDesk.Security.Configuration.Mask.Editor#event:change
+     * @listens vDesk.MetaInformation.DataSet.Editor#event:change
      */
-    const OnChange = Event => {
-
+    const OnChange = () => {
         EditSaveButton.disabled = !DataSetEditor.DataSet.Valid && !DataSetEditor.Changed;
         ResetButton.disabled = !DataSetEditor.Changed;
 
@@ -52,16 +58,14 @@ vDesk.MetaInformation.Attributes = function Attributes(Element) {
             EditSaveButton.style.backgroundImage = `url("${vDesk.Visual.Icons.Save}")`;
             EditSaveButton.textContent = vDesk.Locale.vDesk.Save;
         }
-
     };
 
     /**
      * Eventhandler that listens on the 'create' event.
-     * @param {CustomEvent} Event
-     * @listens vDesk.Security.DataSet.Editor#event:create
+     * @listens vDesk.MetaInformation.DataSet.Editor#event:create
      */
-    const OnCreate = Event => {
-        DeleteButton.disabled = !vDesk.User.Permissions.DeletDataSet;
+    const OnCreate = () => {
+        DeleteButton.disabled = !vDesk.User.Permissions.DeleteDataSet;
         ResetButton.disabled = true;
     };
 
@@ -72,13 +76,12 @@ vDesk.MetaInformation.Attributes = function Attributes(Element) {
         if(DataSetEditor.Enabled) {
             if(DataSetEditor.Changed) {
                 DataSetEditor.Save();
-            } else {
-                DataSetEditor.Reset();
             }
             DataSetEditor.Enabled = false;
             MaskList.Enabled = false;
             EditSaveButton.style.backgroundImage = `url("${vDesk.Visual.Icons.Edit}")`;
             EditSaveButton.textContent = vDesk.Locale.vDesk.Edit;
+            ResetButton.disabled = true;
         } else {
             //Enable MaskEditor.
             EditSaveButton.style.backgroundImage = `url("${vDesk.Visual.Icons.Cancel}")`;
@@ -86,7 +89,6 @@ vDesk.MetaInformation.Attributes = function Attributes(Element) {
             DataSetEditor.Enabled = true;
             MaskList.Enabled = true;
         }
-        DeleteButton.disabled = !vDesk.User.Permissions.DeleteDataSet || DataSetEditor.DataSet === null || DataSetEditor.DataSet.ID === null;
     };
 
     /**
@@ -113,6 +115,7 @@ vDesk.MetaInformation.Attributes = function Attributes(Element) {
         if(DataSetEditor.DataSet !== null && DataSetEditor.DataSet.ID !== null && confirm(
             vDesk.Locale.MetaInformation.DeleteDataSet)) {
             DataSetEditor.Delete();
+            MaskList.Selected = null;
             DeleteButton.disabled = true;
         }
     };
@@ -123,9 +126,8 @@ vDesk.MetaInformation.Attributes = function Attributes(Element) {
      */
     const Control = document.createElement("div");
     Control.className = "Attributes";
-    Control.addEventListener("select", OnSelect, false);
-    Control.addEventListener("create", OnCreate, false);
-    Control.addEventListener("change", OnChange, false);
+    Control.addEventListener("create", OnCreate);
+    Control.addEventListener("change", OnChange);
 
     /**
      * The MaskList of the Attributes.
@@ -133,6 +135,7 @@ vDesk.MetaInformation.Attributes = function Attributes(Element) {
      */
     const MaskList = vDesk.MetaInformation.MaskList.FromMasks();
     MaskList.Enabled = false;
+    MaskList.Control.addEventListener("select", OnSelect);
     Control.appendChild(MaskList.Control);
 
     /**
@@ -141,6 +144,9 @@ vDesk.MetaInformation.Attributes = function Attributes(Element) {
      */
     const DataSetEditor = vDesk.MetaInformation.DataSet.Editor.FromElement(Element);
     Control.appendChild(DataSetEditor.Control);
+    if(DataSetEditor?.DataSet?.Mask?.ID !== undefined) {
+        MaskList.Selected = MaskList.Find(DataSetEditor.DataSet.Mask.ID);
+    }
 
     /**
      * The controls container of the Attributes.
@@ -157,8 +163,8 @@ vDesk.MetaInformation.Attributes = function Attributes(Element) {
     EditSaveButton.className = "Button Icon Save";
     EditSaveButton.style.backgroundImage = `url("${vDesk.Visual.Icons.Edit}")`;
     EditSaveButton.textContent = vDesk.Locale.vDesk.Edit;
-    EditSaveButton.disabled = !vDesk.User.Permissions.UpdateMask;
-    EditSaveButton.addEventListener("click", OnClickEditSaveButton, false);
+    EditSaveButton.disabled = !vDesk.User.Permissions.UpdateDataSet;
+    EditSaveButton.addEventListener("click", OnClickEditSaveButton);
     Controls.appendChild(EditSaveButton);
 
     /**
@@ -170,7 +176,7 @@ vDesk.MetaInformation.Attributes = function Attributes(Element) {
     ResetButton.style.backgroundImage = `url("${vDesk.Visual.Icons.Refresh}")`;
     ResetButton.disabled = true;
     ResetButton.textContent = vDesk.Locale.vDesk.ResetChanges;
-    ResetButton.addEventListener("click", OnClickResetButton, false);
+    ResetButton.addEventListener("click", OnClickResetButton);
     Controls.appendChild(ResetButton);
 
     /**
@@ -182,7 +188,7 @@ vDesk.MetaInformation.Attributes = function Attributes(Element) {
     DeleteButton.style.backgroundImage = `url("${vDesk.Visual.Icons.Delete}")`;
     DeleteButton.disabled = !vDesk.User.Permissions.DeleteDataSet || DataSetEditor.DataSet === null;
     DeleteButton.textContent = vDesk.Locale.vDesk.Delete;
-    DeleteButton.addEventListener("click", OnClickDeleteButton, false);
+    DeleteButton.addEventListener("click", OnClickDeleteButton);
     Controls.appendChild(DeleteButton);
 
     Control.appendChild(Controls);

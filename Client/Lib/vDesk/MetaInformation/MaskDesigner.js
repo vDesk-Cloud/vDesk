@@ -83,7 +83,7 @@ vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
      * @listens vDesk.Security.Configuration.Mask.Editor#event:create
      */
     const OnCreate = Event => {
-        MaskList.Find(Event.detail.mask.ID).Mask = Event.detail.mask;
+        MaskList.Find(null).Mask = Event.detail.mask;
         vDesk.MetaInformation.Masks.push(Event.detail.mask);
         DeleteButton.disabled = !vDesk.User.Permissions.DeleteMask;
         ResetButton.disabled = true;
@@ -119,9 +119,7 @@ vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
             1
         );
         MaskList.Remove(MaskList.Selected);
-        //if(MaskList.Items.length > 0) {
-            MaskList.Selected = MaskList.Items?.[0];
-        //}
+        MaskList.Selected = MaskList.Items?.[0];
         MaskEditor.Mask = MaskList?.Selected?.Mask ?? new vDesk.MetaInformation.Mask();
         MaskEditor.Enabled = false;
         DeleteButton.disabled = MaskEditor.Mask.ID !== null && !vDesk.User.Permissions.DeleteMask;
@@ -181,11 +179,11 @@ vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
      */
     const Control = document.createElement("div");
     Control.className = "MaskDesigner";
-    Control.addEventListener("select", OnSelect, false);
-    Control.addEventListener("change", OnChange, false);
-    Control.addEventListener("create", OnCreate, false);
-    Control.addEventListener("update", OnUpdate, false);
-    Control.addEventListener("delete", OnDelete, false);
+    Control.addEventListener("select", OnSelect);
+    Control.addEventListener("change", OnChange);
+    Control.addEventListener("create", OnCreate);
+    Control.addEventListener("update", OnUpdate);
+    Control.addEventListener("delete", OnDelete);
 
     /**
      * The MaskList of the MaskDesigner.
@@ -205,16 +203,14 @@ vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
         );
     }
 
-    //if(MaskList.Items.length > 0) {
-        MaskList.Selected = MaskList.Items?.[0];
-    //}
+    MaskList.Selected = MaskList.Items?.[0];
     Control.appendChild(MaskList.Control);
 
     /**
      * The Mask.Editor of the MaskDesigner.
      * @type {vDesk.MetaInformation.Mask.Editor}
      */
-    const MaskEditor = new vDesk.MetaInformation.Mask.Editor(MaskList?.Selected?.Mask ??  new vDesk.MetaInformation.Mask(), false);
+    const MaskEditor = new vDesk.MetaInformation.Mask.Editor(MaskList?.Selected?.Mask ?? new vDesk.MetaInformation.Mask(), false);
     Control.appendChild(MaskEditor.Control);
 
 

@@ -103,9 +103,23 @@ class Row implements IManagedModel {
                     if($this->Row->Required && $Value === null) {
                         throw new \InvalidArgumentException("DataSet\Row '[{$this->Row->Name}]' requires a value!");
                     }
-                    if($Value !== null && !Validate::As($Value, $this->Row->Type, $this->Row->Validator)) {
-                        throw new \TypeError("Value of DataSet\Row '{$this->Row->Name}' is invalid!");
+                    
+                    if($Value !== null) {
+                        if(
+                            (
+                                $this->Row->Type === Extension\Type::Date
+                                || $this->Row->Type === Extension\Type::Time
+                                || $this->Row->Type === Extension\Type::DateTime
+                            )
+                            && Type::Of($Value) === Type::String
+                        ) {
+                            $Value = new \DateTime($Value);
+                        }
+                        if(!Validate::As($Value, $this->Row->Type, $this->Row->Validator)) {
+                            throw new \TypeError("Value of DataSet\Row '{$this->Row->Name}' is invalid! {$this->Row->Type} required, " . Type::Of($Value) . " given.");
+                        }
                     }
+                    
                     if($this->ID !== null && $this->Value !== $Value) {
                         $this->ValueChanged = true;
                     }
@@ -138,12 +152,12 @@ class Row implements IManagedModel {
         if($this->ID === null) {
             throw new IDNullException();
         }
-        $Row       = Expression::Select("Row", "Content")
-                               ->From("MetaInformation.DataSetRows")
-                               ->Where(["ID" => $this->ID])
-                               ->Execute()
-                               ->ToMap();
-        $this->Row = new Mask\Row((int)$Row["Row"]);
+        $Row         = Expression::Select("Row", "Content")
+                                 ->From("MetaInformation.DataSetRows")
+                                 ->Where(["ID" => $this->ID])
+                                 ->Execute()
+                                 ->ToMap();
+        $this->Row   = new Mask\Row((int)$Row["Row"]);
         $this->Value = match ($this->Row->Type) {
             Type::Int => (int)$Row["Value"],
             Type::Float => (float)$Row["Value"],
@@ -165,7 +179,7 @@ class Row implements IManagedModel {
         return new static(
             $DataView["ID"] ?? null,
             null,
-            new Mask\Row($DataView["Row"] ?? null),
+            Mask\Row::FromDataView($DataView["Row"] ?? []),
             $DataView["Value"] ?? ""
         );
     }
@@ -182,7 +196,7 @@ class Row implements IManagedModel {
             ? ["ID" => $this->ID]
             : [
                 "ID"    => $this->ID,
-                "Row"   => $this->Row->ID,
+                "Row"   => $this->Row?->ToDataView(true),
                 "Value" => $this->Value instanceof \DateTime ? $this->Value->format(\DateTime::ATOM) : $this->Value
             ];
     }

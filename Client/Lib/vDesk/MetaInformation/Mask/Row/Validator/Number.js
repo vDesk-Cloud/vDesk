@@ -41,25 +41,17 @@ vDesk.MetaInformation.Mask.Row.Validator.Number = function Number(Validator = nu
         Validator: {
             enumerable: true,
             get:        () => {
-                const Validator = {};
-                if(Min.Valid) {
-                    Validator.Min = Min.Value;
-                }
-                if(Max.Valid) {
-                    Validator.Max = Max.Value;
-                }
-                if(Steps !== null) {
-                    Validator.Steps = Steps;
-                }
-                return Object.keys(Validator).length > 0
-                       ? Validator
-                       : null;
+                return {
+                    Min: Min.Value,
+                    Max: Max.Value,
+                    Steps: Steps.Value
+                };
             },
             set:        Value => {
                 Ensure.Property(Value, Type.Object, "Validator", true);
                 Min.Value = Value?.Min ?? null;
-                Max.Value = Value?.Max ?? null;
-                Steps.Value = Value?.Steps ?? null;
+                Max.Value = Value?.Max ?? window.Number.MAX_SAFE_INTEGER;
+                Steps.Value = Value?.Steps ?? 1;
             }
         },
         Enabled:   {
@@ -119,7 +111,7 @@ vDesk.MetaInformation.Mask.Row.Validator.Number = function Number(Validator = nu
         `${vDesk.Locale.MetaInformation.Max}:`,
         null,
         Type.Number,
-        Validator?.Max ?? null,
+        Validator?.Max ?? window.Number.MAX_SAFE_INTEGER,
         null,
         false,
         Enabled
@@ -135,7 +127,7 @@ vDesk.MetaInformation.Mask.Row.Validator.Number = function Number(Validator = nu
         `${vDesk.Locale.MetaInformation.Steps}:`,
         null,
         Type.Number,
-        Validator?.Steps ?? null,
+        Validator?.Steps ?? 1,
         null,
         false,
         Enabled
