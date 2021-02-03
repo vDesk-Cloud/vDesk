@@ -111,7 +111,7 @@ final class Updates extends Module {
     Phar::mapPhar(__FILE__);
     include "phar://" . __FILE__ . "/$Updates/{$Name}.php";
     include "phar://" . __FILE__ . "/$Packages/{$Name}.php";
-    return [new {$UpdateClass}(), new {$PackageClass}];
+    return [new {$UpdateClass}(), new {$PackageClass}()];
     __HALT_COMPILER();
 STUB
         );
