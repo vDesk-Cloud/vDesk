@@ -362,7 +362,8 @@ vDesk.MetaInformation.Mask.Editor = function Editor(Mask, Enabled = true) {
     NameTextBox.type = "text";
     NameTextBox.value = Mask.Name;
     NameTextBox.disabled = !Enabled;
-    NameTextBox.addEventListener("input", OnInput, false);
+    NameTextBox.addEventListener("input", OnInput);
+    NameTextBox.addEventListener("select", Event => Event.stopPropagation());
 
     ControlsRow.appendChild(NameTextBox);
 

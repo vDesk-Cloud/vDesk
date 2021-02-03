@@ -8,15 +8,14 @@ use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
 use vDesk\Locale;
 use vDesk\Events;
-
 use vDesk\Modules\Module\Command;
 use vDesk\Modules\Module\Command\Parameter;
 use vDesk\Struct\Collections\Observable\Collection;
 
 /**
- * Class MetaInformation represents ...
+ * MetaInformation Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\MetaInformation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class MetaInformation extends Package implements Locale\IPackage, Events\IPackage {
@@ -29,7 +28,7 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
+    public const Version = "1.0.1";
     
     /**
      * The name of the Package.
@@ -329,6 +328,22 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
                 null,
                 //@todo Use the Element as Primary identifier.
                 new Collection([new Parameter(null, null, "ID", \vDesk\Struct\Type::Int, false, false)])
+            )
+        );
+        $MetaInformation->Commands->Add(
+            new Command(
+                null,
+                $MetaInformation,
+                "Search",
+                true,
+                false,
+                null,
+                new Collection([
+                    new Parameter(null, null, "ID", \vDesk\Struct\Type::Int, false, false),
+                    new Parameter(null, null, "Values", \vDesk\Struct\Type::Array, false, false),
+                    new Parameter(null, null, "All", \vDesk\Struct\Type::Bool, false, false),
+                    new Parameter(null, null, "Strict", \vDesk\Struct\Type::Bool, false, false)
+                ])
             )
         );
         $MetaInformation->Save();

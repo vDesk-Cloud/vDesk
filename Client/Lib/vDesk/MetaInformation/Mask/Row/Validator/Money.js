@@ -41,22 +41,16 @@ vDesk.MetaInformation.Mask.Row.Validator.Money = function Money(Validator = null
         Validator: {
             enumerable: true,
             get:        () => {
-                const Validator = {};
-                if(Min.Valid) {
-                    Validator.Min = Min.Value;
-                }
-                if(Max.Valid) {
-                    Validator.Max = Max.Value;
-                }
-                if(Currency.Valid) {
-                    Validator.Currency = Currency.Value;
-                }
-                return Validator;
+                return {
+                    Min: Min.Value,
+                    Max: Max.Value,
+                    Currency: Currency.Value
+                };
             },
             set:        Value => {
                 Ensure.Property(Value, Type.Object, "Validator", true);
                 Min.Value = Value?.Min ?? null;
-                Max.Value = Value?.Max ?? null;
+                Max.Value = Value?.Max ?? window.Number.MAX_SAFE_INTEGER;
                 Currency.Value = Value?.Currency ?? null;
             }
         },
@@ -117,7 +111,7 @@ vDesk.MetaInformation.Mask.Row.Validator.Money = function Money(Validator = null
         `${vDesk.Locale.MetaInformation.Max}:`,
         null,
         Type.Number,
-        Validator?.Max ?? null,
+        Validator?.Max ?? window.Number.MAX_SAFE_INTEGER,
         null,
         false,
         Enabled
