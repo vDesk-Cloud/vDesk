@@ -492,11 +492,11 @@
                 <ul class="Dependencies">
                     <li><a href="#Packages">Packages</a></li>
                 </ul>
+                <h4>Configuration</h4>
+                <ul class="Configuration">
+                    <li><span title="Recommended" class="Recommended">✓</span> phar.readonly = 0</li>
+                </ul>
             </header>
-            <h4>Configuration</h4>
-            <ul class="Configuration">
-                <li><span title="Recommended" class="Recommended">✓</span> phar.readonly = 0</li>
-            </ul>
             <hr>
             <section class="Description">
                 <ul class="Features">
