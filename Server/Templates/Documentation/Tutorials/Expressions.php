@@ -90,7 +90,7 @@ use vDesk\Struct\Type;
 </p>
 <div style="display: flex; justify-content: space-around;">
 <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::ForEach ?> = (
+<?= Code::ForEach ?>(
     <?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"Name\"") ?>, <?= Code::String("\"Price\"") ?>)
               -><?= Code::Function("From") ?>(<?= Code::String("\"Products\"") ?>)
               -><?= Code::Function("Where") ?>([<?= Code::String("\"Price\"") ?> => [<?= Code::String("\">\"") ?> => <?= Code::Int("20.3") ?>]])
@@ -294,7 +294,7 @@ use vDesk\Struct\Type;
 <p>
     To query, filter and retrieve any records from the database, the Expression-library provides the global <code
             class="Inline">\vDesk\DataProvider\<?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>()</code> factory-method;<br>
-    which creates a new instance of the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("IInsert") ?></code>-Expression according the current configured
+    which creates a new instance of the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("ISelect") ?></code>-Expression according the current configured
     DataProvider.
 </p>
 <div style="display: flex; justify-content: space-around;">
@@ -721,7 +721,7 @@ use vDesk\Struct\Type;
     [<?= Code::String("\"Conversation\"") ?> => [<?= Code::String("\"Unique\"") ?> => <?= Code::Bool("true") ?>,<?= Code::String("\"Fields\"") ?> => [<?= Code::String("\"ID\"") ?>, <?= Code::String("\"Sender\"") ?>, <?= Code::String("\"Recipient\"") ?>]]]
 )
 -><?= Code::Function("Modify") ?>(
-    [<?= Code::String("\"Text\"") ?>  => [<?= Code::String("\"Type\"") ?> => <?= Code::Class("Type") ?>::<?= Code::Const("TinyText") ?>, <?= Code::String("\"Collation\"") ?> => <?= Code::Class("Collation") ?>::<?= Code::Const("ASCII") ?>],],
+    [<?= Code::String("\"Text\"") ?>  => [<?= Code::String("\"Type\"") ?> => <?= Code::Class("Type") ?>::<?= Code::Const("TinyText") ?>, <?= Code::String("\"Collation\"") ?> => <?= Code::Class("Collation") ?>::<?= Code::Const("ASCII") ?>]],
     [<?= Code::String("\"Index\"") ?> => [<?= Code::String("\"Fields\"") ?> => [<?= Code::String("\"ID\"") ?>, <?= Code::String("\"Sender\"") ?>, <?= Code::String("\"Recipient\"") ?>, <?= Code::String("\"Status\"") ?>, <?= Code::String("\"Date\"") ?>]]]
 )
 -><?= Code::Function("Rename") ?>([<?= Code::String("\"Hello\"") ?> => <?= Code::String("\"World\"") ?>])
@@ -739,6 +739,8 @@ use vDesk\Struct\Type;
 <?= Code::Keyword("ADD UNIQUE INDEX") ?> <?= Code::Field("Conversation") ?>(<?= Code::Field("ID") ?>, <?= Code::Field("Sender") ?>, <?= Code::Field("Recipient") ?>),
 
 <?= Code::Keyword("MODIFY COLUMN") ?> <?= Code::Field("Text") ?> <?= Code::Keyword("TINYTEXT") ?> <?= Code::Keyword("NOT NULL") ?> <?= Code::Keyword("COLLATE") ?> <?= Code::String("ascii_general_ci") ?>,
+<?= Code::Keyword("MODIFY INDEX") ?> <?= Code::Field("Index") ?>(<?= Code::Field("ID") ?>, <?= Code::Field("Sender") ?>, <?= Code::Field("Recipient") ?>, <?= Code::Field("Status") ?>, <?= Code::Field("Date") ?>),
+
 <?= Code::Keyword("RENAME COLUMN") ?> <?= Code::Field("Hello") ?> <?= Code::Keyword("TO") ?> <?= Code::Field("World") ?>,
 
 <?= Code::Keyword("DROP COLUMN") ?> <?= Code::Field("Date") ?>,
