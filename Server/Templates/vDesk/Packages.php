@@ -683,7 +683,7 @@
                     <li><a href="#Machines">Machines</a></li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "Machines.phar") ?>" download>Machines.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "Tasks.phar") ?>" download>Tasks.phar</a></p>
             </header>
         </article>
     </section>
