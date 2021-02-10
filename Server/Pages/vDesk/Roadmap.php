@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 namespace Pages\vDesk;
 
-
 use Pages\vDesk;
 
 /**
- * Class Roadmap
+ * Roadmap Page class.
  *
  * @package Pages\vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
