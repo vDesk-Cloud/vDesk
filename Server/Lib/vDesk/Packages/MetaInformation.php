@@ -28,7 +28,7 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.0.2";
     
     /**
      * The name of the Package.
@@ -386,7 +386,7 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
         
         //Drop database.
         Expression::Drop()
-                  ->Database("Messenger")
+                  ->Database("MetaInformation")
                   ->Execute();
         
         //Delete files.
