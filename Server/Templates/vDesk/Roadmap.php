@@ -128,5 +128,6 @@ use vDesk\Pages\Functions;
     <h3 id="Homepage">Homepage</h3>
     <ul>
         <li>Implement changelog</li>
+        <li>Implement media queries for mobile devices</li>
     </ul>
 </section>
