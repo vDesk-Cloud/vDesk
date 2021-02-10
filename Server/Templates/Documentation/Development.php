@@ -33,7 +33,13 @@ use vDesk\Pages\Functions;
             <li><a href="#Strings">Strings</a></li>
         </ul>
     </li>
-    <li><a href="#Icons">Icons</a></li>
+    <li>
+        <a href="#UI">UI</a>
+        <ul class="Topics">
+            <li><a href="#CSS">CSS</a></li>
+            <li><a href="#Icons">Icons</a></li>
+        </ul>
+    </li>
     <li>
         <a href="#Database">Database</a>
         <ul class="Topics">
@@ -513,7 +519,7 @@ Text<?= Code::Delimiter ?>
     Consider the following rules as a "recommendation" for designing graphical interfaces.
 </p>
 <hr>
-<h4>CSS</h4>
+<h4 id="CSS">CSS</h4>
 <p>
     CSS-classes must be named like the control's class they represent, located in a namespace-equivalent directory.<br>
     If a classname intersects with a different one, consider using combined classnames for CSS-classes consisting of the bottom-most namespace and control's classname.<br>
