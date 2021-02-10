@@ -12,7 +12,6 @@ use vDesk\Pages\Functions;
 </p>
 <h3>Overview</h3>
 <ul class="Topics">
-    <li><a href="#ProjectStructure">Project structure</a></li>
     <li>
         <a href="#CodingStyle">Coding style</a>
         <ul class="Topics">
@@ -43,11 +42,6 @@ use vDesk\Pages\Functions;
         </ul>
     </li>
 </ul>
-<h3 id="ProjectStructure">Project structure</h3>
-<p>
-    Because the system is capable of uninstalling unneeded packages and recomposing itself into an executable setup file, i decided to just throw the entire project into a single
-    repository.
-</p>
 <h3 id="CodingStyle">Coding style</h3>
 <p>
     This section describes the conventions and requirements on source code.
