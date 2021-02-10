@@ -1,8 +1,5 @@
-<?php /** @noinspection PhpUndefinedMethodInspection */
-
+<?php
 use vDesk\Documentation\Code;
-use vDesk\Struct\Type;
-
 ?>
 <h2>Database-Expressions</h2>
 <p>
@@ -12,6 +9,9 @@ use vDesk\Struct\Type;
 <ul class="Topics">
     <li>
         <a href="#Expressions">Expressions</a>
+        <ul class="Topics">
+            <li><a href="#Resultsets">Resultsets</a></li>
+        </ul>
     </li>
     <li>
         <a href="#Functions">Functions</a>
@@ -77,13 +77,17 @@ use vDesk\Struct\Type;
     Besides querying manually the database via passing plain SQL-strings through the <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>()</code>-method,<br>
     vDesk ships with a library that provides an "expressive" way of working with databases.
 </p>
+<p>
+    Expressions are early evaluated fluent interfaces which care about proper value escaping and building SQL statements compatible to the current configured database.
+    
+</p>
 <h4 id="Resultsets">Resultsets</h4>
 <p>
     To execute an Expression and retrieve its resultset, an Expression has to be finished with a call to the <code
             class="Inline">\vDesk\DataProvider\<?= Code::Class("IExpression") ?>::<?= Code::Function("Execute") ?>()</code>-method in its call-chain.
 </p>
 <p>
-    The manual execution and retrieving of the resultset can be skipped by simply directly iterating over an Expression; this will immediately execute the Expression and the
+    The manual execution and retrieval of the resultset can be skipped by simply directly iterating over an Expression; this will immediately execute the Expression and the
     resultset it yields will be used for the iterator.<br>
     Iterating over a resultset, will yield the value of calling the <code class="Inline">\vDesk\DataProvider\<?= Code::Class("IResult") ?>::<?= Code::Function("ToMap") ?>()</code>-method
     on each row of the result.
@@ -104,8 +108,22 @@ use vDesk\Struct\Type;
 }</code></pre>
 </div>
 <p>
-    Single values can by retrieved by invoating the Expression.
+    Single values can be retrieved by invoking the Expression as a function which executes it and calls the <code class="Inline">\vDesk\DataProvider\<?= Code::Class("IResult") ?>::<?= Code::Function("ToValue") ?>()</code>-method on its resultset.
 </p>
+<div style="display: flex; justify-content: space-around;">
+    <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
+<?= Code::Variable("\$ID") ?> = <?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"ID\"") ?>)
+-><?= Code::Function("From") ?>(<?= Code::String("\"Archive.Elements\"") ?>)
+-><?= Code::Function("Where") ?>([<?= Code::String("\"Name\"") ?> => <?= Code::String("\"Example\"") ?>])()<?= Code::Delimiter ?>
+</code></pre>
+<pre style="margin: 10px"><code><?= Code\Language::PHP ?>
+<?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"ID\"") ?>)
+-><?= Code::Function("From") ?>(<?= Code::String("\"Archive.Elements\"") ?>)
+-><?= Code::Function("Where") ?>([<?= Code::String("\"Name\"") ?> => <?= Code::String("\"Example\"") ?>])
+-><?= Code::Function("Execute") ?>()
+-><?= Code::Function("ToValue") ?>()<?= Code::Delimiter ?>
+    </code></pre>
+</div>
 <hr>
 <h3 id="Functions">Functions</h3>
 <p>
@@ -654,7 +672,7 @@ use vDesk\Struct\Type;
 </div>
 
 <hr>
-<h3 id="Create">Creating atabases and tables</h3>
+<h3 id="Create">Creating databases and tables</h3>
 <p>
     To create new databases and tables, the Expression-library provides the global <code class="Inline">Expression::<?= Code::Class("Create") ?></code> factory-method;<br>
     which creates a new instance of the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("ICreate") ?></code>-Expression according the current configured
@@ -738,8 +756,8 @@ use vDesk\Struct\Type;
 <?= Code::Keyword("ADD COLUMN") ?> <?= Code::Field("ID") ?> <?= Code::Keyword("BIGINT") ?> <?= Code::Keyword("UNSIGNED") ?> <?= Code::Keyword("NOT NULL") ?> <?= Code::Keyword("AUTO_INCREMENT") ?>,
 <?= Code::Keyword("ADD UNIQUE INDEX") ?> <?= Code::Field("Conversation") ?>(<?= Code::Field("ID") ?>, <?= Code::Field("Sender") ?>, <?= Code::Field("Recipient") ?>),
 
-<?= Code::Keyword("MODIFY COLUMN") ?> <?= Code::Field("Text") ?> <?= Code::Keyword("TINYTEXT") ?> <?= Code::Keyword("NOT NULL") ?> <?= Code::Keyword("COLLATE") ?> <?= Code::String("ascii_general_ci") ?>,
-<?= Code::Keyword("MODIFY INDEX") ?> <?= Code::Field("Index") ?>(<?= Code::Field("ID") ?>, <?= Code::Field("Sender") ?>, <?= Code::Field("Recipient") ?>, <?= Code::Field("Status") ?>, <?= Code::Field("Date") ?>),
+<?= Code::Keyword("ALTER COLUMN") ?> <?= Code::Field("Text") ?> <?= Code::Keyword("TINYTEXT") ?> <?= Code::Keyword("NOT NULL") ?> <?= Code::Keyword("COLLATE") ?> <?= Code::String("ascii_general_ci") ?>,
+<?= Code::Keyword("ALTER INDEX") ?> <?= Code::Field("Index") ?>(<?= Code::Field("ID") ?>, <?= Code::Field("Sender") ?>, <?= Code::Field("Recipient") ?>, <?= Code::Field("Status") ?>, <?= Code::Field("Date") ?>),
 
 <?= Code::Keyword("RENAME COLUMN") ?> <?= Code::Field("Hello") ?> <?= Code::Keyword("TO") ?> <?= Code::Field("World") ?>,
 
