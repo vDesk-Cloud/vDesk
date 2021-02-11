@@ -14,7 +14,7 @@ The licensetext is provided within the software.
 - PHP >= 8.0
 - Webserver (Apache2.4 recommended)
 - MySQL >= 5.6 compatible SQL server
-- ECMAScript >= 6 compatible browser
+- ECMAScript >= 2020 compatible browser
 
 ## Installation
 Download and copy the latest setup release into the target installation directory.
