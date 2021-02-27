@@ -123,6 +123,7 @@ use vDesk\Pages\Functions;
     <h3 id="Pages">Pages</h3>
     <ul>
         <li>Store authentication ticket in PHP's session</li>
+        <li>Implement cache of composed Pages</li>
     </ul>
     <hr>
     <h3 id="Homepage">Homepage</h3>
