@@ -32,8 +32,11 @@ class Pages extends \vDesk {
         \set_exception_handler(static fn(\Throwable $Exception) => Response::Write($Exception));
         
         //Pages.
-        static::$Load[] = static fn(string $Class): string => Settings::$Local["Pages"]["Pages"] . DIRECTORY_SEPARATOR . \str_replace("\\", DIRECTORY_SEPARATOR, $Class) . ".php";
-        
+        static::$Load[] = static fn(string $Class): string => Settings::$Local["Pages"]["Pages"]
+                                                              . \DIRECTORY_SEPARATOR
+                                                              . \str_replace("\\", \DIRECTORY_SEPARATOR, \str_replace("Pages", "", $Class))
+                                                              . ".php";
+
         \ob_start();
     }
     
