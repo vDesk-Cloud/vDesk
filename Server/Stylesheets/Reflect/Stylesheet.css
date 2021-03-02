@@ -1,0 +1,228 @@
+article {
+    font-family: Arial;
+    height: 100%;
+    width: 100%;
+}
+
+article > header {
+    width: calc(20% - 15px);
+    height: calc(100% - 15px);
+    float: left;
+    overflow-y: auto;
+    padding: 10px 5px 10px 10px;
+}
+
+article > section {
+    width: calc(80% - 15px);
+    height: calc(100% - 20px);
+    padding: 10px 10px 10px 5px;
+    float: left;
+    clear: right;
+    overflow-y: auto;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.Documentation > .Definition,
+.Documentation > .Summary,
+.Documentation > .Constants,
+.Documentation > .Properties,
+.Documentation > .Methods,
+.Documentation > .Methods > .Method,
+.Documentation > .Properties > .Property,
+.Documentation > .Constants > .Constant {
+    width: 100%;
+    float: left;
+    border-bottom: 1px solid #999;
+    padding-bottom: 10px;
+}
+
+.Documentation > .Constants > .Constant:last-child,
+.Documentation > .Properties:last-child,
+.Documentation > .Methods:last-child {
+    border-bottom: none;
+    padding-bottom: initial;
+}
+
+.Documentation > .Description {
+
+}
+
+.Documentation > .Description > .Syntax > .Interfaces > i:last-child {
+    display: none;
+}
+
+.Summary > ul {
+    list-style: none;
+    width: 33%;
+    float: left;
+    margin: 0;
+    padding: 0;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.Interface > .Summary > ul {
+    width: 50%;
+}
+
+.Syntax span.public, .Keyword {
+    color: orange;
+}
+
+code {
+    background-color: #333333;
+    color: whitesmoke;
+    font-family: Courier New, monospace;
+    padding: 10px;
+    border-radius: 5px;
+    display: block;
+}
+
+code > h4 {
+    padding: 0;
+    margin: -4px 0 4px 0;
+    background-color: #333333;
+    border-bottom: 1px solid wheat;
+}
+
+.Syntax .Variable,
+.Syntax .Parameter > .Name {
+    color: #9876AA;
+}
+
+.Syntax .Type.Class,
+.Syntax .Value.Class
+{
+    color: wheat;
+}
+
+.Syntax .Modifiers,
+.Syntax .Type.mixed,
+.Syntax .Type.int,
+.Syntax .Type.void,
+.Syntax .Type.array,
+.Syntax .Type.string,
+.Syntax .Type.callable,
+.Syntax .Type.bool,
+.Syntax .Type.iterable,
+.Syntax .Type.null,
+.Syntax .Type.self,
+.Syntax .Type.static {
+    color: orange;
+}
+
+.Value.string {
+    color: olivedrab;
+}
+
+.Value.null,
+.Value.bool,
+.Value.boolean {
+    color: orange;
+}
+
+.Value.int,
+.Value.integer,
+.Value.float {
+    color: lightblue;
+}
+
+.Constant > .Syntax > .Name {
+    color: #A7543F;
+}
+
+
+.Method > .Syntax > .Name {
+    color: #FFC66D;
+}
+
+.Method > .Name {
+    color: #FFC66D;
+}
+
+.Method > .Parameters > .Parameter,
+.Method > .Exceptions > .Exception,
+.Method > .ReturnValue {
+    display: grid;
+    column-gap: 10px;
+    row-gap: 15px;
+    align-content: stretch;
+}
+
+.Method > .Parameters > .Parameter {
+    grid-template-columns: 20% 10% 70%;
+    grid-template-rows: 0 0 0;
+}
+
+.Method > .Exceptions > .Exception {
+    grid-template-columns: 30% 70%;
+    grid-template-rows: 0 0 0;
+}
+
+.Method > .ReturnValue {
+    grid-template-columns: 30% 70%;
+    grid-template-rows: 0 0 0;
+}
+
+.Method > .Exceptions > .Exception > .Name,
+.Method > .Parameters > .Parameter > .Type,
+.Method > .ReturnValue > .Type {
+    align-self: stretch;
+    grid-column: 1;
+}
+
+.Method > .Parameters > .Parameter > .Name,
+.Method > .Exceptions > .Exception > .Description,
+.Method > .ReturnValue > .Description {
+    align-self: stretch;
+    grid-column: 2;
+}
+
+.Method > .Parameters > .Parameter > .Description {
+    grid-column: 3;
+}
+
+.Exceptions {
+    width: 100%;
+}
+
+.Exception,
+.Parameter,
+.ReturnValue {
+    width: 100%;
+}
+
+.Exception > .Name,
+.ReturnValue > .Type {
+    float: left;
+    color: #333;
+}
+
+.Exception > .Description,
+.ReturnValue > .Description {
+    max-width: 70%;
+    min-width: 80%;
+    margin: 0;
+    float: left;
+    clear: right;
+}
+
+
+.Description > code {
+    white-space: pre;
+}
+
+nav {
+    list-style: none;
+}
+
+nav > a {
+    display: list-item;
+}
