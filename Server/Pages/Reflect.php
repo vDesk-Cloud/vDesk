@@ -37,14 +37,14 @@ class Reflect extends Page {
     /**
      * Initializes a new instance of the Reflect class.
      *
-     * @param null|iterable                     $Values      Initializes the Reflect Page with the specified Dictionary of values.
-     * @param null|iterable                     $Templates   Initializes the Reflect Page with the specified Collection of templates.
-     * @param null|iterable                     $Stylesheets Initializes the Reflect Page with the specified Collection of stylesheets.
-     * @param null|iterable                     $Scripts     Initializes the Reflect Page with the specified Collection of scripts.
-     * @param null|\Reflector                   $Reflector   Initializes the Reflect Page with the specified Reflector.
-     * @param null|\Pages\Reflect\Documentation $Documentation
-     * @param null|\Pages\Reflect\Index         $Index
-     * @param null|string                       $ReferenceName
+     * @param null|iterable                     $Values        Initializes the Reflect Page with the specified Dictionary of values.
+     * @param null|iterable                     $Templates     Initializes the Reflect Page with the specified Collection of templates.
+     * @param null|iterable                     $Stylesheets   Initializes the Reflect Page with the specified Collection of stylesheets.
+     * @param null|iterable                     $Scripts       Initializes the Reflect Page with the specified Collection of scripts.
+     * @param null|\Reflector                   $Reflector     Initializes the Reflect Page with the specified Reflector.
+     * @param null|\Pages\Reflect\Documentation $Documentation Initializes the Reflect Page with the specified Documentation.
+     * @param null|\Pages\Reflect\Index         $Index         Initializes the Reflect Page with the specified Index.
+     * @param null|string                       $ReferenceName Initializes the Reflect Page with the specified reference name.
      */
     public function __construct(
         ?iterable $Values = [],
@@ -72,9 +72,8 @@ class Reflect extends Page {
         }
     }
 
-
     /**
-     * Factory method that creates a new documentation from a specified ReflectionClass.
+     * Factory method that creates a new Reflect from a specified ReflectionClass.
      *
      * @param \ReflectionClass $Class The ReflectionClass to create a documentation of.
      *
@@ -90,15 +89,22 @@ class Reflect extends Page {
         return new Reflect\ClassPage(Reflector: $Class);
     }
 
+    /**
+     * Creates a link from a specified Reflector.
+     *
+     * @param \Reflector $Target The target to link to.
+     * @param bool       $Short  Flag indicating whether to use any shortname of the specified Reflector.
+     *
+     * @return string A string containing a HTML anchor tag linking the specified Reflector.
+     */
     public static function Link(\Reflector $Target, bool $Short = false): string {
-
         return "<a href=\"" . match ($Target::class) {
                 \ReflectionClass::class => match ($Target->isInternal()) {
                     false => match (true) {
                                  $Target->isInterface() => "./Interface.",
                                  $Target->isTrait() => "./Trait.",
                                  default => "./Class.",
-                             } . \str_replace("\\", ".", $Target->name). ".html\">" . ($Short ? $Target->getShortName() : "\\" . $Target->name),
+                             } . \str_replace("\\", ".", $Target->name) . ".html\">" . ($Short ? $Target->getShortName() : "\\" . $Target->name),
                     default => "https://www.php.net/manual/en/class." . \strtolower($Target->getShortName()) . ".php\" target=\"_blank\">\\" . $Target->getShortName()
                 },
                 \ReflectionMethod::class => match (true) {
@@ -121,7 +127,6 @@ class Reflect extends Page {
                                               } . \str_replace("\\", ".", $Target->getDeclaringClass()->name)
                                               . ".html#Property.{$Target->name}\">{$Target->name}",
             } . "</a>";
-
     }
 
 }
