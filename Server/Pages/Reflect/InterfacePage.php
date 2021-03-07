@@ -6,7 +6,7 @@ namespace Pages\Reflect;
 /**
  * Interface Page class.
  *
- * @package Pages\Reflect\Interface
+ * @package Reflect
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class InterfacePage extends Documentation {
