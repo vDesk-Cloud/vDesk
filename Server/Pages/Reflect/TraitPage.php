@@ -4,20 +4,21 @@ declare(strict_types=1);
 namespace Pages\Reflect;
 
 /**
- * Class TraitPage
+ * Trait Page class.
  *
- * @package Pages\Reflect
+ * @package Reflect
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class TraitPage extends Documentation {
 
     /**
+     * Initializes a new instance of the Trait Page class.
      *
-     * @param null|iterable         $Values
-     * @param null|iterable         $Templates
-     * @param null|iterable         $Stylesheets
-     * @param null|iterable         $Scripts
-     * @param null|\ReflectionClass $Reflector
+     * @param null|iterable         $Values      Initializes the Trait Page with the specified Dictionary of values.
+     * @param null|iterable         $Templates   Initializes the Trait Page with the specified Collection of templates.
+     * @param null|iterable         $Stylesheets Initializes the Trait Page with the specified Collection of stylesheets.
+     * @param null|iterable         $Scripts     Initializes the Trait Page with the specified Collection of scripts.
+     * @param null|\ReflectionClass $Reflector   Initializes the Trait Page with the specified Reflector.
      */
     public function __construct(
         ?iterable $Values = [],
