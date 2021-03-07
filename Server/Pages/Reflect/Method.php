@@ -48,7 +48,7 @@ class Method extends Reflect {
     /**
      * Expression for parsing the '@return'-tags of DocBlocks.
      */
-    public const Return             = "/(?<= \* @return ).*?(?= \* @|\*\/)/s";
+    public const Return = "/(?<= \* @return ).*?(?= \* @|\*\/)/s";
 
     /**
      * Expression for parsing the type and description of a '@return'-tag.
