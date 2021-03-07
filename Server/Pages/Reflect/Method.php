@@ -48,7 +48,7 @@ class Method extends Reflect {
     /**
      * Expression for parsing the '@return'-tags of DocBlocks.
      */
-    public const Return = "/(?<= \* @return ).*?(?= \* @|\*\/)/s";
+    public const Return             = "/(?<= \* @return ).*?(?= \* @|\*\/)/s";
 
     /**
      * Expression for parsing the type and description of a '@return'-tag.
@@ -67,7 +67,7 @@ class Method extends Reflect {
      * @param null|iterable                     $Templates         Initializes the Method Page with the specified Collection of templates.
      * @param null|iterable                     $Stylesheets       Initializes the Method Page with the specified Collection of stylesheets.
      * @param null|iterable                     $Scripts           Initializes the Method Page with the specified Collection of scripts.
-     * @param null|\Reflector                   $Reflector         Initializes the Method Page with the specified Reflector.
+     * @param null|\ReflectionMethod            $Reflector         Initializes the Method Page with the specified Reflector.
      * @param bool                              $Final             Initializes the Method Page with the specified flag indicating whether the Method is final.
      * @param bool                              $Abstract          Initializes the Method Page with the specified flag indicating whether the Method is abstract.
      * @param bool                              $Static            Initializes the Method Page with the specified flag indicating whether the Method is static.
