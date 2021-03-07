@@ -6,6 +6,12 @@ namespace Pages\Reflect;
 use Pages\Reflect;
 use Pages\Reflect\Method\Parameter;
 
+/**
+ * Method Page class.
+ *
+ * @package Reflect
+ * @author  Kerry <DevelopmentHero@gmail.com>
+ */
 class Method extends Reflect {
 
     /**
@@ -55,29 +61,28 @@ class Method extends Reflect {
     public const Exceptions = "/(?<= \* @throws ).*?(?= \* @|\*\/)/s";
 
     /**
-     * /**
-     * Initializes a new instance of the Method class.
+     * Initializes a new instance of the Method Page class.
      *
-     * @param null|iterable                     $Values      Initializes the Method Page with the specified set of values.
-     * @param null|iterable                     $Templates   Initializes the Method Page with the specified Collection of templates.
-     * @param null|iterable                     $Stylesheets Initializes the Method Page with the specified Collection of stylesheets.
-     * @param null|iterable                     $Scripts     Initializes the Method Page with the specified Collection of scripts.
-     * @param null|\ReflectionMethod            $Reflector   Initializes the Method Page with the specified Reflector.
-     * @param bool                              $Final       Initializes the Method Page with the specified flag indicating whether the Method is final.
-     * @param bool                              $Abstract    Initializes the Method Page with the specified flag indicating whether the Method is abstract.
-     * @param bool                              $Static      Initializes the Method Page with the specified flag indicating whether the Method is static.
-     * @param null|string                       $Modifier    Initializes the Method Page with the specified modifier.
-     * @param null|string                       $Name        Initializes the Method Page with the specified name.
-     * @param null|\Pages\Reflect\Type          $ReturnType  Initializes the Member Page with the specified return Type.
-     * @param string                            $Description Initializes the Method Page with the specified return description.
-     * @param string                            $ReturnDescription
-     * @param \Pages\Reflect\Method\Parameter[] $Parameters
-     * @param \Pages\Reflect\Method\Exception[] $Exceptions
-     * @param bool                              $Ignore
-     * @param bool                              $Inheritdoc
-     * @param bool                              $Inherited
-     * @param bool                              $Magic
-     * @param null|string                       $Since
+     * @param null|iterable                     $Values            Initializes the Method Page with the specified set of values.
+     * @param null|iterable                     $Templates         Initializes the Method Page with the specified Collection of templates.
+     * @param null|iterable                     $Stylesheets       Initializes the Method Page with the specified Collection of stylesheets.
+     * @param null|iterable                     $Scripts           Initializes the Method Page with the specified Collection of scripts.
+     * @param null|\Reflector                   $Reflector         Initializes the Method Page with the specified Reflector.
+     * @param bool                              $Final             Initializes the Method Page with the specified flag indicating whether the Method is final.
+     * @param bool                              $Abstract          Initializes the Method Page with the specified flag indicating whether the Method is abstract.
+     * @param bool                              $Static            Initializes the Method Page with the specified flag indicating whether the Method is static.
+     * @param null|string                       $Modifier          Initializes the Method Page with the specified modifier.
+     * @param null|string                       $Name              Initializes the Method Page with the specified name.
+     * @param null|\Pages\Reflect\Type          $ReturnType        Initializes the Member Page with the specified return Type.
+     * @param string                            $Description       Initializes the Method Page with the specified description.
+     * @param string                            $ReturnDescription Initializes the Method Page with the specified return description.
+     * @param \Pages\Reflect\Method\Parameter[] $Parameters        Initializes the Method Page with the specified set of parameters.
+     * @param \Pages\Reflect\Method\Exception[] $Exceptions        Initializes the Method Page with the specified set of Exceptions.
+     * @param bool                              $Ignore            Initializes the Method Page with the specified flag indicating whether the Method is ignored.
+     * @param bool                              $Inheritdoc        Initializes the Method Page with the specified flag indicating whether the Method is static.
+     * @param bool                              $Inherited         Initializes the Method Page with the specified flag indicating whether the Method is static.
+     * @param bool                              $Magic             Initializes the Method Page with the specified flag indicating whether the Method is magic.
+     * @param null|string                       $Since             Initializes the Method Page with the specified @since version.
      */
     public function __construct(
         ?iterable $Values = [],
@@ -139,9 +144,9 @@ class Method extends Reflect {
 
         //Parse inheritdoc.
         $this->Inheritdoc = (bool)\preg_match(static::Inheritdoc, (string)$Reflector->getDocComment(), $Matches);
-        if($Reflector->getDeclaringClass()->getParentClass() !== false){
+        if($Reflector->getDeclaringClass()->getParentClass() !== false) {
             foreach($Reflector->getDeclaringClass()->getParentClass()->getMethods() as $ParentMethod) {
-                if($ParentMethod->getShortName() === $Reflector->getShortName()){
+                if($ParentMethod->getShortName() === $Reflector->getShortName()) {
                     $this->Inherited = true;
                     break;
                 }
