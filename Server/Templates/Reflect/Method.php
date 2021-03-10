@@ -60,7 +60,7 @@ if($Count > 2) {
         </div>
     <?php endif; ?>
     <code class="Syntax">
-        <h4>Syntax</h4>
+        <span class="Header">Syntax</span>
         <span class="Modifiers">
             <span class="<?= $Page->Modifier ?>"><?= $Page->Modifier ?></span>
         </span>

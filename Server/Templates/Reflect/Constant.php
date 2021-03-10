@@ -12,7 +12,7 @@ use vDesk\Pages\Functions;
         <?= $Page->Description ?>
     </p>
     <code class="Syntax">
-        <h4>Syntax</h4>
+        <span class="Header">Syntax</span>
         <span class="Modifiers">
             <span class="<?= $Page->Modifier ?>"><?= $Page->Modifier ?> const</span>
         </span>

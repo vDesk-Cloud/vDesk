@@ -7,9 +7,9 @@ use Pages\Reflect\Type;
 use vDesk\Pages\Page;
 
 /**
- * Class Virtual
+ * Method\Virtual Page class.
  *
- * @package Pages\Reflect\Method
+ * @package Reflect
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Virtual extends Page {
@@ -20,23 +20,24 @@ class Virtual extends Page {
     public const Signature = "/^(?(?=static )(?'Static'\S* |))(?'Type'\S*)(?'Name'[^\(]*)(?=\()\((?<=\()(?'Parameters'.*)(?=\))\)(?<=\)) (?'Description'.*)/s";
 
     /**
+     * Initializes a new instance of the Method\Virtual Page class.
      *
-     * @param null|iterable                             $Values
-     * @param null|iterable                             $Templates
-     * @param null|iterable                             $Stylesheets
-     * @param null|iterable                             $Scripts
-     * @param string                                    $Signature
-     * @param bool                                      $Static
-     * @param null|string                               $Modifier
-     * @param null|string                               $Name
-     * @param null|\Pages\Reflect\Type                  $ReturnType
-     * @param string                                    $Description
-     * @param \Pages\Reflect\Method\Parameter\Virtual[] $Parameters
+     * @param null|iterable                             $Values      Initializes the Method\Virtual Page with the specified Dictionary of values.
+     * @param null|iterable                             $Templates   Initializes the Method\Virtual Page with the specified Collection of templates.
+     * @param null|iterable                             $Stylesheets Initializes the Method\Virtual Page with the specified Collection of stylesheets.
+     * @param null|iterable                             $Scripts     Initializes the Method\Virtual Page with the specified Collection of scripts.
+     * @param string                                    $Signature   Initializes the Method\Virtual Page with the specified signature.
+     * @param bool                                      $Static      Initializes the Method\Virtual Page with the specified flag indicating whether the Method\Virtual is nullable.
+     * @param null|string                               $Modifier    Initializes the Method\Virtual Page with the specified modifier.
+     * @param null|string                               $Name        Initializes the Member Page with the specified name.
+     * @param null|\Pages\Reflect\Type                  $ReturnType  Initializes the Member Page with the specified return Type.
+     * @param string                                    $Description Initializes the Member Page with the specified description.
+     * @param \Pages\Reflect\Method\Parameter\Virtual[] $Parameters  Initializes the Method\Virtual Page with the specified set of Parameters.
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Reflect/Property/Virtual"],
-        ?iterable $Stylesheets = ["Reflect/Stylesheet"],
+        ?iterable $Templates = ["Reflect/Method/Virtual"],
+        ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         string $Signature = "",
         public bool $Static = false,

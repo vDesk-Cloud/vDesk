@@ -58,18 +58,78 @@ body, html {
     display: none;
 }
 
-.Summary > ul {
-    list-style: none;
-    width: 33%;
-    float: left;
-    margin: 0;
-    padding: 0;
-    max-height: 400px;
-    overflow-y: auto;
+.Documentation > .Summary {
+    height: 50%;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 42px auto;
 }
 
-.Interface > .Summary > ul {
-    width: 50%;
+.Documentation.Summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) !important;
+}
+
+.Documentation.Summary > h2,
+.Documentation > .Summary > h3 {
+    grid-row: 1;
+}
+
+.Documentation > .Summary > div {
+    grid-row: 2;
+}
+
+.Documentation > .Summary > div > ul,
+.Documentation.Summary > div > ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    height: calc(100% - 22px);
+}
+
+.Documentation > .Summary > div,
+.Documentation.Summary > div{
+    overflow: hidden;
+}
+
+
+.Documentation.Summary > .Classes {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.Documentation.Summary > .Interfaces {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.Documentation.Summary > .Traits {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.Documentation.Summary > .Errors {
+    grid-row: 4;
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+.Documentation.Summary > .Exceptions {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row: 4;
+}
+
+.Summary > hr {
+    grid-row: 3;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    width: 100%;
+}
+
+.Index > a.Hidden {
+    display: none;
 }
 
 .Syntax span.public, .Keyword {
@@ -85,11 +145,13 @@ code {
     display: block;
 }
 
-code > h4 {
+code > .Header {
     padding: 0;
     margin: -4px 0 4px 0;
     background-color: #333333;
     border-bottom: 1px solid wheat;
+    display: inline-block;
+    width: 100%;
 }
 
 .Syntax .Variable,
@@ -98,8 +160,7 @@ code > h4 {
 }
 
 .Syntax .Type.Class,
-.Syntax .Value.Class
-{
+.Syntax .Value.Class {
     color: wheat;
 }
 

@@ -7,6 +7,12 @@ use Pages\Reflect\Index;
 use Pages\Reflect\Documentation;
 use vDesk\Pages\Page;
 
+/**
+ * Reflect Page class.
+ *
+ * @package Reflect
+ * @author  Kerry <DevelopmentHero@gmail.com>
+ */
 class Reflect extends Page {
 
     /**
@@ -35,7 +41,7 @@ class Reflect extends Page {
     public const Inheritdoc = "/(?<= \* )@inheritDoc/s";
 
     /**
-     * Initializes a new instance of the Reflect class.
+     * Initializes a new instance of the Reflect Page.
      *
      * @param null|iterable                     $Values        Initializes the Reflect Page with the specified Dictionary of values.
      * @param null|iterable                     $Templates     Initializes the Reflect Page with the specified Collection of templates.
@@ -50,7 +56,7 @@ class Reflect extends Page {
         ?iterable $Values = [],
         ?iterable $Templates = ["Reflect"],
         ?iterable $Stylesheets = ["Reflect/Stylesheet"],
-        ?iterable $Scripts = [],
+        ?iterable $Scripts = ["Reflect/Search"],
         public ?\Reflector $Reflector = null,
         public ?Documentation $Documentation = null,
         public ?Index $Index = null,
@@ -101,29 +107,29 @@ class Reflect extends Page {
         return "<a href=\"" . match ($Target::class) {
                 \ReflectionClass::class => match ($Target->isInternal()) {
                     false => match (true) {
-                                 $Target->isInterface() => "./Interface.",
-                                 $Target->isTrait() => "./Trait.",
-                                 default => "./Class.",
+                                 $Target->isInterface() => "Interface.",
+                                 $Target->isTrait() => "Trait.",
+                                 default => "Class.",
                              } . \str_replace("\\", ".", $Target->name) . ".html\">" . ($Short ? $Target->getShortName() : "\\" . $Target->name),
                     default => "https://www.php.net/manual/en/class." . \strtolower($Target->getShortName()) . ".php\" target=\"_blank\">\\" . $Target->getShortName()
                 },
                 \ReflectionMethod::class => match (true) {
-                                                $Target->getDeclaringClass()->isInterface() => "./Interface.",
-                                                $Target->getDeclaringClass()->isTrait() => "./Trait.",
-                                                default => "./Class.",
+                                                $Target->getDeclaringClass()->isInterface() => "Interface.",
+                                                $Target->getDeclaringClass()->isTrait() => "Trait.",
+                                                default => "Class.",
                                             }
                                             . \str_replace("\\", ".", $Target->getDeclaringClass()->name)
                                             . ".html#Method.{$Target->name}\">{$Target->name}",
                 \ReflectionClassConstant::class => match (true) {
-                                                       $Target->getDeclaringClass()->isInterface() => "./Interface.",
-                                                       $Target->getDeclaringClass()->isTrait() => "./Trait.",
-                                                       default => "./Class.",
+                                                       $Target->getDeclaringClass()->isInterface() => "Interface.",
+                                                       $Target->getDeclaringClass()->isTrait() => "Trait.",
+                                                       default => "Class.",
                                                    } . \str_replace("\\", ".", $Target->getDeclaringClass()->name)
                                                    . ".html#Constant.{$Target->name}\">{$Target->name}",
                 \ReflectionProperty::class => match (true) {
-                                                  $Target->getDeclaringClass()->isInterface() => "./Interface.",
-                                                  $Target->getDeclaringClass()->isTrait() => "./Trait.",
-                                                  default => "./Class.",
+                                                  $Target->getDeclaringClass()->isInterface() => "Interface.",
+                                                  $Target->getDeclaringClass()->isTrait() => "Trait.",
+                                                  default => "Class.",
                                               } . \str_replace("\\", ".", $Target->getDeclaringClass()->name)
                                               . ".html#Property.{$Target->name}\">{$Target->name}",
             } . "</a>";

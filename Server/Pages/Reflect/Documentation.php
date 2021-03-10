@@ -54,29 +54,29 @@ abstract class Documentation extends Reflect {
     public const PropertySignature = "/(?'Type'^\S*) (?'Name'\S*) (?'Description'.*)/";
 
     /**
-     * Documentation constructor.
+     * Initializes a new instance of the Documentation Page class.
      *
-     * @param null|iterable                     $Values
-     * @param null|iterable                     $Templates
-     * @param null|iterable                     $Stylesheets
-     * @param null|iterable                     $Scripts
-     * @param null|\ReflectionClass             $Reflector
-     * @param string                            $Name
-     * @param string                            $Description
-     * @param string[]                          $Authors
-     * @param null|string                       $Version
-     * @param \Pages\Reflect\Constant[]         $Constants
-     * @param \Pages\Reflect\Property[]         $Properties
-     * @param \Pages\Reflect\Property\Virtual[] $VirtualProperties
-     * @param \Pages\Reflect\Method[]           $Methods
-     * @param \Pages\Reflect\Method\Virtual[]   $VirtualMethods
-     * @param null|\ReflectionClass             $Parent
-     * @param bool                              $Internal
+     * @param null|iterable                     $Values            Initializes the Documentation Page with the specified Dictionary of values.
+     * @param null|iterable                     $Templates         Initializes the Documentation Page with the specified Collection of templates.
+     * @param null|iterable                     $Stylesheets       Initializes the Documentation Page with the specified Collection of stylesheets.
+     * @param null|iterable                     $Scripts           Initializes the Documentation Page with the specified Collection of scripts.
+     * @param null|\Reflector                   $Reflector         Initializes the Documentation Page with the specified ReflectionClass.
+     * @param string                            $Name              Initializes the Documentation Page with the specified name.
+     * @param string                            $Description       Initializes the Documentation Page with the specified name.
+     * @param string[]                          $Authors           Initializes the Documentation Page with the specified set of authors.
+     * @param null|string                       $Version           Initializes the Documentation Page with the specified name.
+     * @param \Pages\Reflect\Constant[]         $Constants         Initializes the Documentation Page with the specified set of scripts.
+     * @param \Pages\Reflect\Property[]         $Properties        Initializes the Documentation Page with the specified set of Properties.
+     * @param \Pages\Reflect\Property\Virtual[] $VirtualProperties Initializes the Documentation Page with the specified set of VirtualProperties.
+     * @param \Pages\Reflect\Method[]           $Methods           Initializes the Documentation Page with the specified set of Methods.
+     * @param \Pages\Reflect\Method\Virtual[]   $VirtualMethods    Initializes the Documentation Page with the specified set of VirtualMethods.
+     * @param null|\ReflectionClass             $Parent            Initializes the Documentation Page with the specified name.
+     * @param bool                              $Internal          Initializes the Documentation Page with the specified flag indicating the Reflector is internal.
      */
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Reflect"],
-        ?iterable $Stylesheets = ["Reflect/Stylesheet"],
+        ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         public ?\Reflector $Reflector = null,
         public string $Name = "",
@@ -105,7 +105,7 @@ abstract class Documentation extends Reflect {
         //Parse authors.
         if((bool)\preg_match_all(static::Author, (string)$Reflector->getDocComment(), $Matches)) {
             foreach($Matches[0] as $Author) {
-                if(\str_contains($Author, "<")){
+                if(\str_contains($Author, "<")) {
                     [$Name, $Mail] = \explode("<", \rtrim($Author, " >\r\n\t"));
                     $this->Authors[\trim($Name)] = $Mail;
                 }

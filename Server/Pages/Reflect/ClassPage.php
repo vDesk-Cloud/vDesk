@@ -25,7 +25,7 @@ class ClassPage extends Documentation {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Reflect/Class"],
-        ?iterable $Stylesheets = ["Reflect/Stylesheet"],
+        ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         ?\Reflector $Reflector = null,
         public bool $Final = false,

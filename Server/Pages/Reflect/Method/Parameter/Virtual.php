@@ -7,27 +7,29 @@ use Pages\Reflect\Type;
 use vDesk\Pages\Page;
 
 /**
- * Class Virtual
+ * Method\Parameter\Virtual Page class.
  *
- * @package Pages\Reflect\Method\Parameter
+ * @package Reflect
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Virtual extends Page {
 
     /**
-     * @param null|iterable            $Values
-     * @param null|iterable            $Templates
-     * @param null|iterable            $Stylesheets
-     * @param null|iterable            $Scripts
-     * @param string                   $Signature
-     * @param null|\Pages\Reflect\Type $Type
-     * @param string                   $Name
-     * @param null|bool                $Nullable
+     * Initializes a new instance of the Method\Parameter\Virtual Page class.
+     *
+     * @param null|iterable            $Values      Initializes the Method\Parameter\Virtual Page with the specified Dictionary of values.
+     * @param null|iterable            $Templates   Initializes the Method\Parameter\Virtual Page with the specified Collection of templates.
+     * @param null|iterable            $Stylesheets Initializes the Method\Parameter\Virtual Page with the specified Collection of stylesheets.
+     * @param null|iterable            $Scripts     Initializes the Method\Parameter\Virtual Page with the specified Collection of scripts.
+     * @param string                   $Signature   Initializes the Method\Parameter\Virtual Page with the specified signature.
+     * @param null|\Pages\Reflect\Type $Type        Initializes the Method\Parameter\Virtual Page with the specified Type.
+     * @param string                   $Name        Initializes the Method\Parameter\Virtual Page with the specified name.
+     * @param null|bool                $Nullable    Initializes the Method\Parameter\Virtual Page with the specified flag indicating whether the Method\Parameter\Virtual is nullable.
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Reflect/Property/Virtual"],
-        ?iterable $Stylesheets = ["Reflect/Stylesheet"],
+        ?iterable $Templates = ["Reflect/Method/Parameters/Virtual"],
+        ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         string $Signature = "",
         public ?Type $Type = null,
@@ -40,7 +42,7 @@ class Virtual extends Page {
             $this->Type = new Type($Chunks[0]);
             $this->Name = $Chunks[1];
         } else {
-            $this->Type = new Type("mixed");
+            $this->Type = new Type(Signature: "mixed");
             $this->Name = $Chunks[0];
         }
         $this->Nullable = $this->Type->Nullable;

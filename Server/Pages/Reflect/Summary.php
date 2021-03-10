@@ -29,7 +29,7 @@ class Summary extends Page {
         ?iterable $Values = [],
         ?iterable $Templates = ["Reflect/Summary"],
         ?iterable $Stylesheets = ["Reflect/Stylesheet"],
-        ?iterable $Scripts = [],
+        ?iterable $Scripts = ["Reflect/Search"],
         public array $Reflectors = [],
         public ?Index $Index = null,
         public array $Errors = [],

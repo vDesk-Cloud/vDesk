@@ -23,7 +23,7 @@ class TraitPage extends Documentation {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Reflect/Trait"],
-        ?iterable $Stylesheets = ["Reflect/Stylesheet"],
+        ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         ?\Reflector $Reflector = null
     ) {

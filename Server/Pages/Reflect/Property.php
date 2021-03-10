@@ -31,7 +31,7 @@ class Property extends Reflect {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Reflect/Property"],
-        ?iterable $Stylesheets = ["Reflect/Stylesheet"],
+        ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         ?\ReflectionProperty $Reflector = null,
         public ?string $Modifier = null,

@@ -7,9 +7,9 @@ use Pages\Reflect\Type;
 use vDesk\Pages\Page;
 
 /**
- * Class Property
+ * Property\Virtual Page class.
  *
- * @package Pages\Reflect
+ * @package Reflect
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Virtual extends Page {
@@ -20,22 +20,23 @@ class Virtual extends Page {
     public const Signature = "/(?'Type'^\S*)\s*(?'Name'\S*)\s*(?'Description'.*)/";
 
     /**
+     * Initializes a new instance of the Property\Virtual Page class.
      *
-     * @param null|iterable            $Values
-     * @param null|iterable            $Templates
-     * @param null|iterable            $Stylesheets
-     * @param null|iterable            $Scripts
-     * @param string                   $Signature
-     * @param string                   $Name
-     * @param null|\Pages\Reflect\Type $Type
-     * @param string                   $Description
-     * @param null|bool                $Readonly
-     * @param null|bool                $Writeonly
+     * @param null|iterable            $Values      Initializes the Property\Virtual Page with the specified Dictionary of values.
+     * @param null|iterable            $Templates   Initializes the Property\Virtual Page with the specified Collection of templates.
+     * @param null|iterable            $Stylesheets Initializes the Property\Virtual Page with the specified Collection of stylesheets.
+     * @param null|iterable            $Scripts     Initializes the Property\Virtual Page with the specified Collection of scripts.
+     * @param string                   $Signature   Initializes the Property\Virtual Page with the specified signature.
+     * @param string                   $Name        Initializes the Property\Virtual Page with the specified name.
+     * @param null|\Pages\Reflect\Type $Type        Initializes the Property\Virtual Page with the specified Type.
+     * @param string                   $Description Initializes the Property\Virtual Page with the specified description.
+     * @param null|bool                $Readonly    Initializes the Property\Virtual Page with the specified flag indicating whether the Property\Virtual is read only.
+     * @param null|bool                $Writeonly   Initializes the Property\Virtual Page with the specified flag indicating whether the Property\Virtual is write only.
      */
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Reflect/Property/Virtual"],
-        ?iterable $Stylesheets = ["Reflect/Stylesheet"],
+        ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         string $Signature = "",
         public string $Name = "",
@@ -48,7 +49,7 @@ class Virtual extends Page {
         $Matches = [];
         if((bool)\preg_match(static::Signature, $Signature, $Matches)) {
             $this->Name        = \str_replace("$", "", \trim($Matches["Name"]));
-            $this->Type        = new Type(Signature:\strpos($Matches["Type"], "[]") > 0 ? "array" : $Matches["Type"]);
+            $this->Type        = new Type(Signature: \strpos($Matches["Type"], "[]") > 0 ? "array" : $Matches["Type"]);
             $this->Description = \trim(\str_replace(" * ", "", $Matches["Description"]));
         }
     }

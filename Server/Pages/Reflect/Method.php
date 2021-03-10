@@ -87,7 +87,7 @@ class Method extends Reflect {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Reflect/Method"],
-        ?iterable $Stylesheets = ["Reflect/Stylesheet"],
+        ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         ?\Reflector $Reflector = null,
         public bool $Final = false,

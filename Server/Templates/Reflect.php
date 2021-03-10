@@ -1,24 +1,25 @@
 <?php
 
 use vDesk\Pages\Functions;
+
 /** @var \Pages\Reflect $Page */
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="utf-8"/>
     <title><?= $Page->Documentation->Name ?></title>
-    <link rel="icon" href="<?= Functions::Image("favicon.ico") ?>" type="image/x-icon">
-    <?php foreach($Page->Stylesheets as $Stylesheet): ?>
-        <link rel="stylesheet" href="<?= Functions::Stylesheet($Stylesheet) ?>">
-    <?php endforeach; ?>
-    <?php foreach($Page->Scripts as $Script): ?>
-        <script src="<?= Functions::Script($Script) ?>"></script>
-    <?php endforeach; ?>
+    <link rel="stylesheet" href="Stylesheet.css">
+    <script src="Search.js"></script>
 </head>
 <body>
 <article class="Page">
     <header class="Index">
-        <h1>Index</h1>
+        <h1><a href="index.html">Index</a></h1>
+        <label>
+            Search:
+            <input type="text" oninput="Search(this.value)">
+        </label>
         <?= $Page->Index ?>
     </header>
     <?= $Page->Documentation ?>

@@ -6,15 +6,15 @@ namespace Pages\Reflect;
 use Pages\Reflect;
 
 /**
- * Constant documentation Page.
+ * Constant Page class.
  *
- * @package Pages\Reflect
+ * @package Reflect
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Constant extends Reflect {
 
     /**
-     * Initializes a new instance of the Constant class.
+     * Initializes a new instance of the Constant Page class.
      *
      * @param null|iterable                 $Values      Initializes the Constant Page with the specified set of values.
      * @param null|iterable                 $Templates   Initializes the Constant Page with the specified Collection of templates.
@@ -30,7 +30,7 @@ class Constant extends Reflect {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Reflect/Constant"],
-        ?iterable $Stylesheets = ["Reflect/Stylesheet"],
+        ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         ?\ReflectionClassConstant $Reflector = null,
         public ?string $Modifier = null,

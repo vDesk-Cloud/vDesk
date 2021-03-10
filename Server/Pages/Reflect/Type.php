@@ -3,10 +3,15 @@ declare(strict_types=1);
 
 namespace Pages\Reflect;
 
-
 use Pages\Reflect;
 use vDesk\Struct;
 
+/**
+ * Class Type
+ *
+ * @package Pages\Reflect
+ * @author  Kerry <DevelopmentHero@gmail.com>
+ */
 class Type extends Reflect {
 
     /**
@@ -24,10 +29,9 @@ class Type extends Reflect {
      * @param array         $UnionTypes
      */
     public function __construct(
-
         ?iterable $Values = [],
         ?iterable $Templates = ["Reflect/Type"],
-        ?iterable $Stylesheets = ["Reflect/Stylesheet"],
+        ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         public string $Signature = "mixed",
         public string $Name = "mixed",
@@ -48,6 +52,7 @@ class Type extends Reflect {
         if(
             $Type === Struct\Type::Mixed
             || $Type === Struct\Type::Array
+            || $Type === Struct\Type::Object
             || $Type === Struct\Type::Iterable
             || $Type === Struct\Type::Callable
             || $Type === Struct\Type::Null
@@ -68,17 +73,15 @@ class Type extends Reflect {
             $this->Name   = "[]";
             $this->Scalar = true;
         } else if(\str_contains($this->Signature, "[]")) {
-           // $this->Name       = \str_replace("[]", "", $this->Signature);
             $this->Name       = Struct\Type::Array;
             $this->Scalar     = true;
-          //  $this->Scalar     = Struct\Type::IsScalarType($this->Name);
             $this->TypedArray = true;
         } else {
             try {
                 $Reflector      = new \ReflectionClass($this->Signature);
                 $this->Internal = $Reflector->isInternal();
                 $this->Name     = $this->Signature;
-            } catch(\Throwable $e) {
+            } catch(\Throwable $Exception) {
                 $this->Name   = "mixed";
                 $this->Scalar = true;
             }

@@ -1,11 +1,8 @@
 <?php
 
-/**
- * @var \Pages\Reflect\TraitPage $Page
- */
-
 use Pages\Reflect;
-use vDesk\Pages\Functions;
+
+/** @var \Pages\Reflect\TraitPage $Page */
 
 $Authors = \count($Page->Authors);
 $Index   = 0;
@@ -34,7 +31,7 @@ $Index   = 0;
             </p>
         <?php endif; ?>
         <code class="Syntax">
-            <h4>Syntax</h4>
+            <span class="Header">Syntax</span>
             <span class="Keyword">trait</span> <span class="Type Class"><?= $Page->Reflector->getShortName() ?></span>
             <?php if($Page->Reflector->getParentClass() !== false) : ?>
                 <span class="Keyword">extends</span> <span class="Parent"><?= $Page->Reflector->getParentClass()->name ?></span>
@@ -42,38 +39,56 @@ $Index   = 0;
             <?php if(\count($Page->Reflector->getInterfaceNames()) > 0) : ?>
                 <span class="Keyword">implements</span> <span class="Interfaces"><?= \implode(", ", $Page->Reflector->getInterfaceNames()) ?></span>
             <?php endif; ?>
+            <?php if(\count($Page->Reflector->getTraitNames()) > 0) : ?>
+                {<br>
+                <?php foreach($Page->Reflector->getTraitNames() as $Trait): ?>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="Keyword">use</span> <?= new Reflect\Type(Signature: $Trait) ?><span class="Keyword">;</span>
+                <?php endforeach; ?><br>
+                }
+            <?php endif; ?>
         </code>
     </div>
     <div class="Summary">
         <h3>Summary</h3>
-        <ul class="Constants">
-            <li><h4>Constants</h4></li>
-            <?php foreach($Page->Constants as $Constant): ?>
-                <li><?= Reflect::Link($Constant->Reflector) ?></li>
-            <?php endforeach; ?>
-        </ul>
-        <ul class="Properties">
-            <li><h4>Properties</h4></li>
-            <?php foreach($Page->Properties as $Property): ?>
-                <li><?= Reflect::Link($Property->Reflector) ?></li>
-            <?php endforeach; ?>
-            <?php if(\count($Page->VirtualProperties) > 0): ?>
-                <li><h5>Virtual</h5></li>
-                <?php foreach($Page->VirtualProperties as $Property): ?>
-                    <li><a href="#VirtualProperty.<?= $Property->Name ?>"><?= $Property->Name ?></a></li>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </ul>
-        <ul class="Methods">
-            <li><h4>Methods</h4></li>
-            <?php foreach($Page->Methods as $Method): ?>
-                <li><?= Reflect::Link($Method->Reflector) ?></li>
-            <?php endforeach; ?>
-        </ul>
+        <?php if(\count($Page->Constants) > 0): ?>
+            <div class="Constants">
+                <h4>Constants</h4>
+                <ul>
+                    <?php foreach($Page->Constants as $Constant): ?>
+                        <li><?= Reflect::Link($Constant->Reflector) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+        <?php if(\count($Page->Properties) + \count($Page->VirtualProperties) > 0): ?>
+            <div class="Properties">
+                <h4>Properties</h4>
+                <ul>
+                    <?php foreach($Page->Properties as $Property): ?>
+                        <li><?= Reflect::Link($Property->Reflector) ?></li>
+                    <?php endforeach; ?>
+                    <?php if(\count($Page->VirtualProperties) > 0): ?>
+                        <li><h5>Virtual</h5></li>
+                        <?php foreach($Page->VirtualProperties as $Property): ?>
+                            <li><a href="#VirtualProperty.<?= $Property->Name ?>"><?= $Property->Name ?></a></li>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+        <?php if(\count($Page->Methods) > 0): ?>
+            <div class="Methods">
+                <h4>Methods</h4>
+                <ul>
+                    <?php foreach($Page->Methods as $Method): ?>
+                        <li><?= Reflect::Link($Method->Reflector) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
     </div>
     <!-- Constants -->
     <?php if(\count($Page->Constants) > 0): ?>
-        <hr>
         <div class="Constants">
             <h3>Constants</h3>
             <?php foreach($Page->Constants as $Constant): ?>
@@ -83,7 +98,6 @@ $Index   = 0;
     <?php endif; ?>
     <!-- Properties -->
     <?php if(\count($Page->Properties) + \count($Page->VirtualProperties) > 0): ?>
-        <hr>
         <div class="Properties">
             <h3>Properties</h3>
             <?php foreach($Page->Properties as $Property): ?>
@@ -96,7 +110,6 @@ $Index   = 0;
     <?php endif; ?>
     <!-- Methods -->
     <?php if(\count($Page->Methods) + \count($Page->VirtualMethods) > 0): ?>
-        <hr>
         <div class="Methods">
             <h3>Methods</h3>
             <?php foreach($Page->Methods as $Method): ?>
