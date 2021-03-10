@@ -50,10 +50,6 @@ body, html {
     padding-bottom: initial;
 }
 
-.Documentation > .Description {
-
-}
-
 .Documentation > .Description > .Syntax > .Interfaces > i:last-child {
     display: none;
 }
@@ -80,7 +76,7 @@ body, html {
 }
 
 .Documentation > .Summary > div > ul,
-.Documentation.Summary > div > ul{
+.Documentation.Summary > div > ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -89,7 +85,7 @@ body, html {
 }
 
 .Documentation > .Summary > div,
-.Documentation.Summary > div{
+.Documentation.Summary > div {
     overflow: hidden;
 }
 
@@ -130,6 +126,10 @@ body, html {
 
 .Index > a.Hidden {
     display: none;
+}
+
+.Index > label > input {
+    width: calc(100% - 5em);
 }
 
 .Syntax span.public, .Keyword {
