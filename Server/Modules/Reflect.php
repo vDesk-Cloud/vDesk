@@ -39,12 +39,6 @@ class Reflect extends Module {
 
         \vDesk::$Load[] = static fn(string $Class): string => $Source . Path::Separator . \str_replace("\\", Path::Separator, $Class) . ".php";
 
-        //@todo Patch in Pages-1.0.1.
-        \vDesk::$Load[] = static fn(string $Class): string => Settings::$Local["Pages"]["Pages"]
-                                                              . Path::Separator
-                                                              . \str_replace("\\", Path::Separator, \str_replace("Pages", "", $Class))
-                                                              . ".php";
-
         $Errors     = [];
         $Exceptions = [];
         \set_error_handler(
@@ -58,6 +52,7 @@ class Reflect extends Module {
             }
         );
 
+        //Search for class files.
         $Classes = [];
         /** @var FileInfo $FilesystemInfo */
         foreach(new RecursiveFilesystemInfoIterator(new DirectoryInfo($Source)) as $FilesystemInfo) {
@@ -68,7 +63,11 @@ class Reflect extends Module {
                 //Use only files containing either classes, interfaces or traits as of usage of Reflection.
                 if((bool)\preg_match(self::Documentation, $File)) {
                     $Classes[] = ($Matches[1] ?? "") . "\\" . $FilesystemInfo->Name;
-                    include_once $FilesystemInfo->FullName;
+                    try {
+                        include_once $FilesystemInfo->FullName;
+                    } catch(\Throwable $Exception) {
+                        $Exceptions[] = $Exception;
+                    }
                 }
             }
         }
@@ -85,36 +84,31 @@ class Reflect extends Module {
             } catch(\Throwable $Exception) {
                 $Exceptions[] = $Exception;
             }
-
         }
         \usort($Reflectors, static fn(\ReflectionClass $First, \ReflectionClass $Second): int => \strnatcmp($First->name, $Second->name));
+
+        //Create documentation.
         foreach($Reflectors as $Reflector) {
-
             try {
-
                 $Page = new \Pages\Reflect(
                     Reflector: $Reflector,
                     Index: new Index(Reflectors: $Reflectors)
                 );
-
                 $File = File::Create($Target . Path::Separator . $Page->ReferenceName . ".html", true);
                 $File->Write((string)$Page);
                 $File->Close();
-                unset($Page);
-
             } catch(\Throwable $Exception) {
                 $Exceptions[] = $Exception;
             }
-
         }
+
         //Create summary.
         $Page = new Summary(
             Reflectors: $Reflectors,
             Index: new Index(Reflectors: $Reflectors),
             Errors: $Errors,
-            Exceptions: $Exceptions,
+            Exceptions: $Exceptions
         );
-
         $File = File::Create($Target . Path::Separator . "index.html", true);
         $File->Write((string)$Page);
         $File->Close();
@@ -135,6 +129,6 @@ class Reflect extends Module {
         );
         $File->Close();
 
-        echo "Done!";
+        echo "Generated documentation for " . \count($Reflectors) . " files.";
     }
 }
