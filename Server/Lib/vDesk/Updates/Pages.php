@@ -11,7 +11,7 @@ use vDesk\Packages\Package;
  * @package vDesk\Pages
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Pages extends Update {
+final class Pages extends Update {
 
     /**
      * The Package of the Update.
