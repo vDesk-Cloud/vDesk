@@ -43,41 +43,122 @@ a.Button:active {
     background-color: #2161ba;
 }
 
-#vDesk, #Features, #Requirements, #Customizable, #Development {
+#Description, #Features, #Technology, #Customiztion, #Development {
     animation-duration: 1s;
 }
 
-#vDesk {
+#Description {
+    display: grid;
+    grid-template-columns: 10% 80% 10%;
+    grid-template-rows: 80% 20%;
+}
+
+#Description > .Previews {
+    position: relative;
     overflow: hidden;
-    height: 50%;
+    grid-row: 1;
+    grid-column: 2;
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+#Description > .Previews > h2 {
+    font-size: 500%;
+    position: absolute;
+    top: 35%;
+    left: 40%;
+    width: 20%;
+    height: 10%;
+    text-align: center;
 }
 
-#vDesk h2 {
-    font-size: 3em;
-}
-
-#vDesk > .Box.Left {
+#Description > .Box.Left {
+    grid-row: 2;
+    grid-column: 2;
     left: 10%;
     bottom: 5em;
     animation-duration: 1s;
     animation-delay: 0.5s;
-    position: absolute;
 }
 
-#vDesk > .Box.Bottom {
+#Description > .Box.Bottom {
+    grid-row: 2;
+    grid-column: 2;
     right: 10%;
     bottom: 2em;
     animation-duration: 1s;
     animation-delay: 0.7s;
-    position: absolute;
 }
 
-#vDesk img {
+#Description > .Previews > img {
+    width: 30%;
+    animation-duration: 1s;
     position: fixed;
-    width: 100%;
-    left: 0;
-    opacity: 0.75;
-    box-shadow: inset 0 0 30px 40px rgb(255, 255, 255);
+    box-shadow: 5px 5px 10px #111;
+}
+
+#Description > .Previews > .Archive {
+    top: 3%;
+    left: 10%;
+    animation-delay: 0.7s;
+}
+
+#Description > .Previews > .Calendar {
+    top: 5%;
+    right: 30%;
+    animation-delay: 0.5s;
+}
+
+#Description > .Previews > .Colors {
+    top: 10%;
+    right: 10%;
+    animation-delay: 0.2s;
+}
+
+#Description > .Previews > .Configuration {
+    bottom: 10%;
+    left: 30%;
+    animation-delay: 0.6s;
+}
+
+#Description > .Previews > .Contacts {
+    bottom: 40%;
+    left: 5%;
+    animation-delay: 0.8s;
+}
+
+#Description > .Previews > .Pinboard {
+    bottom: 30%;
+    right: 5%;
+    animation-delay: 0.9s;
+}
+
+#Description > .Previews > .Search {
+    bottom: 5%;
+    left: 5%;
+    animation-delay: 1.1s;
+}
+
+#Description > .Previews > .Messenger {
+    bottom: 20%;
+    left: 7%;
+    animation-delay: 1.1s;
+}
+#Description > .Previews > .Machines {
+    bottom: 5%;
+    right: 8%;
+    animation-delay: 1.1s;
+}
+
+#Description > .Previews > .Updates {
+    top: 5%;
+    right: 5%;
+    animation-delay: 1.1s;
+}
+
+#Description > .Previews > .Console {
+    bottom: 5%;
+    left: 10%;
+    animation-delay: 1.1s;
 }
 
 .Preview > h2 {
@@ -136,39 +217,38 @@ a.Button:active {
     position: absolute;
 }
 
-#Requirements > header {
+#Technology > header {
     position: relative;
 }
 
-#Requirements {
+#Technology {
     padding: 10px 10% 10px 10% !important;
     min-height: 60% !important;
 }
 
-#Requirements > .Box {
+#Technology > .Box {
     top: 0;
     animation-duration: 1s !important;
 }
-
 
 .Browsers > img, .Technologies > img, .OperatingSystems > img {
     position: relative;
     animation-duration: 1s !important;
 }
 
-#Customizable > img {
+#Customization > img {
     max-width: calc(60% - 10px);
     padding: 10px;
     position: relative;
     float: left;
 }
 
-#Customizable > div {
+#Customization > div {
     max-width: 40%;
     float: right;
 }
 
-#Customizable .Box {
+#Customization .Box {
     float: right;
     animation-duration: 1s;
 }

@@ -25,7 +25,7 @@ class Index extends vDesk {
      *
      * @var string
      */
-    public string $Description = "vDesk";
+    public string $Description = "vDesk Index page";
     
     /**
      * Initializes a new instance of the Index Page.
@@ -34,12 +34,20 @@ class Index extends vDesk {
      * @param null|iterable $Templates   Initializes the Index Page with the specified Collection of templates.
      * @param null|iterable $Stylesheets Initializes the Index Page with the specified Collection of stylesheets.
      * @param null|iterable $Scripts     Initializes the Index Page with the specified Collection of scripts.
+     * @param array         $Previews    Initializes the Index Page with the specified set of Package preview images.
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["vDesk"],
+        ?iterable $Templates = [
+            "vDesk/Index/Description",
+            "vDesk/Index/Features",
+            "vDesk/Index/Technology",
+            "vDesk/Index/Customization",
+            "vDesk/Index/Development"
+        ],
         ?iterable $Stylesheets = ["vDesk/Stylesheet", "Documentation/Stylesheet", "vDesk/Index", "vDesk/Animations", "vDesk/SlideShow"],
-        ?iterable $Scripts = ["vDesk/Index", "vDesk/SlideShow"]
+        ?iterable $Scripts = ["vDesk/Index", "vDesk/SlideShow"],
+        public array $Previews = []
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }

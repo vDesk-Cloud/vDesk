@@ -8,6 +8,8 @@ use vDesk\Struct\Type;
 <section id="vDesk" class="SlideIn Bottom">
     <h2>v<span style="color: #2AB0ED">D</span>esk - The virtual <span style="color: #2AB0ED">D</span>esktop of the web</h2>
     <img src="<?= Functions::Image("vDesk/vDesk.png") ?>" alt="vDesk">
+    <img src="<?= Functions::Image("Packages/ArchiveOverview.png") ?>" alt="Archive">
+    <img src="<?= Functions::Image("Packages/CalendarMonthView.png") ?>" alt="Calendar">
     <aside class="Box SlideIn Left">
         <p>
             v<span style="color: #2AB0ED">D</span>esk is a self hosted open source personal cloud<br>
@@ -97,7 +99,7 @@ use vDesk\Struct\Type;
     </div>
 </section>
 <hr>
-<section id="Requirements" class="SlideIn Right Paused">
+<section id="Technology" class="SlideIn Right Paused">
     <div>
         <aside id="Platforms" class="Box SlideIn Right Paused" style="animation-delay: 1s; float: right">
             <h2><img src="<?= Functions::Image("vDesk", "Platform.png") ?>"> Platform independent</h2>

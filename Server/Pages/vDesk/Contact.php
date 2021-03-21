@@ -37,7 +37,7 @@ class Contact extends vDesk {
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = [],
+        ?iterable $Templates = ["vDesk/Contact"],
         ?iterable $Stylesheets = [
             "vDesk/Stylesheet",
             "../../Client/Design/vDesk",

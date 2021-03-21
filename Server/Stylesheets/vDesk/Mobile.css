@@ -10,7 +10,6 @@ html, body, .Page {
     font-family: Arial, serif;
     color: black;
     height: 100%;
-    width: 100%;
 }
 
 .Page > header {
@@ -79,8 +78,9 @@ html, body, .Page {
 }
 
 .Page > section {
-    width: 100%;
+    width: 80%;
     min-height: calc(100% - 108px);
+    padding: 10px 10% 10px 10%;
 }
 
 .Page > footer {
@@ -90,7 +90,7 @@ html, body, .Page {
     text-align: center;
 }
 
-.Description.Description {
+.Description.vDesk {
     height: 200px;
 }
 

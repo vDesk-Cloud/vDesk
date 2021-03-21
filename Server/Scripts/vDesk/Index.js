@@ -13,10 +13,10 @@ window.addEventListener("load", () => {
 
     const Height = window.innerHeight;
 
-    const Requirements = document.getElementById("Requirements");
-    const RequirementsOffset = Requirements.offsetTop;
-    const Customizable = document.getElementById("Customizable");
-    const CustomizableOffset = Customizable.offsetTop;
+    const Technology = document.getElementById("Technology");
+    const TechnologyOffset = Technology.offsetTop;
+    const Customization = document.getElementById("Customization");
+    const CustomizationOffset = Customization.offsetTop;
 
     const DevelopmentOffset = Development.offsetTop;
 
@@ -26,27 +26,27 @@ window.addEventListener("load", () => {
             Features.classList.toggle("Left", true);
             FeatureSlideShow.Play();
             window.removeEventListener("scroll", OnScrollFeatures);
-            window.addEventListener("scroll", OnScrollRequirements);
+            window.addEventListener("scroll", OnScrollTechnology);
         }
     };
     window.addEventListener("scroll", OnScrollFeatures);
-    const OnScrollRequirements = () => {
+    const OnScrollTechnology = () => {
         let Offset = window.scrollY + Height;
-        if(Offset > RequirementsOffset) {
-            Requirements.classList.toggle("Paused", false);
-            Array.from(Requirements.getElementsByClassName("Paused"))
+        if(Offset > TechnologyOffset) {
+            Technology.classList.toggle("Paused", false);
+            Array.from(Technology.getElementsByClassName("Paused"))
                 .forEach(Node => Node.classList.toggle("Paused", false));
-            window.removeEventListener("scroll", OnScrollRequirements);
-            window.addEventListener("scroll", OnScrollCustomizable);
+            window.removeEventListener("scroll", OnScrollTechnology);
+            window.addEventListener("scroll", OnScrollCustomization);
         }
     };
-    const OnScrollCustomizable = () => {
+    const OnScrollCustomization = () => {
         let Offset = window.scrollY + Height;
-        if(Offset > CustomizableOffset) {
-            Customizable.classList.toggle("Paused", false);
-            Array.from(Customizable.getElementsByClassName("Paused"))
+        if(Offset > CustomizationOffset) {
+            Customization.classList.toggle("Paused", false);
+            Array.from(Customization.getElementsByClassName("Paused"))
                 .forEach(Node => Node.classList.toggle("Paused", false));
-            window.removeEventListener("scroll", OnScrollCustomizable);
+            window.removeEventListener("scroll", OnScrollCustomization);
             window.addEventListener("scroll", OnScrollDevelopment);
         }
     };
