@@ -1,0 +1,47 @@
+#Technology {
+    grid-row: 4 !important;
+    display: grid;
+    grid-template-columns: 25% repeat(5, 10%) 25%;
+    grid-template-rows: 25% repeat(3, 1fr) 25%;
+}
+
+#Technology > .Platforms {
+    grid-row: 1;
+    grid-column-start: 6;
+    grid-column-end: 8;
+    animation-duration: 1s !important;
+}
+
+#Technology > .Resources {
+    grid-row: 5;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    animation-duration: 1s !important;
+}
+
+#Technology > img {
+    place-self: center;
+    animation-duration: 1s !important;
+}
+
+@media only screen and (max-device-width: 600px) {
+    #Technology {
+        grid-template-columns: 0 repeat(5, 20%) 0 !important;
+        grid-template-rows: 30% repeat(3, 10%) 40% !important;
+    }
+
+    #Technology > .Platforms {
+        grid-column-start: 1 !important;
+        grid-column-end: 7 !important;
+    }
+
+    #Technology > .Resources {
+        grid-column-start: 1 !important;
+        grid-column-end: 7 !important;
+    }
+
+    #Technology > img {
+        place-self: stretch !important;
+    }
+
+}

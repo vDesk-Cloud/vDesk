@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace Modules;
 
-use Pages\vDesk\Contact;
 use Pages\vDesk\Index;
 use vDesk\Configuration\Settings;
 use vDesk\IO\DirectoryInfo;
 use vDesk\IO\FileInfo;
-use vDesk\IO\IOException;
 use vDesk\IO\Path;
 use vDesk\Modules\Module;
 use vDesk\Pages\Page;
@@ -31,7 +29,7 @@ class vDesk extends Module {
     public static function Index(): \Pages\vDesk {
         return new \Pages\vDesk(
             Pages: static::GetPages(),
-            Content: new Index(Previews: static::GetPreviews())
+            Content: new Index()
         );
     }
     

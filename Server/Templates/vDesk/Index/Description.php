@@ -19,22 +19,17 @@ use vDesk\Pages\Functions;
     </div>
     <div class="Box SlideIn Left">
         <p>
-            - The virtual <span style="color: #2AB0ED">D</span>esktop of the web
             v<span style="color: #2AB0ED">D</span>esk is a self hosted open source personal cloud<br>
             that has been built with the focus of combining a simple yet intuitive client<br>
             with a feature-rich and customizable server environment.
         </p>
-        <p>
             <a class="Button" href="<?= Functions::URL("vDesk", "Page", "GetvDesk") ?>">Get vDesk</a>
-        </p>
     </div>
-    <div class="Box SlideIn Bottom">
+    <div class="Box SlideIn Right">
         <p>
             Access and manage your files from anywhere, organize your dates and stay in contact with others. <br>
             v<span style="color: #2AB0ED">D</span>esk comes with a predefined feature rich set of packages.
         </p>
-        <p>
             <a class="Button" href="#Features">🡳 Checkout features 🡳</a>
-        </p>
     </div>
 </section>

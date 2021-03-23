@@ -9,24 +9,24 @@ use vDesk\Pages\Functions;
     <link rel="icon" href="<?= Functions::Image("favicon.ico") ?>" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php foreach($Page->Stylesheets as $Stylesheet): ?>
-        <link rel="stylesheet" href="<?= Functions::Stylesheet($Stylesheet) ?>">
+    <link rel="stylesheet" href="<?= Functions::Stylesheet($Stylesheet) ?>">
     <?php endforeach; ?>
-    <?php foreach( $Page->Content->Stylesheets as $Stylesheet): ?>
-        <link rel="stylesheet" href="<?= Functions::Stylesheet($Stylesheet) ?>">
+    <?php foreach($Page->Content->Stylesheets as $Stylesheet): ?>
+    <link rel="stylesheet" href="<?= Functions::Stylesheet($Stylesheet) ?>">
     <?php endforeach; ?>
     <?php foreach($Page->Scripts as $Script): ?>
-        <script src="<?= Functions::Script($Script) ?>"></script>
+    <script src="<?= Functions::Script($Script) ?>"></script>
     <?php endforeach; ?>
     <?php foreach($Page->Content->Scripts as $Script): ?>
-        <script src="<?= Functions::Script($Script) ?>"></script>
+    <script src="<?= Functions::Script($Script) ?>"></script>
     <?php endforeach; ?>
 </head>
 <body>
 <article class="Page">
     <header>
         <h1><a href="<?= Functions::URL("vDesk", "Index") ?>">v<span style="color: #2AB0ED">D</span>esk</a></h1>
-        <button class="Toggle"><</button>
-        <nav>
+        <button class="Toggle" onclick="this.nextElementSibling.classList.toggle('Hidden');">☰</button>
+        <nav class="Hidden">
             <?php foreach($Page->Pages as $ExistingPage): ?>
                 <?php if($ExistingPage->Name !== "Index"): ?>
                     <a class="<?= $ExistingPage->Name === $Page->Content->Name ? "Current" : "" ?>"

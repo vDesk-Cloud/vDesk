@@ -23,6 +23,7 @@ window.addEventListener("load", () => {
     const OnScrollFeatures = () => {
         let Offset = window.scrollY + Height;
         if(Offset > FeaturesOffset) {
+            console.log(window.scrollY, Height, FeaturesOffset);
             Features.classList.toggle("Left", true);
             FeatureSlideShow.Play();
             window.removeEventListener("scroll", OnScrollFeatures);
@@ -33,7 +34,8 @@ window.addEventListener("load", () => {
     const OnScrollTechnology = () => {
         let Offset = window.scrollY + Height;
         if(Offset > TechnologyOffset) {
-            Technology.classList.toggle("Paused", false);
+            console.log(window.scrollY, Height, TechnologyOffset);
+            Technology.classList.toggle("Right", true);
             Array.from(Technology.getElementsByClassName("Paused"))
                 .forEach(Node => Node.classList.toggle("Paused", false));
             window.removeEventListener("scroll", OnScrollTechnology);
@@ -43,7 +45,7 @@ window.addEventListener("load", () => {
     const OnScrollCustomization = () => {
         let Offset = window.scrollY + Height;
         if(Offset > CustomizationOffset) {
-            Customization.classList.toggle("Paused", false);
+            Customization.classList.toggle("Left", true);
             Array.from(Customization.getElementsByClassName("Paused"))
                 .forEach(Node => Node.classList.toggle("Paused", false));
             window.removeEventListener("scroll", OnScrollCustomization);

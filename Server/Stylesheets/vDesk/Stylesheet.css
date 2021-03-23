@@ -11,12 +11,17 @@ html, body, .Page {
     color: black;
     height: 100%;
     width: 100%;
+    display: grid;
+    grid-template-columns: 10% 80% 10%;
+    grid-template-rows: 50px auto 60px;
 }
 
 .Page > header {
     height: 50px;
     width: 100%;
     background-color: #2AB0ED;
+    position: fixed !important;
+    z-index: 9000;
 }
 
 .Page > header > h1,
@@ -35,9 +40,9 @@ html, body, .Page {
 
 .Page > header > nav {
     height: calc(100% - 10px);
-    float: right;
     padding: 5px;
     margin: 0;
+    float: right;
 }
 
 .Page > header > nav > a {
@@ -65,33 +70,66 @@ html, body, .Page {
 @media only screen and (max-device-width:768px) {
     .Toggle {
         display: inline !important;
+        position: absolute;
+        right: 0;
+        height: 100%;
+        background: none;
+        border: none;
+        min-width: 50px;
+        color: white;
+        font-weight: bold;
+        font-size: 150%;
     }
 
     .Page > header > nav {
-        position: absolute;
-        top: 0;
-        right: 0;
+        position: absolute !important;
+        top: 50px !important;
+        right: 0 !important;
+        background-color: #2AB0ED !important;
+        height: auto !important;
+        list-style: none !important;
+        z-index: 9999 !important;
+    }
+
+    .Page > header > nav.Hidden {
+        display: none;
     }
 
     .Page > header > nav > a {
         display: list-item;
+        height: auto;
+    }
+
+    .Page  {
+        grid-template-columns: 0 100% 0;
+    }
+
+    .Page img {
+        max-width: 100%;
     }
 }
 
 .Page > section {
-    width: 100%;
-    min-height: calc(100% - 108px);
+    grid-row: 2;
+    grid-column: 2;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: #999 solid 2px;
 }
 
+.Page > section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
 .Page > footer {
+    grid-row: 3;
+    grid-column-start: 1;
+    grid-column-end: 4;
     padding: 10px;
     background-color: #2AB0ED;
     color: white;
     text-align: center;
-}
-
-.Description.Description {
-    height: 200px;
 }
 
 #Contact {

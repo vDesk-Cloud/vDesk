@@ -1,3 +1,11 @@
+.Page {
+    grid-template-rows: 50px 100% 90% 100% 100% 100% 60px !important;
+}
+
+.Page > footer {
+    grid-row: 7 !important;
+}
+
 h2 > img {
     height: 1em;
     vertical-align: text-top;
@@ -13,16 +21,14 @@ h2 > img {
 }
 
 .Box {
-    width: calc(33% - 60px);
     padding: 10px;
-    margin: 20px;
+    margin: 10px;
     border: 1px solid #999;
     border-radius: 5px;
     text-align: center;
     background-color: white;
     box-shadow: 5px 5px 10px #111;
     z-index: 4;
-    position: relative;
 }
 
 a.Button {
@@ -42,302 +48,18 @@ a.Button:active {
     margin: 1px -1px -1px 1px;
     background-color: #2161ba;
 }
-
-#Description, #Features, #Technology, #Customiztion, #Development {
-    animation-duration: 1s;
+section.Paused {
+    width: 50% !important;
 }
 
-#Description {
-    display: grid;
-    grid-template-columns: 10% 80% 10%;
-    grid-template-rows: 80% 20%;
-}
-
-#Description > .Previews {
-    position: relative;
-    overflow: hidden;
-    grid-row: 1;
-    grid-column: 2;
-    grid-column-start: 2;
-    grid-column-end: 3;
-}
-#Description > .Previews > h2 {
-    font-size: 500%;
-    position: absolute;
-    top: 35%;
-    left: 40%;
-    width: 20%;
-    height: 10%;
-    text-align: center;
-}
-
-#Description > .Box.Left {
-    grid-row: 2;
-    grid-column: 2;
-    left: 10%;
-    bottom: 5em;
-    animation-duration: 1s;
-    animation-delay: 0.5s;
-}
-
-#Description > .Box.Bottom {
-    grid-row: 2;
-    grid-column: 2;
-    right: 10%;
-    bottom: 2em;
-    animation-duration: 1s;
-    animation-delay: 0.7s;
-}
-
-#Description > .Previews > img {
-    width: 30%;
-    animation-duration: 1s;
-    position: fixed;
-    box-shadow: 5px 5px 10px #111;
-}
-
-#Description > .Previews > .Archive {
-    top: 3%;
-    left: 10%;
-    animation-delay: 0.7s;
-}
-
-#Description > .Previews > .Calendar {
-    top: 5%;
-    right: 30%;
-    animation-delay: 0.5s;
-}
-
-#Description > .Previews > .Colors {
-    top: 10%;
-    right: 10%;
-    animation-delay: 0.2s;
-}
-
-#Description > .Previews > .Configuration {
-    bottom: 10%;
-    left: 30%;
-    animation-delay: 0.6s;
-}
-
-#Description > .Previews > .Contacts {
-    bottom: 40%;
-    left: 5%;
-    animation-delay: 0.8s;
-}
-
-#Description > .Previews > .Pinboard {
-    bottom: 30%;
-    right: 5%;
-    animation-delay: 0.9s;
-}
-
-#Description > .Previews > .Search {
-    bottom: 5%;
-    left: 5%;
-    animation-delay: 1.1s;
-}
-
-#Description > .Previews > .Messenger {
-    bottom: 20%;
-    left: 7%;
-    animation-delay: 1.1s;
-}
-#Description > .Previews > .Machines {
-    bottom: 5%;
-    right: 8%;
-    animation-delay: 1.1s;
-}
-
-#Description > .Previews > .Updates {
-    top: 5%;
-    right: 5%;
-    animation-delay: 1.1s;
-}
-
-#Description > .Previews > .Console {
-    bottom: 5%;
-    left: 10%;
-    animation-delay: 1.1s;
-}
-
-.Preview > h2 {
-    top: 5% !important;
-    right: 25px !important;
-    position: absolute;
-    z-index: 10;
-    height: 5%;
-}
-
-.Preview > img {
-    max-height: 100%;
-    max-width: 100%;
-    position: relative;
-}
-
-#Archive > .Box {
-    right: 2em;
-    bottom: 0;
-    position: absolute;
-}
-
-#Calendar > .Box {
-    left: 2em;
-    bottom: 2em;
-    position: absolute;
-}
-
-#Contacts > .Box {
-    right: 6em;
-    bottom: 0;
-    position: absolute;
-}
-
-#Pinboard > .Box {
-    left: 5em;
-    bottom: 3em;
-    position: absolute;
-}
-
-#Search > .Box {
-    left: 2em;
-    bottom: 3em;
-    position: absolute;
-}
-
-#Messenger > .Box {
-    right: 5em;
-    top: 40%;
-    position: absolute;
-}
-
-#Colors > .Box {
-    left: 3em;
-    bottom: 5em;
-    position: absolute;
-}
-
-#Technology > header {
-    position: relative;
-}
-
-#Technology {
-    padding: 10px 10% 10px 10% !important;
-    min-height: 60% !important;
-}
-
-#Technology > .Box {
-    top: 0;
-    animation-duration: 1s !important;
-}
-
-.Browsers > img, .Technologies > img, .OperatingSystems > img {
-    position: relative;
-    animation-duration: 1s !important;
-}
-
-#Customization > img {
-    max-width: calc(60% - 10px);
-    padding: 10px;
-    position: relative;
-    float: left;
-}
-
-#Customization > div {
-    max-width: 40%;
-    float: right;
-}
-
-#Customization .Box {
-    float: right;
-    animation-duration: 1s;
-}
-
-#PackageSystem {
-    top: 0;
-}
-
-#Packages {
-    top: 40%;
-}
-
-#OpenSource {
-    bottom: 0;
-}
-
-#Development {
-    padding: 10px 10% 10px 10% !important;
-}
-
-#Development .Box {
-    position: absolute;
-}
-
-#Development > .Code {
-    display: flex !important;
-}
-
-#Development > .SlideShow {
-    height: 100%;
-}
-
-#Development > .Code > pre {
-    float: left;
-    width: 40%;
-    margin: 5%;
-    height: 90%;
-}
-
-#Development > .Code > pre > code {
-    font-size: 14px;
-}
-
-#Development > .Code > img {
-    float: left;
-    max-width: 40%;
-    padding: 5%;
-}
-
-#Interfaces {
-    position: relative;
-}
-
-#Interfaces > .Box {
-    position: absolute;
-    top: 2em;
-    right: 2em;
-}
-
-#Interfaces > pre {
-    width: 100%;
-}
-
-#Interfaces > img {
-    max-width: 45%;
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-}
-
-#Expressions > pre {
-    width: calc(50% - 42px);
-    float: left;
-    margin: 10px;
-}
-
-#Expressions .Box {
-    bottom: 2em;
-    right: 2em;
-}
-
-#CollectionsDictionaries > .Box {
-    right: 2em;
-    top: 2em;
-    position: absolute;
-}
-
-#RapidDevelopment > .Box {
-    right: 2em;
-    top: 2em;
-    position: absolute;
+@media only screen and (max-device-width: 600px) {
+    .Page {
+        grid-template-rows: 50px 100% 90% 100% 110% 100% 60px !important;
+    }
+    .Box {
+        font-size: 14px;
+    }
+    .Box > h2 {
+        font-size: 16px;
+    }
 }

@@ -1,0 +1,57 @@
+
+#Customization {
+    grid-row: 5 !important;
+    display: grid;
+    grid-template-columns: 60% 40%;
+    grid-template-rows: repeat(3, 1fr);
+}
+
+#Customization > img {
+    grid-row-start: 1;
+    grid-row-end: 4;
+    grid-column: 1;
+    padding: 10px;
+    place-self: stretch;
+    object-fit: contain;
+}
+
+#Customization > .PackageSystem {
+    grid-row: 1;
+}
+
+#Customization > .Packages {
+    grid-row: 2;
+}
+
+#Customization > .OpenSource {
+    grid-row: 3;
+}
+
+#Customization .Box {
+    grid-column: 2;
+    animation-duration: 1s;
+}
+
+@media only screen and (max-device-width: 600px) {
+    #Customization {
+        grid-template-rows: 30% 20% 23% 27% !important;
+        grid-template-columns: 100% !important;
+    }
+
+    #Customization .Box {
+        grid-column: 1 !important;
+    }
+
+    #Customization > img {
+        grid-column: 1 !important;
+        grid-row: 2 !important;
+    }
+
+    #Customization > .Packages {
+        grid-row: 3 !important;
+    }
+
+    #Customization > .OpenSource {
+        grid-row: 4 !important;
+    }
+}

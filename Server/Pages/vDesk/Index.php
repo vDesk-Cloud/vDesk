@@ -45,7 +45,18 @@ class Index extends vDesk {
             "vDesk/Index/Customization",
             "vDesk/Index/Development"
         ],
-        ?iterable $Stylesheets = ["vDesk/Stylesheet", "Documentation/Stylesheet", "vDesk/Index", "vDesk/Animations", "vDesk/SlideShow"],
+        ?iterable $Stylesheets = [
+            "vDesk/Stylesheet",
+            "Documentation/Stylesheet",
+            "vDesk/Animations",
+            "vDesk/SlideShow",
+            "vDesk/Index",
+            "vDesk/Index/Description",
+            "vDesk/Index/Features",
+            "vDesk/Index/Technology",
+            "vDesk/Index/Customization",
+            "vDesk/Index/Development"
+        ],
         ?iterable $Scripts = ["vDesk/Index", "vDesk/SlideShow"],
         public array $Previews = []
     ) {
