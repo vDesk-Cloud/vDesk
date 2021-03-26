@@ -3,7 +3,7 @@
     grid-row: 5 !important;
     display: grid;
     grid-template-columns: 60% 40%;
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 33.333%);
 }
 
 #Customization > img {

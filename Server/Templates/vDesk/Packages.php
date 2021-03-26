@@ -1,11 +1,10 @@
 <?php use vDesk\Pages\Functions; ?>
-<section>
+<section class="Packages">
     <header>
         <h2>Packages</h2>
         <p class="Description">
             vDesk comes with a variety of preselected packages composed in the standard release.
-        </p>
-        <p>
+        <br>
             For further information about packages and bundling resources, consider reading the <a
                     href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", "CustomReleases") ?>">Custom releases</a>-tutorial.
         </p>
@@ -80,9 +79,6 @@
                     <li class="Feature">Folder based navigation through the Archive supporting keyboard controls</li>
                     <li class="Feature">Contextmenu sensitive selection enabling operations on multiple elements</li>
                 </ul>
-            </section>
-            <hr>
-            <section class="Description">
                 <ul class="Features">
                     <li class="Feature">Parallel file uploads keeping track of the upload progress</li>
                     <li class="Feature">Search filter for quickly finding files and folders and conveniently displaying the contents of a file or navigating to a folder</li>
@@ -181,8 +177,6 @@
                     <li class="Feature">Decade-, year-, month- and dayview</li>
                     <li class="Feature">Creation of events with custom highlight colors</li>
                 </ul>
-            </section>
-            <section class="Description">
                 <ul class="Features">
                     <li class="Feature">Access Control List based visibility of events</li>
                     <li class="Feature">Drag & drop supported organization of events</li>
@@ -334,9 +328,6 @@
                     <li class="Feature">Access Control List based management of security critical components</li>
                     <li class="Feature">Drag & drop supported management of permissions</li>
                 </ul>
-            </section>
-            <hr>
-            <section class="Description">
                 <ul class="Features">
                     <li class="Feature">Creation of user groups with fine-grained adjustable permissions</li>
                 </ul>

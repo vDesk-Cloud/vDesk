@@ -1,20 +1,10 @@
-#Description, #Features, #Technology, #Customization, #Development {
-    animation-duration: 1s;
-    grid-column: 2;
-    overflow-x: hidden;
-}
-
-
-
-
 
 #Description {
-    grid-row: 2;
+    grid-row: 2 !important;
     display: grid;
     width: 100%;
-    height: calc(100% - 50px);
     grid-template-columns: 50% 50%;
-    grid-template-rows: 80% 20%;
+    grid-template-rows: 75% 25%;
 }
 
 #Description > .Previews {
@@ -121,11 +111,11 @@
     left: 10%;
     animation-delay: 1.1s;
 }
-
+/* Smartphone */
 @media only screen and (max-device-width: 600px) {
     #Description {
         font-size: 14px;
-        grid-template-rows: repeat(3, 1fr) !important;
+        grid-template-rows: repeat(3, 33.333%) !important;
     }
 
     #Description > .Box.Left {
@@ -142,5 +132,19 @@
         grid-row: 3 !important;
         grid-column-start: 1 !important;
         grid-column-end: 3 !important;
+    }
+}
+
+
+/* Tablet */
+@media only screen and (max-device-width: 1024px) and (min-device-width: 600px) {
+
+    #Description {
+        grid-template-rows: 60% 40%;
+    }
+
+    #Description > .Previews {
+        grid-row-start: 1 !important;
+        grid-row-end: 3 !important;
     }
 }

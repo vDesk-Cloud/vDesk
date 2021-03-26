@@ -6,7 +6,7 @@ use vDesk\Pages\Functions;
 //@todo Add download links to package phars.
 
 ?>
-<section>
+<section class="GetvDesk">
     <h2>Get vDesk</h2>
     <p class="Description">vDesk comes with a variety of preselected Packages composed in the official standard release.</p>
     <p>For specific downloads and a list of bundled core-packages, visit the <a href="<?= Functions::URL("vDesk", "Page", "Packages") ?>">Packages</a> section.

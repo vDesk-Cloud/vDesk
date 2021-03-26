@@ -2,7 +2,7 @@
     grid-row: 4 !important;
     display: grid;
     grid-template-columns: 25% repeat(5, 10%) 25%;
-    grid-template-rows: 25% repeat(3, 1fr) 25%;
+    grid-template-rows: 22% repeat(3, 16.666%) 28%;
 }
 
 #Technology > .Platforms {
@@ -20,11 +20,13 @@
 }
 
 #Technology > img {
-    place-self: center;
+    object-fit: contain;
+    place-self: stretch;
     animation-duration: 1s !important;
 }
 
-@media only screen and (max-device-width: 600px) {
+/* Smartphone */
+@media  (max-device-width: 600px) {
     #Technology {
         grid-template-columns: 0 repeat(5, 20%) 0 !important;
         grid-template-rows: 30% repeat(3, 10%) 40% !important;
@@ -38,6 +40,32 @@
     #Technology > .Resources {
         grid-column-start: 1 !important;
         grid-column-end: 7 !important;
+    }
+
+    #Technology > img {
+        place-self: stretch !important;
+    }
+
+}
+
+/* Tablet */
+@media only screen and (max-device-width: 1024px) and (min-device-width: 600px) {
+    #Technology {
+    }
+
+    #Technology > .Platforms {
+        grid-column: 7 !important;
+        grid-row-start: 1 !important;
+        grid-row-end: 6 !important;
+        font-size: 0.8rem;
+    }
+
+    #Technology > .Resources {
+        grid-column: 1 !important;
+        grid-row-start: 1 !important;
+        grid-row-end: 6 !important;
+        font-size: 0.8rem;
+
     }
 
     #Technology > img {
