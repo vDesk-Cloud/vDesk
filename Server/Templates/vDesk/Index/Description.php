@@ -4,17 +4,17 @@ use vDesk\Pages\Functions;
 ?>
 <section id="Description" class="SlideIn Bottom">
     <div class="Previews">
-        <h2>v<span style="color: #2AB0ED">D</span>esk</h2>
-        <img class="SlideIn Left Archive" src="<?= Functions::Image("Packages", "ArchiveOverview.png") ?>" alt="Archive">
+        <h2 class="FadeIn">v<span style="color: #2AB0ED">D</span>esk</h2>
+        <img class="SlideIn Top Archive" src="<?= Functions::Image("Packages", "ArchiveOverview.png") ?>" alt="Archive">
         <img class="SlideIn Top Calendar" src="<?= Functions::Image("Packages", "CalendarMonthView.png") ?>" alt="Calendar">
         <img class="SlideIn Right Colors" src="<?= Functions::Image("Packages", "Colors.png") ?>" alt="Colors">
         <img class="SlideIn Bottom Configuration" src="<?= Functions::Image("Packages", "Configuration.png") ?>" alt="Configuration">
         <img class="SlideIn Left Contacts" src="<?= Functions::Image("Packages", "Contacts.png") ?>" alt="Contacts">
-        <img class="SlideIn Right Pinboard" src="<?= Functions::Image("Packages", "Pinboard.png") ?>" alt="Pinboard">
+        <img class="SlideIn Bottom Pinboard" src="<?= Functions::Image("Packages", "Pinboard.png") ?>" alt="Pinboard">
         <img class="SlideIn Left Search" src="<?= Functions::Image("Packages", "Search.png") ?>" alt="Search">
         <img class="SlideIn Left Messenger" src="<?= Functions::Image("Packages", "Messenger.png") ?>" alt="Messenger">
-        <img class="SlideIn Bottom Machines" src="<?= Functions::Image("Packages", "Machines.png") ?>" alt="Machines">
-        <img class="SlideIn Top Updates" src="<?= Functions::Image("Packages", "Updates.png") ?>" alt="Updates">
+        <img class="SlideIn Right Machines" src="<?= Functions::Image("Packages", "Machines.png") ?>" alt="Machines">
+        <img class="SlideIn Right Updates" src="<?= Functions::Image("Packages", "Updates.png") ?>" alt="Updates">
         <img class="SlideIn Left Console" src="<?= Functions::Image("Packages", "Console.png") ?>" alt="Console">
     </div>
     <div class="Box SlideIn Left">

@@ -10,6 +10,7 @@ h2 > img {
     height: 1em;
     vertical-align: text-top;
 }
+
 #Description, #Features, #Technology, #Customization, #Development {
     animation-duration: 1s;
     grid-column: 2;
@@ -53,23 +54,40 @@ a.Button:active {
     margin: 1px -1px -1px 1px;
     background-color: #2161ba;
 }
+
 section.Paused {
     width: 50% !important;
 }
 
-@media only screen and (max-device-width: 600px) {
-    .Page {
+@media only screen {
+    /* Smartphone */
+    @media only screen and (max-device-width: 767px) {
+        .Box {
+            font-size: 0.8rem;
+            padding: 5px !important;
+        }
+
+        .Box > h2 {
+            font-size: 1rem !important;
+        }
+
+        .Box > p {
+            margin-top: 0;
+        }
     }
-}
-@media only screen and (max-device-width: 1024px) {
-    .Box {
-        font-size: 0.75rem;
-        padding: 5px !important;
-    }
-    .Box > h2 {
-        font-size: 1rem;
-    }
-    .Box > p {
-        margin-top: 0;
+    /* Tablet */
+    @media (min-device-width: 768px) and (max-device-width: 1024px) {
+        .Box {
+            font-size: 0.95rem;
+            padding: 5px !important;
+        }
+
+        .Box > h2 {
+            font-size: 1.2rem !important;
+        }
+
+        .Box > p {
+            margin-top: 0;
+        }
     }
 }

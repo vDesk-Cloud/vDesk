@@ -126,7 +126,7 @@ aside.Fullscreen {
     left: 0 !important;
 }
 
-
+/* Smartphone */
 @media only screen and (max-device-width:768px) {
     .Toggle {
         display: inline !important;
@@ -168,6 +168,23 @@ aside.Fullscreen {
 
     .Page  {
         grid-template-columns: 5px calc(100% - 10px) 5px !important;
+    }
+
+    .Page img {
+        max-width: 100% !important;
+    }
+}
+
+/* Tablet */
+@media only screen and (min-device-width:768px) and (max-device-width:1280px) {
+
+    .Page > section {
+        margin-bottom: 10px !important;
+        padding-bottom: 10px !important;
+    }
+
+    .Page  {
+        grid-template-columns: 20px calc(100% - 40px) 20px !important;
     }
 
     .Page img {

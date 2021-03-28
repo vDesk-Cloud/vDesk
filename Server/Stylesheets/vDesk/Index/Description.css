@@ -16,13 +16,17 @@
 }
 
 #Description > .Previews > h2 {
-    font-size: 500%;
+    font-size: 5rem;
     position: absolute;
-    top: 35%;
-    left: 40%;
-    width: 20%;
-    height: 10%;
+    top: 40%;
+    left: 35%;
+    width: 30%;
+    height: 20%;
     text-align: center;
+    margin: 0;
+    animation-delay: 1.5s;
+    animation-duration: 1s;
+    opacity: 0;
 }
 
 #Description > .Box.Left {
@@ -47,104 +51,174 @@
 }
 
 #Description > .Previews > .Archive {
-    top: 3%;
-    left: 10%;
-    animation-delay: 0.7s;
+    top: 5%;
+    left: 5%;
+    animation-delay: 1.3s;
+    z-index: 3;
 }
 
 #Description > .Previews > .Calendar {
-    top: 5%;
-    right: 30%;
+    top: 2%;
+    right: 19%;
     animation-delay: 0.5s;
+    z-index: 1;
 }
 
 #Description > .Previews > .Colors {
-    top: 10%;
-    right: 10%;
-    animation-delay: 0.2s;
+    top: 20%;
+    right: 2%;
+    animation-delay: 0.8s;
+    z-index: 2;
 }
 
 #Description > .Previews > .Configuration {
-    bottom: 10%;
-    left: 30%;
-    animation-delay: 0.6s;
+    bottom: 2%;
+    left: 35%;
+    animation-delay: 0.3s;
+    z-index: 1;
 }
 
 #Description > .Previews > .Contacts {
-    bottom: 40%;
-    left: 5%;
-    animation-delay: 0.8s;
+    top: 2%;
+    left: 19%;
+    animation-delay: 0.7s;
+    z-index: 2;
 }
 
 #Description > .Previews > .Pinboard {
-    bottom: 30%;
-    right: 5%;
-    animation-delay: 0.9s;
+    bottom: 5%;
+    right: 8%;
+    animation-delay: 1s;
+    z-index: 3;
 }
 
 #Description > .Previews > .Search {
-    bottom: 5%;
-    left: 5%;
-    animation-delay: 1.1s;
+    top: 20%;
+    left: 2%;
+    animation-delay: 0.9s;
+    z-index: 2;
 }
 
 #Description > .Previews > .Messenger {
-    bottom: 20%;
-    left: 7%;
+    bottom: 5%;
+    left: 8%;
     animation-delay: 1.1s;
+    z-index: 3;
 }
 
 #Description > .Previews > .Machines {
-    bottom: 5%;
-    right: 8%;
-    animation-delay: 1.1s;
+    bottom: 20%;
+    right: 3%;
+    animation-delay: 0.5s;
+    z-index: 1;
 }
 
 #Description > .Previews > .Updates {
     top: 5%;
     right: 5%;
-    animation-delay: 1.1s;
+    animation-delay: 1.2s;
+    z-index: 3;
 }
 
 #Description > .Previews > .Console {
-    bottom: 5%;
-    left: 10%;
-    animation-delay: 1.1s;
+    bottom: 20%;
+    left: 3%;
+    animation-delay: 0.4s;
+    z-index: 1;
 }
+
 /* Smartphone */
-@media only screen and (max-device-width: 600px) {
-    #Description {
-        font-size: 14px;
-        grid-template-rows: repeat(3, 33.333%) !important;
+@media only screen {
+    @media (max-device-width: 767px) {
+        @media (orientation: portrait) {
+            #Description {
+                font-size: 0.9rem;
+                grid-template-rows: repeat(3, 33.333%) !important;
+            }
+
+            #Description > .Previews > h2 {
+                font-size: 1.5rem;
+            }
+
+            #Description > .Box.Left {
+                grid-row: 1 !important;
+                grid-column-start: 1 !important;
+                grid-column-end: 3 !important;
+            }
+
+            #Description > .Previews {
+                grid-row: 2 !important;
+            }
+
+            #Description > .Box.Right {
+                grid-row: 3 !important;
+                grid-column-start: 1 !important;
+                grid-column-end: 3 !important;
+            }
+        }
+        @media (orientation: landscape) {
+            #Description {
+                grid-template-columns: 30% 40% 30%;
+            }
+
+            #Description > .Previews > h2 {
+                font-size: 1.5rem;
+            }
+
+            #Description > .Box.Left {
+                grid-column: 1 !important;
+                grid-row-start: 1 !important;
+                grid-row-end: 3 !important;
+            }
+
+            #Description > .Previews {
+                grid-column: 2 !important;
+                grid-row-start: 1 !important;
+                grid-row-end: 3 !important;
+            }
+
+            #Description > .Box.Right {
+                grid-column: 3 !important;
+                grid-row-start: 1 !important;
+                grid-row-end: 3 !important;
+            }
+        }
     }
 
-    #Description > .Box.Left {
-        grid-row: 1 !important;
-        grid-column-start: 1 !important;
-        grid-column-end: 3 !important;
+    /* Tablet */
+    @media (min-device-width: 768px) and (max-device-width: 1023px) {
+        @media (orientation: portrait) {
+            #Description {
+                grid-template-rows: repeat(3, 33.333%) !important;
+            }
+
+            #Description > .Previews > h2 {
+                font-size: 3rem;
+            }
+
+            #Description > .Box.Left {
+                grid-row: 1 !important;
+                grid-column-start: 1 !important;
+                grid-column-end: 3 !important;
+            }
+
+            #Description > .Previews {
+                grid-row: 2 !important;
+            }
+
+            #Description > .Box.Right {
+                grid-row: 3 !important;
+                grid-column-start: 1 !important;
+                grid-column-end: 3 !important;
+            }
+        }
+        @media (orientation: landscape) {
+        }
+    }
+    @media (min-device-width: 1024px) and (max-device-width: 1280px) {
+        #Description {
+            grid-template-rows: 70% 30%;
+        }
     }
 
-    #Description > .Previews {
-        grid-row: 2 !important;
-    }
-
-    #Description > .Box.Right {
-        grid-row: 3 !important;
-        grid-column-start: 1 !important;
-        grid-column-end: 3 !important;
-    }
-}
-
-
-/* Tablet */
-@media only screen and (max-device-width: 1024px) and (min-device-width: 600px) {
-
-    #Description {
-        grid-template-rows: 60% 40%;
-    }
-
-    #Description > .Previews {
-        grid-row-start: 1 !important;
-        grid-row-end: 3 !important;
-    }
 }
