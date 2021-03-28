@@ -34,26 +34,57 @@
 
 @media only screen {
     @media (max-device-width: 767px) {
-        #Customization {
-            grid-template-rows: 30% 20% 23% 27% !important;
-            grid-template-columns: 100% !important;
-        }
+        @media (orientation: portrait) {
+            #Customization {
+                grid-template-rows: 30% 20% 23% 27% !important;
+                grid-template-columns: 100% !important;
+            }
 
-        #Customization .Box {
-            grid-column: 1 !important;
-        }
+            #Customization .Box {
+                grid-column: 1 !important;
+            }
 
-        #Customization > img {
-            grid-column: 1 !important;
-            grid-row: 2 !important;
-        }
+            #Customization > img {
+                grid-column: 1 !important;
+                grid-row: 2 !important;
+            }
 
-        #Customization > .Packages {
-            grid-row: 3 !important;
-        }
+            #Customization > .Packages {
+                grid-row: 3 !important;
+            }
 
-        #Customization > .OpenSource {
-            grid-row: 4 !important;
+            #Customization > .OpenSource {
+                grid-row: 4 !important;
+            }
+        }
+        @media (orientation: landscape) {
+            #Customization {
+                grid-template-rows: 60% 40% !important;
+                grid-template-columns: repeat(3, 33.333%) !important;
+            }
+
+            #Customization .Box {
+                grid-row-start: 1 !important;
+                grid-row-end: 3 !important;
+            }
+
+            #Customization > img {
+                grid-column: 2 !important;
+                grid-row: 2 !important;
+            }
+
+            #Customization > .PackageSystem {
+                grid-column: 1 !important;
+            }
+
+            #Customization > .Packages {
+                grid-column: 2 !important;
+                grid-row: 1 !important;
+            }
+
+            #Customization > .OpenSource {
+                grid-column: 3 !important;
+            }
         }
     }
 
