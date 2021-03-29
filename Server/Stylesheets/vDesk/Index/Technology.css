@@ -27,7 +27,8 @@
 
 @media only screen {
     /* Smartphone */
-    @media (max-device-width: 767px) {
+    @media (max-device-width: 812px)
+    and (max-device-height: 812px) {
         @media (orientation: portrait) {
             #Technology {
                 grid-template-columns: 0 repeat(5, 20%) 0 !important;
@@ -45,6 +46,10 @@
             }
         }
         @media (orientation: landscape) {
+            #Technology {
+                grid-template-columns: 30% repeat(5, 8%) 30% !important;
+            }
+
             #Technology > .Platforms {
                 grid-column: 1 !important;
                 grid-row-start: 1 !important;
@@ -58,9 +63,11 @@
             }
         }
     }
-
     /* Tablet */
-    @media (min-device-width: 768px) and (max-device-width: 1023px) {
+    @media (min-device-width: 768px)
+    and (max-device-width: 1280px)
+    and (min-device-height: 768px)
+    and (max-device-height: 1280px) {
         @media (orientation: portrait) {
             #Technology {
                 grid-template-columns: 0 repeat(5, 20%) 0 !important;
@@ -95,21 +102,6 @@
                 grid-row-start: 4 !important;
                 grid-row-end: 6 !important;
             }
-        }
-    }
-    @media (min-device-width: 1024px) and (max-device-width: 1280px) {
-        #Technology > .Platforms {
-            grid-column-start: 6 !important;
-            grid-column-end: 8 !important;
-            grid-row-start: 4 !important;
-            grid-row-end: 6 !important;
-        }
-
-        #Technology > .Resources {
-            grid-column-start: 1 !important;
-            grid-column-end: 3 !important;
-            grid-row-start: 1 !important;
-            grid-row-end: 3 !important;
         }
     }
 }
