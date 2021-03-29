@@ -133,7 +133,6 @@
     and (max-device-height: 812px) {
         @media (orientation: portrait) {
             #Description {
-                font-size: 0.9rem;
                 grid-template-rows: repeat(3, 33.333%) !important;
             }
 

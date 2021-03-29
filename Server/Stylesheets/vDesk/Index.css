@@ -61,7 +61,8 @@ section.Paused {
 
 @media only screen {
     /* Smartphone */
-    @media only screen and (max-device-width: 767px) {
+    @media (max-device-width: 768px)
+    and (max-device-height: 768px) {
         .Box {
             font-size: 0.8rem;
             padding: 5px !important;
