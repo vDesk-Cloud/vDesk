@@ -10,7 +10,7 @@
 #Features .Package {
     display: grid;
     grid-template-rows: 10% 20% 45% 25%;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 50% 50%;
     width: 100%;
     height: 100%;
 }
