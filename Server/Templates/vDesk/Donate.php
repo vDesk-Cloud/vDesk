@@ -18,7 +18,7 @@ use vDesk\Pages\Functions; ?>
         If you're wondering who's the person behind this project, let me answer this question and introduce myself:
     </p>
     <p>
-        <img style="max-width: 250px; float:left; padding: 5px; background-color: #333333; margin: 25px" src="<?= Functions::Image("vDesk", "Me.jpg") ?>" class="Author" alt="Author">
+        <img style="max-width: 250px !important; float:left; padding: 5px; background-color: #333333; margin: 25px" src="<?= Functions::Image("vDesk", "Me.jpg") ?>" class="Author" alt="Author">
         Hi, I'm Kerry!<br><br>
         I am a passionate PHP-, JS-, C#- and SQL-developer living in the beautiful and castle-rich german federal state of "Hessen" and I'm the author of this huge pile of source
         code to hopefully <strike>conquer</strike> support the world.<br><br>

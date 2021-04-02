@@ -1,0 +1,152 @@
+
+#Customization {
+    grid-row: 5 !important;
+    display: grid;
+    grid-template-columns: 60% 40%;
+    grid-template-rows: repeat(3, 33.333%);
+}
+
+#Customization > img {
+    grid-row-start: 1;
+    grid-row-end: 4;
+    grid-column: 1;
+    padding: 10px;
+    place-self: stretch;
+    object-fit: contain;
+}
+
+#Customization > .PackageSystem {
+    grid-row: 1;
+}
+
+#Customization > .Packages {
+    grid-row: 2;
+}
+
+#Customization > .OpenSource {
+    grid-row: 3;
+}
+
+#Customization .Box {
+    grid-column: 2;
+    animation-duration: 1s;
+}
+
+@media only screen {
+    /* Smartphone */
+    @media (max-device-width: 812px)
+    and (max-device-height: 812px) {
+        @media (orientation: portrait) {
+            #Customization {
+                grid-template-rows: 30% 20% 23% 27% !important;
+                grid-template-columns: 100% !important;
+            }
+
+            #Customization .Box {
+                grid-column: 1 !important;
+            }
+
+            #Customization > img {
+                grid-column: 1 !important;
+                grid-row: 2 !important;
+            }
+
+            #Customization > .Packages {
+                grid-row: 3 !important;
+            }
+
+            #Customization > .OpenSource {
+                grid-row: 4 !important;
+            }
+        }
+        @media (orientation: landscape) {
+            #Customization {
+                grid-template-rows: 60% 40% !important;
+                grid-template-columns: repeat(3, 33.333%) !important;
+            }
+
+            #Customization .Box {
+                grid-row-start: 1 !important;
+                grid-row-end: 3 !important;
+            }
+
+            #Customization > img {
+                grid-column: 2 !important;
+                grid-row: 2 !important;
+            }
+
+            #Customization > .PackageSystem {
+                grid-column: 1 !important;
+            }
+
+            #Customization > .Packages {
+                grid-column: 2 !important;
+                grid-row: 1 !important;
+            }
+
+            #Customization > .OpenSource {
+                grid-column: 3 !important;
+            }
+        }
+    }
+    /* Small Tablet */
+    @media (min-device-width: 768px)
+    and (max-device-width: 1024px)
+    and (min-device-height: 768px)
+    and (max-device-height: 1024px) {
+        @media (orientation: portrait) {
+            #Customization {
+                grid-template-rows: repeat(3, 33.333%) !important;
+            }
+
+            #Customization > .Box {
+                grid-column-start: 1 !important;
+                grid-column-end: 3 !important;
+            }
+
+            #Customization > img {
+                grid-column: 1 !important;
+                grid-row: 2 !important;
+            }
+
+            #Customization > .Packages {
+                grid-column: 2 !important;
+            }
+        }
+        @media (orientation: landscape) {
+        }
+    }
+    /* Big Tablet */
+    @media (min-device-width: 800px)
+    and (max-device-width: 1280px)
+    and (min-device-height: 800px)
+    and (max-device-height: 1280px) {
+        @media (orientation: portrait) {
+            #Customization {
+                grid-template-rows: 20% 45% 15% 20% !important;
+                grid-template-columns: 100% !important;
+            }
+
+            #Customization > .Packages {
+                grid-row: 3 !important;
+            }
+
+            #Customization > .PackageSystem {
+                grid-row: 1 !important;
+            }
+
+            #Customization > .OpenSource {
+                grid-row: 4 !important;
+            }
+
+            #Customization > .Box {
+                grid-column: 1 !important;
+            }
+
+            #Customization > img {
+                grid-column: 1 !important;
+                grid-row: 2 !important;
+            }
+        }
+    }
+}

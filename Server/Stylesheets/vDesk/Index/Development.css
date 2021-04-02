@@ -1,0 +1,337 @@
+
+#Development {
+    grid-row: 6 !important;
+}
+
+#Development > .SlideShow {
+    height: 100%;
+}
+
+#Development pre {
+    margin: 10px;
+}
+
+#Development .Interfaces,
+#Development .Expressions,
+#Development .API {
+    display: grid;
+    width: 100%;
+    height: 100%;
+}
+
+#Development .Interfaces {
+    grid-template-columns: repeat(2, 50%);
+    grid-template-rows: 70% 30%;
+}
+
+#Development .Interfaces > .Box {
+    grid-row: 2;
+    grid-column: 2;
+}
+
+#Development .Interfaces > pre {
+    grid-row-start: 1;
+    grid-row-end: 3;
+    grid-column: 1;
+}
+
+#Development .Interfaces > img {
+    grid-row: 1;
+    grid-column: 2;
+}
+
+#Development .Expressions {
+    grid-template-columns: repeat(2, 50%);
+    grid-template-rows: 70% 30%;
+}
+
+#Development .Expressions > .Permissions {
+    grid-row-start: 1;
+    grid-row-end: 3;
+    grid-column: 1;
+}
+
+#Development .Expressions > .Elements {
+    grid-row: 1;
+    grid-column: 2;
+}
+
+#Development .Expressions > .Box {
+    grid-row: 2;
+    grid-column: 2;
+}
+
+#Development .API {
+    grid-template-columns: repeat(2, 50%);
+    grid-template-rows: repeat(3, 33.333%);
+}
+
+#Development .API > .Box {
+    grid-row: 1;
+    grid-column: 1;
+}
+
+#Development .API > .Properties {
+    grid-row: 1;
+    grid-column: 2;
+}
+
+#Development .API > .Controls {
+    grid-row: 2;
+    grid-column: 1;
+}
+
+#Development .API > .Collections {
+    grid-row: 2;
+    grid-column: 2;
+}
+
+#Development .API > .IO {
+    grid-row: 3;
+    grid-column: 2;
+}
+
+@media only screen {
+    /* Smartphone */
+    @media (max-device-width: 812px)
+    and (max-device-height: 812px) {
+
+        #Development pre {
+            font-size: 0.7rem;
+            overflow: hidden;
+        }
+
+        #Development .API > .IO {
+            display: none;
+        }
+
+        #Development .API > .Controls {
+            display: none;
+        }
+
+        @media (orientation: portrait) {
+            #Development .Interfaces {
+                grid-template-rows: 30% 50% 20% !important;
+                grid-template-columns: 100% !important;
+            }
+
+            #Development .Interfaces > .Box {
+                grid-row: 1;
+                grid-column: 1;
+            }
+
+            #Development .Interfaces > pre {
+                grid-row: 2;
+                grid-column: 1;
+            }
+
+            #Development .Interfaces > img {
+                grid-row: 3;
+                grid-column: 1;
+                object-fit: contain;
+                width: 100%;
+            }
+
+            #Development .Expressions {
+                grid-template-rows: 66% 34% !important;
+                grid-template-columns: 100% !important;
+            }
+
+            #Development .Expressions > .Permissions {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            #Development .Expressions > .Elements {
+                display: none;
+            }
+
+            #Development .Expressions > .Box {
+                grid-column: 1;
+            }
+
+            #Development .API {
+                grid-template-rows: repeat(3, 33%) !important;
+                grid-template-columns: 100% !important;
+            }
+
+            #Development .API > .Box {
+                grid-row: 2;
+                grid-column: 1;
+            }
+
+            #Development .API > .Properties {
+                grid-row: 1;
+                grid-column: 1;
+            }
+
+            #Development .API > .Collections {
+                grid-row: 3;
+                grid-column: 1;
+            }
+        }
+        @media (orientation: landscape) {
+            #Development .Interfaces {
+                grid-template-rows: 55% 45% !important;
+                grid-template-columns: 50% 50% !important;
+            }
+
+            #Development .Interfaces > .Box {
+                grid-row: 1;
+                grid-column: 2;
+            }
+
+            #Development .Interfaces > pre {
+                grid-row-start: 1;
+                grid-row-end: 3;
+                grid-column: 1;
+            }
+
+            #Development .Interfaces > img {
+                grid-row: 2;
+                grid-column: 2;
+                object-fit: contain;
+                width: 100%;
+            }
+
+            #Development .Expressions,
+            #Development .API {
+                grid-template-rows: 100% !important;
+                grid-template-columns: 50% 50% !important;
+            }
+
+            #Development .Expressions > .Permissions {
+                display: none;
+            }
+
+            #Development .Expressions > .Elements {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            #Development .Expressions > .Box {
+                grid-column: 2;
+                grid-row: 1;
+            }
+
+            #Development .API > .Box {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            #Development .API > .Properties {
+                display: none;
+            }
+
+            #Development .API > .Collections {
+                grid-column: 2;
+                grid-row: 1;
+            }
+        }
+    }
+    /* Tablet */
+    @media (min-device-width: 768px)
+    and (max-device-width: 1280px)
+    and (min-device-height: 768px)
+    and (max-device-height: 1280px) {
+        @media (max-device-width: 1024px)
+        and (max-device-height: 1024px) {
+            #Development pre {
+                font-size: 0.9rem !important;
+            }
+        }
+        @media (orientation: portrait) {
+            #Development .Interfaces {
+                grid-template-rows: 30% 70% !important;
+                grid-template-columns: 100% !important;
+            }
+
+            #Development .Interfaces > .Box {
+                grid-row: 1;
+                grid-column: 1;
+            }
+
+            #Development .Interfaces > pre {
+                grid-row: 2;
+                grid-column: 1;
+            }
+
+            #Development .Interfaces > img {
+                grid-row: 2;
+                grid-column: 2;
+                object-fit: contain;
+                width: 100%;
+                display: none;
+            }
+
+            #Development .Expressions {
+                grid-template-rows:  75% 25% !important;
+                grid-template-columns: 100% !important;
+            }
+
+            #Development .Expressions > .Permissions {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            #Development .Expressions > .Elements {
+                display: none;
+            }
+
+            #Development .Expressions > .Box {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            #Development .API {
+                grid-template-columns: 100% !important;
+                grid-template-rows: 30% 20% 30% 20% !important;
+            }
+
+            #Development .API > .Box {
+                grid-row: 2;
+            }
+
+            #Development .API > .Properties {
+                grid-row: 1;
+                grid-column: 1;
+            }
+
+            #Development .API > .Collections {
+                grid-row: 3;
+                grid-column: 1;
+            }
+
+            #Development .API > .IO {
+                grid-row: 4;
+                grid-column: 1;
+            }
+
+            #Development .API > .Controls {
+                display: none;
+            }
+        }
+        @media (orientation: landscape) {
+
+            #Development .API > .Box {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            #Development .API > .Properties {
+                grid-row-start: 1;
+                grid-row-end: 3;
+            }
+
+            #Development .API > .Collections {
+                grid-column: 1;
+                grid-row-start: 2;
+                grid-row-end: 4;
+            }
+
+            #Development .API > .Controls {
+                display: none;
+            }
+        }
+    }
+}

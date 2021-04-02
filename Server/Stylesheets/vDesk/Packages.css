@@ -1,18 +1,52 @@
 
-.Features > header > .Description {
+section.Packages {
+
 }
 
-.Packages {
+
+section.Packages > header {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: minmax(30px, 10%) 20% minmax(30px, 10%) 60%;
+
+}
+
+section.Packages > header > h2 {
+    grid-row: 1;
+}
+
+section.Packages > header > p {
+    grid-row: 2;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+section.Packages > header > h3 {
+    grid-row: 3;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+section.Packages > header > ul {
+    grid-row: 4;
+}
+
+section.Packages > header > .Core {
+    grid-column: 1;
+}
+
+section.Packages > header > .Optional {
+    grid-column: 2;
+}
+
+section.Packages > header > .Packages {
     list-style: none;
-    width: calc(50% - 62px);
-    height: 100%;
     padding: 20px;
     margin: 10px;
     border: #999999 solid 1px;
-    float: left;
 }
 
-.Packages > .Title {
+section.Packages > header > .Packages > .Title {
     padding-bottom: 5px;
     margin-bottom: 5px;
     border-bottom: #999999 solid 1px;
@@ -20,8 +54,6 @@
 
 .Package {
     padding: 10px;
-    width: calc(100% - 22px);
-    border: #999999 solid 1px;
     margin-bottom: 20px;
 }
 
@@ -31,44 +63,19 @@
 
 .Package > .Description {
     width: 100%;
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-gap: 10px;
 }
 
-.Description aside {
-    width: calc(40% - 20px);
+.Package > .Description > aside {
     padding: 10px;
     background-color: #999999;
-    display: inline-block;
     border-radius: 5px;
-    cursor: zoom-in;
-    text-align: center;
-}
-
-.Description aside > img {
-    max-width: 100%;
-}
-
-aside.Fullscreen > img {
-    cursor: zoom-out !important;
-    max-width: initial !important;
-    max-height: 100%;
-}
-
-aside.Fullscreen {
-    position: fixed !important;
-    width: calc(100% - 100px) !important;
-    height: calc(100% - 100px) !important;
-    padding: 50px !important;
-    background-color: #333333 !important;
-    border-radius: 0 !important;
-    top: 0 !important;
-    left: 0 !important;
 }
 
 .Package > .Description ul {
     padding: 15px;
-    width: calc(40% - 40px);
     margin: auto;
     list-style-type: "►";
     font-size: 18px;
@@ -83,13 +90,6 @@ aside.Fullscreen {
 
 .Package > .Description > ul > li:last-child {
     border-bottom: none;
-}
-
-
-.Package > .Description > aside {
-    padding: 20px;
-    width: calc(40% - 40px);
-    margin: 0;
 }
 
 .Package > header > .Dependencies {
@@ -116,4 +116,18 @@ aside.Fullscreen {
 .Package > header > .Configuration .Required,
 .Package > header > .Requirements .Required {
     color: darkgoldenrod;
+}
+
+/* Smartphone */
+@media only screen and (max-device-width: 600px) {
+
+    .Package > .Description {
+        grid-template-columns: 100% !important;
+        grid-gap: 0 !important;
+    }
+
+    .Package > .Description > aside {
+        padding: 5px !important;
+    }
+
 }

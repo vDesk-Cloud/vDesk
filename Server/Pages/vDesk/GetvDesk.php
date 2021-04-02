@@ -31,10 +31,13 @@ class GetvDesk extends Packages {
      * @param null|iterable $Values      Initializes the Download Page with the specified Dictionary of values.
      * @param null|iterable $Templates   Initializes the Download Page with the specified Collection of templates.
      * @param null|iterable $Stylesheets Initializes the Download Page with the specified Collection of stylesheets.
-     * @param null|iterable $Scripts     Initializes the Download Page with the specified Collection of scripts.
      */
-    public function __construct(?iterable $Values = [], ?iterable $Templates = [], ?iterable $Stylesheets = ["vDesk/Stylesheet", "Documentation/Stylesheet", "vDesk/Packages"], ?iterable $Scripts = []) {
-        parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
+    public function __construct(
+        ?iterable $Values = [],
+        ?iterable $Templates = ["vDesk/GetvDesk"],
+        ?iterable $Stylesheets = ["vDesk/Stylesheet", "Documentation/Stylesheet", "vDesk/Packages"]
+    ) {
+        parent::__construct($Values, $Templates, $Stylesheets);
     }
     
 }
