@@ -5,49 +5,52 @@ use vDesk\Documentation\Code\Conventions;
 use vDesk\Pages\Functions;
 
 ?>
-<h2>Development</h2>
-<p>
-    This document describes the general coding conventions of vDesk's source code.<br>
-    Before submitting a pull request, consider reading the following specifications.
-</p>
-<h3>Overview</h3>
-<ul class="Topics">
-    <li>
-        <a href="#CodingStyle">Coding style</a>
+<article class="Development">
+    <header>
+        <h2>Development</h2>
+        <p>
+            This document describes the general coding conventions of vDesk's source code.<br>
+            Before submitting a pull request, consider reading the following specifications.
+        </p>
+        <h3>Overview</h3>
         <ul class="Topics">
-            <li><a href="#GeneralRecommendations">General recommendations</a></li>
-            <li><a href="#NamingConventions">Naming conventions</a></li>
-            <li><a href="#TypeCompliance">Type compliance</a></li>
-            <li><a href="#CodeBlocks">Code blocks</a></li>
-            <li><a href="#VariablesFieldsConstants">Variables, Fields and Constants</a></li>
-            <li><a href="#FunctionsMethods">Functions/Methods</a></li>
-            <li><a href="#Parameters">Parameters</a></li>
-            <li><a href="#Classes">Classes</a></li>
-            <li><a href="#Interfaces">Interfaces</a></li>
-            <li><a href="#Traits">Traits</a></li>
-            <li><a href="#Namespaces">Namespaces</a></li>
-            <li><a href="#ErrorHandling">Error handling</a></li>
-            <li><a href="#Properties">Properties</a></li>
-            <li><a href="#Iteration">Iteration</a></li>
-            <li><a href="#Arrays">Arrays</a></li>
-            <li><a href="#Strings">Strings</a></li>
+            <li>
+                <a href="#CodingStyle">Coding style</a>
+                <ul class="Topics">
+                    <li><a href="#GeneralRecommendations">General recommendations</a></li>
+                    <li><a href="#NamingConventions">Naming conventions</a></li>
+                    <li><a href="#TypeCompliance">Type compliance</a></li>
+                    <li><a href="#CodeBlocks">Code blocks</a></li>
+                    <li><a href="#VariablesFieldsConstants">Variables, Fields and Constants</a></li>
+                    <li><a href="#FunctionsMethods">Functions/Methods</a></li>
+                    <li><a href="#Parameters">Parameters</a></li>
+                    <li><a href="#Classes">Classes</a></li>
+                    <li><a href="#Interfaces">Interfaces</a></li>
+                    <li><a href="#Traits">Traits</a></li>
+                    <li><a href="#Namespaces">Namespaces</a></li>
+                    <li><a href="#ErrorHandling">Error handling</a></li>
+                    <li><a href="#Properties">Properties</a></li>
+                    <li><a href="#Iteration">Iteration</a></li>
+                    <li><a href="#Arrays">Arrays</a></li>
+                    <li><a href="#Strings">Strings</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#UI">UI</a>
+                <ul class="Topics">
+                    <li><a href="#CSS">CSS</a></li>
+                    <li><a href="#Icons">Icons</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#Database">Database</a>
+                <ul class="Topics">
+                    <li><a href="#SQL">SQL</a></li>
+                    <li><a href="#Models">Models</a></li>
+                </ul>
+            </li>
         </ul>
-    </li>
-    <li>
-        <a href="#UI">UI</a>
-        <ul class="Topics">
-            <li><a href="#CSS">CSS</a></li>
-            <li><a href="#Icons">Icons</a></li>
-        </ul>
-    </li>
-    <li>
-        <a href="#Database">Database</a>
-        <ul class="Topics">
-            <li><a href="#SQL">SQL</a></li>
-            <li><a href="#Models">Models</a></li>
-        </ul>
-    </li>
-</ul>
+    </header>
 <h3 id="CodingStyle">Coding style</h3>
 <p>
     This section describes the conventions and requirements on source code.
@@ -676,3 +679,4 @@ Text<?= Code::Delimiter ?>
     
 }
 </code></pre>
+</article>

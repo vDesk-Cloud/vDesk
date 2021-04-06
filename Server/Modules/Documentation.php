@@ -23,16 +23,13 @@ class Documentation extends Module {
     /**
      * The entry point of the Documentation Page.
      *
-     * @return \Pages\Documentation\Index The index Page of the Documentation Package.
+     * @return \Pages\Documentation The index Page of the Documentation Package.
      */
-    public static function Index(): Index {
-        return new Index(
-            [
-                "Pages"     => static::GetPages(),
-                "Tutorials" => static::GetTutorials(),
-                "Current"   => new Index()
-            ],
-            ["Documentation"]
+    public static function Index(): \Pages\Documentation {
+        
+        return new \Pages\Documentation(
+            Pages: static::GetPages(),
+            Content: new \Pages\Documentation\Index(Pages: static::GetPages(), Tutorials: static::GetTutorials())
         );
     }
     
@@ -49,19 +46,21 @@ class Documentation extends Module {
             ->ToArray();
     }
     
+    
     /**
-     * Displays a specified Documentation Page.
+     * Displays a specified Page.
      *
      * @param string|null $Page The Page to display.
      *
-     * @return \Pages\Documentation The requested tutorial.
+     * @return \Pages\Documentation The requested Page.
      */
-    public static function Page(string $Page = null): Page {
-        $Page    ??= Request::$Parameters["Page"];
-        $Class   = "\\Pages\\Documentation\\{$Page}";
-        $Current = new $Class(["Pages" => static::GetPages()]);
-        $Current->Values->Add("Current", $Current);
-        return $Current;
+    public static function Page(string $Page = null): \Pages\Documentation {
+        $Page  ??= Request::$Parameters["Page"];
+        $Class = "\\Pages\\Documentation\\{$Page}";
+        return new \Pages\Documentation(
+            Pages: static::GetPages(),
+            Content: new $Class()
+        );
     }
     
     /**
@@ -93,7 +92,7 @@ class Documentation extends Module {
      *
      * @return \Pages\Documentation The requested tutorial.
      */
-    public static function Tutorial(string $Tutorial = null): Page {
+    public static function Tutorial(string $Tutorial = null): \Pages\Documentation {
         $Tutorial ??= Request::$Parameters["Tutorial"];
         $Class    = "\\Pages\\Documentation\\Tutorials\\{$Tutorial}";
         return new $Class(

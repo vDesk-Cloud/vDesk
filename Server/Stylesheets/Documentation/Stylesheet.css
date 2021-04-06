@@ -234,3 +234,187 @@ hr {
 .BorderDark {
     border-color: #333 !important;
 }
+
+html, body{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+main {
+    font-family: Arial, serif;
+    color: black;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 10% 80% 10%;
+    grid-template-rows: 50px auto 60px;
+}
+
+main > header {
+    height: 50px;
+    width: 100%;
+    background-color: #2AB0ED;
+    position: fixed !important;
+    z-index: 9000;
+}
+
+main > header > h1 {
+    float: left;
+    background-color: white;
+    margin: 0;
+    padding: 11px;
+    font-size: 24px;
+}
+
+main > header > h1 > a, main > header > h1 > a:visited {
+    color: #333333;
+    text-decoration: none;
+}
+
+main > header > nav {
+    height: calc(100% - 10px);
+    padding: 5px;
+    margin: 0;
+    float: right;
+}
+
+main > header > nav > a {
+    display: inline-block;
+    height: calc(100% - 10px);
+    padding: 5px;
+    line-height: 30px;
+    text-decoration: none;
+    font-family: Arial, serif;
+    color: white;
+}
+
+main > header > nav > a.Current {
+    text-decoration: underline;
+}
+
+main > header > nav > a:hover {
+    color: lightgray;
+}
+
+.Toggle {
+    display: none;
+}
+
+main > article {
+    grid-row: 2;
+    grid-column: 2;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: #999 solid 2px;
+}
+
+main > article:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+main > article > section {
+    display: grid;
+}
+
+main > footer {
+    grid-row: 3;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    padding: 10px;
+    background-color: #2AB0ED;
+    color: white;
+    text-align: center;
+}
+
+aside > img {
+    cursor: zoom-in;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+aside.Fullscreen > img {
+    cursor: zoom-out !important;
+    max-height: 100%;
+}
+
+aside.Fullscreen {
+    position: fixed !important;
+    width: calc(100% - 20px) !important;
+    height: calc(100% - 20px) !important;
+    padding: 10px !important;
+    background-color: #333333 !important;
+    border-radius: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+}
+
+/* Smartphone */
+@media only screen and (max-device-width:768px) {
+    .Toggle {
+        display: inline !important;
+        position: absolute !important;
+        right: 0 !important;
+        height: 100% !important;
+        background: none !important;
+        border: none !important;
+        min-width: 50px !important;
+        color: white !important;
+        font-weight: bold !important;
+        font-size: 1.5rem !important;
+    }
+
+    main > header > nav {
+        position: absolute !important;
+        top: 50px !important;
+        right: 0 !important;
+        background-color: #2AB0ED !important;
+        height: auto !important;
+        list-style: none !important;
+        z-index: 9999 !important;
+    }
+
+    main > header > nav.Hidden {
+        display: none !important;
+    }
+
+    main > header > nav > a {
+        display: list-item !important;
+        height: auto !important;
+    }
+
+
+    main > article {
+        margin-bottom: 10px !important;
+        padding-bottom: 10px !important;
+    }
+
+    main  {
+        grid-template-columns: 5px calc(100% - 10px) 5px !important;
+    }
+
+    main img {
+        max-width: 100% !important;
+    }
+}
+
+/* Tablet */
+@media only screen and (min-device-width:768px) and (max-device-width:1280px) {
+
+    main > article {
+        margin-bottom: 10px !important;
+        padding-bottom: 10px !important;
+    }
+
+    main  {
+        grid-template-columns: 20px calc(100% - 40px) 20px !important;
+    }
+
+    main img {
+        max-width: 100% !important;
+    }
+}
