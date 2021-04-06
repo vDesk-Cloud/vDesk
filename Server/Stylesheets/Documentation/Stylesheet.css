@@ -30,7 +30,8 @@ code .Class {
     color: whitesmoke;
 }
 
-code .Function {
+code .Function,
+code .HTML {
     color: #FFC66D;
 }
 
