@@ -4,62 +4,63 @@ declare(strict_types=1);
 use vDesk\Documentation\Code;
 use vDesk\Documentation\Code\Language;
 use vDesk\Pages\Functions; ?>
-<h2>Custom searchfilters and -results</h2>
-<p>
-    vDesk provides several methods to search for specific objects and /or data in the system, like files and folders in the archive, events in the calendar or metadata of archive
-    entries.
-</p>
-<p>
-    The 'generic'-search view of the Search module provides a way to define custom search-filters and results which define the pattern of the search-operation and the format and
-    presentation of the result if any.
-</p>
-<h3>
-    Custom searchfilters
-</h3>
-<p>
-    A custom searchfilter extends the searchmodule by the capability of performing a searchoperation against a specified serverside module which provides its own kind of data as a
-    resultset. So it is possible to search the archive for example for files and folders and/or search the contactmodule for a specific contact or business-contact.
-</p>
-<h5>Custom search filter provided via plugin API</h5>
-<p style="text-align: center">
-    <img src="<?= Functions::Image("Documentation/SearchFilter.png") ?>">
-</p>
-<h4>
-    Format
-</h4>
-<table>
-    <tr>
-        <th>Key</th>
-        <th>Value</th>
-        <th>Description</th>
-    </tr>
-    <tr>
-        <td>Module</td>
-        <td>String</td>
-        <td>Defines the name of the server-side module, against the searchoperation will be performed.</td>
-    </tr>
-    <tr>
-        <td>Name</td>
-        <td>[String]</td>
-        <td>Defines the name of the filter for identification on the server. Depending on the implementation of the ISearch->Search() method of the according module, the value can
-            be an empty string.
-        </td>
-    </tr>
-    <tr>
-        <td>Icon</td>
-        <td>String</td>
-        <td>Defines the icon that will be displayed on the toolbaritem for the searchfilter.</td>
-    </tr>
-    <tr>
-        <td>Title</td>
-        <td>String</td>
-        <td>Defines the title that will be displayed on the toolbaritem for the searchfilter.</td>
-    </tr>
-</table>
-<h5>Searchfilter registration</h5>
-<p>To register a custom search-filter it must be declared as a member of the {@linkcode vDesk.Search.Filters}-Namespace.</p>
-<br>
-<h5><u>Definition of an example searchfilter</u></h5>
+<article>
+    <h2>Custom searchfilters and -results</h2>
+    <p>
+        vDesk provides several methods to search for specific objects and /or data in the system, like files and folders in the archive, events in the calendar or metadata of archive
+        entries.
+    </p>
+    <p>
+        The 'generic'-search view of the Search module provides a way to define custom search-filters and results which define the pattern of the search-operation and the format and
+        presentation of the result if any.
+    </p>
+    <h3>
+        Custom searchfilters
+    </h3>
+    <p>
+        A custom searchfilter extends the searchmodule by the capability of performing a searchoperation against a specified serverside module which provides its own kind of data as a
+        resultset. So it is possible to search the archive for example for files and folders and/or search the contactmodule for a specific contact or business-contact.
+    </p>
+    <h5>Custom search filter provided via plugin API</h5>
+    <p style="text-align: center">
+        <img src="<?= Functions::Image("Documentation/SearchFilter.png") ?>">
+    </p>
+    <h4>
+        Format
+    </h4>
+    <table>
+        <tr>
+            <th>Key</th>
+            <th>Value</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>Module</td>
+            <td>String</td>
+            <td>Defines the name of the server-side module, against the searchoperation will be performed.</td>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td>[String]</td>
+            <td>Defines the name of the filter for identification on the server. Depending on the implementation of the ISearch->Search() method of the according module, the value can
+                be an empty string.
+            </td>
+        </tr>
+        <tr>
+            <td>Icon</td>
+            <td>String</td>
+            <td>Defines the icon that will be displayed on the toolbaritem for the searchfilter.</td>
+        </tr>
+        <tr>
+            <td>Title</td>
+            <td>String</td>
+            <td>Defines the title that will be displayed on the toolbaritem for the searchfilter.</td>
+        </tr>
+    </table>
+    <h5>Searchfilter registration</h5>
+    <p>To register a custom search-filter it must be declared as a member of the {@linkcode vDesk.Search.Filters}-Namespace.</p>
+    <br>
+    <h5><u>Definition of an example searchfilter</u></h5>
 <pre><code><?= Language::JS ?>
 <?= Code::BlockComment("\"use strict\"") ?><?= Code::Delimiter ?>
         
@@ -94,16 +95,16 @@ use vDesk\Pages\Functions; ?>
 
 <?= Code::Class("vDesk") ?>.Search.Filters.Contacts = <?= Code::Class("vDesk") ?>.Contacts.Contact.Search.Filter<?= Code::Delimiter ?>
 </code></pre>
-<br>
-<h4>Custom searchresults</h4>
-<p>A custom searchresult defines the behaviour and/or presentation of a specific kind of data which has been retrieved by a searchoperation from the server.<br>
-    To register a searchresult it must follow the </p>
-<p></p>
-<h5>Custom search results provided via plugin API</h5>
-<p style="text-align: center">
-    <img src="<?= Functions::Image("Documentation/SearchResult.png") ?>">
-</p>
-<h5><u>Definition of an example searchresult</u></h5>
+    <br>
+    <h4>Custom searchresults</h4>
+    <p>A custom searchresult defines the behaviour and/or presentation of a specific kind of data which has been retrieved by a searchoperation from the server.<br>
+        To register a searchresult it must follow the </p>
+    <p></p>
+    <h5>Custom search results provided via plugin API</h5>
+    <p style="text-align: center">
+        <img src="<?= Functions::Image("Documentation/SearchResult.png") ?>">
+    </p>
+    <h5><u>Definition of an example searchresult</u></h5>
 <pre><code><?= Language::JS ?>
 <?= Code::BlockComment("\"use strict\"") ?><?= Code::Delimiter ?>
         
@@ -147,3 +148,4 @@ use vDesk\Pages\Functions; ?>
 
 <?= Code::Class("vDesk") ?>.Search.Results.<?= Code::Field("CustomSearchResult") ?> = <?= Code::Class("CustomSearchResult") ?><?= Code::Delimiter ?>
 </code></pre>
+</article>

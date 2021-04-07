@@ -307,12 +307,17 @@ main > header > nav > a:hover {
 main > article {
     grid-row: 2;
     grid-column: 2;
+}
+
+main > article > header,
+main > article > section
+{
     margin-bottom: 10px;
     padding-bottom: 10px;
     border-bottom: #999 solid 2px;
 }
 
-main > article:last-child {
+main > article > section:last-child {
     margin-bottom: 0;
     padding-bottom: 0;
     border-bottom: none;

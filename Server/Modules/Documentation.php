@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Modules;
 
 use Pages\Documentation\Index;
+use Pages\Documentation\Tutorials;
 use vDesk\Configuration\Settings;
 use vDesk\IO\DirectoryInfo;
 use vDesk\IO\FileInfo;
@@ -26,7 +27,6 @@ class Documentation extends Module {
      * @return \Pages\Documentation The index Page of the Documentation Package.
      */
     public static function Index(): \Pages\Documentation {
-        
         return new \Pages\Documentation(
             Pages: static::GetPages(),
             Content: new \Pages\Documentation\Index(Pages: static::GetPages(), Tutorials: static::GetTutorials())
@@ -54,7 +54,7 @@ class Documentation extends Module {
      *
      * @return \Pages\Documentation The requested Page.
      */
-    public static function Page(string $Page = null): \Pages\Documentation {
+    public static function Page(string $Page = null): Page {
         $Page  ??= Request::$Parameters["Page"];
         $Class = "\\Pages\\Documentation\\{$Page}";
         return new \Pages\Documentation(
@@ -79,10 +79,15 @@ class Documentation extends Module {
     /**
      * Displays the Tutorials index Page.
      *
-     * @return \Pages\Documentation The requested tutorial.
+     * @return \Pages\Documentation\Tutorials The requested tutorial.
      */
-    public static function Tutorials(): Page {
-        return static::Tutorial("Index");
+    public static function Tutorials(): Tutorials {
+        $Tutorials = static::GetTutorials();
+        return new Tutorials(
+            Pages: static::GetPages(),
+            Tutorials: $Tutorials,
+            Tutorial: new Tutorials\Index(Tutorials: $Tutorials)
+        );
     }
     
     /**
@@ -90,18 +95,15 @@ class Documentation extends Module {
      *
      * @param string|null $Tutorial The Tutorial Page to display.
      *
-     * @return \Pages\Documentation The requested tutorial.
+     * @return \Pages\Documentation\Tutorials The requested tutorial.
      */
-    public static function Tutorial(string $Tutorial = null): \Pages\Documentation {
+    public static function Tutorial(string $Tutorial = null): Tutorials {
         $Tutorial ??= Request::$Parameters["Tutorial"];
-        $Class    = "\\Pages\\Documentation\\Tutorials\\{$Tutorial}";
-        return new $Class(
-            [
-                "Current"   => new $Class(),
-                "Pages"     => static::GetPages(),
-                "Tutorials" => static::GetTutorials(),
-            ],
-            ["Documentation/Tutorials"]
+        $Class = "\\Pages\\Documentation\\Tutorials\\{$Tutorial}";
+        return new Tutorials(
+            Pages: static::GetPages(),
+            Tutorials: static::GetTutorials(),
+            Tutorial: new $Class()
         );
     }
     

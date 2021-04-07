@@ -1,0 +1,24 @@
+main {
+    grid-template-rows: 100px auto 60px !important;
+}
+
+main > header {
+    height: 100px !important;
+    display: grid;
+    grid-template-columns: max-content auto;
+    grid-template-rows: 50% 50%;
+}
+
+
+
+main > header > nav {
+    grid-row: 1 !important;
+    grid-column: 2;
+    place-self: end;
+}
+
+main > header > nav.Tutorials {
+    grid-row: 2 !important;
+    grid-column: 2;
+    place-self: end;
+}

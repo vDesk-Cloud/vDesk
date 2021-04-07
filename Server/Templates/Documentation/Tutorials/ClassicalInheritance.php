@@ -1,4 +1,5 @@
 <?php use vDesk\Documentation\Code; ?>
+<article>
 <h2>Classical inheritance and interfaces in JavaScript</h2>
 <p>
     vDesk provides a simple way of extending classes and describing their pattern through interfaces.
@@ -287,3 +288,4 @@
 
 <?= Code::Keyword("const") ?> <?= Code::Const("LastDone") ?> = <?= Code::Variable("Example") ?>.<?= Code::Variable("DoneStuff") ?><?= Code::Delimiter ?> <?= Code::Comment("//throws error") ?>
 </code></pre>
+</article>

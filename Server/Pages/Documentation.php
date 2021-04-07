@@ -28,12 +28,12 @@ class Documentation extends Page {
     /**
      * Initializes a new instance of the Documentation Page.
      *
-     * @param null|iterable             $Values      Initializes the Documentation Page with the specified Dictionary of values.
-     * @param null|iterable             $Templates   Initializes the Documentation Page with the specified Collection of templates.
-     * @param null|iterable             $Stylesheets Initializes the Documentation Page with the specified Collection of stylesheets.
-     * @param null|iterable             $Scripts     Initializes the Documentation Page with the specified Collection of scripts.
-     * @param string[]                  $Pages       Initializes the Documentation Page with the specified set of Pages.
-     * @param null|\Pages\Documentation $Content     Initializes the Documentation Page with the specified content Page.
+     * @param null|iterable          $Values      Initializes the Documentation Page with the specified Dictionary of values.
+     * @param null|iterable          $Templates   Initializes the Documentation Page with the specified Collection of templates.
+     * @param null|iterable          $Stylesheets Initializes the Documentation Page with the specified Collection of stylesheets.
+     * @param null|iterable          $Scripts     Initializes the Documentation Page with the specified Collection of scripts.
+     * @param string[]               $Pages       Initializes the Documentation Page with the specified set of Pages.
+     * @param null|\vDesk\Pages\Page $Content     Initializes the Documentation Page with the specified content Page.
      */
     public function __construct(
         ?iterable $Values = [],
@@ -41,7 +41,7 @@ class Documentation extends Page {
         ?iterable $Stylesheets = ["Documentation/Stylesheet", "vDesk/Stylesheet"],
         ?iterable $Scripts = [],
         public array $Pages = [],
-        public ?self $Content = null
+        public ?Page $Content = null
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }

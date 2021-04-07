@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Pages\Documentation;
 
 use Pages\Documentation;
+use vDesk\Pages\Cached\Page;
 
 /**
  * Pages Documentation Page.
@@ -34,16 +35,14 @@ class Pages extends Documentation {
      * @param null|iterable $Templates   Initializes the Pages Page with the specified Collection of templates.
      * @param null|iterable $Stylesheets Initializes the Pages Page with the specified Collection of stylesheets.
      * @param null|iterable $Scripts     Initializes the Pages Page with the specified Collection of scripts.
-     * @param array         $Pages       Initializes the Pages Page with the specified set of Pages.
      */
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Pages"],
         ?iterable $Stylesheets = ["Documentation/Stylesheet", "vDesk/Stylesheet"],
-        ?iterable $Scripts = [],
-        array $Pages = []
+        ?iterable $Scripts = []
     ) {
-        parent::__construct($Values, $Templates, $Stylesheets, $Scripts, $Pages);
+        parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }
     
 }
