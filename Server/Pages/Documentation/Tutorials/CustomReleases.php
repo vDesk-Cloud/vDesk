@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pages\Documentation\Tutorials;
 
-use Pages\Documentation\Tutorials;
+use vDesk\Pages\Cached\Page;
 
 /**
  * Class CustomReleases
@@ -11,7 +11,7 @@ use Pages\Documentation\Tutorials;
  * @package Pages\Tutorials
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class CustomReleases extends Tutorials {
+class CustomReleases extends Page {
     
     /**
      * The name of the Tutorial.

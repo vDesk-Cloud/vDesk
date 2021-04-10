@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pages\Documentation\Tutorials;
 
-use Pages\Documentation;
+use vDesk\Pages\Cached\Page;
 
 /**
  * Class CustomReleases
@@ -11,7 +11,7 @@ use Pages\Documentation;
  * @package Pages\Tutorials
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class GlobalEventSystem extends Documentation\Tutorials {
+class GlobalEventSystem extends Page {
     
     /**
      * The name of the Tutorial.

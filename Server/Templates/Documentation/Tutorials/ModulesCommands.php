@@ -82,42 +82,48 @@ use vDesk\Pages\Functions;
             <li>Dispatch events.</li>
         </ol>
     </section>
-    <h3 id="Modules">Modules</h3>
-    <p>
-        Modules are the controller-equivalent of MVC-frameworks.<br>
-        The module-system of vDesk, is split into a server- and client-section.
-    </p>
-    <h4 id="Client">Client</h4>
-    <p>
-        Client-side Modules are supposed to manage the UI and fetching or manipulating data by executing Commands against the server.
-    </p>
-    <p>
-        To register a class as a client-side Module, the class to be located in the <code class="Inline">Modules</code>-namespace and must implement either the <code class="Inline">vDesk.Modules.<?= Code::Class("IModule") ?></code>-
-        or <code class="Inline">vDesk.Modules.<?= Code::Class("IVisualModule") ?></code>-interface.
-    </p>
-    <h4 id="Server">Server</h4>
-    <p>
-        Server-side Modules are supposed to process commands, validate parameters and manage Models.
-    </p>
-    <p>
-        To register a class as a server-side Module, the class has to be located in the <code class="Inline">Modules</code>-namespace and must inherit from the <code class="Inline">\vDesk\Modules\<?= Code::Class("Module") ?></code>-class.<br>
-        The Module base-class implements the <code class="Inline">\vDesk\Data\<?= Code::Class("IModel") ?></code>-interface which allows to simply instantiate the Module once and call
-        its "Save"-method to register it.
-    </p>
-    <p>
-        Modules are stored in the <code class="Inline"><?= Code::Class("Modules") ?>.<?= Code::Const("Modules") ?></code>-table.
-    </p>
-    <hr>
-    <h3 id="Commands">Commands</h3>
-    <p>
-        vDesk's public API is exposed via a collection of "Commands" which are stored in the database, each referencing a target module and method to execute, as well as describing the
-        parameters of the command.
-    </p>
-    <p>
-        Commands are stored in the <code class="Inline"><?= Code::Class("Modules") ?>.<?= Code::Const("Commands") ?></code>-table.
-    </p>
-    <div style="display: flex; justify-content: space-around;">
-<pre style="margin: 10px"><code><?= Language::JS ?>
+    <section id="Modules">
+        <h3>Modules</h3>
+        <p>
+            Modules are the controller-equivalent of MVC-frameworks.<br>
+            The module-system of vDesk, is split into a server- and client-section.
+        </p>
+    </section>
+    <section id="Client">
+        <h4>Client</h4>
+        <p>
+            Client-side Modules are supposed to manage the UI and fetching or manipulating data by executing Commands against the server.
+        </p>
+        <p>
+            To register a class as a client-side Module, the class to be located in the <code class="Inline">Modules</code>-namespace and must implement either the <code class="Inline">vDesk.Modules.<?= Code::Class("IModule") ?></code>-
+            or <code class="Inline">vDesk.Modules.<?= Code::Class("IVisualModule") ?></code>-interface.
+        </p>
+    </section>
+    <section id="Server">
+        <h4>Server</h4>
+        <p>
+            Server-side Modules are supposed to process commands, validate parameters and manage Models.
+        </p>
+        <p>
+            To register a class as a server-side Module, the class has to be located in the <code class="Inline">Modules</code>-namespace and must inherit from the <code class="Inline">\vDesk\Modules\<?= Code::Class("Module") ?></code>-class.<br>
+            The Module base-class implements the <code class="Inline">\vDesk\Data\<?= Code::Class("IModel") ?></code>-interface which allows to simply instantiate the Module once and call
+            its "Save"-method to register it.
+        </p>
+        <p>
+            Modules are stored in the <code class="Inline"><?= Code::Class("Modules") ?>.<?= Code::Const("Modules") ?></code>-table.
+        </p>
+    </section>
+    <section id="Commands">
+        <h3>Commands</h3>
+        <p>
+            vDesk's public API is exposed via a collection of "Commands" which are stored in the database, each referencing a target module and method to execute, as well as describing the
+            parameters of the command.
+        </p>
+        <p>
+            Commands are stored in the <code class="Inline"><?= Code::Class("Modules") ?>.<?= Code::Const("Commands") ?></code>-table.
+        </p>
+        <div style="display: flex; justify-content: space-around;">
+        <pre style="margin: 10px"><code><?= Language::JS ?>
 <?= Code::Variable("vDesk") ?>.<?= Code::Class("Connection") ?>.<?= Code::Function("Send") ?>(
     <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Modules") ?>.<?= Code::Class("Command") ?>(
         {
@@ -144,7 +150,7 @@ use vDesk\Pages\Functions;
     )
 )<?= Code::Delimiter ?>
 </code></pre>
-    <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
+        <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
 <?= Code::Variable("\$ParentElement") ?> = <?= Code::New ?> \vDesk\IO\<?= Code::Class("FileInfo") ?>(<?= Code::Int("12") ?>)<?= Code::Delimiter ?>
             
 <?= Code::Variable("\$File") ?> = <?= Code::New ?> \vDesk\IO\<?= Code::Class("FileInfo") ?>(<?= Code::String("\"Path\"") ?>)<?= Code::Delimiter ?>
@@ -164,15 +170,17 @@ use vDesk\Pages\Functions;
 
 <?= Code::Keyword("echo") ?> <?= Code::Variable("\$UploadedElement") ?>-><?= Code::Field("ID") ?><?= Code::Delimiter ?>
 </code></pre>
-    </div>
-    <h4 id="Parameters">Parameters</h4>
-    <p>
-        Commands can require any parameters if needed, describing the name, type, nullabillity and optionality.
-    </p>
-    <p>
-        Parameters are stored in the <code class="Inline"><?= Code::Class("Modules") ?>.<?= Code::Const("Parameters") ?></code>-table.
-    </p>
-<pre><code><?= Language::PHP ?>
+        </div>
+    </section>
+    <section id="Parameters">
+        <h4>Parameters</h4>
+        <p>
+            Commands can require any parameters if needed, describing the name, type, nullabillity and optionality.
+        </p>
+        <p>
+            Parameters are stored in the <code class="Inline"><?= Code::Class("Modules") ?>.<?= Code::Const("Parameters") ?></code>-table.
+        </p>
+        <pre><code><?= Language::PHP ?>
 <?= Code::Use ?> vDesk\Modules\<?= Code::Class("Command") ?><?= Code::Delimiter ?>
         
 <?= Code::Use ?> vDesk\Struct\Collections\<?= Code::Class("Collection") ?><?= Code::Delimiter ?>
@@ -200,15 +208,17 @@ use vDesk\Pages\Functions;
         
 <?= Code::Variable("\$Archive") ?>-><?= Code::Function("Save") ?>()<?= Code::Delimiter ?>
 </code></pre>
-    <h5 id="Validation">Validation</h5>
-    <p>
-        Parameters are being validated twice: first on the client, and if the validation has passed; a second time on the server.<br>
-        This prevents the server from being stressed with useless malformed requests and ensures a manipulation-safe backend.
-    </p>
-    <p>
-        The following table represents the global type-alias and their platform-specific datatypes of parameters.
-    </p>
-    <table>
+    </section>
+    <section id="Validation">
+        <h5>Validation</h5>
+        <p>
+            Parameters are being validated twice: first on the client, and if the validation has passed; a second time on the server.<br>
+            This prevents the server from being stressed with useless malformed requests and ensures a manipulation-safe backend.
+        </p>
+        <p>
+            The following table represents the global type-alias and their platform-specific datatypes of parameters.
+        </p>
+        <table>
         <tr>
             <th>Type</th>
             <th>JS</th>
@@ -305,4 +315,5 @@ use vDesk\Pages\Functions;
             <td>\vDesk\IO\FileInfo</td>
         </tr>
     </table>
+    </section>
 </article>

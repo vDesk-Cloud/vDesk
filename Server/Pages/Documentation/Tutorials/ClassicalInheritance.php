@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pages\Documentation\Tutorials;
 
-use Pages\Documentation\Tutorials;
+use vDesk\Pages\Cached\Page;
 
 /**
  * Class ClassicalInheritance
@@ -11,7 +11,7 @@ use Pages\Documentation\Tutorials;
  * @package Pages\Documentation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class ClassicalInheritance extends Tutorials {
+class ClassicalInheritance extends Page {
     
     /**
      * The name of the Tutorial.

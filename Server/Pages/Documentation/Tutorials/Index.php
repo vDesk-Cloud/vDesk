@@ -46,9 +46,8 @@ class Index extends Tutorials {
         ?iterable $Scripts = [],
         public array $Pages = [],
         public array $Tutorials = [],
-        public ?Page $Tutorial = null
     ) {
-        parent::__construct($Values, $Templates, $Stylesheets, $Scripts, $Pages, $Tutorials, $Tutorial);
+        parent::__construct($Values, $Templates, $Stylesheets, $Scripts, $Pages, $Tutorials);
     }
     
 }

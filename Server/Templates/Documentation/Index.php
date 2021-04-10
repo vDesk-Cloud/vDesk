@@ -27,7 +27,7 @@ use vDesk\Pages\Functions;
     </ul>
     <h4>Tutorials</h4>
     <ul>
-        <?php foreach($Page->Tutorials as $Tutorial): ?>
+        <?php foreach(\vDesk\Modules::Documentation()::GetTutorials() as $Tutorial): ?>
             <?php if($Tutorial->Name !== "Index"): ?>
                 <li>
                     <a href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", $Tutorial->Name) ?>"><?= $Tutorial->Description ?></a>
