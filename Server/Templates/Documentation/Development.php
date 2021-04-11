@@ -87,13 +87,16 @@ use vDesk\Pages\Functions;
         </p>
         <h5>PHP</h5>
         <p>
-            Every sourcefile containing type-hints must begin with the <code class="Inline"><?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?></code>-statement.
+            Every source file containing type-hints must begin with the <code class="Inline"><?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?></code>-statement.
         </p>
         <h5>JavaScript</h5>
         <p>
             As of the weakly-typed nature of ECMA-/JavaScript, there's currently no equivalent of type-hinting.<br>
-            However, if you <u>optionally</u> want to use value type-checking, you can use the <code class="Inline">Ensure.<?= Code::Function("Parameter") ?>()</code> and <code
-                    class="Inline">Ensure.<?= Code::Function("Property") ?>()</code> methods.
+            However, if you <u>optionally</u> want to use value type-checking, you can use the <code class="Inline">Ensure.<?= Code::Function("Parameter") ?>()</code> and
+            <code class="Inline">Ensure.<?= Code::Function("Property") ?>()</code> methods.
+        </p>
+        <p>
+            At least, source files have to use the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode">strict mode</a> and must begin with the <code class="Inline"><?= Code::String("\"use strict\"") ?><?= Code::Delimiter ?></code>-statement.
         </p>
     </section>
     <section id="CodeBlocks">
@@ -537,6 +540,10 @@ Text<?= Code::Delimiter ?>
         <p>
             As a general rule for frontend-development, is to keep the user interface as simple as possible.<br>
             Consider the following rules as a "recommendation" for designing graphical interfaces.
+        </p>
+        <p>
+            The client uses currently the box model with floatings for alignment of controls but may get refactored to the CSS-grid.<br>
+            
         </p>
     </section>
     <section id="CSS">

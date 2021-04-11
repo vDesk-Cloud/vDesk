@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Pages\Documentation;
 
-use Pages\Documentation;
 use vDesk\Pages\Cached\Page;
 
 /**
@@ -12,7 +11,7 @@ use vDesk\Pages\Cached\Page;
  * @package Pages\Tutorials
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Pages extends Documentation {
+class Pages extends Page {
     
     /**
      * The name of the Tutorial.

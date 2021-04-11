@@ -107,8 +107,4 @@ class Documentation extends Module {
         );
     }
     
-    public static function Show404(){
-    
-    }
-    
 }
