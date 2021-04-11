@@ -2,23 +2,88 @@ main {
     grid-template-rows: 100px auto 60px !important;
 }
 
-main > header {
+main.Tutorials > header {
     height: 100px !important;
     display: grid;
     grid-template-columns: max-content auto;
     grid-template-rows: 50% 50%;
 }
 
-
-
-main > header > nav {
-    grid-row: 1 !important;
+main.Tutorials > header > section {
+    grid-row-start: 1;
+    grid-row-end: 3;
     grid-column: 2;
-    place-self: end;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 50% 50%;
+    grid-template-columns: 100%;
+    justify-items: end;
+    align-items: center;
 }
 
-main > header > nav.Tutorials {
-    grid-row: 2 !important;
-    grid-column: 2;
-    place-self: end;
+main.Tutorials > header > section > nav.Pages {
+    grid-row: 1;
+}
+
+main.Tutorials > header > section > nav.Tutorials {
+    grid-row: 2;
+}
+
+
+main.Tutorials > header > section > nav > a {
+    display: inline-block;
+    height: calc(100% - 10px);
+    padding: 5px;
+    line-height: 30px;
+    text-decoration: none;
+    font-family: Arial, serif;
+    color: white;
+}
+
+/* Smartphone */
+@media only screen and (max-device-width: 768px) {
+    .Toggle {
+        display: inline !important;
+        position: absolute !important;
+        right: 0 !important;
+        height: 100% !important;
+        background: none !important;
+        border: none !important;
+        min-width: 50px !important;
+        color: white !important;
+        font-weight: bold !important;
+        font-size: 1.5rem !important;
+    }
+
+    main > header > section {
+        position: absolute !important;
+        top: 50px !important;
+        right: 0 !important;
+        background-color: #2AB0ED !important;
+        height: auto !important;
+        list-style: none !important;
+        z-index: 9999 !important;
+    }
+
+    main > header > section.Hidden {
+        display: none !important;
+    }
+
+    main > header > section > nav > a {
+        display: list-item !important;
+        height: auto !important;
+    }
+
+    main > article {
+        margin-bottom: 10px !important;
+        padding-bottom: 10px !important;
+    }
+
+    main {
+        grid-template-columns: 5px calc(100% - 10px) 5px !important;
+    }
+
+    main img {
+        max-width: 100% !important;
+    }
 }

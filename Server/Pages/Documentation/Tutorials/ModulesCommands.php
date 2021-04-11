@@ -38,7 +38,7 @@ class ModulesCommands extends Page {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Tutorials/ModulesCommands"],
-        ?iterable $Stylesheets = ["Documentation/Stylesheet","vDesk/Stylesheet", "vDesk/Packages"],
+        ?iterable $Stylesheets = ["Documentation/Stylesheet", "vDesk/Packages"],
         ?iterable $Scripts = []
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);

@@ -38,7 +38,7 @@ class Documentation extends Page {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation"],
-        ?iterable $Stylesheets = ["Documentation/Stylesheet", "vDesk/Stylesheet"],
+        ?iterable $Stylesheets = ["Documentation/Stylesheet"],
         ?iterable $Scripts = [],
         public array $Pages = [],
         public ?Page $Content = null

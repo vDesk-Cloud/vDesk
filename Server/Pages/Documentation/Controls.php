@@ -34,14 +34,12 @@ class Controls extends Page {
      * @param null|iterable $Templates   Initializes the Controls Page with the specified Collection of templates.
      * @param null|iterable $Stylesheets Initializes the Controls Page with the specified Collection of stylesheets.
      * @param null|iterable $Scripts     Initializes the Controls Page with the specified Collection of scripts.
-     * @param array         $Pages       Initializes the Controls Page with the specified set of Pages.
      */
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Controls"],
         ?iterable $Stylesheets = [
             "Documentation/Stylesheet",
-            "vDesk/Stylesheet",
             "../../Client/Design/vDesk",
             "../../Client/Design/vDesk/Controls/GroupBox",
             "../../Client/Design/vDesk/Controls/ResizableBox",
@@ -160,9 +158,8 @@ class Controls extends Page {
             "../../Client/Lib/vDesk/Controls/EditControl/DateTime",
             "../../Client/Lib/vDesk/Controls/EditControl/TimeSpan",
             "../../Client/Lib/vDesk/Controls/EditControl/Enum"
-        ],
-        array $Pages = []
+        ]
     ) {
-        parent::__construct($Values, $Templates, $Stylesheets, $Scripts, $Pages);
+        parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }
 }

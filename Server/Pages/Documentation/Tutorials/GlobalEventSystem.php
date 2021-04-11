@@ -38,7 +38,7 @@ class GlobalEventSystem extends Page {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Tutorials/GlobalEventSystem"],
-        ?iterable $Stylesheets = ["Documentation/Stylesheet", "vDesk/Stylesheet"],
+        ?iterable $Stylesheets = ["Documentation/Stylesheet"],
         ?iterable $Scripts = [],
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);

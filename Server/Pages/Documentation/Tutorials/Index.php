@@ -31,18 +31,17 @@ class Index extends Tutorials {
     /**
      * Initializes a new instance of the Index Page.
      *
-     * @param null|iterable          $Values      Initializes the Index Page with the specified Dictionary of values.
-     * @param null|iterable          $Templates   Initializes the Index Page with the specified Collection of templates.
-     * @param null|iterable          $Stylesheets Initializes the Index Page with the specified Collection of stylesheets.
-     * @param null|iterable          $Scripts     Initializes the Index Page with the specified Collection of scripts.
-     * @param array                  $Pages
-     * @param array                  $Tutorials
-     * @param null|\vDesk\Pages\Page $Tutorial
+     * @param null|iterable $Values      Initializes the Index Page with the specified Dictionary of values.
+     * @param null|iterable $Templates   Initializes the Index Page with the specified Collection of templates.
+     * @param null|iterable $Stylesheets Initializes the Index Page with the specified Collection of stylesheets.
+     * @param null|iterable $Scripts     Initializes the Index Page with the specified Collection of scripts.
+     * @param array         $Pages
+     * @param array         $Tutorials
      */
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Tutorials/Index"],
-        ?iterable $Stylesheets = ["Documentation/Stylesheet", "vDesk/Stylesheet"],
+        ?iterable $Stylesheets = ["Documentation/Stylesheet"],
         ?iterable $Scripts = [],
         public array $Pages = [],
         public array $Tutorials = [],

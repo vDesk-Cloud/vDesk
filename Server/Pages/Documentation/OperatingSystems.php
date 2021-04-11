@@ -39,7 +39,7 @@ class OperatingSystems extends Documentation {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/OperatingSystems"],
-        ?iterable $Stylesheets = ["Documentation/Stylesheet", "vDesk/Stylesheet"],
+        ?iterable $Stylesheets = ["Documentation/Stylesheet"],
         ?iterable $Scripts = [],
         array $Pages = []
     ) {

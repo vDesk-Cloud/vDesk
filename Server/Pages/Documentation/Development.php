@@ -34,16 +34,14 @@ class Development extends Page {
      * @param null|iterable $Templates   Initializes the Development Page with the specified Collection of templates.
      * @param null|iterable $Stylesheets Initializes the Development Page with the specified Collection of stylesheets.
      * @param null|iterable $Scripts     Initializes the Development Page with the specified Collection of scripts.
-     * @param array         $Pages       Initializes the Development Page with the specified set of Pages.
      */
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Development"],
-        ?iterable $Stylesheets = ["Documentation/Stylesheet", "vDesk/Stylesheet"],
-        ?iterable $Scripts = [],
-        array $Pages = []
+        ?iterable $Stylesheets = ["Documentation/Stylesheet"],
+        ?iterable $Scripts = []
     ) {
-        parent::__construct($Values, $Templates, $Stylesheets, $Scripts, $Pages);
+        parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }
     
 }
