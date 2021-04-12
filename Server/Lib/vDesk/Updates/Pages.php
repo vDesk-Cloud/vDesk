@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace vDesk\Updates;
 
+use vDesk\Configuration\Settings;
+use vDesk\IO\Directory;
+use vDesk\IO\Path;
 use vDesk\Packages\Package;
 
 /**
@@ -21,13 +24,13 @@ final class Pages extends Update {
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.0";
+    public const RequiredVersion = "1.0.1";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Fixed autoloading of Page files.
+- Implemented caching functionality.
 Description;
 
     /**
@@ -36,12 +39,9 @@ Description;
     public const Files = [
         self::Deploy   => [
             Package::Server => [
-                Package::Lib     => ["Pages.php"]
-            ]
-        ],
-        self::Undeploy => [
-            Package::Server => [
-                Package::Lib     => ["Pages.php"]
+                Package::Lib     => [
+                    "vDesk/Pages/Cached/Page"
+                ]
             ]
         ]
     ];
@@ -50,7 +50,8 @@ Description;
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
-        self::Uneploy();
+        Settings::$Local["Pages"]["Cache"] = (Directory::Create($Path . Path::Separator . Package::Server . Path::Separator . "Cache"))->Path;
+        Settings::$Local->Save();
         self::Deploy($Phar, $Path);
     }
 }
