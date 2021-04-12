@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pages\Documentation\Tutorials;
 
-use Pages\Documentation;
+use vDesk\Pages\Cached\Page;
 
 /**
  * Class Search
@@ -11,7 +11,7 @@ use Pages\Documentation;
  * @package Pages\Documentation\Tutorials
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Search extends Documentation {
+class Search extends Page {
     
     /**
      * The name of the Tutorial.
@@ -35,7 +35,12 @@ class Search extends Documentation {
      * @param null|iterable $Stylesheets Initializes the Search Page with the specified Collection of stylesheets.
      * @param null|iterable $Scripts     Initializes the Search Page with the specified Collection of scripts.
      */
-    public function __construct(?iterable $Values = [], ?iterable $Templates = [], ?iterable $Stylesheets = ["Documentation/Stylesheet", "vDesk/Stylesheet"], ?iterable $Scripts = []) {
+    public function __construct(
+        ?iterable $Values = [],
+        ?iterable $Templates = ["Documentation/Tutorials/Search"],
+        ?iterable $Stylesheets = ["Documentation/Stylesheet"],
+        ?iterable $Scripts = []
+    ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }
     

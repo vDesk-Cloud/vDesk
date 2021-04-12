@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pages\Documentation;
 
-use Pages\Documentation;
+use vDesk\Pages\Cached\Page;
 
 /**
  * Packages Documentation
@@ -11,7 +11,7 @@ use Pages\Documentation;
  * @package Pages\Tutorials
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Packages extends Documentation {
+class Packages extends Page {
     
     /**
      * The name of the Tutorial.
@@ -26,5 +26,22 @@ class Packages extends Documentation {
      * @var string
      */
     public string $Description = "Packages";
+    
+    /**
+     * Initializes a new instance of the Packages Page.
+     *
+     * @param null|iterable $Values      Initializes the Packages Page with the specified Dictionary of values.
+     * @param null|iterable $Templates   Initializes the Packages Page with the specified Collection of templates.
+     * @param null|iterable $Stylesheets Initializes the Packages Page with the specified Collection of stylesheets.
+     * @param null|iterable $Scripts     Initializes the Packages Page with the specified Collection of scripts.
+     */
+    public function __construct(
+        ?iterable $Values = [],
+        ?iterable $Templates = ["Documentation/Packages"],
+        ?iterable $Stylesheets = ["Documentation/Stylesheet"],
+        ?iterable $Scripts = []
+    ) {
+        parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
+    }
     
 }

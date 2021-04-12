@@ -3,15 +3,15 @@ declare(strict_types=1);
 
 namespace Pages\Documentation;
 
-use Pages\Documentation;
+use vDesk\Pages\Cached\Page;
 
 /**
- * Documentation\Controls Page.
+ * Controls Page.
  *
  * @package Pages\Documentation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Controls extends Documentation {
+class Controls extends Page {
     
     /**
      * The name of the Tutorial.
@@ -28,19 +28,18 @@ class Controls extends Documentation {
     public string $Description = "Controls";
     
     /**
-     * Initializes a new instance of the Documentation Page.
+     * Initializes a new instance of the Controls Page.
      *
-     * @param null|iterable $Values      Initializes the Documentation Page with the specified Dictionary of values.
-     * @param null|iterable $Templates   Initializes the Documentation Page with the specified Collection of templates.
-     * @param null|iterable $Stylesheets Initializes the Documentation Page with the specified Collection of stylesheets.
-     * @param null|iterable $Scripts     Initializes the Documentation Page with the specified Collection of scripts.
+     * @param null|iterable $Values      Initializes the Controls Page with the specified Dictionary of values.
+     * @param null|iterable $Templates   Initializes the Controls Page with the specified Collection of templates.
+     * @param null|iterable $Stylesheets Initializes the Controls Page with the specified Collection of stylesheets.
+     * @param null|iterable $Scripts     Initializes the Controls Page with the specified Collection of scripts.
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Documentation"],
+        ?iterable $Templates = ["Documentation/Controls"],
         ?iterable $Stylesheets = [
             "Documentation/Stylesheet",
-            "vDesk/Stylesheet",
             "../../Client/Design/vDesk",
             "../../Client/Design/vDesk/Controls/GroupBox",
             "../../Client/Design/vDesk/Controls/ResizableBox",
@@ -158,7 +157,7 @@ class Controls extends Documentation {
             "../../Client/Lib/vDesk/Controls/EditControl/Time",
             "../../Client/Lib/vDesk/Controls/EditControl/DateTime",
             "../../Client/Lib/vDesk/Controls/EditControl/TimeSpan",
-            "../../Client/Lib/vDesk/Controls/EditControl/Enum",
+            "../../Client/Lib/vDesk/Controls/EditControl/Enum"
         ]
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
