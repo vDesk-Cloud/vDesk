@@ -38,7 +38,7 @@ class Homepage extends Package implements IPackage {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Documentation" => "1.0.0"];
+    public const Dependencies = ["Documentation" => "1.0.1"];
     
     /**
      * The files and directories of the Package.
