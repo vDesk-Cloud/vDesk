@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pages\vDesk;
 
-use Pages\vDesk;
+use vDesk\Pages\Cached\Page;
 
 /**
  * Class Index
@@ -11,7 +11,7 @@ use Pages\vDesk;
  * @package Pages\vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Index extends vDesk {
+class Index extends Page {
     
     /**
      * The name of the Tutorial.
@@ -39,11 +39,7 @@ class Index extends vDesk {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = [
-            "vDesk/Index/Description",
-            "vDesk/Index/Features",
-            "vDesk/Index/Technology",
-            "vDesk/Index/Customization",
-            "vDesk/Index/Development"
+            "vDesk/Index"
         ],
         ?iterable $Stylesheets = [
             "vDesk/Stylesheet",

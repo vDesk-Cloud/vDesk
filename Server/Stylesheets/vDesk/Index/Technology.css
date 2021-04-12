@@ -1,5 +1,5 @@
 #Technology {
-    grid-row: 4 !important;
+    grid-row: 3 !important;
     display: grid;
     grid-template-columns: 25% repeat(5, 10%) 25%;
     grid-template-rows: 22% repeat(3, 16.666%) 28%;

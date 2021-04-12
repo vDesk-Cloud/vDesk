@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pages\vDesk;
 
-use Pages\vDesk;
+use vDesk\Pages\Cached\Page;
 
 /**
  * The Packages page of the vDesk homepage.
@@ -11,7 +11,7 @@ use Pages\vDesk;
  * @package Pages\vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Packages extends vDesk {
+class Packages extends Page {
     
     /**
      * The name of the Tutorial.
@@ -34,7 +34,11 @@ class Packages extends vDesk {
      * @param null|iterable $Templates   Initializes the Packages Page with the specified Collection of templates.
      * @param null|iterable $Stylesheets Initializes the Packages Page with the specified Collection of stylesheets.
      */
-    public function __construct(?iterable $Values = [], ?iterable $Templates = ["vDesk/Packages"], ?iterable $Stylesheets = ["vDesk/Stylesheet", "vDesk/Packages"]) {
+    public function __construct(
+        ?iterable $Values = [],
+        ?iterable $Templates = ["vDesk/Packages"],
+        ?iterable $Stylesheets = ["vDesk/Stylesheet", "vDesk/Packages"]
+    ) {
         parent::__construct($Values, $Templates, $Stylesheets);
     }
     

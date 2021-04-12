@@ -22,7 +22,7 @@ use vDesk\Pages\Functions;
     <?php endforeach; ?>
 </head>
 <body>
-<article class="Page">
+<main>
     <header>
         <h1><a href="<?= Functions::URL("vDesk", "Index") ?>">v<span style="color: #2AB0ED">D</span>esk</a></h1>
         <button class="Toggle" onclick="this.nextElementSibling.classList.toggle('Hidden');">☰</button>
@@ -42,6 +42,6 @@ use vDesk\Pages\Functions;
         Copyright © 2020 Kerry Holz
         <aside>This website uses icons from <a target="_blank" href="https://www.icons8.com">icons8.com</a></aside>
     </footer>
-</article>
+</main>
 </body>
 </html>

@@ -30,12 +30,12 @@ class vDesk extends Page {
     /**
      * Initializes a new instance of the vDesk Page class.
      *
-     * @param null|iterable     $Values      Initializes the vDesk Page with the specified Dictionary of values.
-     * @param null|iterable     $Templates   Initializes the vDesk Page with the specified Collection of templates.
-     * @param null|iterable     $Stylesheets Initializes the vDesk Page with the specified Collection of stylesheets.
-     * @param null|iterable     $Scripts     Initializes the vDesk Page with the specified Collection of scripts.
-     * @param string[]          $Pages       Initializes the vDesk Page with the specified set of Pages.
-     * @param null|\Pages\vDesk $Content     Initializes the vDesk Page with the specified content Page.
+     * @param null|iterable          $Values      Initializes the vDesk Page with the specified Dictionary of values.
+     * @param null|iterable          $Templates   Initializes the vDesk Page with the specified Collection of templates.
+     * @param null|iterable          $Stylesheets Initializes the vDesk Page with the specified Collection of stylesheets.
+     * @param null|iterable          $Scripts     Initializes the vDesk Page with the specified Collection of scripts.
+     * @param string[]               $Pages       Initializes the vDesk Page with the specified set of Pages.
+     * @param null|\vDesk\Pages\Page $Content     Initializes the vDesk Page with the specified content Page.
      */
     public function __construct(
         ?iterable $Values = [],
@@ -43,7 +43,7 @@ class vDesk extends Page {
         ?iterable $Stylesheets = ["vDesk/Stylesheet"],
         ?iterable $Scripts = [],
         public array $Pages = [],
-        public ?self $Content = null
+        public ?Page $Content = null
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }
