@@ -6,7 +6,7 @@ use vDesk\Pages\Functions;
     <header>
         <h2>Controls</h2>
         <p>
-            This document describes represents an enumeration of vDesk's clientside controls.
+            This document represents an enumeration of vDesk's clientside controls.
         </p>
         <h3>Overview</h3>
         <ul class="Topics">
@@ -159,7 +159,6 @@ use vDesk\Pages\Functions;
 </section>
 <section id="DynamicBox" class="ControlPreview">
     <h4>DynamicBox</h4>
-    <p>The DynamicBox represents a combination between the Floating- and ResizableBox </p>
     <div class="Code">
         <pre><code><?= Code\Language::JS ?>
 <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("DynamicBox") ?>(

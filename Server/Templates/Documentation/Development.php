@@ -385,7 +385,7 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
     <?= Code::Use ?> \vDesk\Struct\<?= Code::Class("Properties") ?><?= Code::Delimiter ?>
         
         
-    <?= Code::Private ?> ?<?= Code::Keyword("string") ?> <?= Code::Field("\$PrivateMember") ?><?= Code::Delimiter ?>
+    <?= Code::Private ?> ?<?= Code::Keyword("string") ?> <?= Code::Variable("\$PrivateMember") ?><?= Code::Delimiter ?>
         
         
     <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("__construct") ?> {

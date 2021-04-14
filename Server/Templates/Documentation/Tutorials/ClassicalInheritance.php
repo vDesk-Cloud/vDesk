@@ -35,13 +35,13 @@
         </p>
         <pre><code><?= Code::BlockComment("//Visualization of an inheritance-tree.") ?>
 
---- <?= Code::Class("vDesk") ?>.<?= Code::Variable("Controls") ?>.<?= Code::Class("DynamicBox") ?> <?= Code::BlockComment("//Acts as the base-control.") ?>
+--- <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("DynamicBox") ?> <?= Code::BlockComment("//Acts as the base-control.") ?>
     
     |
-      --- <?= Code::Class("vDesk") ?>.<?= Code::Variable("Controls") ?>.<?= Code::Class("Window") ?> <?= Code::BlockComment("//Composes it's parent to an 'window'-like host-control.") ?>
+      --- <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("Window") ?> <?= Code::BlockComment("//Composes it's parent to an 'window'-like host-control.") ?>
         
           |
-            --- <?= Code::Class("vDesk") ?>.<?= Code::Variable("Archive") ?>.<?= Code::Variable("Element") ?>.<?= Code::Variable("Viewer") ?>.<?= Code::Class("Window") ?> <?= Code::BlockComment("//The 'final' control. Adding further functionalities to the control-composition.") ?>
+            --- <?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Class("Element") ?>.<?= Code::Field("Viewer") ?>.<?= Code::Class("Window") ?> <?= Code::BlockComment("//The 'final' control. Adding further functionalities to the control-composition.") ?>
 </code></pre>
     </section>
     <section id="ExtendingClasses">
@@ -59,10 +59,11 @@
     <?= Code::Keyword("let") ?> <?= Code::Variable("PrivateValue") ?> = <?= Code::Variable("Param") ?><?= Code::Delimiter ?>
         
         
-    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::Keyword("this") ?>, <?= Code::String("ParentsValue") ?>,{
-        <?= Code::Variable("enumerable") ?>: <?= Code::Bool("true") ?>,
-        <?= Code::Function("get") ?>: () => PrivateValue,
-        <?= Code::Function("set") ?>: Value => PrivateValue = Value
+    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::Keyword("this") ?>, <?= Code::String("\"ParentsValue\"") ?>,{
+        <?= Code::Field("enumerable") ?>: <?= Code::Bool("true") ?>,
+        <?= Code::Function("get") ?>: () => <?= Code::Variable("PrivateValue") ?>,
+        <?= Code::Function("set") ?>: <?= Code::Variable("Value") ?> => <?= Code::Variable("PrivateValue") ?> = <?= Code::Variable("Value") ?>
+        
     })<?= Code::Delimiter ?>
         
         
@@ -86,16 +87,18 @@
     <?= Code::Keyword("let") ?> <?= Code::Variable("PrivateValue") ?> = <?= Code::Variable("First") ?><?= Code::Delimiter ?>
         
         
-    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::Keyword("this") ?>, <?= Code::String("ChildsValue") ?>, {
-        <?= Code::Variable("enumerable") ?>: <?= Code::Bool("true") ?>,
-        <?= Code::Function("get") ?>: () => PrivateValue,
-        <?= Code::Function("set") ?>: Value => PrivateValueParam = Value
+    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::Keyword("this") ?>, <?= Code::String("\"ChildsValue\"") ?>, {
+        <?= Code::Field("enumerable") ?>: <?= Code::Bool("true") ?>,
+        <?= Code::Function("get") ?>: () => <?= Code::Variable("PrivateValue") ?>,
+        <?= Code::Function("set") ?>: <?= Code::Variable("Value") ?> => <?= Code::Variable("PrivateValue") ?> = <?= Code::Variable("Value") ?>
+        
     })<?= Code::Delimiter ?>
         
         
-    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::Keyword("this") ?>, <?= Code::String("Both") ?>, {
-        <?= Code::Variable("enumerable") ?>: <?= Code::Bool("true") ?>,
-        <?= Code::Function("get") ?>: () => <?= Code::Keyword("this") ?>.ChildsValue + <?= Code::String("\" \"") ?> + <?= Code::Keyword("this") ?>.ParentsValue
+    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::Keyword("this") ?>, <?= Code::String("\"Both\"") ?>, {
+        <?= Code::Field("enumerable") ?>: <?= Code::Bool("true") ?>,
+        <?= Code::Function("get") ?>: () => <?= Code::Keyword("this") ?>.<?= Code::Field("ChildsValue") ?> + <?= Code::String("\" \"") ?> + <?= Code::Keyword("this") ?>.<?= Code::Field("ParentsValue") ?>
+        
     })<?= Code::Delimiter ?>
         
         
@@ -104,13 +107,13 @@
     
 }
 
-<?= Code::Keyword("const") ?> <?= Code::Const("Child") ?> = <?= Code::Keyword("new") ?> <?= Code::Class("Child") ?>(<?= Code::String("hello") ?>, <?= Code::String("world") ?>)<?= Code::Delimiter ?>
+<?= Code::Keyword("const") ?> <?= Code::Const("Child") ?> = <?= Code::Keyword("new") ?> <?= Code::Class("Child") ?>(<?= Code::String("\"hello\"") ?>, <?= Code::String("\"world\"") ?>)<?= Code::Delimiter ?>
         
-<?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Variable("Child") ?>.<?= Code::Variable("ChildsValue") ?>)<?= Code::Delimiter ?><?= Code::Comment("  //'hello'") ?>
+<?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Const("Child") ?>.<?= Code::Field("ChildsValue") ?>)<?= Code::Delimiter ?><?= Code::Comment("  //'hello'") ?>
 
-<?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Variable("Child") ?>.<?= Code::Variable("ParentsValue") ?>)<?= Code::Delimiter ?><?= Code::Comment(" //'world'") ?>
+<?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Const("Child") ?>.<?= Code::Field("ParentsValue") ?>)<?= Code::Delimiter ?><?= Code::Comment(" //'world'") ?>
 
-<?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Variable("Child") ?>.<?= Code::Variable("Both") ?>)<?= Code::Delimiter ?><?= Code::Comment("         //'hello world'") ?>
+<?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Const("Child") ?>.<?= Code::Field("Both") ?>)<?= Code::Delimiter ?><?= Code::Comment("         //'hello world'") ?>
 </code></pre>
     </section>
     <section id="Overriding">
@@ -125,8 +128,8 @@
         
 <?= Code::Keyword("function") ?> <?= Code::Class("Parent") ?>(<?= Code::Variable("Param") ?>){
     
-    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::Keyword("this") ?>, <?= Code::String("Member") ?>, {
-        <?= Code::Variable("enumerable") ?>: <?= Code::Bool("true") ?>,
+    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::Keyword("this") ?>, <?= Code::String("\"Member\"") ?>, {
+        <?= Code::Field("enumerable") ?>: <?= Code::Bool("true") ?>,
         <?= Code::Function("get") ?>: ...,
         <?= Code::Function("set") ?>: ...
     })<?= Code::Delimiter ?>
@@ -143,13 +146,13 @@
 
     <?= Code::Comment("//Inherit from parent.") ?>
         
-    <?= Code::Keyword("this") ?>.<?= Code::Function("Extends") ?>(<?= Code::Variable("Parent") ?>)<?= Code::Delimiter ?>
+    <?= Code::Keyword("this") ?>.<?= Code::Function("Extends") ?>(<?= Code::Class("Parent") ?>)<?= Code::Delimiter ?>
         
         
     <?= Code::Comment("//Override parent's 'Member'-property.") ?>
         
-    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::Keyword("this") ?>, <?= Code::String("Member") ?>, {
-        <?= Code::Variable("enumerable") ?>: <?= Code::Bool("true") ?>,
+    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::Keyword("this") ?>, <?= Code::String("\"Member\"") ?>, {
+        <?= Code::Field("enumerable") ?>: <?= Code::Bool("true") ?>,
         <?= Code::Function("get") ?>: ...,
         <?= Code::Function("set") ?>: ...
     })<?= Code::Delimiter ?>
@@ -172,8 +175,8 @@
         
 <?= Code::Keyword("function") ?> <?= Code::Class("Parent") ?>(<?= Code::Variable("Param") ?>){
     
-    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::Keyword("this") ?>, <?= Code::String("Member") ?>, {
-        <?= Code::Variable("enumerable") ?>: <?= Code::Bool("true") ?>,
+    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::Keyword("this") ?>, <?= Code::String("\"Member\"") ?>, {
+        <?= Code::Field("enumerable") ?>: <?= Code::Bool("true") ?>,
         <?= Code::Function("get") ?>: ...,
         <?= Code::Function("set") ?>: ...
     })<?= Code::Delimiter ?>
@@ -195,17 +198,17 @@
         
     <?= Code::Comment("//Override parent's 'Member'-property.") ?>
         
-    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::Keyword("this") ?>, <?= Code::String("Member") ?>, {
-        <?= Code::Variable("enumerable") ?>: <?= Code::Bool("true") ?>,
-        <?= Code::Function("get") ?>: () => <?= Code::Keyword("this") ?>.<?= Code::Variable("Parent") ?>.<?= Code::Variable("Member") ?>,
-        <?= Code::Function("set") ?>: Value => {
+    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::Keyword("this") ?>, <?= Code::String("\"Member\"") ?>, {
+        <?= Code::Field("enumerable") ?>: <?= Code::Bool("true") ?>,
+        <?= Code::Function("get") ?>: () => <?= Code::Keyword("this") ?>.<?= Code::Field("Parent") ?>.<?= Code::Field("Member") ?>,
+        <?= Code::Function("set") ?>: <?= Code::Variable("Value") ?> => {
         
             <?= Code::Comment("//Process value first..") ?>
         
         
             <?= Code::Comment("//Populate if needed to parent.") ?>
         
-            <?= Code::Keyword("this") ?>.<?= Code::Variable("Parent") ?>.<?= Code::Variable("Member") ?> = Value<?= Code::Delimiter ?>
+            <?= Code::Keyword("this") ?>.<?= Code::Field("Parent") ?>.<?= Code::Field("Member") ?> = <?= Code::Variable("Value") ?><?= Code::Delimiter ?>
         
         
         }
@@ -216,7 +219,7 @@
         
     <?= Code::Keyword("this") ?>.<?= Code::Function("Method") ?> = <?= Code::Keyword("function") ?>(){
         
-        <?= Code::Keyword("this") ?>.<?= Code::Variable("Parent") ?>.<?= Code::Function("Method") ?>()<?= Code::Delimiter ?>
+        <?= Code::Keyword("this") ?>.<?= Code::Field("Parent") ?>.<?= Code::Function("Method") ?>()<?= Code::Delimiter ?>
         
         
         <?= Code::Comment("//Further processing...") ?>
@@ -231,7 +234,7 @@
     <section id="Interfaces">
         <h3>Interfaces</h3>
         <p>
-            vDesk extends the prototype of the global "Function" constructor to enable "Interface"-implementations.<br><br>
+            vDesk extends the prototype of the global <code class="Inline"><?= Code::Variable("window") ?>.<?= Code::Class("Function") ?></code>-constructor to enable "Interface"-implementations.<br><br>
             To implement an Interface, the class has to call the "Function.Implements"-method, passing the desired Interface to implement.<br>
             After implementation, any instance of the class can be checked <u>at runtime</u> with the "instanceof"-operator for type-compliance.
         </p>
@@ -243,21 +246,21 @@
         
 <?= Code::Keyword("const") ?> <?= Code::Class("IExampleInterface") ?> = <?= Code::Keyword("function") ?>(){}<?= Code::Delimiter ?>
         
-<?= Code::Class("IExampleInterface") ?>.<?= Code::Variable("prototype") ?> = {
+<?= Code::Class("IExampleInterface") ?>.<?= Code::Field("prototype") ?> = {
     
-<?= Code::BlockComment("/**
-* Does stuff.
-* @type {Function}
-*/") ?>
+<?= Code::BlockComment("    /**
+    * Does stuff.
+    * @type {Function}
+    */") ?>
         
-<?= Code::Variable("DoStuff") ?>: <?= Code::Class("Interface") ?>.<?= Code::Function("MethodNotImplemented") ?>,
+    <?= Code::Function("DoStuff") ?>: <?= Code::Class("Interface") ?>.<?= Code::Function("MethodNotImplemented") ?>,
     
-<?= Code::BlockComment("/**
-* Yields the last stuff, the IExampleInterface has done.
-* @type {String}
-*/") ?>
+<?= Code::BlockComment("    /**
+    * Yields the last stuff, the IExampleInterface has done.
+    * @type {String}
+    */") ?>
         
-<?= Code::Variable("DoneStuff") ?>: <?= Code::Class("Interface") ?>.<?= Code::Field("FieldNotImplemented") ?>
+    <?= Code::Field("DoneStuff") ?>: <?= Code::Class("Interface") ?>.<?= Code::Field("FieldNotImplemented") ?>
     
     
 }<?= Code::Delimiter ?>
@@ -272,7 +275,7 @@
 
     <?= Code::Comment("//Implementation of IExampleInterface.DoStuff()") ?>
         
-        <?= Code::Keyword("this") ?>.<?= Code::Function("DoStuff") ?> = <?= Code::Keyword("function") ?>(){
+    <?= Code::Keyword("this") ?>.<?= Code::Function("DoStuff") ?> = <?= Code::Keyword("function") ?>(){
         <?= Code::Comment("//Code..") ?>
         
     }<?= Code::Delimiter ?>
@@ -289,11 +292,11 @@
 
 <?= Code::Comment("//Check implementation/compliance.") ?>
 
-<?= Code::Variable("Example") ?> <?= Code::Keyword("instanceof") ?> <?= Code::Class("IExampleInterface") ?> <?= Code::Comment("//true") ?>
+<?= Code::Const("Example") ?> <?= Code::Keyword("instanceof") ?> <?= Code::Class("IExampleInterface") ?> <?= Code::Comment("//true") ?>
 
-<?= Code::Variable("Example") ?>.<?= Code::Function("DoStuff") ?>()<?= Code::Delimiter ?> <?= Code::Comment("//works") ?>
+<?= Code::Const("Example") ?>.<?= Code::Function("DoStuff") ?>()<?= Code::Delimiter ?> <?= Code::Comment("//works") ?>
 
-<?= Code::Keyword("const") ?> <?= Code::Const("LastDone") ?> = <?= Code::Variable("Example") ?>.<?= Code::Variable("DoneStuff") ?><?= Code::Delimiter ?> <?= Code::Comment("//throws error") ?>
+<?= Code::Keyword("const") ?> <?= Code::Const("LastDone") ?> = <?= Code::Const("Example") ?>.<?= Code::Field("DoneStuff") ?><?= Code::Delimiter ?> <?= Code::Comment("//throws error") ?>
 </code></pre>
     </section>
 </article>
