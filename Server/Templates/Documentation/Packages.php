@@ -129,7 +129,6 @@ use vDesk\Pages\Functions;
             
               |
                 --- <?= Code::BlockComment("CustomDirectory") ?> <?= Code::Comment("//Server-side custom directories/files") ?>
-            
     </code></pre>
         <aside class="Note">
             <h4>Note</h4>
@@ -174,7 +173,7 @@ use vDesk\Pages\Functions;
 <?= Code::Namespace ?> vDesk\Packages<?= Code::Delimiter ?>
 
 
-<?= Code::ClassDeclaration ?> <?= Code::Class("CustomPackage") ?> <?= Code::Extends ?> \vDesk\<?= Code::Class("Package") ?> {
+<?= Code::Keyword("final") ?> <?= Code::ClassDeclaration ?> <?= Code::Class("CustomPackage") ?> <?= Code::Extends ?> \vDesk\<?= Code::Class("Package") ?> {
     
     <?= Code::Public ?> <?= Code::Constant ?> <?= Code::Const("Name") ?> = <?= Code::String("\"ExamplePackage\"") ?><?= Code::Delimiter ?>
     
@@ -254,14 +253,24 @@ use vDesk\Pages\Functions;
     ]<?= Code::Delimiter ?>
     
     
-    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("Install") ?>(\Phar <?= Code::Variable("\$Phar") ?>, string <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
+    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("Install") ?>(\<?= Code::Class("Phar") ?> <?= Code::Variable("\$Phar") ?>, <?= Code::Keyword("string") ?> <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
         
-        <?= Code::Comment("//Deploy resources, alter database, create permissions, ...") ?>
+        <?= Code::Comment("//Deploy files.") ?>
+        
+        <?= Code::Self ?>::<?= Code::Function("Deploy") ?>(<?= Code::Variable("\$Phar") ?>, <?= Code::Variable("\$Path") ?>)<?= Code::Delimiter ?>
+        
+        
+        <?= Code::Comment("//Alter database, create permissions, ...") ?>
         
         
     }
     
-    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("Uninstall") ?>(string <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
+    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("Uninstall") ?>(<?= Code::Keyword("string") ?> <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
+        
+        <?= Code::Comment("//Remove files.") ?>
+        
+        <?= Code::Self ?>::<?= Code::Function("Undeploy") ?>()<?= Code::Delimiter ?>
+        
         
         <?= Code::Comment("//Revert everything of \"Install\"-method...") ?>
         
@@ -289,12 +298,12 @@ use vDesk\Pages\Functions;
 <?= Code::Namespace ?> vDesk\Packages<?= Code::Delimiter ?>
 
 
-<?= Code::ClassDeclaration ?> <?= Code::Class("CustomPackage") ?> <?= Code::Extends ?> \vDesk\<?= Code::Class("Package") ?> {
+<?= Code::Keyword("final") ?> <?= Code::ClassDeclaration ?> <?= Code::Class("CustomPackage") ?> <?= Code::Extends ?> \vDesk\<?= Code::Class("Package") ?> {
 
     <?= Code::Public ?> <?= Code::Constant ?> <?= Code::Const("Name") ?> = <?= Code::String("\"ExamplePackage\"") ?><?= Code::Delimiter ?>
     
     
-    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("PreInstall") ?>(\Phar <?= Code::Variable("\$Phar") ?>, string <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
+    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("PreInstall") ?>(\<?= Code::Class("Phar") ?> <?= Code::Variable("\$Phar") ?>, <?= Code::Keyword("string") ?> <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
         
         <?= Code::Comment("//Where to install?") ?>
     
@@ -303,7 +312,7 @@ use vDesk\Pages\Functions;
         
     }
     
-    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("PostInstall") ?>(\Phar <?= Code::Variable("\$Phar") ?>, string <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
+    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("PostInstall") ?>(\<?= Code::Class("Phar") ?> <?= Code::Variable("\$Phar") ?>, <?= Code::Keyword("string") ?> <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
         
         <?= Code::Comment("//Cleanup temporary files, call modules..") ?>
         
@@ -331,7 +340,7 @@ use vDesk\Pages\Functions;
 <?= Code::Namespace ?> vDesk\Packages<?= Code::Delimiter ?>
 
 
-<?= Code::ClassDeclaration ?> <?= Code::Class("CustomPackage") ?> <?= Code::Extends ?> \vDesk\<?= Code::Class("Package") ?> <?= Code::Implements ?> \vDesk\Locale\<?= Code::Class("IPackage") ?>, \vDesk\Events\<?= Code::Class("IPackage") ?> {
+<?= Code::Keyword("final") ?> <?= Code::ClassDeclaration ?> <?= Code::Class("CustomPackage") ?> <?= Code::Extends ?> \vDesk\<?= Code::Class("Package") ?> <?= Code::Implements ?> \vDesk\Locale\<?= Code::Class("IPackage") ?>, \vDesk\Events\<?= Code::Class("IPackage") ?> {
     
     <?= Code::Public ?> <?= Code::Constant ?> <?= Code::Const("Name") ?> = <?= Code::String("\"CustomPackage\"") ?><?= Code::Delimiter ?>
     
@@ -390,11 +399,10 @@ use vDesk\Pages\Functions;
         <h4>Custom installers</h4>
         <p>
             To install a custom package, there has to be at least one installed module that is capable of installing the package.<br>
-            To be recognized as a potential installer, the module must implement the <code class="Inline">\vDesk\Packages\Package \<?= Code::Class("IModule") ?></code>-interface<br> and provide an
+            To be recognized as a potential installer, the module must implement the <code class="Inline">\vDesk\Packages\Package\<?= Code::Class("IModule") ?></code>-interface<br> and provide an
             "Install"-method that processes the package.<br>
             To keep complexity of the package system as simple as possible, the installer has to check each passed package for a compatible package type and must resolve required constants
             before processing.
-        
         </p>
         <pre><code><?= Code\Language::PHP ?>
 <?= Code::PHP ?>
@@ -405,11 +413,11 @@ use vDesk\Pages\Functions;
 <?= Code::Namespace ?> Modules<?= Code::Delimiter ?>
 
 
-<?= Code::ClassDeclaration ?> <?= Code::Class("CustomInstaller") ?> <?= Code::Extends ?> \vDesk\Modules\<?= Code::Class("Modules") ?> {
+<?= Code::Keyword("final") ?> <?= Code::ClassDeclaration ?> <?= Code::Class("CustomInstaller") ?> <?= Code::Extends ?> \vDesk\Modules\<?= Code::Class("Modules") ?> {
     
-    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("Install") ?>(\vDesk\Packages\Package <?= Code::Variable("\$Package") ?>, \Phar <?= Code::Variable("\$Phar") ?>, string <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
+    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("Install") ?>(\vDesk\Packages\<?= Code::Class("Package") ?> <?= Code::Variable("\$Package") ?>, \<?= Code::Class("Phar") ?> <?= Code::Variable("\$Phar") ?>, <?= Code::Keyword("string") ?> <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
         
-        <?= Code::If ?>(!<?= Code::Variable("\$Package") ?> <?= Code:: InstanceOf ?> \vDesk\Locale\IPackage) {
+        <?= Code::If ?>(!<?= Code::Variable("\$Package") ?> <?= Code:: InstanceOf ?> \vDesk\Locale\<?= Code::Class("IPackage") ?>) {
             <?= Code::Return ?><?= Code::Delimiter ?>
         
         }
@@ -519,7 +527,6 @@ use vDesk\Pages\Functions;
             
               |
                 --- <?= Code::BlockComment("CustomDirectory") ?> <?= Code::Comment("//Updated server-side custom directories/files") ?>
-            
     </code></pre>
     </section>
     <section id="UpdateManifest">
@@ -531,28 +538,26 @@ use vDesk\Pages\Functions;
         <ul>
             <li>Located in the "\vDesk\Updates"-namespace</li>
             <li>Declaring a public "Package"-constant holding the class name of the updated package's manifest class</li>
-            <li>Declaring a public "Version"-constant holding a version number that represents the minimum required version of the target package to update</li>
-            <li>Declaring a public "Vendor"-constant holding the name of author/company of the update</li>
+            <li>Declaring a public "RequiredVersion"-constant holding a version number that represents the minimum required version of the target package to update</li>
             <li>Declaring a public "Description"-constant holding the description of the update</li>
             <li>(Optionally)Declaring a public "Files"-constant holding the resources to deploy/overwrite and/or delete of the update</li>
             <li>Implementing a public static "Install"-method</li>
         </ul>
-    <pre><code><?= Code\Language::PHP ?>
+        <pre><code><?= Code\Language::PHP ?>
 <?= Code::PHP ?>
 
-<?= Code::Declare ?>(strict_types=1);
+<?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
 
-<?= Code::Namespace ?> vDesk\Updates;
 
-<?= Code::ClassDeclaration ?> <?= Code::Class("CustomUpdate") ?> <?= Code::Extends ?> \vDesk\<?= Code::Class("Update") ?> {
+<?= Code::Namespace ?> vDesk\Updates<?= Code::Delimiter ?>
+
+
+<?= Code::Keyword("final") ?> <?= Code::ClassDeclaration ?> <?= Code::Class("CustomUpdate") ?> <?= Code::Extends ?> \vDesk\<?= Code::Class("Update") ?> {
     
     <?= Code::Public ?> <?= Code::Constant ?> <?= Code::Const("Package") ?> = \vDesk\Packages\<?= Code::Class("ExamplePackage") ?>::<?= Code::ClassDeclaration ?><?= Code::Delimiter ?>
     
     
-    <?= Code::Public ?> <?= Code::Constant ?> <?= Code::Const("Version") ?> = <?= Code::String("\"1.0.0\"") ?><?= Code::Delimiter ?>
-    
-    
-    <?= Code::Public ?> <?= Code::Constant ?> <?= Code::Const("Vendor") ?> = <?= Code::String("\"Author/company &lt;mail@example.com&gt;\"") ?><?= Code::Delimiter ?>
+    <?= Code::Public ?> <?= Code::Constant ?> <?= Code::Const("RequiredVersion") ?> = <?= Code::String("\"1.0.0\"") ?><?= Code::Delimiter ?>
     
     
     <?= Code::Public ?> <?= Code::Constant ?> <?= Code::Const("Description") ?> = <?= Code::String("\"This patch fixes some minor buggs!\"") ?><?= Code::Delimiter ?>
@@ -598,10 +603,19 @@ use vDesk\Pages\Functions;
     ]<?= Code::Delimiter ?>
     
     
-    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("Install") ?>(\Phar <?= Code::Variable("\$Phar") ?>, string <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
+    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("Install") ?>(\<?= Code::Class("Phar") ?> <?= Code::Variable("\$Phar") ?>, <?= Code::Keyword("string") ?> <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
         
-        <?= Code::Comment("//Deploy new resources, alter database, ...") ?>
+        <?= Code::Comment("//Remove outdated or unnecessary files.") ?>
         
+        <?= Code::Self ?>::<?= Code::Function("Undeploy") ?>()<?= Code::Delimiter ?>
+        
+        
+        <?= Code::Comment("//Alter database, permissions, ...") ?>
+        
+        
+        <?= Code::Comment("//Deploy updated or new files.") ?>
+        
+        <?= Code::Self ?>::<?= Code::Function("Deploy") ?>(<?= Code::Variable("\$Phar") ?>, <?= Code::Variable("\$Path") ?>)<?= Code::Delimiter ?>
         
     }
     
@@ -639,7 +653,6 @@ use vDesk\Pages\Functions;
             
               |
                 --- <?= Code::BlockComment("Modules") ?> <?= Code::Comment("//Server-side modules.") ?>
-            
     </code></pre>
     </section>
 </article>

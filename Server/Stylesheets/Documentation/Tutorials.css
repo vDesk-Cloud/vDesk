@@ -40,6 +40,25 @@ main.Tutorials > header > section > nav > a {
     color: white;
 }
 
+
+main.Tutorials > header > section > nav > a.Current {
+    text-decoration: underline;
+}
+
+table, th, td {
+    border: 1px solid #999;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: #2AB0ED;
+    color: white;
+}
+
+table {
+    margin-bottom: 1rem;
+}
+
 /* Smartphone */
 @media only screen and (max-device-width: 768px) {
     .Toggle {

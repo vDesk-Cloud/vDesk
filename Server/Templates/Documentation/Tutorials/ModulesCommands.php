@@ -127,23 +127,23 @@ use vDesk\Pages\Functions;
 <?= Code::Variable("vDesk") ?>.<?= Code::Class("Connection") ?>.<?= Code::Function("Send") ?>(
     <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Modules") ?>.<?= Code::Class("Command") ?>(
         {
-            <?= Code::Variable("Module") ?>:  <?= Code::String("\"Archive\"") ?>,
-            <?= Code::Variable("Command") ?>: <?= Code::String("\"Upload\"") ?>,
-            <?= Code::Variable("Parameters") ?>: {
-                <?= Code::Variable("Parent") ?>: ParentElement,
-                <?= Code::Variable("File") ?>:   File,
+            <?= Code::Field("Module") ?>:  <?= Code::String("\"Archive\"") ?>,
+            <?= Code::Field("Command") ?>: <?= Code::String("\"Upload\"") ?>,
+            <?= Code::Field("Parameters") ?>: {
+                <?= Code::Field("Parent") ?>: <?= Code::Variable("ParentElement") ?>,
+                <?= Code::Field("File") ?>:   <?= Code::Variable("File") ?>,
             },
-            <?= Code::Variable("Ticket") ?>: <?= Code::Variable("vDesk") ?>.<?= Code::Field("User") ?>.<?= Code::Field("Ticket") ?>
+            <?= Code::Field("Ticket") ?>: <?= Code::Variable("vDesk") ?>.<?= Code::Field("User") ?>.<?= Code::Field("Ticket") ?>
         
         },
-        Response => {
-            <?= Code::If ?>(Response.<?= Code::Field("Status") ?>){
-                <?= Code::Constant ?> <?= Code::Const("UploadedElement") ?> = <?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Class("Element") ?>.<?= Code::Function("FromDataView") ?>(Response.<?= Code::Field("Data") ?>)<?= Code::Delimiter ?>
+        <?= Code::Variable("Response") ?> => {
+            <?= Code::If ?>(<?= Code::Variable("Response") ?>.<?= Code::Field("Status") ?>){
+                <?= Code::Constant ?> <?= Code::Const("UploadedElement") ?> = <?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Class("Element") ?>.<?= Code::Function("FromDataView") ?>(<?= Code::Variable("Response") ?>.<?= Code::Field("Data") ?>)<?= Code::Delimiter ?>
         
                 <?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Const("UploadedElement") ?>.<?= Code::Field("ID") ?>)<?= Code::Delimiter ?>
         
             } <?= Code::Else ?> {
-                <?= Code::Function("alert") ?>(<?= Code::String("`What went wrong: ") ?>${Response.<?= Code::Field("Data") ?>}<?= Code::String(".`") ?>)<?= Code::Delimiter ?>
+                <?= Code::Function("alert") ?>(<?= Code::String("`What went wrong: ") ?>${<?= Code::Variable("Response") ?>.<?= Code::Field("Data") ?>}<?= Code::String(".`") ?>)<?= Code::Delimiter ?>
         
             }
         }

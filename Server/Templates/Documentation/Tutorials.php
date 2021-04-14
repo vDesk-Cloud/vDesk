@@ -32,7 +32,7 @@ use vDesk\Pages\Functions;
             <nav class="Pages">
                 <?php foreach($Page->Pages as $ExistingPage): ?>
                     <?php if($ExistingPage->Name !== "Index"): ?>
-                        <a class="Page <?= $ExistingPage->Name === $Page->Content->Name ? "Current" : "" ?>"
+                        <a class="Page <?= $ExistingPage->Name === $Page->Name ? "Current" : "" ?>"
                            href="<?= Functions::URL("Documentation", "Page", $ExistingPage->Name) ?>"><?= $ExistingPage->Description ?></a>
                     <?php endif; ?>
                 <?php endforeach; ?>

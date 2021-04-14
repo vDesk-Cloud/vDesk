@@ -206,10 +206,10 @@ use vDesk\Pages\Functions;
             Parameters must be named according their purpose. Basically, code should provide a "beautiful API"<?= Code::Delimiter ?> that means parameter names must not consist of abbreviations.
         </p>
 <pre><code><?= Conventions::NotRecommended ?>
-<?= Code::Function ?> <?= Code::Function("InstallPackage") ?>(FileInfo <?= Code::Variable("\$Pkg") ?> = <?= Code::Null ?>)
+<?= Code::Function ?> <?= Code::Function("InstallPackage") ?>(<?= Code::Class("FileInfo") ?> <?= Code::Variable("\$Pkg") ?> = <?= Code::Null ?>)
 </code></pre>
 <pre><code><?= Conventions::Recommended ?>
-<?= Code::Function ?> <?= Code::Function("InstallPackage") ?>(FileInfo <?= Code::Variable("\$Package") ?> = <?= Code::Null ?>)
+<?= Code::Function ?> <?= Code::Function("InstallPackage") ?>(<?= Code::Class("FileInfo") ?> <?= Code::Variable("\$Package") ?> = <?= Code::Null ?>)
 </code></pre>
     </section>
     <section id="Classes">
@@ -351,7 +351,8 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
     <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::Keyword("this") ?>, <?= Code::String("\"PublicMember\"") ?>,{
         <?= Code::Variable("enumerable") ?>: <?= Code::Bool("true") ?>,
         <?= Code::Function("get") ?>:        () => <?= Code::Variable("PrivateMember") ?>,
-        <?= Code::Function("set") ?>:        Value => <?= Code::Variable("PrivateMember") ?> = Value
+        <?= Code::Function("set") ?>:        <?= Code::Variable("Value") ?> => <?= Code::Variable("PrivateMember") ?> = <?= Code::Variable("Value") ?>
+        
     })<?= Code::Delimiter ?>
         
         
@@ -365,10 +366,10 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
             <?= Code::Variable("enumerable") ?>:   <?= Code::Bool("true") ?>,
             <?= Code::Variable("configurable") ?>: <?= Code::Bool("false") ?>,
             <?= Code::Function("get") ?>:          () => <?= Code::Variable("Name") ?>,
-            <?= Code::Function("set") ?>:          Value => {
-                <?= Code::Variable("Name") ?> = Value<?= Code::Delimiter ?>
+            <?= Code::Function("set") ?>:          <?= Code::Variable("Value") ?> => {
+                <?= Code::Variable("Name") ?> = <?= Code::Variable("Value") ?><?= Code::Delimiter ?>
         
-                <?= Code::Const("Greeting") ?>.<?= Code::Field("textContent") ?> = <?= Code::String("`Greetings, \"") ?>${Value}<?= Code::String("\"!`") ?><?= Code::Delimiter ?>
+                <?= Code::Const("Greeting") ?>.<?= Code::Field("textContent") ?> = <?= Code::String("`Greetings, \"") ?>${<?= Code::Variable("Value") ?>}<?= Code::String("\"!`") ?><?= Code::Delimiter ?>
         
             }
         },
@@ -379,12 +380,12 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
 }
 </code></pre>
 <pre><code><?= Code\Language::PHP ?>
-<?= Code::ClassDeclaration ?> Example {
+<?= Code::ClassDeclaration ?> <?= Code::Class("Example") ?> {
     
     <?= Code::Use ?> \vDesk\Struct\<?= Code::Class("Properties") ?><?= Code::Delimiter ?>
         
         
-    <?= Code::Private ?> ?<?= Code::Keyword("string") ?> <?= Code::Field("\$PrivateMember") ?><?= Code::Delimiter ?>
+    <?= Code::Private ?> ?<?= Code::Keyword("string") ?> <?= Code::Variable("\$PrivateMember") ?><?= Code::Delimiter ?>
         
         
     <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("__construct") ?> {
@@ -446,7 +447,7 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
 <?= Code::Constant ?> <?= Code::Const("Values") ?> = [<?= Code::Int("1") ?>, <?= Code::Int("2") ?>, <?= Code::Int("3") ?>]<?= Code::Delimiter ?>
         
         
-<?= Code::Const("Values") ?>.<?= Code::Function("forEach") ?>(Value => <?= Code::Class("console") ?>.<?= Code::Function("log") ?>(Value))<?= Code::Delimiter ?>
+<?= Code::Const("Values") ?>.<?= Code::Function("forEach") ?>(<?= Code::Variable("Value") ?> => <?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Variable("Value") ?>))<?= Code::Delimiter ?>
 </code></pre>
         <h5>PHP</h5>
         <p>
@@ -635,12 +636,12 @@ Text<?= Code::Delimiter ?>
         </p>
         <h5>Example model class</h5>
 <pre><code><?= Code\Language::PHP ?>
-<?= Code::ClassDeclaration ?> Model <?= Code::Implements ?> \vDesk\Data\IModel {
+<?= Code::ClassDeclaration ?> <?= Code::Class("Model") ?> <?= Code::Implements ?> \vDesk\Data\<?= Code::Class("IModel") ?> {
     
     <?= Code::Use ?> \vDesk\Struct\<?= Code::Class("Properties") ?><?= Code::Delimiter ?>
         
         
-    <?= Code::Private ?> ?Dependency <?= Code::Field("\$Dependency") ?> = <?= Code::Null ?><?= Code::Delimiter ?>
+    <?= Code::Private ?> ?<?= Code::Class("Dependency") ?> <?= Code::Field("\$Dependency") ?> = <?= Code::Null ?><?= Code::Delimiter ?>
     
     
     <?= Code::Private ?> ?<?= Code::Keyword("int") ?> <?= Code::Field("\$DependencyValue") ?> = <?= Code::Null ?><?= Code::Delimiter ?>
@@ -657,7 +658,7 @@ Text<?= Code::Delimiter ?>
                     <?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"Dependency\"") ?>)
                               -><?= Code::Function("From") ?>(<?= Code::String("\"Table\"") ?>)
                 ),
-                \<?= Code::Const("Set") ?> => <?= Code::Keyword("fn") ?>(Dependency <?= Code::Variable("\$Value") ?>) => <?= Code::Variable("\$this") ?>-><?= Code::Field("Dependency") ?> = <?= Code::Variable("\$Value") ?>
+                \<?= Code::Const("Set") ?> => <?= Code::Keyword("fn") ?>(<?= Code::Class("Dependency") ?> <?= Code::Variable("\$Value") ?>) => <?= Code::Variable("\$this") ?>-><?= Code::Field("Dependency") ?> = <?= Code::Variable("\$Value") ?>
           
             ],
             <?= Code::String("\"Manual\"") ?> => [
@@ -676,7 +677,7 @@ Text<?= Code::Delimiter ?>
         
     }
     
-    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("Fill") ?>(): Model {
+    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("Fill") ?>(): <?= Code::Class("Model") ?> {
         <?= Code::Comment("//Fill model with database record..") ?>
         
     }
@@ -691,7 +692,7 @@ Text<?= Code::Delimiter ?>
         
     }
     
-    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("FromDataView") ?>(<?= Code::Keyword("array") ?> <?= Code::Variable("\$DataView") ?>): Model {
+    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("FromDataView") ?>(<?= Code::Keyword("array") ?> <?= Code::Variable("\$DataView") ?>): <?= Code::Class("Model") ?> {
         <?= Code::Return ?> <?= Code::New ?> <?= Code::Static ?>(
             <?= Code::Variable("\$DataView") ?>[<?= Code::String("\"ID\"") ?>] ?? <?= Code::Null ?>,
             <?= Code::Class("Dependency") ?>::<?= Code::Function("FromDataView") ?>(<?= Code::Variable("\$DataView") ?>),
