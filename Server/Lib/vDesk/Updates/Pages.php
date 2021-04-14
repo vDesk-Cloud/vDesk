@@ -40,7 +40,7 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib     => [
-                    "vDesk/Pages/Cached/Page.php"
+                    "vDesk/Pages/Cached"
                 ]
             ]
         ]
