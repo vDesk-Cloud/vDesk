@@ -413,7 +413,7 @@ Comment) ?>
         
     <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("Post") ?>(<?= Code::Keyword("int") ?> <?= Code::Variable("\$ID") ?> = <?= Code::Null ?>): <?= Code::Class("Page") ?> {
         
-        <?= Code::Variable("\$Post") ?> = <?= Code::New ?> \MyApp\Models\BlogPost(<?= Code::Variable("\$ID") ?>);
+        <?= Code::Variable("\$Post") ?> = <?= Code::New ?> \MyApp\Models\<?= Code::Class("BlogPost") ?>(<?= Code::Variable("\$ID") ?>);
         
         <?= Code::Return ?> <?= Code::New ?> \Pages\Blog\<?= Code::Class("Post") ?>(
             [
@@ -649,14 +649,14 @@ Comment) ?>
     ]<?= Code::Delimiter ?>
             
             
-    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("Install") ?>(\Phar <?= Code::Variable("\$Phar") ?>, string <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
+    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("Install") ?>(\<?= Code::Class("Phar") ?> <?= Code::Variable("\$Phar") ?>, <?= Code::Keyword("string") ?> <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
         
         <?= Code::Comment("//Deploy resources, register routes, set host...") ?>
         
         
     }
     
-    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("Uninstall") ?>(string <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
+    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("Uninstall") ?>(<?= Code::Keyword("string") ?> <?= Code::Variable("\$Path") ?>): <?= Code::Void ?> {
         
         <?= Code::Comment("//Revert everything of \"Install\"-method...") ?>
         
