@@ -38,7 +38,7 @@ class Pages extends Page {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Pages"],
-        ?iterable $Stylesheets = ["Documentation/Stylesheet"],
+        ?iterable $Stylesheets = [],
         ?iterable $Scripts = []
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);

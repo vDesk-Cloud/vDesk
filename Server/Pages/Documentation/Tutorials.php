@@ -43,7 +43,7 @@ class Tutorials extends Documentation {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Tutorials"],
-        ?iterable $Stylesheets = ["Documentation/Stylesheet", "Documentation/Tutorials"],
+        ?iterable $Stylesheets = ["Documentation/Tutorials"],
         ?iterable $Scripts = [],
         array $Pages = [],
         public array $Tutorials = [],
