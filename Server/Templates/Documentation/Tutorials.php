@@ -30,21 +30,19 @@ use vDesk\Pages\Functions;
         <button class="Toggle" onclick="this.nextElementSibling.classList.toggle('Hidden');">☰</button>
         <section class="Hidden">
             <nav class="Pages">
-                <?php foreach($Page->Pages as $ExistingPage): ?>
-                    <?php if($ExistingPage->Name !== "Index"): ?>
-                        <a class="Page <?= $ExistingPage->Name === $Page->Name ? "Current" : "" ?>"
-                           href="<?= Functions::URL("Documentation", "Page", $ExistingPage->Name) ?>"><?= $ExistingPage->Description ?></a>
-                    <?php endif; ?>
-                <?php endforeach; ?>
+<?php foreach($Page->Pages as $ExistingPage): ?>
+<?php if($ExistingPage->Name !== "Index"): ?>
+                <a class="Page <?= $ExistingPage->Name === $Page->Name ? "Current" : "" ?>" href="<?= Functions::URL("Documentation", "Page", $ExistingPage->Name) ?>"><?= $ExistingPage->Description ?></a>
+<?php endif; ?>
+<?php endforeach; ?>
                 <a href="https://www.github.com/vDesk-Cloud">Github</a>
             </nav>
             <nav class="Tutorials">
-                <?php foreach($Page->Tutorials as $Tutorial): ?>
-                    <?php if($Tutorial->Name !== "Index"): ?>
-                        <a class="Tutorial <?= $Tutorial->Name === $Page->Tutorial->Name ? "Current" : "" ?>"
-                           href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", $Tutorial->Name) ?>"><?= $Tutorial->Description ?></a>
-                    <?php endif; ?>
-                <?php endforeach; ?>
+<?php foreach($Page->Tutorials as $Tutorial): ?>
+<?php if($Tutorial->Name !== "Index"): ?>
+                <a class="Tutorial <?= $Tutorial->Name === $Page->Tutorial->Name ? "Current" : "" ?>" href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", $Tutorial->Name) ?>"><?= $Tutorial->Description ?></a>
+<?php endif; ?>
+<?php endforeach; ?>
             </nav>
         </section>
     </header>
