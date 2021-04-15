@@ -8,18 +8,18 @@ use vDesk\Pages\Functions;
     <title>vDesk - Virtual Desktop</title>
     <link rel="icon" href="<?= Functions::Image("favicon.ico") ?>" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php foreach($Page->Stylesheets as $Stylesheet): ?>
-        <link rel="stylesheet" href="<?= Functions::Stylesheet($Stylesheet) ?>">
-    <?php endforeach; ?>
-    <?php foreach($Page->Tutorial->Stylesheets as $Stylesheet): ?>
-        <link rel="stylesheet" href="<?= Functions::Stylesheet($Stylesheet) ?>">
-    <?php endforeach; ?>
-    <?php foreach($Page->Scripts as $Script): ?>
-        <script src="<?= Functions::Script($Script) ?>"></script>
-    <?php endforeach; ?>
-    <?php foreach($Page->Tutorial->Scripts as $Script): ?>
-        <script src="<?= Functions::Script($Script) ?>"></script>
-    <?php endforeach; ?>
+<?php foreach($Page->Stylesheets as $Stylesheet): ?>
+    <link rel="stylesheet" href="<?= Functions::Stylesheet($Stylesheet) ?>">
+<?php endforeach; ?>
+<?php foreach($Page->Tutorial->Stylesheets as $Stylesheet): ?>
+    <link rel="stylesheet" href="<?= Functions::Stylesheet($Stylesheet) ?>">
+<?php endforeach; ?>
+<?php foreach($Page->Scripts as $Script): ?>
+    <script src="<?= Functions::Script($Script) ?>"></script>
+<?php endforeach; ?>
+<?php foreach($Page->Tutorial->Scripts as $Script): ?>
+    <script src="<?= Functions::Script($Script) ?>"></script>
+<?php endforeach; ?>
 </head>
 <body>
 <main class="Tutorials">
@@ -50,7 +50,8 @@ use vDesk\Pages\Functions;
     </header>
     <?= $Page->Tutorial ?>
     <footer>
-        Copyright © 2020 Kerry Holz
+        Copyright © 2021 Kerry Holz
+        <aside>This website uses icons from <a target="_blank" href="https://www.icons8.com">icons8.com</a></aside>
     </footer>
 </main>
 </body>
