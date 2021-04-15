@@ -24,8 +24,9 @@ use vDesk\Pages\Functions;
 <body>
 <main>
     <header>
-        <h1><a href="<?= Functions::URL("vDesk", "Index") ?>">v<span style="color: #2AB0ED">D</span>esk\<a href="<?= Functions::URL("Documentation", "Index") ?>"><span
-                            style="color: #2AB0ED">D</span>ocumentation</a></a></h1>
+        <h1>
+            <a href="<?= Functions::URL("vDesk", "Index") ?>">v<span style="color: #2AB0ED">D</span>esk</a>\<a href="<?= Functions::URL("Documentation", "Index") ?>"><span style="color: #2AB0ED">D</span>ocumentation</a>
+        </h1>
         <button class="Toggle" onclick="this.nextElementSibling.classList.toggle('Hidden');">☰</button>
         <nav class="Hidden">
             <?php foreach($Page->Pages as $ExistingPage): ?>
