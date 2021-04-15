@@ -105,7 +105,7 @@ use vDesk\Pages\Functions;
             vDesk uses the "egyptian"-style placement for curly braces and square brackets.<br>
             This convention applies to every logical code block except inline and parameter array-initializers and object-literals.
         </p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Function ?> <?= Code::Function("Save") ?>()
 {
     <?= Code::Variable("\$Values") ?> =
@@ -118,7 +118,7 @@ use vDesk\Pages\Functions;
     
 }
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Function ?> <?= Code::Function("Save") ?>() {
     <?= Code::Variable("\$Values") ?> = [
         <?= Code::String("\"A\"") ?>,
@@ -129,7 +129,7 @@ use vDesk\Pages\Functions;
     
 }
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Function("MethodCall") ?>(
     <?= Code::Variable("\$Param") ?>,
     [
@@ -145,18 +145,18 @@ use vDesk\Pages\Functions;
     <section id="VariablesFieldsConstants">
         <h4>Variables, Fields and Constants</h4>
         <p>Variables, fields and constants must be named according to the value they yield. Avoid using general names.</p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Variable("\$Data") ?>        = \vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("Archive") ?>()::<?= Code::Function("GetBranch") ?>(<?= Code::Keyword("new") ?> <?= Code::Class("Element") ?>())<?= Code::Delimiter ?>
         
 <?= Code::Constant ?> <?= Code::Variable("Values") ?> = vDesk.<?= Code::Class("Modules") ?>[<?= Code::String("\"Archive\"") ?>].<?= Code::Function("GetBranch") ?>(<?= Code::Keyword("new") ?> <?= Code::Class("Element") ?>())<?= Code::Delimiter ?>
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Variable("\$Branch") ?>      = \vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("Archive") ?>()::<?= Code::Function("GetBranch") ?>(<?= Code::Keyword("new") ?> <?= Code::Class("Element") ?>())<?= Code::Delimiter ?>
         
 <?= Code::Constant ?> <?= Code::Variable("Branch") ?> = vDesk.<?= Code::Class("Modules") ?>[<?= Code::String("\"Archive\"") ?>].<?= Code::Function("GetBranch") ?>(<?= Code::Keyword("new") ?> <?= Code::Class("Element") ?>())<?= Code::Delimiter ?>
 </code></pre>
-<p>Avoid useless variables/allocations.</p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <p>Avoid useless variables/allocations.</p>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Function ?> <?= Code::Function("Foo") ?>() {
     <?= Code::Variable("\$Foo") ?> = <?= Code::Function("Bar") ?>()<?= Code::Delimiter ?>
         
@@ -165,21 +165,21 @@ use vDesk\Pages\Functions;
 }
 </code></pre>
         <p>Avoid long identifier names. Instead of writing an entire sentence, consider thinking of separating the concern of the identifier into a new class.</p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Variable("\$Element") ?>-><?= Code::Class("OwnerName") ?><?= Code::Delimiter ?>
         
 <?= Code::Variable("Element") ?>.<?= Code::Class("OwnerName") ?><?= Code::Delimiter ?>
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Variable("\$Element") ?>-><?= Code::Class("Owner") ?>-><?= Code::Class("Name") ?><?= Code::Delimiter ?>
         
 <?= Code::Variable("Element") ?>.<?= Code::Class("Owner") ?>.<?= Code::Class("Name") ?><?= Code::Delimiter ?>
 </code></pre>
         <p>Avoid "screaming" constants.</p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Public ?> <?= Code::Constant ?> <?= Code::Const("CONSTANT_VALUE") ?><?= Code::Delimiter ?>
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Public ?> <?= Code::Constant ?> <?= Code::Const("ConstantValue") ?><?= Code::Delimiter ?>
 </code></pre>
     </section>
@@ -189,10 +189,10 @@ use vDesk\Pages\Functions;
             Function names should describe in a short manner the logic that the desired function represents.<br>
             Keep function names "stupid simple" and follow the "DRY" principle.
         </p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Class("Log") ?>::<?= Code::Function("WriteDebugLogMessage") ?>(<?= Code::Variable("\$Message") ?>)<?= Code::Delimiter ?>
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Class("Log") ?>::<?= Code::Function("Write") ?>(<?= Code::Class("Log") ?>::<?= Code::Const("Debug") ?>, <?= Code::Variable("\$Message") ?>)<?= Code::Delimiter ?>
 
 <?= Code::Comment("//Or") ?>
@@ -205,10 +205,10 @@ use vDesk\Pages\Functions;
         <p>
             Parameters must be named according their purpose. Basically, code should provide a "beautiful API"<?= Code::Delimiter ?> that means parameter names must not consist of abbreviations.
         </p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Function ?> <?= Code::Function("InstallPackage") ?>(<?= Code::Class("FileInfo") ?> <?= Code::Variable("\$Pkg") ?> = <?= Code::Null ?>)
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Function ?> <?= Code::Function("InstallPackage") ?>(<?= Code::Class("FileInfo") ?> <?= Code::Variable("\$Package") ?> = <?= Code::Null ?>)
 </code></pre>
     </section>
@@ -217,7 +217,7 @@ use vDesk\Pages\Functions;
         <p>
             Classes must be named as singular (agent) nouns or imperatives and reflect their purposes.
         </p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Namespace ?> vDesk\Security<?= Code::Delimiter ?>
         
 <?= Code::ClassDeclaration ?> <?= Code::Class("AccessControlListEntry") ?> {}
@@ -225,7 +225,7 @@ use vDesk\Pages\Functions;
 vDesk.Calendar.<?= Code::Class("EventEditor") ?> = <?= Code::Function ?> <?= Code::Class("EventEditor") ?>() {}
 </code></pre>
         <h5>Purpose:</h5>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Namespace ?> vDesk\Security\AccessControlList<?= Code::Delimiter ?>
         
 <?= Code::ClassDeclaration ?> <?= Code::Class("Entry") ?> {}
@@ -233,7 +233,7 @@ vDesk.Calendar.<?= Code::Class("EventEditor") ?> = <?= Code::Function ?> <?= Cod
 vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Code::Class("Editor") ?>() {}
 </code></pre>
         <h5>Imperative:</h5>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::ClassDeclaration ?> <?= Code::Class("BinaryReader") ?> {}
 </code></pre>
     </section>
@@ -245,11 +245,11 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
             For a JavaScript based code example, visit the "<a href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", "ClassicalInheritance#Interfaces") ?>">Classical
                 inheritance and interfaces in JavaScript</a>"-tutorial.
         </p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Interface ?> <?= Code::Class("ModelInterface") ?> {}
 <?= Code::Interface ?> <?= Code::Class("IEnumerated") ?> {}
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Interface ?> <?= Code::Class("IModel") ?> {}
 <?= Code::Interface ?> <?= Code::Class("IEnumerable") ?> {}
 </code></pre>
@@ -262,11 +262,11 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
             If you want to use traits anyway, design them independent of any implementation details;<br>
             otherwise, if your trait requires a dependency, provide at least an appropriate abstract method or interface.
         </p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Trait ?> <?= Code::Class("AccessController") ?> {}
 <?= Code::Trait ?> <?= Code::Class("VersionControlled") ?> {}
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Trait ?> <?= Code::Class("AccessControl") ?> {}
 <?= Code::Trait ?> <?= Code::Class("VersionControl") ?> {}
 </code></pre>
@@ -280,7 +280,7 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
             JavaScript namespaces have to be declared as plain object's described by a JSDocBlock.
             Namespaces must be named as imperatives and reflect their purposes.<br>
         </p>
-<pre><code><?= Code\Language::JS ?>
+        <pre><code><?= Code\Language::JS ?>
 <?= Code::BlockComment("/**
  * @namespace Space
  * @memberOf My.Name
@@ -291,7 +291,7 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
         <p>
             Classes can be used as namespaces too.
         </p>
-<pre><code><?= Code\Language::JS ?>
+        <pre><code><?= Code\Language::JS ?>
 <?= Code::Variable("NameSpace") ?>.<?= Code::Field("SubNameSpace") ?>          = <?= Code::ClassDeclaration ?> <?= Code::Class("SubNameSpace") ?> {}<?= Code::Delimiter ?>
         
 <?= Code::Variable("NameSpace") ?>.<?= Code::Field("SubNameSpace") ?>.<?= Code::Field("SubClass") ?> = <?= Code::Function ?> <?= Code::Class("SubClass") ?> {}<?= Code::Delimiter ?>
@@ -299,14 +299,14 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
         <p>
             PHP namespaces must follow the <a target="_blank" href="https://www.php-fig.org/psr/psr-4/">PSR-4</a> standard unless you want to provide a custom autoloader callback.
         </p>
-<pre><code><?= Code\Language::PHP ?>
+        <pre><code><?= Code\Language::PHP ?>
 <?= Code::Namespace ?> My\Name\Space<?= Code::Delimiter ?>
 </code></pre>
     </section>
     <section id="ErrorHandling">
         <h4>Error handling</h4>
         <p>Consider using the "crash early" pattern.</p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Function ?> <?= Code::Function("InstallPackage") ?>(<?= Code::Class("Package") ?> <?= Code::Variable("\$Package") ?>): <?= Code::Class("Package") ?> {
     
     <?= Code::Comment("//Install Package..") ?>
@@ -321,7 +321,7 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
     
 }
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Function ?> <?= Code::Function("InstallPackage") ?>(<?= Code::Class("Package") ?> <?= Code::Variable("\$Package") ?>): <?= Code::Class("Package") ?> {
     
     <?= Code::If ?>(!\<?= Code::Class("vDesk") ?>::<?= Code::Variable("\$User") ?>-><?= Code::Field("Permissions") ?>[<?= Code::String("\"InstallPackage\"") ?>]) {
@@ -342,7 +342,7 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
         <p>
             Consider using properties and following the "information hiding"-principle.
         </p>
-<pre><code><?= Code\Language::JS ?>
+        <pre><code><?= Code\Language::JS ?>
 <?= Code::Keyword("function") ?> <?= Code::Class("Example") ?>(){
     
     <?= Code::Keyword("let") ?> <?= Code::Variable("PrivateMember") ?><?= Code::Delimiter ?>
@@ -379,7 +379,7 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
         
 }
 </code></pre>
-<pre><code><?= Code\Language::PHP ?>
+        <pre><code><?= Code\Language::PHP ?>
 <?= Code::ClassDeclaration ?> <?= Code::Class("Example") ?> {
     
     <?= Code::Use ?> \vDesk\Struct\<?= Code::Class("Properties") ?><?= Code::Delimiter ?>
@@ -434,7 +434,7 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
                                                                                                     href="https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach"><?= Code::Function("forEach") ?></a></code>
             in combination with lambda predicates over "for" and "while".
         </p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Constant ?> <?= Code::Const("Values") ?> = [<?= Code::Int("1") ?>, <?= Code::Int("2") ?>, <?= Code::Int("3") ?>]<?= Code::Delimiter ?>
         
         
@@ -443,7 +443,7 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
     
 }
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Constant ?> <?= Code::Const("Values") ?> = [<?= Code::Int("1") ?>, <?= Code::Int("2") ?>, <?= Code::Int("3") ?>]<?= Code::Delimiter ?>
         
         
@@ -453,7 +453,7 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
         <p>
             Use "foreach" over "for" and "while".<br>
         </p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Variable("\$Values") ?> = [<?= Code::Int("1") ?>, <?= Code::Int("2") ?>, <?= Code::Int("3") ?>]<?= Code::Delimiter ?>
         
 <?= Code::Variable("\$Index") ?>  = <?= Code::Int("0") ?><?= Code::Delimiter ?>
@@ -464,7 +464,7 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
     
 }
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Variable("\$Values") ?> = [<?= Code::String("\"One\"") ?> => <?= Code::Int("1") ?>, <?= Code::String("\"Two\"") ?> => <?= Code::Int("2") ?>, <?= Code::String("\"Three\"") ?> => <?= Code::Int("3") ?>]<?= Code::Delimiter ?>
         
         
@@ -479,19 +479,19 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
         <p>
             Use the square bracket syntax instead of the "array()" language construct.
         </p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Variable("\$Values") ?> = <?= Code::Keyword("array") ?>(<?= Code::String("\"A\"") ?>, <?= Code::String("\"B\"") ?>, <?= Code::String("\"C\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Variable("\$Values") ?> = [<?= Code::String("\"A\"") ?>, <?= Code::String("\"B\"") ?>, <?= Code::String("\"C\"") ?>]<?= Code::Delimiter ?>
 </code></pre>
         <p>
             Use the square bracket syntax for array destructuring instead of the "list()" language construct.
         </p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Variable("\$Value") ?> = <?= Code::Keyword("list") ?>(<?= Code::Variable("\$Values") ?>)<?= Code::Delimiter ?>
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 [<?= Code::Variable("\$Value") ?>] = <?= Code::Variable("\$Values") ?><?= Code::Delimiter ?>
 </code></pre>
     </section>
@@ -502,12 +502,12 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
             Consider using template-syntax for larger JavaScript strings.<br>
             Consider using Nowdoc-/Heredoc-syntax for larger PHP strings.
         </p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Constant ?> <?= Code::Const("Text") ?> = <?= Code::String("'Lorem ipsum dolor sit amet..'") ?><?= Code::Delimiter ?>
         
 <?= Code::Variable("\$Text") ?>      = <?= Code::String("'Lorem ipsum dolor sit amet..'") ?><?= Code::Delimiter ?>
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Constant ?> <?= Code::Const("Text") ?>         = <?= Code::String("\"Lorem ipsum dolor sit amet..\"") ?><?= Code::Delimiter ?>
 
 
@@ -606,10 +606,10 @@ Text<?= Code::Delimiter ?>
             or <a target="_blank" href="https://www.php.net/manual/de/pdo.query.php">PDO::query()</a>.<br>
             Anyway, consider at least opening an issue on <a href="https://www.github.com/vDesk-Cloud">Github</a> or implementing the required function into the expression-library.
         </p>
-<pre><code><?= Conventions::NotRecommended ?>
+        <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Variable("\$ResultSet") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::String("\"SELECT * FROM Table WHERE ID = 1\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
-<pre><code><?= Conventions::Recommended ?>
+        <pre><code><?= Conventions::Recommended ?>
 <?= Code::Variable("\$ResultSet") ?> = \vDesk\DataProvider\<?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"*\"") ?>)
                                            -><?= Code::Function("From") ?>(<?= Code::String("\"Table\"") ?>)
                                            -><?= Code::Function("Where") ?>([<?= Code::String("\"ID\"") ?> => <?= Code::Int("1") ?>])
@@ -635,7 +635,7 @@ Text<?= Code::Delimiter ?>
             If your Model references a dependency Model or database value, consider using mapped getters/setters instead.
         </p>
         <h5>Example model class</h5>
-<pre><code><?= Code\Language::PHP ?>
+        <pre><code><?= Code\Language::PHP ?>
 <?= Code::ClassDeclaration ?> <?= Code::Class("Model") ?> <?= Code::Implements ?> \vDesk\Data\<?= Code::Class("IModel") ?> {
     
     <?= Code::Use ?> \vDesk\Struct\<?= Code::Class("Properties") ?><?= Code::Delimiter ?>
