@@ -6,7 +6,7 @@ use vDesk\Pages\Functions;
 //@todo Add download links to package phars.
 
 ?>
-<section>
+<section class="GetvDesk">
     <h2>Get vDesk</h2>
     <p class="Description">vDesk comes with a variety of preselected Packages composed in the official standard release.</p>
     <p>For specific downloads and a list of bundled core-packages, visit the <a href="<?= Functions::URL("vDesk", "Page", "Packages") ?>">Packages</a> section.
@@ -47,7 +47,7 @@ use vDesk\Pages\Functions;
     </p>
     <p>
         Open a console and move to the target directory <code class="Inline"><?= Code::Console("cd %TargetDir%") ?></code> (by replacing the part between the <code
-                class="Inline"><?= Code::Console("%") ?></code>-characters with an absoulte path to the directory, in which you've copied the Setup.phar)<br>
+                class="Inline"><?= Code::Console("%") ?></code>-characters with an absolute path to the directory, in which you've copied the Setup.phar)<br>
         and execute <code class="Inline"><?= Code::Console("php Setup.phar") ?></code> to start the installer.
     </p>
     <p>

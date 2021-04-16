@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace Modules;
 
-use Pages\vDesk\Contact;
 use Pages\vDesk\Index;
 use vDesk\Configuration\Settings;
 use vDesk\IO\DirectoryInfo;
 use vDesk\IO\FileInfo;
-use vDesk\IO\IOException;
 use vDesk\IO\Path;
 use vDesk\Modules\Module;
 use vDesk\Pages\Page;
@@ -26,14 +24,12 @@ class vDesk extends Module {
     /**
      * The index function of the Module.
      *
-     * @return \Pages\Documentation A Page that represents the current overview of available tutorials.
+     * @return \Pages\vDesk A Page that represents the current overview of available tutorials.
      */
-    public static function Index(): Page {
-        return new Index(
-            [
-                "Pages"   => static::GetPages(),
-                "Current" => new Index()
-            ]
+    public static function Index(): \Pages\vDesk {
+        return new \Pages\vDesk(
+            Pages: static::GetPages(),
+            Content: new Index()
         );
     }
     
@@ -47,6 +43,18 @@ class vDesk extends Module {
             ->GetFiles()
             ->Map(static fn(FileInfo $Page): string => "\\Pages\\vDesk\\{$Page->Name}")
             ->Map(static fn(string $Page): Page => new $Page())
+            ->ToArray();
+    }
+    
+    /**
+     * Gets the current available Package preview images.
+     *
+     * @return string[] An array containing the names of the available Package preview images.
+     */
+    public static function GetPreviews(): array {
+        return (new DirectoryInfo(\Server . Path::Separator . "Images" . Path::Separator . "Packages"))
+            ->GetFiles()
+            ->Map(static fn(FileInfo $Image): string => "{$Image->Name}.{$Image->Extension}")
             ->ToArray();
     }
     
@@ -89,17 +97,14 @@ Content;
      *
      * @param string|null $Page The Page to display.
      *
-     * @return \Pages\Documentation The requested tutorial.
+     * @return \Pages\vDesk The requested tutorial.
      */
-    public static function Page(string $Page = null): Page {
+    public static function Page(string $Page = null): \Pages\vDesk {
         $Page  ??= Request::$Parameters["Page"];
         $Class = "\\Pages\\vDesk\\{$Page}";
-        return new $Class(
-            [
-                "Current" => new $Class(),
-                "Pages"   => static::GetPages(),
-            ],
-            ["vDesk"]
+        return new \Pages\vDesk(
+            Pages: static::GetPages(),
+            Content: new $Class()
         );
     }
     

@@ -1,0 +1,114 @@
+#Features {
+    grid-row: 3 !important;
+}
+
+#Features > .SlideShow {
+    width: 100%;
+    height: 100%;
+}
+
+#Features .Package {
+    display: grid;
+    grid-template-rows: 10% 20% 45% 25%;
+    grid-template-columns: 50% 50%;
+    width: 100%;
+    height: 100%;
+}
+
+#Features .Package > h2 {
+    grid-row: 1;
+    grid-column: 1;
+}
+
+#Features .Package > img {
+    grid-row-start: 2;
+    grid-row-end: 4;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    width: 100%;
+}
+
+#Features .Package > .Box {
+    grid-row: 4;
+    grid-column: 2;
+}
+
+@media only screen {
+    @media (max-device-width: 812px)
+    and (max-device-height: 812px) {
+        #Features .Package > h2 {
+            text-align: center;
+        }
+
+        @media (orientation: portrait) {
+            #Features .Package {
+                grid-template-rows: repeat(3, 33.333%) !important;
+                grid-template-columns: 100% !important;
+            }
+
+            #Features .Package > h2 {
+                font-size: 3rem;
+            }
+
+            #Features .Package > img {
+                grid-row: 2 !important;
+            }
+
+            #Features .Package > .Box {
+                grid-row: 3 !important;
+            }
+        }
+        @media (orientation: landscape) {
+            #Features .Package {
+                grid-template-rows: 20% 80% !important;
+                grid-template-columns: 30% 70% !important;
+            }
+
+            #Features .Package > h2 {
+                grid-row: 1 !important;
+                grid-column: 1 !important;
+            }
+
+            #Features .Package > img {
+                grid-row-start: 1 !important;
+                grid-row-end: 3 !important;
+                grid-column: 2 !important;
+                place-self: stretch;
+                object-fit: contain;
+            }
+
+            #Features .Package > .Box {
+                grid-row: 2 !important;
+                grid-column: 1 !important;
+            }
+        }
+    }
+    /* Tablet */
+    @media (min-device-width: 768px)
+    and (max-device-width: 1280px)
+    and (min-device-height: 768px)
+    and (max-device-height: 1280px) {
+        @media (orientation: portrait) {
+            #Features .Package > h2 {
+                text-align: center;
+            }
+
+            #Features .Package {
+                grid-template-rows: 30% 40% 30% !important;
+                grid-template-columns: 100% !important;
+            }
+
+            #Features .Package > h2 {
+                font-size: 3rem;
+            }
+
+            #Features .Package > img {
+                grid-row: 2 !important;
+            }
+
+            #Features .Package > .Box {
+                grid-row: 3 !important;
+            }
+        }
+    }
+}

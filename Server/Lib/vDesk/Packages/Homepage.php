@@ -10,7 +10,7 @@ use vDesk\Pages\IPackage;
 /**
  * Package that installs the vDesk homepage.
  *
- * @package vDesk\Packages
+ * @package Homepage
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Homepage extends Package implements IPackage {
@@ -23,7 +23,7 @@ class Homepage extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.1.0";
+    public const Version = "1.0.1";
     
     /**
      * The name of the Package.

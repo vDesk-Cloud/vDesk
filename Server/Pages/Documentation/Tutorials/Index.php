@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Pages\Documentation\Tutorials;
 
-use Pages\Documentation;
+use Pages\Documentation\Tutorials;
+use vDesk\Pages\Page;
 
 /**
  * Class Index
@@ -11,7 +12,7 @@ use Pages\Documentation;
  * @package Pages\vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Index extends Documentation {
+class Index extends Tutorials {
     
     /**
      * The name of the Tutorial.
@@ -34,9 +35,18 @@ class Index extends Documentation {
      * @param null|iterable $Templates   Initializes the Index Page with the specified Collection of templates.
      * @param null|iterable $Stylesheets Initializes the Index Page with the specified Collection of stylesheets.
      * @param null|iterable $Scripts     Initializes the Index Page with the specified Collection of scripts.
+     * @param array         $Pages
+     * @param array         $Tutorials
      */
-    public function __construct(?iterable $Values = [], ?iterable $Templates = ["Documentation/Tutorials/Index"], ?iterable $Stylesheets = ["Documentation/Stylesheet", "vDesk/Stylesheet"], ?iterable $Scripts = []) {
-        parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
+    public function __construct(
+        ?iterable $Values = [],
+        ?iterable $Templates = ["Documentation/Tutorials/Index"],
+        ?iterable $Stylesheets = [],
+        ?iterable $Scripts = [],
+        public array $Pages = [],
+        public array $Tutorials = [],
+    ) {
+        parent::__construct($Values, $Templates, $Stylesheets, $Scripts, $Pages, $Tutorials);
     }
     
 }

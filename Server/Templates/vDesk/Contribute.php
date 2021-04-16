@@ -43,21 +43,17 @@ git checkout origin/master -- .gitignore
     </p>
     <h4>Branches</h4>
     <p>
-        Branchnames must consist of the target package's name, new version number and topic.<br>
-        For example, a bugg-fix for the "Archive"-package would result in a branch-name like <code class="Inline">Archive-1.0.1-FixBugg</code>.
+        Branches must only consist of commits addressing buggs or features of a single package (unless it's a bundle of multiple packages).<br>
+        Branch names must consist of the target package's name and targeted new version number.<br>
+        For example, a bugg-fix for the "Archive"-package in version 1.0.0 would result in a branch-name like <code class="Inline">Archive-1.0.1</code>.<br>
+        
+        Visit the <a href="<?= Functions::URL("Documentation", "Page", "Packages#Versioning") ?>">Versioning</a>-section of the <a href="<?= Functions::URL("Documentation", "Page", "Packages#CustomPackages") ?>">Packages, Updates and
+            Setups</a>-documentation for further information about versioning.
     </p>
+    <h4>Pull requests</h4>
     <p>
-        If your contribution addresses a bugg-fix, you can directly commit to the Development-branch and open a pull request.
-    </p>
-    <p>
-        If your contribution provides new functionality or deprecates existing functions, create a feature-branch which name references the target package and feature to
-        add/drop.<br>
-        For example: If you want to provide
-        <code class="Inline">Archive.VersionControl</code>, name your branch like <code class="Inline">Archive-1.1.0-VersionControl</code>.<br>
-        Address the type of change in a proper commit message.
-    </p>
-    <p>
-        If your contribution implements an entirely new package, create a separate branch following the previous naming rules.
+        Pull requests shall describe whether its commits address buggfixes or implements new-/deprecates old functionality and have to be opened against the master branch.<br>
+        After any commits have been successfully merged, a new release for the package, update, setup and development bundle will be created.
     </p>
     <h4>Translations</h4>
     <p>
