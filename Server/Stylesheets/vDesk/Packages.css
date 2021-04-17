@@ -1,120 +1,142 @@
 
-section.Packages {
-
-}
-
-
-section.Packages > header {
+article.Packages > header {
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-template-rows: minmax(30px, 10%) 20% minmax(30px, 10%) 60%;
+    grid-template-rows: minmax(30px, 10%) 20% minmax(30px, 10%) auto;
 
 }
 
-section.Packages > header > h2 {
+article.Packages > header > h2 {
     grid-row: 1;
 }
 
-section.Packages > header > p {
+article.Packages > header > p {
     grid-row: 2;
     grid-column-start: 1;
     grid-column-end: 3;
 }
 
-section.Packages > header > h3 {
+article.Packages > header > h3 {
     grid-row: 3;
     grid-column-start: 1;
     grid-column-end: 3;
 }
 
-section.Packages > header > ul {
+article.Packages > header > ul {
     grid-row: 4;
 }
 
-section.Packages > header > .Core {
+article.Packages > header > .Core {
     grid-column: 1;
 }
 
-section.Packages > header > .Optional {
+article.Packages > header > .Optional {
     grid-column: 2;
 }
 
-section.Packages > header > .Packages {
+article.Packages > header > .Packages {
     list-style: none;
     padding: 20px;
     margin: 10px;
     border: #999999 solid 1px;
 }
 
-section.Packages > header > .Packages > .Title {
+article.Packages > header > .Packages > .Title {
     padding-bottom: 5px;
     margin-bottom: 5px;
     border-bottom: #999999 solid 1px;
 }
 
-.Package {
-    padding: 10px;
-    margin-bottom: 20px;
+main > article.Packages > article,
+main > article.Packages > article > header {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: #999 solid 2px;
 }
 
-.Package > hr {
-    margin: 30px 0 30px 0;
+main > article.Packages > article:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
 }
 
-.Package > .Description {
+article.Package > .Description {
     width: 100%;
     display: grid;
     grid-template-columns: 50% 50%;
     grid-gap: 10px;
 }
 
-.Package > .Description > aside {
+article.Package > .Description > aside {
     padding: 10px;
     background-color: #999999;
     border-radius: 5px;
 }
 
-.Package > .Description ul {
+article.Package > .Description ul {
     padding: 15px;
     margin: auto;
     list-style-type: "►";
     font-size: 18px;
 }
 
-.Package > .Description > ul > li {
+article.Package > .Description > ul > li {
     padding-left: 15px;
     border-bottom: 1px solid #999999;
     padding-bottom: 5px;
     margin-bottom: 5px;
 }
 
-.Package > .Description > ul > li:last-child {
+article.Package > header:last-child,
+article.Package > .Description > ul > li:last-child {
     border-bottom: none;
 }
 
-.Package > header > .Dependencies {
-    list-style: square;
+article.Package > header {
+    display: grid;
+    grid-template-rows: 2rem auto 1.5rem auto;
+    grid-template-columns: repeat(5, minmax(0%, 50%));
 }
 
-.Package > header > .Features {
-    list-style: square;
-    margin: 10px;
-    padding: 10px 10px 10px 25px;
-    border: none;
+article.Package > header > h3 {
+    justify-self: start;
+    align-self: center;
+    margin: 0;
+    grid-row: 1;
+    grid-column-start: 1;
+    grid-column-end: 6;
 }
 
-.Package > header > .Configuration,
-.Package > header > .Requirements {
+article.Package > header > p.Description {
+    grid-row: 2;
+    grid-column-start: 1;
+    grid-column-end: 6;
+}
+
+article.Package > header > h4 {
+    grid-row: 3;
+    margin: 0;
+    justify-self: start;
+    align-self: center;
+}
+
+article.Package > header > ul {
     list-style: none;
+    padding: 0;
 }
 
-.Package > header > .Configuration .Recommended,
-.Package > header > .Requirements .Recommended {
+article.Package > header > p,
+article.Package > header > ul {
+    grid-row: 4;
+}
+
+article.Package > header > .Configuration .Recommended,
+article.Package > header > .Requirements .Recommended {
     color: green;
 }
 
-.Package > header > .Configuration .Required,
-.Package > header > .Requirements .Required {
+article.Package > header > .Configuration .Required,
+article.Package > header > .Requirements .Required {
     color: darkgoldenrod;
 }
 
@@ -128,6 +150,30 @@ section.Packages > header > .Packages > .Title {
 
     .Package > .Description > aside {
         padding: 5px !important;
+    }
+
+}
+
+/* Smartphone */
+@media only screen and (orientation: portrait) {
+
+
+    article.Package > header {
+        display: grid;
+        grid-template-rows: 2rem auto !important;
+        grid-template-columns: 100% !important;
+    }
+
+    article.Package > header > h3,
+    article.Package > header > p.Description {
+
+        grid-column: 1;
+    }
+
+    article.Package > header > h4,
+    article.Package > header > p,
+    article.Package > header > ul {
+        grid-row: auto;
     }
 
 }
