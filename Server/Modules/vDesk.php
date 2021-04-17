@@ -14,7 +14,7 @@ use vDesk\Pages\Request;
 use vDesk\Utils\Log;
 
 /**
- * Module for serving the tutorial files of the Package.
+ * vDesk Homepage Module.
  *
  * @package Homepage
  * @author  Kerry <DevelopmentHero@gmail.com>
@@ -22,7 +22,7 @@ use vDesk\Utils\Log;
 class vDesk extends Module {
     
     /**
-     * The index function of the Module.
+     * Displays the index Page of the Homepage.
      *
      * @return \Pages\vDesk A Page that represents the current overview of available tutorials.
      */
@@ -36,7 +36,7 @@ class vDesk extends Module {
     /**
      * Gets the currently installed Pages.
      *
-     * @return array
+     * @return \vDesk\Pages\Page[] An array containing an instance of every installed Pages.
      */
     public static function GetPages(): array {
         return (new DirectoryInfo(Settings::$Local["Pages"]["Pages"] . Path::Separator . "vDesk"))
@@ -85,7 +85,7 @@ Content;
      *
      * @param string|null $Page The Page to display.
      *
-     * @return \Pages\vDesk The requested tutorial.
+     * @return \Pages\vDesk The requested Page.
      */
     public static function Page(string $Page = null): \Pages\vDesk {
         $Page  ??= Request::$Parameters["Page"];
