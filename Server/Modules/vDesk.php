@@ -47,18 +47,6 @@ class vDesk extends Module {
     }
     
     /**
-     * Gets the current available Package preview images.
-     *
-     * @return string[] An array containing the names of the available Package preview images.
-     */
-    public static function GetPreviews(): array {
-        return (new DirectoryInfo(\Server . Path::Separator . "Images" . Path::Separator . "Packages"))
-            ->GetFiles()
-            ->Map(static fn(FileInfo $Image): string => "{$Image->Name}.{$Image->Extension}")
-            ->ToArray();
-    }
-    
-    /**
      * Sends the contents of the contact-form to a specified recipient email-address.
      *
      * @param null|string $Name    The name of the sender.
