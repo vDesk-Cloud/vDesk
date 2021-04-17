@@ -146,7 +146,7 @@ class Collection extends \vDesk\Struct\Collections\Collection {
     /**
      * @inheritdoc
      */
-    public function ReplaceAt(int $Index, mixed $Element): void {
+    public function ReplaceAt(int $Key, mixed $Element): void {
         if($this->Dispatching) {
             foreach($this->OnChange as $OnChange) {
                 $OnChange($this, $Element);
