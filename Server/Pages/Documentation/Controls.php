@@ -39,7 +39,6 @@ class Controls extends Page {
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Controls"],
         ?iterable $Stylesheets = [
-            "Documentation/Stylesheet",
             "../../Client/Design/vDesk",
             "../../Client/Design/vDesk/Controls/GroupBox",
             "../../Client/Design/vDesk/Controls/ResizableBox",

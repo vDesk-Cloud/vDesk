@@ -38,7 +38,7 @@ class Development extends Page {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Development"],
-        ?iterable $Stylesheets = ["Documentation/Stylesheet"],
+        ?iterable $Stylesheets = [],
         ?iterable $Scripts = []
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);

@@ -40,7 +40,7 @@ class Index extends Documentation {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Index"],
-        ?iterable $Stylesheets = ["Documentation/Stylesheet"],
+        ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         array $Pages = [],
         public array $Tutorials = []
