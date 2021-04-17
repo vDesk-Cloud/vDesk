@@ -8,7 +8,7 @@ use vDesk\Pages\Page;
 /**
  * vDesk Page class.
  *
- * @package Pages
+ * @package Homepage
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class vDesk extends Page {
@@ -21,7 +21,7 @@ class vDesk extends Page {
     public string $Name = "vDesk";
     
     /**
-     * The nav label of the Page
+     * The nav label of the Page.
      *
      * @var string
      */

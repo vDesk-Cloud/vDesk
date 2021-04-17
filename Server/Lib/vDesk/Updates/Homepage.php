@@ -12,7 +12,7 @@ use vDesk\Pages\IPackage;
  * @package Homepage
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Homepage extends Update {
+final class Homepage extends Update {
     
     /**
      * The Package of the Update.
@@ -44,11 +44,16 @@ Description;
                     "vDesk.php",
                     "vDesk"
                 ],
+                IPackage::Templates   => [
+                    "vDesk.php",
+                    "vDesk"
+                ],
                 IPackage::Stylesheets => [
                     "vDesk"
                 ],
                 IPackage::Scripts     => [
-                    "vDesk/Index.js"
+                    "vDesk/Index.js",
+                    "vDesk/Contact.js"
                 ]
             ]
         ],
@@ -63,13 +68,14 @@ Description;
                 ],
                 IPackage::Templates   => [
                     "vDesk.php",
-                    "vDesk/Index.php"
+                    "vDesk"
                 ],
                 IPackage::Stylesheets => [
                     "vDesk"
                 ],
                 IPackage::Scripts     => [
-                    "vDesk/Index.js"
+                    "vDesk/Index.js",
+                    "vDesk/Contact.js"
                 ]
             ]
         ]

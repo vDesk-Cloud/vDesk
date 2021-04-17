@@ -15,7 +15,7 @@ use vDesk\Pages\Functions;
     <section id="GeneralFeatures">
         <h3>General features</h3>
         <ul>
-            <li>Workflowengine with drag&drop editor</li>
+            <li>Workflowengine with drag&amp;drop editor</li>
             <li>Mobile client</li>
             <li>Version control package</li>
             <li>Graphical installer</li>

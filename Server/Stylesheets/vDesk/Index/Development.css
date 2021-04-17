@@ -63,7 +63,7 @@
 
 #Development .API {
     grid-template-columns: repeat(2, 50%);
-    grid-template-rows: repeat(3, 33.333%);
+    grid-template-rows: repeat(3, auto);
 }
 
 #Development .API > .Box {

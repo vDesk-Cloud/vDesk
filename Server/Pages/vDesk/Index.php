@@ -6,22 +6,22 @@ namespace Pages\vDesk;
 use vDesk\Pages\Cached\Page;
 
 /**
- * Class Index
+ * Index Page class.
  *
- * @package Pages\vDesk
+ * @package Homepage
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Index extends Page {
     
     /**
-     * The name of the Tutorial.
+     * The name of the Page.
      *
      * @var string
      */
     public string $Name = "Index";
     
     /**
-     * The nav label of the Tutorial
+     * The nav label of the Page.
      *
      * @var string
      */
@@ -42,7 +42,6 @@ class Index extends Page {
             "vDesk/Index"
         ],
         ?iterable $Stylesheets = [
-            "vDesk/Stylesheet",
             "Documentation/Stylesheet",
             "vDesk/Animations",
             "vDesk/SlideShow",

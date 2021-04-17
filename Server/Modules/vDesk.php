@@ -16,7 +16,7 @@ use vDesk\Utils\Log;
 /**
  * Module for serving the tutorial files of the Package.
  *
- * @package Modules
+ * @package Homepage
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class vDesk extends Module {
