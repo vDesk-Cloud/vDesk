@@ -21,7 +21,7 @@ final class Pages extends Update {
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.1";
+    public const RequiredVersion = "1.1.0";
     
     /**
      * The description of the Update.
