@@ -74,7 +74,7 @@ class Request extends Command {
         
         static::$Module      = $Provider->ParseCommand("Module");
         static::$Name        = $Provider->ParseCommand("Command");
-        static::$Ticket      = $Provider->ParseCommand("Ticket");
+        static::$Ticket      = $_COOKIE["Ticket"] ?? $Provider->ParseCommand("Ticket");
         static::$URI         = $_SERVER["REQUEST_URI"];
         static::$QueryString = $_SERVER["QUERY_STRING"];
         static::$Host        = $_SERVER["SERVER_NAME"];
