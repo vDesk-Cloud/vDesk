@@ -12,40 +12,44 @@ use vDesk\Packages\Package;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Pages extends Update {
-
+    
     /**
      * The Package of the Update.
      */
     public const Package = \vDesk\Packages\Pages::class;
-
+    
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.0";
-
+    public const RequiredVersion = "1.0.1";
+    
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Fixed autoloading of Page files.
+- Added cookie based session tickets.
 Description;
-
+    
     /**
      * The files and directories of the Update.
      */
     public const Files = [
         self::Deploy   => [
             Package::Server => [
-                Package::Lib     => ["Pages.php"]
+                Package::Lib => [
+                    "vDesk/Pages/Request.php"
+                ]
             ]
         ],
         self::Undeploy => [
             Package::Server => [
-                Package::Lib     => ["Pages.php"]
+                Package::Lib => [
+                    "vDesk/Pages/Request.php"
+                ]
             ]
         ]
     ];
-
+    
     /**
      * @inheritDoc
      */
