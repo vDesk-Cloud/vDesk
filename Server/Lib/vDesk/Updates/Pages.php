@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace vDesk\Updates;
 
-use vDesk\Configuration\Settings;
-use vDesk\IO\Directory;
-use vDesk\IO\Path;
 use vDesk\Packages\Package;
 
 /**
@@ -15,43 +12,49 @@ use vDesk\Packages\Package;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Pages extends Update {
-
+    
     /**
      * The Package of the Update.
      */
     public const Package = \vDesk\Packages\Pages::class;
-
+    
     /**
      * The required version of the Update.
      */
     public const RequiredVersion = "1.0.1";
-
+    
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Implemented caching functionality.
+- Added cookie based session tickets.
 Description;
-
+    
     /**
      * The files and directories of the Update.
      */
     public const Files = [
         self::Deploy   => [
             Package::Server => [
-                Package::Lib     => [
-                    "vDesk/Pages/Cached"
+                Package::Lib => [
+                    "vDesk/Pages/Request.php"
+                ]
+            ]
+        ],
+        self::Undeploy => [
+            Package::Server => [
+                Package::Lib => [
+                    "vDesk/Pages/Request.php"
                 ]
             ]
         ]
     ];
-
+    
     /**
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
-        Settings::$Local["Pages"]["Cache"] = (Directory::Create($Path . Path::Separator . Package::Server . Path::Separator . "Cache"))->Path;
-        Settings::$Local->Save();
+        self::Uneploy();
         self::Deploy($Phar, $Path);
     }
 }

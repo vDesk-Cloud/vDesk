@@ -27,7 +27,7 @@ final class Pages extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.1.0";
+    public const Version = "1.0.2";
     
     /**
      * The name of the Package.
@@ -116,40 +116,37 @@ LicenseText;
                 "Scripts"     => (Directory::Create($Path . Path::Separator . self::Server . Path::Separator . self::Scripts))->Path,
                 "Stylesheets" => (Directory::Create($Path . Path::Separator . self::Server . Path::Separator . self::Stylesheets))->Path,
                 "Images"      => (Directory::Create($Path . Path::Separator . self::Server . Path::Separator . self::Images))->Path,
-                "Cache"       => (Directory::Create($Path . Path::Separator . self::Server . Path::Separator . "Cache"))->Path,
                 "ShowErrors"  => true
             ],
             "Pages"
         );
         
         //Create configuration for routes.
-        Settings::$Local["Routes"] = new Settings\Local\Settings(
-            [
-                "Default" => [
-                    "Module"  => "Pages",
-                    "Command" => "Index"
-                ]
-            ],
+        Settings::$Local["Routes"] = new Settings\Local\Settings([
+            "Default" => [
+                "Module"  => "Pages",
+                "Command" => "Index"
+            ]
+        ],
             "Routes"
         );
         
         //Create configuration for ErrorHandlers.
-        Settings::$Local["ErrorHandlers"] = new Settings\Local\Settings(
-            [
-                //Default ErrorHandler.
-                "Default"                     => [
-                    "Module"  => "Error",
-                    "Command" => "Index"
-                ],
-                UnknownModuleException::class => [
-                    "Module"  => "Error",
-                    "Command" => "NotFound"
-                ],
-                FileNotFoundException::class  => [
-                    "Module"  => "Error",
-                    "Command" => "NotFound"
-                ]
+        Settings::$Local["ErrorHandlers"] = new Settings\Local\Settings([
+            //Default ErrorHandler.
+            "Default"                     => [
+                "Module"  => "Error",
+                "Command" => "Index"
             ],
+            UnknownModuleException::class => [
+                "Module"  => "Error",
+                "Command" => "NotFound"
+            ],
+            FileNotFoundException::class  => [
+                "Module"  => "Error",
+                "Command" => "NotFound"
+            ]
+        ],
             "ErrorHandlers"
         );
         
