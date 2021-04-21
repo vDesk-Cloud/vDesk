@@ -27,7 +27,7 @@ final class Pages extends Update {
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added cookie based session tickets.
+- Added support for cookie based user sessions.
 Description;
     
     /**
@@ -37,6 +37,7 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib => [
+                    "Pages.php",
                     "vDesk/Pages/Request.php"
                 ]
             ]
@@ -44,6 +45,7 @@ Description;
         self::Undeploy => [
             Package::Server => [
                 Package::Lib => [
+                    "Pages.php",
                     "vDesk/Pages/Request.php"
                 ]
             ]
