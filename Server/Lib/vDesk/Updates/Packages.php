@@ -31,6 +31,9 @@ Description;
     public const Files = [
         Update::Deploy   => [
             Package::Client => [
+                Package::Design => [
+                    "vDesk/Packages/Administration.css"
+                ],
                 Package::Lib => [
                     "vDesk/Packages/Administration.js"
                 ]
@@ -38,7 +41,10 @@ Description;
         ],
         Update::Undeploy => [
             Package::Client => [
-                Package::Lib => [
+                Package::Design => [
+                    "vDesk/Packages/Administration.css"
+                ],
+                Package::Lib    => [
                     "vDesk/Packages/Administration.js"
                 ]
             ]
