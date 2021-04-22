@@ -28,6 +28,7 @@ final class Pages extends Update {
      */
     public const Description = <<<Description
 - Added support for cookie based user sessions.
+- Fixed possible memory leak while fetching parameters.
 Description;
     
     /**
@@ -38,7 +39,8 @@ Description;
             Package::Server => [
                 Package::Lib => [
                     "Pages.php",
-                    "vDesk/Pages/Request.php"
+                    "vDesk/Pages/Request.php",
+                    "vDesk/Pages/Request/Parameters.php"
                 ]
             ]
         ],
@@ -46,7 +48,8 @@ Description;
             Package::Server => [
                 Package::Lib => [
                     "Pages.php",
-                    "vDesk/Pages/Request.php"
+                    "vDesk/Pages/Request.php",
+                    "vDesk/Pages/Request/Parameters.php"
                 ]
             ]
         ]
