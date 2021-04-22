@@ -39,7 +39,8 @@ Description;
             Package::Server => [
                 Package::Lib => [
                     "Pages.php",
-                    "vDesk/Pages/Request.php"
+                    "vDesk/Pages/Request.php",
+                    "vDesk/Pages/Request/Parameters.php"
                 ]
             ]
         ],
@@ -47,7 +48,8 @@ Description;
             Package::Server => [
                 Package::Lib => [
                     "Pages.php",
-                    "vDesk/Pages/Request.php"
+                    "vDesk/Pages/Request.php",
+                    "vDesk/Pages/Request/Parameters.php"
                 ]
             ]
         ]
