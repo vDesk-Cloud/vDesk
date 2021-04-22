@@ -28,6 +28,7 @@ final class Pages extends Update {
      */
     public const Description = <<<Description
 - Added support for cookie based user sessions.
+- Fixed possible memory leak while fetching parameters.
 Description;
     
     /**
