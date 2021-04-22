@@ -27,6 +27,37 @@ vDesk.Packages.Administration = function Administration() {
     const OnSelect = Event => Container.replaceChild(Event.detail.package.Control, Container.lastChild);
 
     /**
+     * Eventhandler that listens on the 'change' event.
+     */
+    const OnChange = () => {
+        //Loop through dropped files.
+        Array.from(OpenFileDialog.files)
+            .forEach(File => {
+                vDesk.Connection.Send(
+                    new vDesk.Modules.Command(
+                        {
+                            Module:     "Packages",
+                            Command:    "Install",
+                            Parameters: {Package: File},
+                            Ticket:     vDesk.User.Ticket
+                        }
+                    ),
+                    Response => {
+                        if(!Response.Status) {
+                            alert(Response.Data);
+                            return;
+                        }
+                        Packages.Add(
+                            new vDesk.Packages.PackageList.Item(
+                                vDesk.Packages.Package.FromDataView(Response.Data)
+                            )
+                        );
+                    }
+                );
+            });
+    };
+
+    /**
      * Install a Package on the server.
      *
      * @param {File} Package The PHAR archive of the Package to install.
@@ -128,7 +159,7 @@ vDesk.Packages.Administration = function Administration() {
     OpenFileDialog.style.cssText = "display: none;";
     OpenFileDialog.multiple = true;
     OpenFileDialog.accept = ".phar";
-    OpenFileDialog.addEventListener("change", () => Array.from(OpenFileDialog.files).forEach(this.Install));
+    OpenFileDialog.addEventListener("change", OnChange, false);
     Control.appendChild(OpenFileDialog);
 
     /**
@@ -148,7 +179,7 @@ vDesk.Packages.Administration = function Administration() {
     Install.style.backgroundImage = `url("${vDesk.Visual.Icons.Packages.Install}")`;
     Install.disabled = !vDesk.User.Permissions.InstallPackage;
     Install.textContent = vDesk.Locale.Packages.Install;
-    Install.addEventListener("click", () => OpenFileDialog.click());
+    Install.addEventListener("click", () => Array.from(OpenFileDialog.files).forEach(this.Install));
     Controls.appendChild(Install);
 
     /**

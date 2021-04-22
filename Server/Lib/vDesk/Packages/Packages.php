@@ -27,7 +27,7 @@ final class Packages extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.0.0";
     
     /**
      * The name of the Package.

@@ -7,7 +7,6 @@
     -ms-user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
-    position: relative;
 }
 
 .PackageList .Item:hover {
@@ -26,6 +25,7 @@
 .PackageList .Item.Disabled {
     color: var(--FontDisabled, #999999);
 }
+
 
 .PackageList .Item > span {
     z-index: 1;
