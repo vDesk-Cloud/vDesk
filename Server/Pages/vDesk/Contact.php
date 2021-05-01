@@ -6,46 +6,45 @@ namespace Pages\vDesk;
 use Pages\vDesk;
 
 /**
- * Class About
+ * Contact Page class.
  *
- * @package Pages\vDesk
+ * @package Homepage
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Contact extends vDesk {
     
     /**
-     * The name of the Tutorial.
+     * The name of the Page.
      *
      * @var string
      */
     public string $Name = "Contact";
     
     /**
-     * The nav label of the Tutorial
+     * The nav label of the Page.
      *
      * @var string
      */
     public string $Description = "Contact";
     
     /**
-     * Initializes a new instance of the Documentation Page.
+     * Initializes a new instance of the Contact Page class.
      *
-     * @param null|iterable $Values      Initializes the Documentation Page with the specified Dictionary of values.
-     * @param null|iterable $Templates   Initializes the Documentation Page with the specified Collection of templates.
-     * @param null|iterable $Stylesheets Initializes the Documentation Page with the specified Collection of stylesheets.
-     * @param null|iterable $Scripts     Initializes the Documentation Page with the specified Collection of scripts.
+     * @param null|iterable $Values      Initializes the Contact Page with the specified Dictionary of values.
+     * @param null|iterable $Templates   Initializes the Contact Page with the specified Collection of templates.
+     * @param null|iterable $Stylesheets Initializes the Contact Page with the specified Collection of stylesheets.
+     * @param null|iterable $Scripts     Initializes the Contact Page with the specified Collection of scripts.
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = [],
+        ?iterable $Templates = ["vDesk/Contact"],
         ?iterable $Stylesheets = [
-            "vDesk/Stylesheet",
             "../../Client/Design/vDesk",
             "../../Client/Design/vDesk/Controls/SuggestionTextBox",
             "../../Client/Design/vDesk/Controls/EditControl",
             "../../Client/Design/vDesk/Controls/EditControl/Text",
             "../../Client/Design/vDesk/Controls/EditControl/Suggest",
-            "../../Client/Design/vDesk/Controls/GroupBox",
+            "../../Client/Design/vDesk/Controls/GroupBox"
         ],
         ?iterable $Scripts = [
             "../../Client/Lib/vDesk",

@@ -1,93 +1,93 @@
 <?php
-
 use vDesk\Documentation\Code;
-use vDesk\Documentation\Code\Conventions;
 use vDesk\Pages\Functions;
-
 ?>
-<h2>Controls</h2>
-<p>
-    This document describes represents an enumeration of vDesk's clientside controls.
-</p>
-<h3>Overview</h3>
-<ul class="Topics">
-    <li>
-        <a href="#Structuring">Structuring</a>
+<article class="Controls">
+    <header>
+        <h2>Controls</h2>
+        <p>
+            This document represents an enumeration of vDesk's clientside controls.
+        </p>
+        <h3>Overview</h3>
         <ul class="Topics">
-            <li><a href="#GroupBox">GroupBox</a></li>
-            <li><a href="#FloatingBox">FloatingBox</a></li>
-            <li><a href="#ResizableBox">ResizableBox</a></li>
-            <li><a href="#DynamicBox">DynamicBox</a></li>
-            <li><a href="#Resizer">Resizer</a></li>
-            <li><a href="#TabControl">TabControl</a></li>
-            <li><a href="#Table">Table</a></li>
-            <li><a href="#Calendar">Calendar</a></li>
-        </ul>
-    </li>
-    <li>
-        <a href="#Picker">Picker</a>
-        <ul class="Topics">
-            <li><a href="#DatePicker">DatePicker</a></li>
-            <li><a href="#TimePicker">TimePicker</a></li>
-            <li><a href="#DateTimePicker">DateTimePicker</a></li>
-            <li><a href="#TimeSpanPicker">TimespanPicker</a></li>
-
-        </ul>
-    </li>
-    <li>
-        <a href="#Input">Input</a>
-        <ul class="Topics">
-            <li><a href="#ToolBar">ToolBar</a></li>
-            <li><a href="#ContextMenu">ContextMenu</a></li>
-            <li><a href="#EditControl">EditControl</a>
+            <li>
+                <a href="#Structuring">Structuring</a>
                 <ul class="Topics">
-                    <li>
-                        <a href="#TextInput">Text input validation</a>
+                    <li><a href="#GroupBox">GroupBox</a></li>
+                    <li><a href="#FloatingBox">FloatingBox</a></li>
+                    <li><a href="#ResizableBox">ResizableBox</a></li>
+                    <li><a href="#DynamicBox">DynamicBox</a></li>
+                    <li><a href="#Resizer">Resizer</a></li>
+                    <li><a href="#TabControl">TabControl</a></li>
+                    <li><a href="#Table">Table</a></li>
+                    <li><a href="#Calendar">Calendar</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#Picker">Picker</a>
+                <ul class="Topics">
+                    <li><a href="#DatePicker">DatePicker</a></li>
+                    <li><a href="#TimePicker">TimePicker</a></li>
+                    <li><a href="#DateTimePicker">DateTimePicker</a></li>
+                    <li><a href="#TimeSpanPicker">TimespanPicker</a></li>
+
+                </ul>
+            </li>
+            <li>
+                <a href="#Input">Input</a>
+                <ul class="Topics">
+                    <li><a href="#ToolBar">ToolBar</a></li>
+                    <li><a href="#ContextMenu">ContextMenu</a></li>
+                    <li><a href="#EditControl">EditControl</a>
                         <ul class="Topics">
-                            <li><a href="#String">String</a></li>
-                            <li><a href="#Text">Text</a></li>
-                            <li><a href="#Email">Email</a></li>
-                            <li><a href="#URL">URL</a></li>
-                            <li><a href="#Suggest">Suggest</a></li>
-                            <li><a href="#Password">Password</a></li>
-                            <li><a href="#Color">Color</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#NumericInput">Numeric input validation</a>
-                        <ul class="Topics">
-                            <li><a href="#Number">Number</a></li>
-                            <li><a href="#Range">Range</a></li>
-                            <li><a href="#Money">Money</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#BooleanInput">Boolean input validation</a>
-                        <ul class="Topics">
-                            <li><a href="#Boolean">Boolean</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#DateInput">Date input validation</a>
-                        <ul class="Topics">
-                            <li><a href="#Date">Date</a></li>
-                            <li><a href="#Time">Time</a></li>
-                            <li><a href="#DateTime">DateTime</a></li>
-                            <li><a href="#TimeSpan">TimeSpan</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#EnumInput">Enum input validation</a>
-                        <ul class="Topics">
-                            <li><a href="#Enum">Enum</a></li>
+                            <li>
+                                <a href="#TextInput">Text input validation</a>
+                                <ul class="Topics">
+                                    <li><a href="#String">String</a></li>
+                                    <li><a href="#Text">Text</a></li>
+                                    <li><a href="#Email">Email</a></li>
+                                    <li><a href="#URL">URL</a></li>
+                                    <li><a href="#Suggest">Suggest</a></li>
+                                    <li><a href="#Password">Password</a></li>
+                                    <li><a href="#Color">Color</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#NumericInput">Numeric input validation</a>
+                                <ul class="Topics">
+                                    <li><a href="#Number">Number</a></li>
+                                    <li><a href="#Range">Range</a></li>
+                                    <li><a href="#Money">Money</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#BooleanInput">Boolean input validation</a>
+                                <ul class="Topics">
+                                    <li><a href="#Boolean">Boolean</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#DateInput">Date input validation</a>
+                                <ul class="Topics">
+                                    <li><a href="#Date">Date</a></li>
+                                    <li><a href="#Time">Time</a></li>
+                                    <li><a href="#DateTime">DateTime</a></li>
+                                    <li><a href="#TimeSpan">TimeSpan</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#EnumInput">Enumerated input validation</a>
+                                <ul class="Topics">
+                                    <li><a href="#Enum">Enum</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                 </ul>
             </li>
         </ul>
-    </li>
-</ul>
-<hr id="Structuring"/>
+    </header>
+    <h3 id="Structuring">Structuring</h3>
 <section id="GroupBox" class="ControlPreview">
     <h4>Group Box</h4>
     <div class="Code">
@@ -107,7 +107,6 @@ use vDesk\Pages\Functions;
         document.getElementById("GroupBoxDemo").appendChild(new vDesk.Controls.GroupBox("Title", [GroupBoxText], true, true).Control);
     </script>
 </section>
-<hr/>
 <section id="FloatingBox" class="ControlPreview">
     <h4>Floating Box</h4>
     <div class="Code">
@@ -133,7 +132,6 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr/>
 <section id="ResizableBox" class="ControlPreview">
     <h4>Resizable Box</h4>
     <div class="Code">
@@ -159,10 +157,8 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr/>
 <section id="DynamicBox" class="ControlPreview">
     <h4>DynamicBox</h4>
-    <p>The DynamicBox represents a combination between the Floating- and ResizableBox </p>
     <div class="Code">
         <pre><code><?= Code\Language::JS ?>
 <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("DynamicBox") ?>(
@@ -196,7 +192,6 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr/>
 <section id="Resizer" class="ControlPreview">
     <h4>Resizer</h4>
     <div class="Code">
@@ -238,7 +233,6 @@ use vDesk\Pages\Functions;
         ResizerDemo.appendChild(Second);
     </script>
 </section>
-<hr/>
 <section id="TabControl" class="ControlPreview">
     <h4>TabControl</h4>
     <div class="Code">
@@ -275,7 +269,6 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr/>
 <section id="Table" class="ControlPreview">
     <h4>Table</h4>
     <div class="Code">
@@ -310,7 +303,6 @@ use vDesk\Pages\Functions;
         TablePreview.appendChild(Table.Control);
     </script>
 </section>
-<hr/>
 <section id="Calendar" class="ControlPreview">
     <h4>Calendar</h4>
     <div class="Code">
@@ -337,7 +329,7 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr id="Picker"/>
+<h3 id="Picker">Picker</h3>
 <section id="DatePicker" class="ControlPreview">
     <h4>DatePicker</h4>
     <div class="Code">
@@ -351,7 +343,6 @@ use vDesk\Pages\Functions;
         document.getElementById("DatePickerDemo").appendChild(new vDesk.Controls.DatePicker().Control);
     </script>
 </section>
-<hr/>
 <section id="TimePicker" class="ControlPreview">
     <h4>TimePicker</h4>
     <div class="Code">
@@ -365,7 +356,6 @@ use vDesk\Pages\Functions;
         document.getElementById("TimePickerDemo").appendChild(new vDesk.Controls.TimePicker().Control);
     </script>
 </section>
-<hr/>
 <section id="DateTimePicker" class="ControlPreview">
     <h4>DateTimePicker</h4>
     <div class="Code">
@@ -379,7 +369,6 @@ use vDesk\Pages\Functions;
         document.getElementById("DateTimePickerDemo").appendChild(new vDesk.Controls.DateTimePicker().Control);
     </script>
 </section>
-<hr/>
 <section id="TimeSpanPicker" class="ControlPreview">
     <h4>TimeSpanPicker</h4>
     <div class="Code">
@@ -414,7 +403,7 @@ use vDesk\Pages\Functions;
         document.getElementById("ColorPickerDemo").appendChild(new vDesk.Media.Drawing.ColorPicker().Control);
     </script>
 </section>
-<hr id="Input"/>
+    <h3 id="Input">Input</h3>
 <section id="ToolBar" class="ControlPreview">
     <h4>ToolBar</h4>
     <div class="Code">
@@ -528,7 +517,7 @@ use vDesk\Pages\Functions;
 </code></pre>
     </div>
 </section>
-<hr id="TextInput"/>
+    <h3 id="TextInput">Text input</h3>
 <section id="String" class="ControlPreview">
     <h5>String</h5>
     <div class="Code">
@@ -555,7 +544,6 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr>
 <section id="Text" class="ControlPreview">
     <h5>Text</h5>
     <div class="Code">
@@ -581,7 +569,6 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr>
 <section id="Email" class="ControlPreview">
     <h5>Email</h5>
     <div class="Code">
@@ -608,7 +595,6 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr>
 <section id="URL" class="ControlPreview">
     <h5>URL</h5>
     <div class="Code">
@@ -635,7 +621,6 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr>
 <section id="Suggest" class="ControlPreview">
     <h5>Suggest</h5>
     <div class="Code">
@@ -663,7 +648,6 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr>
 <section id="Password" class="ControlPreview">
     <h5>Password</h5>
     <div class="Code">
@@ -689,7 +673,6 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr>
 <section id="Color" class="ControlPreview">
     <h5>Color</h5>
     <div class="Code">
@@ -722,7 +705,7 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr id="NumericInput">
+    <h3 id="NumericInput">Numeric input</h3>
 <section id="Number" class="ControlPreview">
     <h5>Number</h5>
     <div class="Code">
@@ -748,7 +731,6 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr>
 <section id="Range" class="ControlPreview">
     <h5>Range</h5>
     <div class="Code">
@@ -774,7 +756,6 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr>
 <section id="Money" class="ControlPreview">
     <h5>Money</h5>
     <div class="Code">
@@ -800,7 +781,7 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr id="BooleanInput">
+    <h3 id="BooleanInput">Boolean input</h3>
 <section id="Boolean" class="ControlPreview">
     <h5>Boolean</h5>
     <div class="Code">
@@ -825,7 +806,7 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr id="DateInput">
+    <h3 id="DateInput">Date input</h3>
 <section id="Date" class="ControlPreview">
     <h5>Date</h5>
     <div class="Code">
@@ -851,7 +832,6 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr>
 <section id="Time" class="ControlPreview">
     <h5>Time</h5>
     <div class="Code">
@@ -877,7 +857,6 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr>
 <section id="DateTime" class="ControlPreview">
     <h5>DateTime</h5>
     <div class="Code">
@@ -903,7 +882,6 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr>
 <section id="TimeSpan" class="ControlPreview">
     <h5>TimeSpan</h5>
     <div class="Code">
@@ -929,7 +907,7 @@ use vDesk\Pages\Functions;
         );
     </script>
 </section>
-<hr id="EnumInput">
+    <h3 id="EnumInput">Enumerated input</h3>
 <section id="Enum" class="ControlPreview">
     <h5>Enum</h5>
     <div class="Code">
@@ -962,3 +940,4 @@ use vDesk\Pages\Functions;
     </script>
 </section>
 <div style="clear: both"></div>
+</article>

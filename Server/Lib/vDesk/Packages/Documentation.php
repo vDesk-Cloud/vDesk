@@ -22,7 +22,7 @@ final class Documentation extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
+    public const Version = "1.0.1";
     
     /**
      * The name of the Package.
@@ -37,7 +37,7 @@ final class Documentation extends Package implements IPackage {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Pages" => "1.0.0"];
+    public const Dependencies = ["Pages" => "1.1.0"];
     
     /**
      * The files and directories of the Package.
