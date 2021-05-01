@@ -55,7 +55,7 @@ class Server extends Machine {
     public function Start(): void {
         $this->EventListeners = new Collection();
         $this->Clients        = new Collection();
-        $this->Socket         = new Socket("tcp://0.0.0.0:420", Socket::Local);
+        $this->Socket         = new Socket("tcp://0.0.0.0:3420", Socket::Local);
         $this->User           = \vDesk::$User;
         Log::Info(__METHOD__, "Relay server started.");
     }
@@ -66,19 +66,19 @@ class Server extends Machine {
     public function Run(): void {
         
         //Check if a new connection has been established.
-        $Socket = $this->Socket->Accept(1);
+        $Socket = $this->Socket->Accept(0, 50000);
         if($Socket !== null) {
             $Event = Event::FromSocket($Socket);
             if($Event->Name !== Event::Login) {
-                $Socket->Write((string)new Event(Event::Error, "Server", "Logg dich erst ein Du Kaschber!"));
+                $Socket->Write((string)new Event(Event::Error, "Server", "Authentication required!"));
                 $Socket->Close();
             }
             //Perform login.
             try {
                 $User = Modules::Security()::Login($Event->Sender, $Event->Data);
                 $this->Clients->Add(new Client($User, $Socket));
-    
-                Log::Debug(__METHOD__, "Client: '{$User->Name}' connected.");
+                $Socket->Write((string)new Event(Event::Success, "Server", $User->Ticket));
+                Log::Info(__METHOD__, "Client: '{$User->Name}' connected.");
                 
                 //@todo Create Security-Update for this dirty hack...
                 \vDesk::$User = $this->User;
@@ -98,9 +98,15 @@ class Server extends Machine {
         foreach($this->Clients as $Client) {
             $Sockets[] = $Client->Socket;
         }
+        
         $Events = [];
-        foreach(Socket::Select($Sockets)["Read"] as $Socket) {
-            $Events[] = Event::FromSocket($Socket);
+        foreach(Socket::Select($Sockets)[0] as $Socket) {
+            try {
+                $Events[] = Event::FromSocket($Socket);
+            } catch(\Throwable $Exception) {
+                $Socket->Write((string)new Event(Event::Error, "Server", "Malformed Event received!"));
+                Log::Error(__METHOD__, $Exception->getMessage() . $Exception->getTraceAsString());
+            }
         }
         
         //Process Events.
@@ -115,7 +121,6 @@ class Server extends Machine {
             
             switch($Event->Name) {
                 case Event::Logout:
-                    Log::Info(__METHOD__, "Client: '{$Client->User->Name}' disconnected.");
                     //@todo Shame on you Kerry, just shame on you...
                     \vDesk::$User = $Client->User;
                     
@@ -124,28 +129,30 @@ class Server extends Machine {
                     $this->Clients->Remove($Client);
                     
                     \vDesk::$User = $this->User;
-                    
-                    break;
+                    Log::Info(__METHOD__, "Client: '{$Client->User->Name}' disconnected.");
+                    continue 2;
                 case Event::AddEventListener:
-                    Log::Info(__METHOD__, "Adding: {$Event->Data}.");
-                    $this->EventListeners->Add(new Event\Listener($Event->Name, $Client));
-                    break;
+                    $this->EventListeners->Add(new Event\Listener($Event->Data, $Client));
+                    $Socket->Write((string)new Event(Event::Success, "Server"));
+                    Log::Info(__METHOD__, "{$Client->User->Name} subscribed to '{$Event->Data}'.");
+                    continue 2;
                 case Event::RemoveEventListener:
-                    Log::Info(__METHOD__, "Removing: {$Event->Data}.");
                     $this->EventListeners->Remove(
                         $this->EventListeners->Find(
                             static fn(Event\Listener $Listener): bool => $Listener->Event === $Event->Data
                                                                          && $Listener->Client->User->Ticket === $Event->Sender
                         )
                     );
-                    break;
+                    $Socket->Write((string)new Event(Event::Success, "Server"));
+                    Log::Info(__METHOD__, "{$Client->User->Name} unsubscribed from '{$Event->Data}'.");
+                    continue 2;
                 default:
-                    Log::Info(__METHOD__, "Dispatched: {$Event->Name}.");
+                    Log::Info(__METHOD__, "Dispatched Event: {$Event->Name}.");
                     //Replace ticket with name and dispatch to subscribers.
                     $Event->Sender = $Client->User->Name;
                     foreach(
                         $this->EventListeners->Filter(
-                            static fn(Event\Listener $Listener): bool => $Listener->Event === $Event->Name
+                        static fn(Event\Listener $Listener): bool => $Listener->Event === $Event->Name
                         )
                         as $Listener
                     ) {
@@ -153,14 +160,14 @@ class Server extends Machine {
                     }
             }
         }
-        \usleep(50000);
+        \usleep(5000);
     }
     
     /**
      * @inheritDoc
      */
     public function Stop(int $Code = 0): void {
-        $Event = new Event(Event::Shutdown, "Server", "Meddl off!");
+        $Event = new Event(Event::Shutdown, "Server", "Server shutting down.");
         foreach($this->Clients as $Socket) {
             $Socket->Write((string)$Event);
         }
