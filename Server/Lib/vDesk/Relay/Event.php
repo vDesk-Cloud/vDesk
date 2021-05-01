@@ -63,9 +63,10 @@ class Event {
      *
      * @param null|string $Name   Initializes the Event with the specified name.
      * @param null|string $Sender Initializes the Event with the specified sender.
-     * @param null|string $Data   Initializes the Event with the specified data.
+     * @param mixed       $Data   Initializes the Event with the specified data.
      */
-    public function __construct(public ?string $Name = null, public ?string $Sender = null, public ?string $Data = null) {}
+    public function __construct(public ?string $Name = null, public ?string $Sender = null, public $Data = null) {
+    }
     
     /**
      * Parses an Event from a specified Socket.
