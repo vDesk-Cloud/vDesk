@@ -5,10 +5,11 @@ namespace vDesk\Relay\Event;
 
 
 use vDesk\IO\Socket;
+use vDesk\Relay\Server\Client;
 
 class Listener {
 
-    public function __construct(public string $Event, public string $User, public Socket $Socket) {
+    public function __construct(public string $Event, public Client $Client) {
     
     }
     
