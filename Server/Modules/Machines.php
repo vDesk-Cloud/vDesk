@@ -45,7 +45,7 @@ final class Machines extends Module implements IModule {
                                                                           ->Where(
                                                                               [
                                                                                   "Parent"    => Settings::$Local["Machines"]["Directory"],
-                                                                                  "Name"      => \str_replace("\\vDesk\\Machines\\", "", $Class),
+                                                                                  "Name"      => \str_replace("vDesk\\Machines\\", "", $Class),
                                                                                   "Extension" => "php"
                                                                               ]
                                                                           )
