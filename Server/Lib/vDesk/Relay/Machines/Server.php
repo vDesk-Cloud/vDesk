@@ -69,13 +69,13 @@ class Server extends Machine {
         //Check if a new connection has been established.
         $Socket = $this->Socket->Accept(0, 50000);
         if($Socket !== null) {
-            $Event = Event::FromSocket($Socket);
-            if($Event->Name !== Event::Login) {
-                $Socket->Write((string)new Event(Event::Error, "Server", "Authentication required!"));
-                $Socket->Close();
-            }
             //Perform login.
             try {
+                $Event = Event::FromSocket($Socket);
+                if($Event->Name !== Event::Login) {
+                    $Socket->Write((string)new Event(Event::Error, "Server", "Authentication required!"));
+                    $Socket->Close();
+                }
                 $User = Modules::Security()::Login($Event->Sender, $Event->Data);
                 $this->Clients->Add(new Client($User, $Socket));
                 $Socket->Write((string)new Event(Event::Success, "Server", $User->Ticket));
@@ -85,6 +85,9 @@ class Server extends Machine {
                 \vDesk::$User = $this->User;
             } catch(UnauthorizedAccessException $Exception) {
                 $Socket->Write((string)new Event(Event::Error, "Server", $Exception->getMessage()));
+            } catch(IOException $Exception) {
+                $Socket->Write((string)new Event(Event::Error, "Server", "Malformed Event received!"));
+                Log::Error(__METHOD__, $Exception->getMessage());
             }
         }
         
@@ -120,7 +123,7 @@ class Server extends Machine {
                 $Events[] = Event::FromSocket($Socket);
             } catch(IOException $Exception) {
                 $Socket->Write((string)new Event(Event::Error, "Server", "Malformed Event received!"));
-                Log::Error(__METHOD__, $Exception->getMessage() . $Exception->getTraceAsString());
+                Log::Error(__METHOD__, $Exception->getMessage());
             }
         }
         
