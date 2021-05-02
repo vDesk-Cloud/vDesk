@@ -3,14 +3,15 @@ declare(strict_types=1);
 
 namespace vDesk\Machines;
 
+use vDesk\IO\IOException;
 use vDesk\IO\Socket;
 use vDesk\Modules;
 use vDesk\Relay\Event;
 use vDesk\Relay\Server\Client;
+use vDesk\Relay\Server\EventListener;
 use vDesk\Security\UnauthorizedAccessException;
 use vDesk\Security\User;
 use vDesk\Struct\Collections\Collection;
-use vDesk\Struct\Collections\Dictionary;
 use vDesk\Utils\Log;
 
 /**
@@ -57,7 +58,7 @@ class Server extends Machine {
         $this->Clients        = new Collection();
         $this->Socket         = new Socket("tcp://0.0.0.0:3420", Socket::Local);
         $this->User           = \vDesk::$User;
-        Log::Info(__METHOD__, "Relay server started.");
+        Log::Info("Relay Server", "Started.");
     }
     
     /**
@@ -78,7 +79,7 @@ class Server extends Machine {
                 $User = Modules::Security()::Login($Event->Sender, $Event->Data);
                 $this->Clients->Add(new Client($User, $Socket));
                 $Socket->Write((string)new Event(Event::Success, "Server", $User->Ticket));
-                Log::Info(__METHOD__, "Client: '{$User->Name}' connected.");
+                Log::Info("Relay Server", "Client: '{$User->Name}' connected.");
                 
                 //@todo Create Security-Update for this dirty hack...
                 \vDesk::$User = $this->User;
@@ -101,9 +102,23 @@ class Server extends Machine {
         
         $Events = [];
         foreach(Socket::Select($Sockets)[0] as $Socket) {
+            //Check if the connection has been closed.
+            if($Socket->EndOfStream()) {
+                $Client = $this->Clients->Find(static fn(Client $Client): bool => $Client->Socket === $Socket);
+                $this->Clients->Remove($Client);
+                
+                //Remove EventListeners of disconnected Client.
+                foreach($this->EventListeners->Filter(static fn(EventListener $Listener): bool => $Listener->Client === $Client) as $Listener) {
+                    $this->EventListeners->Remove($Listener);
+                }
+                
+                $Socket->Close();
+                Log::Warn("Relay Server", "{$Client?->User?->Name} timed out.");
+                continue;
+            }
             try {
                 $Events[] = Event::FromSocket($Socket);
-            } catch(\Throwable $Exception) {
+            } catch(IOException $Exception) {
                 $Socket->Write((string)new Event(Event::Error, "Server", "Malformed Event received!"));
                 Log::Error(__METHOD__, $Exception->getMessage() . $Exception->getTraceAsString());
             }
@@ -128,34 +143,40 @@ class Server extends Machine {
                     $Client->Socket->Close();
                     $this->Clients->Remove($Client);
                     
+                    //Remove EventListeners of disconnected Client.
+                    foreach($this->EventListeners->Filter(static fn(EventListener $Listener): bool => $Listener->Client === $Client) as $Listener) {
+                        $this->EventListeners->Remove($Listener);
+                    }
+                    
                     \vDesk::$User = $this->User;
-                    Log::Info(__METHOD__, "Client: '{$Client->User->Name}' disconnected.");
+                    Log::Info("Relay Server", "Client: '{$Client->User->Name}' disconnected.");
                     continue 2;
                 case Event::AddEventListener:
-                    $this->EventListeners->Add(new Event\Listener($Event->Data, $Client));
+                    $this->EventListeners->Add(new EventListener($Event->Data, $Client));
                     $Socket->Write((string)new Event(Event::Success, "Server"));
-                    Log::Info(__METHOD__, "{$Client->User->Name} subscribed to '{$Event->Data}'.");
+                    Log::Info("Relay Server", "{$Client->User->Name} subscribed to '{$Event->Data}'.");
                     continue 2;
                 case Event::RemoveEventListener:
                     $this->EventListeners->Remove(
                         $this->EventListeners->Find(
-                            static fn(Event\Listener $Listener): bool => $Listener->Event === $Event->Data
-                                                                         && $Listener->Client->User->Ticket === $Event->Sender
+                            static fn(EventListener $Listener): bool => $Listener->Event === $Event->Data
+                                                                        && $Listener->Client->User->Ticket === $Event->Sender
                         )
                     );
                     $Socket->Write((string)new Event(Event::Success, "Server"));
-                    Log::Info(__METHOD__, "{$Client->User->Name} unsubscribed from '{$Event->Data}'.");
+                    Log::Info("Relay Server", "{$Client->User->Name} unsubscribed from '{$Event->Data}'.");
                     continue 2;
                 default:
-                    Log::Info(__METHOD__, "Dispatched Event: {$Event->Name}.");
+                    Log::Info("Relay Server", "Dispatched Event: {$Event->Name}.");
                     //Replace ticket with name and dispatch to subscribers.
                     $Event->Sender = $Client->User->Name;
                     foreach(
                         $this->EventListeners->Filter(
-                        static fn(Event\Listener $Listener): bool => $Listener->Event === $Event->Name
+                            static fn(EventListener $Listener): bool => $Listener->Event === $Event->Name
                         )
                         as $Listener
                     ) {
+                        Log::Info("Relay Server", "Dispatched Event to Client: {$Listener->Client->User->Name}.");
                         $Listener->Client->Socket->Write((string)$Event);
                     }
             }
@@ -167,12 +188,16 @@ class Server extends Machine {
      * @inheritDoc
      */
     public function Stop(int $Code = 0): void {
-        $Event = new Event(Event::Shutdown, "Server", "Server shutting down.");
-        foreach($this->Clients as $Socket) {
-            $Socket->Write((string)$Event);
+        $Event = (string)new Event(Event::Shutdown, "Server", "Shutting down.");
+        foreach($this->Clients as $Client) {
+            if(!$Client->Socket->EndOfStream()) {
+                $Client->Socket->Write($Event);
+                
+            }
+            $Client->Socket->Close();
         }
         $this->Socket->Close();
-        Log::Info(__METHOD__, "Relay server shutting down.");
+        Log::Info("Relay Server", "Shutting down.");
         parent::Stop($Code);
     }
 }
