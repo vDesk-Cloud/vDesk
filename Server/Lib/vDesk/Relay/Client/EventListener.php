@@ -26,7 +26,7 @@ class EventListener {
      *
      * @param string                  $Event    Initializes the EventListener with the specified Event.
      * @param \vDesk\Relay\API\Client $Client   Initializes the EventListener with the specified Client.
-     * @param callable                $Callback The callback to execute when an Event with the specified name has been occurred.
+     * @param callable                $Callback Initializes the EventListener with the specified callback to execute if the specified Event has been dispatched.
      */
     public function __construct(public string $Event, public Client $Client, callable $Callback) {
         $this->Callback = $Callback;

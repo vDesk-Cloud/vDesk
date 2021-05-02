@@ -15,7 +15,7 @@ use vDesk\Utils\Log;
 /**
  * Process based Relay client.
  *
- * @package vDesk\Machines
+ * @package vDesk\Relay
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Client extends Machine {

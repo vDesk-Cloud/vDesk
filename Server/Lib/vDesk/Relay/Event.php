@@ -121,8 +121,8 @@ class Event {
     /**
      * Creates a transmittable string representation of the Event.
      *
-     * @return string
-     * @throws \JsonException
+     * @return string A transmittable string representation of the Event.
+     * @throws \JsonException Thrown if the data of the Event is malformed.
      */
     public function __toString() {
         return $this->Name . self::Delimiter
