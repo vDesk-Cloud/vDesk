@@ -133,7 +133,7 @@ final class Machines extends Module implements IModule {
             Guid::Create()
         );
         $Machine->Save();
-    
+        
         //Run Machine.
         switch(OS::Current) {
             case OS::NT:
@@ -186,36 +186,40 @@ final class Machines extends Module implements IModule {
             Machine::Running
         );
         $Machine->Save();
-        $Machine->Start();
         
-        $Pointer = \shmop_open($Machine->ID, "c", 0644, 1);
-        \shmop_write($Pointer, Machine::Running, 0);
-        
-        while(true) {
-            switch(\shmop_read($Pointer, 0, 1)) {
-                case Machine::Running:
-                    //Run Machine.
-                    $Machine->Run();
-                    break;
-                case Machine::Suspended:
-                    //Suspend Machine.
-                    $Machine->Status = Machine::Suspended;
-                    $Machine->Suspend();
-                    $Machine->Save();
-                    
-                    //Idle until the status of the Machine has been changed.
-                    while(\shmop_read($Pointer, 0, 1) === Machine::Suspended) {
-                        \usleep(100000);
-                    }
-                    
-                    //Resume Machine.
-                    $Machine->Status = Machine::Running;
-                    $Machine->Resume();
-                    $Machine->Save();
-                    break;
-                case Machine::Stopped:
-                    $Machine->Stop();
+        try {
+            $Machine->Start();
+            $Pointer = \shmop_open($Machine->ID, "c", 0644, 1);
+            \shmop_write($Pointer, Machine::Running, 0);
+            while(true) {
+                switch(\shmop_read($Pointer, 0, 1)) {
+                    case Machine::Running:
+                        //Run Machine.
+                        $Machine->Run();
+                        break;
+                    case Machine::Suspended:
+                        //Suspend Machine.
+                        $Machine->Status = Machine::Suspended;
+                        $Machine->Suspend();
+                        $Machine->Save();
+                        
+                        //Idle until the status of the Machine has been changed.
+                        while(\shmop_read($Pointer, 0, 1) === Machine::Suspended) {
+                            \usleep(100000);
+                        }
+                        
+                        //Resume Machine.
+                        $Machine->Status = Machine::Running;
+                        $Machine->Resume();
+                        $Machine->Save();
+                        break;
+                    case Machine::Stopped:
+                        $Machine->Stop();
+                }
             }
+        } catch(\Throwable $Exception) {
+            $Machine->Delete();
+            Log::Error(__METHOD__, "Machine \"{$Machine->ID}\" died because of: {$Exception->getMessage()} {$Exception->getTraceAsString()}.");
         }
     }
     
