@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace vDesk\Machines;
 
+use vDesk\Configuration\Settings;
 use vDesk\IO\IOException;
 use vDesk\IO\Socket;
 use vDesk\Modules;
@@ -56,7 +57,7 @@ class Server extends Machine {
     public function Start(): void {
         $this->EventListeners = new Collection();
         $this->Clients        = new Collection();
-        $this->Socket         = new Socket("tcp://0.0.0.0:3420", Socket::Local);
+        $this->Socket         = new Socket("tcp://0.0.0.0:" . Settings::$Local["Relay"]["Port"], Socket::Local);
         $this->User           = \vDesk::$User;
         Log::Info("Relay Server", "Started.");
     }

@@ -36,10 +36,14 @@ class Client extends Machine {
      * @inheritDoc
      */
     public function Start(): void {
-        
         //Connect to server.
         try {
-            $this->Client = new \vDesk\Relay\API\Client(Settings::$Local["Relay"]["Server"], "RyDesk", "euro");
+            $this->Client = new \vDesk\Relay\API\Client(
+                Settings::$Local["Relay"]["Server"],
+                Settings::$Local["Relay"]["Port"],
+                Settings::$Local["Relay"]["Client"],
+                Settings::$Local["Relay"]["Password"]
+            );
         } catch(IOException $Exception) {
             Log::Error(__METHOD__, $Exception->getMessage());
             $this->Stop($Exception->getCode());
