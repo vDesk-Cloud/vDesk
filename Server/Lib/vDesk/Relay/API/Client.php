@@ -34,16 +34,16 @@ class Client {
      * Initializes a new instance of the Client class.
      *
      * @param string $Server   Initializes the Client with the specified Relay server address.
+     * @param int    $Port     Initializes the Client with the specified port to use.
      * @param string $User     Initializes the Client with the specified User name.
      * @param string $Password Initializes the Client with the specified password.
      * @param int    $Timeout  Initializes the Client with the specified timeout.
      *
-     * @throws \vDesk\IO\IOException Thrown if the login failed.
      * @throws \vDesk\IO\IOException Thrown if the connection timed out.
      */
-    public function __construct(public string $Server, string $User, string $Password, int $Timeout = 3) {
+    public function __construct(public string $Server, int $Port, string $User, string $Password, int $Timeout = 3) {
         //Establish connection to Server.
-        $this->Socket = new Socket("tcp://{$Server}:3420", Socket::Remote);
+        $this->Socket = new Socket("tcp://{$Server}:{$Port}", Socket::Remote);
         $this->Socket->Write((string)new Event(Event::Login, $User, $Password));
         
         //Wait for response Event.
