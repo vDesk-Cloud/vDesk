@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace vDesk\Packages;
 
+use vDesk\Configuration\Settings;
 use vDesk\Machines\IPackage;
 
 /**
@@ -36,7 +37,7 @@ final class Relay extends Package implements IPackage {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Machines" => "1.0.0", "vDesk" => "1.0.1"];
+    public const Dependencies = ["Machines" => "1.0.1", "vDesk" => "1.0.1"];
     
     /**
      * The files and directories of the Package.
@@ -53,13 +54,25 @@ final class Relay extends Package implements IPackage {
      * The Machines of the Package.
      */
     public const Machines = [
-        "Server" => "/vDesk/Relay/Server.php"
+        "/vDesk/Relay/Server.php",
+        "/vDesk/Relay/Client.php"
     ];
     
     /**
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
+        //Create Package configuration.
+        Settings::$Local["Relay"] = new Settings\Local\Settings(
+            [
+                "Port"     => 3420,
+                "Server"   => "",
+                "Client"   => "",
+                "Password" => ""
+            ],
+            "Relay"
+        );
+        
         //Extract files.
         self::Deploy($Phar, $Path);
     }
