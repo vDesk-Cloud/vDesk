@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace vDesk\Relay;
 
+use vDesk\IO\IOException;
 use vDesk\IO\Socket;
+use vDesk\Struct\Text;
 
 /**
  * Class that represents a distributed Event.
@@ -16,7 +18,7 @@ class Event {
     /**
      * The namespace of predefined Events.
      */
-    private const Namespace = "vDesk.Relay.";
+    public const Namespace = "vDesk.Relay.";
     
     /**
      * Predefined Event to login on a Relay server.
@@ -71,17 +73,44 @@ class Event {
     /**
      * Parses an Event from a specified Socket.
      *
-     * @param \vDesk\IO\Socket $Socket
+     * @param \vDesk\IO\Socket $Socket The Socket to parse the Event from.
      *
-     * @return \vDesk\Relay\Event
-     * @throws \JsonException
+     * @return \vDesk\Relay\Event An Event parsed from the specified Socket.
+     *
+     * @throws \vDesk\IO\IOException Thrown if the sender of the Event is missing.
+     * @throws \vDesk\IO\IOException Thrown if the data of the Event is missing.
+     * @throws \JsonException Thrown if the data of the Event is malformed.
      */
     public static function FromSocket(Socket $Socket): self {
-        $Name   = $Socket->ReadLine();
+        
+        //Parse name.
+        $Name = $Socket->ReadLine();
+        if(Text::IsNullOrWhitespace($Name)) {
+            throw new IOException("Missing name for Event!");
+        }
+        
+        //Parse sender.
+        if($Socket->EndOfStream()) {
+            throw new IOException("Missing sender for Event: \"{$Name}\"!");
+        }
         $Sender = $Socket->ReadLine();
-        $Data   = $Socket->ReadLine();
+        if(Text::IsNullOrWhitespace($Sender)) {
+            throw new IOException("Missing sender for Event: \"{$Name}\"!");
+        }
+        
+        //Parse data.
+        if($Socket->EndOfStream()) {
+            throw new IOException("Missing data for Event: \"{$Name}\" from Client: \"{$Name}\"!");
+        }
+        $Data = $Socket->ReadLine();
+        if(Text::IsNullOrWhitespace($Data)) {
+            throw new IOException("Missing data for Event: \"{$Name}\" from Client: \"{$Name}\"!");
+        }
+        
         //Discard last delimiter.
-        $Socket->ReadLine();
+        if(!$Socket->EndOfStream()) {
+            $Socket->ReadLine();
+        }
         return new static(
             \rtrim($Name, self::Delimiter),
             \rtrim($Sender, self::Delimiter),
