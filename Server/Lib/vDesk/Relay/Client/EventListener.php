@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace vDesk\Relay\Client;
 
-use vDesk\Relay\Client;
+use vDesk\Relay\API\Client;
 use vDesk\Relay\Event;
 
 /**
@@ -24,9 +24,9 @@ class EventListener {
     /**
      * Creates a new instance of the EventListener class.
      *
-     * @param string              $Event    Initializes the EventListener with the specified Event.
-     * @param \vDesk\Relay\Client $Client   Initializes the EventListener with the specified Client.
-     * @param callable            $Callback The callback to execute when an Event with the specified name has been occurred.
+     * @param string                  $Event    Initializes the EventListener with the specified Event.
+     * @param \vDesk\Relay\API\Client $Client   Initializes the EventListener with the specified Client.
+     * @param callable                $Callback The callback to execute when an Event with the specified name has been occurred.
      */
     public function __construct(public string $Event, public Client $Client, callable $Callback) {
         $this->Callback = $Callback;

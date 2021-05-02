@@ -1,12 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace vDesk\Relay;
+namespace vDesk\Relay\API;
 
 use vDesk\IO\IOException;
 use vDesk\IO\Socket;
+use vDesk\Relay\Event;
 use vDesk\Security\User;
 
+/**
+ * Class that represents a clientside interface to a Relay server.
+ *
+ * @package vDesk\Relay
+ * @author  Kerry <DevelopmentHero@gmail.com>
+ */
 class Client {
     
     /**
@@ -62,6 +69,9 @@ class Client {
     public function Dispatch(Event $Event, int $Timeout = 3): ?Event {
         $this->Socket->Write((string)$Event);
         foreach(Socket::Select([$this->Socket], [], [], $Timeout)[0] as $Socket) {
+            if($Socket->EndOfStream()) {
+                return null;
+            }
             return Event::FromSocket($Socket);
         }
         return null;
@@ -76,9 +86,19 @@ class Client {
      */
     public function Listen(int $Timeout = 3): ?Event {
         foreach(Socket::Select([$this->Socket], [], [], $Timeout)[0] as $Socket) {
+            if($Socket->EndOfStream()) {
+                return null;
+            }
             return Event::FromSocket($Socket);
         }
         return null;
+    }
+    
+    /**
+     * Disconnects the client from the server.
+     */
+    public function Disconnect(): void {
+        $this->Dispatch(new Event(Event::Logout, $this->User->Ticket));
     }
     
 }
