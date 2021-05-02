@@ -79,7 +79,7 @@ class Server extends Machine {
                 $User = Modules::Security()::Login($Event->Sender, $Event->Data);
                 $this->Clients->Add(new Client($User, $Socket));
                 $Socket->Write((string)new Event(Event::Success, "Server", $User->Ticket));
-                Log::Info("Relay Server", "Client: '{$User->Name}' connected.");
+                Log::Info("Relay Server", "Client \"{$User->Name}\" connected.");
                 
                 //@todo Create Security-Update for this dirty hack...
                 \vDesk::$User = $this->User;
@@ -116,7 +116,7 @@ class Server extends Machine {
                 }
                 
                 $Socket->Close();
-                Log::Warn("Relay Server", "{$Client?->User?->Name} timed out.");
+                Log::Warn("Relay Server", "Client \"{$Client->User->Name}\" timed out.");
                 continue;
             }
             try {
@@ -152,12 +152,12 @@ class Server extends Machine {
                     }
                     
                     \vDesk::$User = $this->User;
-                    Log::Info("Relay Server", "Client: '{$Client->User->Name}' disconnected.");
+                    Log::Info("Relay Server", "Client \"{$Client->User->Name}\" disconnected.");
                     continue 2;
                 case Event::AddEventListener:
                     $this->EventListeners->Add(new EventListener($Event->Data, $Client));
                     $Socket->Write((string)new Event(Event::Success, "Server"));
-                    Log::Info("Relay Server", "{$Client->User->Name} subscribed to '{$Event->Data}'.");
+                    Log::Info("Relay Server", "Client \"{$Client->User->Name}\" subscribed to event \"{$Event->Data}\".");
                     continue 2;
                 case Event::RemoveEventListener:
                     $this->EventListeners->Remove(
@@ -167,10 +167,10 @@ class Server extends Machine {
                         )
                     );
                     $Socket->Write((string)new Event(Event::Success, "Server"));
-                    Log::Info("Relay Server", "{$Client->User->Name} unsubscribed from '{$Event->Data}'.");
+                    Log::Info("Relay Server", "Client \"{$Client->User->Name}\" unsubscribed from event \"{$Event->Data}\".");
                     continue 2;
                 default:
-                    Log::Info("Relay Server", "Dispatched Event: {$Event->Name}.");
+                    Log::Info("Relay Server", "Dispatched event \"{$Event->Name}\" to client \"{$Client->User->Name}\".");
                     //Replace ticket with name and dispatch to subscribers.
                     $Event->Sender = $Client->User->Name;
                     foreach(
@@ -179,7 +179,6 @@ class Server extends Machine {
                         )
                         as $Listener
                     ) {
-                        Log::Info("Relay Server", "Dispatched Event to Client: {$Listener->Client->User->Name}.");
                         $Listener->Client->Socket->Write((string)$Event);
                     }
             }
