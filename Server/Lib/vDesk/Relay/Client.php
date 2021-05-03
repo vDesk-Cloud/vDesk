@@ -83,7 +83,7 @@ class Client extends Machine {
         //Check if an Event has been dispatched.
         $Event = $this->Client->Listen(1);
         if($Event === null) {
-            usleep(5000);
+            \usleep(50000);
             return;
         }
         
