@@ -65,9 +65,9 @@ abstract class Task {
     /**
      * Initializes a new instance of the Task class.
      *
-     * @param \vDesk\Machines\Tasks $Tasks Initializes the Task with the specified Task scheduler.
+     * @param null|\vDesk\Machines\Tasks $Tasks Initializes the Task with the specified Task scheduler.
      */
-    public function __construct(protected Tasks $Tasks) {
+    public function __construct(protected ?Tasks $Tasks = null) {
         $this->Generator = $this->Run();
     }
     
