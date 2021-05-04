@@ -55,7 +55,7 @@ class Tasks extends Machine {
             if(!\class_exists($Class)) {
                 continue;
             }
-            $Task = new $Class(\time(), $this);
+            $Task = new $Class($this);
             if(!$Task instanceof Task) {
                 continue;
             }
@@ -73,7 +73,7 @@ class Tasks extends Machine {
      * @inheritDoc
      */
     public function Run(): void {
-        $TimeStamp = \time();
+        $TimeStamp = \microtime();
         
         //Get pending Tasks.
         /** @var \vDesk\Tasks\Task $Task */

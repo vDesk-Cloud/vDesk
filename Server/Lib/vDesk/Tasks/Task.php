@@ -56,20 +56,18 @@ abstract class Task {
     /**
      * The calculated timestamp of the next schedule of the Task.
      *
-     * @var int
+     * @var float
      */
-    public int $Next;
+    public float $Next;
     
     private \Generator $Generator;
     
     /**
      * Initializes a new instance of the Task class.
      *
-     * @param int                   $Previous Initializes the Task with the specified specified start timestamp.
-     * @param \vDesk\Machines\Tasks $Tasks    Initializes the Task with the specified Task dispatcher.
+     * @param \vDesk\Machines\Tasks $Tasks Initializes the Task with the specified Task dispatcher.
      */
-    public function __construct(public int $Previous, protected Tasks $Tasks) {
-        $this->Next();
+    public function __construct(protected Tasks $Tasks) {
         $this->Generator = $this->Run();
     }
     
@@ -77,6 +75,7 @@ abstract class Task {
      * Starts the Task.
      */
     public function Start(): void {
+        $this->Next = static::Next(\microtime());
     }
     
     /**
@@ -118,20 +117,30 @@ abstract class Task {
         }
         
         //Calculate next estimated schedule.
-        $this->Previous = $this->Next;
-        $this->Next     = $this->Previous
-                          + static::MicroSeconds
-                          + (static::Seconds * 1000000)
-                          + (static::Minutes * 60 * 1000000)
-                          + (static::Hours * 3600 * 1000000)
-                          + (static::Days * 86400 * 1000000)
-                          + (static::Weeks * 604800 * 1000000)
-                          + (static::Months * 2629746 * 1000000)
-                          + (static::Years * 31556952 * 1000000);
+        $this->Next = static::Next($this->Next);
         
         //Run Task.
         $this->Generator = $this->Run();
         return false;
+    }
+    
+    /**
+     * Calculates the next estimated schedule timestamp in microseconds according a specified timestamp.
+     *
+     * @param float $Timestamp The timestamp in microseconds to calculate the next schedule from.
+     *
+     * @return float A float representing the next estimated schedule timestamp of the Task.
+     */
+    public static function Next(float $Timestamp): float {
+        return $Timestamp
+               + static::MicroSeconds
+               + (static::Seconds * 1000000)
+               + (static::Minutes * 60 * 1000000)
+               + (static::Hours * 3600 * 1000000)
+               + (static::Days * 86400 * 1000000)
+               + (static::Weeks * 604800 * 1000000)
+               + (static::Months * 2629746 * 1000000)
+               + (static::Years * 31556952 * 1000000);
     }
     
 }
