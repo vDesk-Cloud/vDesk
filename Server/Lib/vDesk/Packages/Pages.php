@@ -12,9 +12,9 @@ use vDesk\Modules\UnknownModuleException;
 use vDesk\Pages\IPackage;
 
 /**
- * Class vDesk represents ...
+ * Pages Package manifest.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Pages
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Pages extends Package implements IPackage {
@@ -27,7 +27,7 @@ final class Pages extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
+    public const Version = "1.1.1";
     
     /**
      * The name of the Package.
