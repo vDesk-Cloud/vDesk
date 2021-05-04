@@ -24,14 +24,14 @@ class Tasks extends Machine {
      *
      * @var \vDesk\Struct\Collections\Collection
      */
-    public Collection $Tasks;
+    protected Collection $Tasks;
     
     /**
      * The current running Tasks of the Machine.
      *
      * @var \vDesk\Struct\Collections\Queue
      */
-    public Queue $Running;
+    protected Queue $Running;
     
     /**
      * @inheritDoc
@@ -55,11 +55,11 @@ class Tasks extends Machine {
             if(!\class_exists($Class)) {
                 continue;
             }
-            $Task = new $Class($this);
+            $Task = new $Class();
             if(!$Task instanceof Task) {
                 continue;
             }
-            $Task->Start();
+            $Task->Start($this);
             $this->Tasks->Add($Task);
             $this->Running->Enqueue($Task);
         }
@@ -101,6 +101,26 @@ class Tasks extends Machine {
                 )
             )
         );
+    }
+    
+    /**
+     * Adds a new Task to the queue of the scheduler.
+     *
+     * @param \vDesk\Tasks\Task $Task The Task to add for schedule.
+     */
+    public function Add(Task $Task): void {
+        $Task->Start($this);
+        $this->Tasks->Add($Task);
+    }
+    
+    /**
+     * Adds a new Task to the queue of the scheduler.
+     *
+     * @param \vDesk\Tasks\Task $Task The Task to add for schedule.
+     */
+    public function Remove(Task $Task): void {
+        $Task->Stop(1);
+        $this->Tasks->Remove($Task);
     }
     
     /**

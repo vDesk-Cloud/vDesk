@@ -64,19 +64,18 @@ abstract class Task {
     
     /**
      * Initializes a new instance of the Task class.
-     *
-     * @param \vDesk\Machines\Tasks $Tasks Initializes the Task with the specified Task dispatcher.
      */
-    public function __construct(protected Tasks $Tasks) {
+    public function __construct() {
         $this->Generator = $this->Run();
     }
     
     /**
-     * Starts the Task.
+     * Starts the Task in a specified dispatcher.
+     *
+     * @param \vDesk\Machines\Tasks $Tasks Starts the Task with the specified Task dispatcher.
      */
-    public function Start(): void {
+    public function Start(Tasks $Tasks): void {
         $this->Next = static::Next(\microtime());
-        $this->Tasks->Tasks->Add($this);
     }
     
     /**
