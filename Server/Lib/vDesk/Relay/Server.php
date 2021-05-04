@@ -171,7 +171,7 @@ class Server extends Machine {
                     Log::Info("Relay Server", "Client \"{$Client->User->Name}\" unsubscribed from event \"{$Event->Data}\".");
                     continue 2;
                 default:
-                    Log::Info("Relay Server", "Dispatched event \"{$Event->Name}\" to client \"{$Client->User->Name}\".");
+                    Log::Info("Relay Server", "Received event \"{$Event->Name}\" from client \"{$Client->User->Name}\".");
                     //Replace ticket with name and dispatch to subscribers.
                     $Event->Sender = $Client->User->Name;
                     foreach(
@@ -181,6 +181,7 @@ class Server extends Machine {
                         as $Listener
                     ) {
                         $Listener->Client->Socket->Write((string)$Event);
+                        Log::Info("Relay Server", "Dispatched event \"{$Event->Name}\" to client \"{$Listener->Client->User->Name}\".");
                     }
             }
         }
