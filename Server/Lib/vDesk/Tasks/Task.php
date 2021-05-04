@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace vDesk\Tasks;
 
+use vDesk\Machines\Tasks;
+
 /**
  * Abstract baseclass for Tasks.
  *
@@ -10,6 +12,11 @@ namespace vDesk\Tasks;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Task {
+    
+    /**
+     * Per micro second interval.
+     */
+    public const MicroSeconds = 0;
     
     /**
      * Per second interval.
@@ -56,13 +63,20 @@ abstract class Task {
     private \Generator $Generator;
     
     /**
-     * Start/Run/Stop?
+     * Initializes a new instance of the Task class.
      *
-     * @param int $Previous
+     * @param int                   $Previous Initializes the Task with the specified specified start timestamp.
+     * @param \vDesk\Machines\Tasks $Tasks    Initializes the Task with the specified Task dispatcher.
      */
-    public function __construct(public int $Previous) {
+    public function __construct(public int $Previous, protected Tasks $Tasks) {
         $this->Next();
         $this->Generator = $this->Run();
+    }
+    
+    /**
+     * Starts the Task.
+     */
+    public function Start(): void {
     }
     
     /**
@@ -70,33 +84,54 @@ abstract class Task {
      */
     abstract public function Run(): \Generator;
     
+    
+    /**
+     * Suspends the Task.
+     */
+    public function Suspend(): void {
+    }
+    
+    /**
+     * Resumes the Task.
+     */
+    public function Resume(): void {
+    }
+    
+    /**
+     * Stops the Task.
+     *
+     * @param int $Code The stop code of the Task dispatcher.
+     */
+    public function Stop(int $Code): void {
+    }
+    
     /**
      * Schedules the Tasks.
      *
      * @return bool A Generator that yields a value indicating whether the Task is running.
      */
     final public function Schedule(): bool {
+        //Keep executing the Task if it's running.
         $this->Generator->next();
         if($this->Generator->valid()) {
             return true;
         }
+        
+        //Calculate next estimated schedule.
         $this->Previous = $this->Next;
-        $this->Next();
+        $this->Next     = $this->Previous
+                          + static::MicroSeconds
+                          + (static::Seconds * 1000000)
+                          + (static::Minutes * 60 * 1000000)
+                          + (static::Hours * 3600 * 1000000)
+                          + (static::Days * 86400 * 1000000)
+                          + (static::Weeks * 604800 * 1000000)
+                          + (static::Months * 2629746 * 1000000)
+                          + (static::Years * 31556952 * 1000000);
+        
+        //Run Task.
         $this->Generator = $this->Run();
         return false;
-    }
-    
-    /**
-     */
-    private function Next(): void {
-        $this->Next = $this->Previous
-            + static::Seconds
-            + (static::Minutes * 60)
-            + (static::Hours * 3600)
-            + (static::Days * 86400)
-            + (static::Weeks * 604800)
-            + (static::Months * 2629746)
-            + (static::Years * 31556952);
     }
     
 }
