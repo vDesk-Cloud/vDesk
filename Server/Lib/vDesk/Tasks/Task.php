@@ -76,6 +76,7 @@ abstract class Task {
      */
     public function Start(): void {
         $this->Next = static::Next(\microtime());
+        $this->Tasks->Tasks->Add($this);
     }
     
     /**
@@ -102,6 +103,7 @@ abstract class Task {
      * @param int $Code The stop code of the Task dispatcher.
      */
     public function Stop(int $Code): void {
+        $this->Tasks->Tasks->Remove($this);
     }
     
     /**
