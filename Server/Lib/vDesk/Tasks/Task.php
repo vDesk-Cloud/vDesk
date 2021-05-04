@@ -60,16 +60,19 @@ abstract class Task {
      */
     public float $Next;
     
-    private \Generator $Generator;
+    /**
+     * The Task scheduler the Task is currently a member of.
+     *
+     * @var null|\vDesk\Machines\Tasks
+     */
+    protected ?Tasks $Tasks = null;
     
     /**
-     * Initializes a new instance of the Task class.
+     * The Generator yielding the steps of the Task.
      *
-     * @param null|\vDesk\Machines\Tasks $Tasks Initializes the Task with the specified Task scheduler.
+     * @var \Generator
      */
-    public function __construct(protected ?Tasks $Tasks = null) {
-        $this->Generator = $this->Run();
-    }
+    private \Generator $Generator;
     
     /**
      * Starts the Task in a specified dispatcher.
@@ -77,6 +80,7 @@ abstract class Task {
      * @param \vDesk\Machines\Tasks $Tasks Starts the Task with the specified Task scheduler.
      */
     public function Start(Tasks $Tasks): void {
+        $this->Generator = $this->Run();
         $this->Tasks = $Tasks;
         $this->Next  = static::Next(\microtime());
     }
