@@ -94,7 +94,6 @@ class Server extends Machine {
         
         //Idle if no clients are connected.
         if($this->Clients->Count === 0) {
-            \usleep(50000);
             return;
         }
         
@@ -105,26 +104,26 @@ class Server extends Machine {
         }
         
         $Events = [];
-        foreach(Socket::Select($Sockets)[0] as $Socket) {
-            //Check if the connection has been closed.
-            if($Socket->EndOfStream()) {
-                $Client = $this->Clients->Find(static fn(Client $Client): bool => $Client->Socket === $Socket);
-                $this->Clients->Remove($Client);
-                
-                //Remove EventListeners of disconnected Client.
-                foreach($this->EventListeners->Filter(static fn(EventListener $Listener): bool => $Listener->Client === $Client) as $Listener) {
-                    $this->EventListeners->Remove($Listener);
-                }
-                
-                $Socket->Close();
-                Log::Warn("Relay Server", "Client \"{$Client->User->Name}\" timed out.");
-                continue;
-            }
+        foreach(Socket::Select($Sockets, [], [], 0, 50000)[0] as $Socket) {
             try {
                 $Events[] = Event::FromSocket($Socket);
             } catch(IOException $Exception) {
                 $Socket->Write((string)new Event(Event::Error, "Server", "Malformed Event received!"));
                 Log::Error(__METHOD__, $Exception->getMessage());
+            } catch(\Throwable $Exception) {
+                //Check if the connection has been closed.
+                if($Socket->EndOfStream()) {
+                    $Client = $this->Clients->Find(static fn(Client $Client): bool => $Client->Socket === $Socket);
+                    $this->Clients->Remove($Client);
+                    
+                    //Remove EventListeners of disconnected Client.
+                    foreach($this->EventListeners->Filter(static fn(EventListener $Listener): bool => $Listener->Client === $Client) as $Listener) {
+                        $this->EventListeners->Remove($Listener);
+                    }
+                    
+                    $Socket->Close();
+                    Log::Warn("Relay Server", "Client \"{$Client->User->Name}\" timed out.");
+                }
             }
         }
         
@@ -185,7 +184,6 @@ class Server extends Machine {
                     }
             }
         }
-        \usleep(5000);
     }
     
     /**
