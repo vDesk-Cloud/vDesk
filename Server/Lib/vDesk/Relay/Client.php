@@ -94,7 +94,7 @@ class Client extends Machine {
         }
         
         //Dispatch received Event to EventListeners.
-        Log::Info("Relay Client", "Received \"{$Event->Name}\" event.");
+        Log::Info("Relay Client", "Received \"{$Event->Name}\" event from client \"{$Event->Sender}\".");
         foreach($this->EventListeners->Filter(static fn(EventListener $Listener): bool => $Listener->Event === $Event->Name) as $Listener) {
             $Listener->Handle($Event, $this->Client);
         }
