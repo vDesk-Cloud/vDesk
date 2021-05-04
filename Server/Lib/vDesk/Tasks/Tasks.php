@@ -24,14 +24,14 @@ class Tasks extends Machine {
      *
      * @var \vDesk\Struct\Collections\Collection
      */
-    private Collection $Tasks;
+    public Collection $Tasks;
     
     /**
      * The current running Tasks of the Machine.
      *
      * @var \vDesk\Struct\Collections\Queue
      */
-    private Queue $Running;
+    public Queue $Running;
     
     /**
      * @inheritDoc
@@ -55,10 +55,11 @@ class Tasks extends Machine {
             if(!\class_exists($Class)) {
                 continue;
             }
-            $Task = new $Class(\time());
+            $Task = new $Class(\time(), $this);
             if(!$Task instanceof Task) {
                 continue;
             }
+            $Task->Start();
             $this->Tasks->Add($Task);
             $this->Running->Enqueue($Task);
         }
@@ -75,6 +76,7 @@ class Tasks extends Machine {
         $TimeStamp = \time();
         
         //Get pending Tasks.
+        /** @var \vDesk\Tasks\Task $Task */
         foreach($this->Tasks->Filter(fn(Task $Task): bool => $Task->Next <= $TimeStamp) as $Task) {
             $this->Running->Enqueue($Task);
         }
@@ -87,14 +89,45 @@ class Tasks extends Machine {
         }
         
         //Sleep until next schedule.
-        \sleep(
-            \max(
-                $this->Tasks->Reduce(
-                    static fn(int $Previous, Task $Current): int => \min($Current->Next, $Previous),
-                    $this->Tasks[0]->Next
-                ) - $TimeStamp,
-                1
+        \usleep(
+            \min(
+                0.01,
+                \max(
+                    $this->Tasks->Reduce(
+                        static fn(int $Previous, Task $Current): int => \min($Current->Next, $Previous),
+                        $this->Tasks[0]->Next
+                    ) - $TimeStamp,
+                    1
+                )
             )
         );
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function Suspend(): void {
+        foreach($this->Tasks as $Task) {
+            $Task->Suspend();
+        }
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function Resume(): void {
+        foreach($this->Tasks as $Task) {
+            $Task->Resume();
+        }
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function Stop(int $Code = 0): void {
+        foreach($this->Tasks as $Task) {
+            $Task->Stop();
+        }
+        parent::Stop($Code);
     }
 }
