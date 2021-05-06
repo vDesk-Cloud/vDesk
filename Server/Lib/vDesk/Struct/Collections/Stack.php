@@ -125,7 +125,7 @@ class Stack implements \IteratorAggregate, IEnumerable {
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Find()
      */
-    public function Find(callable $Predicate) {
+    public function Find(callable $Predicate): mixed {
         foreach($this->Elements as $Index => $Value) {
             if($Predicate($Value, $Index, $this)) {
                 return $Value;
@@ -171,7 +171,7 @@ class Stack implements \IteratorAggregate, IEnumerable {
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Reduce()
      */
-    public function Reduce(callable $Predicate, $InitialValue = null) {
+    public function Reduce(callable $Predicate, $InitialValue = null): mixed {
         $Accumulator = $InitialValue ?? \reset($this->Elements);
         foreach($this->Elements as $Index => $Value) {
             $Accumulator = $Predicate($Accumulator, $Value, $Index, $this);

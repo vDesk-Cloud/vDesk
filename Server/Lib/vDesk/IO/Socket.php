@@ -60,27 +60,71 @@ class Socket extends FileStream {
     }
     
     /**
-     * Blah
+     * Selects the updated Sockets for non blocking IO operations from a specified set of collections.
      *
-     * @param $Read
-     * @param $Write
-     * @param $Error
+     * @param \vDesk\IO\Socket[] $Read         The Sockets to select for non blocking read operations.
+     * @param \vDesk\IO\Socket[] $Write        The Sockets to select for non blocking write operations.
+     * @param \vDesk\IO\Socket[] $OutOfBand    The Sockets to select for non blocking "out-of-band"-transmission.
+     * @param int                $Seconds      The amount of seconds to wait for changes on the specified Sockets.
+     * @param int                $MicroSeconds The amount of microseconds to wait for changes on the specified Sockets.
+     *
+     * @return array An array containing a subset of the Sockets that wouldn't cause a block on IO operations.
      */
-    public static function Select(&$Read, &$Write, &$Error): void {
-
+    public static function Select(iterable $Read = [], iterable $Write = [], iterable $OutOfBand = [], int $Seconds = 0, int $MicroSeconds = 0): array {
+        $MayRead = $CanRead = $MayWrite = $CanWrite = $MayReceive = $CanReceive = [];
+        foreach($Read as $Socket) {
+            $MayRead[] = $Socket->Pointer;
+        }
+        foreach($Write as $Socket) {
+            $MayWrite[] = $Socket->Pointer;
+        }
+        foreach($OutOfBand as $Socket) {
+            $MayReceive[] = $Socket->Pointer;
+        }
+        if((bool)\stream_select($MayRead, $MayWrite, $MayReceive, $Seconds, $MicroSeconds)) {
+            foreach($MayRead as $Pointer) {
+                foreach($Read as $Socket) {
+                    if($Socket->Pointer === $Pointer) {
+                        $CanRead[] = $Socket;
+                        break;
+                    }
+                }
+            }
+            foreach($MayWrite as $Pointer) {
+                foreach($Write as $Socket) {
+                    if($Socket->Pointer === $Pointer) {
+                        $CanWrite[] = $Socket;
+                        break;
+                    }
+                }
+            }
+            foreach($MayReceive as $Pointer) {
+                foreach($OutOfBand as $Socket) {
+                    if($Socket->Pointer === $Pointer) {
+                        $CanReceive[] = $Socket;
+                        break;
+                    }
+                }
+            }
+        }
+        return [$CanRead, $CanWrite, $CanReceive];
     }
     
-    public function Accept(): ?IStream {
-        
-        $Read   = [$this->Pointer];
-        $Write  = [];
-        $Delete = [];
-        if(\stream_select($Read, $Write, $Delete, 0)) {
-            $Pointer = \stream_socket_accept($this->Pointer);
+    /**
+     * Waits and accepts any connection on the Socket and returns a new Socket for the established connection.
+     *
+     * @param int $Seconds      The amount of seconds to wait for incoming connections.
+     * @param int $MicroSeconds The amount of microseconds to wait for incoming connections.
+     *
+     * @return null|\vDesk\IO\Socket A Socket representing any established connection; otherwise, null.
+     */
+    public function Accept(int $Seconds = 0, int $MicroSeconds = 0): ?Socket {
+        $Read = [$this->Pointer];
+        $_    = [];
+        if(\stream_select($Read, $_, $_, $Seconds, $MicroSeconds)) {
             return self::FromPointer(\stream_socket_accept($this->Pointer));
         }
         return null;
-        
     }
     
     /**

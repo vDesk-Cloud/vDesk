@@ -101,7 +101,7 @@ class vDesk {
         //Initialize translations.
         self::$Locale = new LocaleDictionary();
         
-        \set_error_handler(static fn($Code, $Message, $File, $Line, $Context) => Log::Error(
+        \set_error_handler(static fn($Code, $Message, $File, $Line, $Context = []) => Log::Error(
             __METHOD__,
             "[{$Code}]{$Message} in file: {$File} on line: {$Line}" . \print_r($Context, true)
         ));
