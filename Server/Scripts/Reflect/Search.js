@@ -1,5 +1,9 @@
 let Elements;
-window.onload = () => Elements = Array.from(document.getElementById("Index").children);
+window.onload = () => Elements = Array.of(
+    ...Array.from(document.getElementById("Classes").children),
+    ...Array.from(document.getElementById("Interfaces").children),
+    ...Array.from(document.getElementById("Traits").children)
+);
 
 function Search(Value) {
     window.requestAnimationFrame(

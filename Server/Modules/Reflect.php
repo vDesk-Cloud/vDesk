@@ -5,7 +5,6 @@ namespace Modules;
 
 use Pages\Reflect\Index;
 use Pages\Reflect\Summary;
-use vDesk\Configuration\Settings;
 use vDesk\IO\DirectoryInfo;
 use vDesk\IO\File;
 use vDesk\IO\FileInfo;
@@ -92,7 +91,7 @@ class Reflect extends Module {
             try {
                 $Page = new \Pages\Reflect(
                     Reflector: $Reflector,
-                    Index: new Index(Reflectors: $Reflectors)
+                    Index: new Index(Reflectors: $Reflectors, Current: $Reflector)
                 );
                 $File = File::Create($Target . Path::Separator . $Page->ReferenceName . ".html", true);
                 $File->Write((string)$Page);

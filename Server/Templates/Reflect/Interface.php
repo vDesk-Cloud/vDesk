@@ -7,9 +7,9 @@ use Pages\Reflect;
 $Authors = \count($Page->Authors);
 $Index   = 0;
 ?>
-<section class="Documentation Interface">
-    <h2>Interface <?= $Page->Name ?></h2>
-    <div class="Definition">
+<article class="Interface">
+    <header>
+        <h2>Interface <?= $Page->Name ?></h2>
         <h3>Description</h3>
         <p class="Description">
             <?= $Page->Description ?>
@@ -38,42 +38,42 @@ $Index   = 0;
                 <span class="Keyword">extends</span> <span class="Interfaces"><?= \implode(", ", \array_map(static fn($Interface) => new Reflect\Type(Signature: $Interface), $Page->Reflector->getInterfaceNames())) ?></span>
             <?php endif; ?>
         </code>
-    </div>
-    <div class="Summary">
+    </header>
+    <section class="Summary">
         <h3>Summary</h3>
         <?php if(\count($Page->Constants) > 0): ?>
-            <div class="Constants">
+            <nav class="Constants">
                 <h4>Constants</h4>
                 <ul>
                     <?php foreach($Page->Constants as $Constant): ?>
                         <li><?= Reflect::Link($Constant->Reflector) ?></li>
                     <?php endforeach; ?>
                 </ul>
-            </div>
+            </nav>
         <?php endif; ?>
         <?php if(\count($Page->Methods) > 0): ?>
-            <div class="Methods">
+            <nav class="Methods">
                 <h4>Methods</h4>
                 <ul>
                     <?php foreach($Page->Methods as $Method): ?>
                         <li><?= Reflect::Link($Method->Reflector) ?></li>
                     <?php endforeach; ?>
                 </ul>
-            </div>
+            </nav>
         <?php endif; ?>
-    </div>
+    </section>
     <?php if(\count($Page->Constants) > 0): ?>
         <!-- Constants -->
-        <div class="Constants">
+        <section class="Constants">
             <h3>Constants</h3>
             <?php foreach($Page->Constants as $Constant): ?>
                 <?= $Constant ?>
             <?php endforeach; ?>
-        </div>
+        </section>
     <?php endif; ?>
     <?php if(\count($Page->Methods) + \count($Page->VirtualMethods) > 0): ?>
         <!-- Methods -->
-        <div class="Methods">
+        <section class="Methods">
             <h3>Methods</h3>
             <?php foreach($Page->Methods as $Method): ?>
                 <?= $Method ?>
@@ -81,6 +81,6 @@ $Index   = 0;
             <?php foreach($Page->VirtualMethods as $Method): ?>
                 <?= $Method ?>
             <?php endforeach; ?>
-        </div>
+        </section>
     <?php endif; ?>
-</section>
+</article>

@@ -1,7 +1,4 @@
 <?php
-
-use vDesk\Pages\Functions;
-
 /** @var \Pages\Reflect $Page */
 ?>
 <!DOCTYPE html>
@@ -13,16 +10,14 @@ use vDesk\Pages\Functions;
     <script src="Search.js"></script>
 </head>
 <body>
-<article class="Page">
+<main>
     <header class="Index">
         <h1><a href="index.html">Index</a></h1>
-        <label>
-            Search:
-            <input type="text" oninput="Search(this.value)">
-        </label>
+        <label for="Search">Search:</label>
+        <input id="Search" type="text" oninput="Search(this.value)">
         <?= $Page->Index ?>
     </header>
     <?= $Page->Documentation ?>
-</article>
+</main>
 </body>
 </html>
