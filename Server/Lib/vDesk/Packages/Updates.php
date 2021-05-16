@@ -27,7 +27,7 @@ final class Updates extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
+    public const Version = "1.0.1";
     
     /**
      * The name of the Package.
@@ -62,8 +62,7 @@ final class Updates extends Package implements IPackage {
                 "Updates.php"
             ],
             self::Lib     => [
-                "vDesk/Updates/Update.php",
-                "vDesk/Updates/IModule.php"
+                "vDesk/Updates"
             ]
         ]
     ];
