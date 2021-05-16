@@ -108,7 +108,7 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
     /**
      * @inheritdoc
      */
-    public function Remove($Element) {
+    public function Remove($Element): mixed {
         if($this->Dispatching) {
             foreach($this->OnDelete as $OnDelete) {
                 $OnDelete($this, $Element);
@@ -120,7 +120,7 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
     /**
      * @inheritdoc
      */
-    public function RemoveAt($Key) {
+    public function RemoveAt($Key): mixed {
         if($this->Dispatching) {
             $Element = parent::RemoveAt($Key);
             foreach($this->OnDelete as $OnDelete) {
