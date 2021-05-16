@@ -77,7 +77,7 @@ class Tasks extends Machine {
         
         //Get pending Tasks.
         /** @var \vDesk\Tasks\Task $Task */
-        foreach($this->Tasks->Filter(fn(Task $Task): bool => $Task->Next <= $TimeStamp) as $Task) {
+        foreach($this->Tasks->Filter(static fn(Task $Task): bool => $Task->Next <= $TimeStamp) as $Task) {
             $this->Running->Enqueue($Task);
         }
         
