@@ -39,7 +39,7 @@ class API extends StaticSingleton {
     public static function _construct() {
         static::$Current = match (\PHP_SAPI) {
             "cli" => static::CLI,
-            "apache2handler", "nginx", "phpfpm", "cgi-fcgi" => static::CGI,
+            "apache2handler", "nginx", "phpfpm", "cgi-fcgi", "fpm-fcgi" => static::CGI,
             "tcp", "udp", => static::Socket
         };
     }
