@@ -78,7 +78,9 @@ class vDesk {
         } catch(Throwable $Exception) {
             Output::Write($Exception);
         } finally {
-            Modules::EventDispatcher()::Schedule();
+            if(Modules::$Running->ContainsKey("EventDispatcher")){
+                Modules::EventDispatcher()::Schedule();
+            }
         }
     }
 
