@@ -32,7 +32,7 @@ use vDesk\Struct\Extension;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Security extends Module {
-    
+
     /**
      * Performs a login and creates a session ticket.
      *
@@ -44,32 +44,32 @@ final class Security extends Module {
      */
     public static function Login(string $User = null, string $Password = null): User {
         $User ??= Command::$Parameters["User"];
-        
+
         $Expression = Expression::Select("*")
                                 ->From("Security.Users");
-        
+
         if(Validate::As($User, Extension\Type::Email)) {
             $Expression->Where(["Email" => $User]);
         } else {
             $Expression->Where(["Name" => $User]);
         }
-        
+
         $Result = $Expression->Execute();
-        
+
         //Check if the User exists.
         if($Result->Count === 0) {
             Log::Warn(__METHOD__, "Login failed for User with name or email '{$User}' => User doesn't exist!");
             throw new UnauthorizedAccessException("Name/email and/or password incorrect!");
         }
-        
+
         $Row = $Result->ToMap();
-        
+
         //Check if the User is active.
         if(!(bool)$Row["Active"]) {
             Log::Warn(__METHOD__, "Login failed for User with name '{$User}' => Account currently disabled!");
             throw new UnauthorizedAccessException("Account currently disabled!");
         }
-    
+
         $User = new User(
             (int)$Row["ID"],
             $Row["Name"],
@@ -79,7 +79,7 @@ final class Security extends Module {
             (bool)$Row["Active"],
             (int)$Row["FailedLoginCount"]
         );
-        
+
         //Check if the password is correct.
         //@todo Consider hashing the password once on the client and a second time on the server to prevent MITM attacks?
         if(!\password_verify($Password ?? Command::$Parameters["Password"], $Row["Password"])) {
@@ -92,19 +92,19 @@ final class Security extends Module {
             Log::Warn(__METHOD__, "Login failed for User with name '{$User->Name}' => Password incorrect!");
             throw new UnauthorizedAccessException("Username and/or password incorrect!");
         }
-        
+
         $User->FailedLoginCount = (int)$Row["FailedLoginCount"];
-        
+
         $User->Memberships = new User\Groups([], $User);
         $User->Permissions->Fill();
         $User->Ticket = \uniqid("", true);
-        
+
         //Delete any old sessions.
         Expression::Delete()
                   ->From("Security.Sessions")
                   ->Where(["User" => $User])
                   ->Execute();
-        
+
         //Create new session.
         Expression::Insert()
                   ->Into("Security.Sessions")
@@ -116,12 +116,12 @@ final class Security extends Module {
                           Settings::$Remote["Security"]["SessionLifeTime"]
                       )
                   ])();
-        
+
         Log::Info(__METHOD__, "User '{$User->Name}' logged in.");
-        \vDesk::$User = $User;
+        User::$Current = \vDesk::$User ??= $User;
         return $User;
     }
-    
+
     /**
      * Performs a login with a valid session ticket.
      *
@@ -139,21 +139,26 @@ final class Security extends Module {
         $User->Permissions->Fill();
         return $User;
     }
-    
+
     /**
-     * Logs the current user out.
+     * Performs a logout of the current or specified User.
      *
-     * @return bool True if the current User successfully logged out.
+     * @param null|\vDesk\Security\User $User The User to logout.
+     *
+     * @return bool True if the current or specified User has been successfully logged out.
      */
-    public static function Logout(): bool {
+    public static function Logout(User $User = null): bool {
         Expression::Delete()
                   ->From("Security.Sessions")
-                  ->Where(["User" => \vDesk::$User])
+                  ->Where(["User" => $User ?? \vDesk::$User])
                   ->Execute();
-        Log::Info(__METHOD__, "User " . \vDesk::$User->Name . " logged out.");
+        Log::Info(__METHOD__, "User " . ($User ?? \vDesk::$User)->Name . " logged out.");
+        if($User === null) {
+            User::$Current = \vDesk::$User = null;
+        }
         return true;
     }
-    
+
     /**
      * Determines whether a ticket is valid.
      *
@@ -163,7 +168,7 @@ final class Security extends Module {
      */
     public static function ValidateTicket(string $Ticket = null): void {
         $Ticket ??= Command::$Ticket;
-        
+
         $Result = Expression::Select("ExpirationTime")
                             ->From("Security.Sessions")
                             ->Where([
@@ -171,11 +176,11 @@ final class Security extends Module {
                                 "ExpirationTime" => [">" => λ::Now()]
                             ])
                             ->Execute();
-        
+
         if($Result->Count === 0) {
             throw new TicketExpiredException();
         }
-        
+
         Expression::Update("Security.Sessions")
                   ->Set([
                       "ExpirationTime" => λ::AddTime(
@@ -185,10 +190,10 @@ final class Security extends Module {
                   ])
                   ->Where(["Ticket" => $Ticket])
                   ->Execute();
-        
+
         \vDesk::$User = User::FromTicket($Ticket);
     }
-    
+
     /**
      * Gets all existing Users.
      *
@@ -209,7 +214,7 @@ final class Security extends Module {
         }
         return Users::All();
     }
-    
+
     /**
      * Creates a new User.
      *
@@ -241,7 +246,7 @@ final class Security extends Module {
         (new User\Added($User))->Dispatch();
         return $User;
     }
-    
+
     /**
      * Updates an User.
      *
@@ -287,7 +292,7 @@ final class Security extends Module {
         (new User\Updated($User))->Dispatch();
         return $User;
     }
-    
+
     /**
      * Sets the memberships of an User to a specified set of Groups.
      *
@@ -304,25 +309,25 @@ final class Security extends Module {
             Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to set Group memberships without having permissions.");
             throw new UnauthorizedAccessException();
         }
-        
+
         $User = (new User($ID ?? Command::$Parameters["ID"]))->Fill();
-        
+
         //Add new Groups.
         foreach($Add ?? Command::$Parameters["Add"] as $Added) {
             $User->Memberships->Add(new Group($Added));
         }
-        
+
         //Delete removed Groups.
         foreach($Delete ?? Command::$Parameters["Delete"] as $Deleted) {
             if(($Group = $User->Memberships->Find(static fn(Group $Group): bool => $Group->ID === $Deleted)) !== null) {
                 $User->Memberships->Remove($Group);
             }
         }
-        
+
         $User->Memberships->Save();
         return $User;
     }
-    
+
     /**
      * Updates the password of the current User.
      * Performs a login with the old credentials, so the current ticket will be rendered invalid.
@@ -340,7 +345,7 @@ final class Security extends Module {
                   ->Execute();
         return $User;
     }
-    
+
     /**
      * Updates the email address of the current User.
      *
@@ -353,7 +358,7 @@ final class Security extends Module {
         \vDesk::$User->Save();
         return \vDesk::$User;
     }
-    
+
     /**
      * Updates the locale of the current User.
      *
@@ -366,7 +371,7 @@ final class Security extends Module {
         \vDesk::$User->Save();
         return \vDesk::$User;
     }
-    
+
     /**
      * Deletes an {@link \vDesk\Security\User}-account and all of its group-memberships from the system.
      *
@@ -389,7 +394,7 @@ final class Security extends Module {
         (new User\Deleted($User))->Dispatch();
         return true;
     }
-    
+
     /**
      * Gets all groups of the system.
      *
@@ -411,7 +416,7 @@ final class Security extends Module {
         }
         return Groups::FetchAll();
     }
-    
+
     /**
      * Creates a new Group.
      *
@@ -435,7 +440,7 @@ final class Security extends Module {
         (new Group\Added($Group))->Dispatch();
         return $Group;
     }
-    
+
     /**
      * Updates a Group.
      *
@@ -459,7 +464,7 @@ final class Security extends Module {
         $Group->Save();
         return $Group;
     }
-    
+
     /**
      * Creates a new Group Permission.
      *
@@ -480,7 +485,7 @@ final class Security extends Module {
                   ->Execute();
         return true;
     }
-    
+
     /**
      * Deletes a Group Permission.
      *
@@ -500,7 +505,7 @@ final class Security extends Module {
                   ->Execute();
         return true;
     }
-    
+
     /**
      * Deletes a Group.
      *
@@ -519,7 +524,7 @@ final class Security extends Module {
         (new Group\Deleted($Group))->Dispatch();
         return true;
     }
-    
+
     /**
      * Gets an AccessControlList.
      *
@@ -537,7 +542,7 @@ final class Security extends Module {
         }
         return $AccessControlList;
     }
-    
+
     /**
      * Updates an AccessControlList.
      *
@@ -557,7 +562,7 @@ final class Security extends Module {
             Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to update AccessControlList with without having permissions.");
             throw new UnauthorizedAccessException();
         }
-        
+
         //Add new Entries.
         foreach($Add ?? Command::$Parameters["Add"] as $Added) {
             $AccessControlList->Add(
@@ -571,7 +576,7 @@ final class Security extends Module {
                 )
             );
         }
-        
+
         //Update changed entries.
         foreach($Update ?? Command::$Parameters["Update"] as $Updated) {
             if(($Entry = $AccessControlList->Find(static fn(Entry $Entry): bool => $Entry->ID === $Updated["ID"])) !== null) {
@@ -580,18 +585,18 @@ final class Security extends Module {
                 $Entry->Delete = $Updated["Delete"];
             }
         }
-        
+
         //Delete removed entries.
         foreach($Delete ?? Command::$Parameters["Delete"] as $Deleted) {
             if(($Entry = $AccessControlList->Find(static fn(Entry $Entry): bool => $Entry->ID === $Deleted)) !== null) {
                 $AccessControlList->Remove($Entry);
             }
         }
-        
+
         $AccessControlList->Save();
         return $AccessControlList;
     }
-    
+
     /**
      * Gets the status information of the PinBoard.
      *
@@ -605,5 +610,5 @@ final class Security extends Module {
                                       ->From("Security.Groups")()
         ];
     }
-    
+
 }
