@@ -19,16 +19,6 @@ use vDesk\Utils\Log;
 class vDesk {
     
     /**
-     * The version number of vDesk.
-     */
-    public const Version = "0.1.2";
-    
-    /**
-     * @var \vDesk\Configuration\Settings Gets the configuration.
-     */
-    public static Settings $Configuration;
-    
-    /**
      * Gets the locales.
      *
      * @var \vDesk\Locale\LocaleDictionary
@@ -36,27 +26,15 @@ class vDesk {
     public static LocaleDictionary $Locale;
     
     /**
-     * Gets logged in user.
+     * The current logged in User of vDesk.
      *
-     * @todo     Use \Request::$User instead?
+     * @todo     Use \Request::$User or \vDesk\Security\User::$Current instead?
      *
      * @internal Set by {@link \Security}.
-     * @var \vDesk\Security\User
+     * @var null|\vDesk\Security\User
      */
-    public static User $User;
-    
-    /**
-     *
-     * @var null|\vDesk\DataProvider
-     */
-    private static ?DataProvider $DataProvider;
-    
-    /**
-     *
-     * @var null|\vDesk\Utils\Log
-     */
-    private static ?Log $Log;
-    
+    public static ?User $User;
+
     /**
      * Flag indicating whether vDesk is running inside a Phar archive.
      *
@@ -85,18 +63,6 @@ class vDesk {
             self::$Load[] = static fn(string $Class): string => __DIR__ . \DIRECTORY_SEPARATOR . \str_replace("\\", \DIRECTORY_SEPARATOR, $Class) . ".php";
         }
         \spl_autoload_register("\\vDesk::Load");
-        
-        if(Settings::$Local["DataProvider"]->Count > 0) {
-            //Initialize DataProvider.
-            self::$DataProvider = new DataProvider(
-                Settings::$Local["DataProvider"]["Provider"],
-                Settings::$Local["DataProvider"]["Server"],
-                Settings::$Local["DataProvider"]["Port"],
-                Settings::$Local["DataProvider"]["User"],
-                Settings::$Local["DataProvider"]["Password"],
-                Settings::$Local["DataProvider"]["Charset"] ?? null
-            );
-        }
         
         //Initialize translations.
         self::$Locale = new LocaleDictionary();
