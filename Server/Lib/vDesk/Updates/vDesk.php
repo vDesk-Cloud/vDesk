@@ -5,6 +5,12 @@ namespace vDesk\Updates;
 
 use vDesk\Packages\Package;
 
+/**
+ * vDesk Update manifest class.
+ *
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
+ */
 class vDesk extends Update {
     /**
      * The class name of the Package of the Update.
