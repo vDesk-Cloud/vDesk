@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace vDesk;
 
+use vDesk\Configuration\Settings;
 use vDesk\DataProvider\Expression;
 use vDesk\DataProvider\Expression\Functions;
 use vDesk\DataProvider\IPreparedStatement;
@@ -187,4 +188,16 @@ final class DataProvider extends StaticSingleton {
         self::$Functions = new Functions($Provider);
     }
     
+}
+
+if(Settings::$Local["DataProvider"]->Count > 0) {
+    //Initialize DataProvider.
+    new DataProvider(
+        Settings::$Local["DataProvider"]["Provider"],
+        Settings::$Local["DataProvider"]["Server"],
+        Settings::$Local["DataProvider"]["Port"],
+        Settings::$Local["DataProvider"]["User"],
+        Settings::$Local["DataProvider"]["Password"],
+        Settings::$Local["DataProvider"]["Charset"] ?? null
+    );
 }
