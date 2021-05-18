@@ -1,30 +1,20 @@
 <?php
 declare(strict_types=1);
 
-use vDesk\Configuration\Settings;
-use vDesk\DataProvider;
 use vDesk\IO\FileNotFoundException;
 use vDesk\IO\Input;
 use vDesk\IO\Output;
-use vDesk\Locale\LocaleDictionary;
 use vDesk\Modules;
 use vDesk\Security\User;
 use vDesk\Utils\Log;
 
 /**
- * vDesk baseclass, providing access to core objects.
+ * vDesk baseclass that bootstraps and executes the system.
  *
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class vDesk {
-    
-    /**
-     * Gets the locales.
-     *
-     * @var \vDesk\Locale\LocaleDictionary
-     */
-    public static LocaleDictionary $Locale;
-    
+
     /**
      * The current logged in User of vDesk.
      *
@@ -41,14 +31,14 @@ class vDesk {
      * @var bool
      */
     public static bool $Phar;
-    
+
     /**
      * The autoload callbacks of vDesk.
      *
      * @var callable[]
      */
     public static array $Load = [];
-    
+
     /**
      * Initializes vDesk and all related functionality.
      *
@@ -63,18 +53,16 @@ class vDesk {
             self::$Load[] = static fn(string $Class): string => __DIR__ . \DIRECTORY_SEPARATOR . \str_replace("\\", \DIRECTORY_SEPARATOR, $Class) . ".php";
         }
         \spl_autoload_register("\\vDesk::Load");
-        
-        //Initialize translations.
-        self::$Locale = new LocaleDictionary();
-        
         \set_error_handler(static fn($Code, $Message, $File, $Line, $Context = []) => Log::Error(
             __METHOD__,
             "[{$Code}]{$Message} in file: {$File} on line: {$Line}" . \print_r($Context, true)
         ));
-        \set_exception_handler(static fn(\Throwable $Exception) => Log::Error(__METHOD__, $Exception->getMessage() . $Exception->getTraceAsString()));
-        
+        \set_exception_handler(static fn(\Throwable $Exception) => Log::Error(
+            __METHOD__,
+            $Exception->getMessage() . $Exception->getTraceAsString()
+        ));
     }
-    
+
     /**
      * Runs the according method of the Module of the current Command.
      */
@@ -84,7 +72,7 @@ class vDesk {
             if(Modules\Command::$Ticket !== null) {
                 Modules::Security()::ValidateTicket();
             }
-            
+
             //Call Module.
             Output::Write(Modules::Call(Modules\Command::$Module, Modules\Command::$Name));
         } catch(Throwable $Exception) {
@@ -93,7 +81,7 @@ class vDesk {
             Modules::EventDispatcher()::Schedule();
         }
     }
-    
+
     /**
      * Stops the execution of the system and performs cleanup operations.
      */
@@ -102,7 +90,7 @@ class vDesk {
         \restore_exception_handler();
         \restore_error_handler();
     }
-    
+
     /**
      * Loads the source file of a specified class.
      *
@@ -119,5 +107,5 @@ class vDesk {
         }
         throw new FileNotFoundException("Cannot load any class file of requested class '$Class'.");
     }
-    
+
 }
