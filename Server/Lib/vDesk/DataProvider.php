@@ -190,8 +190,8 @@ final class DataProvider extends StaticSingleton {
     
 }
 
+//Initialize DataProvider.
 if(Settings::$Local["DataProvider"]->Count > 0) {
-    //Initialize DataProvider.
     new DataProvider(
         Settings::$Local["DataProvider"]["Provider"],
         Settings::$Local["DataProvider"]["Server"],

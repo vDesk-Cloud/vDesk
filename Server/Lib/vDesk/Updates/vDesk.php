@@ -5,6 +5,12 @@ namespace vDesk\Updates;
 
 use vDesk\Packages\Package;
 
+/**
+ * vDesk Update manifest class.
+ *
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
+ */
 class vDesk extends Update {
     /**
      * The class name of the Package of the Update.
@@ -23,6 +29,8 @@ class vDesk extends Update {
 - Fixed missing context for error logging.
 - Fixed Socket::Select().
 - Fixed Collections.
+- Removed unused files.
+- Implemented auto initialization of DataProvider- and Expression-facades.
 Description;
     
     /**
@@ -33,7 +41,12 @@ Description;
             Package::Server => [
                 Package::Lib => [
                     "vDesk.php",
-                    "vDesk/IO/Socket.php"
+                    "vDesk/DataProvider.php",
+                    "vDesk/DataProvider/Expression.php",
+                    "vDesk/Environment/API.php",
+                    "vDesk/IO/Socket.php",
+                    "vDesk/Struct/Collections/Stack.php",
+                    "vDesk/Struct/Collections/Observable/Dictionary.php"
                 ]
             ]
         ],
@@ -41,7 +54,15 @@ Description;
             Package::Server => [
                 Package::Lib => [
                     "vDesk.php",
-                    "vDesk/IO/Socket.php"
+                    "vDesk/DataProvider.php",
+                    "vDesk/DataProvider/Expression.php",
+                    "vDesk/Environment/API.php",
+                    "vDesk/IO/Socket.php",
+                    "vDesk/Struct/Value.php",
+                    "vDesk/Struct/IStructuralEquatable.php",
+                    "vDesk/Struct/IStructuralComparable.php",
+                    "vDesk/Struct/Collections/Stack.php",
+                    "vDesk/Struct/Collections/Observable/Dictionary.php"
                 ]
             ]
         ]
