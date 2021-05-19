@@ -37,7 +37,7 @@ final class Relay extends Package implements IPackage {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Machines" => "1.0.1", "vDesk" => "1.0.1"];
+    public const Dependencies = ["Machines" => "1.0.1", "vDesk" => "1.0.1", "Security" => "1.0.1"];
     
     /**
      * The files and directories of the Package.
