@@ -41,7 +41,7 @@ Description;
                     "Security.php"
                 ],
                 Package::Lib => [
-                    "Security/User.php"
+                    "vDesk/Security/User.php"
                 ]
             ]
         ],
@@ -51,7 +51,7 @@ Description;
                     "Security.php"
                 ],
                 Package::Lib     => [
-                    "Security/User.php"
+                    "vDesk/Security/User.php"
                 ]
             ]
         ]
