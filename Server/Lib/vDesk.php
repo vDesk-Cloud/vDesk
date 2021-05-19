@@ -52,12 +52,12 @@ class vDesk {
         }
         \spl_autoload_register("\\vDesk::Load");
         \set_error_handler(static fn($Code, $Message, $File, $Line, $Context = []) => Log::Error(
-            __METHOD__,
-            "[{$Code}]{$Message} in file: {$File} on line: {$Line}" . \print_r($Context, true)
+            __CLASS__,
+            "[{$Code}]{$Message} in file: {$File} on line: {$Line}" . \json_encode($Context)
         ));
         \set_exception_handler(static fn(\Throwable $Exception) => Log::Error(
-            __METHOD__,
-            $Exception->getMessage() . $Exception->getTraceAsString()
+            __CLASS__,
+            $Exception->getMessage() . \json_encode($Exception->getTrace())
         ));
     }
 
