@@ -18,10 +18,8 @@ class vDesk {
     /**
      * The current logged in User of vDesk.
      *
-     * @todo     Use \Request::$User or \vDesk\Security\User::$Current instead?
-     *
-     * @internal Set by {@link \Security}.
      * @var null|\vDesk\Security\User
+     * @deprecated
      */
     public static ?User $User;
 
@@ -78,7 +76,9 @@ class vDesk {
         } catch(Throwable $Exception) {
             Output::Write($Exception);
         } finally {
-            Modules::EventDispatcher()::Schedule();
+            if(Modules::$Running->ContainsKey("EventDispatcher")) {
+                Modules::EventDispatcher()::Schedule();
+            }
         }
     }
 
