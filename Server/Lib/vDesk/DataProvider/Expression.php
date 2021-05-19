@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider;
 
+use vDesk\Configuration\Settings;
 use vDesk\DataProvider\Expression\Functions;
 use vDesk\DataProvider\Expression\IAggregateFunction;
 use vDesk\DataProvider\Expression\ICreate;
@@ -21,14 +22,14 @@ use vDesk\Struct\StaticSingleton;
  * @author  Kerry Holz <DevelopmentHero@gmail.com>
  */
 class Expression extends StaticSingleton {
-    
+
     /**
      * The current expression provider of the Expression.
      *
      * @var string
      */
     private static string $Provider;
-    
+
     /**
      * Initializes a new instance of the Expression class.
      *
@@ -37,7 +38,7 @@ class Expression extends StaticSingleton {
     public static function _construct(string $Provider = "") {
         self::$Provider = "vDesk\\DataProvider\\{$Provider}\\Expression";
     }
-    
+
     /**
      * Factory method that creates a new instance of the ISelect class according the configured DataProvider.
      *
@@ -48,7 +49,7 @@ class Expression extends StaticSingleton {
     public static function Select(...$Fields): ISelect {
         return self::$Provider::Select(...$Fields);
     }
-    
+
     /**
      * Factory method that creates a new instance of the IInsert class according the configured DataProvider.
      *
@@ -57,7 +58,7 @@ class Expression extends StaticSingleton {
     public static function Insert(): IInsert {
         return self::$Provider::Insert();
     }
-    
+
     /**
      * Factory method that creates a new instance of the IUpdate class according the configured DataProvider.
      *
@@ -68,7 +69,7 @@ class Expression extends StaticSingleton {
     public static function Update(string $Table): IUpdate {
         return self::$Provider::Update($Table);
     }
-    
+
     /**
      * Factory method that creates a new instance of the IDelete class according the configured DataProvider.
      *
@@ -77,7 +78,7 @@ class Expression extends StaticSingleton {
     public static function Delete(): IDelete {
         return self::$Provider::Delete();
     }
-    
+
     /**
      * Factory method that creates a new instance of the ICreate class according the configured DataProvider.
      *
@@ -86,7 +87,7 @@ class Expression extends StaticSingleton {
     public static function Create(): ICreate {
         return self::$Provider::Create();
     }
-    
+
     /**
      * Factory method that creates a new instance of the IAlter class according the configured DataProvider.
      *
@@ -95,7 +96,7 @@ class Expression extends StaticSingleton {
     public static function Alter(): IAlter {
         return self::$Provider::Alter();
     }
-    
+
     /**
      * Factory method that creates a new instance of the IDrop class according the configured DataProvider.
      *
@@ -104,7 +105,7 @@ class Expression extends StaticSingleton {
     public static function Drop(): IDrop {
         return self::$Provider::Drop();
     }
-    
+
     /**
      * Factory method that creates a new instance of the IAggregateFunction class according the configured DataProvider.
      *
@@ -116,5 +117,10 @@ class Expression extends StaticSingleton {
     public static function __callStatic(string $Function, array $Arguments): IAggregateFunction {
         return Functions::__callStatic($Function, $Arguments);
     }
-    
+
+}
+
+//Initialize Expression factory.
+if(Settings::$Local["DataProvider"]->Count > 0) {
+    new Expression(Settings::$Local["DataProvider"]["Provider"]);
 }
