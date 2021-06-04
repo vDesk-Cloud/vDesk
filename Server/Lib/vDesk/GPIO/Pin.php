@@ -137,6 +137,13 @@ class Pin extends FileStream {
     /**
      * @inheritDoc
      */
+    public function Write(mixed $Data, ?int $Amount = null): int {
+        return parent::Write((string)$Data, $Amount);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function Close(): bool {
         $this->Unexport();
         return parent::Close();
