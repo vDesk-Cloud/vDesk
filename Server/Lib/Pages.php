@@ -55,14 +55,17 @@ class Pages extends \vDesk {
          * and treats every following segments as "key-value"-pairs/parameters if a Controller matches the querystring.
          * If no matching Controller can be found, Pages tries to use a specified 'fallback'-route if the querystring omits any usable information.
          */
-
         try {
             if(Request::$Ticket !== null) {
                 Modules::Security()::ValidateTicket();
             }
-
+        
             //Call Module.
             Response::Write(Modules::Call(Request::$Module, Request::$Name));
+            
+        } catch(\vDesk\Security\TicketExpiredException $Exception) {
+            \setcookie("Ticket", "null", \time() - 3600);
+            Response::Write($Exception);
         } catch(Throwable $Exception) {
             Response::Write($Exception);
         }

@@ -1,0 +1,364 @@
+
+body, html, main {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    --Foreground: #2AB0ED;
+    --Background: white;
+    --Text: black;
+    overflow: hidden;
+}
+
+main {
+    font-family: Arial;
+    display: grid;
+    grid-template-columns: 20% calc(80% - 1rem);
+    grid-template-rows: 100%;
+    grid-gap: 1rem;
+}
+
+main > header {
+    grid-column: 1;
+    grid-row: 1;
+    display: grid;
+    grid-template-rows: 3rem 2rem calc(100% - 5rem);
+    grid-template-columns: 4rem calc(100% - 4rem);
+}
+
+main > header > h1 {
+    grid-row: 1;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    background-color: var(--Foreground);
+    padding: 0.3rem;
+    margin: 0;
+}
+
+main > header > h1 > a {
+    text-decoration: none;
+    color: var(--Text);
+}
+
+main > header > label {
+    grid-row: 2;
+    grid-column: 1;
+    place-self: center;
+}
+
+main > header > input {
+    grid-row: 2;
+    grid-column: 2;
+}
+
+main > header > nav {
+    grid-row: 3;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    display: grid;
+    grid-template-rows:
+        3rem minmax(calc(50% - 6rem), min-content)
+        3rem minmax(calc(50% - 6rem), min-content)
+        3rem minmax(calc(50% - 6rem), min-content);
+    grid-template-columns: 100%;
+}
+
+main > header > nav > h2 {
+    list-style: none;
+    padding-left: 1rem;
+    margin: 0;
+    align-self: center;
+    justify-self: start;
+    font-size: 1.2rem;
+}
+
+main > header > nav > ul {
+    margin: 0;
+    list-style: none;
+    padding-left: 1rem;
+    overflow: auto;
+}
+
+main > article {
+    grid-column: 2;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: grid;
+    grid-template-rows: minmax(auto, 50%)  minmax(auto, 50%) auto;
+}
+
+main > article > header,
+main > article > section,
+main > article > section.Methods > .Method,
+main > article > section.Properties > .Property,
+main > article > section.Constants > .Constant {
+    border-bottom: 1px solid #999;
+    padding-bottom: 1rem;
+}
+
+main > article > section.Constants > .Constant:last-child,
+main > article > section.Properties:last-child,
+main > article > section.Methods:last-child {
+    border-bottom: none;
+    padding-bottom: initial;
+}
+
+
+/* Summary */
+main > article > section.Summary {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 2rem calc(100% - 2rem);
+}
+
+main > article > section.Summary > h3 {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+    align-self: center;
+    justify-self: start;
+}
+
+main > article > section.Summary > nav.Properties {
+    grid-row: 2;
+}
+
+main > article > section.Summary > nav.Constants {
+    grid-row: 2;
+}
+
+main > article > section.Summary > nav.Methods {
+    grid-row: 2;
+}
+
+main > article > section.Summary > nav {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 1.5rem calc(100% - 1.5rem);
+}
+
+main > article > section.Summary > nav > h4 {
+    margin: 0;
+    align-self: center;
+    justify-self: start;
+}
+
+main > article > section.Summary > nav > ul {
+    overflow-y: auto;
+    list-style: none;
+    margin: 0;
+    padding-left: 1rem;
+}
+
+
+.Documentation > .Description > .Syntax > .Interfaces > i:last-child {
+    display: none;
+}
+
+article.Summary {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 42px auto;
+}
+
+article.Summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) !important;
+    grid-template-rows: 2rem minmax(50%, 100%);
+}
+
+article.Summary > h2 {
+    grid-row: 1;
+    margin: 0;
+}
+
+article.Summary > section > ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    height: calc(100% - 22px);
+}
+
+article.Summary > section {
+    overflow: hidden;
+}
+
+
+article.Summary > section.Classes {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+article.Summary > section.Interfaces {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+article.Summary > section.Traits {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+article.Summary > section.Errors {
+    grid-row: 3;
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+article.Summary > section.Exceptions {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row: 3;
+}
+
+li.Hidden {
+    display: none;
+}
+
+.Syntax span.public, .Keyword {
+    color: orange;
+}
+
+code {
+    background-color: #333333;
+    color: whitesmoke;
+    font-family: Courier New, monospace;
+    padding: 10px;
+    border-radius: 5px;
+    display: block;
+}
+
+code > .Header {
+    padding: 0;
+    margin: -4px 0 4px 0;
+    background-color: #333333;
+    border-bottom: 1px solid wheat;
+    display: inline-block;
+    width: 100%;
+}
+
+.Syntax .Variable,
+.Syntax .Parameter > .Name {
+    color: #9876AA;
+}
+
+.Syntax .Type.Class,
+.Syntax .Value.Class {
+    color: wheat;
+}
+
+.Syntax .Modifiers,
+.Syntax .Type.mixed,
+.Syntax .Type.int,
+.Syntax .Type.void,
+.Syntax .Type.array,
+.Syntax .Type.string,
+.Syntax .Type.callable,
+.Syntax .Type.bool,
+.Syntax .Type.iterable,
+.Syntax .Type.null,
+.Syntax .Type.self,
+.Syntax .Type.static {
+    color: orange;
+}
+
+.Value.string {
+    color: olivedrab;
+}
+
+.Value.null,
+.Value.bool,
+.Value.boolean {
+    color: orange;
+}
+
+.Value.int,
+.Value.integer,
+.Value.float {
+    color: lightblue;
+}
+
+.Constant > .Syntax > .Name {
+    color: #A7543F;
+}
+
+
+.Method > .Syntax > .Name {
+    color: #FFC66D;
+}
+
+.Method > .Name {
+    color: #FFC66D;
+}
+
+.Method > .Parameters > .Parameter,
+.Method > .Exceptions > .Exception,
+.Method > .ReturnValue {
+    display: grid;
+    column-gap: 10px;
+    row-gap: 15px;
+    align-content: stretch;
+}
+
+.Method > .Parameters > .Parameter {
+    grid-template-columns: 20% 10% 70%;
+    grid-template-rows: 0 0 0;
+}
+
+.Method > .Exceptions > .Exception {
+    grid-template-columns: 30% 70%;
+    grid-template-rows: 0 0 0;
+}
+
+.Method > .ReturnValue {
+    grid-template-columns: 30% 70%;
+    grid-template-rows: 0 0 0;
+}
+
+.Method > .Exceptions > .Exception > .Name,
+.Method > .Parameters > .Parameter > .Type,
+.Method > .ReturnValue > .Type {
+    align-self: stretch;
+    grid-column: 1;
+}
+
+.Method > .Parameters > .Parameter > .Name,
+.Method > .Exceptions > .Exception > .Description,
+.Method > .ReturnValue > .Description {
+    align-self: stretch;
+    grid-column: 2;
+}
+
+.Method > .Parameters > .Parameter > .Description {
+    grid-column: 3;
+}
+
+.Exceptions {
+    width: 100%;
+}
+
+.Exception,
+.Parameter,
+.ReturnValue {
+    width: 100%;
+}
+
+.Exception > .Name,
+.ReturnValue > .Type {
+    float: left;
+    color: #333;
+}
+
+.Exception > .Description,
+.ReturnValue > .Description {
+    max-width: 70%;
+    min-width: 80%;
+    margin: 0;
+    float: left;
+    clear: right;
+}
+
+.Description > code {
+    white-space: pre;
+}
