@@ -42,8 +42,9 @@ class Crash extends \vDesk\Modules\Module {
                              \str_replace(
                                  $Path,
                                  "",
-                                 $FilesystemInfo->Directory->Path . "\\" . ""
+                                 $FilesystemInfo->Directory->Path
                              )
+                             . "\\" . $FilesystemInfo->Name
                          );
                 try {
                     //Instantiate Test.
