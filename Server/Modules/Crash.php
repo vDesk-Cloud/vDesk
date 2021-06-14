@@ -160,7 +160,6 @@ final class Crash extends Module {
             $Attributes = \array_merge(
                 $Method->getAttributes(Test\Case\Crash::class),
                 $Method->getAttributes(Test\Case\Repeat::class),
-                $Method->getAttributes(Test\Case\Penetrate::class),
                 $Method->getAttributes(Test\Case\Skip::class)
             );
             if(\count($Attributes) > 0) {
