@@ -31,7 +31,7 @@ class Crash extends Attribute implements \IteratorAggregate {
      */
     public function getIterator(): \Generator {
         for($Index = 0; $Index < $this->Amount; $Index++) {
-            yield $Index => Random::Value();
+            yield $Index => Random::Values();
         }
     }
 

@@ -214,13 +214,13 @@ abstract class Test {
             //Crash Test case.
             foreach($Method->getAttributes(Test\Case\Crash::class) as $Attribute) {
                 $Repetitions = [];
-                foreach(Test\Case\Crash::FromDataView($Attribute) as $Repetition => $Value) {
+                foreach(Test\Case\Crash::FromDataView($Attribute) as $Repetition => $Values) {
                     //Overwrite error handlers.
                     \assert_options(\ASSERT_CALLBACK, static fn(...$Values) => $Repetitions[$Repetition] = $Assert(...$Values));
                     \set_error_handler(static fn(...$Values) => $Repetitions[$Repetition] = $Error(...$Values));
 
-                    $Result = $Run($Method, $Value);
-                    $Result["Value"] = \json_encode($Value);
+                    $Result = $Run($Method, ...$Values);
+                    $Result["Values"] = \json_encode($Values);
                     $Repetitions[$Repetition] = $Result;
                 }
                 $Cases[$Method->getName()] = $Summary($Repetitions);

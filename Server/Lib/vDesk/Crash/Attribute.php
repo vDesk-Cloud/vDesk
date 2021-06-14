@@ -6,7 +6,7 @@ namespace vDesk\Crash;
 use vDesk\Data\IDataView;
 
 /**
- * Base class for Crash\Test Attributes.
+ * Base class for Test and -case attributes.
  *
  * @package vDesk\Crash
  * @author  Kerry <DevelopmentHero@gmail.com>
@@ -27,6 +27,8 @@ abstract class Attribute implements IDataView {
     }
 
     /**
+     * Creates a new Attribute from a specified ReflectionAttribute.
+     *
      * @param mixed|\ReflectionAttribute $DataView
      *
      * @return \vDesk\Data\IDataView

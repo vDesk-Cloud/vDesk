@@ -3,7 +3,12 @@ declare(strict_types=1);
 
 namespace vDesk\Crash;
 
-
+/**
+ * Utility class that provides functionality for generating random values.
+ *
+ * @package vDesk\Crash
+ * @author  Kerry <DevelopmentHero@gmail.com>
+ */
 class Random {
 
     /**
@@ -11,6 +16,11 @@ class Random {
      */
     public const Text = ["Lorem", "Ipsum", "Dolor", "Sit", "Amet"];
 
+    /**
+     * Generates a random value.
+     *
+     * @return mixed A random value of any type.
+     */
     public static function Value(): mixed {
         return match (\random_int(0, 5)) {
             0 => static::Int(true),
@@ -22,6 +32,24 @@ class Random {
         };
     }
 
+    /**
+     * Generates a numeric array of random values.
+     *
+     * @param null|int $Amount Optional amount of random values.
+     *
+     * @return array A numeric array of random values.
+     */
+    public static function Values(int $Amount = null): array {
+        return \array_map(static fn() => static::Value(), \range(0, $Amount ?? \random_int(1, 10)));
+    }
+
+    /**
+     * Generates a random integer.
+     *
+     * @param bool $Negative $Flag indicating whether to allow negative values.
+     *
+     * @return int A random integer.
+     */
     public static function Int(bool $Negative = false): int {
         if($Negative) {
             return \random_int(\PHP_INT_MAX * -1, \PHP_INT_MAX);
@@ -29,10 +57,23 @@ class Random {
         return \random_int(0, \PHP_INT_MAX);
     }
 
+
+    /**
+     * Generates a random float.
+     *
+     * @param bool $Negative $Flag indicating whether to allow negative values.
+     *
+     * @return float A random float.
+     */
     public static function Float(bool $Negative = false): float {
         return static::Int($Negative) / \time();
     }
 
+    /**
+     * Generates a random boolean value.
+     *
+     * @return bool A random bool.
+     */
     public static function Bool(): bool {
         return (bool)\random_int(0, 1);
     }
@@ -40,7 +81,7 @@ class Random {
     /**
      * Generates a random string.
      *
-     * @return string
+     * @return string A random string.
      */
     public static function String(): string {
         return match (\random_int(0, 4)) {
@@ -70,7 +111,7 @@ class Random {
     /**
      * Generates a random upper- or lowercase alphabetical character.
      *
-     * @return string
+     * @return string A random char.
      */
     public static function Char(): string {
         return match (\random_int(0, 1)) {
@@ -79,9 +120,14 @@ class Random {
         };
     }
 
+    /**
+     * Generates an array.
+     *
+     * @return array A random array.
+     */
     public static function Array(): array {
-        return match (\random_int(0, 2)) {
-            0 => \range(0, \random_int(5, 50)),
+        return match (\random_int(0, 5)) {
+            0 => \range(0, \random_int(1, 15)),
             1 => match (\random_int(0, 1)) {
                 0 => static::Text,
                 1 => \array_reverse(static::Text)
@@ -95,8 +141,11 @@ class Random {
                     4 => static::Bool(),
                     5 => static::Array()
                 },
-                \range(0, \random_int(5, 55))
-            )
+                \range(0, \random_int(3, 10))
+            ),
+            3 => \array_map(static fn() => static::String(), \range(0, \random_int(1, 15))),
+            4 => \array_map(static fn() => static::Float(), \range(0, \random_int(1, 15))),
+            5 => \array_map(static fn() => static::Int(), \range(0, \random_int(1, 15)))
         };
     }
 
