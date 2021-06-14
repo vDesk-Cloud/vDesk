@@ -14,7 +14,7 @@ abstract class Test {
     /**
      * Result indicating whether a case of the Test has crashed while being executed.
      */
-    public const Crashed = "Cashed";
+    public const Crashed = "Crashed";
 
     /**
      * Result indicating whether an assertion of a case of the Test has failed.
@@ -37,6 +37,11 @@ abstract class Test {
     public const Result = "Result";
 
     /**
+     * Information index for ratings about execution results of Tests and -cases.
+     */
+    public const Rating = "Rating";
+
+    /**
      * Information index for execution duration of Tests and -cases.
      */
     public const Duration = "Duration";
@@ -45,6 +50,21 @@ abstract class Test {
      * Information index for allocated memory of Tests and -cases.
      */
     public const Allocated = "Allocated";
+
+    /**
+     * Information index for allocated memory peak of Tests and -cases.
+     */
+    public const Peak = "Peak";
+
+    /**
+     * Information index for executed Test-cases.
+     */
+    public const Cases = "Cases";
+
+    /**
+     * Information index for error codes of Test-cases.
+     */
+    public const Code = "Code";
 
     /**
      * Information index for error messages of Test-cases.
@@ -71,77 +91,150 @@ abstract class Test {
      *
      * @return array An array containing information about the Test and its executed cases.
      */
-    final public function Run(): array {
-        //Save previous error handler.
-        $Previous = \set_error_handler(null);
+    final public function __invoke(): array {
+        $Class     = new \ReflectionClass(static::class);
+        foreach($Class->getAttributes(Test\Skip::class) as $_){
+            return [self::Result => self::Skipped];
+        }
 
-        //Run test cases.
-        $Cases = [];
-        $Usage = \memory_get_usage();
-        foreach(\get_class_methods(static::class) as $Case) {
-            //Skip magic methods.
-            if(\str_starts_with($Case, "__")) {
-                continue;
+        $Cases     = [];
+        $Start     = 0;
+        $Allocated = \memory_get_usage();
+        $Previous  = \set_error_handler(null);
+        $Assert    = static fn(string $File, int $Line, string $Assertion, ?string $Description = null): array => [
+            self::Result    => self::Failed,
+            self::Duration  => (\microtime(true) - $Start) * 1000,
+            self::Allocated => \memory_get_usage() - $Allocated,
+            self::Message   => $Description ?? "Assertion Failed",
+            self::File      => $File,
+            self::Line      => $Line,
+            self::Trace     => $Assertion
+        ];
+        $Error     = static fn($Code, string $Message, string $File, int $Line, ?array $Context = []): array => [
+            self::Result    => self::Crashed,
+            self::Duration  => (\microtime(true) - $Start) * 1000,
+            self::Allocated => \memory_get_usage() - $Allocated,
+            self::Code      => $Code,
+            self::Message   => $Message,
+            self::File      => $File,
+            self::Line      => $Line,
+            self::Trace     => $Context
+        ];
+        $Summary   = static function(array $Cases): array {
+            $Status = self::Success;
+            $Amount = \count($Cases);
+            $Failed = \count(\array_filter($Cases, static fn(array $Case): bool => $Case[self::Result] === self::Failed));
+            if((bool)$Failed) {
+                $Status = self::Failed;
             }
-            $Start     = \microtime(true);
-            $Allocated = \memory_get_usage();
-            \assert_options(
-                \ASSERT_CALLBACK,
-                static fn(string $File, int $Line, string $Assertion, ?string $Description = null) => $Cases[$Case] = [
-                    self::Result    => self::Failed,
-                    self::Duration  => \round((\microtime(true) - $Start) * 1000),
-                    self::Allocated => \memory_get_usage() - $Allocated,
-                    self::Message   => $Description ?? "Assertion Failed",
-                    self::File      => $File,
-                    self::Line      => $Line,
-                    self::Trace     => $Assertion
-                ]
-            );
-            \set_error_handler(
-                static fn($Code, $Message, $File, $Line, $Context = []) => $Cases[$Case] = [
-                    self::Result    => self::Crashed,
-                    self::Duration  => \round((\microtime(true) - $Start) * 1000),
-                    self::Allocated => \memory_get_usage() - $Allocated,
-                    self::Message   => $Message,
-                    self::File      => $File,
-                    self::Line      => $Line,
-                    self::Trace     => $Context
-                ]
-            );
-            //Execute test case.
+            $Crashed = \count(\array_filter($Cases, static fn(array $Case): bool => $Case[self::Result] === self::Crashed));
+            if((bool)$Crashed) {
+                $Status = self::Crashed;
+            }
+            return [
+                self::Result    => $Status,
+                self::Rating    => 100 - (($Failed / $Amount) * 100 + ($Crashed / $Amount) * 100),
+                self::Success   => $Amount - $Failed - $Crashed,
+                self::Failed    => $Failed,
+                self::Crashed   => $Crashed,
+                self::Duration  => \array_reduce($Cases, static fn(float $Sum, array $Case): float => $Sum += $Case[self::Duration] ?? 0, 0),
+                self::Allocated => \array_reduce($Cases, static fn(float $Sum, array $Case): float => $Sum += $Case[self::Allocated] ?? 0, 0),
+                self::Peak      => \memory_get_peak_usage(),
+                self::Cases     => $Cases
+            ];
+        };
+        $Run       = function(\ReflectionMethod $Case, ...$Values) use ($Start, $Allocated): array {
             try {
-                $this->{$Case}();
-                $Cases[$Case] = [
+                if($Case->isStatic()) {
+                    static::{$Case->getName()}(...$Values);
+                } else {
+                    $this->{$Case->getName()}(...$Values);
+                }
+                return [
                     self::Result    => self::Success,
-                    self::Duration  => \round((\microtime(true) - $Start) * 1000),
+                    self::Duration  => (\microtime(true) - $Start) * 1000,
                     self::Allocated => \memory_get_usage() - $Allocated,
                 ];
             } catch(\Throwable $Exception) {
-                $Cases[$Case] = [
+                return [
                     self::Result    => self::Crashed,
-                    self::Duration  => \round((\microtime(true) - $Start) * 1000),
+                    self::Duration  => (\microtime(true) - $Start) * 1000,
                     self::Allocated => \memory_get_usage() - $Allocated,
+                    self::Code      => $Exception->getCode(),
                     self::Message   => $Exception->getMessage(),
                     self::File      => $Exception->getFile(),
                     self::Line      => $Exception->getLine(),
                     self::Trace     => $Exception->getTrace()
                 ];
             }
+        };
+        $Allocated = \memory_get_usage() - $Allocated;
+
+        //Run test cases.
+        foreach($Class->getMethods() as $Method) {
+            //Skip magic methods.
+            if(
+                $Method->isAbstract()
+                || $Method->isInternal()
+                || $Method->isConstructor()
+                || $Method->isDestructor()
+                || \str_starts_with($Method->getName(), "__")
+            ) {
+                continue;
+            }
+
+            //Skip Test case.
+            foreach($Method->getAttributes(Test\Case\Skip::class) as $Attribute) {
+                $Cases[$Method->getName()] = [self::Result => self::Skipped];
+                continue 2;
+            }
+
+            //Prepare execution of Test case.
+            $Start     = \microtime(true);
+            $Allocated = \memory_get_usage() - $Allocated;
+
+            //Set error handler.
+            \assert_options(\ASSERT_CALLBACK, static fn(...$Values) => $Cases[$Method->getName()] = $Assert(...$Values));
+            \set_error_handler(static fn(...$Values) => $Cases[$Method->getName()] = $Error(...$Values));
+
+            //Repeat Test case.
+            foreach($Method->getAttributes(Test\Case\Repeat::class) as $Attribute) {
+                $Repetitions = [];
+                foreach(Test\Case\Repeat::FromDataView($Attribute) as $Repetition) {
+                    //Overwrite error handlers.
+                    \assert_options(\ASSERT_CALLBACK, static fn(...$Values) => $Repetitions[$Repetition] = $Assert(...$Values));
+                    \set_error_handler(static fn(...$Values) => $Repetitions[$Repetition] = $Error(...$Values));
+
+                    $Repetitions[$Repetition] = $Run($Method);
+                }
+                $Cases[$Method->getName()] = $Summary($Repetitions);
+                continue 2;
+            }
+
+            //Crash Test case.
+            foreach($Method->getAttributes(Test\Case\Crash::class) as $Attribute) {
+                $Repetitions = [];
+                foreach(Test\Case\Crash::FromDataView($Attribute) as $Repetition => $Value) {
+                    //Overwrite error handlers.
+                    \assert_options(\ASSERT_CALLBACK, static fn(...$Values) => $Repetitions[$Repetition] = $Assert(...$Values));
+                    \set_error_handler(static fn(...$Values) => $Repetitions[$Repetition] = $Error(...$Values));
+
+                    $Result = $Run($Method, $Value);
+                    $Result["Value"] = \json_encode($Value);
+                    $Repetitions[$Repetition] = $Result;
+                }
+                $Cases[$Method->getName()] = $Summary($Repetitions);
+                continue 2;
+            }
+
+            //Normal run.
+            $Cases[$Method->getName()] = $Run($Method);
         }
 
         //Restore previous error handler.
         \set_error_handler($Previous);
 
-        //Aggregate result information.
-        return [
-            self::Duration  => \array_reduce($Cases, static fn(float $Sum, array $Case): float => $Sum += $Case[self::Duration], 0),
-            self::Allocated => \memory_get_usage() - $Usage,
-            "Rating"        => (\count($Cases) / \count(\array_filter(
-                        $Cases,
-                        static fn(array $Case): bool => $Case[self::Result] === self::Crashed || $Case[self::Result] === self::Failed
-                    ))) * 100,
-            "Cases"         => $Cases
-        ];
+        return $Summary($Cases);
     }
 
 }
