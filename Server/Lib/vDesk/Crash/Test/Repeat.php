@@ -17,19 +17,24 @@ class Repeat extends Attribute implements \IteratorAggregate {
     /**
      * Initializes a new instance of the Repeat Attribute class.
      *
-     * @param array $Arguments Initializes the Repeat Attribute with the specified set of arguments.
-     * @param int   $Amount    Initializes the Repeat Attribute with the specified repetition amount.
+     * @param int      $Amount   Initializes the Repeat Attribute with the specified repetition amount.
+     * @param null|int $Interval Initializes the Repeat Attribute with the specified interval in microseconds.
      */
-    public function __construct(public array $Arguments = [], public int $Amount = 10) {
-        parent::__construct($Arguments);
-    }
+    public function __construct(public int $Amount = 10, public ?int $Interval = null) {}
 
     /**
      * @inheritDoc
      */
     public function getIterator(): \Generator {
-        for($Iteration = 0; $Iteration < $this->Amount; $Iteration++) {
-            yield $Iteration;
+        if($this->Interval !== null) {
+            for($Iteration = 0; $Iteration < $this->Amount; $Iteration++) {
+                yield $Iteration;
+                \usleep($this->Interval);
+            }
+        } else {
+            for($Iteration = 0; $Iteration < $this->Amount; $Iteration++) {
+                yield $Iteration;
+            }
         }
     }
 

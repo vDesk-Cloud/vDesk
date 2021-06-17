@@ -18,11 +18,10 @@ class Crash extends Attribute implements \IteratorAggregate {
     /**
      * Initializes a new instance of the Crash Attribute class.
      *
-     * @param array    $Arguments Initializes the Crash Attribute with the specified set of arguments.
-     * @param null|int $Amount    Initializes the Crash Attribute with the specified repetition amount.
+     * @param null|int $Amount   Initializes the Crash Attribute with the specified repetition amount.
+     * @param null|int $Interval Initializes the Crash Attribute with the specified interval in microseconds.
      */
-    public function __construct(public array $Arguments = [], public ?int $Amount = null) {
-        parent::__construct($Arguments);
+    public function __construct(public ?int $Amount = null, public ?int $Interval = null) {
         $this->Amount ??= \random_int(1, 100);
     }
 
@@ -30,8 +29,15 @@ class Crash extends Attribute implements \IteratorAggregate {
      * @inheritDoc
      */
     public function getIterator(): \Generator {
-        for($Index = 0; $Index < $this->Amount; $Index++) {
-            yield $Index => Random::Values();
+        if($this->Interval !== null) {
+            for($Index = 0; $Index < $this->Amount; $Index++) {
+                yield $Index => Random::Values();
+                \usleep($this->Interval);
+            }
+        } else {
+            for($Index = 0; $Index < $this->Amount; $Index++) {
+                yield $Index => Random::Values();
+            }
         }
     }
 

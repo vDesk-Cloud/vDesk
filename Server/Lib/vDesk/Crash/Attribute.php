@@ -3,24 +3,25 @@ declare(strict_types=1);
 
 namespace vDesk\Crash;
 
-use vDesk\Data\IDataView;
-
 /**
  * Base class for Test and -case attributes.
  *
  * @package vDesk\Crash
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-abstract class Attribute implements IDataView {
+abstract class Attribute {
+
+    protected array $Arguments = [];
 
     /**
-     * Initializes a new instance of the Attribute class.
+     * Applies a set of values to the properties of the Attribute.
      *
-     * @param array $Arguments Initializes the Attribute with the specified set of arguments.
+     * @param array $Values The key-value separated values to apply.
      */
-    public function __construct(public array $Arguments = []) {
-        foreach($Arguments as $Name => $Value){
-            if(\property_exists(static::class, $Name)){
+    protected function Apply(array $Values): void {
+        $this->Arguments = $Values;
+        foreach($Values as $Name => $Value) {
+            if(\property_exists(static::class, (string)$Name)) {
                 $this->{$Name} = $Value;
             }
         }
@@ -29,20 +30,19 @@ abstract class Attribute implements IDataView {
     /**
      * Creates a new Attribute from a specified ReflectionAttribute.
      *
-     * @param mixed|\ReflectionAttribute $DataView
+     * @param \ReflectionAttribute $Reflector The reflector to create a new Attribute of.
      *
-     * @return \vDesk\Data\IDataView
+     * @return \vDesk\Crash\Attribute An Attribute that represents the specified Reflector.
      */
-    public static function FromDataView(mixed $DataView): IDataView {
-        if(!$DataView instanceof \ReflectionAttribute) {
-            throw new \InvalidArgumentException("DataView must be an instance of \"\\ReflectionAttribute\"!");
-        }
+    public static function FromReflector(\ReflectionAttribute $Reflector): Attribute {
         /** @var \ReflectionAttribute $DataView */
-        $Class = $DataView->getName();
+        $Class = $Reflector->getName();
         if(!\class_exists($Class)) {
-            throw new \InvalidArgumentException("\"{$DataView->getName()}\" is not a valid Attribute class!");
+            throw new \InvalidArgumentException("\"{$Reflector->getName()}\" is not a valid Attribute class!");
         }
-        return new $Class($DataView->getArguments());
+        $Attribute = new $Class();
+        $Attribute->Apply($Reflector->getArguments());
+        return $Attribute;
     }
 
     /**
@@ -50,8 +50,8 @@ abstract class Attribute implements IDataView {
      *
      * @return string A parsable string representation of the Attribute.
      */
-    public function ToDataView(bool $Reference = false): string {
-        $String    = "#[" . ($Reference ? \substr(static::class, \strrpos(static::class, "\\") + 1) : "\\" . static::class);
+    public function __toString() {
+        $String = "#[\\" . static::class;
         if(\count($this->Arguments) > 0) {
             $String .= "(";
             $Values = [];
@@ -61,14 +61,5 @@ abstract class Attribute implements IDataView {
             $String .= \implode(", ", $Values) . ")";
         }
         return $String . "]";
-    }
-
-    /**
-     * Creates a parsable string representation of the Attribute.
-     *
-     * @return string A parsable string representation of the Attribute.
-     */
-    public function __toString() {
-        return $this->ToDataView();
     }
 }

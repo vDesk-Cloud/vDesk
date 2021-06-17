@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace vDesk\Crash\Test\Case;
 
-use vDesk\Crash\Attribute;
-
 /**
  * Attribute that represents a skipped Test case.
  *
@@ -12,4 +10,4 @@ use vDesk\Crash\Attribute;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 #[\Attribute(\Attribute::TARGET_METHOD)]
-class Skip extends Attribute {}
+class Skip extends \vDesk\Crash\Test\Skip {}

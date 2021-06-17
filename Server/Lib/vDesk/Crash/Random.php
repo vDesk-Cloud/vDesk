@@ -22,13 +22,15 @@ class Random {
      * @return mixed A random value of any type.
      */
     public static function Value(): mixed {
-        return match (\random_int(0, 5)) {
+        return match (\random_int(0, 6)) {
             0 => static::Int(true),
             1 => static::Float(true),
             2 => static::Char(),
             3 => static::String(),
             4 => static::Bool(),
-            5 => static::Array()
+            5 => static::Array(),
+            6 => (object)static::Array(),
+            7 => null
         };
     }
 
@@ -121,7 +123,7 @@ class Random {
     }
 
     /**
-     * Generates an array.
+     * Generates a random array.
      *
      * @return array A random array.
      */

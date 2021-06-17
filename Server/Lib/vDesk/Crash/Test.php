@@ -47,6 +47,11 @@ abstract class Test {
     public const Duration = "Duration";
 
     /**
+     * Information index for applied values.
+     */
+    public const Values = "Values";
+
+    /**
      * Information index for allocated memory of Tests and -cases.
      */
     public const Allocated = "Allocated";
@@ -55,6 +60,11 @@ abstract class Test {
      * Information index for allocated memory peak of Tests and -cases.
      */
     public const Peak = "Peak";
+
+    /**
+     * Information index for executed garbage collection cycles.
+     */
+    public const Cycles = "Cycles";
 
     /**
      * Information index for executed Test-cases.
@@ -92,8 +102,8 @@ abstract class Test {
      * @return array An array containing information about the Test and its executed cases.
      */
     final public function __invoke(): array {
-        $Class     = new \ReflectionClass(static::class);
-        foreach($Class->getAttributes(Test\Skip::class) as $_){
+        $Class = new \ReflectionClass(static::class);
+        foreach($Class->getAttributes(Test\Skip::class) as $_) {
             return [self::Result => self::Skipped];
         }
 
@@ -122,7 +132,7 @@ abstract class Test {
         ];
         $Summary   = static function(array $Cases): array {
             $Status = self::Success;
-            $Amount = \count($Cases);
+            $Amount = \max(1, \count($Cases));
             $Failed = \count(\array_filter($Cases, static fn(array $Case): bool => $Case[self::Result] === self::Failed));
             if((bool)$Failed) {
                 $Status = self::Failed;
@@ -145,16 +155,23 @@ abstract class Test {
         };
         $Run       = function(\ReflectionMethod $Case, ...$Values) use ($Start, $Allocated): array {
             try {
+                $Allocated = \memory_get_usage();
+                $Start = \microtime(true);
                 if($Case->isStatic()) {
                     static::{$Case->getName()}(...$Values);
                 } else {
                     $this->{$Case->getName()}(...$Values);
                 }
-                return [
+                $Result = [
                     self::Result    => self::Success,
                     self::Duration  => (\microtime(true) - $Start) * 1000,
                     self::Allocated => \memory_get_usage() - $Allocated,
+                    self::Cycles    => \gc_collect_cycles()
                 ];
+                if(\count($Values) > 0) {
+                    $Result[self::Values] = $Values;
+                }
+                return $Result;
             } catch(\Throwable $Exception) {
                 return [
                     self::Result    => self::Crashed,
@@ -168,7 +185,6 @@ abstract class Test {
                 ];
             }
         };
-        $Allocated = \memory_get_usage() - $Allocated;
 
         //Run test cases.
         foreach($Class->getMethods() as $Method) {
@@ -189,10 +205,6 @@ abstract class Test {
                 continue 2;
             }
 
-            //Prepare execution of Test case.
-            $Start     = \microtime(true);
-            $Allocated = \memory_get_usage() - $Allocated;
-
             //Set error handler.
             \assert_options(\ASSERT_CALLBACK, static fn(...$Values) => $Cases[$Method->getName()] = $Assert(...$Values));
             \set_error_handler(static fn(...$Values) => $Cases[$Method->getName()] = $Error(...$Values));
@@ -200,7 +212,7 @@ abstract class Test {
             //Repeat Test case.
             foreach($Method->getAttributes(Test\Case\Repeat::class) as $Attribute) {
                 $Repetitions = [];
-                foreach(Test\Case\Repeat::FromDataView($Attribute) as $Repetition) {
+                foreach(Test\Case\Repeat::FromReflector($Attribute) as $Repetition) {
                     //Overwrite error handlers.
                     \assert_options(\ASSERT_CALLBACK, static fn(...$Values) => $Repetitions[$Repetition] = $Assert(...$Values));
                     \set_error_handler(static fn(...$Values) => $Repetitions[$Repetition] = $Error(...$Values));
@@ -214,16 +226,20 @@ abstract class Test {
             //Crash Test case.
             foreach($Method->getAttributes(Test\Case\Crash::class) as $Attribute) {
                 $Repetitions = [];
-                foreach(Test\Case\Crash::FromDataView($Attribute) as $Repetition => $Values) {
+                foreach(Test\Case\Crash::FromReflector($Attribute) as $Repetition => $Values) {
                     //Overwrite error handlers.
                     \assert_options(\ASSERT_CALLBACK, static fn(...$Values) => $Repetitions[$Repetition] = $Assert(...$Values));
                     \set_error_handler(static fn(...$Values) => $Repetitions[$Repetition] = $Error(...$Values));
 
-                    $Result = $Run($Method, ...$Values);
-                    $Result["Values"] = \json_encode($Values);
-                    $Repetitions[$Repetition] = $Result;
+                    $Repetitions[$Repetition] = $Run($Method, ...$Values);
                 }
                 $Cases[$Method->getName()] = $Summary($Repetitions);
+                continue 2;
+            }
+
+            //Apply values.
+            foreach($Method->getAttributes(Test\Case\Values::class) as $Attribute) {
+                $Cases[$Method->getName()] = $Run($Method, ...Test\Case\Values::FromReflector($Attribute)->Values);
                 continue 2;
             }
 
