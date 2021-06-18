@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Modules;
 
 use vDesk\Crash\Attribute;
+use vDesk\Crash\Random;
 use vDesk\Crash\Test;
 use vDesk\IO\Directory;
 use vDesk\IO\DirectoryInfo;
@@ -69,13 +70,10 @@ final class Crash extends Module {
                     //Run Test.
                     $Tests[$Class] = $Test();
 
-                    //Cleanup.
-                    unset($Class);
-                    \gc_collect_cycles();
-
                 } catch(\Throwable $Exception) {
                     $Tests[$Class] = [
                         Test::Result  => Test::Crashed,
+                        Test::Code    => $Exception->getCode(),
                         Test::Message => $Exception->getMessage(),
                         Test::File    => $Exception->getFile(),
                         Test::Line    => $Exception->getLine(),
@@ -106,7 +104,7 @@ final class Crash extends Module {
             throw new \InvalidArgumentException("Class \"{$Class}\" doesn't exist!");
         }
         $Reflector = new \ReflectionClass($Class);
-        if($Reflector->isAbstract()){
+        if($Reflector->isAbstract()) {
             return null;
         }
 
@@ -160,6 +158,7 @@ final class Crash extends Module {
             $Attributes = \array_merge(
                 $Method->getAttributes(Test\Case\Crash::class),
                 $Method->getAttributes(Test\Case\Repeat::class),
+                $Method->getAttributes(Test\Case\Values::class),
                 $Method->getAttributes(Test\Case\Skip::class)
             );
             if(\count($Attributes) > 0) {
@@ -177,11 +176,11 @@ final class Crash extends Module {
                 $Parameters[] = "{$Parameter->getName()}: " . match ($Parameter->isDefaultValueAvailable()) {
                         true => \json_encode($Parameter->getDefaultValue()),
                         false => match ($Type = \ltrim((string)$Parameter->getType(), "?")) {
-                            Type::Int => \random_int(-1000000, 1000000),
-                            Type::Float => \random_int(-1000000, 1000000) / \random_int(1, 9),
-                            Type::String => \json_encode(["Lorem", "Ipsum", "Dolor", "Sit", "Amet"][\random_int(0, 4)]),
-                            Type::Bool, Type::Boolean => \json_encode((bool)\random_int(0, 1)),
-                            Type::Array => \json_encode(\range(\random_int(0, 10), \random_int(100, 1000), \random_int(1, 10))),
+                            Type::Int => Random::Int(true),
+                            Type::Float => Random::Float(true),
+                            Type::String => "\"" . Random::String() . "\"",
+                            Type::Bool, Type::Boolean => \json_encode(Random::Bool()),
+                            Type::Array => \json_encode(Random::Array()),
                             Type::Callable => "static fn() => \"Replace me\"",
                             Type::Mixed, "" => "null",
                             default => "new \\{$Type}()"
@@ -202,14 +201,13 @@ final class Crash extends Module {
             if($Method->hasReturnType()) {
                 $File->Write(
                     match ($Type = \ltrim((string)$Method->getReturnType(), "?")) {
-                        Type::Int => "=== " . \random_int(-1000000, 1000000),
-                        Type::Float => "=== " . \random_int(-1000000, 1000000) / \random_int(1, 9),
-                        Type::String => "=== " . \json_encode(["Lorem", "Ipsum", "Dolor", "Sit", "Amet"][\random_int(0, 4)]),
-                        Type::Bool, Type::Boolean => "=== " . \json_encode((bool)\random_int(0, 1)),
-                        Type::Array => "=== " . \json_encode(\range(\random_int(0, 10), \random_int(100, 1000), \random_int(1, 10))),
+                        Type::Int => "=== " . Random::Int(true),
+                        Type::Float => "=== " . Random::Float(true),
+                        Type::String => "=== \"" . Random::String() . "\"",
+                        Type::Bool, Type::Boolean => "=== " . \json_encode(Random::Bool()),
+                        Type::Array => "=== " . \json_encode(Random::Array()),
                         Type::Mixed, "void" => "=== null",
                         "self" => "instanceof \\{$Reflector->getName()}",
-                       // "self" => "instanceof \\". \ltrim((string)$Method->getReturnType(), "?"),
                         default => "instanceof \\{$Type}"
                     }
                 );
@@ -252,16 +250,13 @@ final class Crash extends Module {
                 );
                 if(\class_exists($Class)) {
                     $Test = self::Create($Class, $Inherit, $Overwrite);
-                    if($Test !== null){
+                    if($Test !== null) {
                         $Tests[] = $Test;
                     }
                 }
-
             }
         }
-
         return $Tests;
     }
-
 
 }
