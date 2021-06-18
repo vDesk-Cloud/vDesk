@@ -163,7 +163,7 @@ final class Crash extends Module {
             );
             if(\count($Attributes) > 0) {
                 foreach($Attributes as $Attribute) {
-                    $File->Write("    " . Attribute::FromDataView($Attribute) . \PHP_EOL);
+                    $File->Write("    " . Attribute::FromReflector($Attribute) . \PHP_EOL);
                 }
             }
 
