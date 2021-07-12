@@ -6,7 +6,7 @@ namespace vDesk\DataProvider\Expression;
 use vDesk\Struct\StaticSingleton;
 
 /**
- * Class Functions represents ...
+ * Factory-facade that provides access to aggregate functions compatible with the current configured DataProvider.
  *
  * @package vDesk\DataProvider\Expression
  * @author  Kerry Holz <DevelopmentHero@gmail.com>
@@ -102,18 +102,18 @@ class Functions extends StaticSingleton {
      * @return \vDesk\DataProvider\Expression\IAggregateFunction
      */
     public static function Avg(...$Values): IAggregateFunction {
-        return self::$Provider::Count(...$Values);
+        return self::$Provider::Avg(...$Values);
     }
     
     /**
-     * GROUP_CONCAT().
+     * GROUP_CONCAT()/GROUPING().
      *
      * @param array $Values
      *
      * @return \vDesk\DataProvider\Expression\IAggregateFunction
      */
-    public static function GroupConcat(...$Values): IAggregateFunction {
-        return self::$Provider::GroupConcat(...$Values);
+    public static function Group(...$Values): IAggregateFunction {
+        return self::$Provider::Group(...$Values);
     }
     
     /**

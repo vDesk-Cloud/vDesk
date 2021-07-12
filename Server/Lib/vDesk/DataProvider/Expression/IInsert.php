@@ -26,8 +26,8 @@ interface IInsert extends IExpression {
     /**
      * Applies one or more fields and values to the IInsert.
      *
-     * @param mixed[] $Values      The fields and values to insert.
-     * @param array   ...$Multiple Additional values to insert.
+     * @param array $Values      The fields and values to insert.
+     * @param array ...$Multiple Additional values to insert.
      *
      * @return \vDesk\DataProvider\Expression\IInsert The current instance for further chaining.
      */

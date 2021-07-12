@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace vDesk\DataProvider\MySQL\Expression\Functions;
+namespace vDesk\DataProvider\AnsiSQL\Expression\Functions;
 
 /**
- * SQL function 'COUNT()'.
+ * SQL function 'SUM()'.
  *
  * @package vDesk\DataProvider\Expression\Functions\MariaDB
  * @author  Kerry Holz <DevelopmentHero@gmail.com>
  */
-class Count extends Distinct {
+class Sum extends Distinct {
     
     /**
      * The name of the function.
      */
-    protected const Name = "COUNT";
+    protected const Name = "SUM";
     
 }

@@ -20,14 +20,14 @@ class Alter implements IAlter {
      *
      * @var string
      */
-    private string $Statement = "";
-    
+    protected string $Statement = "";
+
     /**
      * The statements of the Expression.
      *
      * @var string[]
      */
-    private array  $Statements = [];
+    protected array  $Statements = [];
     
     /**
      * @inheritDoc
@@ -41,7 +41,7 @@ class Alter implements IAlter {
      * @inheritDoc
      */
     public function Database(string $Name): self {
-        $this->Statement .= "CREATE DATABASE $Name";
+        $this->Statement .= "ALTER DATABASE $Name";
         return $this;
     }
     
@@ -68,7 +68,7 @@ class Alter implements IAlter {
                     $Column["Size"] ?? null,
                     $Column["Collation"] ?? null,
                     $Column["Nullable"] ?? false,
-                    \array_key_exists("Default", $Column) ? $Column["Default"] : "",
+                    $Column["Default"] ?? "",
                     $Column["Autoincrement"] ?? false,
                     $Column["OnUpdate"] ?? null
                 );
@@ -104,7 +104,7 @@ class Alter implements IAlter {
                     $Column["Size"] ?? null,
                     $Column["Collation"] ?? null,
                     $Column["Nullable"] ?? false,
-                    \array_key_exists("Default", $Column) ? $Column["Default"] : "",
+                    $Column["Default"] ?? "",
                     $Column["Autoincrement"] ?? false,
                     $Column["OnUpdate"] ?? null
                 );

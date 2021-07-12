@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace vDesk\DataProvider\MySQL\Expression\Functions;
+namespace vDesk\DataProvider\MsSQL\Expression\Functions;
 
 /**
  * SQL function 'MAX()'.

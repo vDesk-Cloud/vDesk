@@ -14,11 +14,9 @@ interface IExpression {
     /**
      * Executes the expression on a SQL-Server.
      *
-     * @param bool $Buffered Flag indicating whether the result-set will be buffered.
-     *
      * @return \vDesk\DataProvider\IResult The result-set yielding the values the SQL-Server returned by executing the IExpression.
      */
-    public function Execute(bool $Buffered = true): IResult;
+    public function Execute(): IResult;
     
     /**
      * Retrieves a string representation of the IExpression.

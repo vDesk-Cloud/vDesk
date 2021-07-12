@@ -54,13 +54,4 @@ interface IResult extends IEnumerable {
      * @return string|null The value of the row at the current position within the IResult; otherwise, null.
      */
     public function __invoke(): ?string;
-
-    /**
-     * Creates a set of IModels filled with the values of the rows of the IResult.
-     *
-     * @param string $Class The class to fill.
-     *
-     * @return iterable An iterable set of filled IModels.
-     */
-    public function Fill(string $Class): iterable;
 }

@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\MySQL\Expression;
 
-use vDesk\DataProvider\Expression\ICreate;
-use vDesk\DataProvider\IResult;
 use vDesk\DataProvider;
 
 /**
@@ -13,15 +11,8 @@ use vDesk\DataProvider;
  * @package vDesk\DataProvider\Expression\Create
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Create implements ICreate {
-    
-    /**
-     * The SQL-statement of the Create\MariaDB.
-     *
-     * @var string
-     */
-    private string $Statement = "";
-    
+class Create extends DataProvider\AnsiSQL\Expression\Create {
+
     /**
      * @inheritDoc
      */
@@ -34,17 +25,13 @@ class Create implements ICreate {
                 $Field["Size"] ?? null,
                 $Field["Collation"] ?? null,
                 $Field["Nullable"] ?? false,
-                \array_key_exists("Default", $Field) ? $Field["Default"] : "",
+                $Field["Default"] ?? "",
                 $Field["Autoincrement"] ?? false,
                 $Field["OnUpdate"] ?? null
             );
         }
         foreach($Indexes as $IndexName => $Index) {
-            $Table[] = Table::Index(
-                $IndexName,
-                $Index["Fields"],
-                $Index["Unique"] ?? false
-            );
+            $Table[] = Table::Index($IndexName, $Index["Unique"] ?? false, $Index["Fields"]);
         }
         $this->Statement .= "CREATE TABLE " . DataProvider::SanitizeField($Name) . " (" . \implode(", ", $Table) . ")";
         $this->Statement .= " ENGINE=" . ($Options["Engine"] ?? "INNODB");
@@ -52,17 +39,9 @@ class Create implements ICreate {
         $this->Statement .= " COLLATE=" . ($Options["Collation"] ?? "utf8mb4_unicode_ci");
         return $this;
     }
-    
+
     /**
-     * @inheritDoc
-     */
-    public function Database(string $Name): self {
-        $this->Statement .= "CREATE DATABASE $Name";
-        return $this;
-    }
-    
-    /**
-     * Applies a storage engine to the Create\MariaDB.
+     * Mysql specific extension for defining storage engines.
      *
      * @param string $Name The name of the storage engine to set.
      *
@@ -72,25 +51,19 @@ class Create implements ICreate {
         $this->Statement .= " ENGINE=$Name";
         return $this;
     }
-    
+
     /**
-     * @inheritDoc
+     * Mysql specific extension for creating indices.
+     *
+     * @param string $Name   The name of the index to create.
+     * @param bool   $Unique Flag indicating whether to create an unique index.
+     * @param array  $Fields $Fields The fields of the index.
+     *
+     * @return \vDesk\DataProvider\MySQL\Expression\Create The current instance for further chaining.
      */
-    public function Execute(bool $Buffered = true): IResult {
-        return DataProvider::Execute($this->Statement, $Buffered);
+    public function Index(string $Name, bool $Unique, array $Fields): self {
+        $this->Statement .= "CREATE " . Table::Index($Name, $Unique, $Fields);
+        return $this;
     }
-    
-    /**
-     * @inheritDoc
-     */
-    public function __toString(): string {
-        return $this->Statement;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function __invoke(): IResult|string|null {
-        return $this->Execute()->ToValue();
-    }
+
 }
