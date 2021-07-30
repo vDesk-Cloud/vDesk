@@ -76,14 +76,12 @@ class Server extends Machine {
                 if($Event->Name !== Event::Login) {
                     $Socket->Write((string)new Event(Event::Error, "Server", "Authentication required!"));
                     $Socket->Close();
+                }else {
+                    $User = Modules::Security()::Login($Event->Sender, $Event->Data);
+                    $this->Clients->Add(new Client($User, $Socket));
+                    $Socket->Write((string)new Event(Event::Success, "Server", $User->Ticket));
+                    Log::Info("Relay Server", "Client \"{$User->Name}\" connected.");
                 }
-                $User = Modules::Security()::Login($Event->Sender, $Event->Data);
-                $this->Clients->Add(new Client($User, $Socket));
-                $Socket->Write((string)new Event(Event::Success, "Server", $User->Ticket));
-                Log::Info("Relay Server", "Client \"{$User->Name}\" connected.");
-
-                //@todo Create Security-Update for this dirty hack...
-                \vDesk::$User = $this->User;
             } catch(UnauthorizedAccessException $Exception) {
                 $Socket->Write((string)new Event(Event::Error, "Server", $Exception->getMessage()));
             } catch(IOException $Exception) {
@@ -143,10 +141,7 @@ class Server extends Machine {
 
             switch($Event->Name) {
                 case Event::Logout:
-                    //@todo Shame on you Kerry, just shame on you...
-                    \vDesk::$User = $Client->User;
-
-                    Modules::Security()::Logout();
+                    Modules::Security()::Logout($Client->User);
                     $Client->Socket->Close();
                     $this->Clients->Remove($Client);
 
@@ -154,8 +149,6 @@ class Server extends Machine {
                     foreach($this->EventListeners->Filter(static fn(EventListener $Listener): bool => $Listener->Client === $Client) as $Listener) {
                         $this->EventListeners->Remove($Listener);
                     }
-
-                    \vDesk::$User = $this->User;
                     Log::Info("Relay Server", "Client \"{$Client->User->Name}\" disconnected.");
                     continue 2;
                 case Event::AddEventListener:
