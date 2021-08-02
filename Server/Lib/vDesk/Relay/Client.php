@@ -14,6 +14,7 @@ use vDesk\Utils\Log;
 
 /**
  * Process based Relay client.
+ * @todo Test what happens if the server crashed.
  *
  * @package vDesk\Relay
  * @author  Kerry <DevelopmentHero@gmail.com>
