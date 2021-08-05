@@ -13,25 +13,24 @@ use vDesk\Relay\Event;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class EventListener {
-    
+
     /**
      * The callback of the EventListener.
      *
      * @var callable|null
      */
     private $Callback;
-    
+
     /**
      * Creates a new instance of the EventListener class.
      *
-     * @param string                  $Event    Initializes the EventListener with the specified Event.
-     * @param \vDesk\Relay\API\Client $Client   Initializes the EventListener with the specified Client.
-     * @param callable                $Callback Initializes the EventListener with the specified callback to execute if the specified Event has been dispatched.
+     * @param string   $Event    Initializes the EventListener with the specified Event.
+     * @param callable $Callback Initializes the EventListener with the specified callback to execute if the specified Event has been dispatched.
      */
-    public function __construct(public string $Event, public Client $Client, callable $Callback) {
+    public function __construct(public string $Event, callable $Callback) {
         $this->Callback = $Callback;
     }
-    
+
     /**
      * Executes a registered EventListener callback.
      *
