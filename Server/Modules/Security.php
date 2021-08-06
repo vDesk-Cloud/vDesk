@@ -150,9 +150,9 @@ final class Security extends Module {
     public static function Logout(User $User = null): bool {
         Expression::Delete()
                   ->From("Security.Sessions")
-                  ->Where(["User" => $User ?? \vDesk::$User])
+                  ->Where(["User" => $User ?? User::$Current])
                   ->Execute();
-        Log::Info(__METHOD__, "User " . ($User ?? \vDesk::$User)->Name . " logged out.");
+        Log::Info(__METHOD__, "User " . ($User ?? User::$Current)->Name . " logged out.");
         if($User === null) {
             User::$Current = \vDesk::$User = null;
         }

@@ -18,32 +18,35 @@ use vDesk\Struct\Collections\Observable\Collection;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Locale extends Package {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Locale";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
-    
+    public const Version = "1.0.1";
+
     /**
      * The name of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The name of the Package.
      */
     public const Description = "Package enabling multi-language support and providing functionality for managing localized packages";
-    
+
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Modules" => "1.0.0"];
-    
+    public const Dependencies = [
+        "vDesk"   => "1.0.1",
+        "Modules" => "1.0.0"
+    ];
+
     /**
      * The files and directories of the Package.
      */
@@ -62,7 +65,7 @@ final class Locale extends Package {
             ]
         ]
     ];
-    
+
     /**
      * The countries of the Package.
      */
@@ -572,16 +575,16 @@ final class Locale extends Package {
             "ZW" => "Zimbabwe"
         ]
     ];
-    
+
     /**
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         Expression::Create()
                   ->Database("Locale")
                   ->Execute();
-        
+
         Expression::Create()
                   ->Table(
                       "Locale.Translations",
@@ -609,7 +612,7 @@ final class Locale extends Package {
                       ]
                   )
                   ->Execute();
-        
+
         //Install countries.
         foreach(self::Countries as $Locale => $Countries) {
             $Expression = Expression::Insert()
@@ -624,7 +627,7 @@ final class Locale extends Package {
             $Expression->Values(...$Values)
                        ->Execute();
         }
-        
+
         //Install Module.
         /** @var \Modules\Locale $Locale */
         $Locale = \vDesk\Modules::Locale();
@@ -689,32 +692,29 @@ final class Locale extends Package {
             )
         );
         $Locale->Save();
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
-        
-        //Initialize translations.
-        \vDesk::$Locale = new LocaleDictionary();
-        
+
     }
-    
+
     /**
      * @inheritDoc
      */
     public static function Uninstall(string $Path): void {
-        
+
         //Uninstall Module.
         /** @var \Modules\Locale $Locale */
         $Locale = \vDesk\Modules::Locale();
         $Locale->Delete();
-        
+
         //Drop database.
         Expression::Drop()
                   ->Database("Locale")
                   ->Execute();
-        
+
         //Delete files.
         self::Undeploy();
-        
+
     }
 }
