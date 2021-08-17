@@ -3,38 +3,43 @@ declare(strict_types=1);
 
 namespace Pages\vDesk;
 
+use vDesk\Pages\Cached\Page;
+
 /**
- * The download Page of the vDesk homepage.
+ * GetvDesk Page class.
  *
- * @package Pages\vDesk
+ * @package Homepage
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class GetvDesk extends Packages {
+class GetvDesk extends Page {
     
     /**
-     * The name of the Tutorial.
+     * The name of the Page.
      *
      * @var string
      */
     public string $Name = "GetvDesk";
     
     /**
-     * The nav label of the Tutorial
+     * The nav label of the Page.
      *
      * @var string
      */
     public string $Description = "Get vDesk";
     
     /**
-     * Initializes a new instance of the Download Page.
+     * Initializes a new instance of the GetvDesk Page class.
      *
-     * @param null|iterable $Values      Initializes the Download Page with the specified Dictionary of values.
-     * @param null|iterable $Templates   Initializes the Download Page with the specified Collection of templates.
-     * @param null|iterable $Stylesheets Initializes the Download Page with the specified Collection of stylesheets.
-     * @param null|iterable $Scripts     Initializes the Download Page with the specified Collection of scripts.
+     * @param null|iterable $Values      Initializes the GetvDesk Page with the specified Dictionary of values.
+     * @param null|iterable $Templates   Initializes the GetvDesk Page with the specified Collection of templates.
+     * @param null|iterable $Stylesheets Initializes the GetvDesk Page with the specified Collection of stylesheets.
      */
-    public function __construct(?iterable $Values = [], ?iterable $Templates = [], ?iterable $Stylesheets = ["vDesk/Stylesheet", "Documentation/Stylesheet", "vDesk/Packages"], ?iterable $Scripts = []) {
-        parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
+    public function __construct(
+        ?iterable $Values = [],
+        ?iterable $Templates = ["vDesk/GetvDesk"],
+        ?iterable $Stylesheets = ["vDesk/Packages", "Documentation/Stylesheet"]
+    ) {
+        parent::__construct($Values, $Templates, $Stylesheets);
     }
     
 }

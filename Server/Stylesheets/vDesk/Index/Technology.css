@@ -1,0 +1,107 @@
+#Technology {
+    grid-row: 3 !important;
+    display: grid;
+    grid-template-columns: 25% repeat(5, 10%) 25%;
+    grid-template-rows: 22% repeat(3, 16.666%) 28%;
+}
+
+#Technology > .Platforms {
+    grid-row: 1;
+    grid-column-start: 6;
+    grid-column-end: 8;
+    animation-duration: 1s !important;
+}
+
+#Technology > .Resources {
+    grid-row: 5;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    animation-duration: 1s !important;
+}
+
+#Technology > img {
+    object-fit: contain;
+    place-self: stretch;
+    animation-duration: 1s !important;
+}
+
+@media only screen {
+    /* Smartphone */
+    @media (max-device-width: 812px)
+    and (max-device-height: 812px) {
+        @media (orientation: portrait) {
+            #Technology {
+                grid-template-columns: 0 repeat(5, 20%) 0 !important;
+                grid-template-rows: 30% repeat(3, 10%) 40% !important;
+            }
+
+            #Technology > .Platforms {
+                grid-column-start: 1 !important;
+                grid-column-end: 7 !important;
+            }
+
+            #Technology > .Resources {
+                grid-column-start: 1 !important;
+                grid-column-end: 7 !important;
+            }
+        }
+        @media (orientation: landscape) {
+            #Technology {
+                grid-template-columns: 30% repeat(5, 8%) 30% !important;
+            }
+
+            #Technology > .Platforms {
+                grid-column: 1 !important;
+                grid-row-start: 1 !important;
+                grid-row-end: 6 !important;
+            }
+
+            #Technology > .Resources {
+                grid-column: 7 !important;
+                grid-row-start: 1 !important;
+                grid-row-end: 6 !important;
+            }
+        }
+    }
+    /* Tablet */
+    @media (min-device-width: 768px)
+    and (max-device-width: 1280px)
+    and (min-device-height: 768px)
+    and (max-device-height: 1280px) {
+        @media (orientation: portrait) {
+            #Technology {
+                grid-template-columns: 0 repeat(5, 20%) 0 !important;
+                grid-template-rows: 30% repeat(3, 13.333%) 30% !important;
+            }
+
+            #Technology > .Platforms {
+                grid-column-start: 1 !important;
+                grid-column-end: 7 !important;
+            }
+
+            #Technology > .Resources {
+                grid-column-start: 1 !important;
+                grid-column-end: 7 !important;
+            }
+        }
+        @media (orientation: landscape) {
+            #Technology {
+                grid-template-rows: repeat(5, 20%) !important;
+            }
+
+            #Technology > .Platforms {
+                grid-column-start: 6 !important;
+                grid-column-end: 8 !important;
+                grid-row-start: 1 !important;
+                grid-row-end: 3 !important;
+            }
+
+            #Technology > .Resources {
+                grid-column-start: 1 !important;
+                grid-column-end: 3 !important;
+                grid-row-start: 4 !important;
+                grid-row-end: 6 !important;
+            }
+        }
+    }
+}
