@@ -13,15 +13,14 @@ use vDesk\DataProvider\Expression\IDelete;
 use vDesk\DataProvider\Expression\IInsert;
 use vDesk\DataProvider\Expression\ISelect;
 use vDesk\DataProvider\Expression\IUpdate;
-use vDesk\Struct\StaticSingleton;
 
 /**
- * Class Expression represents ...
+ * Factory class that provides access to specialized Expressions according the current configured DataProvider.
  *
  * @package vDesk\DataProvider
  * @author  Kerry Holz <DevelopmentHero@gmail.com>
  */
-class Expression extends StaticSingleton {
+class Expression {
 
     /**
      * The current expression provider of the Expression.
@@ -35,7 +34,7 @@ class Expression extends StaticSingleton {
      *
      * @param string $Provider Initializes the Expression with the specified expression provider.
      */
-    public static function _construct(string $Provider = "") {
+    public function __construct(string $Provider) {
         self::$Provider = "vDesk\\DataProvider\\{$Provider}\\Expression";
     }
 

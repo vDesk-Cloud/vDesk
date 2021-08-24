@@ -14,15 +14,6 @@ use vDesk\DataProvider\IExpression;
 interface IDrop extends IExpression {
 
     /**
-     * Drops a table.
-     *
-     * @param string $Name The name of the table to drop.
-     *
-     * @return \vDesk\DataProvider\Expression\IDrop The current instance for further chaining.
-     */
-    public function Table(string $Name): IDrop;
-
-    /**
      * Drops a database.
      *
      * @param string $Name The name of the database to drop.
@@ -30,6 +21,24 @@ interface IDrop extends IExpression {
      * @return \vDesk\DataProvider\Expression\IDrop The current instance for further chaining.
      */
     public function Database(string $Name): IDrop;
+
+    /**
+     * Drops a schema.
+     *
+     * @param string $Name The name of the schema to drop.
+     *
+     * @return \vDesk\DataProvider\Expression\IDrop The current instance for further chaining.
+     */
+    public function Schema(string $Name): IDrop;
+
+    /**
+     * Drops a table.
+     *
+     * @param string $Name The name of the table to drop.
+     *
+     * @return \vDesk\DataProvider\Expression\IDrop The current instance for further chaining.
+     */
+    public function Table(string $Name): IDrop;
 
     /**
      * Drops an index.

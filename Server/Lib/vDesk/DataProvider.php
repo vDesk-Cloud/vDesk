@@ -4,46 +4,31 @@ declare(strict_types=1);
 namespace vDesk;
 
 use vDesk\Configuration\Settings;
-use vDesk\DataProvider\Expression;
-use vDesk\DataProvider\Expression\Functions;
 use vDesk\DataProvider\IPreparedStatement;
 use vDesk\DataProvider\IProvider;
 use vDesk\DataProvider\IResult;
 use vDesk\DataProvider\ITransaction;
-use vDesk\Struct\StaticSingleton;
 
 /**
  * Provides abstract database access.
  *
  * @author  Kerry Holz <DevelopmentHero@gmail.com>
  */
-final class DataProvider extends StaticSingleton {
+final class DataProvider {
 
     /**
      * Database null value.
+     *
+     * @var null|string
      */
-    public static $NULL = null;
+    public static ?string $NULL = null;
 
     /**
      * The IProvider of the DataProvider
      *
      * @var  null|\vDesk\DataProvider\IProvider
      */
-    public static ?IProvider $Provider;
-
-    /**
-     * The Expressions of the DataProvider.
-     *
-     * @var \vDesk\DataProvider\Expression|null
-     */
-    public static ?Expression $Expression;
-
-    /**
-     * The Functions of the DataProvider
-     *
-     * @var \vDesk\DataProvider\Expression\Functions|null
-     */
-    public static ?Expression\Functions $Functions;
+    public static ?IProvider $Provider = null;
 
     /**
      * Retrieves the last auto generated ID of an INSERT-SQL-Statement.
@@ -159,36 +144,26 @@ final class DataProvider extends StaticSingleton {
      * @param int|null    $Port       Initializes the DataProvider with the specified port.
      * @param string      $User       Initializes the DataProvider with the specified database user.
      * @param string      $Password   Initializes the DataProvider with the specified password of the database user.
-     * @param string|null $Charset    Initializes the DataProvider with the specified charset.
-     * @param bool        $Persistent Initializes the DataProvider with the specified flag indicating whether to use perstitent connections.
+     * @param null|string $Database   Initializes the DataProvider with the specified database.
+     * @param bool        $Persistent Initializes the DataProvider with the specified flag indicating whether to use persistent connections.
      */
-    protected static function _construct(
-        string $Provider = "",
-        string $Server = "localhost",
-        int $Port = null,
-        string $User = "",
-        string $Password = "",
-        string $Charset = null,
-        bool $Persistent = true
+    public function __construct(
+        string  $Provider = "",
+        string  $Server = "localhost",
+        int     $Port = null,
+        string  $User = "",
+        string  $Password = "",
+        ?string $Database = null,
+        bool    $Persistent = false
     ) {
+        //Close previous connection.
+        self::$Provider?->Close();
+
         $Class          = "vDesk\\DataProvider\\{$Provider}\\Provider";
-        self::$Provider = new $Class(
-            $Server,
-            $User,
-            $Password,
-            $Port,
-            $Charset,
-            $Persistent
-        );
+        self::$Provider = new $Class($Server, $User, $Password, $Database, $Port, null, $Persistent);
 
         //Populate database specific NULL value.
         self::$NULL = self::$Provider::NULL;
-
-        //Initialize Expressions.
-        self::$Expression = new Expression($Provider);
-
-        //Initialize Functions.
-        self::$Functions = new Functions($Provider);
     }
 
 }
@@ -201,7 +176,7 @@ if(Settings::$Local["DataProvider"]->Count > 0) {
         Settings::$Local["DataProvider"]["Port"],
         Settings::$Local["DataProvider"]["User"],
         Settings::$Local["DataProvider"]["Password"],
-        Settings::$Local["DataProvider"]["Charset"] ?? null,
-        Settings::$Local["DataProvider"]["Persistent"] ?? true
+        Settings::$Local["DataProvider"]["Database"],
+        Settings::$Local["DataProvider"]["Persistent"] ?? false
     );
 }

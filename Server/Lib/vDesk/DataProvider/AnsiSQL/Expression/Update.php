@@ -29,7 +29,7 @@ abstract class Update implements IUpdate {
      * @param string $Table Initializes the Update with the specified table.
      */
     public function __construct(string $Table) {
-        $this->Statement .= "UPDATE {$Table} ";
+        $this->Statement .= "UPDATE " . DataProvider::SanitizeField($Table) . " ";
     }
     
     /**
@@ -77,8 +77,8 @@ abstract class Update implements IUpdate {
     /**
      * @inheritDoc
      */
-    public function Execute(): IResult {
-        return DataProvider::Execute($this->Statement);
+    public function Execute(bool $Buffered = true): IResult {
+        return DataProvider::Execute($this->Statement, $Buffered);
     }
 
     /**

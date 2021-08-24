@@ -5,6 +5,7 @@ namespace vDesk\DataProvider\MySQL;
 
 use vDesk\DataProvider\IResult;
 use vDesk\DataProvider\SQLException;
+use vDesk\IO\IOException;
 
 /**
  * Abstract data-provider for MySQL and MariaDB databases.
@@ -17,7 +18,7 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
     /**
      * Regular expression to extract the table- and column name of a field descriptor.
      */
-    public const Separator = "/^(\w+)\.(\w+)$/";
+    public const SeparatorExpression = "/^(\w+)\.(\w+)$/";
 
     /**
      * The format for storing \DateTime values in a MySQL conform format.
@@ -89,16 +90,30 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
      * @param string      $Server     Initializes the Provider with the specified address of the target SQL-server.
      * @param string      $User       Initializes the Provider with the specified name of the user of the target SQL-server.
      * @param string      $Password   Initializes the Provider with the specified password of the user of the target SQL-server.
+     * @param null|string $Database   This parameter is being ignored due to MySQL doesn't support schemas.
      * @param null|int    $Port       Initializes the Provider with the specified port to use for the connection-socket.
      * @param null|string $Charset    Initializes the Provider with the specified charset of the connection.
      * @param bool        $Persistent Initializes the Provider with the specified flag indicating whether to use a persistent connection.
+     *
+     * @throws \vDesk\IO\IOException Thrown if the connection couldn't be established.
      */
-    public function __construct(string $Server, string $User, string $Password, ?int $Port = self::Port, ?string $Charset = self::Charset, bool $Persistent = true) {
+    public function __construct(
+        string  $Server,
+        string  $User,
+        string  $Password,
+        ?string $Database = null,
+        ?int    $Port = self::Port,
+        ?string $Charset = self::Charset,
+        bool    $Persistent = false
+    ) {
         if($Persistent) {
             $Server = "p:{$Server}";
         }
-        $this->Provider = new \mysqli($Server, $User, $Password, null, $Port ?? self::Port);
-        $this->Provider->set_charset($Charset ?? self::Charset);
+        $this->Provider = new \mysqli($Server, $User, $Password, null, $Port ?? static::Port);
+        if($this->Provider->connect_errno > 0) {
+            throw new IOException("Couldn't establish connection to server: {$this->Provider->connect_error}.");
+        }
+        $this->Provider->set_charset($Charset ?? static::Charset);
     }
 
     /**
@@ -126,10 +141,11 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
      * Executes a SQL-statement on the database-server.
      *
      * @param string $Statement The SQL-statement to execute.
-     * @param bool   $Buffered  Determines whether the result-set will be buffered.
+     * @param bool   $Buffered  Flag indicating whether to buffer the result set.
      *
      * @return \vDesk\DataProvider\IResult The result-set yielding the values the SQL-server returned from the specified statement.
-     * @throws \vDesk\DataProvider\SQLException
+     *
+     * @throws \vDesk\DataProvider\SQLException Thrown if the execution of the statement failed.
      */
     public function Execute(string $Statement, bool $Buffered = true): IResult {
 
@@ -170,9 +186,23 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
      * @return string The escaped field.
      */
     public function EscapeField(string $Field): string {
-        return \in_array(\strtoupper(\trim($Field)), self::Reserved)
+        return \in_array(\strtoupper(\trim($Field)), static::Reserved)
             ? "`{$Field}`"
             : $Field;
+    }
+
+    /**
+     * Escapes reserved words in a field according to the current database-specification.
+     *
+     * @param string $Field The field to escape.
+     *
+     * @return string The escaped field.
+     */
+    public function SanitizeField(string $Field): string {
+        $Matches = [];
+        return (int)\preg_match(static::SeparatorExpression, $Field, $Matches) > 0
+            ? $this->EscapeField($Matches[1]) . static::Separator . $this->EscapeField($Matches[2])
+            : $this->EscapeField($Field);
     }
 
     /**
@@ -190,6 +220,13 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
      */
     public function Transact(string $Statement, bool $Buffered = false, ?string $Name = null, bool $AutoRollback = true, bool $AutoCommit = true): Transaction {
         return new Transaction($this->Provider, $Statement, $Buffered, $Name, $AutoRollback, $AutoCommit);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function Close(): void {
+        $this->Provider->close();
     }
 
 }

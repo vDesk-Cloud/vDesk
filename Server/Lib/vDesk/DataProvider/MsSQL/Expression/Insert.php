@@ -46,7 +46,7 @@ final class Insert implements IInsert {
     /**
      * @inheritDoc
      */
-    public function Into(string $Table, array $Fields = []): self {
+    public function Into(string $Table, array $Fields = null): self {
         $this->Statement .= "INSERT INTO {$Table} ";
         $this->Fields    = $Fields;
         return $this;

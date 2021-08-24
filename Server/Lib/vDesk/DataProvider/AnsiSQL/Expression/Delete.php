@@ -26,15 +26,15 @@ abstract class Delete implements IDelete {
     /**
      * @inheritDoc
      */
-    public function From(string $Table): self {
-        $this->Statement .= "DELETE FROM {$Table} ";
+    public function From(string $Table): static {
+        $this->Statement .= "DELETE FROM " . DataProvider::SanitizeField($Table) . " ";
         return $this;
     }
     
     /**
      * @inheritDoc
      */
-    public function Where(array ...$Conditions): self {
+    public function Where(array ...$Conditions): static {
         $this->Statement .= "WHERE " . Expression::TransformConditions([], ...$Conditions);
         return $this;
     }
@@ -43,8 +43,8 @@ abstract class Delete implements IDelete {
     /**
      * @inheritDoc
      */
-    public function Execute(): IResult {
-        return DataProvider::Execute($this->Statement);
+    public function Execute(bool $Buffered = true): IResult {
+        return DataProvider::Execute($this->Statement, $Buffered);
     }
 
     /**

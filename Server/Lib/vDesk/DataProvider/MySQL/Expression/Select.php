@@ -14,12 +14,36 @@ use vDesk\DataProvider\IResult;
  */
 class Select extends DataProvider\AnsiSQL\Expression\Select {
 
-    //MySQL's SELECT is ANSI conform.
+    //MySQL's SELECT is (mostly) AnsiSQL conform.
     /**
      * @inheritDoc
      */
     public function Execute(bool $Buffered = true): IResult {
         return DataProvider::Execute($this->Statement, $Buffered);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function RightJoin(string $Table, string $Alias = null): static {
+        return $this->Join("RIGHT", $Table, $Alias);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function LeftJoin(string $Table, string $Alias = null): static {
+        return $this->Join("LEFT", $Table, $Alias);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function FullJoin(string $Table, string $Alias = null): static {
+        //FULL OUTER JOIN shim.
+        $Right = clone $this;
+        $this->LeftJoin($Table, $Alias);
+        return $this->Union($Right->RightJoin($Table, $Alias));
     }
 
 }

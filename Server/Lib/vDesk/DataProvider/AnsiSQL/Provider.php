@@ -5,7 +5,6 @@ namespace vDesk\DataProvider\AnsiSQL;
 
 use vDesk\DataProvider\IProvider;
 use vDesk\DataProvider\IResult;
-use vDesk\DataProvider\SQLException;
 use vDesk\Data\IManagedModel;
 use vDesk\Struct\Type;
 
@@ -20,7 +19,12 @@ abstract class Provider implements IProvider {
     /**
      * Regular expression to extract the table- and column name of a field descriptor.
      */
-    public const Separator = "/^(\w+)\.(\w+)$/";
+    public const SeparatorExpression = "/^(\w+)\.(\w+)$/";
+
+    /**
+     * The separator character indicating database-, schema-, table- and column name of a field descriptor.
+     */
+    public const Separator = ".";
 
     /**
      * The format for storing \DateTime values in a MySQL conform format.
@@ -44,6 +48,7 @@ abstract class Provider implements IProvider {
         "BETWEEN",
         "BOTH",
         "CASE",
+        "BINARY",
         "CAST",
         "CHECK",
         "COLLATE",
@@ -135,9 +140,8 @@ abstract class Provider implements IProvider {
      */
     public const NULL = "NULL";
 
-
     /**
-     * Executes an stored procedure on the sql-server.
+     * Executes a stored procedure on the SQL-server.
      *
      * @param string $Procedure The name of the procedure to execute.
      * @param array  $Arguments The list of arguments to pass to the procedure.
@@ -167,13 +171,13 @@ abstract class Provider implements IProvider {
      * @return string The escaped field.
      */
     public function EscapeField(string $Field): string {
-        return \in_array(\strtoupper(\trim($Field)), self::Reserved)
+        return \in_array(\strtoupper(\trim($Field)), static::Reserved)
             ? "'{$Field}'"
             : $Field;
     }
 
     /**
-     * Sanitizes a value according to the MySQL database-specification.
+     * Sanitizes a value according to the AnsiSQL database-specification.
      *
      * @param mixed|\vDesk\Data\IManagedModel $Value The value to sanitize.
      *
@@ -186,24 +190,25 @@ abstract class Provider implements IProvider {
         return match (Type::Of($Value)) {
             Type::String => "'{$this->Escape($Value)}'",
             Type::Bool, Type::Boolean => (int)$Value,
-            Type::Null => self::NULL,
+            Type::Null => static::NULL,
             Type::Object, Type::Array => "'" . \json_encode($Value) . "'",
-            \DateTime::class => "'{$Value->format(self::Format)}'",
+            \DateTime::class => "'{$Value->format(static::Format)}'",
             default => (string)$Value
         };
     }
 
     /**
-     * Escapes reserved words in a field according to the current database-specification.
+     * Sanitizes reserved words in a field according to the AnsiSQL database-specification.
      *
-     * @param string $Field The field to escape.
+     * @param string $Field The field to sanitize.
      *
-     * @return string The escaped field.
+     * @return string The sanitized field.
      */
     public function SanitizeField(string $Field): string {
         $Matches = [];
-        return (int)\preg_match(self::Separator, $Field, $Matches) > 0
-            ? $this->EscapeField($Matches[1]) . "." . $this->EscapeField($Matches[2])
+        return (int)\preg_match(static::SeparatorExpression, $Field, $Matches) > 0
+            ?  $this->EscapeField($Matches[1])
+              . static::Separator . $this->EscapeField($Matches[2])
             : $this->EscapeField($Field);
     }
 

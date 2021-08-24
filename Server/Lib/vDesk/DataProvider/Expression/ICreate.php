@@ -14,18 +14,6 @@ use vDesk\DataProvider\IExpression;
 interface ICreate extends IExpression {
 
     /**
-     * Creates a table.
-     *
-     * @param string   $Name    The name of the table.
-     * @param string[] $Fields  The fields of the table.
-     * @param array[]  $Indexes The indexes of the table.
-     * @param array    $Options The DataProvider specific options of the table.
-     *
-     * @return \vDesk\DataProvider\Expression\ICreate The current instance for further chaining.
-     */
-    public function Table(string $Name, array $Fields, array $Indexes = [], array $Options = []): ICreate;
-
-    /**
      * Creates a database.
      *
      * @param string $Name The name of the database to create.
@@ -35,23 +23,42 @@ interface ICreate extends IExpression {
     public function Database(string $Name): ICreate;
 
     /**
+     * Creates a schema.
+     *
+     * @param string $Name The name of the schema to create.
+     *
+     * @return \vDesk\DataProvider\Expression\ICreate The current instance for further chaining.
+     */
+    public function Schema(string $Name): ICreate;
+
+    /**
+     * Creates a table.
+     *
+     * @param string $Name The name of the table to create.
+     *
+     * @return \vDesk\DataProvider\Expression\ICreate The current instance for further chaining.
+     */
+    public function Table(string $Name): ICreate;
+
+    /**
      * Creates an index.
      *
      * @param string $Name   The name of the index to create.
      * @param bool   $Unique Flag indicating whether to create an unique index.
-     * @param array  $Fields $Fields The fields of the index.
+     *
      *
      * @return \vDesk\DataProvider\Expression\ICreate The current instance for further chaining.
      */
-    public function Index(string $Name, bool $Unique, array $Fields): ICreate;
+    public function Index(string $Name, bool $Unique): ICreate;
 
     /**
      * Applies an ON statement for creating indices.
      *
-     * @param string $Table The name of the target table to create an index on.
+     * @param string $Table  The name of the target table to create an index on.
+     * @param array  $Fields $Fields The fields of the index.
      *
      * @return \vDesk\DataProvider\Expression\ICreate The current instance for further chaining.
      */
-    public function On(string $Table): ICreate;
+    public function On(string $Table, array $Fields): ICreate;
 
 }

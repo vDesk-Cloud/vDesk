@@ -76,7 +76,7 @@ class Result implements \Iterator, IResult {
      * @return string[]|null The row at the current position within the result set; otherwise, null.
      */
     public function ToMap(): ?array {
-        return \pg_fetch_assoc($this->ResultSet);
+        return \pg_fetch_assoc($this->ResultSet, $this->Position);
     }
 
     /**

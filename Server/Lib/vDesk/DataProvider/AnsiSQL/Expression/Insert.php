@@ -14,84 +14,56 @@ use vDesk\DataProvider\Expression\IInsert;
  * @author  Kerry Holz <DevelopmentHero@gmail.com>
  */
 abstract class Insert implements IInsert {
-    
+
     /**
      * The SQL-statement of the Insert\MariaDB.
      *
      * @var string
      */
     protected string $Statement = "";
-    
+
     /**
      * The fields of the Insert\MariaDB.
      *
      * @var string[]
      */
-    protected array $Fields = [];
-    
+    protected ?array $Fields = [];
+
     /**
      * @inheritDoc
      */
-    public function Into(string $Table, array $Fields = []): self {
-        $this->Statement .= "INSERT INTO {$Table} ";
+    public function Into(string $Table, array $Fields = null): static {
+        $this->Statement .= "INSERT INTO " . DataProvider::SanitizeField($Table) . " ";
         $this->Fields    = $Fields;
         return $this;
     }
-    
+
     /**
      * @inheritDoc
      */
-    public function Values(array $Values, array ...$Multiple): self {
-        if(\count($this->Fields) > 0) {
-            $this->Statement .= "("
-                . \implode(
-                    ", ",
-                    \array_map(
-                        static fn($Field): string => DataProvider::EscapeField($Field),
-                        $this->Fields
-                    )
-                )
-                . ") VALUES ("
-                . \implode(
-                    ", ",
-                    \array_map(
-                        static fn($Value) => DataProvider::Sanitize($Value),
-                        \array_values($Values)
-                    )
-                )
-                . ")";
-            foreach($Multiple as $AdditionalValues) {
-                $this->Statement .= ", ("
-                    . \implode(
-                        ", ",
-                        \array_map(
-                            static fn($Value) => DataProvider::Sanitize($Value),
-                            \array_values($AdditionalValues)
-                        )
-                    )
-                    . ")";
-            }
-            
-        } else {
-            $this->Statement .= "("
-                . \implode(
-                    ", ",
-                    \array_map(
-                        static fn($Field): string => DataProvider::EscapeField($Field),
-                        \array_keys($Values)
-                    )
-                )
-                . ") VALUES ("
-                . \implode(
-                    ", ",
-                    \array_map(
-                        static fn($Value) => DataProvider::Sanitize($Value),
-                        \array_values($Values)
-                    )
-                )
-                . ")";
+    public function Values(array $Values, array ...$Multiple): static {
+        $this->Statement .= "("
+                            . \implode(
+                                ", ",
+                                \array_map(static fn($Field): string => DataProvider::EscapeField($Field), $this->Fields ?? \array_keys($Values))
+                            )
+                            . ") VALUES ("
+                            . \implode(
+                                ", ",
+                                \array_map(static fn($Value) => DataProvider::Sanitize($Value), \array_values($Values))
+                            )
+                            . ")";
+        foreach($Multiple as $AdditionalValues) {
+            $this->Statement .= ", ("
+                                . \implode(
+                                    ", ",
+                                    \array_map(
+                                        static fn($Value) => DataProvider::Sanitize($Value),
+                                        \array_values($AdditionalValues)
+                                    )
+                                )
+                                . ")";
         }
-        
         return $this;
     }
 
@@ -104,6 +76,7 @@ abstract class Insert implements IInsert {
     }
 
     //Implementation of IExpression.
+
     /**
      * @inheritDoc
      */
@@ -114,8 +87,8 @@ abstract class Insert implements IInsert {
     /**
      * @inheritDoc
      */
-    public function Execute(): IResult {
-        return DataProvider::Execute($this->Statement);
+    public function Execute(bool $Buffered = true): IResult {
+        return DataProvider::Execute($this->Statement, $Buffered);
     }
 
     /**

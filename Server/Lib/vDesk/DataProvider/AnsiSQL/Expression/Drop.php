@@ -8,49 +8,57 @@ use vDesk\DataProvider\Expression\IDrop;
 use vDesk\DataProvider\IResult;
 
 /**
- * Represents a MySQL compatible DROP SQL expression.
+ * Represents a AnsiSQL compatible DROP SQL expression.
  *
  * @package vDesk\DataProvider\Expression\Drop
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Drop implements IDrop {
-    
+
     /**
      * The SQL-statement of the Drop.
      *
      * @var string
      */
     protected string $Statement = "";
-    
+
     /**
      * @inheritDoc
      */
-    public function Table(string $Name, ...$Fields): self {
-        $this->Statement .= "DROP TABLE {$Name}";
-        return $this;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function Database(string $Name): self {
-        $this->Statement .= "DROP DATABASE {$Name}";
+    public function Database(string $Name): static {
+        $this->Statement .= "DROP DATABASE " . DataProvider::EscapeField($Name);
         return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function Index(string $Name): IDrop {
-        $this->Statement .= "DROP INDEX {$Name}";
+    public function Schema(string $Name): static {
+        $this->Statement .= "DROP SCHEMA " . DataProvider::EscapeField($Name);
         return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function On(string $Table): self {
-        $this->Statement .= "ON {$Table}";
+    public function Table(string $Name, ...$Fields): static {
+        $this->Statement .= "DROP TABLE " . DataProvider::EscapeField($Name);
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function Index(string $Name): static {
+        $this->Statement .= "DROP INDEX " . DataProvider::EscapeField($Name);
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function On(string $Table): static {
+        $this->Statement .= "ON " . DataProvider::SanitizeField($Table);
         return $this;
     }
 
@@ -58,8 +66,8 @@ abstract class Drop implements IDrop {
     /**
      * @inheritDoc
      */
-    public function Execute(): IResult {
-        return DataProvider::Execute($this->Statement);
+    public function Execute(bool $Buffered = true): IResult {
+        return DataProvider::Execute($this->Statement, $Buffered);
     }
 
     /**

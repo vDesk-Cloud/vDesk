@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\AnsiSQL\Expression;
 
+use vDesk\DataProvider\AnsiSQL\Expression;
 use vDesk\DataProvider\Expression\IAggregateFunction;
 use vDesk\DataProvider\IResult;
-use vDesk\DataProvider\MySQL\Expression;
 use vDesk\DataProvider;
 use vDesk\DataProvider\Expression\ISelect;
 
@@ -65,7 +65,7 @@ abstract class Select implements ISelect {
     /**
      * @inheritDoc
      */
-    public function Distinct(...$Fields): self {
+    public function Distinct(...$Fields): static {
         $FlattenedFields = [];
 
         foreach($Fields as $Field) {
@@ -81,7 +81,7 @@ abstract class Select implements ISelect {
     /**
      * @inheritDoc
      */
-    public function From(...$Tables): self {
+    public function From(...$Tables): static {
 
         $FlattenedTables = [];
 
@@ -100,7 +100,7 @@ abstract class Select implements ISelect {
                 continue;
             }
             // Strip out any database names.
-            $this->Aliases[]   = \substr($Table, \strrpos($Table, ".") + 1);
+            $this->Aliases[]   = \substr($Table, \strrpos($Table, DataProvider::$Provider::Separator) + 1);
             $FlattenedTables[] = DataProvider::SanitizeField($Table);
         }
 
@@ -113,7 +113,7 @@ abstract class Select implements ISelect {
     /**
      * @inheritDoc
      */
-    public function Where(array ...$Conditions): self {
+    public function Where(array ...$Conditions): static {
         $this->Statement .= "WHERE " . Expression::TransformConditions($this->Aliases, ...$Conditions) . " ";
         return $this;
     }
@@ -121,16 +121,50 @@ abstract class Select implements ISelect {
     /**
      * @inheritDoc
      */
-    public function InnerJoin(string $Table, string $Alias = null): self {
-        $this->Aliases[] = $Alias ?? \substr($Table, \strrpos($Table, ".") + 1);
-        $this->Statement .= "INNER JOIN " . DataProvider::SanitizeField($Table) . " " . ($Alias !== null ? "AS " . DataProvider::EscapeField($Alias) . " " : "");
+    public function InnerJoin(string $Table, string $Alias = null): static {
+        return $this->Join("INNER", $Table, $Alias);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function RightJoin(string $Table, string $Alias = null): static {
+        return $this->Join("RIGHT OUTER", $Table, $Alias);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function LeftJoin(string $Table, string $Alias = null): static {
+        return $this->Join("LEFT OUTER", $Table, $Alias);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function FullJoin(string $Table, string $Alias = null): static {
+        return $this->Join("FULL OUTER", $Table, $Alias);
+    }
+
+    /**
+     * Applies a JOIN statement with a specified type.
+     *
+     * @param string      $Type  The type of the statement.
+     * @param string      $Table The table to join.
+     * @param null|string $Alias An optional alias for the table to join.
+     *
+     * @return $this The current instance for further chaining.
+     */
+    protected function Join(string $Type, string $Table, string $Alias = null): static {
+        $this->Aliases[] = $Alias ?? \substr($Table, \strrpos($Table, DataProvider::$Provider::Separator) + 1);
+        $this->Statement .= "{$Type} JOIN " . DataProvider::SanitizeField($Table) . " " . ($Alias !== null ? "AS " . DataProvider::EscapeField($Alias) . " " : "");
         return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function On(array ...$Fields): self {
+    public function On(array ...$Fields): static {
         $this->Statement .= "ON " . Expression::TransformConditions($this->Aliases, ...$Fields) . " ";
         return $this;
     }
@@ -138,7 +172,7 @@ abstract class Select implements ISelect {
     /**
      * @inheritDoc
      */
-    public function Limit(int $Amount): self {
+    public function Limit(int $Amount): static {
         $this->Statement .= "LIMIT {$Amount} ";
         return $this;
     }
@@ -146,7 +180,7 @@ abstract class Select implements ISelect {
     /**
      * @inheritDoc
      */
-    public function Offset(int $Index): self {
+    public function Offset(int $Index): static {
         $this->Statement .= "OFFSET {$Index} ";
         return $this;
     }
@@ -154,26 +188,7 @@ abstract class Select implements ISelect {
     /**
      * @inheritDoc
      */
-    public function RightJoin(string $Table, string $Alias = null): self {
-        $this->Aliases[] = $Alias ?? \substr($Table, \strrpos($Table, ".") + 1);
-        $this->Statement .= "RIGHT JOIN " . DataProvider::SanitizeField($Table) . " " . ($Alias !== null ? "AS " . DataProvider::EscapeField($Alias) . " " : "");
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function LeftJoin(string $Table, string $Alias = null): self {
-        $this->Aliases[] = $Alias ?? \substr($Table, \strrpos($Table, ".") + 1);
-        $this->Statement .= "LEFT JOIN " . DataProvider::SanitizeField($Table) . " " . ($Alias !== null ? "AS " . DataProvider::EscapeField($Alias) . " " : "");
-        return $this;
-
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function OrderBy(array $Fields): self {
+    public function OrderBy(array $Fields): static {
         $Conditions = [];
         foreach($Fields as $Field => $Order) {
             if(\is_string($Order)) {
@@ -189,7 +204,7 @@ abstract class Select implements ISelect {
     /**
      * @inheritDoc
      */
-    public function Union(ISelect $Select, bool $ALL = false): self {
+    public function Union(ISelect $Select, bool $ALL = false): static {
         $this->Statement .= "UNION " . ($ALL ? "ALL " : "") . (string)$Select;
         return $this;
     }
@@ -197,7 +212,7 @@ abstract class Select implements ISelect {
     /**
      * @inheritDoc
      */
-    public function Exists(ISelect $Select): self {
+    public function Exists(ISelect $Select): static {
         $this->Statement .= "EXISTS ($Select)";
         return $this;
     }
@@ -210,6 +225,7 @@ abstract class Select implements ISelect {
     }
 
     //Implementation of IExpression.
+
     /**
      * @inheritDoc
      */
@@ -220,8 +236,8 @@ abstract class Select implements ISelect {
     /**
      * @inheritDoc
      */
-    public function Execute(): IResult {
-        return DataProvider::Execute($this->Statement);
+    public function Execute(bool $Buffered = true): IResult {
+        return DataProvider::Execute($this->Statement, $Buffered);
     }
 
     /**

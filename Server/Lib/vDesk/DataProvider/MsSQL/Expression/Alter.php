@@ -32,7 +32,7 @@ class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Table(string $Name): self {
+    public function Table(string $Name): static {
         $this->Statement .= "ALTER TABLE " . DataProvider::SanitizeField($Name) . " ";
         return $this;
     }
@@ -40,7 +40,7 @@ class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Database(string $Name): self {
+    public function Database(string $Name): static {
         $this->Statement .= "CREATE DATABASE $Name";
         return $this;
     }
@@ -48,7 +48,7 @@ class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Add(array $Columns, array $Indexes = []): self {
+    public function Add(array $Columns, array $Indexes = []): static {
         foreach($Columns as $Name => $Column) {
             $this->Statements[] = "ADD COLUMN " . Table::Field(
                     $Name,
@@ -74,7 +74,7 @@ class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Rename(array $Columns): self {
+    public function Rename(array $Columns): static {
         foreach($Columns as $Name => $NewName) {
             $this->Statements[] = "RENAME COLUMN " . DataProvider::SanitizeField($Name) . " TO " . DataProvider::SanitizeField($NewName);
         }
@@ -84,7 +84,7 @@ class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Modify(array $Columns, array $Indexes = []): self {
+    public function Modify(array $Columns, array $Indexes = []): static {
         foreach($Columns as $Name => $Column) {
             $this->Statements[] = "MODIFY COLUMN " . Table::Field(
                     $Name,
@@ -110,7 +110,7 @@ class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Drop(array $Columns, array $Indexes = []): self {
+    public function Drop(array $Columns, array $Indexes = []): static {
         foreach($Columns as $Column) {
             $this->Statements[] = "DROP COLUMN " . DataProvider::SanitizeField($Column);
         }

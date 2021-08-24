@@ -16,7 +16,7 @@ class Create extends DataProvider\AnsiSQL\Expression\Create {
     /**
      * @inheritDoc
      */
-    public function Table(string $Name, array $Fields = [], array $Indexes = [], $Options = []): self {
+    public function Table(string $Name, array $Fields = [], array $Indexes = [], $Options = []): static {
         //Create table statement.
         $Table = [];
         foreach($Fields as $FieldName => $Field) {
@@ -34,37 +34,35 @@ class Create extends DataProvider\AnsiSQL\Expression\Create {
         //Create indices.
         $Indices = [];
         foreach($Indexes as $IndexName => $Index) {
-            if($IndexName === "Primary" || (isset($Index["Unique"]) && $Index["Unique"])) {
+            if($IndexName === "Primary") {
                 $Table[] = Table::Index($IndexName, $Index["Unique"] ?? false, $Index["Fields"]);
             }else{
-                $Indices[] = (new static())->Index($IndexName, $Index["Unique"] ?? false, $Index["Fields"])->On($Name);
+                $Indices[] = (new static())->Index($IndexName, $Index["Unique"] ?? false)->On($Name, $Index["Fields"]);
             }
         }
 
-        $this->Statement .= "CREATE TABLE " . DataProvider::SanitizeField($Name) . " (" . \implode(", ", $Table) . ");" . \PHP_EOL;
+        $this->Statement .= "TABLE " . DataProvider::SanitizeField($Name) . " (" . \implode(", ", $Table) . ");" . \PHP_EOL;
         $this->Statement .= \implode(";" . \PHP_EOL, $Indices);
-        return $this;
-    }
-
-    /**
-     * Postgres specific extension for creating indices.
-     *
-     * @param string $Name   The name of the index to create.
-     * @param bool   $Unique Flag indicating whether to create an unique index.
-     * @param array  $Fields $Fields The fields of the index.
-     *
-     * @return \vDesk\DataProvider\PgSQL\Expression\Create The current instance for further chaining.
-     */
-    public function Index(string $Name, bool $Unique, array $Fields): self {
-        $this->Statement .= "CREATE " . Table::Index($Name, $Unique, $Fields);
         return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function Database(string $Name): self {
-        $this->Statement .= "CREATE DATABASE " . DataProvider::EscapeField($Name) . " WITH ENCODING 'UTF8'";
+    public function On(string $Table, array $Fields): static {
+        $Transformed = [];
+        foreach($Fields as $Field => $Size) {
+            $Transformed[] = \is_string($Field) ? DataProvider::EscapeField($Field) : DataProvider::EscapeField($Size);
+        }
+        $this->Statement .= " ON " . DataProvider::SanitizeField($Table) . " (" . \implode(", ", $Transformed) . ")";
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function Database(string $Name): static {
+        $this->Statement .= "DATABASE " . DataProvider::EscapeField($Name) . " WITH ENCODING 'UTF8'";
         return $this;
     }
 

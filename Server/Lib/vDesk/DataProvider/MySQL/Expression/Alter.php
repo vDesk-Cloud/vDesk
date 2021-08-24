@@ -28,23 +28,33 @@ class Alter implements IAlter {
      * @var string[]
      */
     protected array  $Statements = [];
+
+    protected string $Target = "";
+
+    /**
+     * @inheritDoc
+     */
+    public function Database(string $Name): static {
+        $this->Statement .= "ALTER DATABASE " . DataProvider::SanitizeField($Name);
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function Schema(string $Name): static {
+        $this->Statement .= "ALTER SCHEMA " . DataProvider::SanitizeField($Name);
+        return $this;
+    }
     
     /**
      * @inheritDoc
      */
-    public function Table(string $Name): self {
+    public function Table(string $Name): static {
         $this->Statement .= "ALTER TABLE " . DataProvider::SanitizeField($Name) . " ";
         return $this;
     }
-    
-    /**
-     * @inheritDoc
-     */
-    public function Database(string $Name): self {
-        $this->Statement .= "ALTER DATABASE $Name";
-        return $this;
-    }
-    
+
     /**
      * Applies a storage engine to the Create\MariaDB.
      *
@@ -52,7 +62,7 @@ class Alter implements IAlter {
      *
      * @return \vDesk\DataProvider\MySQL\Expression\Alter The current instance for further chaining.
      */
-    public function Engine(string $Name): self {
+    public function Engine(string $Name): static {
         $this->Statement .= " ENGINE=$Name";
         return $this;
     }
@@ -60,7 +70,7 @@ class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Add(array $Columns, array $Indexes = []): self {
+    public function Add(array $Columns, array $Indexes = []): static {
         foreach($Columns as $Name => $Column) {
             $this->Statements[] = "ADD COLUMN " . Table::Field(
                     $Name,
@@ -86,7 +96,7 @@ class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Rename(array $Columns): self {
+    public function Rename(array $Columns): static {
         foreach($Columns as $Name => $NewName) {
             $this->Statements[] = "RENAME COLUMN " . DataProvider::SanitizeField($Name) . " TO " . DataProvider::SanitizeField($NewName);
         }
@@ -96,7 +106,7 @@ class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Modify(array $Columns, array $Indexes = []): self {
+    public function Modify(array $Columns, array $Indexes = []): static {
         foreach($Columns as $Name => $Column) {
             $this->Statements[] = "MODIFY COLUMN " . Table::Field(
                     $Name,
@@ -122,7 +132,7 @@ class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Drop(array $Columns, array $Indexes = []): self {
+    public function Drop(array $Columns, array $Indexes = []): static {
         foreach($Columns as $Column) {
             $this->Statements[] = "DROP COLUMN " . DataProvider::SanitizeField($Column);
         }
@@ -152,5 +162,12 @@ class Alter implements IAlter {
     public function __invoke(): IResult|string|null {
         return $this->Execute()->ToValue();
     }
-    
+
+    public function Column(array $Columns, array $Indexes = []): IAlter {
+        // TODO: Implement Column() method.
+    }
+
+    public function Index(array $Columns, array $Indexes = []): IAlter {
+        // TODO: Implement Index() method.
+    }
 }

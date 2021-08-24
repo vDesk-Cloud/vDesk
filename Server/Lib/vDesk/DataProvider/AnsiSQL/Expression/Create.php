@@ -20,33 +20,57 @@ abstract class Create implements ICreate {
      *
      * @var string
      */
-    protected string $Statement = "";
+    protected string $Statement = "CREATE ";
 
     /**
      * @inheritDoc
      */
-    public function Database(string $Name): self {
-        $this->Statement .= "CREATE DATABASE " . DataProvider::EscapeField($Name);
-        return $this;
-    }
-
-    public function Index(string $Name, bool $Unique, array $Fields): self {
+    public function Database(string $Name): static {
+        $this->Statement .= "DATABASE " . DataProvider::EscapeField($Name);
         return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function On(string $Table): self {
-        $this->Statement .= "ON " . DataProvider::SanitizeField($Table);
+    public function Schema(string $Name): static {
+        $this->Statement .= "SCHEMA " . DataProvider::EscapeField($Name);
         return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function Execute(): IResult {
-        return DataProvider::Execute($this->Statement);
+    public function PrimaryKey(string $Name, bool $Unique = false): static {
+        $this->Statement .= "PRIMARY KEY ";
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function Index(string $Name, bool $Unique = false): static {
+        $this->Statement .= ($Unique ? " UNIQUE" : "") . " INDEX " . DataProvider::EscapeField($Name);
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function On(string $Table, array $Fields): static {
+        $Transformed = [];
+        foreach($Fields as $Field => $Size) {
+            $Transformed[] = \is_string($Field) ? DataProvider::EscapeField($Field) . " ({$Size})" : DataProvider::EscapeField($Size);
+        }
+        $this->Statement .= " ON " . DataProvider::SanitizeField($Table) . " (" . \implode(", ", $Transformed) . ")";
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function Execute(bool $Buffered = true): IResult {
+        return DataProvider::Execute($this->Statement, $Buffered);
     }
 
     /**

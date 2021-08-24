@@ -16,7 +16,7 @@ use vDesk\DataProvider\Type;
 abstract class Table {
 
     /**
-     * The types of the Table\MariaDB.
+     * Enumeration of supported PGSQL type mappings.
      */
     public const Collations = [
         Collation::ASCII                     => "en_US.utf8",
@@ -30,14 +30,15 @@ abstract class Table {
     ];
 
     /**
-     * The types of the Table\MariaDB.
+     * Enumeration of PGSQL specified type mappings.
      */
     public const Types = [
         Type::TinyInt    => "SMALLINT",
         Type::SmallInt   => "SMALLINT",
         Type::Int        => "INTEGER",
         Type::BigInt     => "BIGINT",
-        Type::Boolean    => "BOOLEAN",
+        //Sorry, but postgres' boolean sucks...
+        Type::Boolean    => "SMALLINT",
         Type::Decimal    => "DECIMAL",
         Type::Float      => "REAL",
         Type::Double     => "DOUBLE PRECISION",
@@ -58,7 +59,7 @@ abstract class Table {
     ];
 
     /**
-     * Creates a MySQL conform table field.
+     * Creates a PGSQL conform table field.
      *
      * @param string      $Name          The name of the table field.
      * @param int         $Type          The type of the table field.
@@ -71,34 +72,44 @@ abstract class Table {
      * @return string A PgSQL conform table field.
      */
     public static function Field(
-        string $Name,
-        int $Type,
-        ?int $Size = null,
-        bool $Nullable = false,
-        $Default = "",
-        bool $AutoIncrement = false,
+        string  $Name,
+        int     $Type,
+        ?int    $Size = null,
+        bool    $Nullable = false,
+                $Default = "",
+        bool    $AutoIncrement = false,
         ?string $OnUpdate = null
     ): string {
 
         $Field = [DataProvider::EscapeField($Name)];
 
         if($AutoIncrement) {
+            //Map autoincrement flags to postgres' serial type.
             $Field[] = match (static::Types[$Type & ~Type::Unsigned]) {
                 static::Types[Type::SmallInt], static::Types[Type::TinyInt] => "SMALLSERIAL",
                 static::Types[Type::Int] => "SERIAL",
                 static::Types[Type::BigInt] => "BIGSERIAL"
             };
+        } else if(
+            $Size !== null
+            && !($Type & DataProvider\Type::TinyInt)
+            && !($Type & DataProvider\Type::SmallInt)
+            && !($Type & DataProvider\Type::Int)
+            && !($Type & DataProvider\Type::BigInt)
+        ) {
+            $Field[] = static::Types[$Type & ~DataProvider\Type::Unsigned] . "({$Size})";
         } else {
-            //Create type and unsigned attribute.
-            $Field[] = static::Types[$Type & ~DataProvider\Type::Unsigned]
-                       . ($Size !== null ? "({$Size})" : "")
-                       . (($Type & DataProvider\Type::Unsigned) || ($Type & Type::Boolean) ? " UNSIGNED" : "");
+            $Field[] = static::Types[$Type & ~DataProvider\Type::Unsigned];
         }
 
         $Field[] = $Nullable ? DataProvider::$NULL : "NOT " . DataProvider::$NULL;
 
         if($Default !== "") {
-            $Field[] = "Default " . DataProvider::Sanitize($Default);
+            if($Default instanceof DataProvider\Expression\IAggregateFunction){
+                $Field[] = "DEFAULT " . \rtrim((string)DataProvider::Sanitize($Default), "()");
+            }else{
+                $Field[] = "DEFAULT " . DataProvider::Sanitize($Default);
+            }
         }
 
         if($OnUpdate !== null) {
@@ -110,13 +121,13 @@ abstract class Table {
     }
 
     /**
-     * Creates a MySQL conform table index.
+     * Creates a PgSQL conform table index.
      *
      * @param string $Name   The name of the index.
      * @param array  $Fields The fields of the index.
      * @param bool   $Unique Flag indicating whether the index is unique.
      *
-     * @return string A MySQL conform table index.
+     * @return string A PgSQL conform table index.
      */
     public static function Index(string $Name, bool $Unique, array $Fields): string {
 

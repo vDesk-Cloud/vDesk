@@ -16,14 +16,16 @@ use vDesk\Struct\Collections\IEnumerable;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Result implements \Iterator, IResult {
-    
+
     /**
-     * Flag indicating whether the result set represents the result of a successfully executed statement.
+     * Initializes a new instance of the Result class.
      *
-     * @var bool
+     * @param bool $Status Initializes the Result with the specified status.
      */
-    public bool $Status = false;
-    
+    public function __construct(public bool $Status =  false){
+
+    }
+
     /**
      * Retrieves a row of the result set as an numeric array.
      * Note this method will always return an empty array.
@@ -35,7 +37,7 @@ final class Result implements \Iterator, IResult {
     }
     
     /**
-     *
+     * @inheritDoc
      */
     public function Free(): void {
     }
@@ -128,35 +130,59 @@ final class Result implements \Iterator, IResult {
     public function __invoke(): ?string {
         return null;
     }
-    
+
+    /**
+     * @inheritDoc
+     */
     public function Count(): int {
         return 0;
     }
-    
+
+    /**
+     * @inheritDoc
+     */
     public function Find(callable $Predicate): mixed {
         return null;
     }
-    
+
+    /**
+     * @inheritDoc
+     */
     public function Sort(callable $Predicate): bool {
         return false;
     }
-    
+
+    /**
+     * @inheritDoc
+     */
     public function Filter(callable $Predicate): IEnumerable {
         return $this;
     }
-    
+
+    /**
+     * @inheritDoc
+     */
     public function Map(callable $Predicate): IEnumerable {
         return $this;
     }
-    
+
+    /**
+     * @inheritDoc
+     */
     public function Reduce(callable $Predicate, $InitialValue = null): mixed {
         return null;
     }
-    
+
+    /**
+     * @inheritDoc
+     */
     public function Any(callable $Predicate): bool {
         return false;
     }
-    
+
+    /**
+     * @inheritDoc
+     */
     public function Every(callable $Predicate): bool {
         return false;
     }

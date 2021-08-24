@@ -66,7 +66,7 @@ abstract class Expression {
             //Check if the value is a referenced column.
             if(\is_string($Value)) {
                 foreach($Aliases as $Alias) {
-                    if(str_contains(\trim($Value), "{$Alias}.")) {
+                    if(\str_contains(\trim($Value), "{$Alias}.")) {
                         return $Value;
                     }
                 }

@@ -29,7 +29,7 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
      *
      * @var false|resource
      */
-    private $Provider;
+    protected $Provider;
 
     /**
      * Initializes a new instance of the Provider class.
@@ -37,24 +37,34 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
      * @param string      $Server     Initializes the Provider with the specified address of the target SQL-server.
      * @param string      $User       Initializes the Provider with the specified name of the user of the target SQL-server.
      * @param string      $Password   Initializes the Provider with the specified password of the user of the target SQL-server.
+     * @param null|string $Database   Initializes the Provider with the specified database of the target SQL-server.
      * @param null|int    $Port       Initializes the Provider with the specified port to use for the connection-socket.
      * @param null|string $Charset    Initializes the Provider with the specified charset of the connection.
      * @param bool        $Persistent Initializes the Provider with the specified flag indicating whether to use a persistent connection.
      *
      * @throws \vDesk\IO\IOException Thrown if the connection couldn't be established.
      */
-    public function __construct(string $Server, string $User, string $Password, ?int $Port = self::Port, ?string $Charset = self::Charset, bool $Persistent = true) {
+    public function __construct(
+        string  $Server,
+        string  $User,
+        string  $Password,
+        ?string $Database = null,
+        ?int    $Port = self::Port,
+        ?string $Charset = self::Charset,
+        bool    $Persistent = false
+    ) {
         $this->Provider = \sqlsrv_connect(
-            "{$Server}, {$Port}",
+            $Server . ", " . $Port ?? self::Port,
             [
                 "ConnectionPooling" => $Persistent,
                 "UID"               => $User,
                 "PWD"               => $Password,
-                "CharacterSet"      => $Charset
+                "Database"          => $Database,
+                "CharacterSet"      => $Charset ?? self::Charset
             ]
         );
         if($this->Provider === false) {
-            throw new IOException("Couldn't establish connection to server");
+            throw new IOException("Couldn't establish connection to server: " . \sqlsrv_errors());
         }
     }
 
@@ -83,7 +93,7 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
      * Executes a SQL-statement on the database-server.
      *
      * @param string $Statement The SQL-statement to execute.
-     * @param bool   $Buffered  Determines whether the result-set will be buffered.
+     * @param bool   $Buffered  Flag indicating whether to buffer the result set.
      *
      * @return \vDesk\DataProvider\IResult The result-set yielding the values the SQL-server returned from the specified statement.
      */
@@ -123,17 +133,10 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
     }
 
     /**
-     * Escapes reserved words in a field according to the current database-specification.
-     *
-     * @param string $Field The field to escape.
-     *
-     * @return string The escaped field.
+     * @inheritDoc
      */
-    public function SanitizeField(string $Field): string {
-        $Matches = [];
-        return (int)\preg_match(self::Separator, $Field, $Matches) > 0
-            ? $this->EscapeField($Matches[1]) . ".dbo." . $this->EscapeField($Matches[2])
-            : $this->EscapeField($Field);
+    public function Close(): void {
+        \sqlsrv_close($this->Provider);
     }
 
 }

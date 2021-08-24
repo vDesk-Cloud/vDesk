@@ -148,4 +148,15 @@ class Alter implements IAlter {
         return $this->Execute()->ToValue();
     }
 
+    public function Schema(string $Name): IAlter {
+        // TODO: Implement Schema() method.
+    }
+
+    public function Column(array $Columns, array $Indexes = []): IAlter {
+        // TODO: Implement Column() method.
+    }
+
+    public function Index(array $Columns, array $Indexes = []): IAlter {
+        // TODO: Implement Index() method.
+    }
 }

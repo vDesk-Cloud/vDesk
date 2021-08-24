@@ -13,19 +13,12 @@ use vDesk\DataProvider;
  * @package vDesk\DataProvider\Expression\Create
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Create implements ICreate {
-
-    /**
-     * The SQL-statement of the Create\MariaDB.
-     *
-     * @var string
-     */
-    private string $Statement = "";
+class Create extends DataProvider\AnsiSQL\Expression\Create {
 
     /**
      * @inheritDoc
      */
-    public function Table(string $Name, array $Fields = [], array $Indexes = [], $Options = []): self {
+    public function Table(string $Name, array $Fields = [], array $Indexes = [], $Options = []): static {
         $Table = [];
         foreach($Fields as $FieldName => $Field) {
             $Table[] = Table::Field(
@@ -59,14 +52,14 @@ class Create implements ICreate {
      *
      * @return $this
      */
-    public function Index(string $Table, ...$Fields): self {
+    public function Index(string $Table, ...$Fields): static {
 
     }
 
     /**
      * @inheritDoc
      */
-    public function Database(string $Name): self {
+    public function Database(string $Name): static {
         $this->Statement .= "CREATE DATABASE {$Name} COLLATE ENCODING 'UTF8'";
         return $this;
     }
@@ -90,5 +83,13 @@ class Create implements ICreate {
      */
     public function __invoke(): IResult|string|null {
         return $this->Execute()->ToValue();
+    }
+
+    public function Schema(string $Name): static {
+        // TODO: Implement Schema() method.
+    }
+
+    public function On(string $Table): static {
+        // TODO: Implement On() method.
     }
 }
