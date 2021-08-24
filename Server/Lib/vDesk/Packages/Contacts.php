@@ -184,7 +184,7 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
     public static function Install(\Phar $Phar, string $Path): void {
         
         Expression::Create()
-                  ->Database("Contacts")
+                  ->Schema("Contacts")
                   ->Execute();
         
         //Create tables.
@@ -503,7 +503,7 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
         
         //Drop database.
         Expression::Drop()
-                  ->Database("Contacts")
+                  ->Schema("Contacts")
                   ->Execute();
         
         //Delete files.

@@ -41,7 +41,7 @@ final class Modules extends Package {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["vDesk" => "1.0.0"];
+    public const Dependencies = ["DataProvider" => "1.0.0"];
     
     /**
      * The files and directories of the Package.
@@ -73,7 +73,7 @@ final class Modules extends Package {
     public static function Install(\Phar $Phar, string $Path): void {
         
         Expression::Create()
-                  ->Database(self::Modules)
+                  ->Schema(self::Modules)
                   ->Execute();
         
         //Create tables.
@@ -182,7 +182,7 @@ final class Modules extends Package {
         
         //Drop database.
         Expression::Drop()
-                  ->Database(self::Modules)
+                  ->Schema(self::Modules)
                   ->Execute();
         
         //Delete files.

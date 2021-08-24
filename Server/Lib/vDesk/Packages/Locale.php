@@ -579,7 +579,7 @@ final class Locale extends Package {
     public static function Install(\Phar $Phar, string $Path): void {
         
         Expression::Create()
-                  ->Database("Locale")
+                  ->Schema("Locale")
                   ->Execute();
         
         Expression::Create()
@@ -693,9 +693,6 @@ final class Locale extends Package {
         //Extract files.
         self::Deploy($Phar, $Path);
         
-        //Initialize translations.
-        \vDesk::$Locale = new LocaleDictionary();
-        
     }
     
     /**
@@ -710,7 +707,7 @@ final class Locale extends Package {
         
         //Drop database.
         Expression::Drop()
-                  ->Database("Locale")
+                  ->Schema("Locale")
                   ->Execute();
         
         //Delete files.

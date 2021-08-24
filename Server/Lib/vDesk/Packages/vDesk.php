@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace vDesk\Packages;
 
 use vDesk\Configuration\Settings;
-use vDesk\DataProvider;
 use vDesk\IO\Directory;
 use vDesk\IO\Path;
 use vDesk\Locale\IPackage;
@@ -115,8 +114,6 @@ final class vDesk extends Package implements IPackage {
             "vDesk.php",
             self::Lib => [
                 "vDesk.php",
-                "vDesk/DataProvider.php",
-                "vDesk/DataProvider",
                 "vDesk/Client.php",
                 "vDesk/Struct",
                 "vDesk/Environment",
@@ -241,7 +238,7 @@ final class vDesk extends Package implements IPackage {
      * @inheritDoc
      */
     public static function PreInstall(\Phar $Phar, string $Path): void {
-        $Provider = \readline("SQL provider [available = mysql] [default = mysql]: ");
+        /*$Provider = \readline("SQL provider [available = mysql] [default = mysql]: ");
         switch(\strtolower($Provider)) {
             case "":
             case "mysql":
@@ -265,7 +262,7 @@ final class vDesk extends Package implements IPackage {
                 "Password" => $Password
             ],
             "DataProvider"
-        );
+        );*/
         
     }
     
@@ -275,13 +272,13 @@ final class vDesk extends Package implements IPackage {
     public static function Install(\Phar $Phar, string $Path): void {
         
         //Setup DataProvider.
-        new DataProvider(
+       /* new DataProvider(
             Settings::$Local["DataProvider"]["Provider"],
             Settings::$Local["DataProvider"]["Server"],
             Settings::$Local["DataProvider"]["Port"],
             Settings::$Local["DataProvider"]["User"],
             Settings::$Local["DataProvider"]["Password"]
-        );
+        );*/
         
         //Create system structure.
         $Client = Directory::Create($Path . Path::Separator . self::Client);

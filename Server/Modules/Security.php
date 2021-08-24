@@ -178,6 +178,7 @@ final class Security extends Module {
         
         Expression::Update("Security.Sessions")
                   ->Set([
+                      //@todo Replace with \DateTime.
                       "ExpirationTime" => λ::AddTime(
                           λ::Now(),
                           Settings::$Remote["Security"]["SessionLifeTime"]
@@ -185,7 +186,7 @@ final class Security extends Module {
                   ])
                   ->Where(["Ticket" => $Ticket])
                   ->Execute();
-        
+
         \vDesk::$User = User::FromTicket($Ticket);
     }
     
