@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace vDesk;
 
 use vDesk\Configuration\Settings;
+use vDesk\DataProvider\AnsiSQL\Provider;
 use vDesk\DataProvider\IPreparedStatement;
 use vDesk\DataProvider\IProvider;
 use vDesk\DataProvider\IResult;
@@ -17,11 +18,18 @@ use vDesk\DataProvider\ITransaction;
 final class DataProvider {
 
     /**
-     * Database null value.
+     * The null value of the current DataProvider.
      *
      * @var null|string
      */
     public static ?string $NULL = null;
+
+    /**
+     * The field separator character of the current DataProvider.
+     *
+     * @var string
+     */
+    public static string $Separator = Provider::Separator;
 
     /**
      * The IProvider of the DataProvider
@@ -162,8 +170,9 @@ final class DataProvider {
         $Class          = "vDesk\\DataProvider\\{$Provider}\\Provider";
         self::$Provider = new $Class($Server, $User, $Password, $Database, $Port, null, $Persistent);
 
-        //Populate database specific NULL value.
-        self::$NULL = self::$Provider::NULL;
+        //Populate database specific values.
+        self::$NULL      = self::$Provider::NULL;
+        self::$Separator = self::$Provider::Separator;
     }
 
 }
