@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\PgSQL;
 
-use vDesk\Data\IModel;
-use vDesk\DataProvider\AnsiSQL\Provider;
-use vDesk\DataProvider\Expression\IAggregateFunction;
 use vDesk\DataProvider\PgSQL\Expression\Alter;
 use vDesk\DataProvider\PgSQL\Expression\Create;
 use vDesk\DataProvider\PgSQL\Expression\Delete;
@@ -13,7 +10,6 @@ use vDesk\DataProvider\PgSQL\Expression\Drop;
 use vDesk\DataProvider\PgSQL\Expression\Insert;
 use vDesk\DataProvider\PgSQL\Expression\Select;
 use vDesk\DataProvider\PgSQL\Expression\Update;
-use vDesk\DataProvider;
 
 /**
  * Class Expression represents ...
@@ -21,7 +17,7 @@ use vDesk\DataProvider;
  * @package vDesk\DataProvider\PgSQL
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-abstract class Expression extends DataProvider\AnsiSQL\Expression {
+abstract class Expression extends \vDesk\DataProvider\AnsiSQL\Expression {
 
     /**
      * Factory method that creates a new instance of the ISelect class according the configured DataProvider.
