@@ -88,9 +88,6 @@ abstract class Expression extends DataProvider\AnsiSQL\Expression {
      */
     public static function Drop(): Drop {
         return new Drop();
-        $Sanitize     = static fn($Value) => (\is_string($Value) && (int)\preg_match(Provider::SeparatorExpression, $Value, $Matches) > 0)
-            ? DataProvider::EscapeField($Matches[1]) . Provider::Separator . DataProvider::EscapeField($Matches[2])
-            : DataProvider::Sanitize($Value);
     }
 
 }
