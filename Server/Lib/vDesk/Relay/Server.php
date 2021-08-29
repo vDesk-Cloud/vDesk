@@ -89,13 +89,7 @@ class Server extends Machine {
         //Parse new Events.
         $Events = [];
         foreach(
-            Socket::Select(
-                $this->Clients->Map(static fn(Client $Client): Socket => $Client->Socket)->ToArray(),
-                [],
-                [],
-                0,
-                50000
-            )[0]
+            Socket::Select($this->Clients->Map(static fn(Client $Client): Socket => $Client->Socket), [], [], 0, 50000)[0]
             as
             $Socket
         ) {
