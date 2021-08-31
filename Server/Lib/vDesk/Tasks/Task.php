@@ -58,7 +58,7 @@ abstract class Task {
      *
      * @var float
      */
-    public float $Next;
+    public float $Next = 0.0;
     
     /**
      * The Task scheduler the Task is currently a member of.
@@ -73,6 +73,13 @@ abstract class Task {
      * @var \Generator
      */
     private \Generator $Generator;
+
+    /**
+     * Initializes a new instance of the Task class.
+     */
+    public function __construct(){
+        $this->Generator = $this->Run();
+    }
     
     /**
      * Starts the Task in a specified dispatcher.
@@ -80,9 +87,8 @@ abstract class Task {
      * @param \vDesk\Machines\Tasks $Tasks Starts the Task with the specified Task scheduler.
      */
     public function Start(Tasks $Tasks): void {
-        $this->Generator = $this->Run();
         $this->Tasks = $Tasks;
-        $this->Next  = static::Next(\microtime());
+        $this->Next  = static::Next(\microtime(true));
     }
     
     /**
@@ -109,7 +115,6 @@ abstract class Task {
      * @param int $Code The stop code of the Task dispatcher.
      */
     public function Stop(int $Code): void {
-        $this->Tasks->Tasks->Remove($this);
     }
     
     /**
