@@ -73,7 +73,7 @@ class Tasks extends Machine {
      * @inheritDoc
      */
     public function Run(): void {
-        $TimeStamp = \microtime();
+        $TimeStamp = \microtime(true);
         
         //Get pending Tasks.
         /** @var \vDesk\Tasks\Task $Task */
@@ -87,17 +87,22 @@ class Tasks extends Machine {
                 $this->Running->Enqueue($Task);
             }
         }
+
+        $Next = $this->Tasks->Reduce(
+            static fn(int $Previous, Task $Current): int => \min($Current->Next, $Previous),
+            $this->Tasks[0]->Next
+        );
         
         //Sleep until next schedule.
         \usleep(
             \min(
-                0.01,
+                10,
                 \max(
                     $this->Tasks->Reduce(
                         static fn(int $Previous, Task $Current): int => \min($Current->Next, $Previous),
                         $this->Tasks[0]->Next
                     ) - $TimeStamp,
-                    1
+                    1000
                 )
             )
         );
