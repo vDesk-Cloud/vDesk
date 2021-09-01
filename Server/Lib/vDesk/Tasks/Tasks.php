@@ -18,27 +18,28 @@ use vDesk\Utils\Log;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Tasks extends Machine {
-    
+
     /**
      * The Tasks of the Machine.
      *
      * @var \vDesk\Struct\Collections\Collection
      */
     protected Collection $Tasks;
-    
+
     /**
      * The current running Tasks of the Machine.
      *
      * @var \vDesk\Struct\Collections\Queue
      */
     protected Queue $Running;
-    
+
     /**
      * @inheritDoc
      */
     public function Start(): void {
         $this->Running = new Queue();
         $this->Tasks   = new Collection();
+        $TimeStamp = \microtime(true);
         foreach(
             Expression::Select("File", "Name")
                       ->From("Archive.Elements")
@@ -55,11 +56,11 @@ class Tasks extends Machine {
             if(!\class_exists($Class)) {
                 continue;
             }
-            $Task = new $Class();
+            $Task = new $Class($this, $TimeStamp);
             if(!$Task instanceof Task) {
                 continue;
             }
-            $Task->Start($this);
+            $Task->Start();
             $this->Tasks->Add($Task);
             $this->Running->Enqueue($Task);
         }
@@ -68,19 +69,19 @@ class Tasks extends Machine {
             $this->Stop(1);
         }
     }
-    
+
     /**
      * @inheritDoc
      */
     public function Run(): void {
-        $TimeStamp = \microtime(true);
-        
+        $Start = \microtime(true);
+
         //Get pending Tasks.
         /** @var \vDesk\Tasks\Task $Task */
-        foreach($this->Tasks->Filter(static fn(Task $Task): bool => $Task->Next <= $TimeStamp) as $Task) {
+        foreach($this->Tasks->Filter(static fn(Task $Task): bool => $Task->TimeStamp <= $Start) as $Task) {
             $this->Running->Enqueue($Task);
         }
-        
+
         //Schedule Tasks.
         foreach($this->Running as $Task) {
             if($Task->Schedule()) {
@@ -88,36 +89,37 @@ class Tasks extends Machine {
             }
         }
 
-        $Next = $this->Tasks->Reduce(
-            static fn(int $Previous, Task $Current): int => \min($Current->Next, $Previous),
-            $this->Tasks[0]->Next
-        );
-        
+        //Get next estimated schedule time.
+        $Next = $this->Tasks->Reduce(static fn(float $Previous, Task $Current): float => \min($Current->TimeStamp, $Previous), $this->Tasks[0]->TimeStamp);
+
+        //Skip idle on overtime.
+        $Stop = \microtime(true);
+        if($Next <= $Stop) {
+            return;
+        }
+
+        //Calculate idle time.
+        $Estimated = $Next - $Stop;
+        $Seconds      = (int)$Estimated;
+        $Microseconds = (int)(\round($Estimated - $Seconds, 6) * 1000000);
+
         //Sleep until next schedule.
-        \usleep(
-            \min(
-                10,
-                \max(
-                    $this->Tasks->Reduce(
-                        static fn(int $Previous, Task $Current): int => \min($Current->Next, $Previous),
-                        $this->Tasks[0]->Next
-                    ) - $TimeStamp,
-                    1000
-                )
-            )
-        );
+        \usleep($Microseconds);
+        \sleep($Seconds);
     }
-    
+
     /**
      * Adds a new Task to the queue of the scheduler.
      *
      * @param \vDesk\Tasks\Task $Task The Task to add for schedule.
      */
     public function Add(Task $Task): void {
-        $Task->Start($this);
+        $Task->Tasks = $this;
+        $Task->TimeStamp = \microtime(true);
+        $Task->Start();
         $this->Tasks->Add($Task);
     }
-    
+
     /**
      * Adds a new Task to the queue of the scheduler.
      *
@@ -127,7 +129,7 @@ class Tasks extends Machine {
         $Task->Stop(1);
         $this->Tasks->Remove($Task);
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -136,7 +138,7 @@ class Tasks extends Machine {
             $Task->Suspend();
         }
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -145,13 +147,13 @@ class Tasks extends Machine {
             $Task->Resume();
         }
     }
-    
+
     /**
      * @inheritDoc
      */
     public function Stop(int $Code = 0): void {
         foreach($this->Tasks as $Task) {
-            $Task->Stop();
+            $Task->Stop($Code);
         }
         parent::Stop($Code);
     }

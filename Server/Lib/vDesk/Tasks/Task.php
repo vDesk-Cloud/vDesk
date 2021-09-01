@@ -12,61 +12,47 @@ use vDesk\Machines\Tasks;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Task {
-    
+
     /**
      * Per micro second interval.
      */
     public const MicroSeconds = 0;
-    
+
     /**
      * Per second interval.
      */
     public const Seconds = 0;
-    
+
     /**
      * Per minute interval.
      */
-    public const Minutes = 5;
-    
+    public const Minutes = 0;
+
     /**
      * Per hour interval.
      */
     public const Hours = 0;
-    
+
     /**
      * Per day interval.
      */
     public const Days = 0;
-    
+
     /**
      * Per week interval.
      */
     public const Weeks = 0;
-    
+
     /**
      * Per month interval.
      */
     public const Months = 0;
-    
+
     /**
      * Per year interval.
      */
     public const Years = 0;
-    
-    /**
-     * The calculated timestamp of the next schedule of the Task.
-     *
-     * @var float
-     */
-    public float $Next = 0.0;
-    
-    /**
-     * The Task scheduler the Task is currently a member of.
-     *
-     * @var null|\vDesk\Machines\Tasks
-     */
-    protected ?Tasks $Tasks = null;
-    
+
     /**
      * The Generator yielding the steps of the Task.
      *
@@ -75,40 +61,67 @@ abstract class Task {
     private \Generator $Generator;
 
     /**
+     * The schedule interval of the Task.
+     *
+     * @var float
+     */
+    public float $Interval = 0.0;
+
+    /**
+     * The parent Task scheduler of the Task.
+     *
+     * @var null|\vDesk\Machines\Tasks
+     */
+    public ?Tasks $Tasks = null;
+
+    /**
+     * The start/schedule timestamp of the Task.
+     *
+     * @var null|float
+     */
+    public ?float $TimeStamp = null;
+
+    /**
      * Initializes a new instance of the Task class.
      */
-    public function __construct(){
+    public function __construct() {
         $this->Generator = $this->Run();
+
+        //Calculate schedule interval.
+        $this->Interval =
+            (static::MicroSeconds * 0.000001)
+            + static::Seconds
+            + (static::Minutes * 60)
+            + (static::Hours * 3600)
+            + (static::Days * 86400)
+            + (static::Weeks * 604800)
+            + (static::Months * 2629746)
+            + (static::Years * 31556952);
     }
-    
+
     /**
-     * Starts the Task in a specified dispatcher.
-     *
-     * @param \vDesk\Machines\Tasks $Tasks Starts the Task with the specified Task scheduler.
+     * Starts the Task.
      */
-    public function Start(Tasks $Tasks): void {
-        $this->Tasks = $Tasks;
-        $this->Next  = static::Next(\microtime(true));
+    public function Start(): void {
     }
-    
+
     /**
      * Runs the Task.
      */
     abstract public function Run(): \Generator;
-    
-    
+
     /**
      * Suspends the Task.
      */
     public function Suspend(): void {
     }
-    
+
     /**
      * Resumes the Task.
      */
     public function Resume(): void {
     }
-    
+
     /**
      * Stops the Task.
      *
@@ -116,7 +129,7 @@ abstract class Task {
      */
     public function Stop(int $Code): void {
     }
-    
+
     /**
      * Schedules the Tasks.
      *
@@ -128,32 +141,13 @@ abstract class Task {
         if($this->Generator->valid()) {
             return true;
         }
-        
+
         //Calculate next estimated schedule.
-        $this->Next = static::Next($this->Next);
-        
+        $this->TimeStamp += $this->Interval;
+
         //Run Task.
         $this->Generator = $this->Run();
         return false;
     }
-    
-    /**
-     * Calculates the next estimated schedule timestamp in microseconds according a specified timestamp.
-     *
-     * @param float $Timestamp The timestamp in microseconds to calculate the next schedule from.
-     *
-     * @return float A float representing the next estimated schedule timestamp of the Task.
-     */
-    public static function Next(float $Timestamp): float {
-        return $Timestamp
-               + static::MicroSeconds
-               + (static::Seconds * 1000000)
-               + (static::Minutes * 60 * 1000000)
-               + (static::Hours * 3600 * 1000000)
-               + (static::Days * 86400 * 1000000)
-               + (static::Weeks * 604800 * 1000000)
-               + (static::Months * 2629746 * 1000000)
-               + (static::Years * 31556952 * 1000000);
-    }
-    
+
 }
