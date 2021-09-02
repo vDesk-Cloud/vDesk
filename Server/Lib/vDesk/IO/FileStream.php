@@ -288,7 +288,7 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
      *
      * @return \vDesk\IO\FileStream A new instance of the FileStream yielding the specified pointer.
      */
-    public static function FromPointer($Pointer): IStream {
+    public static function FromPointer($Pointer): static {
         $Stream          = new static();
         $Stream->Pointer = $Pointer;
         return $Stream;

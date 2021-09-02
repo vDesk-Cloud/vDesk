@@ -31,7 +31,7 @@ interface IStream {
      *
      * @return \vDesk\IO\IStream A wrapper for the passed resource.
      */
-    public static function FromPointer($Pointer): IStream;
+    public static function FromPointer($Pointer): static;
     
     /**
      * Tells whether the current Stream has reached its end. EndOfStream is a convenience method that is equivalent to the value of the
