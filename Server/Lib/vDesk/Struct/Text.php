@@ -10,7 +10,7 @@ use vDesk\Struct\Text\Chain;
  * @package vDesk\Struct
  * @author  Kerry Holz <DevelopmentHero@gmail.com>
  */
-final class Text {
+class Text {
     
     use Properties;
     
@@ -58,27 +58,27 @@ final class Text {
     public static function Join(string|\Stringable $Separator, iterable $Strings): Chain {
         return new Chain(\implode((array)$Separator, $Strings));
     }
-    
+
     /**
      * Indicates whether a specified string is null, empty, or consists only of white-space characters.
      *
-     * @param string|\vDesk\Struct\Text|\Stringable $String The string to test.
+     * @param null|string|\vDesk\Struct\Text|\Stringable $String The string to test.
      *
      * @return bool True if the value $String is null or Text::Empty, or if value consists exclusively of white-space characters;
      *              otherwise, false.
      */
-    public static function IsNullOrWhitespace(string|self|\Stringable $String): bool {
+    public static function IsNullOrWhitespace(null|string|self|\Stringable $String): bool {
         return self::IsNullOrEmpty($String) || \ctype_space($String);
     }
-    
+
     /**
      * Indicates whether the specified string is null or an empty string.
      *
-     * @param string|\vDesk\Struct\Text|\Stringable $String The string to test.
+     * @param null|string|\vDesk\Struct\Text|\Stringable $String The string to test.
      *
      * @return bool True if the value $String is null or an empty string (""); otherwise, false.
      */
-    public static function IsNullOrEmpty(string|self|\Stringable $String): bool {
+    public static function IsNullOrEmpty(null|string|self|\Stringable $String): bool {
         return $String === null || $String === self::Empty;
     }
     

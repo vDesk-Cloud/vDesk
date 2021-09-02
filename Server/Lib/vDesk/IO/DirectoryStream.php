@@ -45,7 +45,7 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
     /**
      * Initializes a new instance of the DirectoryStream class.
      *
-     * @param null|string $Directory The target directory to read.
+     * @param null|string $Directory Initializes the DirectoryStream with the specified target directory to iterate over.
      */
     public function __construct(?string $Directory = null) {
         $this->AddProperties([
@@ -100,11 +100,10 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
             return $Element;
         }
         if($this->Handle && ($Element = \readdir($this->Handle)) !== false) {
+            $this->Entry = null;
             if($Element === "." || $Element === "..") {
-                $this->Entry = null;
                 return $this->Read();
             }
-            $this->Entry = null;
             return $Element;
         }
         $this->EndOfStream = true;

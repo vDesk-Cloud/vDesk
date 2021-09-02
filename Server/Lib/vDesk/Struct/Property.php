@@ -16,19 +16,20 @@ class Property {
      *
      * @var null|callable
      */
-    public $Getter;
+    public $Getter = null;
     
     /**
      * Gets or sets the Getter of the Property.
      *
      * @var null|callable
      */
-    public $Setter;
-    
+    public $Setter = null;
+
     /**
      * Initializes a new instance of the Property class.
      *
-     * @param array $Accessors Initializes the Property with the specified set of accessor-methods.
+     * @param null|callable $Getter Initializes the Property with the specified getter callback.
+     * @param null|callable $Setter Initializes the Property with the specified setter callback.
      */
     public function __construct(?callable $Getter = null, ?callable $Setter = null) {
         $this->Getter = $Getter;

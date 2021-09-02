@@ -21,7 +21,7 @@ abstract class Singleton {
     /**
      * Initializes the functionality of the Singleton class.
      */
-    public final function __construct() {
+    final public function __construct() {
         if(!isset(self::$Instances[static::class])) {
             self::$Instances[static::class] = $this;
             $this->_construct();
@@ -33,7 +33,7 @@ abstract class Singleton {
      *
      * @return mixed An unique instance of the extending class.
      */
-    public final static function &GetInstance() {
+    final public static function &GetInstance() {
         if(!isset(self::$Instances[static::class])) {
             new static();
         }
