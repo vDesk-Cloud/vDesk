@@ -34,7 +34,7 @@ class Socket extends FileStream {
      * @param null|string $Address Initializes the Socket with the specified target address.
      * @param null|int    $Type    Initializes the Socket with the specified type.
      */
-    public function __construct(?string $Address = null, int $Type = null) {
+    public function __construct(public ?string $Address = null, int $Type = null) {
         parent::__construct();
         if($Address !== null) {
             $this->Open($Address, $Type ?? self::Remote);

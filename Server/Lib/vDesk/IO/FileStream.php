@@ -38,19 +38,12 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
     protected $Pointer;
     
     /**
-     * The target file of the FileStream.
-     *
-     * @var null|string
-     */
-    public ?string $File;
-    
-    /**
      * Initializes a new instance of the FileStream class.
      *
      * @param null|string $File The target file to read or write.
      * @param int|null    $Mode The access-mode on the FileStream.
      */
-    public function __construct(?string $File = null, int $Mode = null) {
+    public function __construct(public ?string $File = null, int $Mode = null) {
         $this->AddProperty("Pointer", [\Get => fn() => $this->Pointer]);
         if($File !== null) {
             $this->Open($File, $Mode ?? Mode::Read | Mode::Duplex | Mode::Binary);

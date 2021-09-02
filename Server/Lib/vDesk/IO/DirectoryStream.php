@@ -239,7 +239,7 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
     /**
      * @inheritDoc
      */
-    public static function FromPointer($Pointer): IStream {
+    public static function FromPointer($Pointer): static {
         // TODO: Implement FromPointer() method.
     }
     
