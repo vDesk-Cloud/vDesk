@@ -13,46 +13,46 @@ use vDesk\Struct\Collections\Typed\CallableCollection;
  * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnChange $Gets the "OnChange"-Eventlisteners of the Dictionary.
  * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnClear  $Gets the "OnClear"-Eventlisteners of the Dictionary.
  *
- * @package vDesk\Struct\Collections\Typed\Observable
+ * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Dictionary extends \vDesk\Struct\Collections\Dictionary {
-    
+
     /**
      * The 'OnAdd' callbacks of the Collection.
      *
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
     protected CallableCollection $OnAdd;
-    
+
     /**
      * The 'OnDelete' callbacks of the Collection.
      *
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
     protected CallableCollection $OnDelete;
-    
+
     /**
      * The 'OnChange' callbacks of the Collection.
      *
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
     protected CallableCollection $OnChange;
-    
+
     /**
      * The 'OnClear' callbacks of the Collection.
      *
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
     protected CallableCollection $OnClear;
-    
+
     /**
      * Flag indicating whether the Collection is currently dispatching events.
      *
      * @var bool
      */
     private bool $Dispatching = false;
-    
+
     /**
      * Initializes a new instance of the Collection class.
      *
@@ -66,21 +66,13 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
         parent::__construct($Elements);
         $this->Dispatching = true;
         $this->AddProperties([
-            "OnAdd"    => [
-                \Get => fn&(): CallableCollection => $this->OnAdd
-            ],
-            "OnDelete" => [
-                \Get => fn&(): CallableCollection => $this->OnDelete
-            ],
-            "OnChange" => [
-                \Get => fn&(): CallableCollection => $this->OnChange
-            ],
-            "OnClear"  => [
-                \Get => fn&(): CallableCollection => $this->OnClear
-            ]
+            "OnAdd"    => [\Get => fn&(): CallableCollection => $this->OnAdd],
+            "OnDelete" => [\Get => fn&(): CallableCollection => $this->OnDelete],
+            "OnChange" => [\Get => fn&(): CallableCollection => $this->OnChange],
+            "OnClear"  => [\Get => fn&(): CallableCollection => $this->OnClear]
         ]);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -92,7 +84,7 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
         }
         parent::Add($Key, $Element);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -104,7 +96,7 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
         }
         parent::Insert($Before, $Key, $Element);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -116,7 +108,7 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
         }
         return parent::Remove($Element);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -130,7 +122,7 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
         }
         return parent::RemoveAt($Key);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -142,7 +134,7 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
         }
         parent::Replace($Element, $Replacement);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -154,14 +146,14 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
         }
         parent::Clear();
     }
-    
+
     /**
      * Enables/starts dispatching of events.
      */
     public function StartDispatch(): void {
         $this->Dispatching = true;
     }
-    
+
     /**
      * Disables/stops dispatching of events.
      */

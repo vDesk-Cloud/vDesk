@@ -12,8 +12,8 @@ use vDesk\Struct\Type;
  *
  * @property-read int $Count Gets the amount of elements in the Collection.
  *
- * @package vDesk\Struct\Collections
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Collection implements ICollection {
 

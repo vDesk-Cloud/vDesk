@@ -6,11 +6,11 @@ namespace vDesk\IO;
 /**
  * Exception that is thrown when attempting to read from a Stream which has reached its end.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
- * @package vDesk\IO
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class EndOfStreamException extends IOException {
-    
+
     /**
      * Initializes a new instance of the EndOfStreamException class.
      *

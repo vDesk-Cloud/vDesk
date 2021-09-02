@@ -7,42 +7,41 @@ use vDesk\Configuration\Settings;
 use vDesk\IO\Directory;
 use vDesk\IO\Path;
 use vDesk\Locale\IPackage;
-
 use vDesk\Utils\Log;
 
 /**
  * vDesk base Package class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class vDesk extends Package implements IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "vDesk";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
-    
+    public const Version = "1.1.0";
+
     /**
      * The name of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The name of the Package.
      */
     public const Description = "vDesk base package containing the library files of the system.";
-    
+
     /**
      * The dependencies of the Package.
      */
     public const Dependencies = [];
-    
+
     /**
      * The files and directories of the Package.
      */
@@ -82,27 +81,27 @@ final class vDesk extends Package implements IPackage {
                 "vDesk/LoginDialog.js",
                 "vDesk/ClipBoard.js",
                 "vDesk/AboutDialog.js",
-                
+
                 //vDesk.Struct
                 "vDesk/Struct.js",
                 "vDesk/Struct",
-                
+
                 //vDesk.Utils
                 "vDesk/Utils.js",
                 "vDesk/Utils",
-                
+
                 //vDesk.Visual
                 "vDesk/Visual.js",
                 "vDesk/Visual",
-                
+
                 //vDesk.Media
                 "vDesk/Media.js",
                 "vDesk/Media",
-                
+
                 //vDesk.Controls
                 "vDesk/Controls.js",
                 "vDesk/Controls",
-                
+
                 //vDesk.Connection
                 "vDesk/Connection.js"
             ],
@@ -119,12 +118,11 @@ final class vDesk extends Package implements IPackage {
                 "vDesk/Environment",
                 "vDesk/IO",
                 "vDesk/Utils",
-                "vDesk/Data",
-                "vDesk/Connection"
+                "vDesk/Data"
             ]
         ]
     ];
-    
+
     /**
      * The translations of the Package.
      */
@@ -233,63 +231,25 @@ final class vDesk extends Package implements IPackage {
             ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
-    public static function PreInstall(\Phar $Phar, string $Path): void {
-        /*$Provider = \readline("SQL provider [available = mysql] [default = mysql]: ");
-        switch(\strtolower($Provider)) {
-            case "":
-            case "mysql":
-                $Provider = "MySQL";
-                break;
-            default:
-                throw new \InvalidArgumentException("Provider '{$Provider}' is not supported. Current supported Drivers: MySQL");
-        }
-        
-        $Server   = \readline("SQL server [default = p:localhost]: ");
-        $Port     = \readline("Port [default = 3306]: ");
-        $User     = \readline("SQL user: ");
-        $Password = \readline("SQL user password: ");
-        
-        Settings::$Local["DataProvider"] = new Settings\Local\Settings(
-            [
-                "Provider" => $Provider,
-                "Server"   => $Server !== "" ? $Server : "p:localhost",
-                "Port"     => $Port !== "" ? (int)$Port : 3306,
-                "User"     => $User,
-                "Password" => $Password
-            ],
-            "DataProvider"
-        );*/
-        
-    }
-    
+
+
     /**
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
-        
-        //Setup DataProvider.
-       /* new DataProvider(
-            Settings::$Local["DataProvider"]["Provider"],
-            Settings::$Local["DataProvider"]["Server"],
-            Settings::$Local["DataProvider"]["Port"],
-            Settings::$Local["DataProvider"]["User"],
-            Settings::$Local["DataProvider"]["Password"]
-        );*/
-        
+
         //Create system structure.
+        //@todo Move Client to separate Package to enable "headless" installations.
         $Client = Directory::Create($Path . Path::Separator . self::Client);
         $Design = Directory::Create($Client->Path . Path::Separator . self::Design);
         Directory::Create($Design->Path . Path::Separator . "vDesk");
         $ClientLib = Directory::Create($Client->Path . Path::Separator . self::Lib);
         Directory::Create($ClientLib->Path . Path::Separator . "vDesk");
         Directory::Create($Client->Path . Path::Separator . self::Modules);
-        
-        $Server                 = Directory::Create($Path . Path::Separator . self::Server);
-        $Logs                   = Directory::Create($Server->Path . Path::Separator . "Logs");
+
+        $Server = Directory::Create($Path . Path::Separator . self::Server);
+        $Logs   = Directory::Create($Server->Path . Path::Separator . "Logs");
+        //@todo Move Log to separate Package.
         Settings::$Local["Log"] = new Settings\Local\Settings(
             [
                 "Target" => $Logs->Path . Path::Separator . "Log.txt",
@@ -298,17 +258,17 @@ final class vDesk extends Package implements IPackage {
             ],
             "Log"
         );
-        
+
         $ServerLib = Directory::Create($Server->Path . Path::Separator . self::Lib);
         Directory::Create($ServerLib->Path . Path::Separator . "vDesk");
         Directory::Create($Server->Path . Path::Separator . self::Modules);
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
-        
+
     }
-    
-    
+
+
     /**
      * @inheritDoc
      */
@@ -316,5 +276,5 @@ final class vDesk extends Package implements IPackage {
         //Delete files.
         Directory::Delete($Path, true);
     }
-    
+
 }

@@ -5,25 +5,24 @@ namespace vDesk\IO\Output;
 
 use vDesk\Modules\Command;
 use vDesk\Data\IDataView;
-use vDesk\Events\EventProvider;
 use vDesk\IO\FileInfo;
 use vDesk\IO\IStream;
 
 /**
- * Class CLI represents ...
+ * Interface providing functionality for writing data to a command line interface.
  *
- * @package vDesk\Connection\Output
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class CLI implements IProvider {
-    
+
     /**
      * Sends data to the current output API.
      *
      * @param mixed $Data The data to send.
      */
-    public static function Write($Data): void {
-        
+    public static function Write(mixed $Data): void {
+
         //Check if the passed data implements the IDataView interface.
         if($Data instanceof IDataView) {
             \fwrite(\STDOUT,
@@ -37,7 +36,7 @@ final class CLI implements IProvider {
             );
             return;
         }
-        
+
         //Check if a file has been passed.
         if($Data instanceof FileInfo) {
             $FileStream = $Data->Open();
@@ -47,17 +46,7 @@ final class CLI implements IProvider {
             $Data->Close();
             return;
         }
-        
-        //Check if an EventProvider has been passed.
-        if($Data instanceof EventProvider) {
-            // Flush events.
-            foreach($Data->FetchEvents() as $Event => $EventData) {
-                \fwrite(\STDOUT, "event: {$Event}\n");
-                \fwrite(\STDOUT, "data: {$EventData}\n\n");
-            }
-            return;
-        }
-        
+
         //Check if a Stream has been passed.
         if($Data instanceof IStream) {
             while($Data->CanSeek()) {
@@ -66,7 +55,7 @@ final class CLI implements IProvider {
             $Data->Close();
             return;
         }
-        
+
         //Check if an Exception has been thrown.
         if($Data instanceof \Throwable) {
             \fwrite(\STDOUT,
@@ -81,7 +70,7 @@ final class CLI implements IProvider {
             );
             return;
         }
-        
+
         //Create a default response.
         \fwrite(\STDOUT,
             \json_encode([
@@ -92,6 +81,6 @@ final class CLI implements IProvider {
                 "Data"    => $Data
             ])
         );
-        
+
     }
 }

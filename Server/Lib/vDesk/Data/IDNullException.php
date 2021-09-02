@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace vDesk\Data;
 
 /**
- * Exception that is thrown when attempting to fill a virtual {@link \vDesk\Data\IModel}.
+ * Exception that is thrown when attempting to fill a virtual IModel.
  *
- * @package vDesk\Data
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class IDNullException extends \Exception {
-    
+
     /**
      * Initializes a new instance of the IDNullException class.
      *
@@ -21,5 +21,5 @@ class IDNullException extends \Exception {
     public function __construct(string $message = "Cannot Fill Model without ID", int $code = 51, \Throwable $previous = null) {
         parent::__construct($message, $code, $previous);
     }
-    
+
 }

@@ -8,8 +8,8 @@ use vDesk\Struct\Type;
 /**
  * Represents a static factory-class for creating setter-callback-functions to use in properties.
  *
- * @package vDesk\Struct\Property
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Setter {
     
@@ -23,7 +23,7 @@ abstract class Setter {
      *
      * @return callable A generated setter.
      */
-    public static function Create(&$Property, string $Type = Type::Mixed, bool $Nullable = false, ?bool &$Changed = false): callable {
+    public static function Create(mixed &$Property, string $Type = Type::Mixed, bool $Nullable = false, ?bool &$Changed = false): callable {
         switch($Type) {
             case Type::String:
                 return $Nullable
