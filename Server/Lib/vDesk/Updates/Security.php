@@ -29,6 +29,7 @@ class Security extends Update {
     public const Description = <<<Description
 - Added option for logging out specific Users.
 - Added support for preserving the current logged in User while performing multiple logins.
+- Changed update of session timestamps to \Datetime objects instead of SQL functions.
 Description;
 
     /**
