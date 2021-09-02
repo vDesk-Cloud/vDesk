@@ -4,73 +4,73 @@ declare(strict_types=1);
 namespace vDesk\Struct;
 
 /**
- * Class Type represents ...
+ * Class that provides functionality for analyzing types on runtime.
  *
- * @package vDesk\Struct
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Type {
-    
+
     /**
      * string
      */
     public const String = "string";
-    
+
     /**
      * int
      */
     public const Int = "int";
-    
+
     /**
      * float
      */
     public const Float = "float";
-    
+
     /**
      * bool
      */
     public const Bool = "bool";
-    
+
     /**
      * boolean
      */
     public const Boolean = "boolean";
-    
+
     /**
      * array
      */
     public const Array   = "array";
-    
+
     /**
      * object
      */
     public const Object = "object";
-    
+
     /**
      * mixed
      */
     public const Mixed    = "mixed";
-    
+
     /**
      * callable
      */
     public const Callable = "callable";
-    
+
     /**
      * iterable
      */
     public const Iterable = "iterable";
-    
+
     /**
      * resource
      */
     public const Resource = "resource";
-    
+
     /**
      * null
      */
     public const Null = "null";
-    
+
     /**
      * Enumeration of scalar value types.
      */
@@ -81,18 +81,18 @@ abstract class Type {
         Type::Bool,
         Type::Boolean
     ];
-    
+
     /**
      * Determines whether a specified value is of a scalar or an object-type.
      *
-     * @param string $Value The value to check.
+     * @param mixed $Value The value to check.
      *
      * @return bool True if the specified value is scalar; otherwise, false.
      */
-    public static function IsScalar($Value): bool {
+    public static function IsScalar(mixed $Value): bool {
         return \is_scalar($Value);
     }
-    
+
     /**
      * Determines whether a specified type is scalar or an object-type.
      *
@@ -103,7 +103,7 @@ abstract class Type {
     public static function IsScalarType(string $Type): bool {
         return \in_array($Type, self::Scalar, false);
     }
-    
+
     /**
      * Determines the type of a specified value.
      *
@@ -111,10 +111,10 @@ abstract class Type {
      *
      * @return string The name of the type of the specified value.
      */
-    public static function Of($Value): string {
+    public static function Of(mixed $Value): string {
         return (($Type = \gettype($Value)) === static::Object) && !$Value instanceof \stdClass ? \get_class($Value) : \strtolower($Type);
     }
-    
+
     /**
      * Creates an error message for TypeErrors in an uniform format.
      *
@@ -124,10 +124,10 @@ abstract class Type {
      *
      * @return string A string containing an error message for TypeErrors in an uniform format.
      */
-    public static function ErrorMessage(string $Name, string $Expected, $Passed): string {
+    public static function ErrorMessage(string $Name, string $Expected, mixed $Passed): string {
         return "{$Name} must be an instance of " . self::Of($Expected) . ", " . self::Of($Passed) . " given.";
     }
-    
+
     /**
      * Convenience-method that creates a TypeError in an uniform format.
      *
@@ -139,8 +139,8 @@ abstract class Type {
      *
      * @return \TypeError A TypeError containing a pre-formatted error message.
      */
-    public static function Error(string $Name, $Expected, $Passed, int $Code = 0, \Throwable $Previous = null): \TypeError {
+    public static function Error(string $Name, string $Expected, mixed $Passed, int $Code = 0, \Throwable $Previous = null): \TypeError {
         return new \TypeError(self::ErrorMessage($Name, $Expected, $Passed), $Code, $Previous);
     }
-    
+
 }

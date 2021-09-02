@@ -12,20 +12,21 @@ use vDesk\Struct\Properties;
  * @property-read int      $Count  Gets the amount of elements in the Dictionary.
  * @property-read string[] $Keys   Gets all keys of the Dictionary
  * @property-read mixed[]  $Values Gets all values of the Dictionary
- * @package vDesk\Struct\Collections
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ *
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Dictionary implements IDictionary {
-    
+
     use Properties;
-    
+
     /**
      * The elements of the Dictionary.
      *
      * @var array
      */
     protected array $Elements = [];
-    
+
     /**
      * Initializes a new instance of the Dictionary class.
      *
@@ -33,21 +34,15 @@ class Dictionary implements IDictionary {
      */
     public function __construct(iterable $Elements = []) {
         $this->AddProperties([
-            "Count"  => [
-                \Get => fn(): int => \count($this->Elements)
-            ],
-            "Keys"   => [
-                \Get => fn(): array => \array_keys($this->Elements)
-            ],
-            "Values" => [
-                \Get => fn(): array => \array_values($this->Elements)
-            ]
+            "Count"  => [\Get => fn(): int => \count($this->Elements)],
+            "Keys"   => [\Get => fn(): array => \array_keys($this->Elements)],
+            "Values" => [\Get => fn(): array => \array_values($this->Elements)]
         ]);
         foreach($Elements as $Key => $Element) {
             $this->Add($Key, $Element);
         }
     }
-    
+
     /**
      * Adds an element to the Dictionary.
      *
@@ -62,7 +57,7 @@ class Dictionary implements IDictionary {
         }
         $this->Elements[$Key] = $Element;
     }
-    
+
     /**
      * Changes the key associated with the specified element in the IKeyedCollection.
      *
@@ -75,7 +70,7 @@ class Dictionary implements IDictionary {
             unset($this->Elements[$OldKey]);
         }
     }
-    
+
     /**
      * Searches for the specified element and returns the key of the first occurrence within the entire Dictionary.
      *
@@ -91,7 +86,7 @@ class Dictionary implements IDictionary {
         }
         return null;
     }
-    
+
     /**
      * Copies the elements of the Dictionary into an array.
      *
@@ -113,7 +108,7 @@ class Dictionary implements IDictionary {
         }
         return \array_slice($this->Elements, $FromIndex ?? 0, $ToIndex ?? $this->Count, true);
     }
-    
+
     /**
      * Determines whether an element is in the Dictionary.
      *
@@ -124,7 +119,7 @@ class Dictionary implements IDictionary {
     public function Contains(mixed $Element): bool {
         return \in_array($Element, $this->Elements);
     }
-    
+
     /**
      * Determines whether an element with the specified key is in the Dictionary.
      *
@@ -135,14 +130,14 @@ class Dictionary implements IDictionary {
     public function ContainsKey(string $Key): bool {
         return isset($this->Elements[$Key]);
     }
-    
+
     /**
      * Removes all elements from the Dictionary.
      */
     public function Clear(): void {
         $this->Elements = [];
     }
-    
+
     /**
      * Merges the elements of a different {@link \vDesk\Struct\Collections\Dictionary} into the Dictionary.
      *
@@ -155,7 +150,7 @@ class Dictionary implements IDictionary {
             $this->Add($Key, $Value);
         }
     }
-    
+
     /**
      * Replaces an element of the Dictionary with a different element.
      *
@@ -167,7 +162,7 @@ class Dictionary implements IDictionary {
             $this->Elements[$Key] = $Replacement;
         }
     }
-    
+
     /**
      * Replaces the element with the specified key of the Dictionary with a specified element.
      *
@@ -179,7 +174,7 @@ class Dictionary implements IDictionary {
             $this->Elements[$Key] = $Element;
         }
     }
-    
+
     /**
      * Removes the specified element from the Dictionary.
      *
@@ -190,7 +185,7 @@ class Dictionary implements IDictionary {
     public function Remove(mixed $Element): mixed {
         return $this->RemoveAt($this->KeyOf($Element) ?? "");
     }
-    
+
     /**
      * Removes an element with the specified key.
      *
@@ -206,7 +201,7 @@ class Dictionary implements IDictionary {
         }
         return null;
     }
-    
+
     /**
      * Inserts an element into the Dictionary at the position of the element with the specified key.
      *
@@ -217,24 +212,24 @@ class Dictionary implements IDictionary {
      * @throws \vDesk\Struct\Collections\DuplicateKeyException Thrown if an element with an equal key already exists.
      */
     public function Insert(string $Before, string $Key, mixed $Element): void {
-        
+
         if(isset($this->Elements[$Key])) {
             throw new DuplicateKeyException("An element with the same key '$Key' already exists.");
         }
-        
+
         $Elements = [];
-        
+
         foreach($this->Elements as $ExistingKey => $ExistingValue) {
             if($ExistingKey === $Before) {
                 $Elements[$Key] = $Element;
             }
             $Elements[$ExistingKey] = $ExistingValue;
         }
-        
+
         $this->Elements = $Elements;
-        
+
     }
-    
+
     /**
      * Inserts an element into the Dictionary after the position of the element with the specified key.
      *
@@ -245,24 +240,24 @@ class Dictionary implements IDictionary {
      * @throws \vDesk\Struct\Collections\DuplicateKeyException Thrown if an element with an equal key already exists.
      */
     public function InsertAfter(string $After, string $Key, mixed $Value): void {
-        
+
         if(isset($this->Elements[$Key])) {
             throw new DuplicateKeyException("An element with the same key '$Key' already exists.");
         }
-        
+
         $Elements = [];
-        
+
         foreach($this->Elements as $ExistingKey => $ExistingValue) {
             $Elements[$ExistingKey] = $ExistingValue;
             if($ExistingKey === $After) {
                 $Elements[$Key] = $Value;
             }
         }
-        
+
         $this->Elements = $Elements;
-        
+
     }
-    
+
     /**
      * Sets the value of an existing key within the Dictionary.
      * Note: Adding new key/values to the Dictionary isn't supported, use {@see \vDesk\Struct\Collections\Dictionary::Add()} instead.
@@ -281,7 +276,7 @@ class Dictionary implements IDictionary {
             $this->Add($Key, $Value);
         }
     }
-    
+
     /**
      *
      * Determines whether an element with the specified key exists.
@@ -295,7 +290,7 @@ class Dictionary implements IDictionary {
     public function offsetExists($Key): bool {
         return isset($this->Elements[$Key]);
     }
-    
+
     /**
      * Unsets an element and its key from the Dictionary.
      * Note: Using 'unset()' to delete an element within the Dictionary isn't supported,
@@ -311,7 +306,7 @@ class Dictionary implements IDictionary {
     public function offsetUnset($Key): void {
         throw new InvalidOperationException("Cannot unset element at index " . __CLASS__ . "[$Key]. Use " . __CLASS__ . "::RemoveAt($Key) instead.");
     }
-    
+
     /**
      * Returns the element of the specified key.
      *
@@ -330,7 +325,7 @@ class Dictionary implements IDictionary {
         }
         return $this->Elements[$Key];
     }
-    
+
     /**
      * Rewinds the internal pointer of the Dictionary to the start.
      *
@@ -340,7 +335,7 @@ class Dictionary implements IDictionary {
     public function rewind(): void {
         \reset($this->Elements);
     }
-    
+
     /**
      *
      * Returns the element at the current position of the internal pointer of the Dictionary.
@@ -353,7 +348,7 @@ class Dictionary implements IDictionary {
     public function current() {
         return \current($this->Elements);
     }
-    
+
     /**
      * @inheritdoc
      *
@@ -363,7 +358,7 @@ class Dictionary implements IDictionary {
     public function key(): string {
         return \key($this->Elements);
     }
-    
+
     /**
      * @inheritdoc
      *
@@ -373,7 +368,7 @@ class Dictionary implements IDictionary {
     public function next(): void {
         \next($this->Elements);
     }
-    
+
     /**
      * @inheritdoc
      *
@@ -383,7 +378,7 @@ class Dictionary implements IDictionary {
     public function valid(): bool {
         return \key($this->Elements) !== null;
     }
-    
+
     /**
      * Returns the amount of elements inside the Dictionary.
      *
@@ -393,7 +388,7 @@ class Dictionary implements IDictionary {
     public function Count(): int {
         return \count($this->Elements);
     }
-    
+
     /**
      * Searches for an element inside the Dictionary and returns the first element which satisfies a test provided by the specified
      * predicate function.
@@ -417,7 +412,7 @@ class Dictionary implements IDictionary {
         }
         return null;
     }
-    
+
     /**
      * Sorts the Dictionary by value.
      *
@@ -437,7 +432,7 @@ class Dictionary implements IDictionary {
     public function Sort(callable $Predicate): bool {
         return \usort($this->Elements, $Predicate);
     }
-    
+
     /**
      * Returns a new Dictionary containing all elements that satisfy a test provided by the specified predicate function.
      *
@@ -460,7 +455,7 @@ class Dictionary implements IDictionary {
         }
         return $Dictionary;
     }
-    
+
     /**
      * Creates creates a new Dictionary with the results of calling a function for every element in the Dictionary.
      *
@@ -476,7 +471,7 @@ class Dictionary implements IDictionary {
         }
         return $Dictionary;
     }
-    
+
     /**
      * Reduces the values of the Dictionary to a single value.
      *
@@ -494,7 +489,7 @@ class Dictionary implements IDictionary {
         }
         return $Accumulator;
     }
-    
+
     /**
      * Determines whether any element of a sequence satisfies a condition.
      *
@@ -510,7 +505,7 @@ class Dictionary implements IDictionary {
         }
         return false;
     }
-    
+
     /**
      * Determines whether all elements of a sequence satisfy a condition.
      *

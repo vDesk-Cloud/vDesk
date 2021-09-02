@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace vDesk\Data;
 
 /**
- * Provides mechanisms for displaying data of objects.
+ * Interface that provides functionality for displaying data of objects.
  *
- * @package vDesk\Data
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 interface IDataView {
-    
+
     /**
      * Creates an IDataView from a specified data view.
      *
@@ -19,7 +19,7 @@ interface IDataView {
      * @return \vDesk\Data\IDataView An IDataView created from the specified data view.
      */
     public static function FromDataView(mixed $DataView): IDataView;
-    
+
     /**
      * Creates a data view of the IDataView.
      *

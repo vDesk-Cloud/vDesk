@@ -127,7 +127,7 @@ final class PinBoard extends Package implements Locale\IPackage, Events\IPackage
     public static function Install(\Phar $Phar, string $Path): void {
         
         Expression::Create()
-                  ->Database("PinBoard")
+                  ->Schema("PinBoard")
                   ->Execute();
         
         Expression::Create()
@@ -358,7 +358,7 @@ final class PinBoard extends Package implements Locale\IPackage, Events\IPackage
         
         //Drop database.
         Expression::Drop()
-                  ->Database("PinBoard")
+                  ->Schema("PinBoard")
                   ->Execute();
         
         //Delete files.

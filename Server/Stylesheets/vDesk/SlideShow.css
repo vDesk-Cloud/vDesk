@@ -74,13 +74,6 @@
     visibility: visible !important;
 }
 
-.SlideShow > .Code.Slide {
-    height: 800px;
-    max-width: calc(100% - 20px);
-    padding: 20px;
-    overflow: hidden;
-}
-
 .Hide {
     animation: Hide;
     animation-fill-mode: forwards;
@@ -98,9 +91,8 @@
 }
 
 .SlideShow > .Code.Slide {
-    height: 800px;
-    max-width: calc(100% - 20px);
-    padding: 20px;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
 }
 
@@ -146,7 +138,6 @@
     left: 0;
     top: 0;
     height: 100%;
-    width: 5%;
 }
 
 .SlideShow > button.Previous:hover {
@@ -158,7 +149,6 @@
     right: 0;
     top: 0;
     height: 100%;
-    width: 5%;
 }
 
 .SlideShow > button.Next:hover {

@@ -102,7 +102,7 @@ final class Messenger extends Package implements IPackage {
     public static function Install(\Phar $Phar, string $Path): void {
         
         Expression::Create()
-                  ->Database("Messenger")
+                  ->Schema("Messenger")
                   ->Execute();
         
         //Create tables.
@@ -235,7 +235,7 @@ final class Messenger extends Package implements IPackage {
         
         //Drop database.
         Expression::Drop()
-                  ->Database("Messenger")
+                  ->Schema("Messenger")
                   ->Execute();
         
         //Delete files.

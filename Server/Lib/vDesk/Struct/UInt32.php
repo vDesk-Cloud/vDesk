@@ -6,26 +6,26 @@ namespace vDesk\Struct;
 /**
  * Represents an unsigned 32-bit integer.
  *
- * @package vDesk\Struct
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class UInt32 {
-    
+
     /**
      * Represents the largest possible value of an unsigned 32-bit integer.
      */
     public const MaxValue = 4294967295;
-    
+
     /**
      * Represents the smallest possible value of an unsigned 32-bit integer.
      */
     public const MinValue = 0;
-    
+
     /**
      * The size in Bytes an unsigned 32-bit integer will address.
      */
     public const Size = 4;
-    
+
     /**
      * Parses an unsigned 32-bit integer from a specified string.
      *
@@ -37,7 +37,7 @@ class UInt32 {
     public static function Parse(string $String): int {
         return Number::ParseUInt32($String);
     }
-    
+
     /**
      * Tries to parse an unsigned 32-bit integer from a specified string.
      *
@@ -48,5 +48,5 @@ class UInt32 {
     public static function TryParse(string $String): ?int {
         return Number::TryParseUInt32($String);
     }
-    
+
 }

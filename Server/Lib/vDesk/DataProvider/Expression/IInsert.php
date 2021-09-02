@@ -12,22 +12,22 @@ use vDesk\DataProvider\IExpression;
  * @author  Kerry Holz <DevelopmentHero@gmail.com>
  */
 interface IInsert extends IExpression {
-    
+
     /**
      * Applies a specified target table to the IInsert.
      *
-     * @param string $Table  The table to insert any values.
-     * @param array  $Fields The fields of multiple values to insert.
+     * @param string     $Table  The table to insert any values.
+     * @param null|array $Fields The fields of multiple values to insert.
      *
      * @return \vDesk\DataProvider\Expression\IInsert The current instance for further chaining.
      */
-    public function Into(string $Table, array $Fields = []): IInsert;
+    public function Into(string $Table, array $Fields = null): IInsert;
     
     /**
      * Applies one or more fields and values to the IInsert.
      *
-     * @param mixed[] $Values      The fields and values to insert.
-     * @param array   ...$Multiple Additional values to insert.
+     * @param array $Values      The fields and values to insert.
+     * @param array ...$Multiple Additional values to insert.
      *
      * @return \vDesk\DataProvider\Expression\IInsert The current instance for further chaining.
      */

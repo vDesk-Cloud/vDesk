@@ -60,7 +60,7 @@ interface ISelect extends IExpression, \IteratorAggregate {
     public function InnerJoin(string $Table, string $Alias = null): ISelect;
     
     /**
-     * Applies a LEFT JOIN statement to the ISelect.
+     * Applies a LEFT (OUTER) JOIN statement to the ISelect.
      *
      * @param string      $Table The table to join.
      * @param string|null $Alias An optional alias for the table to join.
@@ -70,7 +70,7 @@ interface ISelect extends IExpression, \IteratorAggregate {
     public function LeftJoin(string $Table, string $Alias = null): ISelect;
     
     /**
-     * Applies a RIGHT JOIN statement to the ISelect.
+     * Applies a RIGHT (OUTER) JOIN statement to the ISelect.
      *
      * @param string      $Table The table to join.
      * @param string|null $Alias An optional alias for the table to join.
@@ -78,6 +78,16 @@ interface ISelect extends IExpression, \IteratorAggregate {
      * @return \vDesk\DataProvider\Expression\ISelect The current instance for further chaining.
      */
     public function RightJoin(string $Table, string $Alias = null): ISelect;
+
+    /**
+     * Applies a FULL (OUTER) JOIN statement to the ISelect.
+     *
+     * @param string      $Table The table to join.
+     * @param string|null $Alias An optional alias for the table to join.
+     *
+     * @return \vDesk\DataProvider\Expression\ISelect The current instance for further chaining.
+     */
+    public function FullJoin(string $Table, string $Alias = null): ISelect;
     
     /**
      * Applies one or more ON conditions to the ISelect.

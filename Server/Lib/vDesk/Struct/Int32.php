@@ -6,26 +6,26 @@ namespace vDesk\Struct;
 /**
  * Represents a signed 32-bit integer.
  *
- * @package vDesk\Struct
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Int32 {
-    
+
     /**
      * Represents the largest possible value of a signed 32-bit integer.
      */
     public const MaxValue = 2147483647;
-    
+
     /**
      * Represents the smallest possible value of a signed 32-bit integer.
      */
     public const MinValue = -2147483648;
-    
+
     /**
      * The size in Bytes a signed 32-bit integer will address.
      */
     public const Size = 4;
-    
+
     /**
      * Parses a signed 32-bit integer from a specified string.
      *
@@ -37,7 +37,7 @@ class Int32 {
     public static function ParseInt32(string $String): int {
         return Number::ParseInt32($String);
     }
-    
+
     /**
      * Tries to parse a signed 32-bit integer from a specified string.
      *
@@ -48,5 +48,5 @@ class Int32 {
     public static function TryParseInt32(string $String): ?int {
         return Number::TryParseInt32($String);
     }
-    
+
 }

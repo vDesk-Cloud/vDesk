@@ -47,7 +47,7 @@ final class Security extends Package implements IPackage {
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "vDesk"         => "1.0.1",
+        "vDesk"         => "1.1.0",
         "Configuration" => "1.0.0",
         "Events"        => "1.0.0"
     ];
@@ -201,7 +201,7 @@ final class Security extends Package implements IPackage {
     public static function Install(\Phar $Phar, string $Path): void {
 
         Expression::Create()
-                  ->Database("Security")
+                  ->Schema("Security")
                   ->Execute();
 
         //Create tables.
@@ -221,8 +221,8 @@ final class Security extends Package implements IPackage {
                           "UpdateAccessControlList" => ["Type" => Type::Boolean, "Default" => false]
                       ],
                       [
-                          "Primary" => ["Fields" => ["ID"]],
-                          "Name"    => ["Unique" => true, "Fields" => ["Name" => 255]]
+                          "Primary"   => ["Fields" => ["ID"]],
+                          "GroupName" => ["Unique" => true, "Fields" => ["Name" => 255]]
                       ]
                   )
                   ->Execute();
@@ -253,8 +253,8 @@ final class Security extends Package implements IPackage {
                           "LastLogin"        => ["Type" => Type::Timestamp, "Default" => λ::CurrentTimestamp(), "Update" => λ::CurrentTimestamp()]
                       ],
                       [
-                          "Primary" => ["Fields" => ["ID"]],
-                          "Name"    => ["Unique" => true, "Fields" => ["Name" => 255, "Email" => 255]]
+                          "Primary"  => ["Fields" => ["ID"]],
+                          "UserName" => ["Unique" => true, "Fields" => ["Name" => 255, "Email" => 255]]
                       ]
                   )
                   ->Execute();
@@ -619,7 +619,7 @@ final class Security extends Package implements IPackage {
 
         //Drop database.
         Expression::Drop()
-                  ->Database("Security")
+                  ->Schema("Security")
                   ->Execute();
 
         //Delete files.

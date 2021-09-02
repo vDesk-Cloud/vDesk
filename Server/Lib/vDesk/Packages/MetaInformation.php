@@ -161,7 +161,7 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
     public static function Install(\Phar $Phar, string $Path): void {
         
         Expression::Create()
-                  ->Database("MetaInformation")
+                  ->Schema("MetaInformation")
                   ->Execute();
         
         //Create tables.
@@ -386,7 +386,7 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
         
         //Drop database.
         Expression::Drop()
-                  ->Database("MetaInformation")
+                  ->Schema("MetaInformation")
                   ->Execute();
         
         //Delete files.

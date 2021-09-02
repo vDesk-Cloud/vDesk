@@ -99,7 +99,7 @@ final class Events extends Package implements IPackage {
     public static function Install(\Phar $Phar, string $Path): void {
         
         Expression::Create()
-                  ->Database("Events")
+                  ->Schema("Events")
                   ->Execute();
         
         //Create tables.
@@ -211,7 +211,7 @@ final class Events extends Package implements IPackage {
         
         //Drop database.
         Expression::Drop()
-                  ->Database("Events")
+                  ->Schema("Events")
                   ->Execute();
         
         //Delete files.

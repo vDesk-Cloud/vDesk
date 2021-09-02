@@ -15,39 +15,42 @@ use vDesk\Struct\Text;
  * @property-read bool     $CanWrite    Gets a value indicating whether the current DirectoryStream supports writing.
  * @property-read resource $Handle      Gets the operating system handle of the DirectoryStream.
  * @property-read bool     $EndOfStream Gets a value indicating whether the current DirectoryStream has reached its end.
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class DirectoryStream implements IReadableStream, ISeekableStream {
-    
+
     use Properties;
-    
+
     /**
      * Gets a value indicating whether the current DirectoryStream has reached its end.
      *
      * @var bool
      */
     public bool $EndOfStream = false;
-    
+
     /**
      * The last read entry of the DirectoryStream.
      *
      * @var string|null
      */
     private ?string $Entry = null;
-    
+
     /**
      * The handle of the DirectoryStream.
      *
      * @var resource
      */
-    private $Handle;
-    
+    private $Pointer;
+
     /**
      * Initializes a new instance of the DirectoryStream class.
      *
-     * @param null|string $Directory The target directory to read.
+     * @param null|string $Directory Initializes the DirectoryStream with the specified target directory to iterate over.
+     *
+     * @throws \vDesk\IO\IOException
      */
-    public function __construct(?string $Directory = null) {
+    public function __construct(public ?string $Directory) {
         $this->AddProperties([
             "CanSeek"     => [
                 \Get => fn(): bool => $this->CanSeek()
@@ -65,26 +68,22 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
                 \Get => fn(): bool => $this->EndOfStream()
             ],
             "Handle"      => [
-                \Get => fn() => $this->Handle,
-                \Set => fn($Value) => $this->Handle = $Value
+                \Get => fn() => $this->Pointer,
+                \Set => fn($Value) => $this->Pointer = $Value
             ]
         ]);
-        if($Directory !== null && Directory::Exists($Directory)) {
-            $this->Open($Directory);
+        $this->Pointer = @\opendir($Directory);
+        if($this->Pointer === false) {
+            if(!Directory::Exists($Directory)) {
+                throw new IOException("Can't open DirectoryStream on directory: \"{$Directory}\", directory doesn't exist!");
+            }
+            if(!Directory::IsReadable($Directory)) {
+                throw new IOException("Can't open DirectoryStream on directory: \"{$Directory}\", access denied!");
+            }
+            throw new IOException("Can't open DirectoryStream on directory: \"{$Directory}\", filesystem made shit?");
         }
     }
-    
-    /**
-     * Opens a Stream on a given target directory.
-     *
-     * @param string $Directory The target directory to read.
-     *
-     * @return bool True on success, false on failure.
-     */
-    public function Open(string $Directory): bool {
-        return !($this->Handle !== null || ($this->Handle = @\opendir($Directory)) === false);
-    }
-    
+
     /**
      * Reads an entry from the DirectoryStream.
      *
@@ -99,30 +98,29 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
             $this->Entry = null;
             return $Element;
         }
-        if($this->Handle && ($Element = \readdir($this->Handle)) !== false) {
+        if($this->Pointer && ($Element = \readdir($this->Pointer)) !== false) {
+            $this->Entry = null;
             if($Element === "." || $Element === "..") {
-                $this->Entry = null;
                 return $this->Read();
             }
-            $this->Entry = null;
             return $Element;
         }
         $this->EndOfStream = true;
         return Text::Empty;
     }
-    
+
     /**
      * Resets the position of the internal pointer of the DirectoryStream.
      *
      * @return bool True on success, false on failure.
      */
     public function Rewind(): bool {
-        \rewinddir($this->Handle);
+        \rewinddir($this->Pointer);
         $this->Entry       = null;
         $this->EndOfStream = false;
         return true;
     }
-    
+
     /**
      * Tells whether the current DirectoryStream has reached its end.
      * EndOfStream is a convenience method that is equivalent to the value of the EndOfStream property of the current instance.
@@ -130,15 +128,15 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
      * @return bool True if the DirectoryStream has reached its end; otherwise, false.
      */
     public function EndOfStream(): bool {
-        if($this->EndOfStream || !$this->Handle) {
+        if($this->EndOfStream || !$this->Pointer) {
             return $this->EndOfStream;
         }
         if($this->Entry === null) {
-            $Element = \readdir($this->Handle);
+            $Element = \readdir($this->Pointer);
             if($Element === "." || $Element === "..") {
-                $Element = \readdir($this->Handle);
+                $Element = \readdir($this->Pointer);
                 if($Element === "." || $Element === "..") {
-                    $Element = \readdir($this->Handle);
+                    $Element = \readdir($this->Pointer);
                 }
             }
             if($Element === false) {
@@ -150,20 +148,20 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
         }
         return $this->EndOfStream;
     }
-    
+
     /**
      * Closes the DirectoryStream.
      *
      * @return bool True on success; otherwise, false.
      */
     public function Close(): bool {
-        if(\is_resource($this->Handle)) {
-            \closedir($this->Handle);
+        if(\is_resource($this->Pointer)) {
+            \closedir($this->Pointer);
             return true;
         }
         return false;
     }
-    
+
     /**
      * Reads a single character from the Stream.
      *
@@ -172,7 +170,7 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
     public function ReadCharacter(): string {
         return $this->Read();
     }
-    
+
     /**
      * Unlocks the Stream, granting access for other processes.
      *
@@ -181,7 +179,7 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
     public function Unlock(): bool {
         return false;
     }
-    
+
     /**
      * Reads a line from the Stream.
      *
@@ -190,16 +188,16 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
     public function ReadLine(): string {
         return $this->Read();
     }
-    
+
     /**
      * Determines current position of the pointer of the Stream.
      *
      * @return int The current byte-offset of the pointer of the Stream.
      */
     public function Tell(): int {
-        return \ftell($this->Handle);
+        return \ftell($this->Pointer);
     }
-    
+
     /**
      * Sets the current position of the pointer of the Stream to a specified offset.
      *
@@ -208,10 +206,10 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
      * @return bool True on success; otherwise, false.
      */
     public function Seek(int $Offset): bool {
-        \fseek($this->Handle, $Offset);
+        \fseek($this->Pointer, $Offset);
         return true;
     }
-    
+
     /**
      * Reads the entire content of the Stream from the current position until the end of the Stream.
      *
@@ -224,7 +222,7 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
     public function ReadAll(int $Amount = -1, int $Offset = -1): string {
         // TODO: Implement ReadAll() method.
     }
-    
+
     /**
      * Sets a lock on the Stream, limiting or prohibiting access for other processes.
      *
@@ -235,18 +233,11 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
     public function Lock(int $Type = Lock::Shared): bool {
         // TODO: Implement Lock() method.
     }
-    
-    /**
-     * @inheritDoc
-     */
-    public static function FromPointer($Pointer): IStream {
-        // TODO: Implement FromPointer() method.
-    }
-    
+
     public function CanRead(): bool {
         return true;
     }
-    
+
     public function CanSeek(): bool {
         return true;
     }

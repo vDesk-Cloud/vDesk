@@ -111,10 +111,7 @@ final class Security extends Module {
                   ->Values([
                       "User"           => $User,
                       "Ticket"         => $User->Ticket,
-                      "ExpirationTime" => λ::AddTime(
-                          λ::Now(),
-                          Settings::$Remote["Security"]["SessionLifeTime"]
-                      )
+                      "ExpirationTime" => (new \DateTime())->add(new \DateInterval("P0000-00-00T" . Settings::$Remote["Security"]["SessionLifeTime"]))
                   ])();
 
         Log::Info(__METHOD__, "User '{$User->Name}' logged in.");
@@ -182,12 +179,7 @@ final class Security extends Module {
         }
 
         Expression::Update("Security.Sessions")
-                  ->Set([
-                      "ExpirationTime" => λ::AddTime(
-                          λ::Now(),
-                          Settings::$Remote["Security"]["SessionLifeTime"]
-                      )
-                  ])
+                  ->Set(["ExpirationTime" => (new \DateTime())->add(new \DateInterval("P0000-00-00T" . Settings::$Remote["Security"]["SessionLifeTime"]))])
                   ->Where(["Ticket" => $Ticket])
                   ->Execute();
 
