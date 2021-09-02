@@ -20,6 +20,7 @@ namespace vDesk\Struct;
 /**
  * Trait that enables the definition of properties.
  *
+ * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 trait Properties {

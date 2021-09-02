@@ -6,8 +6,8 @@ namespace vDesk\Struct;
 /**
  * Represents a property providing get and set-methods.
  *
- * @package vDesk\Struct
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Property {
     

@@ -6,10 +6,11 @@ namespace vDesk\Struct;
 /**
  * Abstract base class for static singleton classes.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class StaticSingleton {
-    
+
     /**
      * Internal reference storage of StaticSingleton instances.
      * These references are required to prevent instances being instantly collected by the GC.
@@ -17,7 +18,7 @@ abstract class StaticSingleton {
      * @var array
      */
     private static array $Instances = [];
-    
+
     /**
      * Initializes the functionality of the StaticSingleton class.
      *
@@ -29,17 +30,17 @@ abstract class StaticSingleton {
             static::_construct(...$Arguments);
         }
     }
-    
+
     /**
      * Initializes the functionality of the StaticSingleton class.
      */
     protected static function _construct() {
     }
-    
+
     /**
      * Prevent cloning.
      */
     private function __clone() {
     }
-    
+
 }

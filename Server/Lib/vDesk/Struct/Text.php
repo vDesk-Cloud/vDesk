@@ -7,45 +7,46 @@ use vDesk\Struct\Text\Chain;
 /**
  * Stringwrapper class.
  *
- * @package vDesk\Struct
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Text {
-    
+
     use Properties;
-    
+
     /**
      * Represents an empty string.
      */
     public const Empty = "";
-    
+
     /**
      * Represents a whitespace character.
      */
     public const Space = " ";
-    
+
     /**
      * The default characters to remove for trim operations.
      */
     public const Trim = " \t\n\r\0\x0B";
-    
+
     /**
      * The 'NULL'-character.
      */
     public const NULL = "\0x00";
-    
+
     /**
      * The internal string of the Text.
      *
      * @var string|null
      */
     private ?string $String = null;
-    
+
     /**
      * Prevent instantiation.
      */
-    private function __construct() { }
-    
+    private function __construct() {
+    }
+
     /**
      * Concatenates the members of a constructed iterable collection of type String, using the specified separator between each member.
      *
@@ -81,7 +82,7 @@ class Text {
     public static function IsNullOrEmpty(null|string|self|\Stringable $String): bool {
         return $String === null || $String === self::Empty;
     }
-    
+
     /**
      * Indicates whether a specified string consists only of alphabetical characters.
      *
@@ -92,7 +93,7 @@ class Text {
     public static function IsAlphabetic(string|self|\Stringable $String): bool {
         return \ctype_alpha($String);
     }
-    
+
     /**
      * Indicates whether a specified string consists only of numerical characters.
      *
@@ -103,7 +104,7 @@ class Text {
     public static function IsNumeric(string|self|\Stringable $String): bool {
         return \ctype_digit($String);
     }
-    
+
     /**
      * Indicates whether a specified string consists only of aphlanumerical characters.
      *
@@ -114,7 +115,7 @@ class Text {
     public static function IsAlphaNumeric(string|self|\Stringable $String): bool {
         return \ctype_alnum($String);
     }
-    
+
     /**
      * Indicates whether a specified string consists only of printable characters.
      *
@@ -125,7 +126,7 @@ class Text {
     public static function IsPrintable(string|self|\Stringable $String): bool {
         return \ctype_print($String);
     }
-    
+
     /**
      * Indicates whether a specified string consists only of lowercase characters.
      *
@@ -136,7 +137,7 @@ class Text {
     public static function IsLowerCase(string|self|\Stringable $String): bool {
         return \ctype_lower($String);
     }
-    
+
     /**
      * Indicates whether a specified string consists only of uppercase characters.
      *
@@ -147,7 +148,7 @@ class Text {
     public static function IsUpperCase(string|self|\Stringable $String): bool {
         return \ctype_upper($String);
     }
-    
+
     /**
      * Returns a copy of the specified string converted to lowercase.
      *
@@ -158,7 +159,7 @@ class Text {
     public static function ToLower(string|self|\Stringable $String): Chain {
         return new Chain(\strtolower($String));
     }
-    
+
     /**
      * Returns a copy of the specified string converted to uppercase.
      *
@@ -169,7 +170,7 @@ class Text {
     public static function ToUpper(string|self|\Stringable $String): Chain {
         return new Chain(\strtoupper($String));
     }
-    
+
     /**
      * Returns a new string in which all occurrences of a specified string in the specified target string are replaced with another
      * specified string.
@@ -184,7 +185,7 @@ class Text {
     public static function Replace(string|self|\Stringable $String, string|self|\Stringable $OldValue, string|self|\Stringable $NewValue): Chain {
         return new Chain(\str_replace($OldValue, $NewValue, $String));
     }
-    
+
     /**
      * Returns a new string in which all occurrences of any specified strings in the specified target string are replaced with another
      * specified string.
@@ -199,7 +200,7 @@ class Text {
     public static function ReplaceAny(string|self|\Stringable $String, array $OldValues, string|self|\Stringable $NewValue): Chain {
         return new Chain(\str_replace($OldValues, $NewValue, $String));
     }
-    
+
     /**
      * Checks whether a specified substring exists within the target string.
      *
@@ -212,7 +213,7 @@ class Text {
     public static function Contains(string|self|\Stringable $String, string|self|\Stringable $SearchString, bool $CaseSensitive = true): bool {
         return self::IndexOf($String, $SearchString, $CaseSensitive) >= 0;
     }
-    
+
     /**
      * Returns the zero-based index of the first occurrence of the specified search string in the specified string.
      *
@@ -225,7 +226,7 @@ class Text {
     public static function IndexOf(string|self|\Stringable $String, string|self|\Stringable $Search, bool $CaseSensitive = true): int {
         return ($Position = $CaseSensitive ? \strpos($String, $Search) : \stripos($String, $Search)) !== false ? $Position : -1;
     }
-    
+
     /**
      * Checks whether any of a set of a substrings exist within the target string. Note: the comparison will be performed case-insensitive.
      *
@@ -242,7 +243,7 @@ class Text {
         }
         return false;
     }
-    
+
     /**
      * Concatenates two or more strings.
      *
@@ -253,7 +254,7 @@ class Text {
     public static function Concat(string ...$Strings): Chain {
         return self::Join(self::Empty, $Strings);
     }
-    
+
     /**
      * Determines whether the start of a string matches the specified string.
      *
@@ -266,7 +267,7 @@ class Text {
     public static function StartsWith(string|self|\Stringable $String, string|self|\Stringable $Search, bool $CaseSensitive = true): bool {
         return self::IndexOf($String, $Search, $CaseSensitive) === 0;
     }
-    
+
     /**
      * Determines whether the end of a string matches the specified string.
      *
@@ -279,7 +280,7 @@ class Text {
     public static function EndsWith(string|self|\Stringable $String, string|self|\Stringable $Search, bool $CaseSensitive = true): bool {
         return self::LastIndexOf($String, $Search, $CaseSensitive) === (\strlen($String) - \strlen($Search));
     }
-    
+
     /**
      * Returns the zero-based index position of the last occurrence of the specified search string in the specified string.
      *
@@ -292,7 +293,7 @@ class Text {
     public static function LastIndexOf(string|self|\Stringable $String, string|self|\Stringable $Search, bool $CaseSensitive = true): int {
         return (($Position = $CaseSensitive ? \strrpos($String, $Search) : \strripos($String, $Search)) !== false) ? $Position : -1;
     }
-    
+
     /**
      * Returns the amount of characters of the specified string.
      *
@@ -303,7 +304,7 @@ class Text {
     public static function Length(string|self|\Stringable $String): int {
         return \strlen($String);
     }
-    
+
     /**
      * Returns a new string that aligns the characters in the specified string by padding them on both sides with a specified Unicode
      * character, for a specified total length.
@@ -319,7 +320,7 @@ class Text {
     public static function Pad(string|self|\Stringable $String, int $Amount, string|self|\Stringable $Char = self::Space): Chain {
         return new Chain(\str_pad($String, $Amount, $Char, \STR_PAD_BOTH));
     }
-    
+
     /**
      * Returns a new string that right-aligns the characters in the specified string by padding them on the left with a specified Unicode
      * character, for a specified total length.
@@ -335,7 +336,7 @@ class Text {
     public static function PadLeft(string|self|\Stringable $String, int $Amount, string|self|\Stringable $Char = self::Space): Chain {
         return new Chain(\str_pad($String, $Amount, $Char, \STR_PAD_LEFT));
     }
-    
+
     /**
      * Returns a new string that left-aligns the characters in the specified string by padding them on the right with a specified Unicode
      * character, for a specified total length.
@@ -351,7 +352,7 @@ class Text {
     public static function PadRight(string|self|\Stringable $String, int $Amount, string|self|\Stringable $Char = self::Space): Chain {
         return new Chain(\str_pad($String, $Amount, $Char, \STR_PAD_RIGHT));
     }
-    
+
     /**
      * Splits a string into substrings that are based on the specified delimiter character.
      *
@@ -364,7 +365,7 @@ class Text {
     public static function Split(string|self|\Stringable $String, string|self|\Stringable $Delimiter): array {
         return \array_map(static fn(string|self|\Stringable $String): Chain => new Chain($String), \explode($Delimiter, $String));
     }
-    
+
     /**
      * Removes all leading and trailing occurrences of a set of characters specified in a character mask from the specified string.
      *
@@ -377,7 +378,7 @@ class Text {
     public static function Trim(string|self|\Stringable $String, string|self|\Stringable $Chars = null): Chain {
         return new Chain($Chars === null ? \trim($String) : \trim($String, $Chars));
     }
-    
+
     /**
      * Removes all leading occurrences of a set of characters specified in a character mask from the the specified string.
      *
@@ -390,7 +391,7 @@ class Text {
     public static function TrimStart(string|self|\Stringable $String, string|self|\Stringable $Chars = null): Chain {
         return new Chain($Chars === null ? \ltrim($String) : \ltrim($String, $Chars));
     }
-    
+
     /**
      * Removes all trailing occurrences of a set of characters specified in a character mask from the current String object.
      *
@@ -403,7 +404,7 @@ class Text {
     public static function TrimEnd(string|self|\Stringable $String, string|self|\Stringable $Chars = null): Chain {
         return new Chain($Chars === null ? \rtrim($String) : \rtrim($String, $Chars));
     }
-    
+
     /**
      * Repeats the specified string|self|\Stringable $Amount times.
      *
@@ -415,7 +416,7 @@ class Text {
     public static function Repeat(string|self|\Stringable $String, int $Amount): Chain {
         return new Chain(\str_repeat($String, $Amount));
     }
-    
+
     /**
      * Extracts a substring between two specified identifier chars.
      *
@@ -444,7 +445,7 @@ class Text {
         }
         return new Chain(self::Empty);
     }
-    
+
     /**
      * Retrieves a substring from the specified string. The substring starts at a specified character position and has a specified length.
      *
@@ -466,7 +467,7 @@ class Text {
                 : self::Empty
         );
     }
-    
+
     /**
      * @return string
      * @ignore
@@ -474,6 +475,6 @@ class Text {
     public function __toString() {
         return $this->String;
     }
-    
+
 }
 

@@ -9,8 +9,8 @@ use vDesk\Utils\Expressions;
 /**
  * Enumeration of extension types.
  *
- * @package vDesk\Struct\Extension
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Type {
     
@@ -78,20 +78,10 @@ class Type {
      * @return bool True if the specified type is an extension type; otherwise, false.
      */
     public static function IsExtensionType(string $Type): bool {
-        switch($Type) {
-            case self::Date:
-            case self::Time:
-            case self::DateTime:
-            case self::Color:
-            case self::URL:
-            case self::Email:
-            case self::Money:
-            case self::File:
-            case self::TimeSpan:
-            case self::Enum:
-                return true;
-        }
-        return false;
+        return match ($Type) {
+            self::Date, self::Time, self::DateTime, self::Color, self::URL, self::Email, self::Money, self::File, self::TimeSpan, self::Enum => true,
+            default => false,
+        };
     }
     
     /**

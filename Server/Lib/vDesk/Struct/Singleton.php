@@ -6,10 +6,11 @@ namespace vDesk\Struct;
 /**
  * Abstract base class for singleton classes.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Singleton {
-    
+
     /**
      * Internal reference storage of Singleton instances.
      * These references are required to prevent instances being instantly collected by the GC.
@@ -17,7 +18,7 @@ abstract class Singleton {
      * @var array
      */
     private static array $Instances = [];
-    
+
     /**
      * Initializes the functionality of the Singleton class.
      */
@@ -27,7 +28,7 @@ abstract class Singleton {
             $this->_construct();
         }
     }
-    
+
     /**
      * Gets an unique instance of the extending class.
      *
@@ -39,7 +40,7 @@ abstract class Singleton {
         }
         return self::$Instances[static::class];
     }
-    
+
     /**
      * Proxies static method calls to the instance of the Singleton.
      *
@@ -51,11 +52,11 @@ abstract class Singleton {
     public static function __callStatic($Method, $Arguments) {
         return self::GetInstance()->{$Method}(...$Arguments);
     }
-    
+
     /**
      * Initializes the functionality of the Singleton class.
      */
     protected function _construct() {
     }
-    
+
 }

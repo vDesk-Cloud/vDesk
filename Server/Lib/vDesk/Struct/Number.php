@@ -6,33 +6,33 @@ namespace vDesk\Struct;
 /**
  * Static utility class that provides functionality for working with numeric values.
  *
- * @package vDesk\Struct
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Number {
-    
+
     /**
      * Represents the largest possible value of a signed platform specific integer.
      */
     public const MaxValue = \PHP_INT_MAX;
-    
+
     /**
      * Represents the smallest possible value of a signed platform specific integer.
      */
     public const MinValue = \PHP_INT_MIN;
-    
+
     /**
      * The size in Bytes of a signed platform specific integer will address.
      */
     public const Size = \PHP_INT_SIZE;
-    
+
     /**
      * Prevent instantiation.
      * Initializes a new instance of the Number class.
      */
     private function __construct() {
     }
-    
+
     /**
      * Parses a signed 8-bit integer from a specified string.
      *
@@ -48,7 +48,7 @@ final class Number {
         }
         return $Value;
     }
-    
+
     /**
      * Tries to parse a signed 8-bit integer from a specified string.
      *
@@ -63,7 +63,7 @@ final class Number {
         }
         return $Value & ($Value >= 0 ? Int8::MaxValue : Int8::MinValue);
     }
-    
+
     /**
      * Parses an unsigned 8-bit integer from a specified string.
      *
@@ -79,7 +79,7 @@ final class Number {
         }
         return $Value;
     }
-    
+
     /**
      * Tries to parse an unsigned 8-bit integer from a specified string.
      *
@@ -94,7 +94,7 @@ final class Number {
         }
         return $Value & ($Value >= 0 ? UInt8::MaxValue : UInt8::MinValue);
     }
-    
+
     /**
      * Parses a signed 16-bit integer from a specified string.
      *
@@ -110,7 +110,7 @@ final class Number {
         }
         return $Value;
     }
-    
+
     /**
      * Tries to parse a signed 16-bit integer from a specified string.
      *
@@ -125,7 +125,7 @@ final class Number {
         }
         return $Value & ($Value >= 0 ? Int16::MaxValue : Int16::MinValue);
     }
-    
+
     /**
      * Parses an unsigned 16-bit integer from a specified string.
      *
@@ -141,7 +141,7 @@ final class Number {
         }
         return $Value;
     }
-    
+
     /**
      * Tries to parse an unsigned 16-bit integer from a specified string.
      *
@@ -156,7 +156,7 @@ final class Number {
         }
         return $Value & ($Value >= 0 ? UInt16::MaxValue : UInt16::MinValue);
     }
-    
+
     /**
      * Parses a signed 32-bit integer from a specified string.
      *
@@ -172,7 +172,7 @@ final class Number {
         }
         return $Value;
     }
-    
+
     /**
      * Tries to parse a signed 32-bit integer from a specified string.
      *
@@ -187,7 +187,7 @@ final class Number {
         }
         return $Value & ($Value >= 0 ? Int32::MaxValue : Int32::MinValue);
     }
-    
+
     /**
      * Parses an unsigned 32-bit integer from a specified string.
      *
@@ -203,7 +203,7 @@ final class Number {
         }
         return $Value;
     }
-    
+
     /**
      * Tries to parse an unsigned 32-bit integer from a specified string.
      *
@@ -218,7 +218,7 @@ final class Number {
         }
         return $Value & ($Value >= 0 ? UInt32::MaxValue : UInt32::MinValue);
     }
-    
+
     /**
      * Parses a signed 64-bit integer from a specified string.
      *
@@ -234,7 +234,7 @@ final class Number {
         }
         return $Value;
     }
-    
+
     /**
      * Tries to parse a signed 64-bit integer from a specified string.
      *
@@ -249,7 +249,7 @@ final class Number {
         }
         return $Value & ($Value >= 0 ? Int64::MaxValue : Int64::MinValue);
     }
-    
+
     /**
      * Parses an unsigned 64-bit integer from a specified string.
      *
@@ -265,7 +265,7 @@ final class Number {
         }
         return $Value;
     }
-    
+
     /**
      * Tries to parse an unsigned 64-bit integer from a specified string.
      *
@@ -280,7 +280,7 @@ final class Number {
         }
         return $Value & ($Value >= 0 ? UInt64::MaxValue : UInt64::MinValue);
     }
-    
+
     /**
      * Determines whether the specified value is of the type int or float a numeric string.
      *
@@ -291,7 +291,7 @@ final class Number {
     public static function IsNumeric($Value): bool {
         return \is_numeric($Value);
     }
-    
+
     /**
      * Generates a random number in a specified range.
      *
@@ -303,13 +303,13 @@ final class Number {
     public static function Random(int $Min = self::MinValue, int $Max = self::MaxValue): int {
         return \random_int($Min, $Max);
     }
-    
+
     /**
      * Parses an integer from a specified string.
      *
      * @param string $String The string to parse.
      *
-     * @return int|null An integer that yields the value parsed from the specified string.
+     * @return int An integer that yields the value parsed from the specified string.
      */
     private static function ParseInt(string $String): int {
         if(!\is_numeric($String)) {
@@ -317,7 +317,7 @@ final class Number {
         }
         return (int)$String;
     }
-    
+
     /**
      * Tries to parse an integer from a specified string.
      *
@@ -328,5 +328,30 @@ final class Number {
     private static function TryParseInt(string $String): ?int {
         return \is_numeric($String) ? (int)$String : null;
     }
-    
+
+    /**
+     * Parses a float from a specified string.
+     *
+     * @param string $String The string to parse.
+     *
+     * @return float A floating point value that yields the value parsed from the specified string.
+     */
+    private static function ParseFloat(string $String): float {
+        if(!\is_numeric($String)) {
+            throw new \InvalidArgumentException("The specified string doesn't contain any valid numeric characters.");
+        }
+        return (float)$String;
+    }
+
+    /**
+     * Tries to parse a float from a specified string.
+     *
+     * @param string $String The string to parse.
+     *
+     * @return float|null A floating point value that yields the value parsed from the specified string; otherwise, null.
+     */
+    private static function TryParseFloat(string $String): ?float {
+        return \is_numeric($String) ? (float)$String : null;
+    }
+
 }
