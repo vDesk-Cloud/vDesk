@@ -17,48 +17,38 @@ use vDesk\Struct\Properties;
  * @property-read bool     $CanWrite    Gets a value indicating whether the current FileStream supports writing.
  * @property-read int      $Position    Gets the current position of the pointer of the FileStream.
  * @property-read bool     $EndOfStream Gets a value indicating whether the current FileStream has reached its end.
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
-    
+
     use Properties;
-    
+
     /**
      * The access mode of the FileStream.
      *
      * @var int|null
      */
     protected ?int $Mode;
-    
+
     /**
      * The pointer of the FileStream.
      *
      * @var resource
      */
     protected $Pointer;
-    
+
     /**
      * Initializes a new instance of the FileStream class.
      *
-     * @param null|string $File The target file to read or write.
-     * @param int|null    $Mode The access-mode on the FileStream.
+     * @param string $File Initializes the FileStream with the specified target file to read or write.
+     * @param int    $Mode Initializes the FileStream with the specified access-mode.
+     *
+     * @throws \vDesk\IO\IOException Thrown if the FileStream couldn't be opened on the specified file.
      */
-    public function __construct(public ?string $File = null, int $Mode = null) {
+    public function __construct(public string $File, int $Mode = Mode::Read | Mode::Duplex | Mode::Binary) {
         $this->AddProperty("Pointer", [\Get => fn() => $this->Pointer]);
-        if($File !== null) {
-            $this->Open($File, $Mode ?? Mode::Read | Mode::Duplex | Mode::Binary);
-        }
-    }
-    
-    /**
-     * Opens a Stream on a given target file or creates a new file if it does not exist.
-     *
-     * @param string $File The target file to read or write.
-     * @param int    $Mode The access-mode on the FileStream.
-     *
-     * @return bool True on success, false on failure.
-     */
-    public function Open(string $File, int $Mode = Mode::Read | Mode::Duplex | Mode::Binary): bool {
+
         $FileMode = "";
         if($Mode & Mode::Read) {
             $FileMode .= "r";
@@ -82,13 +72,11 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
             $FileMode .= "+";
         }
         if($this->Pointer !== null || ($this->Pointer = @\fopen($File, $FileMode)) === false) {
-            return false;
+            throw new IOException("Can't open FileStream on file: \"{$File}\" with mode: \"{$FileMode}\"");
         }
-        $this->File = $File;
         $this->Mode = $Mode;
-        return true;
     }
-    
+
     /**
      * Reads a given amount of bytes from the FileStream.
      *
@@ -103,7 +91,7 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
         }
         return \fread($this->Pointer, $Amount);
     }
-    
+
     /**
      * Reads a line from the FileStream.
      *
@@ -116,7 +104,7 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
         }
         return \fgets($this->Pointer);
     }
-    
+
     /**
      * Reads the entire content of the FileStream from the current position until the end of the FileStream.
      *
@@ -133,7 +121,7 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
         }
         return \stream_get_contents($this->Pointer, $Amount, $Offset);
     }
-    
+
     /**
      * Reads a single character from the FileStream.
      *
@@ -146,7 +134,7 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
         }
         return \fgetc($this->Pointer);
     }
-    
+
     /**
      * Writes data to the FileStream.
      *
@@ -161,7 +149,7 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
         }
         return \fwrite($this->Pointer, $Data, $Amount);
     }
-    
+
     /**
      * Sets a lock on the FileStream, limiting or prohibiting access for other processes.
      *
@@ -172,7 +160,7 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
     public function Lock(int $Type = Lock::Shared): bool {
         return \flock($this->Pointer, $Type);
     }
-    
+
     /**
      * Unlocks the FileStream, granting access for other processes.
      *
@@ -181,7 +169,7 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
     public function Unlock(): bool {
         return \flock($this->Pointer, Lock::Free);
     }
-    
+
     /**
      * Resets the position of the internal pointer of the FileStream.
      *
@@ -190,7 +178,7 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
     public function Rewind(): bool {
         return \rewind($this->Pointer);
     }
-    
+
     /**
      * Determines current position of the pointer of the FileStream.
      *
@@ -199,7 +187,7 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
     public function Tell(): int {
         return \ftell($this->Pointer);
     }
-    
+
     /**
      * Sets the current position of the pointer of the FileStream to a specified offset.
      *
@@ -211,7 +199,7 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
     public function Seek(int $Offset, int $Mode = Seek::Offset): bool {
         return \fseek($this->Pointer, $Offset, $Mode) > -1;
     }
-    
+
     /**
      * Tells whether the current FileStream supports seeking.
      * CanSeek is a convenience method that is equivalent to the value of the CanSeek property of the current instance.
@@ -221,7 +209,7 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
     public function CanSeek(): bool {
         return $this->Mode !== Mode::Append;
     }
-    
+
     /**
      * Tells whether the current FileStream supports reading.
      * CanRead is a convenience method that is equivalent to the value of the CanRead property of the current instance.
@@ -233,7 +221,7 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
                && $this->Mode !== Mode::Append
                && $this->Mode !== Mode::Create;
     }
-    
+
     /**
      * Tells whether the current FileStream supports writing.
      * CanWrite is a convenience method that is equivalent to the value of the CanWrite property of the current instance.
@@ -243,7 +231,7 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
     public function CanWrite(): bool {
         return $this->Mode !== Mode::Read;
     }
-    
+
     /**
      * Tells whether the current FileStream has reached its end.
      * EndOfStream is a convenience method that is equivalent to the value of the EndOfStream property of the current instance.
@@ -253,16 +241,16 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
     public function EndOfStream(): bool {
         return \feof($this->Pointer);
     }
-    
+
     /**
      * Closes the FileStream.
      *
      * @return bool True on success, false on failure.
      */
     public function Close(): bool {
-        return \is_resource($this->Pointer) ? \fclose($this->Pointer) : false;
+        return \is_resource($this->Pointer) && \fclose($this->Pointer);
     }
-    
+
     /**
      * Truncates the sequence of bytes to the specified size.
      *
@@ -272,18 +260,5 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
      */
     public function Truncate(int $Size): bool {
         return \ftruncate($this->Pointer, $Size);
-    }
-    
-    /**
-     * Creates a new FileStream as wrapper of a specified pointer resource.
-     *
-     * @param resource $Pointer The pointer to wrap.
-     *
-     * @return \vDesk\IO\FileStream A new instance of the FileStream yielding the specified pointer.
-     */
-    public static function FromPointer($Pointer): static {
-        $Stream          = new static();
-        $Stream->Pointer = $Pointer;
-        return $Stream;
     }
 }

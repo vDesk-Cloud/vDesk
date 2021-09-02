@@ -12,20 +12,20 @@ use vDesk\IO\Stream;
 use vDesk\Struct\StaticSingleton;
 
 /**
- * Class CGI represents ...
+ * Interface providing functionality for writing data zo a CGI request.
  *
- * @package vDesk\Connection\Output
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class CGI extends StaticSingleton implements IProvider {
-    
+
     /**
      * The output-stream.
      *
      * @var null|\vDesk\IO\FileStream
      */
     protected static ?FileStream $Stream = null;
-    
+
     /**
      * Initializes a new instance of the CGI class.
      */
@@ -34,14 +34,14 @@ class CGI extends StaticSingleton implements IProvider {
         \header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
         static::$Stream = new FileStream("php://output", Stream\Mode::Read | Stream\Mode::Binary);
     }
-    
+
     /**
      * Sends data to the current output API.
      *
      * @param mixed $Data The data to send.
      */
-    public static function Write($Data): void {
-        
+    public static function Write(mixed $Data): void {
+
         //Check if the passed data implements the IDataView interface.
         if($Data instanceof IDataView) {
             \header("Content-Type: application/json");
@@ -58,7 +58,7 @@ class CGI extends StaticSingleton implements IProvider {
             );
             return;
         }
-        
+
         //Check if a file has been passed.
         if($Data instanceof FileInfo) {
             \header("Content-type: " . ($Data->MimeType ?? "application/octet-stream"));
@@ -70,7 +70,7 @@ class CGI extends StaticSingleton implements IProvider {
             }
             return;
         }
-        
+
         //Check if a Stream has been passed.
         if($Data instanceof IReadableStream) {
             while(!$Data->EndOfStream()) {
@@ -79,7 +79,7 @@ class CGI extends StaticSingleton implements IProvider {
             $Data->Close();
             return;
         }
-        
+
         //Check if a Generator has been passed.
         if($Data instanceof \Generator) {
             foreach($Data as $Bytes) {
@@ -88,7 +88,7 @@ class CGI extends StaticSingleton implements IProvider {
             return;
         }
         \header("Content-Type: application/json");
-        
+
         //Check if an Exception has been thrown.
         if($Data instanceof \Throwable) {
             static::$Stream->Write(
@@ -105,7 +105,7 @@ class CGI extends StaticSingleton implements IProvider {
             );
             return;
         }
-        
+
         //Create a default response.
         static::$Stream->Write(
             \json_encode([
@@ -118,7 +118,7 @@ class CGI extends StaticSingleton implements IProvider {
                 \JSON_THROW_ON_ERROR
             )
         );
-        
+
     }
 }
 
