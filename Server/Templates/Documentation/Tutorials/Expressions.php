@@ -56,19 +56,21 @@ use vDesk\Documentation\Code;
                 </ul>
             </li>
             <li>
-                <a href="#Create">Creating databases and tables</a>
+                <a href="#Create">Creating databases, schemas and tables</a>
                 <ul class="Topics">
                     <li><a href="#CreateDatabase">Databases</a></li>
+                    <li><a href="#CreateSchema">Schemas</a></li>
                     <li><a href="#CreateTable">Tables</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#Alter">Updating databases and tables</a>
+                <a href="#Alter">Updating databases, schemas and tables</a>
             </li>
             <li>
-                <a href="#Drop">Deleting databases and tables</a>
+                <a href="#Drop">Deleting databases, schemas and tables</a>
                 <ul class="Topics">
                     <li><a href="#DropDatabase">Databases</a></li>
+                    <li><a href="#DropSchema">Schemas</a></li>
                     <li><a href="#DropTable">Tables</a></li>
                 </ul>
             </li>
@@ -83,7 +85,7 @@ use vDesk\Documentation\Code;
         </p>
         <p>
             Expressions are early evaluated fluent interfaces which care about proper value escaping and building SQL statements compatible to the current configured database.
-            
+
         </p>
     </section>
     <section id="Resultsets">
@@ -142,7 +144,7 @@ use vDesk\Documentation\Code;
             Aggregate-functions are represented as an instance of the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("IAggregateFunction") ?></code>-interface.<br>
             If an aggregate-function isn't supported by the current configured DataProvider, the <code
                     class="Inline">\vDesk\DataProvider\Expression\Functions\<?= Code::Class("Generic") ?></code>-class will be used as fallback.
-        
+
         </p>
         <div style="display: flex; justify-content: space-around;">
             <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
@@ -398,10 +400,10 @@ use vDesk\Documentation\Code;
         <p>
             To join the records of a different table into the resultset, the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("ISelect") ?></code>-Expression provides
             the <br>
-            <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("InnerJoin") ?></code>, <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("LeftJoin") ?></code> and <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("RightJoin") ?></code>-methods which accept the name
+            <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("InnerJoin") ?></code>, <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("LeftJoin") ?></code>, <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("RightJoin") ?>  and <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("FullOuterJoin") ?></code>-methods which accept the name
             of the table to join.<br>
             Comparison rules can be applied through the <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("On") ?></code>-method by following the same rules of
-            filtering resultsets.
+            filtering result sets.
         </p>
         <div style="display: flex; justify-content: space-around;">
             <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
@@ -700,9 +702,9 @@ use vDesk\Documentation\Code;
         </div>
     </section>
     <section id="Create">
-        <h3>Creating databases and tables</h3>
+        <h3>Creating databases, schemas and tables</h3>
         <p>
-            To create new databases and tables, the Expression-library provides the global <code class="Inline">Expression::<?= Code::Class("Create") ?></code> factory-method;<br>
+            To create new databases, schemas and tables, the Expression-library provides the global <code class="Inline">Expression::<?= Code::Class("Create") ?></code> factory-method;<br>
             which creates a new instance of the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("ICreate") ?></code>-Expression according the current configured
             DataProvider.
         </p>
@@ -712,10 +714,38 @@ use vDesk\Documentation\Code;
         <div style="display: flex; justify-content: space-around;">
             <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
 <?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
--><?= Code::Function("Database") ?>(<?= Code::String("\"Messenger\"") ?>)<?= Code::Delimiter ?>
+-><?= Code::Function("Database") ?>(<?= Code::String("\"vDesk\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
             <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
 <?= Code::Keyword("CREATE") ?> <?= Code::Keyword("DATABASE") ?>
+
+   <?= Code::Class("vDesk") ?><?= Code::Delimiter ?>
+</code></pre>
+</div>
+<aside class="Note">
+    <h4>Note</h4>
+    <p>
+        This method won't have any effect while using the MySQL DataProvider as of keeping compatibility to other databases due to the fact<br>
+        that MySQL is the only major SQL-server which doesn't support schemas.<br>
+        Calling this method will render the Expression "useless" upon execution by simply skipping the execution against the server and returning an empty, successful result-set in every case.
+    </p>
+    <p>
+        To create a database, use the <code class="Inline"><?= Code::Class("ICreate") ?>::<?= Code::Function("Schema") ?>()</code>-method instead.
+    </p>
+    <p>
+        These rules apply to the syntax described in the <a href="#DropSchema">Deleting schemas</a> and <a href="#DropSchema">updating schemas</a>-sections.
+    </p>
+</aside>
+    </section>
+    <section id="CreateSchema">
+        <h4>Schema</h4>
+<div style="display: flex; justify-content: space-around;">
+<pre style="margin: 10px"><code><?= Code\Language::PHP ?>
+<?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
+-><?= Code::Function("Schema") ?>(<?= Code::String("\"Messenger\"") ?>)<?= Code::Delimiter ?>
+</code></pre>
+    <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
+<?= Code::Keyword("CREATE") ?> <?= Code::Keyword("SCHEMA") ?>
 
    <?= Code::Class("Messenger") ?><?= Code::Delimiter ?>
 </code></pre>
@@ -800,9 +830,9 @@ use vDesk\Documentation\Code;
         </div>
     </section>
     <section id="Drop">
-        <h3>Deleting databases and tables</h3>
+        <h3>Deleting databases, schemas and tables</h3>
         <p>
-            To delete databases and tables, the Expression-library provides the global <code class="Inline">Expression::<?= Code::Class("Drop") ?></code> factory-method;
+            To delete databases, schemas and tables, the Expression-library provides the global <code class="Inline">Expression::<?= Code::Class("Drop") ?></code> factory-method;
             which creates a new instance of the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("IDrop") ?></code>-Expression according the current configured
             DataProvider.
         </p>
@@ -812,10 +842,24 @@ use vDesk\Documentation\Code;
         <div style="display: flex; justify-content: space-around;">
             <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
 <?= Code::Class("Expression") ?>::<?= Code::Function("Drop") ?>()
--><?= Code::Function("Database") ?>(<?= Code::String("\"Messenger\"") ?>)<?= Code::Delimiter ?>
+-><?= Code::Function("Database") ?>(<?= Code::String("\"vDesk\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
             <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
 <?= Code::Keyword("DROP") ?> <?= Code::Keyword("DATABASE") ?>
+
+    <?= Code::Class("vDesk") ?><?= Code::Delimiter ?>
+</code></pre>
+</div>
+    </section>
+    <section id="DropSchema">
+        <h4>Schema</h4>
+<div style="display: flex; justify-content: space-around;">
+<pre style="margin: 10px"><code><?= Code\Language::PHP ?>
+<?= Code::Class("Expression") ?>::<?= Code::Function("Drop") ?>()
+-><?= Code::Function("Schema") ?>(<?= Code::String("\"Messenger\"") ?>)<?= Code::Delimiter ?>
+</code></pre>
+    <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
+<?= Code::Keyword("DROP") ?> <?= Code::Keyword("SCHEMA") ?>
 
     <?= Code::Class("Messenger") ?><?= Code::Delimiter ?>
 </code></pre>
