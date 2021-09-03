@@ -81,7 +81,6 @@ final class Security extends Module {
         );
 
         //Check if the password is correct.
-        //@todo Consider hashing the password once on the client and a second time on the server to prevent MITM attacks?
         if(!\password_verify($Password ?? Command::$Parameters["Password"], $Row["Password"])) {
             $User->FailedLoginCount++;
             //Check if the User reached the maximum amount of failed login attempts.
@@ -124,7 +123,7 @@ final class Security extends Module {
      *
      * @param null|string $Ticket The ticket of the user to login.
      *
-     * @return \vDesk\Security\User The logged in User.
+     * @return \vDesk\Security\User The logged-in User.
      * @throws \vDesk\Security\UnauthorizedAccessException
      */
     public static function ReLogin(string $Ticket = null): User {
