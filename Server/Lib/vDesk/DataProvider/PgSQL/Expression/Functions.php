@@ -6,9 +6,9 @@ namespace vDesk\DataProvider\PgSQL\Expression;
 use vDesk\DataProvider\PgSQL\Expression\Functions\GroupConcat;
 
 /**
- * Factory-facade that provides access to PgSQL compatible aggregate functions.
+ * Facade that provides factory methods to create PgSQL compatible aggregate functions.
  *
- * @package vDesk\DataProvider\PgSQL
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Functions  extends \vDesk\DataProvider\AnsiSQL\Expression\Functions {

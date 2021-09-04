@@ -6,9 +6,9 @@ namespace vDesk\DataProvider\PgSQL\Expression;
 use vDesk\DataProvider\PgSQL\Expression;
 
 /**
- * Represents a PgSQL compatible SELECT SQL expression.
+ * Represents a PgSQL compatible "SELECT" Expression.
  *
- * @package vDesk\DataProvider\PgSQL
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Select extends \vDesk\DataProvider\AnsiSQL\Expression\Select {

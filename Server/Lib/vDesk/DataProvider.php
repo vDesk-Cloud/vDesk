@@ -32,6 +32,20 @@ final class DataProvider {
     public static string $Separator = Provider::Separator;
 
     /**
+     * The quotation character for escaping strings of the current DataProvider.
+     *
+     * @var string
+     */
+    public static string $Quote = Provider::Quote;
+
+    /**
+     * The quotation character for escaping reserved keywords and field identifiers of the current DataProvider.
+     *
+     * @var string
+     */
+    public static string $Field = Provider::Field;
+
+    /**
      * The IProvider of the DataProvider
      *
      * @var  null|\vDesk\DataProvider\IProvider
@@ -173,6 +187,8 @@ final class DataProvider {
         //Populate database specific values.
         self::$NULL      = self::$Provider::NULL;
         self::$Separator = self::$Provider::Separator;
+        self::$Quote     = self::$Provider::Quote;
+        self::$Field     = self::$Provider::Field;
     }
 
 }

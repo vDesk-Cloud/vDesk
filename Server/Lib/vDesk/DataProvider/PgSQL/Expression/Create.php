@@ -6,9 +6,9 @@ namespace vDesk\DataProvider\PgSQL\Expression;
 use vDesk\DataProvider;
 
 /**
- * Represents a PgSQL compatible CREATE SQL expression.
+ * Represents a PgSQL compatible "CREATE" Expression.
  *
- * @package vDesk\DataProvider\PgSQL
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Create extends DataProvider\AnsiSQL\Expression\Create {

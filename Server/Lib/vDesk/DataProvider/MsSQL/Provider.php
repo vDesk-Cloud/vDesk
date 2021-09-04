@@ -7,9 +7,9 @@ use vDesk\DataProvider\IResult;
 use vDesk\IO\IOException;
 
 /**
- * Abstract data-provider for PostgreSQL databases.
+ * Abstract data-provider for MsSQL databases.
  *
- * @package vDesk\DataProvider\Provider
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {

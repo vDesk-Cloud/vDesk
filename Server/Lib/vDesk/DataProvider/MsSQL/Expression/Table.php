@@ -6,15 +6,15 @@ namespace vDesk\DataProvider\MsSQL\Expression;
 use vDesk\DataProvider;
 
 /**
- * Trait for table related MySQL IExpressions providing functionality for creating fields and indexes.
+ * Utility class for table related MsSQL Expressions providing functionality for creating fields and indexes.
  *
- * @package vDesk\DataProvider\Expression\Table
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Table {
 
     /**
-     * The types of the Table\MariaDB.
+     * The types of the Table.
      */
     public const Collations = [
         DataProvider\Collation::ASCII                                  => "en_US.utf8",
@@ -28,7 +28,7 @@ abstract class Table {
     ];
 
     /**
-     * The types of the Table\MariaDB.
+     * The types of the Table.
      */
     public const Types = [
         DataProvider\Type::TinyInt    => "SMALLINT",
@@ -56,7 +56,7 @@ abstract class Table {
     ];
 
     /**
-     * Creates a MySQL conform table field.
+     * Creates a MsSQL conform table field.
      *
      * @param string      $Name          The name of the table field.
      * @param int         $Type          The type of the table field.

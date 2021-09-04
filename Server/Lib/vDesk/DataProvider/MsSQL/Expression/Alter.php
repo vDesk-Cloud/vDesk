@@ -10,7 +10,7 @@ use vDesk\DataProvider;
 /**
  * Represents a MySQL compatible ALTER SQL expression.
  *
- * @package vDesk\DataProvider\Expression\Alter
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Alter implements IAlter {
@@ -28,20 +28,29 @@ class Alter implements IAlter {
      * @var string[]
      */
     private array  $Statements = [];
-    
+
+    /**
+     * @inheritDoc
+     */
+    public function Database(string $Old, string $New): static {
+        $this->Statement .= "DATABASE " . DataProvider::EscapeField($Old) . " MODIFY NAME " . DataProvider::EscapeField($New);
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function Schema(string $Old, string $New): static {
+        $this->Statement .= "SCHEMA " . DataProvider::EscapeField($Old) . " RENAME TO " . DataProvider::EscapeField($New);
+        return $this;
+    }
+
+
     /**
      * @inheritDoc
      */
     public function Table(string $Name): static {
         $this->Statement .= "ALTER TABLE " . DataProvider::SanitizeField($Name) . " ";
-        return $this;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function Database(string $Name): static {
-        $this->Statement .= "CREATE DATABASE $Name";
         return $this;
     }
 

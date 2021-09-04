@@ -10,10 +10,10 @@ use vDesk\DataProvider;
 use vDesk\DataProvider\Expression\ISelect;
 
 /**
- * Represents a MySQL compatible SELECT SQL expression.
+ * Abstract base class for AnsiSQL compatible "SELECT" Expressions.
  *
- * @package vDesk\DataProvider\Expression\Select
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Select implements ISelect {
 

@@ -6,31 +6,33 @@ namespace vDesk\DataProvider\Expression;
 use vDesk\DataProvider\IExpression;
 
 /**
- * Interface that represents a ALTER SQL expression.
+ * Interface for abstract SQL "ALTER" Expressions.
  *
- * @package vDesk\DataProvider\Expression
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 interface IAlter extends IExpression {
 
     /**
-     * Alters a database.
+     * Alters(renames) a database.
      *
-     * @param string $Name The name of the database to alter.
+     * @param string $Old The old name of the database to alter.
+     * @param string $New The new name of the database to alter.
      *
      * @return \vDesk\DataProvider\Expression\IAlter The current instance for further chaining.
      */
-    public function Database(string $Name): IAlter;
+    public function Database(string $Old, string $New): IAlter;
 
     /**
-     * Alters a schema.
+     * Alters(renames) a schema.
      *
-     * @param string $Name The name of the schema to alter.
+     * @param string $Old The old name of the schema to alter.
+     * @param string $New The new name of the schema to alter.
      *
      * @return \vDesk\DataProvider\Expression\IAlter The current instance for further chaining.
      */
-    public function Schema(string $Name): IAlter;
-    
+    public function Schema(string $Old, string $New): IAlter;
+
     /**
      * Alters a table.
      *
@@ -39,7 +41,7 @@ interface IAlter extends IExpression {
      * @return \vDesk\DataProvider\Expression\IAlter The current instance for further chaining.
      */
     public function Table(string $Name): IAlter;
-    
+
     /**
      * Adds multiple columns and indexes to the table to alter.
      *
@@ -49,46 +51,25 @@ interface IAlter extends IExpression {
      * @return \vDesk\DataProvider\Expression\IAlter The current instance for further chaining.
      */
     public function Add(array $Columns, array $Indexes = []): IAlter;
-    
+
     /**
-     * Renames multiple columns of the table to alter.
+     * Renames multiple columns and indexes of the table to alter.
      *
      * @param string[] $Columns A key-value separated array of columns and their new names.
      *
      * @return \vDesk\DataProvider\Expression\IAlter The current instance for further chaining.
      */
-    public function Rename(array $Columns): IAlter;
-    
-    /**
-     * Modifies multiple columns and indexes of the table to alter.
-     *
-     * @param array[] $Columns The columns to modify.
-     * @param array[] $Indexes The indexes to modify.
-     *
-     * @return \vDesk\DataProvider\Expression\IAlter The current instance for further chaining.
-     */
-    public function Modify(array $Columns, array $Indexes = []): IAlter;
+    public function Rename(array $Columns, array $Indexes = []): IAlter;
 
     /**
-     * Modifies multiple columns and indexes of the table to alter.
+     * Alters multiple columns of the table to alter.
      *
      * @param array[] $Columns The columns to modify.
-     * @param array[] $Indexes The indexes to modify.
      *
      * @return \vDesk\DataProvider\Expression\IAlter The current instance for further chaining.
      */
-    public function Column(array $Columns, array $Indexes = []): IAlter;
+    public function Modify(array $Columns): IAlter;
 
-    /**
-     * Modifies multiple columns and indexes of the table to alter.
-     *
-     * @param array[] $Columns The columns to modify.
-     * @param array[] $Indexes The indexes to modify.
-     *
-     * @return \vDesk\DataProvider\Expression\IAlter The current instance for further chaining.
-     */
-    public function Index(array $Columns, array $Indexes = []): IAlter;
-    
     /**
      * Drops multiple columns and indexes of the table to alter.
      *

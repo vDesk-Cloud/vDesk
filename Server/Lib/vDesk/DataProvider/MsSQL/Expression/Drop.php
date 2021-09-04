@@ -10,7 +10,7 @@ use vDesk\DataProvider;
 /**
  * Represents a MySQL compatible DROP SQL expression.
  *
- * @package vDesk\DataProvider\Expression\Drop
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Drop implements IDrop {
@@ -57,5 +57,17 @@ class Drop implements IDrop {
      */
     public function __invoke(): IResult|string|null {
         return $this->Execute()->ToValue();
+    }
+
+    public function Schema(string $Name): IDrop {
+        // TODO: Implement Schema() method.
+    }
+
+    public function Index(string $Name): IDrop {
+        // TODO: Implement Index() method.
+    }
+
+    public function On(string $Table): IDrop {
+        // TODO: Implement On() method.
     }
 }

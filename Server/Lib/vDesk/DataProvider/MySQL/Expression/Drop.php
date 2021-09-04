@@ -9,7 +9,7 @@ use vDesk\DataProvider;
 /**
  * Represents a MySQL compatible DROP SQL expression.
  *
- * @package vDesk\DataProvider\Expression\Drop
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Drop extends DataProvider\AnsiSQL\Expression\Drop {

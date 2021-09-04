@@ -12,9 +12,9 @@ use vDesk\DataProvider\PgSQL\Expression\Select;
 use vDesk\DataProvider\PgSQL\Expression\Update;
 
 /**
- * Class Expression represents ...
+ * Facade that provides factory methods to create PgSQL compatible Expressions.
  *
- * @package vDesk\DataProvider\PgSQL
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Expression extends \vDesk\DataProvider\AnsiSQL\Expression {

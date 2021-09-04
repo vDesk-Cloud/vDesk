@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace vDesk\DataProvider\PgSQL\Expression;
 
 /**
- * Represents a PgSQL compatible INSERT SQL expression.
+ * Represents a PgSQL compatible "INSERT" Expression.
  *
- * @package vDesk\DataProvider\PgSQL
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Insert extends \vDesk\DataProvider\AnsiSQL\Expression\Insert {
 

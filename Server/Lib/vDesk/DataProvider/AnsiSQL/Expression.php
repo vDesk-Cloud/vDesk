@@ -8,45 +8,45 @@ use vDesk\DataProvider;
 use vDesk\Data\IModel;
 
 /**
- * Class Expression represents ...
+ * Utility class for AnsiSQL compatible Expressions.
  *
- * @package vDesk\DataProvider\Expression
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Expression {
-    
+
     /**
-     *
+     * "IN"-condition for "WHERE"-clauses.
      */
     public const In = "IN";
-    
+
     /**
-     *
+     * "NOT IN"-condition for "WHERE"-clauses.
      */
     public const NotIn = "NOT IN";
-    
+
     /**
-     *
+     * "LIKE"-condition for "WHERE"-clauses.
      */
     public const Like = "LIKE";
-    
+
     /**
-     *
+     * "BETWEEN"-condition for "WHERE"-clauses.
      */
     public const Between = "BETWEEN";
-    
+
     /**
-     *
+     * "NOT BETWEEN"-condition for "WHERE"-clauses.
      */
     public const NotBetween = "NOT BETWEEN";
-    
+
     /**
-     *
+     * "REGEXP"-condition for "WHERE"-clauses.
      */
     public const Regex = "REGEXP";
-    
+
     /**
-     *
+     * "NOT REGEXP"-condition for "WHERE"-clauses.
      */
     public const NotRegex = "NOT REGEXP";
 
@@ -59,9 +59,9 @@ abstract class Expression {
      * @return string A string containing the specified conditions in a SQL-conform format.
      */
     public static function TransformConditions(array $Aliases = [], array ...$Conditions): string {
-        
+
         $OrStatements = [];
-        
+
         $Sanitize = static function($Value) use ($Aliases) {
             //Check if the value is a referenced column.
             if(\is_string($Value)) {
@@ -73,7 +73,7 @@ abstract class Expression {
             }
             return DataProvider::Sanitize($Value);
         };
-        
+
         foreach($Conditions as $Condition) {
             $AndStatements = [];
             foreach($Condition as $Field => $Value) {
@@ -83,7 +83,7 @@ abstract class Expression {
                         $AndStatements[] = self::TransformConditions($Aliases, ...$Value);
                         continue;
                     }
-                    $Field = DataProvider::SanitizeField($Field);
+                    $Field           = DataProvider::SanitizeField($Field);
                     $AndStatements[] = match (\key($Value)) {
                         0 => "({$Field} = " . \implode(" OR {$Field} = ", \array_map($Sanitize, $Value)) . ")",
                         self::In => "{$Field} IN (" . \implode(",", \array_map($Sanitize, $Value[self::In])) . ")",
@@ -112,10 +112,10 @@ abstract class Expression {
                 ? "(" . \implode(" AND ", $AndStatements) . ")"
                 : \implode(" AND ", $AndStatements);
         }
-        
+
         return \count($OrStatements) > 1
             ? "(" . \implode(" OR ", $OrStatements) . ")"
             : \implode(" OR ", $OrStatements);
     }
-    
+
 }

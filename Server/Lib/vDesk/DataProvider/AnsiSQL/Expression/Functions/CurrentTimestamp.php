@@ -6,16 +6,16 @@ namespace vDesk\DataProvider\AnsiSQL\Expression\Functions;
 use vDesk\DataProvider\Expression\IAggregateFunction;
 
 /**
- * Class CurrentTimestamp represents ...
+ * SQL aggregate function "CURRENT_TIMESTAMP()".
  *
- * @package vDesk\DataProvider\Expression\Functions\MariaDB
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class CurrentTimestamp implements IAggregateFunction {
     /**
-     * Returns the string representation of the Distinct.
+     * Returns the string representation of the CurrentTimestamp.
      *
-     * @return string The string representation of the Distinct.
+     * @return string The string representation of the CurrentTimestamp.
      */
     public function __toString(): string {
         return "CURRENT_TIMESTAMP()";

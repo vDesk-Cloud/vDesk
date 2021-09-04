@@ -9,7 +9,7 @@ use vDesk\DataProvider\IResult;
 /**
  * Represents a MySQL compatible CREATE SQL expression.
  *
- * @package vDesk\DataProvider\Expression\Create
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Create extends DataProvider\AnsiSQL\Expression\Create {

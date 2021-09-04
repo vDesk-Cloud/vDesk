@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace vDesk\DataProvider\AnsiSQL\Expression\Functions;
 
 /**
- * SQL function 'COUNT()'.
+ * SQL aggregate function "COUNT()".
  *
- * @package vDesk\DataProvider\Expression\Functions\MariaDB
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Count extends Distinct {
     

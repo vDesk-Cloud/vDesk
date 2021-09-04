@@ -8,9 +8,9 @@ use vDesk\DataProvider\IResult;
 use vDesk\DataProvider;
 
 /**
- * Represents a MySQL compatible CREATE SQL expression.
+ * Abstract base class for AnsiSQL compatible "CREATE" Expressions.
  *
- * @package vDesk\DataProvider\AnsiSQL
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Create implements ICreate {
@@ -41,8 +41,8 @@ abstract class Create implements ICreate {
     /**
      * @inheritDoc
      */
-    public function PrimaryKey(string $Name, bool $Unique = false): static {
-        $this->Statement .= "PRIMARY KEY ";
+    public function Table(string $Name): static {
+        $this->Statement .= "TABLE " . DataProvider::SanitizeField($Name) . " ";
         return $this;
     }
 
@@ -50,6 +50,10 @@ abstract class Create implements ICreate {
      * @inheritDoc
      */
     public function Index(string $Name, bool $Unique = false): static {
+        if($Name === "Primary"){
+            $this->Statement .= "PRIMARY KEY ";
+            return $this;
+        }
         $this->Statement .= ($Unique ? " UNIQUE" : "") . " INDEX " . DataProvider::EscapeField($Name);
         return $this;
     }

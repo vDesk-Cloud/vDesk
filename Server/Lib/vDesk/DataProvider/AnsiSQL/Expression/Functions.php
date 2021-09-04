@@ -15,8 +15,8 @@ use vDesk\DataProvider\AnsiSQL\Expression\Functions\Sum;
 /**
  * Factory-facade that provides access to generic ANSI SQL compatible aggregate functions.
  *
- * @package vDesk\DataProvider\Expression\Functions
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Functions {
 

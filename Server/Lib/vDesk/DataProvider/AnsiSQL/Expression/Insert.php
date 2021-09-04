@@ -8,10 +8,10 @@ use vDesk\DataProvider;
 use vDesk\DataProvider\Expression\IInsert;
 
 /**
- * Represents a MySQL compatible INSERT SQL expression.
+ * Abstract base class for AnsiSQL compatible "INSERT" Expressions.
  *
- * @package vDesk\DataProvider\Expression\Insert
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Insert implements IInsert {
 
@@ -74,8 +74,6 @@ abstract class Insert implements IInsert {
         $this->Execute();
         return DataProvider::LastInsertID();
     }
-
-    //Implementation of IExpression.
 
     /**
      * @inheritDoc

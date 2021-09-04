@@ -8,9 +8,9 @@ use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
 
 /**
- * Trait for table related MySQL IExpressions providing functionality for creating fields and indexes.
+ * Utility class for table related MySQL Expressions providing functionality for creating fields and indexes.
  *
- * @package vDesk\DataProvider\Expression\Table
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Table {

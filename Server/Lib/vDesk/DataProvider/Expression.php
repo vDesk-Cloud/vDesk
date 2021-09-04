@@ -20,7 +20,7 @@ use vDesk\DataProvider\Expression\IUpdate;
  * @package vDesk\DataProvider
  * @author  Kerry Holz <DevelopmentHero@gmail.com>
  */
-class Expression {
+final class Expression {
 
     /**
      * The current expression provider of the Expression.

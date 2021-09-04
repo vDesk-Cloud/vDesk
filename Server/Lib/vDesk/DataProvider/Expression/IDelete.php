@@ -6,13 +6,13 @@ namespace vDesk\DataProvider\Expression;
 use vDesk\DataProvider\IExpression;
 
 /**
- * Interface that represents a DELETE SQL expression.
+ * Interface for abstract SQL "DELETE" Expressions.
  *
- * @package vDesk\DataProvider\Expression
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 interface IDelete extends IExpression {
-    
+
     /**
      * Applies one table to the IDelete.
      *
@@ -21,7 +21,7 @@ interface IDelete extends IExpression {
      * @return \vDesk\DataProvider\Expression\IDelete The current instance for further chaining.
      */
     public function From(string $Table): IDelete;
-    
+
     /**
      * Applies a set of conditions to the IDelete.
      *
@@ -30,5 +30,5 @@ interface IDelete extends IExpression {
      * @return \vDesk\DataProvider\Expression\IDelete The current instance for further chaining.
      */
     public function Where(array ...$Conditions): IDelete;
-    
+
 }

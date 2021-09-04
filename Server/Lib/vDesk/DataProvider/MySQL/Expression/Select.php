@@ -9,8 +9,8 @@ use vDesk\DataProvider\IResult;
 /**
  * Represents a MySQL compatible SELECT SQL expression.
  *
- * @package vDesk\DataProvider\Expression\Select
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Select extends DataProvider\AnsiSQL\Expression\Select {
 

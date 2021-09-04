@@ -9,10 +9,10 @@ use vDesk\DataProvider\MySQL\Expression;
 use vDesk\DataProvider;
 
 /**
- * Represents a MySQL compatible UPDATE SQL expression.
+ * Represents a MsSQL compatible "UPDATE" Expression.
  *
- * @package vDesk\DataProvider\Expression\Update
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Update implements IUpdate {
     

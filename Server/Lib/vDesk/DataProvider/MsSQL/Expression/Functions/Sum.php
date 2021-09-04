@@ -6,8 +6,8 @@ namespace vDesk\DataProvider\MsSQL\Expression\Functions;
 /**
  * SQL function 'SUM()'.
  *
- * @package vDesk\DataProvider\Expression\Functions\MariaDB
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Sum extends Distinct {
     

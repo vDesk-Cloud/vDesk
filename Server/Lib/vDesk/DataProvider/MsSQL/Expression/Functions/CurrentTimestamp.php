@@ -8,7 +8,7 @@ use vDesk\DataProvider\Expression\IAggregateFunction;
 /**
  * Class CurrentTimestamp represents ...
  *
- * @package vDesk\DataProvider\Expression\Functions\MariaDB
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class CurrentTimestamp implements IAggregateFunction {

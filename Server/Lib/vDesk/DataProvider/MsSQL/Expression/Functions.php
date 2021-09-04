@@ -6,10 +6,10 @@ namespace vDesk\DataProvider\MsSQL\Expression;
 use vDesk\DataProvider\MsSQL\Expression\Functions\Group;
 
 /**
- * Factory-facade that provides access to MsSQL compatible aggregate functions.
+ * Facade that provides factory methods to create MsSQL compatible aggregate functions.
  *
- * @package vDesk\DataProvider\Expression\Functions
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Functions extends \vDesk\DataProvider\AnsiSQL\Expression\Functions {
     

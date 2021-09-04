@@ -11,8 +11,8 @@ use vDesk\DataProvider;
 /**
  * Represents a MySQL compatible DELETE SQL expression.
  *
- * @package vDesk\DataProvider\Expression\Delete
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Delete implements IDelete {
     

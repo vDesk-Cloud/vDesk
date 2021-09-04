@@ -8,50 +8,33 @@ use vDesk\DataProvider\IResult;
 use vDesk\DataProvider;
 
 /**
- * Represents a MySQL compatible ALTER SQL expression.
+ * Represents a MySQL compatible "ALTER" Expression.
  *
- * @package vDesk\DataProvider\Expression\Alter
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Alter implements IAlter {
+class Alter extends DataProvider\AnsiSQL\Expression\Alter {
     
     /**
-     * The SQL-statement of the Create\MariaDB.
+     * Flag indicating whether the Database method has been called.
      *
-     * @var string
+     * @var bool
      */
-    protected string $Statement = "";
-
-    /**
-     * The statements of the Expression.
-     *
-     * @var string[]
-     */
-    protected array  $Statements = [];
-
-    protected string $Target = "";
+    private bool $Database = false;
 
     /**
      * @inheritDoc
      */
-    public function Database(string $Name): static {
-        $this->Statement .= "ALTER DATABASE " . DataProvider::SanitizeField($Name);
+    public function Database(string $Old, string $New): static {
+        $this->Statement .= "ALTER DATABASE " . DataProvider::SanitizeField($Old);
         return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function Schema(string $Name): static {
-        $this->Statement .= "ALTER SCHEMA " . DataProvider::SanitizeField($Name);
-        return $this;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function Table(string $Name): static {
-        $this->Statement .= "ALTER TABLE " . DataProvider::SanitizeField($Name) . " ";
+    public function Schema(string $Old, string $New): static {
+        $this->Statement .= "DATABASE " . DataProvider::SanitizeField($Old);
         return $this;
     }
 
@@ -96,7 +79,7 @@ class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Rename(array $Columns): static {
+    public function Rename(array $Columns, array $Indexes = []): static {
         foreach($Columns as $Name => $NewName) {
             $this->Statements[] = "RENAME COLUMN " . DataProvider::SanitizeField($Name) . " TO " . DataProvider::SanitizeField($NewName);
         }
@@ -163,11 +146,9 @@ class Alter implements IAlter {
         return $this->Execute()->ToValue();
     }
 
-    public function Column(array $Columns, array $Indexes = []): IAlter {
-        // TODO: Implement Column() method.
-    }
 
-    public function Index(array $Columns, array $Indexes = []): IAlter {
+    public function Index(string $Name, bool $Unique = false): IAlter {
         // TODO: Implement Index() method.
     }
+
 }

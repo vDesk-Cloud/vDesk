@@ -8,9 +8,9 @@ use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
 
 /**
- * Trait for table related PgSQL IExpressions providing functionality for creating fields and indexes.
+ * Utility class for table related PgSQL Expressions providing functionality for creating fields and indexes.
  *
- * @package vDesk\DataProvider\PgSQL
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Table {

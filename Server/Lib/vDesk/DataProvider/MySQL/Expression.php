@@ -12,10 +12,10 @@ use vDesk\DataProvider\MySQL\Expression\Select;
 use vDesk\DataProvider\MySQL\Expression\Update;
 
 /**
- * Class Expression represents ...
+ * Facade that provides factory methods to create MySQL compatible Expressions.
  *
- * @package vDesk\DataProvider\Expression
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Expression extends \vDesk\DataProvider\AnsiSQL\Expression {
     

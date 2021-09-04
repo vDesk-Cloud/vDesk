@@ -9,8 +9,8 @@ use vDesk\DataProvider;
 /**
  * Represents a distinct SQL function.
  *
- * @package vDesk\DataProvider\Expression\Functions\MariaDB
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Distinct implements IAggregateFunction {
     

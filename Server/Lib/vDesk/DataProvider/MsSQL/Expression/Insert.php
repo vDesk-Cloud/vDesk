@@ -8,10 +8,10 @@ use vDesk\DataProvider;
 use vDesk\DataProvider\Expression\IInsert;
 
 /**
- * Represents a MySQL compatible INSERT SQL expression.
+ * Represents a MsSQL compatible "INSERT" Expression.
  *
- * @package vDesk\DataProvider\Expression\Insert
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Insert implements IInsert {
     
