@@ -11,6 +11,7 @@ use vDesk\Documentation\Code;
         <ul class="Topics">
             <li>
                 <a href="#Expressions">Expressions</a>
+                <a href="#Comparison">Comparison between different DataProviders</a>
                 <ul class="Topics">
                     <li><a href="#Resultsets">Resultsets</a></li>
                 </ul>
@@ -61,10 +62,17 @@ use vDesk\Documentation\Code;
                     <li><a href="#CreateDatabase">Databases</a></li>
                     <li><a href="#CreateSchema">Schemas</a></li>
                     <li><a href="#CreateTable">Tables</a></li>
+                    <li><a href="#CreateIndex">Indices</a></li>
                 </ul>
             </li>
             <li>
                 <a href="#Alter">Updating databases, schemas and tables</a>
+                <ul class="Topics">
+                    <li><a href="#AlterDatabase">Databases</a></li>
+                    <li><a href="#AlterSchema">Schemas</a></li>
+                    <li><a href="#AlterTable">Tables</a></li>
+                    <li><a href="#AlterIndex">Indices</a></li>
+                </ul>
             </li>
             <li>
                 <a href="#Drop">Deleting databases, schemas and tables</a>
@@ -72,6 +80,7 @@ use vDesk\Documentation\Code;
                     <li><a href="#DropDatabase">Databases</a></li>
                     <li><a href="#DropSchema">Schemas</a></li>
                     <li><a href="#DropTable">Tables</a></li>
+                    <li><a href="#DropIndex">Indices</a></li>
                 </ul>
             </li>
         </ul>
@@ -88,16 +97,25 @@ use vDesk\Documentation\Code;
 
         </p>
     </section>
+    <section id="Comparison">
+        <h3>Comparison between different DataProviders</h3>
+        <p>
+           The major differences between
+        </p>
+        <p>
+            Expressions are early evaluated fluent interfaces which care about proper value escaping and building SQL statements compatible to the current configured database.
+        </p>
+    </section>
     <section id="Resultsets">
         <h4>Resultsets</h4>
         <p>
-            To execute an Expression and retrieve its resultset, an Expression has to be finished with a call to the <code
+            To execute an Expression and retrieve its result set, an Expression has to be finished with a call to the <code
                     class="Inline">\vDesk\DataProvider\<?= Code::Class("IExpression") ?>::<?= Code::Function("Execute") ?>()</code>-method in its call-chain.
         </p>
         <p>
-            The manual execution and retrieval of the resultset can be skipped by simply directly iterating over an Expression; this will immediately execute the Expression and the
-            resultset it yields will be used for the iterator.<br>
-            Iterating over a resultset, will yield the value of calling the <code class="Inline">\vDesk\DataProvider\<?= Code::Class("IResult") ?>::<?= Code::Function("ToMap") ?>()</code>-method
+            The manual execution and retrieval of the result set can be skipped by simply directly iterating over an Expression; this will immediately execute the Expression and the
+            result set it yields will be used for the iterator.<br>
+            Iterating over a result set, will yield the value of calling the <code class="Inline">\vDesk\DataProvider\<?= Code::Class("IResult") ?>::<?= Code::Function("ToMap") ?>()</code>-method
             on each row of the result.
         </p>
         <div style="display: flex; justify-content: space-around;">
@@ -144,7 +162,6 @@ use vDesk\Documentation\Code;
             Aggregate-functions are represented as an instance of the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("IAggregateFunction") ?></code>-interface.<br>
             If an aggregate-function isn't supported by the current configured DataProvider, the <code
                     class="Inline">\vDesk\DataProvider\Expression\Functions\<?= Code::Class("Generic") ?></code>-class will be used as fallback.
-
         </p>
         <div style="display: flex; justify-content: space-around;">
             <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
@@ -400,7 +417,7 @@ use vDesk\Documentation\Code;
         <p>
             To join the records of a different table into the resultset, the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("ISelect") ?></code>-Expression provides
             the <br>
-            <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("InnerJoin") ?></code>, <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("LeftJoin") ?></code>, <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("RightJoin") ?>  and <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("FullOuterJoin") ?></code>-methods which accept the name
+            <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("InnerJoin") ?></code>, <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("LeftJoin") ?></code>, <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("RightJoin") ?></code> and <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("FullJoin") ?></code>-methods which accept the name
             of the table to join.<br>
             Comparison rules can be applied through the <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("On") ?></code>-method by following the same rules of
             filtering result sets.
@@ -450,6 +467,20 @@ use vDesk\Documentation\Code;
     <?= Code::Const("Attachments") ?>.<?= Code::Field("ID") ?> = <?= Code::Int("12") ?><?= Code::Delimiter ?>
 </code></pre>
         </div>
+        <aside class="Note">
+            <h4>Note</h4>
+            <p>
+                Calling <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("FullJoin") ?>()</code> while using the MySQL DataProvider<br>
+                will cause a fallback to a Calling <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("Union") ?>()</code>-select between a Calling <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("LeftJoin") ?>()</code> and Calling <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("RightJoin") ?>()</code>
+                Calling <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("FullJoin") ?>()</code>
+            </p>
+            <p>
+                To create a database, use the <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("FullJoin") ?>()</code>-method instead.
+            </p>
+            <p>
+                These rules apply to the syntax described in the <a href="#DropSchema">Deleting schemas</a> and <a href="#DropSchema">updating schemas</a>-sections.
+            </p>
+        </aside>
     </section>
     <section id="JoinAliases">
         <h6>Aliases</h6>
@@ -783,6 +814,25 @@ use vDesk\Documentation\Code;
         <?= Code::Field("Text") ?> <?= Code::Keyword("TEXT") ?> <?= Code::Keyword("COLLATE") ?> <?= Code::String("utf8mb4_unicode_ci") ?> <?= Code::Keyword("NOT NULL") ?>,
         <?= Code::Keyword("PRIMARY KEY") ?>(<?= Code::Field("ID") ?>, <?= Code::Field("Sender") ?>, <?= Code::Field("Recipient") ?>, <?= Code::Field("Status") ?>, <?= Code::Field("Date") ?>)
 )<?= Code::Delimiter ?>
+</code></pre>
+        </div>
+    </section>
+    <section id="CreateIndex">
+        <h4>Schema</h4>
+        <div style="display: flex; justify-content: space-around;">
+<pre style="margin: 10px"><code><?= Code\Language::PHP ?>
+<?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
+-><?= Code::Function("Index") ?>(<?= Code::String("\"PrivateMessages\"") ?>)
+-><?= Code::Function("On") ?>(<?= Code::String("\"Messenger.Messages\"") ?>)<?= Code::Delimiter ?>
+</code></pre>
+            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
+<?= Code::Keyword("CREATE INDEX") ?>
+
+    <?= Code::Field("PrivateMessages") ?>
+
+<?= Code::Keyword("ON") ?>
+
+    <?= Code::Class("Messenger") ?>.<?= Code::Const("Messages") ?><?= Code::Delimiter ?>
 </code></pre>
         </div>
     </section>
