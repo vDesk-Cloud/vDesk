@@ -41,8 +41,8 @@ class Create extends DataProvider\AnsiSQL\Expression\Create {
             }
         }
 
-        $this->Statement .= "TABLE " . DataProvider::SanitizeField($Name) . " (" . \implode(", ", $Table) . ");" . \PHP_EOL;
-        $this->Statement .= \implode(";" . \PHP_EOL, $Indices);
+        $this->Statement .= "TABLE " . DataProvider::SanitizeField($Name) . " (" . \implode(", ", $Table) . "); ";
+        $this->Statement .= \implode("; ", $Indices);
         return $this;
     }
 

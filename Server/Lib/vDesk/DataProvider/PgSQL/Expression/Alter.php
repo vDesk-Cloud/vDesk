@@ -6,7 +6,7 @@ namespace vDesk\DataProvider\PgSQL\Expression;
 use vDesk\DataProvider;
 
 /**
- * Represents a MySQL compatible ALTER SQL expression.
+ * Represents a PgSQL compatible "ALTER" Expression.
  *
  * @package vDesk\DataProvider\PgSQL
  * @author  Kerry <DevelopmentHero@gmail.com>
@@ -18,7 +18,14 @@ class Alter extends DataProvider\AnsiSQL\Expression\Alter {
      *
      * @var string
      */
-    private $Table = "";
+    private string $Table = "";
+
+    /**
+     * The indexes of the Alter Expression
+     *
+     * @var array
+     */
+    private array $Indexes = [];
 
     /**
      * @inheritDoc
@@ -44,8 +51,9 @@ class Alter extends DataProvider\AnsiSQL\Expression\Alter {
                 );
         }
         foreach($Indexes as $Name => $Index) {
-            //$this->Statements[] = "ADD " . Table::Index($Name, $Index["Fields"], $Index["Unique"] ?? false);
-            $this->Statements[] = (new Create())->Index($Name, $Index["Unique"] ?? false)->On($Name, $Index["Fields"]);
+            $this->Indexes[] = DataProvider\Expression::Create()
+                                                      ->Index($Name, $Index["Unique"] ?? false)
+                                                      ->On($this->Table, $Index["Fields"]);
         }
         return $this;
     }
@@ -70,10 +78,32 @@ class Alter extends DataProvider\AnsiSQL\Expression\Alter {
             }
         }
         foreach($Indexes as $Old => $New) {
-            $this->Statements[] = "RENAME INDEX " . DataProvider::SanitizeField($Old) . " TO " . DataProvider::SanitizeField($New);
+            $this->Indexes[] = "ALTER INDEX " . DataProvider::SanitizeField($Old) . " RENAME TO " . DataProvider::SanitizeField($New);
         }
-
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function Drop(array $Columns, array $Indexes = []): static {
+        parent::Drop($Columns);
+        foreach($Indexes as $Index) {
+            $this->Indexes[] = DataProvider\Expression::Drop()
+                                                      ->Index($Index)
+                                                      ->On($this->Table);
+        }
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __toString(): string {
+        if(\count($this->Indexes) > 0) {
+            return parent::__toString() . "; " . \implode("; ", $this->Indexes);
+        }
+        return parent::__toString();
     }
 
     /**

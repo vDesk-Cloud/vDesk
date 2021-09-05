@@ -76,7 +76,7 @@ abstract class Table {
         int     $Type,
         ?int    $Size = null,
         bool    $Nullable = false,
-                $Default = "",
+        string  $Default = "",
         bool    $AutoIncrement = false,
         ?string $OnUpdate = null
     ): string {
