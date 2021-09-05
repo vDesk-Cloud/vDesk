@@ -23,10 +23,9 @@ class Create extends DataProvider\AnsiSQL\Expression\Create {
             $Table[] = Table::Field(
                 $FieldName,
                 $Field["Type"],
-                $Field["Size"] ?? null,
                 $Field["Nullable"] ?? false,
-                $Field["Default"] ?? "",
                 $Field["Autoincrement"] ?? false,
+                $Field["Default"] ?? "",
                 $Field["OnUpdate"] ?? null
             );
         }

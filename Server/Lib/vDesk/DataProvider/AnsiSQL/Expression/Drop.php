@@ -58,7 +58,7 @@ abstract class Drop implements IDrop {
      * @inheritDoc
      */
     public function On(string $Table): static {
-        $this->Statement .= "ON " . DataProvider::SanitizeField($Table);
+        $this->Statement .= " ON " . DataProvider::SanitizeField($Table);
         return $this;
     }
 

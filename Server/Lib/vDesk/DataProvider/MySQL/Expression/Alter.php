@@ -42,7 +42,7 @@ class Alter extends DataProvider\AnsiSQL\Expression\Alter {
      * @inheritDoc
      */
     public function Rename(string $Name): static {
-        $this->Statements[] = "RENAME " . DataProvider::EscapeField($Name);
+        $this->Statements[] = "RENAME " . DataProvider::SanitizeField($Name);
         return $this;
     }
 

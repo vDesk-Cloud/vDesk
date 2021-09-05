@@ -63,7 +63,6 @@ abstract class Table {
      *
      * @param string      $Name          The name of the table field.
      * @param int         $Type          The type of the table field.
-     * @param int|null    $Size          The size of the table field.
      * @param bool        $Nullable      Flag indicating whether the table field is nullable.
      * @param string      $Default       The default value of the table field.
      * @param bool        $AutoIncrement The size of the table field.
@@ -74,10 +73,9 @@ abstract class Table {
     public static function Field(
         string  $Name,
         int     $Type,
-        ?int    $Size = null,
         bool    $Nullable = false,
-        mixed   $Default = "",
         bool    $AutoIncrement = false,
+        mixed   $Default = "",
         ?string $OnUpdate = null
     ): string {
 
@@ -90,14 +88,6 @@ abstract class Table {
                 static::Types[Type::Int] => "SERIAL",
                 static::Types[Type::BigInt] => "BIGSERIAL"
             };
-        } else if(
-            $Size !== null
-            && !($Type & DataProvider\Type::TinyInt)
-            && !($Type & DataProvider\Type::SmallInt)
-            && !($Type & DataProvider\Type::Int)
-            && !($Type & DataProvider\Type::BigInt)
-        ) {
-            $Field[] = static::Types[$Type & ~DataProvider\Type::Unsigned] . "({$Size})";
         } else {
             $Field[] = static::Types[$Type & ~DataProvider\Type::Unsigned];
         }
