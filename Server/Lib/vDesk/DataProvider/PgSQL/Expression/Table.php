@@ -76,7 +76,7 @@ abstract class Table {
         int     $Type,
         ?int    $Size = null,
         bool    $Nullable = false,
-        string  $Default = "",
+        mixed   $Default = "",
         bool    $AutoIncrement = false,
         ?string $OnUpdate = null
     ): string {
@@ -105,9 +105,9 @@ abstract class Table {
         $Field[] = $Nullable ? DataProvider::$NULL : "NOT " . DataProvider::$NULL;
 
         if($Default !== "") {
-            if($Default instanceof DataProvider\Expression\IAggregateFunction){
+            if($Default instanceof DataProvider\Expression\IAggregateFunction) {
                 $Field[] = "DEFAULT " . \rtrim((string)DataProvider::Sanitize($Default), "()");
-            }else{
+            } else {
                 $Field[] = "DEFAULT " . DataProvider::Sanitize($Default);
             }
         }

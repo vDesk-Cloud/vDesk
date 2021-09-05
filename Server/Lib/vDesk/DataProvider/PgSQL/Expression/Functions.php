@@ -11,8 +11,7 @@ use vDesk\DataProvider\PgSQL\Expression\Functions\GroupConcat;
  * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-abstract class Functions  extends \vDesk\DataProvider\AnsiSQL\Expression\Functions {
-    
+abstract class Functions extends \vDesk\DataProvider\AnsiSQL\Expression\Functions {
 
     /**
      * GROUP_CONCAT().
