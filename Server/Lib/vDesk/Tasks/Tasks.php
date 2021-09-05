@@ -56,10 +56,12 @@ class Tasks extends Machine {
             if(!\class_exists($Class)) {
                 continue;
             }
-            $Task = new $Class($this, $TimeStamp);
+            $Task = new $Class();
             if(!$Task instanceof Task) {
                 continue;
             }
+            $Task->Tasks = $this;
+            $Task->TimeStamp = $TimeStamp;
             $Task->Start();
             $this->Tasks->Add($Task);
             $this->Running->Enqueue($Task);
@@ -109,7 +111,7 @@ class Tasks extends Machine {
     }
 
     /**
-     * Adds a new Task to the queue of the scheduler.
+     * Adds a new Task to the scheduler.
      *
      * @param \vDesk\Tasks\Task $Task The Task to add for schedule.
      */
@@ -118,6 +120,16 @@ class Tasks extends Machine {
         $Task->TimeStamp = \microtime(true);
         $Task->Start();
         $this->Tasks->Add($Task);
+    }
+
+    /**
+     * Adds a new Task to the queue of the scheduler.
+     *
+     * @param \vDesk\Tasks\Task $Task The Task to add for schedule.
+     */
+    public function Schedule(Task $Task): void {
+        $this->Add($Task);
+        $this->Running->Enqueue($Task);
     }
 
     /**
