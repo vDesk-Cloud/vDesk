@@ -6,7 +6,7 @@ namespace vDesk\DataProvider\MySQL\Expression;
 use vDesk\DataProvider;
 
 /**
- * Represents a MySQL compatible UPDATE SQL expression.
+ * Represents a MySQL compatible "UPDATE" Expression.
  *
  * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>

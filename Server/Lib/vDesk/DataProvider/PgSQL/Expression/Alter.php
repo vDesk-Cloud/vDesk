@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\PgSQL\Expression;
 
-use vDesk\DataProvider\Expression\IAlter;
-use vDesk\DataProvider\IResult;
 use vDesk\DataProvider;
 
 /**
@@ -46,11 +44,7 @@ class Alter extends DataProvider\AnsiSQL\Expression\Alter {
                 );
         }
         foreach($Indexes as $Name => $Index) {
-            $this->Statements[] = "ADD INDEX " . Table::Index(
-                    $Name,
-                    $Index["Fields"],
-                    $Index["Unique"] ?? false
-                );
+            //$this->Statements[] = "ADD " . Table::Index($Name, $Index["Fields"], $Index["Unique"] ?? false);
             $this->Statements[] = (new Create())->Index($Name, $Index["Unique"] ?? false)->On($Name, $Index["Fields"]);
         }
         return $this;
@@ -59,41 +53,34 @@ class Alter extends DataProvider\AnsiSQL\Expression\Alter {
     /**
      * @inheritDoc
      */
-    public function Rename(array $Columns, array $Indexes = []): static {
-        foreach($Columns as $Name => $NewName) {
-            $this->Statements[] = "RENAME COLUMN " . DataProvider::SanitizeField($Name) . " TO " . DataProvider::SanitizeField($NewName);
-        }
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function Modify(array $Columns): static {
+    public function Modify(array $Columns, array $Indexes = []): static {
         foreach($Columns as $Name => $Column) {
-            $this->Statements[] = "ALTER COLUMN " . Table::Field(
-                    $Name,
-                    $Column["Type"],
-                    $Column["Size"] ?? null,
-                    $Column["Nullable"] ?? false,
-                    $Column["Default"] ?? "",
-                    $Column["Autoincrement"] ?? false,
-                    $Column["OnUpdate"] ?? null
-                );
+            if(\is_array($Column)) {
+                $this->Statements[] = "ALTER COLUMN " . Table::Field(
+                        $Name,
+                        $Column["Type"],
+                        $Column["Size"] ?? null,
+                        $Column["Nullable"] ?? false,
+                        $Column["Default"] ?? "",
+                        $Column["Autoincrement"] ?? false,
+                        $Column["OnUpdate"] ?? null
+                    );
+            } else {
+                $this->Statements[] = "RENAME COLUMN " . DataProvider::SanitizeField($Name) . " TO " . DataProvider::SanitizeField($Column);
+            }
         }
+        foreach($Indexes as $Old => $New) {
+            $this->Statements[] = "RENAME INDEX " . DataProvider::SanitizeField($Old) . " TO " . DataProvider::SanitizeField($New);
+        }
+
         return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function Drop(array $Columns, array $Indexes = []): static {
-        foreach($Columns as $Column) {
-            $this->Statements[] = "DROP COLUMN " . DataProvider::SanitizeField($Column);
-        }
-        foreach($Indexes as $Index) {
-            $this->Statements[] = "DROP INDEX " . ($Index === "Primary" ? "PRIMARY KEY" : "INDEX {$Index}");
-        }
+    public function Rename(string $Name): static {
+        $this->Statement .= "RENAME TO " . DataProvider::EscapeField($Name);
         return $this;
     }
 

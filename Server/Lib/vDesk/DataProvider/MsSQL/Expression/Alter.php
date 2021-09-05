@@ -32,16 +32,16 @@ class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Database(string $Old, string $New): static {
-        $this->Statement .= "DATABASE " . DataProvider::EscapeField($Old) . " MODIFY NAME " . DataProvider::EscapeField($New);
+    public function Database(string $Name): static {
+        $this->Statement .= "DATABASE " . DataProvider::EscapeField($Name) . " ";
         return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function Schema(string $Old, string $New): static {
-        $this->Statement .= "SCHEMA " . DataProvider::EscapeField($Old) . " RENAME TO " . DataProvider::EscapeField($New);
+    public function Schema(string $Name): static {
+        $this->Statement .= "SCHEMA " . DataProvider::EscapeField($Name) . " ";
         return $this;
     }
 

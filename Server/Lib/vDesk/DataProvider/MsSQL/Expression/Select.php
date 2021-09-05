@@ -12,5 +12,5 @@ use vDesk\DataProvider;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Select extends DataProvider\AnsiSQL\Expression\Select {
-    //Postgres' SELECT is ANSI conform.
+    //MsSQL's SELECT is ANSI conform.
 }

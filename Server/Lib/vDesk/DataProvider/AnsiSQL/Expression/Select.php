@@ -34,7 +34,7 @@ abstract class Select implements ISelect {
     /**
      * @inheritDoc
      */
-    public function __construct(...$Fields) {
+    public function __construct(string|array|IAggregateFunction ...$Fields) {
 
         $FlattenedFields = [];
 
@@ -65,7 +65,7 @@ abstract class Select implements ISelect {
     /**
      * @inheritDoc
      */
-    public function Distinct(...$Fields): static {
+    public function Distinct(string|array|IAggregateFunction ...$Fields): static {
         $FlattenedFields = [];
 
         foreach($Fields as $Field) {
@@ -81,7 +81,7 @@ abstract class Select implements ISelect {
     /**
      * @inheritDoc
      */
-    public function From(...$Tables): static {
+    public function From(string|array|ISelect ...$Tables): static {
 
         $FlattenedTables = [];
 

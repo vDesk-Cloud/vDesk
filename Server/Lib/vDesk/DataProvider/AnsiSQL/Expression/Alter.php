@@ -32,16 +32,16 @@ abstract class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Database(string $Old, string $New): static {
-        $this->Statement .= "DATABASE " . DataProvider::EscapeField($Old) . " RENAME TO " . DataProvider::EscapeField($New);
+    public function Database(string $Name): static {
+        $this->Statement .= "DATABASE " . DataProvider::EscapeField($Name) . " ";
         return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function Schema(string $Old, string $New): static {
-        $this->Statement .= "SCHEMA " . DataProvider::SanitizeField($Old) . " RENAME TO " . DataProvider::SanitizeField($New);
+    public function Schema(string $Name): static {
+        $this->Statement .= "SCHEMA " . DataProvider::SanitizeField($Name) . " ";
         return $this;
     }
 
@@ -56,25 +56,12 @@ abstract class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Rename(array $Columns, array $Indexes = []): static {
-        foreach($Columns as $Name => $NewName) {
-            $this->Statements[] = "RENAME COLUMN " . DataProvider::SanitizeField($Name) . " TO " . DataProvider::SanitizeField($NewName);
-        }
-        foreach($Indexes as $Name => $NewName) {
-            $this->Statements[] = "RENAME INDEX " . DataProvider::SanitizeField($Name) . " TO " . DataProvider::SanitizeField($NewName);
-        }
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function Drop(array $Columns, array $Indexes = []): static {
         foreach($Columns as $Column) {
             $this->Statements[] = "DROP COLUMN " . DataProvider::SanitizeField($Column);
         }
         foreach($Indexes as $Index) {
-            $this->Statements[] = "DROP INDEX " . ($Index === "Primary" ? "PRIMARY KEY" : "INDEX {$Index}");
+            $this->Statements[] = "DROP " . ($Index === "Primary" ? "PRIMARY KEY" : "INDEX " . DataProvider::SanitizeField($Index));
         }
         return $this;
     }

@@ -7,7 +7,7 @@ use vDesk\DataProvider\IResult;
 use vDesk\DataProvider;
 
 /**
- * Represents a MySQL compatible DROP SQL expression.
+ * Represents a MySQL compatible "DROP" Expression.
  *
  * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
@@ -45,6 +45,5 @@ class Drop extends DataProvider\AnsiSQL\Expression\Drop {
     public function Schema(string $Name): static {
         return parent::Database($Name);
     }
-
 
 }

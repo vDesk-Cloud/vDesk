@@ -41,11 +41,11 @@ final class Expression {
     /**
      * Factory method that creates a new instance of the ISelect class according the configured DataProvider.
      *
-     * @param mixed ...$Fields
+     * @param string|array|\vDesk\DataProvider\Expression\IAggregateFunction ...$Fields
      *
      * @return \vDesk\DataProvider\Expression\ISelect
      */
-    public static function Select(...$Fields): ISelect {
+    public static function Select(string|array|IAggregateFunction ...$Fields): ISelect {
         return self::$Provider::Select(...$Fields);
     }
 

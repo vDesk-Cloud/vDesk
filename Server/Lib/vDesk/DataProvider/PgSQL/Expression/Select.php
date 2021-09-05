@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\PgSQL\Expression;
 
-use vDesk\DataProvider\PgSQL\Expression;
-
 /**
  * Represents a PgSQL compatible "SELECT" Expression.
  *
@@ -13,22 +11,6 @@ use vDesk\DataProvider\PgSQL\Expression;
  */
 class Select extends \vDesk\DataProvider\AnsiSQL\Expression\Select {
 
-    //Postgres' SELECT is (mostly) ANSI conform.
-
-    /**
-     * @inheritDoc
-     */
-    public function Where(array ...$Conditions): static {
-        $this->Statement .= "WHERE " . Expression::TransformConditions($this->Aliases, ...$Conditions) . " ";
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function On(array ...$Fields): static {
-        $this->Statement .= "ON " . Expression::TransformConditions($this->Aliases, ...$Fields) . " ";
-        return $this;
-    }
+    //Postgres' SELECT is ANSI conform.
 
 }

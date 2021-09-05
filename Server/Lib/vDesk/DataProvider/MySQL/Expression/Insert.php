@@ -7,7 +7,7 @@ use vDesk\DataProvider\IResult;
 use vDesk\DataProvider;
 
 /**
- * Represents a MySQL compatible INSERT SQL expression.
+ * Represents a MySQL compatible "INSERT" Expression.
  *
  * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>

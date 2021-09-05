@@ -16,29 +16,29 @@ interface ISelect extends IExpression, \IteratorAggregate {
     /**
      * Initializes a new instance of the ISelect class.
      *
-     * @param array|string ...$Fields Initializes the ISelect with the specified fields to select.
+     * @param string|array|\vDesk\DataProvider\Expression\IAggregateFunction ...$Fields Initializes the ISelect with the specified fields to select.
      */
-    public function __construct(...$Fields);
+    public function __construct(string|array|IAggregateFunction ...$Fields);
 
     /**
      * Applies a DISTINCT statement to the ISelect.
      * This method should act like an alternative constructor in implementing classes.
      * To create a distinct select statement, the fields passed to the constructor should be passed to this method instead.
      *
-     * @param array|string ...$Fields The Fields to distinct select.
+     * @param string|array|\vDesk\DataProvider\Expression\IAggregateFunction ...$Fields The fields to select.
      *
      * @return \vDesk\DataProvider\Expression\ISelect The current instance for further chaining.
      */
-    public function Distinct(...$Fields): ISelect;
+    public function Distinct(string|array|IAggregateFunction ...$Fields): ISelect;
 
     /**
      * Applies one or multiple tables to the ISelect.
      *
-     * @param string|ISelect|string[] ...$Tables The tables to select.
+     * @param string|array|\vDesk\DataProvider\Expression\ISelect ...$Tables The tables to select.
      *
      * @return \vDesk\DataProvider\Expression\ISelect The current instance for further chaining.
      */
-    public function From(...$Tables): ISelect;
+    public function From(string|array|ISelect ...$Tables): ISelect;
 
     /**
      * Applies a set of conditions to the ISelect.
