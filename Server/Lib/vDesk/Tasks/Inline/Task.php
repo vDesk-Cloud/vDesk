@@ -19,9 +19,12 @@ final class Task extends \vDesk\Tasks\Task {
     /**
      * Initializes a new instance of the Task class.
      *
-     * @param \Generator $Delegate Initializes the Task with the specified delegated Generator.
+     * @param \Generator|\Closure $Delegate Initializes the Task with the specified delegated Generator.
      */
-    public function __construct(private \Generator $Delegate) {
+    public function __construct(private \Generator|\Closure $Delegate) {
+        if($Delegate instanceof \Closure){
+            $this->Delegate = $Delegate();
+        }
         parent::__construct();
     }
 
