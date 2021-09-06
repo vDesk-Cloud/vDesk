@@ -60,11 +60,7 @@ class Tasks extends Machine {
             if(!$Task instanceof Task) {
                 continue;
             }
-            $Task->Tasks = $this;
-            $Task->TimeStamp = $TimeStamp;
-            $Task->Start();
-            $this->Tasks->Add($Task);
-            $this->Running->Enqueue($Task);
+            $this->Add($Task);
         }
         if($this->Tasks->Count === 0) {
             Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to start Machine without any Tasks installed!");
