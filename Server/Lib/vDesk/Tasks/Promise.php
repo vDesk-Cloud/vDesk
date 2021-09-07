@@ -45,18 +45,13 @@ class Promise extends Task {
      * @inheritDoc
      */
     public function Run(): \Generator {
+        $Key    = null;
         $Value  = null;
         $Reject = $this->Reject;
         try {
             foreach($this->Task->Run() as $Key => $Value) {
-                if($Key === self::Resolve) {
+                if($Key === self::Resolve || $Key === self::Reject) {
                     break;
-                }
-                if($Key === self::Reject) {
-                    $Reject($Value);
-                    yield;
-                    $this->Tasks->Remove($this);
-                    return;
                 }
                 yield;
             }
@@ -66,8 +61,12 @@ class Promise extends Task {
             $this->Tasks->Remove($this);
             return;
         }
-        $Resolve = $this->Resolve;
-        $Resolve($Value);
+        if($Key === self::Reject) {
+            $Reject($Value);
+        } else {
+            $Resolve = $this->Resolve;
+            $Resolve($Value);
+        }
         yield;
         $this->Tasks->Remove($this);
         yield;
