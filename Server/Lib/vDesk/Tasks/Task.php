@@ -54,11 +54,11 @@ abstract class Task {
     public const Years = 0;
 
     /**
-     * The Generator yielding the steps of the Task.
+     * The Generator yielding the execution steps of the Task.
      *
-     * @var \Generator
+     * @var \Generator|null
      */
-    private \Generator $Generator;
+    private ?\Generator $Generator;
 
     /**
      * The schedule interval of the Task.
@@ -82,10 +82,16 @@ abstract class Task {
     public ?float $TimeStamp = null;
 
     /**
-     * Initializes a new instance of the Task class.
+     * Starts the Task in a specified parent Task-scheduler.
+     *
+     * @param \vDesk\Machines\Tasks $Tasks The scheduler to run the Task in.
+     *                                     This parameter is a circular reference to the Task-Scheduler the Task is a member of and
+     *                                     is normally called and set by the scheduler itself upon passing through {@see Tasks::Add()} and {@see Tasks::Schedule()} to the scheduler.
      */
-    public function __construct() {
-        $this->Generator = $this->Run();
+    public function Start(Tasks $Tasks): void {
+        $this->Tasks     = $Tasks;
+        $this->TimeStamp ??= \microtime(true);
+        $this->Generator ??= $this->Run();
 
         //Calculate schedule interval.
         $this->Interval =
@@ -97,12 +103,6 @@ abstract class Task {
             + (static::Weeks * 604800)
             + (static::Months * 2629746)
             + (static::Years * 31556952);
-    }
-
-    /**
-     * Starts the Task.
-     */
-    public function Start(): void {
     }
 
     /**

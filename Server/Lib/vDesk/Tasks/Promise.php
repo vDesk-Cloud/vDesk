@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace vDesk\Tasks;
 
-use vDesk\Utils\Log;
+use vDesk\Machines\Tasks;
 
 /**
  * Task based Promise for executing Tasks.
@@ -31,16 +31,14 @@ class Promise extends Task {
      * @param null|\Closure     $Reject  Initializes the Promise with the specified reject callback.
      */
     public function __construct(public Task $Task, protected ?\Closure $Resolve = null, protected ?\Closure $Reject = null) {
-        parent::__construct();
     }
 
     /**
      * @inheritDoc
      */
-    public function Start(): void {
-        parent::Start();
-        $this->Task->Tasks = $this->Tasks;
-        $this->Task->Start();
+    public function Start(Tasks $Tasks): void {
+        parent::Start($Tasks);
+        $this->Task->Start($Tasks);
     }
 
     /**
@@ -58,28 +56,23 @@ class Promise extends Task {
                     $Reject($Value);
                     return;
                 }
-                Log::Debug(__METHOD__, "Pending");
                 yield;
             }
         } catch(\Throwable $Exception) {
-            Log::Error(__METHOD__, "Rejecting {$Exception->getMessage()}");
             $Reject($Exception);
             return;
         }
-
-        Log::Debug(__METHOD__, "Resolving");
         $Resolve = $this->Resolve;
         $Resolve($Value);
         yield;
         $this->Tasks->Remove($this);
         yield;
-
     }
 
     /**
      * Applies a callback to execute if the Promise has been rejected.
      *
-     * @param callable $Predicate
+     * @param callable $Predicate The predicate to call if the Promise has been resolved.
      *
      * @return static The current instance for further chaining.
      */
@@ -91,7 +84,7 @@ class Promise extends Task {
     /**
      * Applies a callback to execute if the Promise has been rejected.
      *
-     * @param callable $Predicate
+     * @param callable $Predicate The predicate to call if the Promise has been rejected.
      *
      * @return static The current instance for further chaining.
      */

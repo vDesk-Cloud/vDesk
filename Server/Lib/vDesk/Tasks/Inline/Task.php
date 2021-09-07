@@ -25,7 +25,6 @@ final class Task extends \vDesk\Tasks\Task {
         if($Delegate instanceof \Closure){
             $this->Delegate = $Delegate();
         }
-        parent::__construct();
     }
 
     /**

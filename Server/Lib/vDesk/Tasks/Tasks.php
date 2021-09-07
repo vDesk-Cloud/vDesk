@@ -112,9 +112,7 @@ class Tasks extends Machine {
      * @param \vDesk\Tasks\Task $Task The Task to add for schedule.
      */
     public function Add(Task $Task): void {
-        $Task->Tasks = $this;
-        $Task->TimeStamp = \microtime(true);
-        $Task->Start();
+        $Task->Start($this);
         $this->Tasks->Add($Task);
     }
 
