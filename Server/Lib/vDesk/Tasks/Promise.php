@@ -54,12 +54,16 @@ class Promise extends Task {
                 }
                 if($Key === self::Reject) {
                     $Reject($Value);
+                    yield;
+                    $this->Tasks->Remove($this);
                     return;
                 }
                 yield;
             }
         } catch(\Throwable $Exception) {
             $Reject($Exception);
+            yield;
+            $this->Tasks->Remove($this);
             return;
         }
         $Resolve = $this->Resolve;
