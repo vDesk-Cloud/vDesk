@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace vDesk\DataProvider\MsSQL\Expression;
 
 use vDesk\DataProvider;
+use vDesk\DataProvider\Collation;
+use vDesk\DataProvider\Type;
 
 /**
  * Utility class for table related MsSQL Expressions providing functionality for creating fields and indexes.
@@ -14,45 +16,45 @@ use vDesk\DataProvider;
 abstract class Table {
 
     /**
-     * The types of the Table.
+     * Enumeration of supported PGSQL type mappings.
      */
     public const Collations = [
-        DataProvider\Collation::ASCII                                  => "en_US.utf8",
-        DataProvider\Collation::ASCII | DataProvider\Collation::Binary => "en_US.utf8",
-        DataProvider\Collation::UTF8                                   => "en_US.utf8",
-        DataProvider\Collation::UTF8 | DataProvider\Collation::Binary  => "en_US.utf8",
-        DataProvider\Collation::UTF16                                  => "en_US.utf8",
-        DataProvider\Collation::UTF16 | DataProvider\Collation::Binary => "en_US.utf8",
-        DataProvider\Collation::UTF32                                  => "en_US.utf8",
-        DataProvider\Collation::UTF32 | DataProvider\Collation::Binary => "en_US.utf8"
+        Collation::ASCII                     => "Latin1_General_100_CI_AI",
+        Collation::ASCII | Collation::Binary => "Latin1_General_100_BIN2",
+        Collation::UTF8                      => "Latin1_General_100_CI_AI_SC_UTF8",
+        Collation::UTF8 | Collation::Binary  => "Latin1_General_100_BIN2_UTF8",
+        Collation::UTF16                     => "Latin1_General_100_CI_AI_SC_UTF8",
+        Collation::UTF16 | Collation::Binary => "Latin1_General_100_BIN2_UTF8",
+        Collation::UTF32                     => "Latin1_General_100_CI_AI_SC_UTF8",
+        Collation::UTF32 | Collation::Binary => "Latin1_General_100_BIN2_UTF8"
     ];
 
     /**
-     * The types of the Table.
+     * Enumeration of PGSQL specified type mappings.
      */
     public const Types = [
-        DataProvider\Type::TinyInt    => "SMALLINT",
-        DataProvider\Type::SmallInt   => "SMALLINT",
-        DataProvider\Type::Int        => "INTEGER",
-        DataProvider\Type::BigInt     => "BIGINT",
-        DataProvider\Type::Boolean    => "BOOLEAN",
-        DataProvider\Type::Decimal    => "DECIMAL",
-        DataProvider\Type::Float      => "REAL",
-        DataProvider\Type::Double     => "DOUBLE PRECISION",
-        DataProvider\Type::Char       => "CHAR",
-        DataProvider\Type::VarChar    => "VARCHAR",
-        DataProvider\Type::TinyText   => "VARCHAR(255)",
-        DataProvider\Type::Text       => "VARCHAR(65535)",
-        DataProvider\Type::MediumText => "VARCHAR(16777215)",
-        DataProvider\Type::LongText   => "TEXT",
-        DataProvider\Type::Timestamp  => "TIMESTAMP",
-        DataProvider\Type::Date       => "DATE",
-        DataProvider\Type::Time       => "TIME",
-        DataProvider\Type::DateTime   => "TIMESTAMPTZ",
-        DataProvider\Type::TinyBlob   => "BYTEA(255)",
-        DataProvider\Type::Blob       => "BYTEA(65535)",
-        DataProvider\Type::MediumBlob => "BYTEA(16777215)",
-        DataProvider\Type::LongBlob   => "BYTEA(4294967295)"
+        Type::TinyInt    => "TINYINT",
+        Type::SmallInt   => "SMALLINT",
+        Type::Int        => "INT",
+        Type::BigInt     => "BIGINT",
+        Type::Boolean    => "TINYINT",
+        Type::Decimal    => "DECIMAL",
+        Type::Float      => "REAL",
+        Type::Double     => "DOUBLE PRECISION",
+        Type::Char       => "CHAR",
+        Type::VarChar    => "VARCHAR",
+        Type::TinyText   => "VARCHAR(255)",
+        Type::Text       => "TEXT",
+        Type::MediumText => "VARCHAR(16777215)",
+        Type::LongText   => "VARCHAR(MAX)",
+        Type::Timestamp  => "TIMESTAMP",
+        Type::Date       => "DATE",
+        Type::Time       => "TIME",
+        Type::DateTime   => "DATETIME",
+        Type::TinyBlob   => "VARBINARY(255)",
+        Type::Blob       => "VARBINARY(65535)",
+        Type::MediumBlob => "VARBINARY(16777215)",
+        Type::LongBlob   => "VARBINARY(MAX)"
     ];
 
     /**
@@ -63,53 +65,54 @@ abstract class Table {
      * @param int|null    $Size          The size of the table field.
      * @param null|int    $Collation     The collation of the table field.
      * @param bool        $Nullable      Flag indicating whether the table field is nullable.
-     * @param string      $Default       The default value of the table field.
+     * @param mixed       $Default       The default value of the table field.
      * @param bool        $AutoIncrement The size of the table field.
      * @param string|null $OnUpdate      The size of the table field.
      *
      * @return string A MsSQL conform table field.
      */
     public static function Field(
-        string $Name,
-        int $Type,
-        ?int $Size = null,
-        ?int $Collation = null,
-        bool $Nullable = false,
-        $Default = "",
-        bool $AutoIncrement = false,
+        string  $Name,
+        int     $Type,
+        bool    $Nullable = false,
+        bool    $AutoIncrement = false,
+        mixed   $Default = "",
+        ?int    $Collation = null,
+        ?int    $Size = null,
         ?string $OnUpdate = null
     ): string {
 
         $Field = [DataProvider::EscapeField($Name)];
 
-        if($AutoIncrement) {
-            $Field[] = match (static::Types[$Type & ~DataProvider\Type::Unsigned]) {
-                static::Types[DataProvider\Type::SmallInt], static::Types[DataProvider\Type::TinyInt] => "SMALLSERIAL",
-                static::Types[DataProvider\Type::Int] => "SERIAL",
-                static::Types[DataProvider\Type::BigInt] => "BIGSERIAL"
-            };
-        } else {
-            //Create type and unsigned attribute.
-            $Field[] = static::Types[$Type & ~DataProvider\Type::Unsigned]
-                       . ($Size !== null ? "({$Size})" : "")
-                       . ((($Type & DataProvider\Type::Unsigned) || ($Type & DataProvider\Type::Boolean)) ? " UNSIGNED" : "");
-        }
-
-        //Create collation/charset.
+        //Create type and collation.
         if($Collation !== null) {
-            if($Collation & DataProvider\Collation::ASCII) {
-                $Field[] = "CHARACTER SET ascii" . (($Collation & DataProvider\Collation::Binary) ? " COLLATE ascii_bin" : "");
+            if($Collation & ~Collation::ASCII & ~Collation::Binary) {
+                $Field[] = match ($Type & ~Type::Unsigned) {
+                    Type::Char,
+                    Type::VarChar,
+                    Type::TinyText,
+                    Type::MediumText,
+                    Type::LongText => "N" . static::Types[$Type & ~Type::Unsigned] . ($Size !== null ? "({$Size})" : ""),
+                    default => ""
+                };
             } else {
-                $Field[] = "COLLATE " . static::Collations[$Collation];
+                $Field[] = static::Types[$Type & ~Type::Unsigned]
+                           . ($Size !== null ? "({$Size})" : "");
             }
+            $Field[] = "COLLATE " . static::Collations[$Collation];
+        } else {
+            $Field[] = static::Types[$Type & ~Type::Unsigned]
+                       . ($Size !== null ? "({$Size})" : "");
         }
 
         $Field[] = $Nullable ? DataProvider::$NULL : "NOT " . DataProvider::$NULL;
 
         if($Default !== "") {
-            $Field[] = "Default " . DataProvider::Sanitize($Default);
+            $Field[] = "DEFAULT " . DataProvider::Sanitize($Default);
         }
-
+        if($AutoIncrement) {
+            $Field[] = "IDENTITY (1, 1)";
+        }
         if($OnUpdate !== null) {
             $Field[] = "ON UPDATE {$OnUpdate}";
         }
@@ -119,23 +122,22 @@ abstract class Table {
     }
 
     /**
-     * Creates a MySQL conform table index.
+     * Creates a MsSQL conform table index.
      *
      * @param string $Name   The name of the index.
      * @param array  $Fields The fields of the index.
      * @param bool   $Unique Flag indicating whether the index is unique.
-     * @param string $Table  Optional table name for PostgreSQL indices.
      *
-     * @return string A MySQL conform table index.
+     * @return string A MsSQL conform table index.
      */
-    public static function Index(string $Name, array $Fields, bool $Unique = false, string $Table = ""): string {
+    public static function Index(string $Name, bool $Unique, array $Fields): string {
 
         if($Name === "Primary") {
             $Index = "PRIMARY KEY";
         } else if($Unique) {
-            $Index = "UNIQUE";
+            $Index = "UNIQUE INDEX {$Name}";
         } else {
-            $Index = \rtrim("CREATE INDEX {$Name}") . " ON {$Table}";
+            $Index = "INDEX {$Name}";
         }
 
         $Transformed = [];

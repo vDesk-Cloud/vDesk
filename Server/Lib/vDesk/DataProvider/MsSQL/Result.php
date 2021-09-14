@@ -67,17 +67,10 @@ class Result implements \Iterator, IResult {
      * @return string[]|null The row at the current position within the result set; otherwise, null.
      */
     public function ToArray(): ?array {
-        return \sqlsrv_fetch_array($this->ResultSet,  \SQLSRV_FETCH_NUMERIC);
-    }
-
-    /**
-     * Frees all resources allocated by this result.
-     */
-    public function Free(): void {
-        if(!$this->Disposed) {
-            \sqlsrv_free_stmt($this->ResultSet);
-            $this->Disposed = true;
+        if(!$this->Buffered) {
+            return \sqlsrv_fetch_array($this->ResultSet, \SQLSRV_FETCH_NUMERIC);
         }
+        return \sqlsrv_fetch_array($this->ResultSet, \SQLSRV_FETCH_NUMERIC, \SQLSRV_SCROLL_ABSOLUTE, $this->Position);
     }
 
     /**
@@ -86,7 +79,19 @@ class Result implements \Iterator, IResult {
      * @return string[]|null The row at the current position within the result set; otherwise, null.
      */
     public function ToMap(): ?array {
-        return \sqlsrv_fetch_array($this->ResultSet,  \SQLSRV_FETCH_ASSOC);
+        if(!$this->Buffered) {
+            return \sqlsrv_fetch_array($this->ResultSet, \SQLSRV_FETCH_ASSOC);
+        }
+        return \sqlsrv_fetch_array($this->ResultSet, \SQLSRV_FETCH_ASSOC, \SQLSRV_SCROLL_ABSOLUTE, $this->Position);
+    }
+
+    /**
+     * Retrieves a row of the IResult as a single value.
+     *
+     * @return string|null The value of the row at the current position within the IResult; otherwise, null.
+     */
+    public function ToValue(): ?string {
+        return $this->ToArray()[0] ?? null;
     }
 
     /**
@@ -99,12 +104,13 @@ class Result implements \Iterator, IResult {
     }
 
     /**
-     * Retrieves a row of the IResult as a single value.
-     *
-     * @return string|null The value of the row at the current position within the IResult; otherwise, null.
+     * Frees all resources allocated by this result.
      */
-    public function ToValue(): ?string {
-        return $this->ToArray()[0] ?? null;
+    public function Free(): void {
+        if(!$this->Disposed) {
+            \sqlsrv_free_stmt($this->ResultSet);
+            $this->Disposed = true;
+        }
     }
 
     /**
@@ -142,8 +148,9 @@ class Result implements \Iterator, IResult {
 
     /**
      * Gets the current position of the internal result set-pointer.
-     * @ignore
+     *
      * @return int The current position of the internal result set-pointer.
+     * @ignore
      */
     public function key(): int {
         return $this->Position;
@@ -151,26 +158,24 @@ class Result implements \Iterator, IResult {
 
     /**
      * Resets the internal result set-pointer to the start.
-     * @ignore
+     *
      * @throws \vDesk\IO\IOException Thrown if the result set is being streamed.
+     * @ignore
      */
     public function rewind(): void {
         if(!$this->Buffered) {
             throw new IOException("Cannot rewind unbuffered result set!");
         }
-        \sqlsrv_fetch($this->ResultSet, \SQLSRV_SCROLL_FIRST);
         $this->Position = 0;
     }
 
     /**
      * Determines whether any left rows are available.
-     * @ignore
+     *
      * @return bool True if any rows are left; otherwise, false.
+     * @ignore
      */
     public function valid(): bool {
-        if($this->Buffered) {
-            return \sqlsrv_fetch($this->ResultSet, \SQLSRV_SCROLL_ABSOLUTE, $this->Position);
-        }
         return $this->Position < $this->Count;
     }
 

@@ -5,6 +5,9 @@ namespace vDesk\Packages;
 
 use vDesk\Configuration\Settings;
 use vDesk\DataProvider\Expression;
+use vDesk\DataProvider\MySQL;
+use vDesk\DataProvider\PgSQL;
+use vDesk\DataProvider\MsSQL;
 use vDesk\Environment\API;
 use vDesk\IO\Directory;
 use vDesk\Struct\Text;
@@ -114,9 +117,9 @@ final class DataProvider extends Package {
 
         //Get server port.
         $DefaultPort = match ($Provider) {
-            self::Available["mysql"] => 3306,
-            self::Available["pgsql"] => 5432,
-            self::Available["mssql"] => 1433
+            self::Available["mysql"] => MySQL\Provider::Port,
+            self::Available["pgsql"] => PgSQL\Provider::Port,
+            self::Available["mssql"] => MsSQL\Provider::Port
         };
         $Port        = $Parameters["DataProvider.Server"] ?? $Parameters["dp.srv"] ?? \readline("Port [default = {$DefaultPort}]: ");
         $Port        = (int)$Port === 0 ? $DefaultPort : (int)$Port;

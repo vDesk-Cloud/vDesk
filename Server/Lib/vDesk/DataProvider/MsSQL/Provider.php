@@ -22,7 +22,7 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
     /**
      * The default charset of the connection collation.
      */
-    public const Charset = "UTF8";
+    public const Charset = "UTF-8";
 
     /**
      * The underlying pgsql connection resource.
@@ -54,7 +54,7 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
         bool    $Persistent = false
     ) {
         $this->Provider = \sqlsrv_connect(
-            $Server . ", " . $Port ?? self::Port,
+            "tcp:{$Server}, " . $Port ?? self::Port,
             [
                 "ConnectionPooling" => $Persistent,
                 "UID"               => $User,
@@ -64,7 +64,7 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
             ]
         );
         if($this->Provider === false) {
-            throw new IOException("Couldn't establish connection to server: " . \sqlsrv_errors());
+            throw new IOException("Couldn't establish connection to server: " . \json_encode(\sqlsrv_errors()));
         }
     }
 
