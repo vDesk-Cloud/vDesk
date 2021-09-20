@@ -159,7 +159,7 @@ abstract class Provider implements IProvider {
      * @return \vDesk\DataProvider\IResult The IResult containing the results of the executed procedure.
      */
     public function Call(string $Procedure, array $Arguments): IResult {
-        return $this->Execute("CALL {$Procedure}(" . (\count($Arguments) > 0 ? "'" . \implode("','", $Arguments) . "'" : "") . ");", true);
+        return $this->Execute("CALL {$this->Escape($Procedure)}(" . \implode(", ", \array_map(fn($Argument) => $this->Sanitize($Argument), $Arguments)) . ")");
     }
 
     /**
