@@ -199,7 +199,7 @@ abstract class Provider implements IProvider {
             return $this->Sanitize($Value->ID());
         }
         return match (Type::Of($Value)) {
-            Type::String => static::Quote . $this->Escape($Value) . static::Quote,
+            Type::String => $Value === "DEFAULT" ? $Value : static::Quote . $this->Escape($Value) . static::Quote,
             Type::Bool, Type::Boolean => (int)$Value,
             Type::Null => static::NULL,
             Type::Object, Type::Array => static::Quote . \json_encode($Value) . static::Quote,

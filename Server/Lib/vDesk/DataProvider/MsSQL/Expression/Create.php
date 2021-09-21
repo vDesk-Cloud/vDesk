@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\MsSQL\Expression;
 
-use vDesk\DataProvider\Expression\ICreate;
-use vDesk\DataProvider\IResult;
 use vDesk\DataProvider;
 
 /**

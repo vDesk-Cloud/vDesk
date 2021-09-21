@@ -16,7 +16,7 @@ use vDesk\DataProvider\Type;
 abstract class Table {
 
     /**
-     * Enumeration of supported PGSQL type mappings.
+     * Enumeration of supported MsSQL type mappings.
      */
     public const Collations = [
         Collation::ASCII                     => "Latin1_General_100_CI_AI",
@@ -30,7 +30,7 @@ abstract class Table {
     ];
 
     /**
-     * Enumeration of PGSQL specified type mappings.
+     * Enumeration of MsSQL specified type mappings.
      */
     public const Types = [
         Type::TinyInt    => "TINYINT",
@@ -45,8 +45,8 @@ abstract class Table {
         Type::VarChar    => "VARCHAR",
         Type::TinyText   => "VARCHAR(255)",
         Type::Text       => "TEXT",
-        Type::MediumText => "VARCHAR(16777215)",
-        Type::LongText   => "VARCHAR(MAX)",
+        Type::MediumText => "TEXT",
+        Type::LongText   => "TEXT",
         Type::Timestamp  => "TIMESTAMP",
         Type::Date       => "DATE",
         Type::Time       => "TIME",
@@ -89,10 +89,11 @@ abstract class Table {
             if($Collation & ~Collation::ASCII & ~Collation::Binary) {
                 $Field[] = match ($Type & ~Type::Unsigned) {
                     Type::Char,
-                    Type::VarChar,
+                    Type::VarChar => "N" . static::Types[$Type & ~Type::Unsigned] . ($Size !== null ? "({$Size})" : ""),
                     Type::TinyText,
+                    Type::Text,
                     Type::MediumText,
-                    Type::LongText => "N" . static::Types[$Type & ~Type::Unsigned] . ($Size !== null ? "({$Size})" : ""),
+                    Type::LongText => "N" . static::Types[$Type & ~Type::Unsigned],
                     default => ""
                 };
             } else {

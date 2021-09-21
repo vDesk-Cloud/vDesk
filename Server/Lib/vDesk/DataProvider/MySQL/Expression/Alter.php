@@ -26,7 +26,6 @@ class Alter extends DataProvider\AnsiSQL\Expression\Alter {
      */
     public function Database(string $Name): static {
         $this->Database  = true;
-        //$this->Statement .= "ALTER DATABASE " . DataProvider::SanitizeField($Name);
         return $this;
     }
 

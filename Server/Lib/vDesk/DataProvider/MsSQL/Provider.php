@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\MsSQL;
 
+use vDesk\Data\IManagedModel;
 use vDesk\DataProvider\IResult;
 use vDesk\IO\IOException;
+use vDesk\Struct\Type;
 
 /**
  * Abstract data-provider for MsSQL databases.
@@ -29,7 +31,7 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
      *
      * @var false|resource
      */
-    protected $Provider;
+    protected mixed $Provider;
 
     /**
      * Initializes a new instance of the Provider class.
@@ -100,6 +102,13 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
     public function Execute(string $Statement, bool $Buffered = true): IResult {
         $Result = \sqlsrv_query($this->Provider, $Statement, [], ["Scrollable" => $Buffered ? \SQLSRV_CURSOR_CLIENT_BUFFERED : \SQLSRV_CURSOR_STATIC]);
         return $Result ? new Result($Result, $Buffered) : new \vDesk\DataProvider\Result();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function Call(string $Procedure, array $Arguments): IResult {
+        return $this->Execute("EXECUTE {$this->Escape($Procedure)} " . \implode(", ", \array_map(fn($Argument) => $this->Sanitize($Argument), $Arguments)));
     }
 
     /**

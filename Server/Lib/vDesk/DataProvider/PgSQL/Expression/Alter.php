@@ -40,7 +40,7 @@ class Alter extends DataProvider\AnsiSQL\Expression\Alter {
      * @inheritDoc
      */
     public function Rename(string $Name): static {
-        $Path = \explode(DataProvider::$Separator, $Name);
+        $Path            = \explode(DataProvider::$Separator, $Name);
         $this->Indexes[] = $this->Statement . " RENAME TO " . DataProvider::EscapeField(\array_pop($Path));
         return $this;
     }
@@ -104,20 +104,18 @@ class Alter extends DataProvider\AnsiSQL\Expression\Alter {
      * @inheritDoc
      */
     public function Drop(array $Columns, array $Indexes = []): static {
-        parent::Drop($Columns);
         foreach($Indexes as $Index) {
             $this->Indexes[] = DataProvider\Expression::Drop()
                                                       ->Index($Index)
                                                       ->On($this->Table);
         }
-        return $this;
+        return parent::Drop($Columns);
     }
 
     /**
      * @inheritDoc
      */
     public function __toString(): string {
-        //@todo Renamed duplicate als last action.
         if(\count($this->Indexes) > 0) {
             return parent::__toString() . "; " . \implode("; ", $this->Indexes);
         }
