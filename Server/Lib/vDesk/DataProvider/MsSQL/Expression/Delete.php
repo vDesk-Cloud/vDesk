@@ -9,7 +9,7 @@ use vDesk\DataProvider\MySQL\Expression;
 use vDesk\DataProvider;
 
 /**
- * Represents a MsSQL compatible DELETE SQL expression.
+ * Represents a MsSQL compatible "DELETE" Expression.
  *
  * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>

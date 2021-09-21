@@ -6,7 +6,7 @@ namespace vDesk\DataProvider\MsSQL\Expression;
 use vDesk\DataProvider;
 
 /**
- * Represents a MsSQL compatible CREATE SQL expression.
+ * Represents a MsSQL compatible "CREATE" Expression.
  *
  * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>

@@ -7,7 +7,7 @@ use vDesk\Configuration\Settings;
 use vDesk\DataProvider;
 
 /**
- * Represents a MsSQL compatible ALTER SQL expression.
+ * Represents a MsSQL compatible "ALTER" Expression.
  *
  * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
