@@ -98,9 +98,30 @@ use vDesk\Documentation\Code;
         </p>
     </section>
     <section id="Comparison">
-        <h3>Comparison between different DataProviders</h3>
+        <h4>Comparison between different DataProviders</h4>
         <p>
-           The major differences between
+            While simple CRUD-operations don't differ between all major SQL databases, except for MySQL's lack of full outer joins, <br>
+            the most problematic thing to conquer was how each RDBMS handles creation and alternation of databases/schemas and tables.
+        </p>
+        <h5>Full outer join</h5>
+        <p>
+            The MySQL Provider will fall back to a union select between a left- and a right join.
+        </p>
+        <h5>Autoincrement columns</h5>
+        <p>
+            The system has been initially developed on a MySQL server, using null values for generating IDs and columns with default values.<br>
+            The PgSQL and MsSQL Providers currently assumes the first field identifier as an identity column if it's name ends with an "ID" suffix.
+        </p>
+        <h5>Default values</h5>
+        <p>
+            The escaping methods of the PgSQL and MsSQL Providers currently ignore any strings containing the value "DEFAULT". <br>
+            Until the system isn't completely aware of default values, the MySQL Provider relies on null values instead.
+        </p>
+        <h5>Tables</h5>
+        <p>
+            While the MySQL version of the "CREATE/ALTER TABLE" statement is rather a simple enumeration of sub-statements, <br>
+            Postgres and SQL Server requires a bit more workarounds to achieve the same syntax.
+            The PgSQL Provider will append
         </p>
         <p>
             Expressions are early evaluated fluent interfaces which care about proper value escaping and building SQL statements compatible to the current configured database.
@@ -818,7 +839,7 @@ use vDesk\Documentation\Code;
         </div>
     </section>
     <section id="CreateIndex">
-        <h4>Schema</h4>
+        <h4>Index</h4>
         <div style="display: flex; justify-content: space-around;">
 <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
 <?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
@@ -837,12 +858,59 @@ use vDesk\Documentation\Code;
         </div>
     </section>
     <section id="Alter">
-        <h3>Updating tables</h3>
+        <h3>Updating databases, schemas and tables</h3>
         <p>
             To update existing tables, the Expression-library provides the global <code class="Inline">Expression::<?= Code::Class("Alter") ?></code> factory-method;<br>
             which creates a new instance of the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("IAlter") ?></code>-Expression according the current configured
             DataProvider.
         </p>
+    </section>
+    <section id="AlterDatabase">
+        <h4>Database</h4>
+        <div style="display: flex; justify-content: space-around;">
+<pre style="margin: 10px"><code><?= Code\Language::PHP ?>
+<?= Code::Class("Expression") ?>::<?= Code::Function("Alter") ?>()
+-><?= Code::Function("Database") ?>(<?= Code::String("\"Messenger\"") ?>)<?= Code::Delimiter ?>
+</code></pre>
+            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
+<?= Code::Keyword("CREATE") ?> <?= Code::Keyword("SCHEMA") ?>
+
+    <?= Code::Class("Messenger") ?><?= Code::Delimiter ?>
+</code></pre>
+        </div>
+    </section>
+    <section id="AlterSchema">
+        <h4>Schema</h4>
+        <div style="display: flex; justify-content: space-around;">
+<pre style="margin: 10px"><code><?= Code\Language::PHP ?>
+<?= Code::Class("Expression") ?>::<?= Code::Function("Alter") ?>()
+-><?= Code::Function("Schema") ?>(<?= Code::String("\"Messenger\"") ?>)
+-><?= Code::Function("Rename") ?>(<?= Code::String("\"Newname\"") ?>)<?= Code::Delimiter ?>
+</code></pre>
+            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
+<?= Code::Keyword("ALTER SCHEMA") ?>
+
+    <?= Code::Class("Messenger") ?>
+
+<?= Code::Keyword("RENAME TO") ?>
+
+    <?= Code::Class("Messenger") ?><?= Code::Delimiter ?>
+</code></pre>
+        </div>
+        <aside class="Note">
+            <h4>Note</h4>
+            <p>
+                This method currently just transforms a single entity to another schema while using the MsSQL DataProvider.<br>
+                Unfortunately, renaming schemas on a Ms SQL server isn't a trivial task and would require in it's simplest approach to scan the schema for it's entities first,<br>
+                creating then a new schema with the new name and copying over every found entity and dropping the old schema afterwards.
+            </p>
+            <p>
+                It is advised to plan schema names carefully until this problem has been addressed.
+            </p>
+        </aside>
+    </section>
+    <section id="AlterTable">
+        <h4>Updating tables</h4>
         <div style="display: flex; justify-content: space-around;">
             <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
 <?= Code::Class("Expression") ?>::<?= Code::Function("Alter") ?>()
@@ -876,6 +944,34 @@ use vDesk\Documentation\Code;
 
 <?= Code::Keyword("DROP COLUMN") ?> <?= Code::Field("Date") ?>,
 <?= Code::Keyword("DROP INDEX") ?> <?= Code::Field("Conversation") ?><?= Code::Delimiter ?>
+</code></pre>
+        </div>
+        <aside class="Note">
+            <h4>Note</h4>
+            <p>
+                While using the PgSQL or MsSQL DataProvider, any dropped indices will be prepended to the final statement.<br>
+                While using the MsSQL DataProvider, any dropped indices will be prepended to the final statement.
+                Dropped indices will be prepended to the final statement while using the PgSQL or MsSQL DataProvider.
+                This method currently just transforms a single entity to another schema while using the MsSQL DataProvider.<br>
+                Unfortunately, renaming schemas on a Ms SQL server isn't a trivial task and would require in it's simplest approach to scan the schema for it's entities first,<br>
+                creating then a new schema with the new name and copying over every found entity and dropping the old schema afterwards.
+            </p>
+            <p>
+                It is advised to plan schema names carefully until this problem has been addressed.
+            </p>
+        </aside>
+    </section>
+    <section id="AlterIndex">
+        <h4>Schema</h4>
+        <div style="display: flex; justify-content: space-around;">
+<pre style="margin: 10px"><code><?= Code\Language::PHP ?>
+<?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
+-><?= Code::Function("Schema") ?>(<?= Code::String("\"Messenger\"") ?>)<?= Code::Delimiter ?>
+</code></pre>
+            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
+<?= Code::Keyword("CREATE") ?> <?= Code::Keyword("SCHEMA") ?>
+
+    <?= Code::Class("Messenger") ?><?= Code::Delimiter ?>
 </code></pre>
         </div>
     </section>
@@ -925,6 +1021,25 @@ use vDesk\Documentation\Code;
             <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
 <?= Code::Keyword("DROP") ?> <?= Code::Keyword("TABLE") ?>
             
+    <?= Code::Class("Messenger") ?>.<?= Code::Const("Messages") ?><?= Code::Delimiter ?>
+</code></pre>
+        </div>
+    </section>
+    <section id="DropIndex">
+        <h4>Index</h4>
+        <div style="display: flex; justify-content: space-around;">
+            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
+<?= Code::Class("Expression") ?>::<?= Code::Function("Drop") ?>()
+-><?= Code::Function("Index") ?>(<?= Code::String("\"PrivateMessages\"") ?>)
+-><?= Code::Function("On") ?>(<?= Code::String("\"Messenger.Messages\"") ?>)<?= Code::Delimiter ?>
+</code></pre>
+            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
+<?= Code::Keyword("DROP INDEX") ?>
+
+    <?= Code::Field("PrivateMessages") ?>
+
+<?= Code::Keyword("ON") ?>
+
     <?= Code::Class("Messenger") ?>.<?= Code::Const("Messages") ?><?= Code::Delimiter ?>
 </code></pre>
         </div>
