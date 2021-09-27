@@ -83,13 +83,17 @@ abstract class Table {
     ): string {
 
         $Field = [DataProvider::EscapeField($Name)];
+        $Limit = "";
+        if($Size !== null) {
+            $Limit = $Size > 8000 ? "(MAX)" : "($Size)";
+        }
 
         //Create type and collation.
         if($Collation !== null) {
             if($Collation & ~Collation::ASCII & ~Collation::Binary) {
                 $Field[] = match ($Type & ~Type::Unsigned) {
                     Type::Char,
-                    Type::VarChar => "N" . static::Types[$Type & ~Type::Unsigned] . ($Size !== null ? "(" . min($Size, 4000) . ")" : ""),
+                    Type::VarChar => "N" . static::Types[$Type & ~Type::Unsigned] . $Limit,
                     Type::TinyText,
                     Type::Text,
                     Type::MediumText,
@@ -98,14 +102,14 @@ abstract class Table {
                 };
             } else {
                 $Field[] = static::Types[$Type & ~Type::Unsigned] . match ($Type) {
-                        Type::Char, Type::VarChar => $Size !== null ? "(" . \min($Size, 8000) . ")" : "",
+                        Type::Char, Type::VarChar => $Limit,
                         default => ""
                     };
             }
             $Field[] = "COLLATE " . static::Collations[$Collation];
         } else {
             $Field[] = static::Types[$Type & ~Type::Unsigned] . match ($Type) {
-                    Type::Char, Type::VarChar => $Size !== null ? "(" . min($Size, 8000) . ")" : "",
+                    Type::Char, Type::VarChar => $Limit,
                     default => ""
                 };
         }
