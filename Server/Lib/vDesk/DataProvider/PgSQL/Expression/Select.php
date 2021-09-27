@@ -10,7 +10,5 @@ namespace vDesk\DataProvider\PgSQL\Expression;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Select extends \vDesk\DataProvider\AnsiSQL\Expression\Select {
-
     //Postgres' SELECT is ANSI conform.
-
 }

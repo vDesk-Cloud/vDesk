@@ -10,11 +10,9 @@ namespace vDesk\DataProvider\MsSQL\Expression\Functions;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Now extends \vDesk\DataProvider\AnsiSQL\Expression\Functions\Now {
-    
+
     /**
-     * Returns the string representation of the Distinct.
-     *
-     * @return string The string representation of the Distinct.
+     * @inheritDoc
      */
     public function __toString(): string {
         return "GETDATE()";

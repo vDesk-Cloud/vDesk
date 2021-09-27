@@ -17,4 +17,5 @@ class CurrentTimestamp extends \vDesk\DataProvider\AnsiSQL\Expression\Functions\
     public function __toString(): string {
         return "CURRENT_TIMESTAMP";
     }
+
 }

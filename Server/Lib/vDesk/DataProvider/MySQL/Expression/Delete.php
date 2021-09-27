@@ -12,4 +12,5 @@ use vDesk\DataProvider;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Delete extends DataProvider\AnsiSQL\Expression\Delete {
+    //MySQL's DELETE is ANSI conform.
 }
