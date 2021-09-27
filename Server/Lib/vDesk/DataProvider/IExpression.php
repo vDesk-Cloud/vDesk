@@ -30,8 +30,8 @@ interface IExpression {
     /**
      * Executes the expression on a SQL-Server.
      *
-     * @return null|\vDesk\DataProvider\IResult|string The result-set yielding the values the SQL-Server returned by executing the IExpression.
+     * @return null|string|int|float The value the SQL-Server returned by executing the IExpression.
      */
-    public function __invoke(): IResult|string|null;
+    public function __invoke(): null|string|int|float;
 
 }

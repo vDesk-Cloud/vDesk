@@ -79,7 +79,7 @@ abstract class Drop implements IDrop {
     /**
      * @inheritDoc
      */
-    public function __invoke(): IResult|string|null {
+    public function __invoke(): null|string|int|float {
         return $this->Execute()->ToValue();
     }
 

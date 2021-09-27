@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace vDesk\DataProvider\MsSQL\Expression;
 
 use vDesk\DataProvider;
+use vDesk\DataProvider\Collation;
 
 /**
  * Represents a MsSQL compatible "CREATE" Expression.
@@ -36,7 +37,7 @@ class Create extends DataProvider\AnsiSQL\Expression\Create {
         foreach($Indexes as $IndexName => $Index) {
             if($IndexName === "Primary") {
                 $Table[] = Table::Index($IndexName, $Index["Unique"] ?? false, $Index["Fields"]);
-            }else{
+            } else {
                 $Indices[] = (new static())->Index($IndexName, $Index["Unique"] ?? false)->On($Name, $Index["Fields"]);
             }
         }
@@ -46,12 +47,23 @@ class Create extends DataProvider\AnsiSQL\Expression\Create {
         return $this;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function On(string $Table, array $Fields): static {
+        $Transformed = [];
+        foreach($Fields as $Field => $Size) {
+            $Transformed[] = \is_string($Field) ? DataProvider::EscapeField($Field) : DataProvider::EscapeField($Size);
+        }
+        $this->Statement .= " ON " . DataProvider::SanitizeField($Table) . " (" . \implode(", ", $Transformed) . ")";
+        return $this;
+    }
 
     /**
      * @inheritDoc
      */
     public function Database(string $Name): static {
-        $this->Statement .= "CREATE DATABASE {$Name} COLLATE ENCODING 'UTF8'";
+        $this->Statement .= "DATABASE {$Name} COLLATE " . Table::Collations[Collation::UTF8];
         return $this;
     }
 

@@ -19,7 +19,7 @@ class Insert extends \vDesk\DataProvider\AnsiSQL\Expression\Insert {
         $Fields   = $this->Fields ?? \array_keys($Values);
         $Identity = \current($Fields);
         if(\current($Values) === null && \str_ends_with($Identity, "ID")) {
-            if($this->Fields[0] === $Identity) {
+            if(($this->Fields[0] ?? null) === $Identity) {
                 $Values[0] = "DEFAULT";
             } else {
                 $Values[$Identity] = "DEFAULT";

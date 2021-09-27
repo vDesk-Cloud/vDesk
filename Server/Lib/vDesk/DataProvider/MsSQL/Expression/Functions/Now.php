@@ -3,15 +3,13 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\MsSQL\Expression\Functions;
 
-use vDesk\DataProvider\Expression\IAggregateFunction;
-
 /**
  * SQL function 'NOW()'.
  *
  * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Now implements IAggregateFunction {
+class Now extends \vDesk\DataProvider\AnsiSQL\Expression\Functions\Now {
     
     /**
      * Returns the string representation of the Distinct.
@@ -19,7 +17,7 @@ class Now implements IAggregateFunction {
      * @return string The string representation of the Distinct.
      */
     public function __toString(): string {
-        return "NOW()";
+        return "GETDATE()";
     }
     
 }

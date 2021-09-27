@@ -54,10 +54,10 @@ class Result implements \Iterator, IResult {
     /**
      * Initializes a new instance of the Result class.
      *
-     * @param null|\mysqli_result $ResultSet The Initializes the Result with the specified result set.
+     * @param null|resource $ResultSet Initializes the Result with the specified result set.
      */
     public function __construct(protected mixed $ResultSet, protected bool $Buffered = true) {
-        $this->Count = (int)\sqlsrv_num_rows($this->ResultSet);
+        $this->Count = \max((int)\sqlsrv_num_rows($this->ResultSet), 0);
         $this->AddProperty("Count", [\Get => fn(): int => $this->Count]);
     }
 
@@ -67,6 +67,9 @@ class Result implements \Iterator, IResult {
      * @return string[]|null The row at the current position within the result set; otherwise, null.
      */
     public function ToArray(): ?array {
+        if($this->Count === 0){
+            return null;
+        }
         if(!$this->Buffered) {
             return \sqlsrv_fetch_array($this->ResultSet, \SQLSRV_FETCH_NUMERIC);
         }
@@ -79,6 +82,9 @@ class Result implements \Iterator, IResult {
      * @return string[]|null The row at the current position within the result set; otherwise, null.
      */
     public function ToMap(): ?array {
+        if($this->Count === 0){
+            return null;
+        }
         if(!$this->Buffered) {
             return \sqlsrv_fetch_array($this->ResultSet, \SQLSRV_FETCH_ASSOC);
         }
@@ -88,9 +94,9 @@ class Result implements \Iterator, IResult {
     /**
      * Retrieves a row of the IResult as a single value.
      *
-     * @return string|null The value of the row at the current position within the IResult; otherwise, null.
+     * @return null|string|int|float The value of the row at the current position within the IResult; otherwise, null.
      */
-    public function ToValue(): ?string {
+    public function ToValue(): null|string|int|float {
         return $this->ToArray()[0] ?? null;
     }
 
@@ -107,7 +113,7 @@ class Result implements \Iterator, IResult {
      * Frees all resources allocated by this result.
      */
     public function Free(): void {
-        if(!$this->Disposed) {
+        if(!$this->Disposed && \is_resource($this->ResultSet)) {
             \sqlsrv_free_stmt($this->ResultSet);
             $this->Disposed = true;
         }
@@ -116,9 +122,9 @@ class Result implements \Iterator, IResult {
     /**
      * Retrieves a row of the IResult as a single value.
      *
-     * @return string|null The value of the row at the current position within the IResult; otherwise, null.
+     * @return null|string|int|float The value of the row at the current position within the IResult; otherwise, null.
      */
-    public function __invoke(): ?string {
+    public function __invoke(): null|string|int|float {
         return $this->ToValue();
     }
 

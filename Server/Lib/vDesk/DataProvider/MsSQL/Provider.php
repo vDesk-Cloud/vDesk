@@ -16,6 +16,8 @@ use vDesk\Struct\Type;
  */
 class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
 
+    public const Reserved = ["USERS", "PUBLIC", "FILE"] + parent::Reserved;
+
     /**
      * The default port MsSQL-servers usually use.
      */
@@ -58,11 +60,12 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
         $this->Provider = \sqlsrv_connect(
             "tcp:{$Server}, " . ($Port ?? self::Port),
             [
-                "ConnectionPooling" => $Persistent,
-                "UID"               => $User,
-                "PWD"               => $Password,
-                "Database"          => $Database ?? "master",
-                "CharacterSet"      => $Charset ?? self::Charset
+                "ConnectionPooling"    => $Persistent,
+                "UID"                  => $User,
+                "PWD"                  => $Password,
+                "Database"             => $Database ?? "master",
+                "CharacterSet"         => $Charset ?? self::Charset,
+                "ReturnDatesAsStrings" => true
             ]
         );
         if($this->Provider === false) {

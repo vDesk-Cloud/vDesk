@@ -70,7 +70,7 @@ abstract class Update implements IUpdate {
     /**
      * @inheritDoc
      */
-    public function __invoke(): IResult|string|null {
+    public function __invoke(): null|string|int|float {
         return $this->Execute()->ToValue();
     }
 

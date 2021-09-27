@@ -57,7 +57,7 @@ abstract class Delete implements IDelete {
     /**
      * @inheritDoc
      */
-    public function __invoke(): IResult|string|null {
+    public function __invoke(): null|string|int|float {
         return $this->Execute()->ToValue();
     }
     

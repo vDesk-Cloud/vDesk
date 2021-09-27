@@ -20,7 +20,7 @@ class Insert extends \vDesk\DataProvider\AnsiSQL\Expression\Insert {
         $Identity = \current($Fields);
         if(\current($Values) === null && \str_ends_with($Identity, "ID")) {
             //Omit null values.
-            if($this->Fields[0] === $Identity) {
+            if(($this->Fields[0] ?? null) === $Identity) {
                 unset($this->Fields[0], $Values[0]);
             } else {
                 unset($Values[$Identity]);

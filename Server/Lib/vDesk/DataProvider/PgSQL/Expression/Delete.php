@@ -10,5 +10,4 @@ namespace vDesk\DataProvider\PgSQL\Expression;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Delete extends \vDesk\DataProvider\AnsiSQL\Expression\Delete {
-    //Postgres' DROP is ANSI conform.
 }

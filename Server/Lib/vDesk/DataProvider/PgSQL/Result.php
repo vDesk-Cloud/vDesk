@@ -65,7 +65,7 @@ class Result implements \Iterator, IResult {
      * Frees all resources allocated by this result.
      */
     public function Free(): void {
-        if(!$this->Disposed) {
+        if(!$this->Disposed && \is_resource($this->ResultSet)) {
             \pg_free_result($this->ResultSet);
             $this->Disposed = true;
         }

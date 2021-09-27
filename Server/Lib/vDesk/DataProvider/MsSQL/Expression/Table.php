@@ -44,9 +44,9 @@ abstract class Table {
         Type::Char       => "CHAR",
         Type::VarChar    => "VARCHAR",
         Type::TinyText   => "VARCHAR(255)",
-        Type::Text       => "TEXT",
-        Type::MediumText => "TEXT",
-        Type::LongText   => "TEXT",
+        Type::Text       => "VARCHAR(MAX)",
+        Type::MediumText => "VARCHAR(MAX)",
+        Type::LongText   => "VARCHAR(MAX)",
         Type::Timestamp  => "TIMESTAMP",
         Type::Date       => "DATE",
         Type::Time       => "TIME",
@@ -89,7 +89,7 @@ abstract class Table {
             if($Collation & ~Collation::ASCII & ~Collation::Binary) {
                 $Field[] = match ($Type & ~Type::Unsigned) {
                     Type::Char,
-                    Type::VarChar => "N" . static::Types[$Type & ~Type::Unsigned] . ($Size !== null ? "({$Size})" : ""),
+                    Type::VarChar => "N" . static::Types[$Type & ~Type::Unsigned] . ($Size !== null ? "(" . min($Size, 4000) . ")" : ""),
                     Type::TinyText,
                     Type::Text,
                     Type::MediumText,
@@ -97,18 +97,21 @@ abstract class Table {
                     default => ""
                 };
             } else {
-                $Field[] = static::Types[$Type & ~Type::Unsigned]
-                           . ($Size !== null ? "({$Size})" : "");
+                $Field[] = static::Types[$Type & ~Type::Unsigned] . match ($Type) {
+                        Type::Char, Type::VarChar => $Size !== null ? "(" . \min($Size, 8000) . ")" : "",
+                        default => ""
+                    };
             }
             $Field[] = "COLLATE " . static::Collations[$Collation];
         } else {
-            $Field[] = static::Types[$Type & ~Type::Unsigned]
-                       . ($Size !== null ? "({$Size})" : "");
+            $Field[] = static::Types[$Type & ~Type::Unsigned] . match ($Type) {
+                    Type::Char, Type::VarChar => $Size !== null ? "(" . min($Size, 8000) . ")" : "",
+                    default => ""
+                };
         }
 
         $Field[] = $Nullable ? DataProvider::$NULL : "NOT " . DataProvider::$NULL;
-
-        if($Default !== "") {
+        if($Default !== "" && ($Type & ~Type::Unsigned) !== Type::Timestamp) {
             $Field[] = "DEFAULT " . DataProvider::Sanitize($Default);
         }
         if($AutoIncrement) {
@@ -143,11 +146,7 @@ abstract class Table {
 
         $Transformed = [];
         foreach($Fields as $Key => $Field) {
-            if(\is_string($Key)) {
-                $Transformed[] = DataProvider::EscapeField($Key) . " ({$Field})";
-            } else {
-                $Transformed[] = DataProvider::EscapeField($Field);
-            }
+            $Transformed[] = \is_string($Key) ? DataProvider::EscapeField($Key) : DataProvider::EscapeField($Field);
         }
 
         return $Index . " (" . \implode(", ", $Transformed) . ")";
