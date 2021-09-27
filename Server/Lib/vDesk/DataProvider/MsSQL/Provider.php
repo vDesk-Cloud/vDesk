@@ -50,7 +50,7 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
         string  $Server,
         string  $User,
         string  $Password,
-        ?string $Database = null,
+        ?string $Database = "master",
         ?int    $Port = self::Port,
         ?string $Charset = self::Charset,
         bool    $Persistent = false
@@ -61,7 +61,7 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
                 "ConnectionPooling" => $Persistent,
                 "UID"               => $User,
                 "PWD"               => $Password,
-                "Database"          => $Database,
+                "Database"          => $Database ?? "master",
                 "CharacterSet"      => $Charset ?? self::Charset
             ]
         );
