@@ -56,7 +56,7 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
         bool    $Persistent = false
     ) {
         $this->Provider = \sqlsrv_connect(
-            "tcp:{$Server}, " . $Port ?? self::Port,
+            "tcp:{$Server}, " . ($Port ?? self::Port),
             [
                 "ConnectionPooling" => $Persistent,
                 "UID"               => $User,
