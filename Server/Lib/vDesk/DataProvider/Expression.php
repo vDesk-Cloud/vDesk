@@ -23,6 +23,41 @@ use vDesk\DataProvider\Expression\IUpdate;
 final class Expression {
 
     /**
+     * "IN"-condition for "WHERE"-clauses.
+     */
+    public const In = "IN";
+
+    /**
+     * "NOT IN"-condition for "WHERE"-clauses.
+     */
+    public const NotIn = "NOT IN";
+
+    /**
+     * "LIKE"-condition for "WHERE"-clauses.
+     */
+    public const Like = "LIKE";
+
+    /**
+     * "BETWEEN"-condition for "WHERE"-clauses.
+     */
+    public const Between = "BETWEEN";
+
+    /**
+     * "NOT BETWEEN"-condition for "WHERE"-clauses.
+     */
+    public const NotBetween = "NOT BETWEEN";
+
+    /**
+     * "REGEXP"-condition for "WHERE"-clauses.
+     */
+    public const Regex = "REGEXP";
+
+    /**
+     * "NOT REGEXP"-condition for "WHERE"-clauses.
+     */
+    public const NotRegex = "NOT REGEXP";
+
+    /**
      * The current expression provider of the Expression.
      *
      * @var string
@@ -123,3 +158,12 @@ final class Expression {
 if(Settings::$Local["DataProvider"]->Count > 0) {
     new Expression(Settings::$Local["DataProvider"]["Provider"]);
 }
+
+//Alias constants.
+\define("In", Expression::In);
+\define("NotIn", Expression::NotIn);
+\define("Like", Expression::Like);
+\define("Between", Expression::Between);
+\define("NotBetween", Expression::NotBetween);
+\define("Regex", Expression::Regex);
+\define("NotRegex", Expression::NotRegex);

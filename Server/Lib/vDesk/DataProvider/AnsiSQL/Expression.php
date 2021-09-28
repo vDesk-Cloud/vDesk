@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\AnsiSQL;
 
-use vDesk\DataProvider\Expression\IAggregateFunction;
-use vDesk\DataProvider;
 use vDesk\Data\IModel;
+use vDesk\DataProvider;
+use vDesk\DataProvider\Expression as Where;
+use vDesk\DataProvider\Expression\IAggregateFunction;
 
 /**
  * Utility class for AnsiSQL compatible Expressions.
@@ -14,41 +15,6 @@ use vDesk\Data\IModel;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Expression {
-
-    /**
-     * "IN"-condition for "WHERE"-clauses.
-     */
-    public const In = "IN";
-
-    /**
-     * "NOT IN"-condition for "WHERE"-clauses.
-     */
-    public const NotIn = "NOT IN";
-
-    /**
-     * "LIKE"-condition for "WHERE"-clauses.
-     */
-    public const Like = "LIKE";
-
-    /**
-     * "BETWEEN"-condition for "WHERE"-clauses.
-     */
-    public const Between = "BETWEEN";
-
-    /**
-     * "NOT BETWEEN"-condition for "WHERE"-clauses.
-     */
-    public const NotBetween = "NOT BETWEEN";
-
-    /**
-     * "REGEXP"-condition for "WHERE"-clauses.
-     */
-    public const Regex = "REGEXP";
-
-    /**
-     * "NOT REGEXP"-condition for "WHERE"-clauses.
-     */
-    public const NotRegex = "NOT REGEXP";
 
     /**
      * Transforms sets of specified conditions into a SQL-conform format string.
@@ -86,13 +52,13 @@ abstract class Expression {
                     $Field           = DataProvider::SanitizeField($Field);
                     $AndStatements[] = match (\key($Value)) {
                         0 => "({$Field} = " . \implode(" OR {$Field} = ", \array_map($Sanitize, $Value)) . ")",
-                        self::In => "{$Field} IN (" . \implode(",", \array_map($Sanitize, $Value[self::In])) . ")",
-                        self::NotIn => "{$Field} NOT IN (" . \implode(",", \array_map($Sanitize, $Value[self::NotIn])) . ")",
-                        self::Like => "{$Field} LIKE '{$Value[self::Like]}'",
-                        self::Between => "({$Field} BETWEEN {$Sanitize($Value[self::Between][0])} AND {$Sanitize($Value[self::Between][1])})",
-                        self::NotBetween => "({$Field} NOT BETWEEN {$Sanitize($Value[self::NotBetween][0])} AND {$Sanitize($Value[self::NotBetween][1])})",
-                        self::Regex => "{$Field} REGEXP '{$Value[self::Regex]}'",
-                        self::NotRegex => "{$Field} NOT REGEXP '{$Value[self::NotRegex]}'",
+                        Where::In => "{$Field} " . Where::In . " (" . \implode(",", \array_map($Sanitize, $Value[Where::In])) . ")",
+                        Where::NotIn => "{$Field} " . Where::NotIn . " (" . \implode(",", \array_map($Sanitize, $Value[Where::NotIn])) . ")",
+                        Where::Like => "{$Field} " . Where::Like . " '{$Value[Where::Like]}'",
+                        Where::Between => "({$Field} " . Where::Between . " {$Sanitize($Value[Where::Between][0])} AND {$Sanitize($Value[Where::Between][1])})",
+                        Where::NotBetween => "({$Field} " . Where::NotBetween . " {$Sanitize($Value[Where::NotBetween][0])} AND {$Sanitize($Value[Where::NotBetween][1])})",
+                        Where::Regex => "{$Field} " . Where::Regex . " '{$Value[Where::Regex]}'",
+                        Where::NotRegex => "{$Field} " . Where::NotRegex . " '{$Value[Where::NotRegex]}'",
                         default => "{$Field} " . \key($Value) . " " . $Sanitize(\current($Value))
                     };
                     continue;
