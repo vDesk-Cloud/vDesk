@@ -12,10 +12,10 @@ use vDesk\Struct\Collections\Dictionary;
 use vDesk\Struct\Type;
 
 /**
- * Class Settings represents a dictionary of local
+ * Class that represents a Dictionary of local configuration values.
  *
- * @package vDesk\Configuration\Settings\Local
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\Configuration
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Settings extends Dictionary {
     
@@ -101,6 +101,7 @@ class Settings extends Dictionary {
                 }
                 return "[" . \PHP_EOL . "    " . \implode(", " . \PHP_EOL . "    ", $Values) . \PHP_EOL . "]";
             case Type::Bool:
+            case Type::Boolean:
                 return $Value ? "true" : "false";
             default:
                 return (string)$Value;
