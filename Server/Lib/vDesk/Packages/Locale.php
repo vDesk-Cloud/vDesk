@@ -42,7 +42,7 @@ final class Locale extends Package {
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "vDesk"   => "1.0.1",
+        "vDesk"   => "1.1.0",
         "Modules" => "1.0.0"
     ];
 
