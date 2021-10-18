@@ -52,6 +52,8 @@ Description;
                     //Install new DataProvider.
                     "vDesk/DataProvider",
                     "vDesk/DataProvider.php",
+                    //@todo Check manifest file in Updates-1.0.2 instead of folder existence.
+                    "vDesk/Packages/vDesk.php",
                     "vDesk/Packages/DataProvider.php"
                 ]
             ]
@@ -66,7 +68,8 @@ Description;
                     "vDesk/Struct",
                     //Uninstall old DataProvider.
                     "vDesk/DataProvider",
-                    "vDesk/DataProvider.php"
+                    "vDesk/DataProvider.php",
+                    "vDesk/Packages/vDesk.php"
                 ]
             ]
         ]
