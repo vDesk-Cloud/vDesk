@@ -268,4 +268,15 @@ class Code {
     public static function Const(string $Text): string {
         return static::Block("Const", $Text);
     }
+    
+    /**
+     * Creates an escaped HTML code block with a specified text.
+     *
+     * @param string $Text The text of the code block.
+     *
+     * @return string A code block representing the specified text.
+     */
+    public static function HTML(string $Text): string {
+        return static::Block("HTML", \htmlentities($Text));
+    }
 }

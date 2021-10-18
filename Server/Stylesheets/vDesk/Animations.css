@@ -39,6 +39,10 @@
     animation-duration: 1s;
 }
 
+.SlideIn.Paused {
+    transform: translateX(0);
+}
+
 .SlideIn.Top {
     animation: SlideInTop;
     animation-fill-mode: forwards;

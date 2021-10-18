@@ -3,40 +3,43 @@ declare(strict_types=1);
 
 namespace Pages\vDesk;
 
-use Pages\vDesk;
+use vDesk\Pages\Cached\Page;
 
 /**
- * Class About
+ * Contribute Page class.
  *
- * @package Pages\vDesk
+ * @package Homepage
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Contribute extends vDesk {
+class Contribute extends Page {
     
     /**
-     * The name of the Tutorial.
+     * The name of the Page.
      *
      * @var string
      */
     public string $Name = "Contribute";
     
     /**
-     * The nav label of the Tutorial
+     * The nav label of the Page.
      *
      * @var string
      */
     public string $Description = "Contribute";
     
-    
     /**
-     * Initializes a new instance of the About Page.
+     * Initializes a new instance of the Contribute Page.
      *
-     * @param null|iterable $Values      Initializes the About Page with the specified Dictionary of values.
-     * @param null|iterable $Templates   Initializes the About Page with the specified Collection of templates.
-     * @param null|iterable $Stylesheets Initializes the About Page with the specified Collection of stylesheets.
-     * @param null|iterable $Scripts     Initializes the About Page with the specified Collection of scripts.
+     * @param null|iterable $Values      Initializes the Contribute Page with the specified Dictionary of values.
+     * @param null|iterable $Templates   Initializes the Contribute Page with the specified Collection of templates.
+     * @param null|iterable $Stylesheets Initializes the Contribute Page with the specified Collection of stylesheets.
      */
-    public function __construct(?iterable $Values = [], ?iterable $Templates = ["vDesk/Contribute"], ?iterable $Stylesheets = ["vDesk/Stylesheet", "Documentation/Stylesheet"], ?iterable $Scripts = []) {
-        parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
+    public function __construct(
+        ?iterable $Values = [],
+        ?iterable $Templates = ["vDesk/Contribute"],
+        ?iterable $Stylesheets = ["Documentation/Stylesheet"]
+    ) {
+        parent::__construct($Values, $Templates, $Stylesheets);
     }
+    
 }
