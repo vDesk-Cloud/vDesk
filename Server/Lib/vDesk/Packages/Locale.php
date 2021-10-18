@@ -6,7 +6,6 @@ namespace vDesk\Packages;
 use vDesk\DataProvider\Expression;
 use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
-use vDesk\Locale\LocaleDictionary;
 use vDesk\Modules\Module\Command;
 use vDesk\Modules\Module\Command\Parameter;
 use vDesk\Struct\Collections\Observable\Collection;
