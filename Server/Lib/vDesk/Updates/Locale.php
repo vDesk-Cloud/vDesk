@@ -26,6 +26,7 @@ class Locale extends Update {
      * The description of the Update.
      */
     public const Description = <<<Description
+- Fixed Bugg with usage of deprecated LocaleDictionary property. 
 Description;
     
     /**
