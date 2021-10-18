@@ -81,7 +81,6 @@ final class Security extends Module {
         );
 
         //Check if the password is correct.
-        //@todo Consider hashing the password once on the client and a second time on the server to prevent MITM attacks?
         if(!\password_verify($Password ?? Command::$Parameters["Password"], $Row["Password"])) {
             $User->FailedLoginCount++;
             //Check if the User reached the maximum amount of failed login attempts.
@@ -124,7 +123,7 @@ final class Security extends Module {
      *
      * @param null|string $Ticket The ticket of the user to login.
      *
-     * @return \vDesk\Security\User The logged in User.
+     * @return \vDesk\Security\User The logged-in User.
      * @throws \vDesk\Security\UnauthorizedAccessException
      */
     public static function ReLogin(string $Ticket = null): User {
@@ -159,7 +158,7 @@ final class Security extends Module {
     /**
      * Determines whether a ticket is valid.
      *
-     * @param string|null $Ticket
+     * @param string|null $Ticket The ticket to validate.
      *
      * @throws \vDesk\Security\TicketExpiredException Thrown if the ticket exceeded its lifetime.
      */
@@ -183,7 +182,7 @@ final class Security extends Module {
                   ->Where(["Ticket" => $Ticket])
                   ->Execute();
 
-        \vDesk::$User = User::FromTicket($Ticket);
+        User::$Current = \vDesk::$User ??= User::FromTicket($Ticket);
     }
 
     /**
@@ -200,8 +199,8 @@ final class Security extends Module {
         if($View ?? Command::$Parameters["View"]) {
             return UsersView::All();
         }
-        if(!\vDesk::$User->Permissions["UpdateUser"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to view Users without having permissions.");
+        if(!User::$Current->Permissions["UpdateUser"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to view Users without having permissions.");
             throw new UnauthorizedAccessException();
         }
         return Users::All();
@@ -220,8 +219,8 @@ final class Security extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to create new Users.
      */
     public static function CreateUser(string $Name = null, string $Locale = null, string $Password = null, string $Email = null, bool $Active = null): User {
-        if(!\vDesk::$User->Permissions["CreateUser"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to create a new User without having permissions.");
+        if(!User::$Current->Permissions["CreateUser"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to create a new User without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $User = new User(
@@ -254,16 +253,16 @@ final class Security extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Users.
      */
     public static function UpdateUser(
-        int $ID = null,
+        int    $ID = null,
         string $Name = null,
         string $Locale = null,
         string $Password = null,
         string $Email = null,
-        bool $Active = null,
-        int $FailedLoginCount = null
+        bool   $Active = null,
+        int    $FailedLoginCount = null
     ): User {
-        if(!\vDesk::$User->Permissions["UpdateUser"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to update an User without having permissions.");
+        if(!User::$Current->Permissions["UpdateUser"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to update an User without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $ID                     ??= Command::$Parameters["ID"];
@@ -297,8 +296,8 @@ final class Security extends Module {
      * @todo Rename to "UpdateGroups"?
      */
     public static function SetMemberships(int $ID = null, array $Add = null, array $Delete = null): User {
-        if(!\vDesk::$User->Permissions["UpdateUser"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to set Group memberships without having permissions.");
+        if(!User::$Current->Permissions["UpdateUser"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to set Group memberships without having permissions.");
             throw new UnauthorizedAccessException();
         }
 
@@ -330,7 +329,7 @@ final class Security extends Module {
      * @return \vDesk\Security\User The updated User.
      */
     public static function ResetPassword(string $Old = null, string $New = null): User {
-        $User = self::Login(\vDesk::$User->Name, $Old ?? Command::$Parameters["Old"]);
+        $User = self::Login(User::$Current->Name, $Old ?? Command::$Parameters["Old"]);
         Expression::Update("Security.Users")
                   ->Set(["Password" => \password_hash($New ?? Command::$Parameters["New"], \PASSWORD_DEFAULT)])
                   ->Where(["ID" => $User->ID])
@@ -346,9 +345,9 @@ final class Security extends Module {
      * @return \vDesk\Security\User The updated User.
      */
     public static function UpdateEmail(string $Email = null): User {
-        \vDesk::$User->Email = $Email ?? Command::$Parameters["Email"];
-        \vDesk::$User->Save();
-        return \vDesk::$User;
+        User::$Current->Email = $Email ?? Command::$Parameters["Email"];
+        User::$Current->Save();
+        return User::$Current;
     }
 
     /**
@@ -359,9 +358,9 @@ final class Security extends Module {
      * @return \vDesk\Security\User The updated User.
      */
     public static function UpdateLocale(string $Locale = null): User {
-        \vDesk::$User->Locale = $Locale ?? Command::$Parameters["Locale"];
-        \vDesk::$User->Save();
-        return \vDesk::$User;
+        User::$Current->Locale = $Locale ?? Command::$Parameters["Locale"];
+        User::$Current->Save();
+        return User::$Current;
     }
 
     /**
@@ -373,13 +372,13 @@ final class Security extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to delete Users.
      */
     public static function DeleteUser(int $ID = null): bool {
-        if(!\vDesk::$User->Permissions["DeleteUser"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to delete an User without having permissions.");
+        if(!User::$Current->Permissions["DeleteUser"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to delete an User without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $User = new User($ID ?? Command::$Parameters["ID"]);
         if($User->ID === User::System) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to delete the system User.");
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to delete the system User.");
             throw new UnauthorizedAccessException();
         }
         $User->Delete();
@@ -402,8 +401,8 @@ final class Security extends Module {
         if($View ?? Command::$Parameters["View"]) {
             return GroupsView::FetchAll();
         }
-        if(!\vDesk::$User->Permissions["UpdateGroup"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to view Groups without having permissions.");
+        if(!User::$Current->Permissions["UpdateGroup"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to view Groups without having permissions.");
             throw new UnauthorizedAccessException();
         }
         return Groups::FetchAll();
@@ -419,8 +418,8 @@ final class Security extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to create new Groups.
      */
     public static function CreateGroup(string $Name = null, array $Permissions = null): Group {
-        if(!\vDesk::$User->Permissions["CreateGroup"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to create a new Group without having permissions.");
+        if(!User::$Current->Permissions["CreateGroup"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to create a new Group without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Group = new Group(
@@ -444,8 +443,8 @@ final class Security extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Groups.
      */
     public static function UpdateGroup(int $ID = null, string $Name = null, array $Permissions = null): Group {
-        if(!\vDesk::$User->Permissions["UpdateGroup"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to update a Group without having permissions.");
+        if(!User::$Current->Permissions["UpdateGroup"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to update a Group without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Group       = (new Group($ID ?? Command::$Parameters["ID"]))->Fill();
@@ -467,8 +466,8 @@ final class Security extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Groups.
      */
     public static function CreatePermission(string $Name = null, bool $Default = null): bool {
-        if(!\vDesk::$User->Permissions["UpdateGroup"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to create a Group Permission without having permissions.");
+        if(!User::$Current->Permissions["UpdateGroup"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to create a Group Permission without having permissions.");
             throw new UnauthorizedAccessException();
         }
         Expression::Alter()
@@ -487,8 +486,8 @@ final class Security extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Groups.
      */
     public static function DeletePermission(string $Name = null): bool {
-        if(!\vDesk::$User->Permissions["UpdateGroup"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to create a Group Permission without having permissions.");
+        if(!User::$Current->Permissions["UpdateGroup"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to create a Group Permission without having permissions.");
             throw new UnauthorizedAccessException();
         }
         Expression::Alter()
@@ -507,8 +506,8 @@ final class Security extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to delete Groups.
      */
     public static function DeleteGroup(int $ID = null): bool {
-        if(!\vDesk::$User->Permissions["DeleteGroup"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to delete a Group without having permissions.");
+        if(!User::$Current->Permissions["DeleteGroup"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to delete a Group without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Group = new Group($ID ?? Command::$Parameters["ID"]);
@@ -527,9 +526,9 @@ final class Security extends Module {
      *                                                     read permissions on the AccessControlList to get.
      */
     public static function GetAccessControlList(int $ID = null): AccessControlList {
-        $AccessControlList = (new AccessControlList([], $ID ?? Command::$Parameters["ID"]))->Fill(\vDesk::$User);
-        if(!\vDesk::$User->Permissions["ReadAccessControlList"] || !$AccessControlList->Read) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to view AccessControlList without having permissions.");
+        $AccessControlList = (new AccessControlList([], $ID ?? Command::$Parameters["ID"]))->Fill(User::$Current);
+        if(!User::$Current->Permissions["ReadAccessControlList"] || !$AccessControlList->Read) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to view AccessControlList without having permissions.");
             throw new UnauthorizedAccessException();
         }
         return $AccessControlList;
@@ -549,9 +548,9 @@ final class Security extends Module {
      *                                                     write permissions on the AccessControlList to update.
      */
     public static function UpdateAccessControlList(int $ID = null, array $Add = null, array $Update = null, array $Delete = null): AccessControlList {
-        $AccessControlList = (new AccessControlList([], $ID ?? Command::$Parameters["ID"]))->Fill(\vDesk::$User);
-        if(!\vDesk::$User->Permissions["UpdateAccessControlList"] || !$AccessControlList->Write) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to update AccessControlList with without having permissions.");
+        $AccessControlList = (new AccessControlList([], $ID ?? Command::$Parameters["ID"]))->Fill(User::$Current);
+        if(!User::$Current->Permissions["UpdateAccessControlList"] || !$AccessControlList->Write) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to update AccessControlList with without having permissions.");
             throw new UnauthorizedAccessException();
         }
 
