@@ -25,7 +25,7 @@ final class MetaInformation extends Update {
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to vDesk-1.0.0.
+- Added compatibility to DataProvider-1.0.0.
 Description;
     
     /**
