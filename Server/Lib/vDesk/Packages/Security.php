@@ -47,7 +47,7 @@ final class Security extends Package implements IPackage {
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "vDesk"         => "1.1.0",
+        "vDesk"         => "1.0.0",
         "Configuration" => "1.0.0",
         "Events"        => "1.0.0"
     ];
