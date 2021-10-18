@@ -40,6 +40,6 @@ class Parameters extends Dictionary {
             return parent::offsetGet($Key);
         }
         $this->Add($Key, $this->Provider->ParseCommand($Key) ?? $this->Provider->ParseParameter($Key));
-        return $this->offsetGet($Key);
+        return parent::offsetGet($Key);
     }
 }

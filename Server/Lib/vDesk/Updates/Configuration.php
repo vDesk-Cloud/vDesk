@@ -6,60 +6,55 @@ namespace vDesk\Updates;
 use vDesk\Packages\Package;
 
 /**
- * Pages Update manifest class.
+ * Configuration Update manifest class.
  *
- * @package vDesk\Pages
+ * @package vDesk\Configuration
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-final class Pages extends Update {
-    
+final class Configuration extends Update {
+
     /**
      * The Package of the Update.
      */
-    public const Package = \vDesk\Packages\Pages::class;
-    
+    public const Package = \vDesk\Packages\Configuration::class;
+
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.1.0";
-    
+    public const RequiredVersion = "1.0.0";
+
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added support for cookie based user sessions.
-- Fixed possible memory leak while fetching parameters.
+- Fixed wrong serialization of boolean values.
 Description;
-    
+
     /**
-     * The files and directories of the Update.
+     * The files of the Update.
      */
     public const Files = [
-        self::Deploy   => [
+        Update::Deploy   => [
             Package::Server => [
                 Package::Lib => [
-                    "Pages.php",
-                    "vDesk/Pages/Request.php",
-                    "vDesk/Pages/Request/Parameters.php"
+                    "vDesk/Configuration/Settings/Local/Settings.php"
                 ]
             ]
         ],
-        self::Undeploy => [
+        Update::Undeploy => [
             Package::Server => [
                 Package::Lib => [
-                    "Pages.php",
-                    "vDesk/Pages/Request.php",
-                    "vDesk/Pages/Request/Parameters.php"
+                    "vDesk/Configuration/Settings/Local/Settings.php"
                 ]
             ]
         ]
     ];
-    
+
     /**
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
-        self::Uneploy();
+        self::Undeploy();
         self::Deploy($Phar, $Path);
     }
 }

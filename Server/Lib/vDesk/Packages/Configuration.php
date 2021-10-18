@@ -17,7 +17,7 @@ use vDesk\Struct\Collections\Observable\Collection;
 /**
  * Configuration Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Configuration
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Configuration extends Package implements IPackage {
@@ -30,7 +30,7 @@ final class Configuration extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
+    public const Version = "1.0.1";
     
     /**
      * The name of the Package.
