@@ -15,9 +15,9 @@ use vDesk\Struct\Guid;
 use vDesk\Utils\Log;
 
 /**
- * Class Events represents ...
+ * Events Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Events
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Events extends Package implements IPackage {

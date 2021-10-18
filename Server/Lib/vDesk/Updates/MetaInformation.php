@@ -19,19 +19,19 @@ final class MetaInformation extends Update {
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.1";
+    public const RequiredVersion = "1.0.2";
     
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Fixed deletion of wrong database.
+- Added compatibility to vDesk-1.0.0.
 Description;
     
     /**
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
-        //Do nothing.
+        //Just update Package manifest.
     }
 }

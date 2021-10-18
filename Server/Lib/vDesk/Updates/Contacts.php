@@ -28,8 +28,10 @@ final class Contacts extends Update {
 - Added compatibility to vDesk-1.0.0.
 Description;
 
+    /**
+     * @inheritDoc
+     */
     public static function Install(\Phar $Phar, string $Path): void {
-        self::Undeploy();
-        self::Deploy($Phar, $Path);
+        //Just update Package manifest.
     }
 }

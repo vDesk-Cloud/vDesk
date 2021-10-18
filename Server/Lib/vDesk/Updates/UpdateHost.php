@@ -4,22 +4,22 @@ declare(strict_types=1);
 namespace vDesk\Updates;
 
 /**
- * Configuration Update manifest class.
+ * UpdateHost Update manifest class.
  *
- * @package vDesk\Configuration
+ * @package vDesk\Updates
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-final class Configuration extends Update {
+class UpdateHost extends Update {
 
     /**
-     * The Package of the Update.
+     * The class name of the Package of the Update.
      */
-    public const Package = \vDesk\Packages\Configuration::class;
+    public const Package = \vDesk\Packages\UpdateHost::class;
 
     /**
-     * The required version of the Update.
+     * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.1";
+    public const RequiredVersion = "1.0.0";
 
     /**
      * The description of the Update.

@@ -16,7 +16,7 @@ use vDesk\Struct\Collections\Observable\Collection;
 /**
  * Calendar Package manifest class.
  *
- * @package vDesk\Packages
+ * @package vDesk\Calendar
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Calendar extends Package implements Locale\IPackage, Events\IPackage {

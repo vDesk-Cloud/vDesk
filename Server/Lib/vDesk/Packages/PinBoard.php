@@ -8,15 +8,14 @@ use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
 use vDesk\Locale;
 use vDesk\Events;
-
 use vDesk\Modules\Module\Command;
 use vDesk\Modules\Module\Command\Parameter;
 use vDesk\Struct\Collections\Observable\Collection;
 
 /**
- * Class PinBoard represents ...
+ * PinBoard Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\PinBoard
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class PinBoard extends Package implements Locale\IPackage, Events\IPackage {
@@ -29,7 +28,7 @@ final class PinBoard extends Package implements Locale\IPackage, Events\IPackage
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
+    public const Version = "1.0.1";
     
     /**
      * The name of the Package.

@@ -16,9 +16,9 @@ use vDesk\Struct\Collections\Observable\Collection;
 use vDesk\Struct\Extension;
 
 /**
- * UpdateServer Package manifest.
+ * UpdateHost Package manifest class.
  *
- * @package vDesk\Packages
+ * @package vDesk\Updates
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class UpdateHost extends Package implements IPackage {
@@ -31,7 +31,7 @@ final class UpdateHost extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
+    public const Version = "1.0.1";
     
     /**
      * The name of the Package.

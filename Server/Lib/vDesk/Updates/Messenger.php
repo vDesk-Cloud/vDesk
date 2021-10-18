@@ -4,23 +4,23 @@ declare(strict_types=1);
 namespace vDesk\Updates;
 
 /**
- * Configuration Update manifest class.
+ * Messenger Update manifest.
  *
- * @package vDesk\Configuration
+ * @package vDesk\Messenger
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-final class Configuration extends Update {
-
+final class Messenger extends Update {
+    
     /**
      * The Package of the Update.
      */
-    public const Package = \vDesk\Packages\Configuration::class;
-
+    public const Package = \vDesk\Packages\Messenger::class;
+    
     /**
      * The required version of the Update.
      */
     public const RequiredVersion = "1.0.1";
-
+    
     /**
      * The description of the Update.
      */

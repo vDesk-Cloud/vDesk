@@ -28,30 +28,11 @@ class Locale extends Update {
     public const Description = <<<Description
 - Added compatibility to vDesk-1.0.0.
 Description;
-    
-    /**
-     * The files and directories of the Update.
-     */
-    public const Files = [
-        self::Deploy   => [
-            Package::Server => [
-                Package::Lib => [
-                ]
-            ]
-        ],
-        self::Undeploy => [
-            Package::Server => [
-                Package::Lib => [
-                ]
-            ]
-        ]
-    ];
-    
+
     /**
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
-        self::Undeploy();
-        self::Deploy($Phar, $Path);
+        //Just update Package manifest.
     }
 }

@@ -25,7 +25,7 @@ use vDesk\Utils\Log;
 /**
  * Archive Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Archive
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Archive extends Package implements Locale\IPackage, Events\IPackage {

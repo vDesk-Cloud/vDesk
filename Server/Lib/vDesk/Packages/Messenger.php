@@ -7,15 +7,14 @@ use vDesk\DataProvider\Expression;
 use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
 use vDesk\Locale\IPackage;
-
 use vDesk\Modules\Module\Command;
 use vDesk\Modules\Module\Command\Parameter;
 use vDesk\Struct\Collections\Observable\Collection;
 
 /**
- * Class Messenger represents ...
+ * Messenger Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Messenger
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Messenger extends Package implements IPackage {

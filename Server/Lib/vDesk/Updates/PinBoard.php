@@ -4,30 +4,30 @@ declare(strict_types=1);
 namespace vDesk\Updates;
 
 /**
- * Configuration Update manifest class.
+ * PinBoard Update manifest class.
  *
- * @package vDesk\Configuration
+ * @package vDesk\PinBoard
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-final class Configuration extends Update {
-
+final class PinBoard extends Update {
+    
     /**
      * The Package of the Update.
      */
-    public const Package = \vDesk\Packages\Configuration::class;
-
+    public const Package = \vDesk\Packages\PinBoard::class;
+    
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.1";
-
+    public const RequiredVersion = "1.0.0";
+    
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
 - Added compatibility to vDesk-1.0.0.
 Description;
-
+    
     /**
      * @inheritDoc
      */

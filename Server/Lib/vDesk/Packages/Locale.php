@@ -11,9 +11,9 @@ use vDesk\Modules\Module\Command\Parameter;
 use vDesk\Struct\Collections\Observable\Collection;
 
 /**
- * Class Locale represents ...
+ * Locale Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Locale
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Locale extends Package {
