@@ -28,6 +28,7 @@ final class Machines extends Update {
      */
     public const Description = <<<Description
 - Fixed auto loading of Machines.
+- Added logging of crashed Machines.
 Description;
     
     /**
