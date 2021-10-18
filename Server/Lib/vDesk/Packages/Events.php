@@ -10,7 +10,6 @@ use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
 use vDesk\Locale\IPackage;
 use vDesk\Modules\Module\Command;
-
 use vDesk\Security\AccessControlList;
 use vDesk\Struct\Guid;
 use vDesk\Utils\Log;
@@ -31,7 +30,7 @@ final class Events extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
+    public const Version = "1.0.1";
     
     /**
      * The name of the Package.
@@ -46,7 +45,7 @@ final class Events extends Package implements IPackage {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Modules" => "1.0.0", "Configuration" => "1.0.0"];
+    public const Dependencies = ["Modules" => "1.0.1", "Configuration" => "1.0.0"];
     
     /**
      * The files and directories of the Package.

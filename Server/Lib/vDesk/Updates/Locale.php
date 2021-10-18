@@ -20,13 +20,13 @@ class Locale extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.0";
+    public const RequiredVersion = "1.0.1";
     
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Fixed Bugg with usage of deprecated LocaleDictionary property. 
+- Added compatibility to vDesk-1.0.0.
 Description;
     
     /**

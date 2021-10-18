@@ -26,7 +26,7 @@ final class Locale extends Package {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.0.2";
 
     /**
      * The name of the Package.
@@ -41,10 +41,7 @@ final class Locale extends Package {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = [
-        "vDesk"   => "1.0.0",
-        "Modules" => "1.0.0"
-    ];
+    public const Dependencies = ["Modules" => "1.0.1"];
 
     /**
      * The files and directories of the Package.
