@@ -6,9 +6,9 @@ namespace vDesk\Updates;
 use vDesk\Packages\Package;
 
 /**
- * Homepage Update manifest.
+ * Machines Update manifest.
  *
- * @package Homepage
+ * @package vDesk\Machines
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Machines extends Update {
