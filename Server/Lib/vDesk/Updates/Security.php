@@ -19,7 +19,7 @@ class Security extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.1";
+    public const RequiredVersion = "1.0.2";
 
     /**
      * The description of the Update.

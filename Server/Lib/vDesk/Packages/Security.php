@@ -592,7 +592,7 @@ final class Security extends Package implements IPackage {
             new User\Groups([$Everyone, $Administration])
         );
         $User->Save();
-        \vDesk::$User = $User;
+        User::$Current = \vDesk::$User = $User;
 
         Settings::$Remote["Security"] = new Settings\Remote\Settings(
             [
