@@ -31,7 +31,7 @@ final class Security extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.0.2";
 
     /**
      * The name of the Package.
@@ -592,7 +592,7 @@ final class Security extends Package implements IPackage {
             new User\Groups([$Everyone, $Administration])
         );
         $User->Save();
-        \vDesk::$User = $User;
+        User::$Current = \vDesk::$User = $User;
 
         Settings::$Remote["Security"] = new Settings\Remote\Settings(
             [

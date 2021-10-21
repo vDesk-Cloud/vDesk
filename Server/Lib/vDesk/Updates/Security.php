@@ -21,15 +21,13 @@ class Security extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.0";
+    public const RequiredVersion = "1.0.1";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added option for logging out specific Users.
-- Added support for preserving the current logged in User while performing multiple logins.
-- Changed update of session timestamps to \Datetime objects instead of SQL functions.
+- Fixed bugg with missing User instance while installation.
 Description;
 
     /**
@@ -38,9 +36,6 @@ Description;
     public const Files = [
         self::Deploy   => [
             Package::Server => [
-                Package::Modules => [
-                    "Security.php"
-                ],
                 Package::Lib => [
                     "vDesk/Security/User.php"
                 ]
@@ -48,9 +43,6 @@ Description;
         ],
         self::Undeploy => [
             Package::Server => [
-                Package::Modules => [
-                    "Security.php"
-                ],
                 Package::Lib     => [
                     "vDesk/Security/User.php"
                 ]
