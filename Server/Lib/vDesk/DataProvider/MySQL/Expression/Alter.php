@@ -112,7 +112,7 @@ class Alter extends DataProvider\AnsiSQL\Expression\Alter {
         if($this->Database) {
             return new DataProvider\Result(true);
         }
-        return DataProvider::Execute($this->Statement, $Buffered);
+        return DataProvider::Execute((string)$this, $Buffered);
     }
 
 }
