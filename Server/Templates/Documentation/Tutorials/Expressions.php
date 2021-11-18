@@ -11,9 +11,9 @@ use vDesk\Documentation\Code;
         <ul class="Topics">
             <li>
                 <a href="#Expressions">Expressions</a>
-                <a href="#Comparison">Comparison between different DataProviders</a>
                 <ul class="Topics">
-                    <li><a href="#Resultsets">Resultsets</a></li>
+                    <li><a href="#Comparison">Comparison between different DataProviders</a></li>
+                    <li><a href="#Resultsets">Result sets</a></li>
                 </ul>
             </li>
             <li>
@@ -93,44 +93,60 @@ use vDesk\Documentation\Code;
             vDesk ships with a library that provides an "expressive" way of working with databases.
         </p>
         <p>
-            Expressions are early evaluated fluent interfaces which care about proper value escaping and building SQL statements compatible to the current configured database.
-
+            Expressions are early evaluated fluent interfaces which aim to provide a transformation of the usual well known SQL syntax into an unified injection-safe PHP-API
+            that cares about proper value escaping and building SQL statements compatible to the current configured database.<br>
         </p>
+        <p>
+            To reduce the required effort of writing code, the Expression library provides a global <code class="Inline">\vDesk\DataProvider\<?= Code::Class("Expression") ?></code>-factory, that creates specific Expression-instances according the current configured DataProvider.<br>
+        </p>
+        <aside class="Note">
+            <h4>Note</h4>
+            <p>
+                Independent of the specific implementation, any Expression instance will use the escaping methods of the current DataProvider-instance.<br>
+                For subsequent calls to different target RDMS, the global DataProvider interface has to be manually re-initialized via invoking it's constructor before executing the Expression.
+            </p>
+        </aside>
     </section>
     <section id="Comparison">
         <h4>Comparison between different DataProviders</h4>
         <p>
             While simple CRUD-operations don't differ between all major SQL databases, except for MySQL's lack of full outer joins, <br>
-            the most problematic thing to conquer was how each RDBMS handles creation and alternation of databases/schemas and tables.
+            the most problematic thing to conquer was how each RDBMS handles creation and alternation of databases/schemas, tables and columns.
         </p>
         <h5>Full outer join</h5>
         <p>
-            The MySQL Provider will fall back to a union select between a left- and a right join.
+            The MySQL provider will fall back to a union select between a left- and a right join.
         </p>
         <h5>Autoincrement columns</h5>
         <p>
             The system has been initially developed on a MySQL server, using null values for generating IDs and columns with default values.<br>
-            The PgSQL and MsSQL Providers currently assumes the first field identifier as an identity column if it's name ends with an "ID" suffix.
+            The PgSQL and MsSQL providers currently assumes the first field identifier as an identity column if it's name ends with an "ID" suffix.
+        </p>
+        <p>
+            In case of the PgSQL provider, null-values will be replaced with "DEFAULT", while the MsSQL provider will omit the column entirely.
         </p>
         <h5>Default values</h5>
         <p>
-            The escaping methods of the PgSQL and MsSQL Providers currently ignore any strings containing the value "DEFAULT". <br>
-            Until the system isn't completely aware of default values, the MySQL Provider relies on null values instead.
+            The escaping methods of the PgSQL and MsSQL providers currently ignore any strings containing the value "DEFAULT". <br>
+            Until the system isn't completely aware of default values, the MySQL provider relies on null values instead.
+        </p>
+        <h5>Schemas</h5>
+        <p>
+            As of MySQL's lack of schema support, the according provider will invalidate any database creation or modification attempts while providing the desired functionality through the schema related methods to keep compatibility to different providers.<br>
+            The MsSQL provider currently doesn't support renaming of schemas - this would require querying the master database and copying over the schema-objects to a new schema while dropping the old one afterwards.
         </p>
         <h5>Tables</h5>
         <p>
-            While the MySQL version of the "CREATE/ALTER TABLE" statement is rather a simple enumeration of sub-statements, <br>
-            Postgres and SQL Server requires a bit more workarounds to achieve the same syntax.
-            The PgSQL Provider will append
-        </p>
-        <p>
-            Expressions are early evaluated fluent interfaces which care about proper value escaping and building SQL statements compatible to the current configured database.
+            While the MySQL version of the "CREATE/ALTER TABLE" statement is rather a simple enumeration of sub-statements,
+            Postgres and SQL servers require a bit more workarounds to achieve the same syntax.<br>
+            The PgSQL and MsSQL providers will append any index creation or modification in a separate list of SQL statements to the final Expression while dropped indices will get prepended.<br>
+            Updating tables using the MsSQL provider will result in a whole list of separate SQL statements for each modification.
         </p>
     </section>
     <section id="Resultsets">
-        <h4>Resultsets</h4>
+        <h4>Result sets</h4>
         <p>
-            To execute an Expression and retrieve its result set, an Expression has to be finished with a call to the <code
+            To execute an Expression and retrieve it's result set, an Expression has to be finished with a call to the <code
                     class="Inline">\vDesk\DataProvider\<?= Code::Class("IExpression") ?>::<?= Code::Function("Execute") ?>()</code>-method in its call-chain.
         </p>
         <p>
@@ -864,18 +880,26 @@ use vDesk\Documentation\Code;
             which creates a new instance of the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("IAlter") ?></code>-Expression according the current configured
             DataProvider.
         </p>
+        <p>
+            Alternation of databases and schemas is limited to renaming.
+        </p>
     </section>
     <section id="AlterDatabase">
         <h4>Database</h4>
         <div style="display: flex; justify-content: space-around;">
 <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
 <?= Code::Class("Expression") ?>::<?= Code::Function("Alter") ?>()
--><?= Code::Function("Database") ?>(<?= Code::String("\"Messenger\"") ?>)<?= Code::Delimiter ?>
+-><?= Code::Function("Database") ?>(<?= Code::String("\"vDesk\"") ?>)
+-><?= Code::Function("Rename") ?>(<?= Code::String("\"Newname\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
             <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("CREATE") ?> <?= Code::Keyword("SCHEMA") ?>
+<?= Code::Keyword("ALTER DATABASE") ?>
 
-    <?= Code::Class("Messenger") ?><?= Code::Delimiter ?>
+    <?= Code::Class("vDesk") ?>
+
+<?= Code::Keyword("RENAME TO") ?>
+
+    <?= Code::Class("Newname") ?><?= Code::Delimiter ?>
 </code></pre>
         </div>
     </section>
@@ -894,7 +918,7 @@ use vDesk\Documentation\Code;
 
 <?= Code::Keyword("RENAME TO") ?>
 
-    <?= Code::Class("Messenger") ?><?= Code::Delimiter ?>
+    <?= Code::Class("Newname") ?><?= Code::Delimiter ?>
 </code></pre>
         </div>
         <aside class="Note">
