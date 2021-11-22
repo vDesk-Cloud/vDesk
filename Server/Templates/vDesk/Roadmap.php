@@ -13,17 +13,15 @@ use vDesk\Pages\Functions;
     <hr>
     <h3>General features</h3>
     <ul>
-        <li>Workflowengine with drag&drop editor</li>
+        <li>Workflow engine with drag&drop editor</li>
         <li>Mobile client</li>
         <li>Version control package</li>
         <li>Graphical installer</li>
-        <li>PostgreSQL-, MSSQL- and Oracle-database support</li>
         <li>Process-based execution without the need of a webserver and clustered hosting of modules</li>
-        <li>Template system</li>
+        <li>Template engine</li>
         <li>Custom dialog boxes</li>
         <li>E-Mail client package</li>
         <li>Backup package</li>
-        <li>Move DataProvider into separate package</li>
         <li>Move client into separate package</li>
         <li>Unit test package</li>
     </ul>
@@ -54,7 +52,7 @@ use vDesk\Pages\Functions;
     <ul>
         <li>Coordinate system that translates the position of pinboard elements according the screen resolution</li>
         <li>API for attachable custom elements</li>
-        <li>Formatting notes with basic HTML (lists, checkboxes, ...)</li>
+        <li>Formatting notes with basic HTML (lists, checkboxes, text, ...)</li>
     </ul>
     <hr>
     <h3 id="Calendar">Calendar</h3>
@@ -108,6 +106,13 @@ use vDesk\Pages\Functions;
         <li>Downloading updates via https</li>
     </ul>
     <hr>
+    <h3 id="DataProvider">DataProvider</h3>
+    Adding support for:
+    <ul>
+        <li>DB2</li>
+        <li>OracleDB</li>
+    </ul>
+    <hr>
     <h3 id="Events">Events</h3>
     <ul>
         <li>Configurable storage of eventlisteners in separate directory to remove the Archive package as a hard dependency</li>
@@ -120,15 +125,8 @@ use vDesk\Pages\Functions;
         <li>Process based hosting of modules</li>
     </ul>
     <hr>
-    <h3 id="Pages">Pages</h3>
-    <ul>
-        <li>Store authentication ticket in PHP's session</li>
-        <li>Implement cache of composed Pages</li>
-    </ul>
-    <hr>
     <h3 id="Homepage">Homepage</h3>
     <ul>
         <li>Implement changelog</li>
-        <li>Implement media queries for mobile devices</li>
     </ul>
 </section>

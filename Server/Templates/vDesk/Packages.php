@@ -28,6 +28,7 @@
             <li><a href="#Updates">Updates</a></li>
             <li><a href="#Events">Events</a></li>
             <li><a href="#Modules">Modules</a></li>
+            <li><a href="#DataProvider">DataProvider</a></li>
             <li><a href="#vDesk">vDesk</a></li>
         </ul>
         <ul class="Packages Optional">
@@ -524,6 +525,22 @@
             <header>
                 <h3>Modules</h3>
                 <p>The Modules core package provides a module system and input parameter validation.</p>
+                <h4>License</h4>
+                <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
+                <h4>Dependencies</h4>
+                <ul class="Dependencies">
+                    <li><a href="#DataProvider">DataProvider</a></li>
+                </ul>
+                <h4>Requirements</h4>
+                <ul class="Requirements">
+                    <li><span title="Required" class="Required">⚠</span> Separate database</li>
+                </ul>
+            </header>
+        </article>
+        <article class="Package" id="DataProvider">
+            <header>
+                <h3>DataProvider</h3>
+                <p>The DataProvider core package provides an abstract injection safe database access layer for MySQL, Microsoft SQL Server and PostgreSQL.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
