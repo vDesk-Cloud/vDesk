@@ -103,7 +103,7 @@ use vDesk\Documentation\Code;
             <h4>Note</h4>
             <p>
                 Independent of the specific implementation, any Expression instance will use the escaping methods of the current DataProvider-instance.<br>
-                For subsequent calls to different target RDMS, the global DataProvider interface has to be manually re-initialized via invoking it's constructor before executing the Expression.
+                For subsequent calls to different target RDBMS, the global DataProvider interface has to be manually re-initialized via invoking it's constructor before executing the Expression.
             </p>
         </aside>
     </section>
@@ -508,14 +508,7 @@ use vDesk\Documentation\Code;
             <h4>Note</h4>
             <p>
                 Calling <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("FullJoin") ?>()</code> while using the MySQL DataProvider<br>
-                will cause a fallback to a Calling <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("Union") ?>()</code>-select between a Calling <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("LeftJoin") ?>()</code> and Calling <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("RightJoin") ?>()</code>
-                Calling <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("FullJoin") ?>()</code>
-            </p>
-            <p>
-                To create a database, use the <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("FullJoin") ?>()</code>-method instead.
-            </p>
-            <p>
-                These rules apply to the syntax described in the <a href="#DropSchema">Deleting schemas</a> and <a href="#DropSchema">updating schemas</a>-sections.
+                will cause a fallback to a <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("Union") ?>()</code>-select between a <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("LeftJoin") ?>()</code> and a <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("RightJoin") ?>()</code>.
             </p>
         </aside>
     </section>
