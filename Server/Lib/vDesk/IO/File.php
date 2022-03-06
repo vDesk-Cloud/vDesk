@@ -272,7 +272,6 @@ final class File {
         foreach($Lines as $Line) {
             $FileStream->Write($Line . \PHP_EOL);
         }
-        $FileStream->Close();
     }
 
 }

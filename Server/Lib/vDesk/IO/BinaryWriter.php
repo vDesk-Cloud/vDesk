@@ -271,7 +271,6 @@ class BinaryWriter {
      *
      */
     public function __destruct() {
-        $this->Close();
     }
 
     /**

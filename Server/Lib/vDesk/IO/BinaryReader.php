@@ -425,7 +425,6 @@ class BinaryReader {
      * Closes the current BinaryReader and the underlying Stream.
      */
     public function Close(): void {
-        $this->Stream->Close();
     }
 
     /**

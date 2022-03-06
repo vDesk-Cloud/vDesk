@@ -20,7 +20,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
     /**
      * The elements of the Queue.
      *
-     * @var mixed[]
+     * @var array
      */
     protected array $Elements = [];
 
@@ -63,9 +63,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
         return empty($this->Elements) ? null : \reset($this->Elements);
     }
 
-    /**
-     * Removes all elements from the Queue.
-     */
+    /** @inheritDoc */
     public function Clear(): void {
         \array_splice($this->Elements, 0, \count($this->Elements));
     }
@@ -82,19 +80,13 @@ class Queue implements \IteratorAggregate, IEnumerable {
         }
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Count()
-     */
+    /** @inheritDoc */
     public function Count(): int {
         return \count($this->Elements);
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Filter()
-     */
-    public function Filter(callable $Predicate): IEnumerable {
+    /** @inheritDoc */
+    public function Filter(callable $Predicate): static {
         $Queue = new static();
         foreach($this->Elements as $Index => $Value) {
             if($Predicate($Value, $Index, $this)) {
@@ -104,10 +96,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
         return $Queue;
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Find()
-     */
+    /** @inheritDoc */
     public function Find(callable $Predicate): mixed {
         foreach($this->Elements as $Index => $Value) {
             if($Predicate($Value, $Index, $this)) {
@@ -117,10 +106,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
         return null;
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Every()
-     */
+    /** @inheritDoc */
     public function Every(callable $Predicate): bool {
         foreach($this->Elements as $Index => $Value) {
             if(!$Predicate($Value, $Index, $this)) {
@@ -130,19 +116,15 @@ class Queue implements \IteratorAggregate, IEnumerable {
         return true;
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Sort()
-     */
-    public function Sort(callable $Predicate): bool {
-        return \usort($this->Elements, $Predicate);
+    /** @inheritDoc */
+    public function Sort(callable $Predicate): static {
+        $Sorted = $this->ToArray();
+        \usort($Sorted, $Predicate);
+        return new static($Sorted);
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Map()
-     */
-    public function Map(callable $Predicate): IEnumerable {
+    /** @inheritDoc */
+    public function Map(callable $Predicate): static {
         $Queue = new static();
         foreach($this->Elements as $Index => $Value) {
             $Queue->Enqueue($Predicate($Value, $Index, $this));
@@ -150,10 +132,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
         return $Queue;
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Reduce()
-     */
+    /** @inheritDoc */
     public function Reduce(callable $Predicate, $InitialValue = null): mixed {
         $Accumulator = $InitialValue ?? \reset($this->Elements);
         foreach($this->Elements as $Index => $Value) {
@@ -162,10 +141,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
         return $Accumulator;
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Any()
-     */
+    /** @inheritDoc */
     public function Any(callable $Predicate): bool {
         foreach($this->Elements as $Index => $Value) {
             if($Predicate($Value, $Index, $this)) {

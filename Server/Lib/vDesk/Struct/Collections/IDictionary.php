@@ -57,8 +57,10 @@ interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
      *
      * @param string $Key     The key of the element to replace.
      * @param mixed  $Element The element to replace with the element with the specified key.
+     *
+     * @return mixed The replaced element or null if the element can't be found or replaced.
      */
-    public function ReplaceAt(string $Key, mixed $Element): void;
+    public function ReplaceAt(string $Key, mixed $Element): mixed;
 
     /**
      * Removes the first occurrence of a specific element from the IDictionary.
@@ -92,8 +94,10 @@ interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
      *
      * @param mixed  $Element The element to change the key of.
      * @param string $Key     The new key for the element.
+     *
+     * @return string|null The previous key of the element, if found; otherwise, null.
      */
-    public function ChangeKey(mixed $Element, string $Key): void;
+    public function ChangeKey(mixed $Element, string $Key): ?string;
 
     /**
      * Determines whether an element is in the IDictionary.
@@ -112,11 +116,6 @@ interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
      * @return bool True if an element with the specified key is in the IDictionary, otherwise, false.
      */
     public function ContainsKey(string $Key): bool;
-
-    /**
-     * Removes all elements from the IDictionary.
-     */
-    public function Clear(): void;
 
     /**
      * Merges the elements of another IDictionary into the IDictionary.
