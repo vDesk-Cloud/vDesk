@@ -9,7 +9,6 @@ use vDesk\Struct\Properties;
  * Represents a variable size last-in-first-out (LIFO) collection.
  *
  * @property-read int $Count Gets the amount of elements in the Stack.
- *
  * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
@@ -52,7 +51,7 @@ class Stack implements \IteratorAggregate, IEnumerable {
      * @return mixed The element removed from the top of the Stack; otherwise if the Stack is emtpy, null.
      */
     public function Pop(): mixed {
-        $Value = array_pop($this->Elements);
+        $Value = \array_pop($this->Elements);
         \end($this->Elements);
         return $Value;
     }

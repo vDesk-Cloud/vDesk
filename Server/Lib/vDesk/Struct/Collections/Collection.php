@@ -11,7 +11,6 @@ use vDesk\Struct\Type;
  * Represents a generic iterable list of objects.
  *
  * @property-read int $Count Gets the amount of elements in the Collection.
- *
  * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */

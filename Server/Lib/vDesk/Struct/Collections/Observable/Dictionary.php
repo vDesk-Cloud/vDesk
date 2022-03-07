@@ -12,7 +12,6 @@ use vDesk\Struct\Collections\Typed\CallableCollection;
  * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnDelete $Gets the "OnDelete"-Eventlisteners of the Dictionary.
  * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnChange $Gets the "OnChange"-Eventlisteners of the Dictionary.
  * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnClear  $Gets the "OnClear"-Eventlisteners of the Dictionary.
- *
  * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
@@ -73,10 +72,8 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
         ]);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function Add($Key, mixed $Element): void {
+    /** @inheritdoc */
+    public function Add(string $Key, mixed $Element): void {
         if($this->Dispatching) {
             foreach($this->OnAdd as $OnAdd) {
                 $OnAdd($this, $Element);
@@ -85,10 +82,8 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
         parent::Add($Key, $Element);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function Insert($Before, $Key, mixed $Element): void {
+    /** @inheritdoc */
+    public function Insert(string $Before, string $Key, mixed $Element): void {
         if($this->Dispatching) {
             foreach($this->OnAdd as $OnAdd) {
                 $OnAdd($this, $Element);
@@ -97,10 +92,18 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
         parent::Insert($Before, $Key, $Element);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function Remove($Element): mixed {
+    /** @inheritdoc */
+    public function InsertAfter(string $After, string $Key, mixed $Element): void {
+        if($this->Dispatching) {
+            foreach($this->OnAdd as $OnAdd) {
+                $OnAdd($this, $Element);
+            }
+        }
+        parent::InsertAfter($After, $Key, $Element);
+    }
+
+    /** @inheritdoc */
+    public function Remove(mixed $Element): mixed {
         if($this->Dispatching) {
             foreach($this->OnDelete as $OnDelete) {
                 $OnDelete($this, $Element);
@@ -109,10 +112,8 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
         return parent::Remove($Element);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function RemoveAt($Key): mixed {
+    /** @inheritdoc */
+    public function RemoveAt(string $Key): mixed {
         if($this->Dispatching) {
             $Element = parent::RemoveAt($Key);
             foreach($this->OnDelete as $OnDelete) {
@@ -123,10 +124,8 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
         return parent::RemoveAt($Key);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function Replace($Element, $Replacement): void {
+    /** @inheritdoc */
+    public function Replace(mixed $Element, mixed $Replacement): void {
         if($this->Dispatching) {
             foreach($this->OnChange as $OnChange) {
                 $OnChange($this, $Replacement);
@@ -135,9 +134,17 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
         parent::Replace($Element, $Replacement);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
+    public function ReplaceAt(string $Key, mixed $Element): mixed {
+        if($this->Dispatching) {
+            foreach($this->OnChange as $OnChange) {
+                $OnChange($this, $Element);
+            }
+        }
+        return parent::ReplaceAt($Element, $Element);
+    }
+
+    /** @inheritdoc */
     public function Clear(): void {
         if($this->Dispatching) {
             foreach($this->OnClear as $OnClear) {

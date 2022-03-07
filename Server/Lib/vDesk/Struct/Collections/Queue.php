@@ -9,7 +9,6 @@ use vDesk\Struct\Properties;
  * Represents a variable size first-in-first-out (FIFO) collection.
  *
  * @property-read int $Count Gets the amount of elements in the Queue.
- *
  * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */

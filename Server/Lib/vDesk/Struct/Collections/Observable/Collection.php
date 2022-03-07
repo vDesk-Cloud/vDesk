@@ -12,7 +12,6 @@ use vDesk\Struct\Collections\Typed\CallableCollection;
  * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnDelete $Gets the "OnDelete"-Eventlisteners of the Collection.
  * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnChange $Gets the "OnChange"-Eventlisteners of the Collection.
  * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnClear  $Gets the "OnClear"-Eventlisteners of the Collection.
- *
  * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
@@ -73,9 +72,7 @@ class Collection extends \vDesk\Struct\Collections\Collection {
         ]);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function Add(mixed $Element): void {
         if($this->Dispatching) {
             foreach($this->OnAdd as $OnAdd) {
@@ -85,9 +82,7 @@ class Collection extends \vDesk\Struct\Collections\Collection {
         parent::Add($Element);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function Insert(int $Index, mixed $Element): void {
         if($this->Dispatching) {
             foreach($this->OnAdd as $OnAdd) {
@@ -97,9 +92,7 @@ class Collection extends \vDesk\Struct\Collections\Collection {
         parent::Insert($Index, $Element);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function Remove(mixed $Element): mixed {
         if($this->Dispatching) {
             foreach($this->OnDelete as $OnDelete) {
@@ -109,9 +102,7 @@ class Collection extends \vDesk\Struct\Collections\Collection {
         return parent::Remove($Element);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function RemoveAt(int $Index): mixed {
         if($this->Dispatching) {
             $Element = parent::RemoveAt($Index);
@@ -123,9 +114,7 @@ class Collection extends \vDesk\Struct\Collections\Collection {
         return parent::RemoveAt($Index);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function Replace(mixed $Element, mixed $Replacement): void {
         if($this->Dispatching) {
             foreach($this->OnChange as $OnChange) {
@@ -135,21 +124,17 @@ class Collection extends \vDesk\Struct\Collections\Collection {
         parent::Replace($Element, $Element);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function ReplaceAt(int $Key, mixed $Element): void {
+    /** @inheritdoc */
+    public function ReplaceAt(int $Key, mixed $Element): mixed {
         if($this->Dispatching) {
             foreach($this->OnChange as $OnChange) {
                 $OnChange($this, $Element);
             }
         }
-        parent::Replace($Element, $Element);
+        return parent::ReplaceAt($Element, $Element);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function Clear(): void {
         if($this->Dispatching) {
             foreach($this->OnClear as $OnClear) {

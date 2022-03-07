@@ -12,7 +12,6 @@ use vDesk\Struct\Collections\Typed\CallableCollection;
  * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnDelete $Gets the "OnDelete"-Eventlisteners of the Dictionary.
  * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnChange $Gets the "OnChange"-Eventlisteners of the Dictionary.
  * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnClear  $Gets the "OnClear"-Eventlisteners of the Dictionary.
- *
  * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
@@ -73,9 +72,7 @@ class Dictionary extends \vDesk\Struct\Collections\Typed\Dictionary {
         ]);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function Add(string $Key, mixed $Element): void {
         if($this->Dispatching) {
             foreach($this->OnAdd as $OnAdd) {
@@ -85,9 +82,7 @@ class Dictionary extends \vDesk\Struct\Collections\Typed\Dictionary {
         parent::Add($Key, $Element);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function Insert(string $Before, string $Key, mixed $Element): void {
         if($this->Dispatching) {
             foreach($this->OnAdd as $OnAdd) {
@@ -97,9 +92,7 @@ class Dictionary extends \vDesk\Struct\Collections\Typed\Dictionary {
         parent::Insert($Before, $Key, $Element);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function Remove(mixed $Element): mixed {
         if($this->Dispatching) {
             foreach($this->OnDelete as $OnDelete) {
@@ -109,9 +102,7 @@ class Dictionary extends \vDesk\Struct\Collections\Typed\Dictionary {
         return parent::Remove($Element);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function RemoveAt(string $Key): mixed {
         if($this->Dispatching) {
             $Element = parent::RemoveAt($Key);
@@ -123,9 +114,7 @@ class Dictionary extends \vDesk\Struct\Collections\Typed\Dictionary {
         return parent::RemoveAt($Key);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function Replace($Element, $Replacement): void {
         if($this->Dispatching) {
             foreach($this->OnChange as $OnChange) {
@@ -135,21 +124,17 @@ class Dictionary extends \vDesk\Struct\Collections\Typed\Dictionary {
         parent::Replace($Element, $Replacement);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function ReplaceAt(string $Key, $Element): void {
+    /** @inheritdoc */
+    public function ReplaceAt(string $Key, $Element): mixed {
         if($this->Dispatching) {
             foreach($this->OnChange as $OnChange) {
                 $OnChange($this, $Element);
             }
         }
-        parent::ReplaceAt($Key, $Element);
+       return parent::ReplaceAt($Key, $Element);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function Clear(): void {
         if($this->Dispatching) {
             foreach($this->OnClear as $OnClear) {

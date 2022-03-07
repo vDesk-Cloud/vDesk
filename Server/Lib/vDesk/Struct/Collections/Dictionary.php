@@ -12,7 +12,6 @@ use vDesk\Struct\Properties;
  * @property-read int      $Count  Gets the amount of elements in the Dictionary.
  * @property-read string[] $Keys   Gets all keys of the Dictionary
  * @property-read array    $Values Gets all values of the Dictionary
- *
  * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
