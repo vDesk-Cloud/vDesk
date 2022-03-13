@@ -35,6 +35,11 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
+            Package::Client => [
+                Package::Lib => [
+                    "vDesk/Events/EventDispatcher.js"
+                ]
+            ],
             Package::Server => [
                 Package::Modules => [
                     "EventDispatcher.php"
@@ -42,6 +47,11 @@ Description;
             ]
         ],
         self::Undeploy => [
+            Package::Client => [
+                Package::Lib => [
+                    "vDesk/Events/EventDispatcher.js"
+                ]
+            ],
             Package::Server => [
                 Package::Modules => [
                     "EventDispatcher.php"
