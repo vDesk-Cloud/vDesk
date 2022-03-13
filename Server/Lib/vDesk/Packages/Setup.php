@@ -15,32 +15,32 @@ use vDesk\Struct\Type;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Setup extends Package {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Setup";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
-    
+    public const Version = "1.0.1";
+
     /**
      * The name of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The name of the Package.
      */
     public const Description = "Package providing functionality for creating and installing setups.";
-    
+
     /**
      * The dependencies of the Package.
      */
     public const Dependencies = ["Packages" => "1.0.0"];
-    
+
     /**
      * The files and directories of the Package.
      */
@@ -51,12 +51,12 @@ final class Setup extends Package {
             ]
         ]
     ];
-    
+
     /**
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         //Install Module.
         /** @var \Modules\Setup $Setup */
         $Setup = \vDesk\Modules::Setup();
@@ -76,24 +76,24 @@ final class Setup extends Package {
             )
         );
         $Setup->Save();
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
-        
+
     }
-    
+
     /**
      * @inheritDoc
      */
     public static function Uninstall(string $Path): void {
-        
+
         //Uninstall Module.
         /** @var \Modules\Setup $Setup */
         $Setup = \vDesk\Modules::Setup();
         $Setup->Delete();
-        
+
         //Delete files.
         self::Undeploy();
-        
+
     }
 }
