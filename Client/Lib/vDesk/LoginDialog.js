@@ -152,8 +152,8 @@ vDesk.LoginDialog = function LoginDialog() {
             ),
             Response => {
                 if(Response.Status) {
-                    vDesk.User = vDesk.Security.User.FromDataView(Response.Data);
-                    new vDesk.Events.BubblingEvent("login", {sender: this, user: vDesk.User}).Dispatch(window);
+                    vDesk.Security.User.Current = vDesk.User = vDesk.Security.User.FromDataView(Response.Data);
+                    new vDesk.Events.BubblingEvent("login", {sender: this, user: vDesk.Security.User.Current}).Dispatch(window);
                 }
             }
         );
@@ -169,8 +169,8 @@ vDesk.LoginDialog = function LoginDialog() {
                 {
                     Module:     "Security",
                     Command:    "Logout",
-                    Parameters: {User: vDesk.User.Name},
-                    Ticket:     vDesk.User.Ticket
+                    Parameters: {User: vDesk.Security.User.Current.Name},
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             )
         );
@@ -179,7 +179,7 @@ vDesk.LoginDialog = function LoginDialog() {
         localStorage.removeItem("Password");
         localStorage.removeItem("KeepLoggedIn");
 
-        new vDesk.Events.BubblingEvent("logout", {sender: this, user: vDesk.User}).Dispatch(window);
+        new vDesk.Events.BubblingEvent("logout", {sender: this, user: vDesk.Security.User.Current}).Dispatch(window);
         vDesk.User = {
             ID:          null,
             Name:        "",

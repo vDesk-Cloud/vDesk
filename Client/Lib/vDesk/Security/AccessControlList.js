@@ -25,14 +25,14 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the AccessControlList is enabled.
  * @memberOf vDesk.Security
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.AccessControlList = function AccessControlList(
     ID      = null,
     Entries = [
         vDesk.Security.AccessControlList.Entry.FromUser(),
         vDesk.Security.AccessControlList.Entry.FromGroup(null, false, false, false),
-        vDesk.Security.AccessControlList.Entry.FromUser(vDesk.User)
+        vDesk.Security.AccessControlList.Entry.FromUser(vDesk.Security.User.Current)
     ],
     Read    = true,
     Write   = true,
@@ -157,7 +157,7 @@ vDesk.Security.AccessControlList = function AccessControlList(
     const OnDragLeave = Event => {
         Event.preventDefault();
         DragCount--;
-        if(DragCount === 0) {
+        if(DragCount === 0){
             Control.classList.remove("Hover");
         }
     };
@@ -175,10 +175,10 @@ vDesk.Security.AccessControlList = function AccessControlList(
     this.Add = function(Entry) {
         Ensure.Parameter(Entry, vDesk.Security.AccessControlList.Entry, "Entry");
         //Check if the entry doesn't already exist.
-        if(Entry.User.ID !== null && this.FindByUser(Entry.User) === null) {
+        if(Entry.User.ID !== null && this.FindByUser(Entry.User) === null){
             Entries.push(Entry);
             Control.appendChild(Entry.Control);
-        } else if(Entry.Group.ID !== null && this.FindByGroup(Entry.Group) === null) {
+        }else if(Entry.Group.ID !== null && this.FindByGroup(Entry.Group) === null){
             Entries.push(Entry);
             Control.appendChild(Entry.Control);
         }
@@ -228,7 +228,7 @@ vDesk.Security.AccessControlList = function AccessControlList(
     this.Remove = function(Entry) {
         Ensure.Parameter(Entry, vDesk.Security.AccessControlList.Entry, "Entry");
         const Index = Entries.indexOf(Entry);
-        if(~Index) {
+        if(~Index){
             Control.removeChild(Entry.Control);
             Entries.splice(Index, 1);
         }
@@ -314,18 +314,18 @@ vDesk.Security.AccessControlList.FromDataView = function(DataView) {
  */
 vDesk.Security.AccessControlList.Load = function(ID = null) {
     Ensure.Parameter(ID, Type.Number, "ID", true);
-    if(ID !== null) {
+    if(ID !== null){
         const Response = vDesk.Connection.Send(
             new vDesk.Modules.Command(
                 {
                     Module:     "Security",
                     Command:    "GetAccessControlList",
                     Parameters: {ID: ID},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             )
         );
-        if(Response.Status) {
+        if(Response.Status){
             return vDesk.Security.AccessControlList.FromDataView(Response.Data);
         }
     }
@@ -334,7 +334,7 @@ vDesk.Security.AccessControlList.Load = function(ID = null) {
         [
             vDesk.Security.AccessControlList.Entry.FromUser(),
             vDesk.Security.AccessControlList.Entry.FromGroup(null, false, false, false),
-            vDesk.Security.AccessControlList.Entry.FromUser(vDesk.User)
+            vDesk.Security.AccessControlList.Entry.FromUser(vDesk.Security.User.Current)
         ]
     );
 
@@ -346,32 +346,32 @@ vDesk.Security.AccessControlList.Load = function(ID = null) {
  */
 vDesk.Security.AccessControlList.prototype.Fill = function(Callback = null) {
     Ensure.Parameter(Callback, Type.Function, "Callback", true);
-    if(this.ID !== null) {
+    if(this.ID !== null){
         vDesk.Connection.Send(
             new vDesk.Modules.Command(
                 {
                     Module:     "Security",
                     Command:    "GetAccessControlList",
                     Parameters: {ID: this.ID},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     this.Entries = Response.Data.Entries.map(Entry => vDesk.Security.AccessControlList.Entry.FromDataView(Entry));
                 }
-                if(Callback !== null) {
+                if(Callback !== null){
                     Callback(this);
                 }
             }
         );
-    } else {
+    }else{
         this.Entries = [
             vDesk.Security.AccessControlList.Entry.FromUser(),
             vDesk.Security.AccessControlList.Entry.FromGroup(null, false, false, false),
-            vDesk.Security.AccessControlList.Entry.FromUser(vDesk.User)
+            vDesk.Security.AccessControlList.Entry.FromUser(vDesk.Security.User.Current)
         ];
-        if(Callback !== null) {
+        if(Callback !== null){
             Callback(this);
         }
     }
