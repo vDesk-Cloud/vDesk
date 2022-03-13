@@ -12,12 +12,12 @@ use vDesk\Packages\Package;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class MetaInformation extends Update {
-    
+
     /**
      * The Package of the Update.
      */
     public const Package = \vDesk\Packages\MetaInformation::class;
-    
+
     /**
      * The required version of the Update.
      */
@@ -35,6 +35,11 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
+            Package::Client => [
+                Package::Lib => [
+                    "vDesk/MetaInformation"
+                ]
+            ],
             Package::Server => [
                 Package::Modules => [
                     "MetaInformation.php"
@@ -42,6 +47,11 @@ Description;
             ]
         ],
         self::Undeploy => [
+            Package::Client => [
+                Package::Lib => [
+                    "vDesk/MetaInformation"
+                ]
+            ],
             Package::Server => [
                 Package::Modules => [
                     "MetaInformation.php"

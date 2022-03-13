@@ -12,7 +12,7 @@
  * @implements vDesk.MetaInformation.Mask.Row.IValidator
  * @memberOf vDesk.MetaInformation.Mask.Row.Validator
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.Mask.Row.Validator.String = function String(Validator = null, Enabled = true) {
     Ensure.Parameter(Validator, Type.Object, "Validator", true);
@@ -35,8 +35,8 @@ vDesk.MetaInformation.Mask.Row.Validator.String = function String(Validator = nu
         Validator:  {
             enumerable: true,
             get:        () => Expression.Value === null
-                              ? null
-                              : {Expression: Expression.Value},
+                ? null
+                : {Expression: Expression.Value},
             set:        Value => {
                 Ensure.Property(Value, Type.Object, "Validator", true);
                 Expression.Value = Value?.Expression ?? null;
