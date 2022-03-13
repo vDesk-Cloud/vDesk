@@ -37,7 +37,6 @@ Description;
         self::Deploy   => [
             Package::Client => [
                 Package::Lib => [
-                    "vDesk/LoginDialog.js",
                     "vDesk/Security"
                 ]
             ]
