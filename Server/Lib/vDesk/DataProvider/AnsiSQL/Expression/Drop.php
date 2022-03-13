@@ -8,9 +8,9 @@ use vDesk\DataProvider\Expression\IDrop;
 use vDesk\DataProvider\IResult;
 
 /**
- * Represents a AnsiSQL compatible DROP SQL expression.
+ * Abstract base class for AnsiSQL compatible "DROP" Expressions.
  *
- * @package vDesk\DataProvider\Expression\Drop
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Drop implements IDrop {
@@ -20,13 +20,13 @@ abstract class Drop implements IDrop {
      *
      * @var string
      */
-    protected string $Statement = "";
+    protected string $Statement = "DROP ";
 
     /**
      * @inheritDoc
      */
     public function Database(string $Name): static {
-        $this->Statement .= "DROP DATABASE " . DataProvider::EscapeField($Name);
+        $this->Statement .= "DATABASE " . DataProvider::EscapeField($Name);
         return $this;
     }
 
@@ -34,15 +34,15 @@ abstract class Drop implements IDrop {
      * @inheritDoc
      */
     public function Schema(string $Name): static {
-        $this->Statement .= "DROP SCHEMA " . DataProvider::EscapeField($Name);
+        $this->Statement .= "SCHEMA " . DataProvider::EscapeField($Name);
         return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function Table(string $Name, ...$Fields): static {
-        $this->Statement .= "DROP TABLE " . DataProvider::EscapeField($Name);
+    public function Table(string $Name): static {
+        $this->Statement .= "TABLE " . DataProvider::EscapeField($Name);
         return $this;
     }
 
@@ -50,7 +50,7 @@ abstract class Drop implements IDrop {
      * @inheritDoc
      */
     public function Index(string $Name): static {
-        $this->Statement .= "DROP INDEX " . DataProvider::EscapeField($Name);
+        $this->Statement .= "INDEX " . DataProvider::EscapeField($Name);
         return $this;
     }
 
@@ -58,11 +58,10 @@ abstract class Drop implements IDrop {
      * @inheritDoc
      */
     public function On(string $Table): static {
-        $this->Statement .= "ON " . DataProvider::SanitizeField($Table);
+        $this->Statement .= " ON " . DataProvider::SanitizeField($Table);
         return $this;
     }
 
-    //Implementation of IExpression.
     /**
      * @inheritDoc
      */
@@ -80,7 +79,7 @@ abstract class Drop implements IDrop {
     /**
      * @inheritDoc
      */
-    public function __invoke(): IResult|string|null {
+    public function __invoke(): null|string|int|float {
         return $this->Execute()->ToValue();
     }
 

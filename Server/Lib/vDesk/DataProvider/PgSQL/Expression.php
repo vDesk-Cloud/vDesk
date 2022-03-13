@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\PgSQL;
 
+use vDesk\DataProvider\Expression\IAggregateFunction;
 use vDesk\DataProvider\PgSQL\Expression\Alter;
 use vDesk\DataProvider\PgSQL\Expression\Create;
 use vDesk\DataProvider\PgSQL\Expression\Delete;
@@ -12,9 +13,9 @@ use vDesk\DataProvider\PgSQL\Expression\Select;
 use vDesk\DataProvider\PgSQL\Expression\Update;
 
 /**
- * Class Expression represents ...
+ * Facade that provides factory methods to create PgSQL compatible Expressions.
  *
- * @package vDesk\DataProvider\PgSQL
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Expression extends \vDesk\DataProvider\AnsiSQL\Expression {
@@ -22,11 +23,11 @@ abstract class Expression extends \vDesk\DataProvider\AnsiSQL\Expression {
     /**
      * Factory method that creates a new instance of the ISelect class according the configured DataProvider.
      *
-     * @param mixed ...$Fields
+     * @param string|array|\vDesk\DataProvider\Expression\IAggregateFunction ...$Fields The fields to select.
      *
      * @return \vDesk\DataProvider\PgSQL\Expression\Select
      */
-    public static function Select(...$Fields): Select {
+    public static function Select(string|array|IAggregateFunction ...$Fields): Select {
         return new Select(...$Fields);
     }
 

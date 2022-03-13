@@ -6,7 +6,6 @@ namespace vDesk\Packages;
 use vDesk\DataProvider\Expression;
 use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
-use vDesk\Locale\LocaleDictionary;
 use vDesk\Modules\Module\Command;
 use vDesk\Modules\Module\Command\Parameter;
 use vDesk\Struct\Collections\Observable\Collection;
@@ -43,7 +42,7 @@ final class Locale extends Package {
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "vDesk"   => "1.1.0",
+        "vDesk"   => "1.0.0",
         "Modules" => "1.0.0"
     ];
 

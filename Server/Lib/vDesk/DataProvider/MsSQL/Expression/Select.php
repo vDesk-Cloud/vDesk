@@ -6,11 +6,11 @@ namespace vDesk\DataProvider\MsSQL\Expression;
 use vDesk\DataProvider;
 
 /**
- * Represents a MsSQL compatible SELECT SQL expression.
+ * Represents a MsSQL compatible "SELECT" Expression.
  *
- * @package vDesk\DataProvider\Expression\Select
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Select extends DataProvider\AnsiSQL\Expression\Select {
-    //Postgres' SELECT is ANSI conform.
+    //MsSQL's SELECT is ANSI conform.
 }

@@ -9,10 +9,10 @@ use vDesk\DataProvider;
 use vDesk\DataProvider\IResult;
 
 /**
- * Represents an AnsiSQL compatible UPDATE SQL expression.
+ * Abstract base class for AnsiSQL compatible "UPDATE" Expressions.
  *
- * @package vDesk\DataProvider\Expression\Update
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Update implements IUpdate {
     
@@ -70,7 +70,7 @@ abstract class Update implements IUpdate {
     /**
      * @inheritDoc
      */
-    public function __invoke(): IResult|string|null {
+    public function __invoke(): null|string|int|float {
         return $this->Execute()->ToValue();
     }
 

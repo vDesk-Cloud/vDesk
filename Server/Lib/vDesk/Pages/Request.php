@@ -74,7 +74,7 @@ class Request extends Command {
         
         static::$Module      = $Provider->ParseCommand("Module");
         static::$Name        = $Provider->ParseCommand("Command");
-        static::$Ticket      = $Provider->ParseCommand("Ticket");
+        static::$Ticket      = $Provider->ParseCommand("Ticket") ?? $_COOKIE["Ticket"] ?? null;
         static::$URI         = $_SERVER["REQUEST_URI"];
         static::$QueryString = $_SERVER["QUERY_STRING"];
         static::$Host        = $_SERVER["SERVER_NAME"];
@@ -114,7 +114,7 @@ class Request extends Command {
                 static::$Module     = $Definition["Module"] ?? null;
                 static::$Name       = $Definition["Command"] ?? null;
                 static::$Parameters = new Parameters(\array_combine($Parameters, $Values), $Provider);
-                static::$Ticket     = $Provider->ParseCommand("Ticket");
+                static::$Ticket     = $Provider->ParseCommand("Ticket") ?? $_COOKIE["Ticket"] ?? null;
                 return new static();
             }
         }
@@ -131,7 +131,7 @@ class Request extends Command {
             for($Index = 0; $Index < $Count; $Index++) {
                 static::$Parameters->Add($Parts[$Index], $Parts[++$Index] ?? null);
             }
-            static::$Ticket = $Parameters["Ticket"] ?? null;
+            static::$Ticket = $Parameters["Ticket"]  ?? $_COOKIE["Ticket"] ?? null;
             
             return new static();
         }

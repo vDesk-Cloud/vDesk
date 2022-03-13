@@ -6,10 +6,10 @@ namespace vDesk\DataProvider\Expression;
 use vDesk\Configuration\Settings;
 
 /**
- * Factory-facade that provides access to aggregate functions compatible with the current configured DataProvider.
+ * Facade that provides factory methods for creating aggregate functions compatible with the current configured DataProvider.
  *
- * @package vDesk\DataProvider\Expression
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Functions {
 
@@ -32,94 +32,99 @@ class Functions {
     /**
      * Factory method that creates a new instance of the IAggregateFunction class according the configured DataProvider.
      *
-     * @param string $Function
-     * @param array  $Arguments
+     * @param string $Function  The name of the function to create.
+     * @param array  $Arguments The arguments of the function to apply.
      *
-     * @return \vDesk\DataProvider\Expression\IAggregateFunction
+     * @return \vDesk\DataProvider\Expression\IAggregateFunction A new instance of the IAggregateFunction-implementation of the current configured DataProvider.
      */
     public static function __callStatic(string $Function, array $Arguments): IAggregateFunction {
         return self::$Provider::__callStatic($Function, $Arguments);
     }
 
     /**
-     * MIN().
+     * Factory method that creates new "MIN()"-IAggregateFunction according the current configured DataProvider.
      *
-     * @param array $Values
+     * @param string $Field    The field to get the lowest value of.
+     * @param bool   $Distinct Flag indicating whether to prepend a "DISTINCT"-statement.
      *
-     * @return \vDesk\DataProvider\Expression\IAggregateFunction
+     * @return \vDesk\DataProvider\Expression\IAggregateFunction A new instance of the IAggregateFunction-implementation of the current configured DataProvider.
      */
-    public static function Min(...$Values): IAggregateFunction {
-        return self::$Provider::Min(...$Values);
+    public static function Min(string $Field, bool $Distinct = false): IAggregateFunction {
+        return self::$Provider::Min($Field, $Distinct);
     }
 
     /**
-     * MAX().
+     * Factory method that creates new "MAX()"-IAggregateFunction according the current configured DataProvider.
      *
-     * @param array $Values
+     * @param string $Field    The field to get the highest value of.
+     * @param bool   $Distinct Flag indicating whether to prepend a "DISTINCT"-statement.
      *
-     * @return \vDesk\DataProvider\Expression\IAggregateFunction
+     * @return \vDesk\DataProvider\Expression\IAggregateFunction A new instance of the IAggregateFunction-implementation of the current configured DataProvider.
      */
-    public static function Max(...$Values): IAggregateFunction {
-        return self::$Provider::Max(...$Values);
+    public static function Max(string $Field, bool $Distinct = false): IAggregateFunction {
+        return self::$Provider::Max($Field, $Distinct);
     }
 
     /**
-     * SUM().
+     * Factory method that creates new "SUM()"-IAggregateFunction according the current configured DataProvider.
      *
-     * @param array $Values
+     * @param string $Field    The field to sum the values of.
+     * @param bool   $Distinct Flag indicating whether to prepend a "DISTINCT"-statement.
      *
-     * @return \vDesk\DataProvider\Expression\IAggregateFunction
+     * @return \vDesk\DataProvider\Expression\IAggregateFunction A new instance of the IAggregateFunction-implementation of the current configured DataProvider.
      */
-    public static function Sum(...$Values): IAggregateFunction {
-        return self::$Provider::Sum(...$Values);
+    public static function Sum(string $Field, bool $Distinct = false): IAggregateFunction {
+        return self::$Provider::Sum($Field, $Distinct);
     }
 
     /**
-     * COUNT().
+     * Factory method that creates new "COUNT()"-IAggregateFunction according the current configured DataProvider.
      *
-     * @param array $Values
+     * @param string $Field    The field to count the rows of.
+     * @param bool   $Distinct Flag indicating whether to prepend a "DISTINCT"-statement.
      *
-     * @return \vDesk\DataProvider\Expression\IAggregateFunction
+     * @return \vDesk\DataProvider\Expression\IAggregateFunction A new instance of the IAggregateFunction-implementation of the current configured DataProvider.
      */
-    public static function Count(...$Values): IAggregateFunction {
-        return self::$Provider::Count(...$Values);
+    public static function Count(string $Field, bool $Distinct = false): IAggregateFunction {
+        return self::$Provider::Count($Field, $Distinct);
     }
 
     /**
-     * NOW().
+     * Factory method that creates new "NOW()"-IAggregateFunction according the current configured DataProvider.
      *
-     * @return \vDesk\DataProvider\Expression\IAggregateFunction
+     * @return \vDesk\DataProvider\Expression\IAggregateFunction A new instance of the IAggregateFunction-implementation of the current configured DataProvider.
      */
     public static function Now(): IAggregateFunction {
         return self::$Provider::Now();
     }
 
     /**
-     * AVG().
+     * Factory method that creates new "AVG()"-IAggregateFunction according the current configured DataProvider.
      *
-     * @param array $Values
+     * @param string $Field    The field to get the average value of.
+     * @param bool   $Distinct Flag indicating whether to prepend a "DISTINCT"-statement.
      *
-     * @return \vDesk\DataProvider\Expression\IAggregateFunction
+     * @return \vDesk\DataProvider\Expression\IAggregateFunction A new instance of the IAggregateFunction-implementation of the current configured DataProvider.
      */
-    public static function Avg(...$Values): IAggregateFunction {
-        return self::$Provider::Avg(...$Values);
+    public static function Avg(string $Field, bool $Distinct = false): IAggregateFunction {
+        return self::$Provider::Avg($Field, $Distinct);
     }
 
     /**
-     * GROUP_CONCAT()/GROUPING().
+     * Factory method that creates new "GROUP_CONCAT()/GROUPING()"-IAggregateFunction according the current configured DataProvider.
      *
      * @param array $Values
      *
-     * @return \vDesk\DataProvider\Expression\IAggregateFunction
+     * @return \vDesk\DataProvider\Expression\IAggregateFunction A new instance of the IAggregateFunction-implementation of the current configured DataProvider.
      */
     public static function Group(...$Values): IAggregateFunction {
         return self::$Provider::Group(...$Values);
     }
 
     /**
-     * CURRENT_TIMESTAMP().
+     * Factory method that creates new "CURRENT_TIMESTAMP()"-IAggregateFunction according the current configured DataProvider.
      *
-     * @return \vDesk\DataProvider\Expression\IAggregateFunction
+     * @return \vDesk\DataProvider\Expression\IAggregateFunction A new instance of the IAggregateFunction-implementation of the current configured DataProvider.
      */
     public static function CurrentTimestamp(): IAggregateFunction {
         return self::$Provider::CurrentTimestamp();

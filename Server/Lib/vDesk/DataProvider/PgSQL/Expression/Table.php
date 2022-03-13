@@ -8,9 +8,9 @@ use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
 
 /**
- * Trait for table related PgSQL IExpressions providing functionality for creating fields and indexes.
+ * Utility class for table related PgSQL Expressions providing functionality for creating fields and indexes.
  *
- * @package vDesk\DataProvider\PgSQL
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Table {
@@ -63,7 +63,6 @@ abstract class Table {
      *
      * @param string      $Name          The name of the table field.
      * @param int         $Type          The type of the table field.
-     * @param int|null    $Size          The size of the table field.
      * @param bool        $Nullable      Flag indicating whether the table field is nullable.
      * @param string      $Default       The default value of the table field.
      * @param bool        $AutoIncrement The size of the table field.
@@ -74,10 +73,9 @@ abstract class Table {
     public static function Field(
         string  $Name,
         int     $Type,
-        ?int    $Size = null,
         bool    $Nullable = false,
-                $Default = "",
         bool    $AutoIncrement = false,
+        mixed   $Default = "",
         ?string $OnUpdate = null
     ): string {
 
@@ -90,14 +88,6 @@ abstract class Table {
                 static::Types[Type::Int] => "SERIAL",
                 static::Types[Type::BigInt] => "BIGSERIAL"
             };
-        } else if(
-            $Size !== null
-            && !($Type & DataProvider\Type::TinyInt)
-            && !($Type & DataProvider\Type::SmallInt)
-            && !($Type & DataProvider\Type::Int)
-            && !($Type & DataProvider\Type::BigInt)
-        ) {
-            $Field[] = static::Types[$Type & ~DataProvider\Type::Unsigned] . "({$Size})";
         } else {
             $Field[] = static::Types[$Type & ~DataProvider\Type::Unsigned];
         }
@@ -105,9 +95,9 @@ abstract class Table {
         $Field[] = $Nullable ? DataProvider::$NULL : "NOT " . DataProvider::$NULL;
 
         if($Default !== "") {
-            if($Default instanceof DataProvider\Expression\IAggregateFunction){
+            if($Default instanceof DataProvider\Expression\IAggregateFunction) {
                 $Field[] = "DEFAULT " . \rtrim((string)DataProvider::Sanitize($Default), "()");
-            }else{
+            } else {
                 $Field[] = "DEFAULT " . DataProvider::Sanitize($Default);
             }
         }

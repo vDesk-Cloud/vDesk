@@ -6,9 +6,9 @@ namespace vDesk\DataProvider\Expression;
 use vDesk\DataProvider\IExpression;
 
 /**
- * Interface that represents a CREATE SQL expression.
+ * Interface for abstract SQL "CREATE" Expressions.
  *
- * @package vDesk\DataProvider\Expression
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 interface ICreate extends IExpression {

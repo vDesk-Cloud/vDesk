@@ -15,7 +15,8 @@ use vDesk\Struct\Properties;
  * @property-read int  Count    Gets the amount of rows of the result set.
  * @property-read bool Status   Gets a value indicating whether the previous query or stored-procedure has been successfully executed.
  * @property-read bool Buffered Gets a value indicating whether the result set is buffered.
- * @package vDesk\DataProvider\Result
+ *
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Result implements \Iterator, IResult {

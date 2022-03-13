@@ -9,8 +9,8 @@ use vDesk\DataProvider\Expression\IAggregateFunction;
 /**
  * Represents a MySQL compatible GROUP_CONCAT function.
  *
- * @package vDesk\DataProvider\Expression\Functions\MariaDB
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Group implements IAggregateFunction {
 

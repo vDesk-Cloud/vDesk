@@ -12,8 +12,8 @@ use vDesk\Struct\Type;
 /**
  * Class Statement represents ...
  *
- * @package vDesk\DataProvider\Statement
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Statement implements IPreparedStatement {
 

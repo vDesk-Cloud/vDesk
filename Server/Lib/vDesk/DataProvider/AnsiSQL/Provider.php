@@ -9,9 +9,9 @@ use vDesk\Data\IManagedModel;
 use vDesk\Struct\Type;
 
 /**
- * Abstract data-provider for MySQL and MariaDB databases.
+ * Abstract base class for AnsiSQL compatible DataProviders.
  *
- * @package vDesk\DataProvider\Provider
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Provider implements IProvider {
@@ -32,7 +32,7 @@ abstract class Provider implements IProvider {
     public const Format = "Y-m-d\TH:i:s";
 
     /**
-     * The reserved key words of the Provider.
+     * The reserved keywords of the Provider.
      */
     public const Reserved = [
         "ALL",
@@ -136,7 +136,17 @@ abstract class Provider implements IProvider {
     public const Escaped = ["\\\"", "\\'", "\\`", "\\\\", "\\/", "\\b", "\\f", "\\b", "\\r", "\\t", "\\u0000", "\\u0001", "\\u001f"];
 
     /**
-     * Database null value.
+     * The quotation character for escaping strings of the Provider.
+     */
+    public const Quote = "'";
+
+    /**
+     * The quotation character for escaping reserved keywords and field identifiers of the Provider.
+     */
+    public const Field = "\"";
+
+    /**
+     * The database null value of the Provider.
      */
     public const NULL = "NULL";
 
@@ -146,10 +156,10 @@ abstract class Provider implements IProvider {
      * @param string $Procedure The name of the procedure to execute.
      * @param array  $Arguments The list of arguments to pass to the procedure.
      *
-     * @return \vDesk\DataProvider\MySQL\Result The IResult containing the results of the executed procedure.
+     * @return \vDesk\DataProvider\IResult The IResult containing the results of the executed procedure.
      */
     public function Call(string $Procedure, array $Arguments): IResult {
-        return $this->Execute("CALL {$Procedure}(" . (\count($Arguments) > 0 ? "'" . implode("','", $Arguments) . "'" : "") . ");", true);
+        return $this->Execute("CALL {$this->Escape($Procedure)}(" . \implode(", ", \array_map(fn($Argument) => $this->Sanitize($Argument), $Arguments)) . ")");
     }
 
     /**
@@ -171,8 +181,9 @@ abstract class Provider implements IProvider {
      * @return string The escaped field.
      */
     public function EscapeField(string $Field): string {
-        return \in_array(\strtoupper(\trim($Field)), static::Reserved)
-            ? "'{$Field}'"
+        $Field = \trim($Field);
+        return \in_array(\strtoupper($Field), static::Reserved)
+            ? static::Field . $Field . static::Field
             : $Field;
     }
 
@@ -188,11 +199,11 @@ abstract class Provider implements IProvider {
             return $this->Sanitize($Value->ID());
         }
         return match (Type::Of($Value)) {
-            Type::String => "'{$this->Escape($Value)}'",
+            Type::String => $Value === "DEFAULT" ? $Value : static::Quote . $this->Escape($Value) . static::Quote,
             Type::Bool, Type::Boolean => (int)$Value,
             Type::Null => static::NULL,
-            Type::Object, Type::Array => "'" . \json_encode($Value) . "'",
-            \DateTime::class => "'{$Value->format(static::Format)}'",
+            Type::Object, Type::Array => static::Quote . \json_encode($Value) . static::Quote,
+            \DateTime::class => static::Quote . $Value->format(static::Format) . static::Quote,
             default => (string)$Value
         };
     }
@@ -205,11 +216,11 @@ abstract class Provider implements IProvider {
      * @return string The sanitized field.
      */
     public function SanitizeField(string $Field): string {
-        $Matches = [];
-        return (int)\preg_match(static::SeparatorExpression, $Field, $Matches) > 0
-            ?  $this->EscapeField($Matches[1])
-              . static::Separator . $this->EscapeField($Matches[2])
-            : $this->EscapeField($Field);
+        $Identifiers = [];
+        foreach(\explode(static::Separator, $Field) as $Identifier) {
+            $Identifiers[] = $this->EscapeField($Identifier);
+        }
+        return \implode(static::Separator, $Identifiers);
     }
 
 }

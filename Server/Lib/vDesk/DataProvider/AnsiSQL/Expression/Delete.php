@@ -9,15 +9,15 @@ use vDesk\DataProvider\Expression\IDelete;
 use vDesk\DataProvider\IResult;
 
 /**
- * Represents a MySQL compatible DELETE SQL expression.
+ * Abstract base class for AnsiSQL compatible "DELETE" Expressions.
  *
- * @package vDesk\DataProvider\Expression\Delete
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Delete implements IDelete {
     
     /**
-     * The SQL-statement of the Delete\MariaDB.
+     * The SQL-statement of the Delete.
      *
      * @var string
      */
@@ -57,7 +57,7 @@ abstract class Delete implements IDelete {
     /**
      * @inheritDoc
      */
-    public function __invoke(): IResult|string|null {
+    public function __invoke(): null|string|int|float {
         return $this->Execute()->ToValue();
     }
     

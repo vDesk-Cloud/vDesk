@@ -6,10 +6,10 @@ namespace vDesk\DataProvider\MySQL\Expression;
 use vDesk\DataProvider\MySQL\Expression\Functions\Group;
 
 /**
- * Factory-facade that provides access to MySQL compatible aggregate functions.
+ * Facade that provides factory methods to create MySQL compatible aggregate functions.
  *
- * @package vDesk\DataProvider\Expression\Functions
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Functions extends \vDesk\DataProvider\AnsiSQL\Expression\Functions {
 

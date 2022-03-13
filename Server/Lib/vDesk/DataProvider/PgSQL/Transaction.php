@@ -10,7 +10,7 @@ use vDesk\DataProvider;
 /**
  * Class MariaDB represents a SQL-transaction usually created by invoking @see \vDesk\DataProvider::Transact().
  *
- * @package vDesk\DataProvider\PgSQL
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Transaction implements ITransaction {

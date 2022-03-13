@@ -3,14 +3,13 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\MsSQL\Expression;
 
-use vDesk\DataProvider\Expression\ICreate;
-use vDesk\DataProvider\IResult;
 use vDesk\DataProvider;
+use vDesk\DataProvider\Collation;
 
 /**
- * Represents a MySQL compatible CREATE SQL expression.
+ * Represents a MsSQL compatible "CREATE" Expression.
  *
- * @package vDesk\DataProvider\Expression\Create
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Create extends DataProvider\AnsiSQL\Expression\Create {
@@ -24,72 +23,48 @@ class Create extends DataProvider\AnsiSQL\Expression\Create {
             $Table[] = Table::Field(
                 $FieldName,
                 $Field["Type"],
-                $Field["Size"] ?? null,
-                $Field["Collation"] ?? null,
                 $Field["Nullable"] ?? false,
-                \array_key_exists("Default", $Field) ? $Field["Default"] : "",
                 $Field["Autoincrement"] ?? false,
+                $Field["Default"] ?? "",
+                $Field["Collation"] ?? null,
+                $Field["Size"] ?? null,
                 $Field["OnUpdate"] ?? null
             );
         }
+
+        //Create indices.
         $Indices = [];
         foreach($Indexes as $IndexName => $Index) {
-            if($IndexName === "Primary" || (isset($Index["Unique"]) && $Index["Unique"])) {
-                $Table[] = Table::Index($IndexName, $Index["Fields"], $Index["Unique"] ?? false);
+            if($IndexName === "Primary") {
+                $Table[] = Table::Index($IndexName, $Index["Unique"] ?? false, $Index["Fields"]);
+            } else {
+                $Indices[] = (new static())->Index($IndexName, $Index["Unique"] ?? false)->On($Name, $Index["Fields"]);
             }
-            $Indices[] = Table::Index($IndexName, $Index["Fields"]);
         }
-        $this->Statement .= "CREATE TABLE " . DataProvider::SanitizeField($Name) . " (" . \implode(", ", $Table) . ")";
-        $this->Statement .= \implode(\PHP_EOL, $Indices);
+
+        $this->Statement .= "TABLE " . DataProvider::SanitizeField($Name) . " (" . \implode(", ", $Table) . "); ";
+        $this->Statement .= \implode("; ", $Indices);
         return $this;
     }
 
     /**
-     * Postgres specific extension for creating indices.
-     *
-     * @param string $Table
-     * @param        ...$Fields
-     *
-     * @return $this
+     * @inheritDoc
      */
-    public function Index(string $Table, ...$Fields): static {
-
+    public function On(string $Table, array $Fields): static {
+        $Transformed = [];
+        foreach($Fields as $Field => $Size) {
+            $Transformed[] = \is_string($Field) ? DataProvider::EscapeField($Field) : DataProvider::EscapeField($Size);
+        }
+        $this->Statement .= " ON " . DataProvider::SanitizeField($Table) . " (" . \implode(", ", $Transformed) . ")";
+        return $this;
     }
 
     /**
      * @inheritDoc
      */
     public function Database(string $Name): static {
-        $this->Statement .= "CREATE DATABASE {$Name} COLLATE ENCODING 'UTF8'";
+        $this->Statement .= "DATABASE {$Name} COLLATE " . Table::Collations[Collation::UTF8];
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function Execute(bool $Buffered = true): IResult {
-        return DataProvider::Execute($this->Statement, $Buffered);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function __toString(): string {
-        return $this->Statement;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function __invoke(): IResult|string|null {
-        return $this->Execute()->ToValue();
-    }
-
-    public function Schema(string $Name): static {
-        // TODO: Implement Schema() method.
-    }
-
-    public function On(string $Table): static {
-        // TODO: Implement On() method.
-    }
 }

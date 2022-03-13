@@ -15,7 +15,8 @@ use vDesk\Struct\Properties;
  * @property-read int  Count    Gets the amount of rows of the result set.
  * @property-read bool Status   Gets a value indicating whether the previous query or stored-procedure has been successfully executed.
  * @property-read bool Buffered Gets a value indicating whether the result set is buffered.
- * @package vDesk\DataProvider\Result
+ *
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Result implements \Iterator, IResult {
@@ -53,10 +54,10 @@ class Result implements \Iterator, IResult {
     /**
      * Initializes a new instance of the Result class.
      *
-     * @param null|\mysqli_result $ResultSet The Initializes the Result with the specified result set.
+     * @param null|resource $ResultSet Initializes the Result with the specified result set.
      */
     public function __construct(protected mixed $ResultSet, protected bool $Buffered = true) {
-        $this->Count = (int)\sqlsrv_num_rows($this->ResultSet);
+        $this->Count = \max((int)\sqlsrv_num_rows($this->ResultSet), 0);
         $this->AddProperty("Count", [\Get => fn(): int => $this->Count]);
     }
 
@@ -66,17 +67,13 @@ class Result implements \Iterator, IResult {
      * @return string[]|null The row at the current position within the result set; otherwise, null.
      */
     public function ToArray(): ?array {
-        return \sqlsrv_fetch_array($this->ResultSet,  \SQLSRV_FETCH_NUMERIC);
-    }
-
-    /**
-     * Frees all resources allocated by this result.
-     */
-    public function Free(): void {
-        if(!$this->Disposed) {
-            \sqlsrv_free_stmt($this->ResultSet);
-            $this->Disposed = true;
+        if($this->Count === 0){
+            return null;
         }
+        if(!$this->Buffered) {
+            return \sqlsrv_fetch_array($this->ResultSet, \SQLSRV_FETCH_NUMERIC);
+        }
+        return \sqlsrv_fetch_array($this->ResultSet, \SQLSRV_FETCH_NUMERIC, \SQLSRV_SCROLL_ABSOLUTE, $this->Position);
     }
 
     /**
@@ -85,7 +82,22 @@ class Result implements \Iterator, IResult {
      * @return string[]|null The row at the current position within the result set; otherwise, null.
      */
     public function ToMap(): ?array {
-        return \sqlsrv_fetch_array($this->ResultSet,  \SQLSRV_FETCH_ASSOC);
+        if($this->Count === 0){
+            return null;
+        }
+        if(!$this->Buffered) {
+            return \sqlsrv_fetch_array($this->ResultSet, \SQLSRV_FETCH_ASSOC);
+        }
+        return \sqlsrv_fetch_array($this->ResultSet, \SQLSRV_FETCH_ASSOC, \SQLSRV_SCROLL_ABSOLUTE, $this->Position);
+    }
+
+    /**
+     * Retrieves a row of the IResult as a single value.
+     *
+     * @return null|string|int|float The value of the row at the current position within the IResult; otherwise, null.
+     */
+    public function ToValue(): null|string|int|float {
+        return $this->ToArray()[0] ?? null;
     }
 
     /**
@@ -98,20 +110,21 @@ class Result implements \Iterator, IResult {
     }
 
     /**
-     * Retrieves a row of the IResult as a single value.
-     *
-     * @return string|null The value of the row at the current position within the IResult; otherwise, null.
+     * Frees all resources allocated by this result.
      */
-    public function ToValue(): ?string {
-        return $this->ToArray()[0] ?? null;
+    public function Free(): void {
+        if(!$this->Disposed && \is_resource($this->ResultSet)) {
+            \sqlsrv_free_stmt($this->ResultSet);
+            $this->Disposed = true;
+        }
     }
 
     /**
      * Retrieves a row of the IResult as a single value.
      *
-     * @return string|null The value of the row at the current position within the IResult; otherwise, null.
+     * @return null|string|int|float The value of the row at the current position within the IResult; otherwise, null.
      */
-    public function __invoke(): ?string {
+    public function __invoke(): null|string|int|float {
         return $this->ToValue();
     }
 
@@ -141,8 +154,9 @@ class Result implements \Iterator, IResult {
 
     /**
      * Gets the current position of the internal result set-pointer.
-     * @ignore
+     *
      * @return int The current position of the internal result set-pointer.
+     * @ignore
      */
     public function key(): int {
         return $this->Position;
@@ -150,26 +164,24 @@ class Result implements \Iterator, IResult {
 
     /**
      * Resets the internal result set-pointer to the start.
-     * @ignore
+     *
      * @throws \vDesk\IO\IOException Thrown if the result set is being streamed.
+     * @ignore
      */
     public function rewind(): void {
         if(!$this->Buffered) {
             throw new IOException("Cannot rewind unbuffered result set!");
         }
-        \sqlsrv_fetch($this->ResultSet, \SQLSRV_SCROLL_FIRST);
         $this->Position = 0;
     }
 
     /**
      * Determines whether any left rows are available.
-     * @ignore
+     *
      * @return bool True if any rows are left; otherwise, false.
+     * @ignore
      */
     public function valid(): bool {
-        if($this->Buffered) {
-            return \sqlsrv_fetch($this->ResultSet, \SQLSRV_SCROLL_ABSOLUTE, $this->Position);
-        }
         return $this->Position < $this->Count;
     }
 

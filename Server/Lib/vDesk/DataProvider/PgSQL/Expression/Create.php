@@ -6,9 +6,9 @@ namespace vDesk\DataProvider\PgSQL\Expression;
 use vDesk\DataProvider;
 
 /**
- * Represents a PgSQL compatible CREATE SQL expression.
+ * Represents a PgSQL compatible "CREATE" Expression.
  *
- * @package vDesk\DataProvider\PgSQL
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Create extends DataProvider\AnsiSQL\Expression\Create {
@@ -23,10 +23,9 @@ class Create extends DataProvider\AnsiSQL\Expression\Create {
             $Table[] = Table::Field(
                 $FieldName,
                 $Field["Type"],
-                $Field["Size"] ?? null,
                 $Field["Nullable"] ?? false,
-                $Field["Default"] ?? "",
                 $Field["Autoincrement"] ?? false,
+                $Field["Default"] ?? "",
                 $Field["OnUpdate"] ?? null
             );
         }
@@ -41,8 +40,8 @@ class Create extends DataProvider\AnsiSQL\Expression\Create {
             }
         }
 
-        $this->Statement .= "TABLE " . DataProvider::SanitizeField($Name) . " (" . \implode(", ", $Table) . ");" . \PHP_EOL;
-        $this->Statement .= \implode(";" . \PHP_EOL, $Indices);
+        $this->Statement .= "TABLE " . DataProvider::SanitizeField($Name) . " (" . \implode(", ", $Table) . "); ";
+        $this->Statement .= \implode("; ", $Indices);
         return $this;
     }
 

@@ -18,6 +18,13 @@ use vDesk\Struct\Collections\IEnumerable;
 final class Result implements \Iterator, IResult {
 
     /**
+     * The length of the Result.
+     *
+     * @var int
+     */
+    public int $Count = 0;
+
+    /**
      * Initializes a new instance of the Result class.
      *
      * @param bool $Status Initializes the Result with the specified status.

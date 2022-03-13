@@ -7,10 +7,10 @@ use vDesk\DataProvider\IPreparedStatement;
 use vDesk\DataProvider\SQLException;
 
 /**
- * Class that represents a PostgreSQL compatible prepared statement.
+ * Class that represents a MsSQL compatible prepared statement.
  *
- * @package vDesk\DataProvider\Statement
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Statement implements IPreparedStatement {
 

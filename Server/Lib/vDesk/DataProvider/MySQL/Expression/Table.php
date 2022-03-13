@@ -8,15 +8,15 @@ use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
 
 /**
- * Trait for table related MySQL IExpressions providing functionality for creating fields and indexes.
+ * Utility class for table related MySQL Expressions providing functionality for creating/altering fields and indexes.
  *
- * @package vDesk\DataProvider\Expression\Table
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Table {
 
     /**
-     * The types of the Table\MariaDB.
+     * The types of the Table.
      */
     public const Collations = [
         Collation::ASCII                     => "ascii_general_ci",
@@ -30,7 +30,7 @@ abstract class Table {
     ];
 
     /**
-     * The types of the Table\MariaDB.
+     * The types of the Table.
      */
     public const Types = [
         Type::TinyInt    => "TINYINT",
@@ -60,25 +60,25 @@ abstract class Table {
     /**
      * Creates a MySQL conform table field.
      *
-     * @param string      $Name          The name of the table field.
-     * @param int         $Type          The type of the table field.
-     * @param int|null    $Size          The size of the table field.
-     * @param null|int    $Collation     The collation of the table field.
+     * @param string      $Name          The name of the field.
+     * @param int         $Type          The type of the field.
      * @param bool        $Nullable      Flag indicating whether the table field is nullable.
      * @param mixed       $Default       The default value of the table field.
      * @param bool        $AutoIncrement The size of the table field.
+     * @param null|int    $Collation     The collation of the table field.
+     * @param int|null    $Size          The size of the field.
      * @param string|null $OnUpdate      The size of the table field.
      *
      * @return string A MySQL conform table field.
      */
     public static function Field(
-        string $Name,
-        int $Type,
-        ?int $Size = null,
-        ?int $Collation = null,
-        bool $Nullable = false,
-        mixed $Default = "",
-        bool $AutoIncrement = false,
+        string  $Name,
+        int     $Type,
+        bool    $Nullable = false,
+        bool    $AutoIncrement = false,
+        mixed   $Default = "",
+        ?int    $Collation = null,
+        ?int    $Size = null,
         ?string $OnUpdate = null
     ): string {
 

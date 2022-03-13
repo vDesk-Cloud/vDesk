@@ -3,46 +3,45 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\MsSQL\Expression;
 
-use vDesk\DataProvider\Expression\IAlter;
-use vDesk\DataProvider\IResult;
+use vDesk\Configuration\Settings;
 use vDesk\DataProvider;
 
 /**
- * Represents a MySQL compatible ALTER SQL expression.
+ * Represents a MsSQL compatible "ALTER" Expression.
  *
- * @package vDesk\DataProvider\Expression\Alter
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Alter implements IAlter {
-    
+class Alter extends DataProvider\AnsiSQL\Expression\Alter {
+
     /**
-     * The SQL-statement of the Create\MariaDB.
+     * The table name of the Alter Expression.
      *
      * @var string
      */
-    private string $Statement = "";
-    
+    private string $Table = "";
+
     /**
-     * The statements of the Expression.
+     * Flag indicating whether the Expression alters a schema.
      *
-     * @var string[]
+     * @var bool
      */
-    private array  $Statements = [];
-    
+    private bool $Schema = false;
+
+    /**
+     * @inheritDoc
+     */
+    public function Schema(string $Name): static {
+        $this->Schema = true;
+        return parent::Schema($Name);
+    }
+
     /**
      * @inheritDoc
      */
     public function Table(string $Name): static {
-        $this->Statement .= "ALTER TABLE " . DataProvider::SanitizeField($Name) . " ";
-        return $this;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function Database(string $Name): static {
-        $this->Statement .= "CREATE DATABASE $Name";
-        return $this;
+        $this->Table = $Name;
+        return parent::Table($Name);
     }
 
     /**
@@ -50,95 +49,176 @@ class Alter implements IAlter {
      */
     public function Add(array $Columns, array $Indexes = []): static {
         foreach($Columns as $Name => $Column) {
-            $this->Statements[] = "ADD COLUMN " . Table::Field(
-                    $Name,
-                    $Column["Type"],
-                    $Column["Size"] ?? null,
-                    $Column["Collation"] ?? null,
-                    $Column["Nullable"] ?? false,
-                    \array_key_exists("Default", $Column) ? $Column["Default"] : "",
-                    $Column["Autoincrement"] ?? false,
-                    $Column["OnUpdate"] ?? null
-                );
+            $this->Statements[] = (new static())->Table($this->Table)
+                                                ->AddColumn($Name, $Column);
         }
         foreach($Indexes as $Name => $Index) {
-            $this->Statements[] = "ADD INDEX " . Table::Index(
-                    $Name,
-                    $Index["Fields"],
-                    $Index["Unique"] ?? false
-                );
+            $this->Statements[] = DataProvider\Expression::Create()
+                                                         ->Index($Name, $Index["Unique"] ?? false)
+                                                         ->On($this->Table, $Index["Fields"]);
         }
         return $this;
     }
-    
+
+
+    /**
+     * Applies an "ADD (COLUMN)" statement to the Expression.
+     *
+     * @param string $Name   The name of the column.
+     * @param array  $Column The definition of the column.
+     *
+     * @return $this The current instance for further chaining.
+     */
+    protected function AddColumn(string $Name, array $Column): static {
+        $this->Statement .= "ADD " . Table::Field(
+                $Name,
+                $Column["Type"],
+                $Column["Nullable"] ?? false,
+                $Column["Autoincrement"] ?? false,
+                $Column["Default"] ?? "",
+                $Column["Collation"] ?? null,
+                $Column["Size"] ?? null,
+                $Column["OnUpdate"] ?? null
+            );
+        return $this;
+    }
+
     /**
      * @inheritDoc
      */
-    public function Rename(array $Columns): static {
-        foreach($Columns as $Name => $NewName) {
-            $this->Statements[] = "RENAME COLUMN " . DataProvider::SanitizeField($Name) . " TO " . DataProvider::SanitizeField($NewName);
+    public function Rename(string $Name): static {
+        if($this->Schema) {
+            $this->Statement .= "TRANSFER " . (Settings::$Local["DataProvider"]["Database"] ?? "dbo") . DataProvider\MsSQL\Provider::Separator . DataProvider::EscapeField($Name);
+        } else {
+            $this->Statement = "EXECUTE sp_rename " . DataProvider::Sanitize($this->Table)
+                               . ", " . DataProvider::Sanitize($Name);
         }
         return $this;
     }
-    
+
     /**
      * @inheritDoc
      */
     public function Modify(array $Columns, array $Indexes = []): static {
         foreach($Columns as $Name => $Column) {
-            $this->Statements[] = "MODIFY COLUMN " . Table::Field(
-                    $Name,
-                    $Column["Type"],
-                    $Column["Size"] ?? null,
-                    $Column["Collation"] ?? null,
-                    $Column["Nullable"] ?? false,
-                    \array_key_exists("Default", $Column) ? $Column["Default"] : "",
-                    $Column["Autoincrement"] ?? false,
-                    $Column["OnUpdate"] ?? null
-                );
+            if(\is_array($Column)) {
+                $this->Statements[] = (new static())->Table($this->Table)
+                                                    ->AlterColumn($Name, $Column);
+            } else {
+                $this->Statements[] = (new static())->Table($this->Table)
+                                                    ->RenameColumn($Name, $Column);
+            }
         }
-        foreach($Indexes as $Name => $Index) {
-            $this->Statements[] = "MODIFY INDEX " . Table::Index(
-                    $Name,
-                    $Index["Fields"],
-                    $Index["Unique"] ?? false
-                );
+        //Seriously Microsoft...
+        foreach($Indexes as $Old => $New) {
+            $this->Statements[] = (new static())->Table($this->Table)
+                                                ->RenameIndex($Old, $New);
         }
         return $this;
     }
-    
+
+    /**
+     * Applies an "ALTER COLUMN" statement to the Expression.
+     *
+     * @param string $Name       The name of the column to alter.
+     * @param array  $Definition The new column definition to set.
+     *
+     * @return $this The current instance for further chaining.
+     */
+    protected function AlterColumn(string $Name, array $Definition): static {
+        //@todo How to preserve indices?!?
+        $this->Statement .= "ALTER COLUMN " . Table::Field(
+                $Name,
+                $Definition["Type"],
+                $Definition["Nullable"] ?? false,
+                $Definition["Autoincrement"] ?? false,
+                "",
+                $Definition["Collation"] ?? null,
+                $Definition["Size"] ?? null,
+                $Definition["OnUpdate"] ?? null
+            );
+        if(isset($Definition["Default"])) {
+            $this->Statements[] = $this->Statement;
+            if($Definition["Default"] !== "") {
+                $this->Statements[] = (new static())->Table($this->Table) . " ADD CONSTRAINT DF" . DataProvider::EscapeField($Name)
+                                      . " DEFAULT " . DataProvider::Sanitize($Definition["Default"])
+                                      . " FOR " . DataProvider::EscapeField($Name);
+            } else {
+                $this->Statements[] = (new static())->Table($this->Table) . " DROP CONSTRAINT DF" . DataProvider::EscapeField($Name);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Calls the "sp_rename" stored procedure to rename a column.
+     *
+     * @param string $Old The name of the column to rename.
+     * @param string $New The new name of the column.
+     *
+     * @return $this The current instance for further chaining.
+     */
+    protected function RenameColumn(string $Old, string $New): static {
+        $this->Statement = "EXECUTE sp_rename " . DataProvider::Sanitize($this->Table . DataProvider\MsSQL\Provider::Separator . $Old)
+                           . ", " . DataProvider::Sanitize($New)
+                           . ", 'COLUMN'";
+        return $this;
+    }
+
+    /**
+     * Calls the "sp_rename" stored procedure to rename a index.
+     *
+     * @param string $Old The name of the column to rename.
+     * @param string $New The new name of the column.
+     *
+     * @return $this The current instance for further chaining.
+     */
+    protected function RenameIndex(string $Old, string $New): static {
+        $this->Statement = "EXECUTE sp_rename " . DataProvider::Sanitize($this->Table . DataProvider\MsSQL\Provider::Separator . $Old)
+                           . ", " . DataProvider::Sanitize($New)
+                           . ", 'INDEX'";
+        return $this;
+    }
+
+
     /**
      * @inheritDoc
      */
     public function Drop(array $Columns, array $Indexes = []): static {
-        foreach($Columns as $Column) {
-            $this->Statements[] = "DROP COLUMN " . DataProvider::SanitizeField($Column);
-        }
+        $Drop = [];
         foreach($Indexes as $Index) {
-            $this->Statements[] = "DROP INDEX " . ($Index === "Primary" ? "PRIMARY KEY" : "INDEX {$Index}");
+            $Drop[] = DataProvider\Expression::Drop()
+                                             ->Index($Index)
+                                             ->On($this->Table);
         }
+        foreach($Columns as $Column) {
+            $Drop[] = (new static())->Table($this->Table)
+                                    ->DropColumn($Column);
+        }
+        $this->Statements = [...$Drop, ...$this->Statements];
         return $this;
     }
-    
+
     /**
-     * @inheritDoc
+     * Applies an "DROP (COLUMN)" statement to the Expression.
+     *
+     * @param string $Name The name of the column to drop.
+     *
+     * @return $this The current instance for further chaining.
      */
-    public function Execute(bool $Buffered = true): IResult {
-        return DataProvider::Execute((string)$this, $Buffered);
+    protected function DropColumn(string $Name): static {
+        $this->Statement .= "DROP COLUMN " . DataProvider::EscapeField($Name);
+        return $this;
     }
-    
+
     /**
      * @inheritDoc
      */
     public function __toString(): string {
-        return $this->Statement . \implode(", ", $this->Statements);
+        if(\count($this->Statements) > 0) {
+            return \implode("; \r\n\r\n", $this->Statements);
+        }
+        return $this->Statement;
     }
-    
-    /**
-     * @inheritDoc
-     */
-    public function __invoke(): IResult|string|null {
-        return $this->Execute()->ToValue();
-    }
-    
+
 }

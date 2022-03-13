@@ -6,47 +6,50 @@ namespace vDesk\Updates;
 use vDesk\Packages\Package;
 
 /**
- * Locale Update manifest class.
+ * Configuration Update manifest class.
  *
- * @package vDesk
+ * @package vDesk\Configuration
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Locale extends Update {
+final class Configuration extends Update {
+
     /**
-     * The class name of the Package of the Update.
+     * The Package of the Update.
      */
-    public const Package = \vDesk\Packages\Locale::class;
-    
+    public const Package = \vDesk\Packages\Configuration::class;
+
     /**
-     * The required Package version of the Update.
+     * The required version of the Update.
      */
     public const RequiredVersion = "1.0.0";
-    
+
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Fixed Bugg with usage of deprecated LocaleDictionary property. 
+- Fixed wrong serialization of boolean values.
 Description;
-    
+
     /**
-     * The files and directories of the Update.
+     * The files of the Update.
      */
     public const Files = [
-        self::Deploy   => [
+        Update::Deploy   => [
             Package::Server => [
                 Package::Lib => [
+                    "vDesk/Configuration/Settings/Local/Settings.php"
                 ]
             ]
         ],
-        self::Undeploy => [
+        Update::Undeploy => [
             Package::Server => [
                 Package::Lib => [
+                    "vDesk/Configuration/Settings/Local/Settings.php"
                 ]
             ]
         ]
     ];
-    
+
     /**
      * @inheritDoc
      */

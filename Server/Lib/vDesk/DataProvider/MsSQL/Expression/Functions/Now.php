@@ -3,23 +3,19 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\MsSQL\Expression\Functions;
 
-use vDesk\DataProvider\Expression\IAggregateFunction;
-
 /**
  * SQL function 'NOW()'.
  *
- * @package vDesk\DataProvider\Expression\Functions\MariaDB
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Now implements IAggregateFunction {
-    
+class Now extends \vDesk\DataProvider\AnsiSQL\Expression\Functions\Now {
+
     /**
-     * Returns the string representation of the Distinct.
-     *
-     * @return string The string representation of the Distinct.
+     * @inheritDoc
      */
     public function __toString(): string {
-        return "NOW()";
+        return "GETDATE()";
     }
     
 }

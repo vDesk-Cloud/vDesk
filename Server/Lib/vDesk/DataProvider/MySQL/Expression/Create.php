@@ -7,9 +7,9 @@ use vDesk\DataProvider;
 use vDesk\DataProvider\IResult;
 
 /**
- * Represents a MySQL compatible CREATE SQL expression.
+ * Represents a MySQL compatible "CREATE" Expression.
  *
- * @package vDesk\DataProvider\Expression\Create
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Create extends DataProvider\AnsiSQL\Expression\Create {
@@ -45,11 +45,11 @@ class Create extends DataProvider\AnsiSQL\Expression\Create {
             $Table[] = Table::Field(
                 $FieldName,
                 $Field["Type"],
-                $Field["Size"] ?? null,
-                $Field["Collation"] ?? null,
                 $Field["Nullable"] ?? false,
-                $Field["Default"] ?? "",
                 $Field["Autoincrement"] ?? false,
+                $Field["Default"] ?? "",
+                $Field["Collation"] ?? null,
+                $Field["Size"] ?? null,
                 $Field["OnUpdate"] ?? null
             );
         }

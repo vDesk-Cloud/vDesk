@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace vDesk\DataProvider\AnsiSQL\Expression\Functions;
 
 /**
- * SQL function 'MAX()'.
+ * SQL aggregate function "MAX()".
  *
- * @package vDesk\DataProvider\Expression\Functions\MariaDB
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Max extends Distinct {
     

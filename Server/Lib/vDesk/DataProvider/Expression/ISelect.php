@@ -6,40 +6,40 @@ namespace vDesk\DataProvider\Expression;
 use vDesk\DataProvider\IExpression;
 
 /**
- * Interface that represents a SELECT SQL expression.
+ * Interface for abstract SQL "SELECT" Expressions.
  *
- * @package vDesk\DataProvider\Expression
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 interface ISelect extends IExpression, \IteratorAggregate {
-    
+
     /**
      * Initializes a new instance of the ISelect class.
      *
-     * @param array|string ...$Fields Initializes the ISelect with the specified fields to select.
+     * @param string|array|\vDesk\DataProvider\Expression\IAggregateFunction ...$Fields Initializes the ISelect with the specified fields to select.
      */
-    public function __construct(...$Fields);
-    
+    public function __construct(string|array|IAggregateFunction ...$Fields);
+
     /**
      * Applies a DISTINCT statement to the ISelect.
      * This method should act like an alternative constructor in implementing classes.
      * To create a distinct select statement, the fields passed to the constructor should be passed to this method instead.
      *
-     * @param array|string ...$Fields The Fields to distinct select.
+     * @param string|array|\vDesk\DataProvider\Expression\IAggregateFunction ...$Fields The fields to select.
      *
      * @return \vDesk\DataProvider\Expression\ISelect The current instance for further chaining.
      */
-    public function Distinct(...$Fields): ISelect;
-    
+    public function Distinct(string|array|IAggregateFunction ...$Fields): ISelect;
+
     /**
      * Applies one or multiple tables to the ISelect.
      *
-     * @param string|ISelect|string[] ...$Tables The tables to select.
+     * @param string|array|\vDesk\DataProvider\Expression\ISelect ...$Tables The tables to select.
      *
      * @return \vDesk\DataProvider\Expression\ISelect The current instance for further chaining.
      */
-    public function From(...$Tables): ISelect;
-    
+    public function From(string|array|ISelect ...$Tables): ISelect;
+
     /**
      * Applies a set of conditions to the ISelect.
      *
@@ -48,7 +48,7 @@ interface ISelect extends IExpression, \IteratorAggregate {
      * @return \vDesk\DataProvider\Expression\ISelect The current instance for further chaining.
      */
     public function Where(array ...$Conditions): ISelect;
-    
+
     /**
      * Applies a JOIN statement to the ISelect.
      *
@@ -58,7 +58,7 @@ interface ISelect extends IExpression, \IteratorAggregate {
      * @return \vDesk\DataProvider\Expression\ISelect The current instance for further chaining.
      */
     public function InnerJoin(string $Table, string $Alias = null): ISelect;
-    
+
     /**
      * Applies a LEFT (OUTER) JOIN statement to the ISelect.
      *
@@ -68,7 +68,7 @@ interface ISelect extends IExpression, \IteratorAggregate {
      * @return \vDesk\DataProvider\Expression\ISelect The current instance for further chaining.
      */
     public function LeftJoin(string $Table, string $Alias = null): ISelect;
-    
+
     /**
      * Applies a RIGHT (OUTER) JOIN statement to the ISelect.
      *
@@ -88,7 +88,7 @@ interface ISelect extends IExpression, \IteratorAggregate {
      * @return \vDesk\DataProvider\Expression\ISelect The current instance for further chaining.
      */
     public function FullJoin(string $Table, string $Alias = null): ISelect;
-    
+
     /**
      * Applies one or more ON conditions to the ISelect.
      *
@@ -97,7 +97,7 @@ interface ISelect extends IExpression, \IteratorAggregate {
      * @return \vDesk\DataProvider\Expression\ISelect The current instance for further chaining.
      */
     public function On(array ...$Fields): ISelect;
-    
+
     /**
      * Applies a LIMIT condition to the ISelect.
      *
@@ -106,7 +106,7 @@ interface ISelect extends IExpression, \IteratorAggregate {
      * @return \vDesk\DataProvider\Expression\ISelect The current instance for further chaining.
      */
     public function Limit(int $Amount): ISelect;
-    
+
     /**
      * Applies an OFFSET condition to the ISelect.
      *
@@ -115,7 +115,7 @@ interface ISelect extends IExpression, \IteratorAggregate {
      * @return \vDesk\DataProvider\Expression\ISelect The current instance for further chaining.
      */
     public function Offset(int $Index): ISelect;
-    
+
     /**
      * Applies an ORDER BY condition to the ISelect.
      *
@@ -124,7 +124,7 @@ interface ISelect extends IExpression, \IteratorAggregate {
      * @return \vDesk\DataProvider\Expression\ISelect The current instance for further chaining.
      */
     public function OrderBy(array $Fields): ISelect;
-    
+
     /**
      * Applies an UNION condition to the ISelect.
      *
@@ -134,7 +134,7 @@ interface ISelect extends IExpression, \IteratorAggregate {
      * @return \vDesk\DataProvider\Expression\ISelect The current instance for further chaining.
      */
     public function Union(ISelect $Select, bool $ALL = false): ISelect;
-    
+
     /**
      * Applies an EXISTS condition to the ISelect.
      *

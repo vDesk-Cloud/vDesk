@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\AnsiSQL\Expression\Functions;
 /**
- * SQL function 'AVG()'.
+ * SQL aggregate function "AVG()".
  *
- * @package vDesk\DataProvider\Expression\Functions\MariaDB
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Avg extends Distinct {
     

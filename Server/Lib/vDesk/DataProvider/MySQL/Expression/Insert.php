@@ -7,10 +7,10 @@ use vDesk\DataProvider\IResult;
 use vDesk\DataProvider;
 
 /**
- * Represents a MySQL compatible INSERT SQL expression.
+ * Represents a MySQL compatible "INSERT" Expression.
  *
- * @package vDesk\DataProvider\Expression\Insert
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Insert extends DataProvider\AnsiSQL\Expression\Insert {
 

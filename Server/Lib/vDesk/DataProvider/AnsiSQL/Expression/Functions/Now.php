@@ -6,10 +6,10 @@ namespace vDesk\DataProvider\AnsiSQL\Expression\Functions;
 use vDesk\DataProvider\Expression\IAggregateFunction;
 
 /**
- * SQL function 'NOW()'.
+ * SQL aggregate function "NOW()".
  *
- * @package vDesk\DataProvider\Expression\Functions\MariaDB
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\DataProvider
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Now implements IAggregateFunction {
     

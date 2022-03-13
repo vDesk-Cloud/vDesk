@@ -3,78 +3,66 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\PgSQL\Expression;
 
-use vDesk\DataProvider\Expression\IAlter;
-use vDesk\DataProvider\IResult;
 use vDesk\DataProvider;
+use vDesk\DataProvider\Type;
 
 /**
- * Represents a MySQL compatible ALTER SQL expression.
+ * Represents a PgSQL compatible "ALTER" Expression.
  *
  * @package vDesk\DataProvider\PgSQL
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Alter implements IAlter {
-
-    /**
-     * The SQL-statement of the Create\MariaDB.
-     *
-     * @var string
-     */
-    private string $Statement = "";
-
-    /**
-     * The statements of the Expression.
-     *
-     * @var string[]
-     */
-    private array $Statements = [];
+class Alter extends DataProvider\AnsiSQL\Expression\Alter {
 
     /**
      * The table name of the Alter Expression.
      *
      * @var string
      */
-    private       $Table      = "";
+    private string $Table = "";
+
+    /**
+     * The indexes of the Alter Expression
+     *
+     * @var array
+     */
+    private array $Indexes = [];
 
     /**
      * @inheritDoc
      */
-    public function Table(string $Name): self {
-        $this->Statement .= "ALTER TABLE " . DataProvider::SanitizeField($Name) . " ";
+    public function Table(string $Name): static {
         $this->Table = $Name;
+        return parent::Table($Name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function Rename(string $Name): static {
+        $Path            = \explode(DataProvider::$Separator, $Name);
+        $this->Indexes[] = $this->Statement . " RENAME TO " . DataProvider::EscapeField(\array_pop($Path));
         return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function Database(string $Name): self {
-        $this->Statement .= "CREATE DATABASE $Name";
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function Add(array $Columns, array $Indexes = []): self {
+    public function Add(array $Columns, array $Indexes = []): static {
         foreach($Columns as $Name => $Column) {
             $this->Statements[] = "ADD COLUMN " . Table::Field(
                     $Name,
                     $Column["Type"],
-                    $Column["Size"] ?? null,
                     $Column["Nullable"] ?? false,
-                    $Column["Default"] ?? "",
                     $Column["Autoincrement"] ?? false,
+                    $Column["Default"] ?? "",
                     $Column["OnUpdate"] ?? null
                 );
         }
         foreach($Indexes as $Name => $Index) {
-            $this->Statements[] = "ADD INDEX " . Table::Index(
-                    $Name,
-                    $Index["Fields"],
-                    $Index["Unique"] ?? false
-                );
-            $this->Statements[] = (new Create())->Index($Name, $Index["Unique"] ?? false, $Index["Fields"])->On($Name);
+            $this->Indexes[] = DataProvider\Expression::Create()
+                                                      ->Index($Name, $Index["Unique"] ?? false)
+                                                      ->On($this->Table, $Index["Fields"]);
         }
         return $this;
     }
@@ -82,34 +70,32 @@ class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Rename(array $Columns): self {
-        foreach($Columns as $Name => $NewName) {
-            $this->Statements[] = "RENAME COLUMN " . DataProvider::SanitizeField($Name) . " TO " . DataProvider::SanitizeField($NewName);
-        }
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function Modify(array $Columns, array $Indexes = []): self {
+    public function Modify(array $Columns, array $Indexes = []): static {
+        //@todo Blame PostgreSQL developers.
         foreach($Columns as $Name => $Column) {
-            $this->Statements[] = "MODIFY COLUMN " . Table::Field(
-                    $Name,
-                    $Column["Type"],
-                    $Column["Size"] ?? null,
-                    $Column["Nullable"] ?? false,
-                    $Column["Default"] ?? "",
-                    $Column["Autoincrement"] ?? false,
-                    $Column["OnUpdate"] ?? null
-                );
+            if(\is_array($Column)) {
+                if($Column["Autoincrement"] ?? false) {
+                    $Type = match (Table::Types[$Column["Type"] & ~Type::Unsigned]) {
+                        Table::Types[Type::SmallInt], Table::Types[Type::TinyInt] => "SMALLSERIAL",
+                        Table::Types[Type::Int] => "SERIAL",
+                        Table::Types[Type::BigInt] => "BIGSERIAL"
+                    };
+                } else {
+                    $Type = Table::Types[$Column["Type"] & ~DataProvider\Type::Unsigned];
+                }
+                $this->Statements[] = "ALTER COLUMN " . DataProvider::SanitizeField($Name) . " TYPE {$Type}";
+                if(isset($Column["Nullable"])) {
+                    $this->Statements[] = "ALTER COLUMN " . DataProvider::SanitizeField($Name) . ($Column["Nullable"] ? " SET NOT NULL" : " DROP NOT NULL");
+                }
+                if(isset($Column["Default"])) {
+                    $this->Statements[] = "ALTER COLUMN " . DataProvider::SanitizeField($Name) . " SET DEFAULT " . DataProvider::Sanitize($Column["Default"]);
+                }
+            } else {
+                $this->Statements[] = "ALTER COLUMN " . DataProvider::SanitizeField($Name) . " RENAME TO " . DataProvider::SanitizeField($Column);
+            }
         }
-        foreach($Indexes as $Name => $Index) {
-            $this->Statements[] = "MODIFY INDEX " . Table::Index(
-                    $Name,
-                    $Index["Fields"],
-                    $Index["Unique"] ?? false
-                );
+        foreach($Indexes as $Old => $New) {
+            $this->Indexes[] = "ALTER INDEX " . DataProvider::SanitizeField($Old) . " RENAME TO " . DataProvider::SanitizeField($New);
         }
         return $this;
     }
@@ -117,46 +103,23 @@ class Alter implements IAlter {
     /**
      * @inheritDoc
      */
-    public function Drop(array $Columns, array $Indexes = []): self {
-        foreach($Columns as $Column) {
-            $this->Statements[] = "DROP COLUMN " . DataProvider::SanitizeField($Column);
-        }
+    public function Drop(array $Columns, array $Indexes = []): static {
         foreach($Indexes as $Index) {
-            $this->Statements[] = "DROP INDEX " . ($Index === "Primary" ? "PRIMARY KEY" : "INDEX {$Index}");
+            $this->Indexes[] = DataProvider\Expression::Drop()
+                                                      ->Index($Index)
+                                                      ->On($this->Table);
         }
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function Execute(bool $Buffered = true): IResult {
-        return DataProvider::Execute((string)$this, $Buffered);
+        return parent::Drop($Columns);
     }
 
     /**
      * @inheritDoc
      */
     public function __toString(): string {
-        return $this->Statement . \implode(", ", $this->Statements);
+        if(\count($this->Indexes) > 0) {
+            return parent::__toString() . "; " . \implode("; ", $this->Indexes);
+        }
+        return parent::__toString();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function __invoke(): IResult|string|null {
-        return $this->Execute()->ToValue();
-    }
-
-    public function Schema(string $Name): IAlter {
-        // TODO: Implement Schema() method.
-    }
-
-    public function Column(array $Columns, array $Indexes = []): IAlter {
-        // TODO: Implement Column() method.
-    }
-
-    public function Index(array $Columns, array $Indexes = []): IAlter {
-        // TODO: Implement Index() method.
-    }
 }

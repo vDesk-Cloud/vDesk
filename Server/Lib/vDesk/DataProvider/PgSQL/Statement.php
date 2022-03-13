@@ -9,7 +9,7 @@ use vDesk\DataProvider\SQLException;
 /**
  * Class that represents a PostgreSQL compatible prepared statement.
  *
- * @package vDesk\DataProvider\PgSQL
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Statement implements IPreparedStatement {
