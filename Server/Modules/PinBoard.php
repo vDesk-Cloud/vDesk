@@ -17,13 +17,13 @@ use vDesk\Security\User;
 use vDesk\Utils\Log;
 
 /**
- * Module for organizing notes and attachments which refer to existing {@link \vDesk\Archive\Element} objects.
+ * PinBoard Module.
  *
  * @package vDesk\PinBoard
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class PinBoard extends Module {
-    
+
     /**
      * Fetches all Notes and Attachments of the current logged in User.
      *
@@ -31,11 +31,11 @@ final class PinBoard extends Module {
      */
     public static function GetEntries(): array {
         return [
-            "Attachments" => Attachments::FromOwner(\vDesk::$User)->ToDataView(),
-            "Notes"       => Notes::FromOwner(\vDesk::$User)->ToDataView()
+            "Attachments" => Attachments::FromOwner(User::$Current)->ToDataView(),
+            "Notes"       => Notes::FromOwner(User::$Current)->ToDataView()
         ];
     }
-    
+
     /**
      * Creates a new Note.
      *
@@ -50,17 +50,17 @@ final class PinBoard extends Module {
      * @return int The ID of the newly created Note.
      */
     public static function CreateNote(
-        User $Owner = null,
-        int $X = null,
-        int $Y = null,
-        int $Width = null,
-        int $Height = null,
+        User   $Owner = null,
+        int    $X = null,
+        int    $Y = null,
+        int    $Width = null,
+        int    $Height = null,
         string $Color = null,
         string $Content = null
     ): int {
         $Note = new Note(
             null,
-            $Owner ?? \vDesk::$User,
+            $Owner ?? User::$Current,
             $X ?? Command::$Parameters["X"],
             $Y ?? Command::$Parameters["Y"],
             $Width ?? Command::$Parameters["Width"],
@@ -71,7 +71,7 @@ final class PinBoard extends Module {
         $Note->Save();
         return $Note->ID;
     }
-    
+
     /**
      * Updates a Note.
      *
@@ -87,17 +87,17 @@ final class PinBoard extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User is doesn't have ownership of the Note to update.
      */
     public static function UpdateNote(
-        int $ID = null,
-        int $X = null,
-        int $Y = null,
-        int $Width = null,
-        int $Height = null,
+        int    $ID = null,
+        int    $X = null,
+        int    $Y = null,
+        int    $Width = null,
+        int    $Height = null,
         string $Color = null,
         string $Content = null
     ): Note {
         $Note = (new Note($ID ?? Command::$Parameters["ID"]))->Fill();
-        if($Note->Owner->ID !== \vDesk::$User->ID) {
-            Log::Error(__METHOD__, \vDesk::$User->Name . " tried to change position of Note [{$Note->ID}] without having ownership.");
+        if($Note->Owner->ID !== User::$Current->ID) {
+            Log::Error(__METHOD__, User::$Current->Name . " tried to change position of Note [{$Note->ID}] without having ownership.");
             throw new UnauthorizedAccessException();
         }
         $Note->X       = $X ?? Command::$Parameters["X"];
@@ -109,7 +109,7 @@ final class PinBoard extends Module {
         $Note->Save();
         return $Note;
     }
-    
+
     /**
      * Updates the position of a Note.
      *
@@ -122,8 +122,8 @@ final class PinBoard extends Module {
      */
     public static function UpdateNotePosition(int $ID = null, int $X = null, int $Y = null): bool {
         $Note = (new Note($ID ?? Command::$Parameters["ID"]))->Fill();
-        if($Note->Owner->ID !== \vDesk::$User->ID) {
-            Log::Error(__METHOD__, \vDesk::$User->Name . " tried to change position of Note [{$Note->ID}] without having ownership.");
+        if($Note->Owner->ID !== User::$Current->ID) {
+            Log::Error(__METHOD__, User::$Current->Name . " tried to change position of Note [{$Note->ID}] without having ownership.");
             throw new UnauthorizedAccessException();
         }
         $Note->X = $X ?? Command::$Parameters["X"];
@@ -131,7 +131,7 @@ final class PinBoard extends Module {
         $Note->Save();
         return true;
     }
-    
+
     /**
      * Updates the size of a Note.
      *
@@ -144,8 +144,8 @@ final class PinBoard extends Module {
      */
     public static function UpdateNoteSize(int $ID = null, int $Width = null, int $Height = null): bool {
         $Note = (new Note($ID ?? Command::$Parameters["ID"]))->Fill();
-        if($Note->Owner->ID !== \vDesk::$User->ID) {
-            Log::Error(__METHOD__, \vDesk::$User->Name . " tried to change size of Note [{$Note->ID}] without having ownership.");
+        if($Note->Owner->ID !== User::$Current->ID) {
+            Log::Error(__METHOD__, User::$Current->Name . " tried to change size of Note [{$Note->ID}] without having ownership.");
             throw new UnauthorizedAccessException();
         }
         $Note->Width  = $Width ?? Command::$Parameters["Width"];
@@ -153,7 +153,7 @@ final class PinBoard extends Module {
         $Note->Save();
         return true;
     }
-    
+
     /**
      * Updates the color of a Note.
      *
@@ -165,15 +165,15 @@ final class PinBoard extends Module {
      */
     public static function UpdateNoteColor(int $ID = null, string $Color = null): bool {
         $Note = (new Note($ID ?? Command::$Parameters["ID"]))->Fill();
-        if($Note->Owner->ID !== \vDesk::$User->ID) {
-            Log::Error(__METHOD__, \vDesk::$User->Name . " tried to change color of Note [{$Note->ID}] without having ownership.");
+        if($Note->Owner->ID !== User::$Current->ID) {
+            Log::Error(__METHOD__, User::$Current->Name . " tried to change color of Note [{$Note->ID}] without having ownership.");
             throw new UnauthorizedAccessException();
         }
         $Note->Color = $Color ?? Command::$Parameters["Color"];
         $Note->Save();
         return true;
     }
-    
+
     /**
      * Updates the text content of a Note.
      *
@@ -185,15 +185,15 @@ final class PinBoard extends Module {
      */
     public static function UpdateNoteContent(int $ID = null, string $Content = null): bool {
         $Note = (new Note($ID ?? Command::$Parameters["ID"]))->Fill();
-        if($Note->Owner->ID !== \vDesk::$User->ID) {
-            Log::Error(__METHOD__, \vDesk::$User->Name . " tried to change content of Note [{$Note->ID}] without having ownership.");
+        if($Note->Owner->ID !== User::$Current->ID) {
+            Log::Error(__METHOD__, User::$Current->Name . " tried to change content of Note [{$Note->ID}] without having ownership.");
             throw new UnauthorizedAccessException();
         }
         $Note->Content = $Content ?? Command::$Parameters["Content"];
         $Note->Save();
         return true;
     }
-    
+
     /**
      * Deletes a Note.
      *
@@ -204,29 +204,28 @@ final class PinBoard extends Module {
      */
     public static function DeleteNote(int $ID = null): bool {
         $Note = new Note($ID ?? Command::$Parameters["ID"]);
-        if($Note->Owner->ID !== \vDesk::$User->ID) {
-            Log::Error(__METHOD__, \vDesk::$User->Name . " tried to delete Note [{$Note->ID}] without having ownership.");
+        if($Note->Owner->ID !== User::$Current->ID) {
+            Log::Error(__METHOD__, User::$Current->Name . " tried to delete Note [{$Note->ID}] without having ownership.");
             throw new UnauthorizedAccessException();
         }
         $Note->Delete();
         return true;
     }
-    
+
     /**
-     *  Creates a new Attachment.
+     * Creates a new Attachment.
      *
      * @param \vDesk\Security\User|null   $Owner   The owner of the Attachment.
      * @param int|null                    $X       The horizontal position of the Attachment.
      * @param int|null                    $Y       The vertical position of the Attachment.
      * @param \vDesk\Archive\Element|null $Element The attached Element of the Attachment.
      *
-     *
      * @return int The ID of the newly created Attachment.
      */
     public static function CreateAttachment(User $Owner = null, int $X = null, int $Y = null, Element $Element = null): int {
         $Attachment = new Attachment(
             null,
-            $Owner ?? \vDesk::$User,
+            $Owner ?? User::$Current,
             $X ?? Command::$Parameters["X"],
             $Y ?? Command::$Parameters["Y"],
             $Element ?? new Element(Command::$Parameters["Element"])
@@ -234,7 +233,7 @@ final class PinBoard extends Module {
         $Attachment->Save();
         return $Attachment->ID;
     }
-    
+
     /**
      * Updates the position of an Attachment.
      *
@@ -247,8 +246,8 @@ final class PinBoard extends Module {
      */
     public static function UpdateAttachmentPosition(int $ID = null, int $X = null, int $Y = null): bool {
         $Attachment = (new Attachment($ID ?? Command::$Parameters["ID"]))->Fill();
-        if($Attachment->Owner->ID !== \vDesk::$User->ID) {
-            Log::Error(__METHOD__, \vDesk::$User->Name . " tried to change position of Attachment [{$Attachment->ID}] without having ownership.");
+        if($Attachment->Owner->ID !== User::$Current->ID) {
+            Log::Error(__METHOD__, User::$Current->Name . " tried to change position of Attachment [{$Attachment->ID}] without having ownership.");
             throw new UnauthorizedAccessException();
         }
         $Attachment->X = $X ?? Command::$Parameters["X"];
@@ -256,7 +255,7 @@ final class PinBoard extends Module {
         $Attachment->Save();
         return true;
     }
-    
+
     /**
      * Deletes an Attachment.
      *
@@ -267,14 +266,14 @@ final class PinBoard extends Module {
      */
     public static function DeleteAttachment(int $ID = null): bool {
         $Attachment = new Attachment($ID ?? Command::$Parameters["ID"]);
-        if($Attachment->Owner->ID !== \vDesk::$User->ID) {
-            Log::Error(__METHOD__, \vDesk::$User->Name . " tried to delete Attachment [{$Attachment->ID}] without having ownership.");
+        if($Attachment->Owner->ID !== User::$Current->ID) {
+            Log::Error(__METHOD__, User::$Current->Name . " tried to delete Attachment [{$Attachment->ID}] without having ownership.");
             throw new UnauthorizedAccessException();
         }
         $Attachment->Delete();
         return true;
     }
-    
+
     /**
      * Gets the status information of the PinBoard.
      *
@@ -288,5 +287,5 @@ final class PinBoard extends Module {
                                            ->From("PinBoard.Attachments")()
         ];
     }
-    
+
 }
