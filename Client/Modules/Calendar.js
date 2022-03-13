@@ -1,19 +1,16 @@
 "use strict";
 /**
  * Initializes a new instance of the Calendar class.
- * @module Calendar
- * @class The calendar module.
- * Provides functionality for adding and organizing events and meetings as well als setting reminders.
+ * @class Calendar Module.
  * @memberOf Modules
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Calendar
  */
 Modules.Calendar = function Calendar() {
 
     /**
      * The current selected event of the Calendar module.
      * @type vDesk.Calendar.Event
-     * @ignore
      */
     let SelectedEvent = null;
 
@@ -73,7 +70,7 @@ Modules.Calendar = function Calendar() {
      * Updates the displayed events of the current view of the Calendar module.
      */
     const UpdateCalendar = function() {
-        if(Calendar.CurrentView instanceof vDesk.Controls.Calendar.View.Day) {
+        if(Calendar.CurrentView instanceof vDesk.Controls.Calendar.View.Day){
             EventCache.FetchDay(
                 Calendar.CurrentView.Date,
                 //@todo Make "Calendar.CurrentView.Show"
@@ -81,7 +78,7 @@ Modules.Calendar = function Calendar() {
                 false
             );
         }
-        if(Calendar.CurrentView instanceof vDesk.Controls.Calendar.View.Month) {
+        if(Calendar.CurrentView instanceof vDesk.Controls.Calendar.View.Month){
             EventCache.FetchMonth(Calendar.CurrentView.Date, Calendar.CurrentView.Display, false);
         }
     };
@@ -91,7 +88,7 @@ Modules.Calendar = function Calendar() {
      * @param {CustomEvent} Event
      */
     const OnSelect = Event => {
-        if(Event.detail.sender instanceof vDesk.Calendar.Event) {
+        if(Event.detail.sender instanceof vDesk.Calendar.Event){
             SelectedEvent = Event.detail.sender;
             OpenEventToolBarItem.Enabled = true;
             EditEventToolBarItem.Enabled = true;
@@ -116,7 +113,7 @@ Modules.Calendar = function Calendar() {
      * @param {CustomEvent} Event
      */
     const OnOpen = Event => {
-        if(Event.detail.sender instanceof vDesk.Calendar.Event) {
+        if(Event.detail.sender instanceof vDesk.Calendar.Event){
             new vDesk.Calendar.Event.Viewer.Window(Event.detail.sender).Show();
         }
     };
@@ -128,7 +125,7 @@ Modules.Calendar = function Calendar() {
      */
     const OnDateChanged = Event => {
         //Check if currently the day-view is active and fetch events of the displayed day.
-        if(Calendar.CurrentView instanceof vDesk.Controls.Calendar.View.Day) {
+        if(Calendar.CurrentView instanceof vDesk.Controls.Calendar.View.Day){
             EventCache.FetchDay(
                 Event.detail.date,
                 Calendar.CurrentView.Display,
@@ -136,7 +133,7 @@ Modules.Calendar = function Calendar() {
             );
         }
         //Otherwise check if currently the month-view is active and fetch events of the displayed month.
-        else if(Calendar.CurrentView instanceof vDesk.Controls.Calendar.View.Month) {
+        else if(Calendar.CurrentView instanceof vDesk.Controls.Calendar.View.Month){
             //@todo Fetch Events according the dates of the first and last Cell of the Month-view.
             EventCache.FetchMonth(Event.detail.date, Calendar.CurrentView.Display, false);
         }
@@ -154,9 +151,9 @@ Modules.Calendar = function Calendar() {
         const Difference = ((Event.detail.height.previous - Event.detail.height.current) * Calendar.CurrentView.PixelPerMinute) * 60000;
 
         //Check if the position has been changed.
-        if(Event.detail.top.current !== Event.detail.top.previous) {
+        if(Event.detail.top.current !== Event.detail.top.previous){
             Start.setTime(Start.getTime() + Difference);
-        } else {
+        }else{
             End.setTime(End.getTime() - Difference);
         }
 
@@ -171,11 +168,11 @@ Modules.Calendar = function Calendar() {
                         Start: Start,
                         End:   End
                     },
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     Event.detail.sender.End = End;
                     Event.detail.sender.Start = Start;
                     Event.detail.sender.SetTooltip();
@@ -210,11 +207,11 @@ Modules.Calendar = function Calendar() {
                         Start,
                         End
                     },
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     Event.detail.sender.Start = Start;
                     Event.detail.sender.End = End;
                     Event.detail.sender.SetTooltip();
@@ -239,9 +236,9 @@ Modules.Calendar = function Calendar() {
      * @param {MessageEvent} Event
      */
     const OnCalendarEventCreated = Event => {
-        if(EventCache.Find(Number.parseInt(Event.data)) === null) {
+        if(EventCache.Find(Number.parseInt(Event.data)) === null){
             EventCache.FetchEvent(Number.parseInt(Event.data), Event => {
-                if(Event !== null) {
+                if(Event !== null){
                     EventCache.Add(Event);
                     UpdateCalendar();
                 }
@@ -265,9 +262,9 @@ Modules.Calendar = function Calendar() {
      * @param {MessageEvent} Event
      */
     const OnCalendarEventUpdated = Event => {
-        if(EventCache.Find(Number.parseInt(Event.data)) !== null) {
+        if(EventCache.Find(Number.parseInt(Event.data)) !== null){
             EventCache.FetchEvent(Number.parseInt(Event.data), Event => {
-                if(Event !== null) {
+                if(Event !== null){
                     EventCache.Update(Event);
                     UpdateCalendar();
                 }
@@ -291,9 +288,9 @@ Modules.Calendar = function Calendar() {
      * @param {MessageEvent} Event
      */
     const OnCalendarEventDeleted = Event => {
-        if(EventCache.Find(Number.parseInt(Event.data)) !== null) {
+        if(EventCache.Find(Number.parseInt(Event.data)) !== null){
             EventCache.FetchEvent(Number.parseInt(Event.data), Event => {
-                if(Event !== null) {
+                if(Event !== null){
                     EventCache.Remove(Event);
                     UpdateCalendar();
                 }
@@ -320,7 +317,7 @@ Modules.Calendar = function Calendar() {
      * @param {CustomEvent} Event
      */
     const OnSubmit = Event => {
-        switch(Event.detail.action) {
+        switch(Event.detail.action){
             case "open":
                 new vDesk.Calendar.Event.Viewer.Window(ContextMenu.Target).Show();
                 break;

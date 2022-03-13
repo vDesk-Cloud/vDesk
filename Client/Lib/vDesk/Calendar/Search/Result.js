@@ -6,7 +6,7 @@
  * @implements {vDesk.Search.IResult}
  * @memberOf vDesk.Calendar.Search
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Calendar
  */
 vDesk.Calendar.Search.Result = function Result(Result) {
 
@@ -30,16 +30,6 @@ vDesk.Calendar.Search.Result = function Result(Result) {
             value:      Result.Type
         }
     });
-
-
-    /*Object.defineProperty(this, "Open", {
-     enumerable: true,
-     value: function () {
-     var oModule = vDesk.WorkSpace.Find(Modules.Archive);
-     vDesk.WorkSpace.Load(oModule);
-     oModule.GoToID(_oEvent.ID);
-     }
-     });*/
 
 };
 vDesk.Calendar.Search.Result.Implements(vDesk.Search.IResult);

@@ -7,7 +7,7 @@
  * @property {Event|vDesk.Calendar.Event} Event Gets or sets the event of the Viewer.
  * @memberOf vDesk.Calendar.Event
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Calendar
  */
 vDesk.Calendar.Event.Viewer = function Viewer(Event) {
     Ensure.Parameter(Event, vDesk.Calendar.Event, "Event");
@@ -34,7 +34,7 @@ vDesk.Calendar.Event.Viewer = function Viewer(Event) {
      * @return {String} The 'zerofilled' string of the passed value.
      */
     const Zerofill = function(Value) {
-        if(Value < 10) {
+        if(Value < 10){
             Value = "0" + Value;
         }
         return Value.toString();
