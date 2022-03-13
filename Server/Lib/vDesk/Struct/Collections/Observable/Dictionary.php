@@ -53,11 +53,11 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
     private bool $Dispatching = false;
 
     /**
-     * Initializes a new instance of the Collection class.
+     * Initializes a new instance of the Dictionary class.
      *
-     * @param iterable|null $Elements
+     * @param iterable $Elements Initializes the Dictionary with the specified map of elements.
      */
-    public function __construct(?iterable $Elements = []) {
+    public function __construct(iterable $Elements = []) {
         $this->OnAdd    = new CallableCollection();
         $this->OnDelete = new CallableCollection();
         $this->OnChange = new CallableCollection();
@@ -141,7 +141,7 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
                 $OnChange($this, $Element);
             }
         }
-        return parent::ReplaceAt($Element, $Element);
+        return parent::ReplaceAt($Key, $Element);
     }
 
     /** @inheritdoc */

@@ -76,7 +76,7 @@ class Dictionary implements IDictionary {
      * @inheritDoc
      * @throws \vDesk\Struct\Collections\DuplicateKeyException Thrown if an element with an equal key already exists.
      */
-    public function InsertAfter(string $After, string $Key, mixed $Value): void {
+    public function InsertAfter(string $After, string $Key, mixed $Element): void {
         if(isset($this->Elements[$Key])) {
             throw new DuplicateKeyException("An element with the same key '$Key' already exists.");
         }
@@ -84,7 +84,7 @@ class Dictionary implements IDictionary {
         foreach($this->Elements as $ExistingKey => $ExistingValue) {
             $Elements[$ExistingKey] = $ExistingValue;
             if($ExistingKey === $After) {
-                $Elements[$Key] = $Value;
+                $Elements[$Key] = $Element;
             }
         }
         $this->Elements = $Elements;
@@ -129,6 +129,7 @@ class Dictionary implements IDictionary {
                 return $Key;
             }
         }
+        //@todo Evaluate returning an empty string instead to stay consistent with ICollection::IndexOf().
         return null;
     }
 
@@ -183,6 +184,27 @@ class Dictionary implements IDictionary {
     /** @inheritDoc */
     public function Count(): int {
         return \count($this->Elements);
+    }
+
+    /** @inheritDoc */
+    public function First(bool $Remove = false): mixed {
+        if($Remove){
+            return \array_shift($this->Elements);
+        }
+        return \reset($this->Elements) ?: null;
+    }
+
+    /** @inheritDoc */
+    public function Last(bool $Remove = false): mixed {
+        if($Remove){
+            return \array_pop($this->Elements);
+        }
+        return \end($this->Elements) ?: null;
+    }
+
+    /** @inheritDoc */
+    public function Reverse(): static {
+        return new static(\array_reverse($this->Elements, true));
     }
 
     /** @inheritDoc */
@@ -253,11 +275,11 @@ class Dictionary implements IDictionary {
 
     //Implementation of \ArrayAccess.
     /** @see \ArrayAccess::offsetSet() */
-    public function offsetSet($Key, $Value): void {
+    public function offsetSet($Key, $Element): void {
         if($this->offsetExists($Key)) {
-            $this->ReplaceAt($Key, $Value);
+            $this->ReplaceAt($Key, $Element);
         } else {
-            $this->Add($Key, $Value);
+            $this->Add($Key, $Element);
         }
     }
 

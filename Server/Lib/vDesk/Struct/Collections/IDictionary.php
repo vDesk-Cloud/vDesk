@@ -12,13 +12,6 @@ namespace vDesk\Struct\Collections;
 interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
 
     /**
-     * Initializes a new instance of the ICollection class.
-     *
-     * @param iterable $Elements Initializes the ICollection with the specified set of elements.
-     */
-    public function __construct(iterable $Elements = []);
-
-    /**
      * Adds an element to the IDictionary.
      *
      * @param string $Key     The key to access the element.
@@ -38,11 +31,11 @@ interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
     /**
      * Inserts an element into the IDictionary after the position of the element with the specified key.
      *
-     * @param string $After The key of the element of which the new element will be inserted after.
-     * @param string $Key   The key of the element to insert.
-     * @param mixed  $Value The element to insert.
+     * @param string $After   The key of the element of which the new element will be inserted after.
+     * @param string $Key     The key of the element to insert.
+     * @param mixed  $Element The element to insert.
      */
-    public function InsertAfter(string $After, string $Key, mixed $Value): void;
+    public function InsertAfter(string $After, string $Key, mixed $Element): void;
 
     /**
      * Replaces an element of the IDictionary with a different element.

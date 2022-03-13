@@ -26,14 +26,14 @@ class Collection extends \vDesk\Struct\Collections\Collection {
 
     /**
      * The 'OnDelete' callbacks of the Collection.
-     *
+     * @deprecated
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
     protected CallableCollection $OnDelete;
 
     /**
      * The 'OnChange' callbacks of the Collection.
-     *
+     * @deprecated
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
     protected CallableCollection $OnChange;
@@ -50,7 +50,7 @@ class Collection extends \vDesk\Struct\Collections\Collection {
      *
      * @var bool
      */
-    private bool $Dispatching = false;
+    public bool $Dispatching = false;
 
     /**
      * Initializes a new instance of the Collection class.
@@ -66,8 +66,10 @@ class Collection extends \vDesk\Struct\Collections\Collection {
         $this->Dispatching = true;
         $this->AddProperties([
             "OnAdd"    => [\Get => fn&(): CallableCollection => $this->OnAdd],
+            "OnRemove" => [\Get => fn&(): CallableCollection => $this->OnDelete],
             "OnDelete" => [\Get => fn&(): CallableCollection => $this->OnDelete],
             "OnChange" => [\Get => fn&(): CallableCollection => $this->OnChange],
+            "OnReplace" => [\Get => fn&(): CallableCollection => $this->OnChange],
             "OnClear"  => [\Get => fn&(): CallableCollection => $this->OnClear]
         ]);
     }
@@ -125,13 +127,13 @@ class Collection extends \vDesk\Struct\Collections\Collection {
     }
 
     /** @inheritdoc */
-    public function ReplaceAt(int $Key, mixed $Element): mixed {
+    public function ReplaceAt(int $Index, mixed $Element): mixed {
         if($this->Dispatching) {
             foreach($this->OnChange as $OnChange) {
                 $OnChange($this, $Element);
             }
         }
-        return parent::ReplaceAt($Element, $Element);
+        return parent::ReplaceAt($Index, $Element);
     }
 
     /** @inheritdoc */

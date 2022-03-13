@@ -117,18 +117,18 @@ class Dictionary implements IDictionary {
      * @inheritDoc
      * @throws \vDesk\Struct\Collections\DuplicateKeyException Thrown if an element with an equal key already exists.
      */
-    public function InsertAfter(string $After, string $Key, mixed $Value): void {
-        if(!self::IsValid($Value)) {
-            throw self::TypeError(3, __METHOD__, $Value);
+    public function InsertAfter(string $After, string $Key, mixed $Element): void {
+        if(!self::IsValid($Element)) {
+            throw self::TypeError(3, __METHOD__, $Element);
         }
         if(isset($this->Elements[$Key])) {
             throw new DuplicateKeyException("An element with the same key '$Key' already exists.");
         }
         $Elements = [];
-        foreach($this->Elements as $ExistingKey => $ExistingValue) {
-            $Elements[$ExistingKey] = $ExistingValue;
+        foreach($this->Elements as $ExistingKey => $ExistingElement) {
+            $Elements[$ExistingKey] = $ExistingElement;
             if($ExistingKey === $After) {
-                $Elements[$Key] = $Value;
+                $Elements[$Key] = $Element;
             }
         }
         $this->Elements = $Elements;
@@ -243,6 +243,27 @@ class Dictionary implements IDictionary {
     /** @inheritDoc */
     public function Count(): int {
         return \count($this->Elements);
+    }
+
+    /** @inheritDoc */
+    public function First(bool $Remove = false): mixed {
+        if($Remove){
+            return \array_shift($this->Elements);
+        }
+        return \reset($this->Elements) ?: null;
+    }
+
+    /** @inheritDoc */
+    public function Last(bool $Remove = false): mixed {
+        if($Remove){
+            return \array_pop($this->Elements);
+        }
+        return \end($this->Elements) ?: null;
+    }
+
+    /** @inheritDoc */
+    public function Reverse(): static {
+        return new static(\array_reverse($this->Elements, true));
     }
 
     /** @inheritDoc */

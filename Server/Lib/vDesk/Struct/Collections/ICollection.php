@@ -12,13 +12,6 @@ namespace vDesk\Struct\Collections;
 interface ICollection extends IEnumerable, \ArrayAccess, \Iterator {
 
     /**
-     * Initializes a new instance of the ICollection class.
-     *
-     * @param iterable $Elements Initializes the ICollection with the specified set of elements.
-     */
-    public function __construct(iterable $Elements = []);
-
-    /**
      * Adds an element to the ICollection.
      *
      * @param mixed $Element The element to add.

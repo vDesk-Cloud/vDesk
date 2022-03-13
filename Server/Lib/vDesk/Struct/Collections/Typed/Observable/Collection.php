@@ -125,6 +125,20 @@ class Collection extends \vDesk\Struct\Collections\Typed\Collection {
     }
 
     /** @inheritdoc */
+    public function ReplaceAt(int $Index, mixed $Element): void {
+        if($this->Dispatching && isset($this->Elements[$Index])) {
+            $Previous = $this->Elements[$Index];
+            foreach($this->OnChange as $OnChange) {
+                $OnChange($this, $Element);
+                if(!($OnChange($Previous, $Element, $this) ?? true)){
+                    return;
+                }
+            }
+        }
+        parent::ReplaceAt($Index, $Element);
+    }
+
+    /** @inheritdoc */
     public function Clear(): void {
         if($this->Dispatching) {
             foreach($this->OnClear as $OnClear) {

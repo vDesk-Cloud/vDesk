@@ -48,18 +48,16 @@ class Collection implements ICollection {
      * @throws \vDesk\Struct\Collections\IndexOutOfRangeException Thrown if the specified index doesn't exist.
      */
     public function Insert(int $Index, mixed $Element): void {
-        if($Index < 0 || $Index > ($iCount = $this->Count())) {
+        if($Index < 0 || $Index > ($Count = $this->Count())) {
             throw new IndexOutOfRangeException("Undefined index at " . __CLASS__ . "[$Index].");
         }
 
-        if($Index === $iCount) {
+        if($Element === $Count) {
             $this->Add($Element);
         } else {
             $Temp             = \array_splice($this->Elements, $Index);
             $this->Elements[] = $Element;
-            foreach($Temp as $Element) {
-                $this->Elements[] = $Element;
-            }
+            $this->Elements   = \array_values(\array_merge($this->Elements, $Temp));
         }
     }
 
@@ -90,9 +88,7 @@ class Collection implements ICollection {
 
     /** @inheritDoc */
     public function Remove(mixed $Element): mixed {
-        $Value          = \array_splice($this->Elements, $this->IndexOf($Element), 1)[0] ?? null;
-        $this->Elements = \array_values($this->Elements);
-        return $Value;
+        return $this->RemoveAt($this->IndexOf($Element));
     }
 
     /** @inheritDoc */
@@ -136,6 +132,27 @@ class Collection implements ICollection {
     /** @inheritDoc */
     public function Count(): int {
         return \count($this->Elements);
+    }
+
+    /** @inheritDoc */
+    public function First(bool $Remove = false): mixed {
+        if($Remove){
+            return \array_shift($this->Elements);
+        }
+        return \reset($this->Elements) ?: null;
+    }
+
+    /** @inheritDoc */
+    public function Last(bool $Remove = false): mixed {
+        if($Remove){
+            return \array_pop($this->Elements);
+        }
+        return \end($this->Elements) ?: null;
+    }
+
+    /** @inheritDoc */
+    public function Reverse(): static {
+        return new static(\array_reverse($this->Elements));
     }
 
     /** @inheritDoc */
@@ -244,16 +261,16 @@ class Collection implements ICollection {
      * @throws \vDesk\Struct\Collections\IndexOutOfRangeException Thrown if the specified index doesn't exist.
      * @see \ArrayAccess::offsetSet()
      */
-    public function offsetSet($Index, $Value): void {
+    public function offsetSet($Index, $Element): void {
         // Check if an index has been specified.
         if($Index !== null) {
             // Check if the index is in range.
             if(!$this->offsetExists($Index)) {
                 throw new IndexOutOfRangeException("Undefined index at " . __CLASS__ . "[$Index].");
             }
-            $this->Replace($Index, $Value);
+            $this->ReplaceAt($Index, $Element);
         } else {
-            $this->Add($Value);
+            $this->Add($Element);
         }
     }
 

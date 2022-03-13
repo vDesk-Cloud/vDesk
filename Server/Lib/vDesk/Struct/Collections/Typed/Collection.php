@@ -198,6 +198,27 @@ class Collection implements ICollection {
     }
 
     /** @inheritDoc */
+    public function First(bool $Remove = false): mixed {
+        if($Remove){
+            return \array_shift($this->Elements);
+        }
+        return \reset($this->Elements) ?: null;
+    }
+
+    /** @inheritDoc */
+    public function Last(bool $Remove = false): mixed {
+        if($Remove){
+            return \array_pop($this->Elements);
+        }
+        return \end($this->Elements) ?: null;
+    }
+
+    /** @inheritDoc */
+    public function Reverse(): static {
+        return new static(\array_reverse($this->Elements));
+    }
+
+    /** @inheritDoc */
     public function Find(callable $Predicate): mixed {
         foreach($this as $Index => $Value) {
             if($Predicate($Value, $Index, $this)) {
