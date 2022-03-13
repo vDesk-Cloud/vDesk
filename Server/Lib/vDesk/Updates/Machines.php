@@ -35,6 +35,12 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
+            Package::Client => [
+                Package::Lib => [
+                    "vDesk/Machines/Machine.js",
+                    "vDesk/Machines/Administration.js"
+                ]
+            ],
             Package::Server => [
                 Package::Modules => [
                     "Machines.php"
@@ -42,6 +48,12 @@ Description;
             ]
         ],
         self::Undeploy => [
+            Package::Client => [
+                Package::Lib => [
+                    "vDesk/Machines/Machine.js",
+                    "vDesk/Machines/Administration.js"
+                ]
+            ],
             Package::Server => [
                 Package::Modules => [
                     "Machines.php"
