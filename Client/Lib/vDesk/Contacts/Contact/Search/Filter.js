@@ -3,6 +3,7 @@
  * Searchfilter for searching contacts by a similar surname.
  * @type Object
  * @memberOf vDesk.Contacts.Contact.Search
+ * @package vDesk\Contacts
  */
 vDesk.Contacts.Contact.Search.Filter = {
     Module: "Contacts",
