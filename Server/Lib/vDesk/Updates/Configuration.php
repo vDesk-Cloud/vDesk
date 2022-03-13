@@ -35,6 +35,13 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
+            Package::Client => [
+                Package::Lib => [
+                    "vDesk/Configuration/Settings.js",
+                    "vDesk/Configuration/Remote/Plugins/Log.js",
+                    "vDesk/Configuration/Remote/Plugins/Settings.js"
+                ]
+            ],
             Package::Server => [
                 Package::Modules => [
                     "Configuration.php"
@@ -42,6 +49,11 @@ Description;
             ]
         ],
         self::Undeploy => [
+            Package::Lib    => [
+                "vDesk/Configuration/Settings.js",
+                "vDesk/Configuration/Remote/Plugins/Log.js",
+                "vDesk/Configuration/Remote/Plugins/Settings.js"
+            ],
             Package::Server => [
                 Package::Modules => [
                     "Configuration.php"
