@@ -3,9 +3,14 @@ declare(strict_types=1);
 
 namespace vDesk\Updates;
 
-
 use vDesk\Packages\Package;
 
+/**
+ * Packages Update manifest class.
+ *
+ * @package vDesk\Packages
+ * @author  Kerry <DevelopmentHero@gmail.com>
+ */
 final class Packages extends Update {
     
     /**
@@ -16,45 +21,40 @@ final class Packages extends Update {
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.0";
-    
+    public const RequiredVersion = "1.0.1";
+
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Fixed toggling of file dialog for installing Packages.
+- Added compatibility to vDesk-1.1.0.
 Description;
-    
+
     /**
-     * The files of the Update.
+     * The files and directories of the Update.
      */
     public const Files = [
-        Update::Deploy   => [
-            Package::Client => [
-                Package::Design => [
-                    "vDesk/Packages/Administration.css"
-                ],
-                Package::Lib => [
-                    "vDesk/Packages/Administration.js"
+        self::Deploy   => [
+            Package::Server => [
+                Package::Modules => [
+                    "Packages.php"
                 ]
             ]
         ],
-        Update::Undeploy => [
-            Package::Client => [
-                Package::Design => [
-                    "vDesk/Packages/Administration.css"
-                ],
-                Package::Lib    => [
-                    "vDesk/Packages/Administration.js"
+        self::Undeploy => [
+            Package::Server => [
+                Package::Modules => [
+                    "Packages.php"
                 ]
             ]
         ]
     ];
-    
+
     /**
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
+        //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
     }
