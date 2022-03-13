@@ -213,7 +213,7 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
     public static function Install(\Phar $Phar, string $Path): void {
         
         Expression::Create()
-                  ->Database("Calendar")
+                  ->Schema("Calendar")
                   ->Execute();
         
         //Create tables.
@@ -364,7 +364,7 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
         
         //Drop database.
         Expression::Drop()
-                  ->Database("Calendar")
+                  ->Schema("Calendar")
                   ->Execute();
         
         //Delete files.

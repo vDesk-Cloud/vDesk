@@ -6,14 +6,13 @@ namespace vDesk\IO\Input;
 use vDesk\IO\FileInfo;
 
 /**
- * Common Gateway Interface that provides execution relevant data.
- * Normally invoked through HTTP-Servers.
+ * Interface providing functionality for reading data from a CGI request.
  *
- * @package vDesk\Connection\Input
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class CGI implements IProvider {
-    
+
     /**
      * Parses the execution relevant parameters from the Common Gateway Interface.
      *
@@ -24,7 +23,7 @@ final class CGI implements IProvider {
     public function ParseCommand(string $Name): ?string {
         return \filter_input(\INPUT_GET, $Name, 513);
     }
-    
+
     /**
      * Parses the parameters of the current passed command from the Common Gateway Interface.
      *
@@ -35,7 +34,7 @@ final class CGI implements IProvider {
     public function ParseParameter(string $Name): ?string {
         return \filter_input(\INPUT_POST, $Name);
     }
-    
+
     /**
      * Fetches a binary file from the current input API.
      *

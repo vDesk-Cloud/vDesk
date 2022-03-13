@@ -6,18 +6,18 @@ namespace vDesk\Struct\Collections;
 /**
  * Represents a key-value based collection of objects that can be individually accessed by index.
  *
- * @package vDesk\Struct\Collections
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
-    
+
     /**
      * Initializes a new instance of the ICollection class.
      *
      * @param iterable $Elements Initializes the ICollection with the specified set of elements.
      */
     public function __construct(iterable $Elements = []);
-    
+
     /**
      * Adds an element to the IDictionary.
      *
@@ -25,7 +25,7 @@ interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
      * @param mixed  $Element The element to add.
      */
     public function Add(string $Key, mixed $Element): void;
-    
+
     /**
      * Inserts an element into the IDictionary at the position of the element with the specified key.
      *
@@ -34,7 +34,7 @@ interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
      * @param mixed  $Element The element to insert.
      */
     public function Insert(string $Before, string $Key, mixed $Element): void;
-    
+
     /**
      * Inserts an element into the IDictionary after the position of the element with the specified key.
      *
@@ -43,7 +43,7 @@ interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
      * @param mixed  $Value The element to insert.
      */
     public function InsertAfter(string $After, string $Key, mixed $Value): void;
-    
+
     /**
      * Replaces an element of the IDictionary with a different element.
      *
@@ -51,7 +51,7 @@ interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
      * @param mixed $Replacement The element to set.
      */
     public function Replace(mixed $Element, mixed $Replacement): void;
-    
+
     /**
      * Replaces the element with the specified key of the IDictionary.
      *
@@ -59,7 +59,7 @@ interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
      * @param mixed  $Element The element to replace with the element with the specified key.
      */
     public function ReplaceAt(string $Key, mixed $Element): void;
-    
+
     /**
      * Removes the first occurrence of a specific element from the IDictionary.
      *
@@ -68,7 +68,7 @@ interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
      * @return mixed The removed element or null if the element can't be found or removed.
      */
     public function Remove(mixed $Element): mixed;
-    
+
     /**
      * Removes an element with the specified key from the IDictionary.
      *
@@ -77,7 +77,7 @@ interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
      * @return mixed The removed element.
      */
     public function RemoveAt(string $Key): mixed;
-    
+
     /**
      * Searches for the specified element and returns the key of the first occurrence within the entire IDictionary.
      *
@@ -86,7 +86,7 @@ interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
      * @return string|null The key of the first occurrence of the element within the entire IDictionary, if found; otherwise, null.
      */
     public function KeyOf(mixed $Element): ?string;
-    
+
     /**
      * Changes the key associated with the specified element in the IDictionary.
      *
@@ -94,7 +94,7 @@ interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
      * @param string $Key     The new key for the element.
      */
     public function ChangeKey(mixed $Element, string $Key): void;
-    
+
     /**
      * Determines whether an element is in the IDictionary.
      *
@@ -103,7 +103,7 @@ interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
      * @return bool True if the element is in the IDictionary, otherwise, false.
      */
     public function Contains(mixed $Element): bool;
-    
+
     /**
      * Determines whether an element with the specified key is in the IDictionary.
      *
@@ -112,19 +112,19 @@ interface IDictionary extends IEnumerable, \ArrayAccess, \Iterator {
      * @return bool True if an element with the specified key is in the IDictionary, otherwise, false.
      */
     public function ContainsKey(string $Key): bool;
-    
+
     /**
      * Removes all elements from the IDictionary.
      */
     public function Clear(): void;
-    
+
     /**
      * Merges the elements of another IDictionary into the IDictionary.
      *
      * @param \vDesk\Struct\Collections\IDictionary $Map The IDictionary to merge.
      */
     public function Merge(IDictionary $Map): void;
-    
+
     /**
      * Copies the elements of the IDictionary into an array.
      *

@@ -6,11 +6,11 @@ namespace vDesk\Data;
 /**
  * Default Model for convenient handling of virtual dependency Models.
  *
- * @package vDesk\Data
+ * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Model implements IModel {
-    
+
     /**
      * Convenience method to create a default IModel for virtual dependency IModels.
      *
@@ -19,41 +19,41 @@ final class Model implements IModel {
     public function __invoke() {
         return new static();
     }
-    
+
     /**
      * @inheritDoc
      */
     public static function FromDataView(mixed $DataView): Model {
         return new static();
     }
-    
+
     /**
      * @inheritDoc
      */
     public function ToDataView(bool $Reference = false) {
         return null;
     }
-    
+
     /**
      * @inheritDoc
      */
     public function ID() {
         return null;
     }
-    
+
     /**
      * @inheritDoc
      */
     public function Fill(): Model {
         return $this;
     }
-    
+
     /**
      * @inheritDoc
      */
     public function Save(): void {
     }
-    
+
     /**
      * @inheritDoc
      */

@@ -6,26 +6,26 @@ namespace vDesk\Struct;
 /**
  * Represents a signed 16-bit integer.
  *
- * @package vDesk\Struct
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Int16 {
-    
+
     /**
      * Represents the largest possible value of a signed 16-bit integer.
      */
     public const MaxValue = 32767;
-    
+
     /**
      * Represents the smallest possible value of a signed 16-bit integer.
      */
     public const MinValue = -32768;
-    
+
     /**
      * The size in Bytes a signed 16-bit integer will address.
      */
     public const Size = 2;
-    
+
     /**
      * Parses a signed 16-bit integer from a specified string.
      *
@@ -37,7 +37,7 @@ class Int16 {
     public static function ParseInt16(string $String): int {
         return Number::ParseInt16($String);
     }
-    
+
     /**
      * Tries to parse a signed 16-bit integer from a specified string.
      *
@@ -48,5 +48,5 @@ class Int16 {
     public static function TryParseInt16(string $String): ?int {
         return Number::TryParseInt16($String);
     }
-    
+
 }

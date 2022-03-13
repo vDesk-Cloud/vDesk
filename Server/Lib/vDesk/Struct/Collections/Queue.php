@@ -3,27 +3,27 @@ declare(strict_types=1);
 
 namespace vDesk\Struct\Collections;
 
-use vDesk\Struct\Collections\IEnumerable;
 use vDesk\Struct\Properties;
 
 /**
  * Represents a variable size first-in-first-out (FIFO) collection.
  *
  * @property-read int $Count Gets the amount of elements in the Queue.
- * @package vDesk\Struct\Collections
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ *
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Queue implements \IteratorAggregate, IEnumerable {
-    
+
     use Properties;
-    
+
     /**
      * The elements of the Queue.
      *
      * @var mixed[]
      */
     protected array $Elements = [];
-    
+
     /**
      * Initializes a new instance of the Queue class.
      *
@@ -35,7 +35,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
             $this->Enqueue($Value);
         }
     }
-    
+
     /**
      * Inserts an element at the end of the Queue.
      *
@@ -44,7 +44,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
     public function Enqueue(mixed $Element): void {
         $this->Elements[] = $Element;
     }
-    
+
     /**
      * Removes and returns the element at the beginning of the Queue.
      *
@@ -53,7 +53,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
     public function Dequeue(): mixed {
         return \array_shift($this->Elements);
     }
-    
+
     /**
      * Returns the element at the beginning of the Queue without removing it.
      *
@@ -62,14 +62,14 @@ class Queue implements \IteratorAggregate, IEnumerable {
     public function Peek(): mixed {
         return empty($this->Elements) ? null : \reset($this->Elements);
     }
-    
+
     /**
      * Removes all elements from the Queue.
      */
     public function Clear(): void {
         \array_splice($this->Elements, 0, \count($this->Elements));
     }
-    
+
     /**
      * Returns a Generator which iterates over the Queue.
      *
@@ -81,7 +81,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
             yield $Key => $this->Dequeue();
         }
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Count()
@@ -89,7 +89,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
     public function Count(): int {
         return \count($this->Elements);
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Filter()
@@ -103,7 +103,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
         }
         return $Queue;
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Find()
@@ -116,7 +116,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
         }
         return null;
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Every()
@@ -129,7 +129,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
         }
         return true;
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Sort()
@@ -137,7 +137,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
     public function Sort(callable $Predicate): bool {
         return \usort($this->Elements, $Predicate);
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Map()
@@ -149,7 +149,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
         }
         return $Queue;
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Reduce()
@@ -161,7 +161,7 @@ class Queue implements \IteratorAggregate, IEnumerable {
         }
         return $Accumulator;
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Any()
@@ -174,5 +174,5 @@ class Queue implements \IteratorAggregate, IEnumerable {
         }
         return false;
     }
-    
+
 }

@@ -185,7 +185,7 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
         
         //Create database.
         Expression::Create()
-                  ->Database("Archive")
+                  ->Schema("Archive")
                   ->Execute();
         
         //Create tables.
@@ -483,7 +483,7 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
         
         //Drop database.
         Expression::Drop()
-                  ->Database("Archive")
+                  ->Schema("Archive")
                   ->Execute();
         
         //Delete files.

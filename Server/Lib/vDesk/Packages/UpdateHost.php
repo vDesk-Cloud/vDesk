@@ -88,7 +88,7 @@ final class UpdateHost extends Package implements IPackage {
     public static function Install(\Phar $Phar, string $Path): void {
         
         Expression::Create()
-                  ->Database("Updates")
+                  ->Schema("Updates")
                   ->Execute();
         
         //Create table.
@@ -191,6 +191,11 @@ final class UpdateHost extends Package implements IPackage {
         /** @var \Modules\Packages $Updates */
         $Updates = \vDesk\Modules::Updates();
         $Updates->Delete();
+
+        //Drop schema.
+        Expression::Drop()
+                  ->Schema("Updates")
+                  ->Execute();
         
         //Delete files.
         Directory::Delete($Path . Path::Separator . self::Server . Path::Separator . "Updates", true);
