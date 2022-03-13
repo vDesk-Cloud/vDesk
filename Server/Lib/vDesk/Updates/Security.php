@@ -8,7 +8,7 @@ use vDesk\Packages\Package;
 /**
  * Security Update manifest class.
  *
- * @package vDesk
+ * @package vDesk\Security
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Security extends Update {
@@ -21,15 +21,13 @@ class Security extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.0";
+    public const RequiredVersion = "1.0.2";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added option for logging out specific Users.
-- Added support for preserving the current logged in User while performing multiple logins.
-- Changed update of session timestamps to \Datetime objects instead of SQL functions.
+- Added compatibility to vDesk-1.1.0.
 Description;
 
     /**
@@ -37,22 +35,17 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
-            Package::Server => [
-                Package::Modules => [
-                    "Security.php"
-                ],
+            Package::Client => [
                 Package::Lib => [
-                    "vDesk/Security/User.php"
+                    "vDesk/Security"
                 ]
             ]
         ],
         self::Undeploy => [
-            Package::Server => [
-                Package::Modules => [
-                    "Security.php"
-                ],
-                Package::Lib     => [
-                    "vDesk/Security/User.php"
+            Package::Client => [
+                Package::Lib => [
+                    "vDesk/LoginDialog.js",
+                    "vDesk/Security"
                 ]
             ]
         ]
@@ -62,6 +55,7 @@ Description;
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
+        //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
     }

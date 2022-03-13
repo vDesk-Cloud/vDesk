@@ -16,12 +16,13 @@ use vDesk\Messenger\Groups;
 use vDesk\Utils\Log;
 
 /**
- * Messenger module.
+ * Messenger Module.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\Messenger
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Messenger extends Module {
-    
+
     /**
      * Fetches a specified amount of Messages of a User chat before a specified date.
      *
@@ -34,9 +35,9 @@ final class Messenger extends Module {
      */
     public static function GetUserMessages(User $Sender = null, User $Recipient = null, \DateTime $Date = null, int $Amount = null): Users\Chat {
         $Sender    ??= new User(Command::$Parameters["Sender"]);
-        $Recipient ??= \vDesk::$User;
+        $Recipient ??= User::$Current;
         $Messages  = new Users\Chat();
-        
+
         foreach(
             Expression::Select("*")
                       ->From(
@@ -44,7 +45,6 @@ final class Messenger extends Module {
                                     ->From("Messenger.Messages")
                                     ->Where(
                                         [
-                        
                                             "Date" => ["<" => $Date ?? Command::$Parameters["Date"]],
                                             [
                                                 [
@@ -81,10 +81,10 @@ final class Messenger extends Module {
             }
             $Messages->Add($Message);
         }
-        
+
         return $Messages;
     }
-    
+
     /**
      * Gets the amount of all unread private Messages of a specified recipient.
      *
@@ -93,7 +93,7 @@ final class Messenger extends Module {
      * @return array The amount of all unread Messages of the specified recipient.
      */
     public static function GetUnreadUserMessages(User $Recipient = null): array {
-        $Recipient ??= \vDesk::$User;
+        $Recipient ??= User::$Current;
         $Messages  = [];
         foreach(
             Expression::Select("*")
@@ -124,7 +124,7 @@ final class Messenger extends Module {
         }
         return $Messages;
     }
-    
+
     /**
      * Sends a Message to an User.
      *
@@ -136,7 +136,7 @@ final class Messenger extends Module {
     public static function SendUserMessage(User $Recipient = null, string $Text = null): Users\Message {
         $Message = new Users\Message(
             null,
-            \vDesk::$User,
+            User::$Current,
             $Recipient ?? new User(Command::$Parameters["Recipient"]),
             Users\Message::Sent,
             new \DateTime("now"),
@@ -146,7 +146,7 @@ final class Messenger extends Module {
         (new Users\Message\Sent($Message->Recipient, $Message))->Dispatch();
         return $Message;
     }
-    
+
     /**
      * Fetches a specified amount of Messages of a Group chat before a specified date.
      *
@@ -160,8 +160,8 @@ final class Messenger extends Module {
     public static function GetGroupMessages(Group $Group = null, \DateTime $Date = null, int $Amount = null): Groups\Chat {
         $Group    ??= new Group(Command::$Parameters["Group"]);
         $Messages = new Groups\Chat();
-        if(!(\vDesk::$User->Memberships->Fill())->Any(fn(Group $Membership) => $Membership->ID === $Group->ID)) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to get Group messages without having permissions.");
+        if(!(User::$Current->Memberships->Fill())->Any(fn(Group $Membership) => $Membership->ID === $Group->ID)) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to get Group messages without having permissions.");
             throw new UnauthorizedAccessException();
         }
         foreach(
@@ -192,10 +192,10 @@ final class Messenger extends Module {
             );
             $Messages->Add($Message);
         }
-        
+
         return $Messages;
     }
-    
+
     /**
      * Sends a Message to a Group.
      *
@@ -207,27 +207,27 @@ final class Messenger extends Module {
      */
     public static function SendGroupMessage(Group $Group = null, string $Text = null): Groups\Message {
         $Group ??= new Group(Command::$Parameters["Group"]);
-        if(!\vDesk::$User->Memberships->Fill()->Any(fn(Group $Membership) => $Membership->ID === $Group->ID)) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to send Group message without having permissions.");
+        if(!User::$Current->Memberships->Fill()->Any(fn(Group $Membership) => $Membership->ID === $Group->ID)) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to send Group message without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Message = new Groups\Message(
             null,
-            \vDesk::$User,
+            User::$Current,
             $Group ?? new Group(Command::$Parameters["Group"]),
             new \DateTime("now"),
             $Text ?? Command::$Parameters["Text"]
         );
         $Message->Save();
         foreach($Group->Users as $User) {
-            if($User->ID === \vDesk::$User->ID) {
+            if($User->ID === User::$Current->ID) {
                 continue;
             }
             (new Groups\Message\Sent($User, $Message))->Dispatch();
         }
         return $Message;
     }
-    
+
     /**
      * Gets the status information of the Messenger.
      *
@@ -241,5 +241,5 @@ final class Messenger extends Module {
                                              ->From("Messenger.GroupMessages")()
         ];
     }
-    
+
 }

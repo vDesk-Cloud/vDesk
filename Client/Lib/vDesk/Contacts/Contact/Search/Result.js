@@ -6,7 +6,7 @@
  * @implements {vDesk.Search.IResult}
  * @memberOf vDesk.Contacts.Contact.Search
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Contacts
  */
 vDesk.Contacts.Contact.Search.Result = function Result(Result) {
 
@@ -20,7 +20,7 @@ vDesk.Contacts.Contact.Search.Result = function Result(Result) {
         Viewer: {
             enumerable: true,
             get:        () => {
-                if(Contact === null) {
+                if(Contact === null){
                     Contact = vDesk.Contacts.Contact.FromDataView(
                         vDesk.Connection.Send(
                             new vDesk.Modules.Command(
@@ -28,7 +28,7 @@ vDesk.Contacts.Contact.Search.Result = function Result(Result) {
                                     Module:     "Contacts",
                                     Command:    "GetContact",
                                     Parameters: {ID: Result.Data.ID},
-                                    Ticket:     vDesk.User.Ticket
+                                    Ticket:     vDesk.Security.User.Current.Ticket
                                 }
                             )
                         ).Data

@@ -1,15 +1,16 @@
 "use strict";
 /**
- * Console Module.
- * @param {vDesk.Security.User} [User=vDesk.User] Initializes the Console with the specified User.
+ * Initializes a new instanced of the Console class.
+ * @class Console Module.
+ * @param {vDesk.Security.User} [User=vDesk.Security.User.Current] Initializes the Console with the specified User.
  * @property {HTMLDivElement} Control Gets the underlying DOM-Node.
  * @property {String} Name Gets the name of the Console.
  * @property {vDesk.Security.User} User Gets or sets the current User of the Console.
  * @memberOf Modules
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Console
  */
-Modules.Console = function Console(User = vDesk.User) {
+Modules.Console = function Console(User = vDesk.Security.User.Current) {
 
     this.Extends(vDesk.Controls.Window);
 
@@ -51,24 +52,24 @@ Modules.Console = function Console(User = vDesk.User) {
      * @param {KeyboardEvent} Event
      */
     const OnKeyDown = Event => {
-        switch(Event.key) {
+        switch(Event.key){
             case "Tab":
                 InputText.textContent = Object.keys(vDesk.Console.Commands).find(Command => Command.startsWith(InputText.textContent)) ?? InputText.textContent;
                 Event.preventDefault();
                 break;
             case "ArrowUp":
                 Event.preventDefault();
-                if(InputText.textContent.length === 0) {
+                if(InputText.textContent.length === 0){
                     InputText.textContent = History[Index];
-                } else if(Index > 0) {
+                }else if(Index > 0){
                     InputText.textContent = History[--Index];
                 }
                 break;
             case "ArrowDown":
                 Event.preventDefault();
-                if(Index < History.length - 1) {
+                if(Index < History.length - 1){
                     InputText.textContent = History[++Index];
-                } else {
+                }else{
                     InputText.textContent = "";
                 }
                 break;
@@ -83,7 +84,7 @@ Modules.Console = function Console(User = vDesk.User) {
      * @param {KeyboardEvent} Event
      */
     const OnKeyPressCircumflex = Event => {
-        if(Event.key === "°") {
+        if(Event.key === "°"){
             this.Toggle();
         }
     };
@@ -107,25 +108,25 @@ Modules.Console = function Console(User = vDesk.User) {
     this.Toggle = async function(Visible = null) {
         Ensure.Parameter(Visible, Type.Boolean, "Visible", true);
 
-        if(this.Visible) {
+        if(this.Visible){
             History = [];
             InputText.blur();
             this.Close();
-        } else {
+        }else{
             this.Show();
             InputText.focus();
         }
-        User = vDesk.User;
+        User = vDesk.Security.User.Current;
 
         //Infinitely read the Console while it's visible.
-        while(this.Visible) {
+        while(this.Visible){
             InputMessage.textContent = "";
             const Line = await this.Read(`${User.Name}>`);
             //@todo Line.split("|") and pipe output of previous command to next command;
             const Command = Object.keys(vDesk.Console.Commands).find(Command => Line.startsWith(Command));
-            if(Command === undefined) {
+            if(Command === undefined){
                 this.Write(`Command "${Line}" not found!`);
-            } else {
+            }else{
                 vDesk.Console.Commands[Command](
                     this,
                     //Console argument parser in a nutshell; lel.
@@ -140,13 +141,13 @@ Modules.Console = function Console(User = vDesk.User) {
                                 if(
                                     Parameter[1].startsWith("{") && Parameter[1].endsWith("}")
                                     || Parameter[1].startsWith("[") && Parameter[1].endsWith("]")
-                                ) {
+                                ){
                                     Parameters[Parameter[0]] = JSON.parse(Parameter[1]);
                                     return Parameters;
                                 }
                                 //Check if an array of values has been passed.
                                 const Values = Parameter[1].split(", ");
-                                if(Values.length > 1) {
+                                if(Values.length > 1){
                                     Parameters[Parameter[0]] = Values.map(Value => !/^[a-zA-Z]/.test(Value) ? JSON.parse(Value) : Value);
                                     return Parameters;
                                 }
@@ -155,10 +156,10 @@ Modules.Console = function Console(User = vDesk.User) {
                             }
                         )
                 );
-                if(Line !== History[History.length - 1]) {
+                if(Line !== History[History.length - 1]){
                     History.push(Line);
                     Index = History.length - 1;
-                    if(History.length > 20) {
+                    if(History.length > 20){
                         History.shift();
                     }
                 }
@@ -177,7 +178,7 @@ Modules.Console = function Console(User = vDesk.User) {
         InputMessage.textContent += Message;
         return new Promise(Resolve => {
             const OnKeyPress = Event => {
-                switch(Event.key) {
+                switch(Event.key){
                     case "°":
                         //Cancel reading if the Console is being closed.
                         window.removeEventListener("keypress", OnKeyPress);
@@ -224,7 +225,7 @@ Modules.Console = function Console(User = vDesk.User) {
      * Clears the Console.
      */
     this.Clear = function() {
-        while(IO.hasChildNodes()) {
+        while(IO.hasChildNodes()){
             IO.removeChild(IO.lastChild);
         }
     };

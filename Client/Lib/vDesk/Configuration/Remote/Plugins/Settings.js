@@ -6,7 +6,7 @@
  * @property {String} Title Gets the title of the settingseditor-plugin.
  * @memberOf vDesk.Configuration.Remote.Plugins
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Configuration
  */
 vDesk.Configuration.Remote.Plugins.Settings = function Settings() {
 
@@ -35,39 +35,43 @@ vDesk.Configuration.Remote.Plugins.Settings = function Settings() {
                 Module:     "Configuration",
                 Command:    "GetSettings",
                 Parameters: {All: true},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         Response => {
-            if(Response.Status) {
+            if(Response.Status){
                 const Fragment = document.createDocumentFragment();
 
                 //Loop through domains
-                for(const Domain in Response.Data) {
+                for(const Domain in Response.Data){
 
                     //Create a GroupBox for each domain.
                     const DomainGroupBox = new vDesk.Controls.GroupBox(Domain);
-                    DomainGroupBox.Control.addEventListener("save", Event => {
-                        vDesk.Connection.Send(
-                            new vDesk.Modules.Command(
-                                {
-                                    Module:     "Configuration",
-                                    Command:    "UpdateSetting",
-                                    Parameters: {
-                                        Domain: Event.detail.sender.Domain,
-                                        Tag:    Event.detail.sender.Tag,
-                                        Value:  Event.detail.sender.Value
-                                    },
-                                    Ticket:     vDesk.User.Ticket
+                    DomainGroupBox.Control.addEventListener(
+                        "save",
+                        Event => {
+                            vDesk.Connection.Send(
+                                new vDesk.Modules.Command(
+                                    {
+                                        Module:     "Configuration",
+                                        Command:    "UpdateSetting",
+                                        Parameters: {
+                                            Domain: Event.detail.sender.Domain,
+                                            Tag:    Event.detail.sender.Tag,
+                                            Value:  Event.detail.sender.Value
+                                        },
+                                        Ticket:     vDesk.Security.User.Current.Ticket
+                                    }
+                                ),
+                                Response => {
+                                    if(!Response.Status){
+                                        alert(Response.Data);
+                                    }
                                 }
-                            ),
-                            Response => {
-                                if(!Response.Status) {
-                                    alert(Response.Data);
-                                }
-                            }
-                        );
-                    }, false);
+                            );
+                        },
+                        false
+                    );
 
                     //Loop through settings of each domain.
                     Response.Data[Domain].forEach(Setting => {
@@ -81,7 +85,7 @@ vDesk.Configuration.Remote.Plugins.Settings = function Settings() {
                             Setting.Value,
                             Setting?.Validator ?? {},
                             false,
-                            vDesk.User.Permissions.UpdateSettings
+                            vDesk.Security.User.Current.Permissions.UpdateSettings
                         );
 
                         DomainGroupBox.Add(SettingControl.Control);
@@ -92,7 +96,7 @@ vDesk.Configuration.Remote.Plugins.Settings = function Settings() {
 
                 SettingsGroupBox.Add(Fragment);
 
-            } else {
+            }else{
                 alert(Response.Data);
             }
         }

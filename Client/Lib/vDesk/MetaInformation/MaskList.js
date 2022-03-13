@@ -19,7 +19,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the MaskList is enabled.
  * @memberOf vDesk.MetaInformation
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.MaskList = function MaskList(Items = [], Enabled = true) {
 
@@ -51,7 +51,7 @@ vDesk.MetaInformation.MaskList = function MaskList(Items = [], Enabled = true) {
             get:        () => Selected,
             set:        Value => {
                 Ensure.Property(Value, vDesk.MetaInformation.MaskList.Item, "Selected", true);
-                if(Selected !== null) {
+                if(Selected !== null){
                     Selected.Selected = false;
                 }
                 Selected = Value;
@@ -78,7 +78,7 @@ vDesk.MetaInformation.MaskList = function MaskList(Items = [], Enabled = true) {
      */
     const OnSelect = Event => {
         Event.stopPropagation();
-        if(Selected !== null) {
+        if(Selected !== null){
             Selected.Selected = false;
         }
         //Mark the current selected item as the selected item.
@@ -111,7 +111,7 @@ vDesk.MetaInformation.MaskList = function MaskList(Items = [], Enabled = true) {
     this.Add = function(Item) {
         Ensure.Parameter(Item, vDesk.MetaInformation.MaskList.Item, "Item");
         //Check if an item with given ID already exists.
-        if(this.Find(Item.Mask.ID) !== null) {
+        if(this.Find(Item.Mask.ID) !== null){
             throw new ArgumentError(`Item with ID: '${Item.Mask.ID}' already exists!`);
         }
         Items.push(Item);
@@ -126,7 +126,7 @@ vDesk.MetaInformation.MaskList = function MaskList(Items = [], Enabled = true) {
         Ensure.Parameter(Item, vDesk.MetaInformation.MaskList.Item, "Item");
         //Check if the row is in the mask and remove it.
         const FoundItem = this.Find(Item.Mask.ID);
-        if(FoundItem !== null) {
+        if(FoundItem !== null){
             Control.removeChild(FoundItem.Control);
             Items.splice(Items.indexOf(FoundItem), 1);
         }

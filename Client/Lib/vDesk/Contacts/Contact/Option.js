@@ -27,6 +27,7 @@
  * @property {Boolean} Valid Gets or sets a value indicating whether the value of the Option is valid.
  * @property {Boolean} Enabled Gets or sets a value indicating whether the Option is enabled.
  * @memberOf vDesk.Contacts.Contact
+ * @package vDesk\Contacts
  */
 vDesk.Contacts.Contact.Option = function Option(ID = null, Type = vDesk.Contacts.Contact.Option.Type.Telephone, Value = "", Enabled = true) {
     Ensure.Parameter(ID, vDesk.Struct.Type.Number, "ID", true);
@@ -54,7 +55,7 @@ vDesk.Contacts.Contact.Option = function Option(ID = null, Type = vDesk.Contacts
                 Ensure.Property(Value, vDesk.Struct.Type.Number, "Type");
                 Type = Value;
                 ValueTextBox.pattern = null;
-                switch(Value) {
+                switch(Value){
                     case vDesk.Contacts.Contact.Option.Type.Telephone:
                     case vDesk.Contacts.Contact.Option.Type.Fax:
                         ValueTextBox.type = "text";
@@ -105,7 +106,7 @@ vDesk.Contacts.Contact.Option = function Option(ID = null, Type = vDesk.Contacts
      */
     const OnChange = () => {
         ValueTextBox.classList.toggle("Error", !this.Valid);
-        if(ID !== null) {
+        if(ID !== null){
             new vDesk.Events.BubblingEvent("update", {sender: this}).Dispatch(Control);
         }
     };
@@ -130,7 +131,7 @@ vDesk.Contacts.Contact.Option = function Option(ID = null, Type = vDesk.Contacts
      * @type {HTMLInputElement}
      */
     const ValueTextBox = document.createElement("input");
-    switch(Type) {
+    switch(Type){
         case vDesk.Contacts.Contact.Option.Type.Telephone:
         case vDesk.Contacts.Contact.Option.Type.Fax:
             ValueTextBox.type = "text";
@@ -179,7 +180,6 @@ vDesk.Contacts.Contact.Option.FromDataView = function(DataView) {
 
 /**
  * Enumeration of available types for Options.
- * @readonly
  * @enum {Number}
  */
 vDesk.Contacts.Contact.Option.Type = {

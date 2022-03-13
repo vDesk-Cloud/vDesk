@@ -42,7 +42,7 @@ final class Updates extends Package implements IPackage {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Packages" => "1.0.0"];
+    public const Dependencies = ["Packages" => "1.0.1"];
     
     /**
      * The files and directories of the Package.

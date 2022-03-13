@@ -41,10 +41,9 @@
  * @property {Boolean} Required Gets or sets a value indicating whether the Entry is required.
  * @property {Boolean} Enabled Gets or sets a value indicating whether the Entry is enabled.
  * @property {Boolean} Selected Gets or sets a value indicating whether the Entry is selected.
- * @fires select Fired if the user clicked on the Entry.
  * @memberOf vDesk.Security.AccessControlList
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.AccessControlList.Entry = function Entry(
     ID      = null,
@@ -66,7 +65,6 @@ vDesk.Security.AccessControlList.Entry = function Entry(
     /**
      * Flag indicating whether the Entry is selected.
      * @type {Boolean}
-     * @ignore
      */
     let Selected = false;
 
@@ -154,7 +152,7 @@ vDesk.Security.AccessControlList.Entry = function Entry(
      * @fires vDesk.Security.AccessControlList.Entry#select
      */
     const OnClick = () => {
-        if(!this.Required) {
+        if(!this.Required){
             new vDesk.Events.BubblingEvent("select", {sender: this}).Dispatch(Control);
         }
     };
@@ -188,10 +186,10 @@ vDesk.Security.AccessControlList.Entry = function Entry(
     const Icon = document.createElement("img");
     Icon.className = "Icon";
     Icon.src = User.ID !== null
-               ? vDesk.Visual.Icons.Security.User
-               : Group.ID !== null
-                 ? vDesk.Visual.Icons.Security.Group
-                 : vDesk.Visual.Icons.Unknown;
+        ? vDesk.Visual.Icons.Security.User
+        : Group.ID !== null
+            ? vDesk.Visual.Icons.Security.Group
+            : vDesk.Visual.Icons.Unknown;
 
     /**
      * The name span of the Entry.
@@ -265,7 +263,6 @@ vDesk.Security.AccessControlList.Entry = function Entry(
  * @param {Boolean}                      [Read=true]   Flag indicating whether the specified User has read permissions.
  * @param {Boolean}                      [Write=true]  Flag indicating whether the specified User has write permissions.
  * @param {Boolean}                      [Delete=true] Flag indicating whether the specified User has delete permissions.
- *
  * @return {vDesk.Security.AccessControlList.Entry} The Entry representing the specified permissions of the specified User.
  */
 vDesk.Security.AccessControlList.Entry.FromUser = function(User = null, Read = true, Write = true, Delete = true) {
@@ -288,7 +285,6 @@ vDesk.Security.AccessControlList.Entry.FromUser = function(User = null, Read = t
  * @param {Boolean}                      [Read=true]   Flag indicating whether the specified Group has read permissions.
  * @param {Boolean}                      [Write=true]  Flag indicating whether the specified Group has write permissions.
  * @param {Boolean}                      [Delete=true] Flag indicating whether the specified Group has delete permissions.
- *
  * @return {vDesk.Security.AccessControlList.Entry} The Entry representing the specified permissions of the specified Group.
  */
 

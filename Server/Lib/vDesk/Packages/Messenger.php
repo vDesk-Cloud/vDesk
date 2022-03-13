@@ -7,15 +7,14 @@ use vDesk\DataProvider\Expression;
 use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
 use vDesk\Locale\IPackage;
-
 use vDesk\Modules\Module\Command;
 use vDesk\Modules\Module\Command\Parameter;
 use vDesk\Struct\Collections\Observable\Collection;
 
 /**
- * Class Messenger represents ...
+ * Messenger Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Messenger
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Messenger extends Package implements IPackage {
@@ -28,7 +27,7 @@ final class Messenger extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
+    public const Version = "1.0.1";
     
     /**
      * The name of the Package.
@@ -44,9 +43,9 @@ final class Messenger extends Package implements IPackage {
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Events"   => "1.0.0",
-        "Locale"   => "1.0.0",
-        "Security" => "1.0.0"
+        "Events"   => "1.0.1",
+        "Locale"   => "1.0.2",
+        "Security" => "1.0.2"
     ];
     
     /**

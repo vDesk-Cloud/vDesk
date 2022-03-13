@@ -3,6 +3,7 @@
  * SearchFilter for searching archive entries by a similar name.
  * @type Object
  * @memberOf vDesk.Archive
+ * @package vDesk\Archive
  */
 vDesk.Archive.SearchFilter = {
     Module: "Archive",

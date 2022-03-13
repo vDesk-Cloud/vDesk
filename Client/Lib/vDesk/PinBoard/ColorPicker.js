@@ -1,11 +1,10 @@
 "use strict";
-
 /**
- * Class ColorPicker represents... blah.
- *
+ * @class PinBoard Colorpicker
+ * @extends vDesk.Controls.Window
  * @memberOf vDesk.PinBoard
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\PinBoard
  */
 vDesk.PinBoard.ColorPicker = function ColorPicker(Note = null) {
     this.Extends(vDesk.Controls.Window);

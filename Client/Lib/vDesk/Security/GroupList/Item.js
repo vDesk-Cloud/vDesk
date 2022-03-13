@@ -21,7 +21,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the Item is enabled.
  * @memberOf vDesk.Security.GroupList
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.GroupList.Item = function Item(Group, Draggable = false, Enabled = true) {
     Ensure.Parameter(Group, vDesk.Security.Group, "Group");
@@ -63,7 +63,7 @@ vDesk.Security.GroupList.Item = function Item(Group, Draggable = false, Enabled 
                 Ensure.Property(Value, Type.Boolean, "Draggable");
                 Draggable = Value;
                 Control.classList.toggle("Selected", Value);
-                if(Group.ID !== vDesk.Security.Group.Everyone) {
+                if(Group.ID !== vDesk.Security.Group.Everyone){
                     Control.draggable = Value;
                     Control.style.cursor = Value ? "grab" : "pointer";
 
@@ -77,11 +77,11 @@ vDesk.Security.GroupList.Item = function Item(Group, Draggable = false, Enabled 
                 Ensure.Property(Value, Type.Boolean, "Enabled");
                 Enabled = Value;
                 Control.classList.toggle("Disabled", !Value);
-                if(Value) {
+                if(Value){
                     Control.addEventListener("click", OnClick, false);
                     Control.addEventListener("dragstart", OnDragStart, false);
                     Control.addEventListener("dragend", OnDragEnd, false);
-                } else {
+                }else{
                     Control.removeEventListener("click", OnClick, false);
                     Control.removeEventListener("dragstart", OnDragStart, false);
                     Control.removeEventListener("dragend", OnDragEnd, false);
@@ -127,11 +127,11 @@ vDesk.Security.GroupList.Item = function Item(Group, Draggable = false, Enabled 
     Control.style.cursor = "pointer";
     Control.classList.toggle("Disabled", !Enabled);
     Control.classList.toggle("Selected", Selected);
-    if(Group.ID !== vDesk.Security.Group.Everyone) {
+    if(Group.ID !== vDesk.Security.Group.Everyone){
         Control.draggable = Draggable;
         Control.style.cursor = Draggable ? "grab" : "pointer";
     }
-    if(Enabled) {
+    if(Enabled){
         Control.addEventListener("click", OnClick, false);
         Control.addEventListener("dragstart", OnDragStart, false);
         Control.addEventListener("dragend", OnDragEnd, false);
