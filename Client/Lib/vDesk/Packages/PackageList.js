@@ -8,7 +8,6 @@
  * @property {vDesk.Packages.PackageList.Item} detail.item The selected Item.
  * @property {vDesk.Packages.Package} detail.user The Package of the selected Item.
  */
-
 /**
  * Initializes a new instance of the PackageList class.
  * @class Represents a list of all installed Packages.
@@ -20,7 +19,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the PackageList is enabled.
  * @memberOf vDesk.Packages
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Packages
  */
 vDesk.Packages.PackageList = function PackageList(Items = [], Enabled = true) {
     Ensure.Parameter(Items, Array, "Items");
@@ -58,11 +57,11 @@ vDesk.Packages.PackageList = function PackageList(Items = [], Enabled = true) {
             get:        () => Selected,
             set:        Value => {
                 Ensure.Property(Value, vDesk.Packages.PackageList.Item, "Selected", true);
-                if(Selected !== null) {
+                if(Selected !== null){
                     Selected.Selected = false;
                 }
                 Selected = Value;
-                if(Value !== null) {
+                if(Value !== null){
                     Selected.Selected = true;
                 }
             }
@@ -87,7 +86,7 @@ vDesk.Packages.PackageList = function PackageList(Items = [], Enabled = true) {
     const OnSelect = Event => {
         Event.stopPropagation();
 
-        if(Selected !== null) {
+        if(Selected !== null){
             Selected.Selected = false;
         }
         Selected = Event.detail.sender;
@@ -129,7 +128,7 @@ vDesk.Packages.PackageList = function PackageList(Items = [], Enabled = true) {
     this.Remove = function(Item) {
         Ensure.Parameter(Item, vDesk.Packages.PackageList.Item, "Item");
         const Index = Items.indexOf(Item);
-        if(~Index) {
+        if(~Index){
             Control.removeChild(Item.Control);
             Items.splice(Index, 1);
         }
@@ -164,7 +163,7 @@ vDesk.Packages.PackageList = function PackageList(Items = [], Enabled = true) {
  * @return {vDesk.Packages.PackageList} A PackageList containing every existing Package.
  */
 vDesk.Packages.PackageList.FromPackages = function(View = true) {
-    if(View) {
+    if(View){
         return new vDesk.Packages.PackageList(
             vDesk.Packages.Packages.map(Package => new vDesk.Packages.PackageList.Item(Package))
         );
@@ -176,16 +175,15 @@ vDesk.Packages.PackageList.FromPackages = function(View = true) {
                 Module:     "Packages",
                 Command:    "Installed",
                 Parameters: {View: false},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         )
     );
-    if(Response.Status) {
+    if(Response.Status){
         return new vDesk.Packages.PackageList(
             Response.Data.map(Package => new vDesk.Packages.PackageList.Item(vDesk.Packages.Package.FromDataView(Package)))
         );
-    } else {
+    }else{
         alert(Response.Data);
     }
-
 };
