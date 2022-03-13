@@ -37,6 +37,7 @@ Description;
         self::Deploy   => [
             Package::Client => [
                 Package::Lib => [
+                    "vDesk/Modules.js",
                     "vDesk/Modules"
                 ]
             ]
@@ -44,6 +45,7 @@ Description;
         self::Undeploy => [
             Package::Client => [
                 Package::Lib => [
+                    "vDesk/Modules.js",
                     "vDesk/Modules"
                 ]
             ]
