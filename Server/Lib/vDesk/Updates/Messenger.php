@@ -12,12 +12,12 @@ use vDesk\Packages\Package;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Messenger extends Update {
-    
+
     /**
      * The Package of the Update.
      */
     public const Package = \vDesk\Packages\Messenger::class;
-    
+
     /**
      * The required version of the Update.
      */
@@ -35,6 +35,14 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
+            Package::Client => [
+                Package::Lib     => [
+                    "vDesk/Messenger"
+                ],
+                Package::Modules => [
+                    "Messenger.js"
+                ]
+            ],
             Package::Server => [
                 Package::Modules => [
                     "Messenger.php"
@@ -42,6 +50,14 @@ Description;
             ]
         ],
         self::Undeploy => [
+            Package::Client => [
+                Package::Lib     => [
+                    "vDesk/Messenger"
+                ],
+                Package::Modules => [
+                    "Messenger.js"
+                ]
+            ],
             Package::Server => [
                 Package::Modules => [
                     "Messenger.php"
