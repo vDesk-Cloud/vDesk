@@ -47,7 +47,7 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
     public const Dependencies = [
         "Events"   => "1.0.0",
         "Locale"   => "1.0.0",
-        "Security" => "1.0.0",
+        "Security" => "1.0.2",
         "Search"   => "1.0.0"
     ];
     
