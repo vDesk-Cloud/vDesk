@@ -7,7 +7,7 @@
  * @param {Object} [Arguments={}] Executes the command with the specified arguments.
  */
 vDesk.Console.Commands.Logout = async function(Console, Arguments = {}) {
-    if(Console.User !== vDesk.User) {
+    if(Console.User !== vDesk.Security.User.Current) {
         const Response = await vDesk.Connection.Execute(
             new vDesk.Modules.Command(
                 {
@@ -19,7 +19,7 @@ vDesk.Console.Commands.Logout = async function(Console, Arguments = {}) {
             )
         );
         if(Response.Status) {
-            Console.User = vDesk.User;
+            Console.User = vDesk.Security.User.Current;
             Console.Write(`Changed context to User '${Console.User.Name}'`);
         }
     }
