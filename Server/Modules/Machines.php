@@ -26,7 +26,7 @@ use vDesk\Utils\Log;
 /**
  * Machines Module.
  *
- * @package Modules
+ * @package vDesk\Machines
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Machines extends Module implements IModule {
