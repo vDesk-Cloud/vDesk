@@ -65,7 +65,7 @@ vDesk.Search.Generic = function Generic() {
                                 };
                             })
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
