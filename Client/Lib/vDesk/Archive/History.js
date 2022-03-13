@@ -35,7 +35,7 @@
  * @property {Boolean} Selected Gets or sets a value indicating whether the History is enabled.
  * @memberOf vDesk.Archive
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Archive
  */
 vDesk.Archive.History = function History(Size = 10, Enabled = true) {
     Ensure.Parameter(Size, Type.Number, "Size");
@@ -71,9 +71,9 @@ vDesk.Archive.History = function History(Size = 10, Enabled = true) {
             set:        Value => {
                 Ensure.Property(Value, Type.Boolean, "Enabled");
                 Enabled = Value;
-                if(Value) {
+                if(Value){
                     window.addEventListener("keydown", OnKeyDown);
-                } else {
+                }else{
                     window.removeEventListener("keydown", OnKeyDown);
                 }
             }
@@ -86,7 +86,7 @@ vDesk.Archive.History = function History(Size = 10, Enabled = true) {
      */
     const OnClickPrevious = () => {
         //Check if the pointer is not at the first position.
-        if(CurrentPosition !== 0) {
+        if(CurrentPosition !== 0){
             //Set pointer to the previous step.
             CurrentPosition--;
 
@@ -97,7 +97,7 @@ vDesk.Archive.History = function History(Size = 10, Enabled = true) {
             }).Dispatch(Control);
 
             //Disable the backbutton if the pointer has reached the first position.
-            if(CurrentPosition === 0) {
+            if(CurrentPosition === 0){
                 Previous.disabled = true;
             }
             //Enable the forwardbutton (if it's disabled).
@@ -114,7 +114,7 @@ vDesk.Archive.History = function History(Size = 10, Enabled = true) {
      */
     const OnClickNext = () => {
         //Check if the pointer is not at the last position.
-        if(CurrentPosition < Elements.length - 1) {
+        if(CurrentPosition < Elements.length - 1){
             //Set pointer to the next step.
             CurrentPosition++;
 
@@ -125,7 +125,7 @@ vDesk.Archive.History = function History(Size = 10, Enabled = true) {
             }).Dispatch(Control);
 
             //Disable the forwardbutton if the pointer has reached the last position.
-            if(CurrentPosition === (Elements.length - 1)) {
+            if(CurrentPosition === (Elements.length - 1)){
                 Next.disabled = true;
             }
 
@@ -156,11 +156,11 @@ vDesk.Archive.History = function History(Size = 10, Enabled = true) {
      * @param {KeyboardEvent} Event
      */
     const OnKeyDown = Event => {
-        if(Event.key === "PageUp" && Elements[CurrentPosition].ID > vDesk.Archive.Element.Root) {
+        if(Event.key === "PageUp" && Elements[CurrentPosition].ID > vDesk.Archive.Element.Root){
             OnClickParent();
         }
     };
-    if(Enabled) {
+    if(Enabled){
         window.addEventListener("keydown", OnKeyDown);
     }
 
@@ -175,9 +175,9 @@ vDesk.Archive.History = function History(Size = 10, Enabled = true) {
             Element !== Elements[Elements.length - 1]
             && Element !== Elements[CurrentPosition]
             && Element.Type === vDesk.Archive.Element.Folder
-        ) {
+        ){
             //Remove the first Element if the maximum amount of steps is exceeded.
-            if(Elements.length === Size) {
+            if(Elements.length === Size){
                 Elements.shift();
             }
             //Add the new Element to the History.

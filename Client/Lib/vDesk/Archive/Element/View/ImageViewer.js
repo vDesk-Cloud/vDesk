@@ -5,6 +5,7 @@
  * @param {vDesk.Archive.Element} Element The element to display the image of.
  * @property {HTMLDivElement} Control Gets the underlying dom node.
  * @memberOf vDesk.Archive.Element.View
+ * @package vDesk\Archive
  */
 vDesk.Archive.Element.View.ImageViewer = function ImageViewer(Element) {
     Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
@@ -25,7 +26,6 @@ vDesk.Archive.Element.View.ImageViewer = function ImageViewer(Element) {
      * @type {HTMLImageElement}
      */
     const Image = document.createElement("img");
-
     Control.appendChild(Image);
 
     vDesk.Connection.Send(
@@ -34,7 +34,7 @@ vDesk.Archive.Element.View.ImageViewer = function ImageViewer(Element) {
                 Module:     "Archive",
                 Command:    "Download",
                 Parameters: {ID: Element.ID},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         Buffer => {
@@ -44,11 +44,10 @@ vDesk.Archive.Element.View.ImageViewer = function ImageViewer(Element) {
         },
         true
     );
-
 };
+
 /**
- * The file extensions the plugin can handle
- * @constant
- * @type {Array<String>}
+ * The file extensions the plugin can handle.
+ * @enum {String}
  */
 vDesk.Archive.Element.View.ImageViewer.Extensions = ["jpg", "jpeg", "png", "gif", "bmp", "tiff"];
