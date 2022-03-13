@@ -12,12 +12,12 @@ use vDesk\Packages\Package;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class PinBoard extends Update {
-    
+
     /**
      * The Package of the Update.
      */
     public const Package = \vDesk\Packages\PinBoard::class;
-    
+
     /**
      * The required version of the Update.
      */
@@ -35,6 +35,14 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
+            Package::Client => [
+                Package::Lib     => [
+                    "vDesk/PinBoard"
+                ],
+                Package::Modules => [
+                    "PinBoard.js"
+                ]
+            ],
             Package::Server => [
                 Package::Modules => [
                     "PinBoard.php"
@@ -42,6 +50,14 @@ Description;
             ]
         ],
         self::Undeploy => [
+            Package::Client => [
+                Package::Lib     => [
+                    "vDesk/PinBoard"
+                ],
+                Package::Modules => [
+                    "PinBoard.js"
+                ]
+            ],
             Package::Server => [
                 Package::Modules => [
                     "PinBoard.php"
