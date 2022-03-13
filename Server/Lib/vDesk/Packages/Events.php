@@ -46,7 +46,7 @@ final class Events extends Package implements IPackage {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Modules" => "1.0.1", "Configuration" => "1.0.1"];
+    public const Dependencies = ["Modules" => "1.0.1", "Configuration" => "1.0.2"];
     
     /**
      * The files and directories of the Package.

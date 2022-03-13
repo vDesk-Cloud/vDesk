@@ -45,7 +45,7 @@ final class Configuration extends Package implements IPackage {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Locale" => "1.0.0"];
+    public const Dependencies = ["Locale" => "1.0.2"];
     
     /**
      * The files and directories of the Package.

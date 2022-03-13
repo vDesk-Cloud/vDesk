@@ -44,7 +44,7 @@ final class Packages extends Package implements IPackage {
      */
     public const Dependencies = [
         "Events"   => "1.0.1",
-        "Locale"   => "1.0.1",
+        "Locale"   => "1.0.2",
         "Security" => "1.0.2"
     ];
     

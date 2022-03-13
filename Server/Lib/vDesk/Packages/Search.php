@@ -41,8 +41,8 @@ final class Search extends Package implements IPackage {
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Modules" => "1.0.0",
-        "Locale"  => "1.0.0"
+        "Modules" => "1.0.1",
+        "Locale"  => "1.0.2"
     ];
 
     /**
