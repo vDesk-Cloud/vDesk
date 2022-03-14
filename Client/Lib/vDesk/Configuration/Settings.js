@@ -5,7 +5,7 @@
  * @namespace
  * @memberOf vDesk.Configuration
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Configuration
  */
 vDesk.Configuration.Settings = {
 
@@ -31,20 +31,20 @@ vDesk.Configuration.Settings = {
      * Saves the values of the configuration settings.
      */
     Save() {
-        localStorage.setItem(vDesk.User.Name, JSON.stringify(this.Local));
+        localStorage.setItem(vDesk.Security.User.Current.Name, JSON.stringify(this.Local));
         sessionStorage.setItem("Temp", JSON.stringify(this.Temp));
     }
-
 };
+
 vDesk.Load.Configuration = {
     Status: "Loading settings",
     Load() {
 
         vDesk.Configuration.Settings.Local = new Proxy(
-            JSON.parse(localStorage.getItem(vDesk.User.Name) ?? "{}"),
+            JSON.parse(localStorage.getItem(vDesk.Security.User.Current.Name) ?? "{}"),
             {
                 get: (LocalSettings, Domain) => {
-                    if(!(Domain in LocalSettings)) {
+                    if(!(Domain in LocalSettings)){
                         LocalSettings[Domain] = {};
                     }
                     return LocalSettings[Domain];
@@ -58,16 +58,17 @@ vDesk.Load.Configuration = {
                 {
                     Module:  "Configuration",
                     Command: "GetSettings",
-                    Ticket:  vDesk.User.Ticket
+                    Ticket:  vDesk.Security.User.Current.Ticket
                 }
             )
         );
-        if(Response.Status) {
+        if(Response.Status){
             vDesk.Configuration.Settings.Remote = Response.Data;
             vDesk.Configuration.Settings.remote = vDesk.Configuration.Settings.Remote;
         }
     }
 };
+
 vDesk.Unload.Configuration = {
     Status: "Saving settings",
     Unload() {

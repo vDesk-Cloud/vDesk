@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider;
 
+use vDesk\Configuration\Settings;
 use vDesk\DataProvider\Expression\Functions;
 use vDesk\DataProvider\Expression\IAggregateFunction;
 use vDesk\DataProvider\Expression\ICreate;
@@ -12,43 +13,77 @@ use vDesk\DataProvider\Expression\IDelete;
 use vDesk\DataProvider\Expression\IInsert;
 use vDesk\DataProvider\Expression\ISelect;
 use vDesk\DataProvider\Expression\IUpdate;
-use vDesk\Struct\StaticSingleton;
 
 /**
- * Class Expression represents ...
+ * Factory class that provides access to specialized Expressions according the current configured DataProvider.
  *
  * @package vDesk\DataProvider
  * @author  Kerry Holz <DevelopmentHero@gmail.com>
  */
-class Expression extends StaticSingleton {
-    
+final class Expression {
+
+    /**
+     * "IN"-condition for "WHERE"-clauses.
+     */
+    public const In = "IN";
+
+    /**
+     * "NOT IN"-condition for "WHERE"-clauses.
+     */
+    public const NotIn = "NOT IN";
+
+    /**
+     * "LIKE"-condition for "WHERE"-clauses.
+     */
+    public const Like = "LIKE";
+
+    /**
+     * "BETWEEN"-condition for "WHERE"-clauses.
+     */
+    public const Between = "BETWEEN";
+
+    /**
+     * "NOT BETWEEN"-condition for "WHERE"-clauses.
+     */
+    public const NotBetween = "NOT BETWEEN";
+
+    /**
+     * "REGEXP"-condition for "WHERE"-clauses.
+     */
+    public const Regex = "REGEXP";
+
+    /**
+     * "NOT REGEXP"-condition for "WHERE"-clauses.
+     */
+    public const NotRegex = "NOT REGEXP";
+
     /**
      * The current expression provider of the Expression.
      *
      * @var string
      */
     private static string $Provider;
-    
+
     /**
      * Initializes a new instance of the Expression class.
      *
      * @param string $Provider Initializes the Expression with the specified expression provider.
      */
-    public static function _construct(string $Provider = "") {
+    public function __construct(string $Provider) {
         self::$Provider = "vDesk\\DataProvider\\{$Provider}\\Expression";
     }
-    
+
     /**
      * Factory method that creates a new instance of the ISelect class according the configured DataProvider.
      *
-     * @param mixed ...$Fields
+     * @param string|array|\vDesk\DataProvider\Expression\IAggregateFunction ...$Fields
      *
      * @return \vDesk\DataProvider\Expression\ISelect
      */
-    public static function Select(...$Fields): ISelect {
+    public static function Select(string|array|IAggregateFunction ...$Fields): ISelect {
         return self::$Provider::Select(...$Fields);
     }
-    
+
     /**
      * Factory method that creates a new instance of the IInsert class according the configured DataProvider.
      *
@@ -57,7 +92,7 @@ class Expression extends StaticSingleton {
     public static function Insert(): IInsert {
         return self::$Provider::Insert();
     }
-    
+
     /**
      * Factory method that creates a new instance of the IUpdate class according the configured DataProvider.
      *
@@ -68,7 +103,7 @@ class Expression extends StaticSingleton {
     public static function Update(string $Table): IUpdate {
         return self::$Provider::Update($Table);
     }
-    
+
     /**
      * Factory method that creates a new instance of the IDelete class according the configured DataProvider.
      *
@@ -77,7 +112,7 @@ class Expression extends StaticSingleton {
     public static function Delete(): IDelete {
         return self::$Provider::Delete();
     }
-    
+
     /**
      * Factory method that creates a new instance of the ICreate class according the configured DataProvider.
      *
@@ -86,7 +121,7 @@ class Expression extends StaticSingleton {
     public static function Create(): ICreate {
         return self::$Provider::Create();
     }
-    
+
     /**
      * Factory method that creates a new instance of the IAlter class according the configured DataProvider.
      *
@@ -95,7 +130,7 @@ class Expression extends StaticSingleton {
     public static function Alter(): IAlter {
         return self::$Provider::Alter();
     }
-    
+
     /**
      * Factory method that creates a new instance of the IDrop class according the configured DataProvider.
      *
@@ -104,7 +139,7 @@ class Expression extends StaticSingleton {
     public static function Drop(): IDrop {
         return self::$Provider::Drop();
     }
-    
+
     /**
      * Factory method that creates a new instance of the IAggregateFunction class according the configured DataProvider.
      *
@@ -116,5 +151,19 @@ class Expression extends StaticSingleton {
     public static function __callStatic(string $Function, array $Arguments): IAggregateFunction {
         return Functions::__callStatic($Function, $Arguments);
     }
-    
+
 }
+
+//Initialize Expression factory.
+if(Settings::$Local["DataProvider"]->Count > 0) {
+    new Expression(Settings::$Local["DataProvider"]["Provider"]);
+}
+
+//Alias constants.
+\define("In", Expression::In);
+\define("NotIn", Expression::NotIn);
+\define("Like", Expression::Like);
+\define("Between", Expression::Between);
+\define("NotBetween", Expression::NotBetween);
+\define("Regex", Expression::Regex);
+\define("NotRegex", Expression::NotRegex);

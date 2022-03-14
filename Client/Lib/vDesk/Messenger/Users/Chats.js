@@ -18,7 +18,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the Chats is enabled.
  * @memberOf vDesk.Messenger.Users
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Messenger
  */
 vDesk.Messenger.Users.Chats = function Chats(Chats = [], Enabled = true) {
     Ensure.Parameter(Chats, Array, "Chats");
@@ -60,7 +60,7 @@ vDesk.Messenger.Users.Chats = function Chats(Chats = [], Enabled = true) {
             get:        () => Selected,
             set:        Value => {
                 Ensure.Property(Value, vDesk.Messenger.Users.Chat, "Selected");
-                if(Selected !== null) {
+                if(Selected !== null){
                     Selected.Selected = false;
                 }
                 Selected = Value;
@@ -87,7 +87,7 @@ vDesk.Messenger.Users.Chats = function Chats(Chats = [], Enabled = true) {
     const OnSelect = Event => {
         Event.stopPropagation();
 
-        if(Selected !== null) {
+        if(Selected !== null){
             Selected.Selected = false;
         }
         Selected = Event.detail.sender;
@@ -128,7 +128,7 @@ vDesk.Messenger.Users.Chats = function Chats(Chats = [], Enabled = true) {
     this.Remove = function(Chat) {
         Ensure.Parameter(Chat, vDesk.Messenger.Users.Chat, "Chat");
         const Index = Chats.indexOf(Chat);
-        if(~Index) {
+        if(~Index){
             Control.removeChild(Chat.Control);
             Chats.splice(Index, 1);
         }
@@ -169,7 +169,7 @@ vDesk.Messenger.Users.Chats.FromUsers = function() {
             {
                 Module:  "Messenger",
                 Command: "GetUnreadUserMessages",
-                Ticket:  vDesk.User.Ticket
+                Ticket:  vDesk.Security.User.Current.Ticket
             }
         ),
         Response => {

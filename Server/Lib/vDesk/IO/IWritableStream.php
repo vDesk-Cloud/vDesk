@@ -6,18 +6,18 @@ namespace vDesk\IO;
 /**
  * Interface for writable byte streams.
  *
- * @package vDesk\IO
+ * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 interface IWritableStream extends IStream {
-    
+
     /**
      * Tells whether the current Stream supports writing.
      *
      * @return bool True if the Stream supports writing; otherwise, false.
      */
     public function CanWrite(): bool;
-    
+
     /**
      * Writes data to the Stream.
      *
@@ -26,7 +26,7 @@ interface IWritableStream extends IStream {
      * @return int The amount of bytes written.
      */
     public function Write(string $Data): int;
-    
+
     /**
      * Truncates the sequence of bytes to the specified size.
      *

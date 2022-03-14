@@ -33,7 +33,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the Editor is enabled.
  * @memberOf vDesk.Security.AccessControlList
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.AccessControlList.Editor = function Editor(AccessControlList, Enabled = true) {
     Ensure.Parameter(AccessControlList, vDesk.Security.AccessControlList, "AccessControlList");
@@ -144,16 +144,16 @@ vDesk.Security.AccessControlList.Editor = function Editor(AccessControlList, Ena
      * @param {CustomEvent} Event
      */
     const OnSelect = Event => {
-        if(SelectedElement !== null) {
+        if(SelectedElement !== null){
             SelectedElement.Selected = false;
         }
         SelectedElement = Event.detail.sender;
         SelectedElement.Selected = true;
 
-        if(Event.detail.sender instanceof vDesk.Security.AccessControlList.Entry) {
+        if(Event.detail.sender instanceof vDesk.Security.AccessControlList.Entry){
             ToggleArrowLeftButton(false);
             ToggleArrowRightButton(true);
-        } else if(Event.detail.sender instanceof vDesk.Security.UserGroupList.Item) {
+        }else if(Event.detail.sender instanceof vDesk.Security.UserGroupList.Item){
             ToggleArrowLeftButton(true);
             ToggleArrowRightButton(false);
         }
@@ -168,7 +168,7 @@ vDesk.Security.AccessControlList.Editor = function Editor(AccessControlList, Ena
     const OnUpdate = Event => {
         Event.stopPropagation();
         //Check if the entry has an ID and has not been updated before.
-        if(Event.detail.sender.ID !== null && !~Updated.indexOf(Event.detail.sender)) {
+        if(Event.detail.sender.ID !== null && !~Updated.indexOf(Event.detail.sender)){
             Updated.push(Event.detail.sender);
         }
         Changed = true;
@@ -184,14 +184,14 @@ vDesk.Security.AccessControlList.Editor = function Editor(AccessControlList, Ena
     const OnDelete = Event => {
         Event.stopPropagation();
         //Check if the deleted entry is not virtual
-        if(Event.detail.sender.ID !== null) {
+        if(Event.detail.sender.ID !== null){
             //Check if the entry has been updated before.
             const Index = Updated.indexOf(Event.detail.sender);
-            if(~Index) {
+            if(~Index){
                 Updated.splice(Index, 1);
             }
             Deleted.push(Event.detail.sender);
-        } else {
+        }else{
             //Else it is an added one, so remove it from the added list.
             Added.splice(Added.indexOf(Event.detail.sender), 1);
         }
@@ -237,16 +237,16 @@ vDesk.Security.AccessControlList.Editor = function Editor(AccessControlList, Ena
      */
     const OnClickRight = () => {
         //Check if the deleted entry is not virtual
-        if(SelectedElement.ID !== null) {
+        if(SelectedElement.ID !== null){
 
             //Check if the entry has been updated before.
             const Index = Updated.indexOf(SelectedElement);
-            if(~Index) {
+            if(~Index){
                 Updated.splice(Index, 1);
             }
             Deleted.push(SelectedElement);
             Changed = true;
-        } else {
+        }else{
             //Else it is an added one, so remove it from the added list.
             Added.splice(Added.indexOf(SelectedElement), 1);
         }
@@ -290,7 +290,7 @@ vDesk.Security.AccessControlList.Editor = function Editor(AccessControlList, Ena
                 || Updated.length > 0
                 || Deleted.length > 0
             )
-        ) {
+        ){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -313,11 +313,11 @@ vDesk.Security.AccessControlList.Editor = function Editor(AccessControlList, Ena
                             })),
                             Delete: Deleted.map(Entry => Entry.ID)
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         this.AccessControlList = vDesk.Security.AccessControlList.FromDataView(Response.Data);
                         Changed = false;
                         Control.removeEventListener("update", OnUpdate, false);
@@ -356,32 +356,32 @@ vDesk.Security.AccessControlList.Editor = function Editor(AccessControlList, Ena
             //Check if the Entry exists in the current specified AccessControlList.
             const VirtualEntry = AccessControlList.Entries.find(
                 VirtualEntry => VirtualEntry.Group.ID === Entry.Group.ID
-                                && VirtualEntry.User.ID === Entry.User.ID
+                    && VirtualEntry.User.ID === Entry.User.ID
             );
-            if(VirtualEntry !== undefined) {
+            if(VirtualEntry !== undefined){
 
                 //Check if the permissions differ.
                 if(
                     VirtualEntry.Read !== Entry.Read
                     || VirtualEntry.Write !== Entry.Write
                     || VirtualEntry.Delete !== Entry.Delete
-                ) {
+                ){
                     //Mark non virtual Entries as updated.
-                    if(Entry.ID !== null) {
+                    if(Entry.ID !== null){
                         //Copy permissions and mark it as updated.
                         Entry.Read = VirtualEntry.Read;
                         Entry.Write = VirtualEntry.Write;
                         Entry.Delete = VirtualEntry.Delete;
 
-                    } else {
+                    }else{
                         //Copy ID if the Entry is virtual.
                         Entry.ID = Entry?.ID ?? VirtualEntry.ID;
                     }
                     Updated.push(Entry);
                 }
-            } else {
+            }else{
                 //Otherwise mark non virtual Entries as deleted.
-                if(Entry.ID !== null) {
+                if(Entry.ID !== null){
                     Deleted.push(Entry);
                 }
                 this.AccessControlList.Remove(Entry);
@@ -393,9 +393,9 @@ vDesk.Security.AccessControlList.Editor = function Editor(AccessControlList, Ena
             if(
                 this.AccessControlList.Entries.find(
                     Entry => Entry.Group.ID === VirtualEntry.Group.ID
-                             && Entry.User.ID === VirtualEntry.User.ID
+                        && Entry.User.ID === VirtualEntry.User.ID
                 ) === undefined
-            ) {
+            ){
                 const Entry = vDesk.Security.AccessControlList.Entry.FromDataView(VirtualEntry);
                 Entry.ID = null;
                 this.AccessControlList.Add(Entry);
@@ -457,7 +457,5 @@ vDesk.Security.AccessControlList.Editor = function Editor(AccessControlList, Ena
     Arrows.className = "Arrows";
     Arrows.appendChild(Left);
     Arrows.appendChild(Right);
-
     Control.appendChild(Arrows);
-
 };

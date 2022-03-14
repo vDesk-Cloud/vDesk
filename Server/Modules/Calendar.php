@@ -22,12 +22,12 @@ use vDesk\Security\User;
 use vDesk\Utils\Log;
 
 /**
- * Class Calendar represents ...
+ * Calendar Module class.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Calendar extends Module implements ISearch {
-    
+
     /**
      * Gets the data of an Event.
      *
@@ -43,7 +43,7 @@ final class Calendar extends Module implements ISearch {
         }
         return $Event;
     }
-    
+
     /**
      * Returns all accessible events within a given time-period.
      *
@@ -55,7 +55,7 @@ final class Calendar extends Module implements ISearch {
     public static function GetEvents(\DateTime $From = null, \DateTime $To = null): Events {
         return Events::Between($From ?? Command::$Parameters["From"], $To ?? Command::$Parameters["To"]);
     }
-    
+
     /**
      * Gets all participants of an {@link \vDesk\Calendar\Event} Event.
      *
@@ -67,12 +67,12 @@ final class Calendar extends Module implements ISearch {
     public static function GetParticipants(int $ID = null): Event\Participants {
         $Event = new Event($ID ?? Command::$Parameters["ID"]);
         if(!$Event->AccessControlList->Read) {
-            Log::Error(__METHOD__, \vDesk::$User->Name . " tried to get Participants of an Event without having permissions.");
+            Log::Error(__METHOD__, User::$Current->Name . " tried to get Participants of an Event without having permissions.");
             throw new UnauthorizedAccessException();
         }
         return $Event->Participants->Fill();
     }
-    
+
     /**
      * Creates a new Event.
      * Triggers the {@link \vDesk\Calendar\Created}-Event for the created Event.
@@ -80,8 +80,8 @@ final class Calendar extends Module implements ISearch {
      * @param \DateTime|null            $Start          The date and time when the event begins.
      * @param \DateTime|null            $End            The date and time when the event ends.
      * @param bool|null                 $FullTime       Determines whether the Event spans over the whole day.
-     * @param int|null                  $RepeatAmount   The amount of times the Event re-occurrs.
-     * @param int|null                  $RepeatInterval The interval in days the Event re-occurrs.
+     * @param int|null                  $RepeatAmount   The amount of times the Event re-occurs.
+     * @param int|null                  $RepeatInterval The interval in days the Event re-occurs.
      * @param \vDesk\Security\User|null $Owner          The owner of the Event.
      * @param string|null               $Title          The title of the Event.
      * @param string|null               $Color          The color of the Event.
@@ -93,18 +93,18 @@ final class Calendar extends Module implements ISearch {
     public static function CreateEvent(
         \DateTime $Start = null,
         \DateTime $End = null,
-        bool $FullTime = null,
-        int $RepeatAmount = null,
-        int $RepeatInterval = null,
-        User $Owner = null,
-        string $Title = null,
-        string $Color = null,
-        string $Content = null,
-        array $Participants = null
+        bool      $FullTime = null,
+        int       $RepeatAmount = null,
+        int       $RepeatInterval = null,
+        User      $Owner = null,
+        string    $Title = null,
+        string    $Color = null,
+        string    $Content = null,
+        array     $Participants = null
     ): Event {
         $Event = new Event(
             null,
-            $Owner ?? \vDesk::$User,
+            $Owner ?? User::$Current,
             $Start ?? Command::$Parameters["Start"],
             $End ?? Command::$Parameters["End"],
             $FullTime ?? Command::$Parameters["FullTime"],
@@ -117,7 +117,7 @@ final class Calendar extends Module implements ISearch {
             new AccessControlList([
                 Entry::FromUser(),
                 Entry::FromGroup(null, false, false, false),
-                Entry::FromUser($Owner ?? \vDesk::$User)
+                Entry::FromUser($Owner ?? User::$Current)
             ])
         );
         $Event->Save();
@@ -127,7 +127,7 @@ final class Calendar extends Module implements ISearch {
         (new Created($Event))->Dispatch();
         return $Event;
     }
-    
+
     /**
      * Updates an Event.
      * Triggers the {@link \vDesk\Calendar\Updated}-Event for the updated {@link \vDesk\Calendar\Event}.
@@ -146,19 +146,19 @@ final class Calendar extends Module implements ISearch {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update the specified Event.
      */
     public static function UpdateEvent(
-        int $ID = null,
+        int       $ID = null,
         \DateTime $Start = null,
         \DateTime $End = null,
-        bool $FullTime = null,
-        int $RepeatAmount = null,
-        int $RepeatInterval = null,
-        string $Title = null,
-        string $Color = null,
-        string $Content = null
+        bool      $FullTime = null,
+        int       $RepeatAmount = null,
+        int       $RepeatInterval = null,
+        string    $Title = null,
+        string    $Color = null,
+        string    $Content = null
     ): Event {
         $Event = (new Event($ID ?? Command::$Parameters["ID"]))->Fill();
         if(!$Event->AccessControlList->Write) {
-            Log::Error(__METHOD__, \vDesk::$User->Name . " tried to update Event without having permissions.");
+            Log::Error(__METHOD__, User::$Current->Name . " tried to update Event without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Event->Start          = $Start ?? Command::$Parameters["Start"];
@@ -173,7 +173,7 @@ final class Calendar extends Module implements ISearch {
         (new Updated($Event))->Dispatch();
         return $Event;
     }
-    
+
     /**
      * Updates the start- and end date and time of an existing {@link \vDesk\Calendar\Event}.
      * Triggers the {@link \vDesk\Calendar\Updated}-Event for the updated {@link \vDesk\Calendar\Event}.
@@ -188,7 +188,7 @@ final class Calendar extends Module implements ISearch {
     public static function UpdateEventDate(int $ID = null, \DateTime $Start = null, \DateTime $End = null): bool {
         $Event = (new Event($ID ?? Command::$Parameters["ID"]))->Fill();
         if(!$Event->AccessControlList->Write) {
-            Log::Error(__METHOD__, \vDesk::$User->Name . " tried to update Event without having permissions.");
+            Log::Error(__METHOD__, User::$Current->Name . " tried to update Event without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Event->Start = $Start ?? Command::$Parameters["Start"];
@@ -197,7 +197,7 @@ final class Calendar extends Module implements ISearch {
         (new Updated($Event))->Dispatch();
         return true;
     }
-    
+
     /**
      * Deletes an Event.
      * Triggers the {@link \vDesk\Calendar\Event\Deleted}-Event for the deleted {@link \vDesk\Calendar\Event}.
@@ -210,26 +210,26 @@ final class Calendar extends Module implements ISearch {
     public static function DeleteEvent(int $ID = null): bool {
         $Event = new Event($ID ?? Command::$Parameters["ID"]);
         if(!$Event->AccessControlList->Delete) {
-            Log::Error(__METHOD__, \vDesk::$User->Name . " tried to delete Event [{$Event->ID}]({$Event->Title}) without having permissions.");
+            Log::Error(__METHOD__, User::$Current->Name . " tried to delete Event [{$Event->ID}]({$Event->Title}) without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Event->Delete();
         (new Deleted($Event))->Dispatch();
         return true;
     }
-    
+
     /**
      * Adds a set of Participants to an Event.
      *
      * @param null|int   $ID    The ID of the {@link \vDesk\Calendar\Event}.
-     * @param null|array $Users An array containig the IDs of the Users to add.
+     * @param null|array $Users An array containing the IDs of the Users to add.
      *
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update the specified Event.
      */
     public static function AddParticipants(int $ID = null, array $Users = null): void {
         $Event = new Event($ID ?? Command::$Parameters["ID"]);
         if(!$Event->AccessControlList->Write) {
-            Log::Error(__METHOD__, \vDesk::$User->Name . " tried to add Participants without having permissions.");
+            Log::Error(__METHOD__, User::$Current->Name . " tried to add Participants without having permissions.");
             throw new UnauthorizedAccessException();
         }
         //Fill collections first, required for check of duplicate entries.
@@ -245,12 +245,8 @@ final class Calendar extends Module implements ISearch {
              * @var \vDesk\Security\AccessControlList\Entry $Entry Eventually existing ACL-Entry.
              */
             //Check if an entry already exists
-            $Entry = $Event->AccessControlList->Find(
-                static function(Entry $Entry) use ($User): bool {
-                    return $Entry->User->ID === $User;
-                }
-            );
-            
+            $Entry = $Event->AccessControlList->Find(static fn(Entry $Entry): bool => $Entry->User->ID === $User);
+
             if($Entry !== null) {
                 //If true, update the existing element with read permissions.
                 $Entry->Read = true;
@@ -261,7 +257,7 @@ final class Calendar extends Module implements ISearch {
         }
         $Event->Save();
     }
-    
+
     /**
      * Searches the Calendar for Events with a similar title.
      *
@@ -300,7 +296,7 @@ final class Calendar extends Module implements ISearch {
         }
         return $Results;
     }
-    
+
     /**
      * Gets the status information of the Calendar.
      *
@@ -312,5 +308,5 @@ final class Calendar extends Module implements ISearch {
                                       ->From("Calendar.Events")()
         ];
     }
-    
+
 }

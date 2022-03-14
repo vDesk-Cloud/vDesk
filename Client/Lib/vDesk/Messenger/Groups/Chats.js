@@ -18,7 +18,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the Chats is enabled.
  * @memberOf vDesk.Messenger.Groups
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Messenger
  */
 vDesk.Messenger.Groups.Chats = function Chats(Chats = [], Enabled = true) {
     Ensure.Parameter(Chats, Array, "Chats");
@@ -60,7 +60,7 @@ vDesk.Messenger.Groups.Chats = function Chats(Chats = [], Enabled = true) {
             get:        () => Selected,
             set:        Value => {
                 Ensure.Property(Value, vDesk.Messenger.Groups.Chat, "Selected");
-                if(Selected !== null) {
+                if(Selected !== null){
                     Selected.Selected = false;
                 }
                 Selected = Value;
@@ -87,7 +87,7 @@ vDesk.Messenger.Groups.Chats = function Chats(Chats = [], Enabled = true) {
     const OnSelect = Event => {
         Event.stopPropagation();
 
-        if(Selected !== null) {
+        if(Selected !== null){
             Selected.Selected = false;
         }
         Selected = Event.detail.sender;
@@ -128,7 +128,7 @@ vDesk.Messenger.Groups.Chats = function Chats(Chats = [], Enabled = true) {
     this.Remove = function(Chat) {
         Ensure.Parameter(Chat, vDesk.Messenger.Groups.Chat, "Chat");
         const Index = Chats.indexOf(Chat);
-        if(~Index) {
+        if(~Index){
             Control.removeChild(Chat.Control);
             Chats.splice(Index, 1);
         }
@@ -156,13 +156,14 @@ vDesk.Messenger.Groups.Chats = function Chats(Chats = [], Enabled = true) {
         Control.appendChild(Chat.Control);
     });
 };
+
 /**
  * Factory method that creates a Chats list containing every existing recipient.
  * @return {vDesk.Messenger.Groups.Chats} A Chats list containing all current Chats.
  */
 vDesk.Messenger.Groups.Chats.FromGroups = function() {
     const Chats = new vDesk.Messenger.Groups.Chats(
-        vDesk.User.Memberships
+        vDesk.Security.User.Current.Memberships
             .map(Group => vDesk.Security.Groups.find(ExistingGroup => ExistingGroup.ID === Group.ID))
             .map(Group => new vDesk.Messenger.Groups.Chat(Group))
     );
@@ -177,14 +178,14 @@ vDesk.Messenger.Groups.Chats.FromGroups = function() {
                         Date:   new Date(),
                         Amount: 10
                     },
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
                 Chat.Conversation.AddMessages(
                     ...Response.Data.map(Message => vDesk.Messenger.Groups.Message.FromDataView(Message))
                 );
-                if(Chat.Selected) {
+                if(Chat.Selected){
                     Chat.Conversation.Scroll();
                 }
             }

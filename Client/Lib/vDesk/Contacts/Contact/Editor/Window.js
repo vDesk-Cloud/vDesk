@@ -6,7 +6,7 @@
  * @extends vDesk.Controls.Window
  * @memberOf vDesk.Contacts.Contact.Editor
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Contacts
  */
 vDesk.Contacts.Contact.Editor.Window = function Window(Contact) {
     Ensure.Property(Contact, vDesk.Contacts.Contact, "Contact");
@@ -46,7 +46,7 @@ vDesk.Contacts.Contact.Editor.Window = function Window(Contact) {
     const OnUpdate = Event => {
         ResetItem.Enabled = false;
         SaveItem.Enabled = false;
-        if(Event.detail.sender === AccessControlListEditor) {
+        if(Event.detail.sender === AccessControlListEditor){
             Event.stopPropagation();
         }
     };
@@ -73,10 +73,10 @@ vDesk.Contacts.Contact.Editor.Window = function Window(Contact) {
         vDesk.Visual.Icons.Save,
         false,
         () => {
-            if(ContactEditor.Changed) {
+            if(ContactEditor.Changed){
                 ContactEditor.Save();
             }
-            if(AccessControlListEditor.Changed) {
+            if(AccessControlListEditor.Changed){
                 AccessControlListEditor.Save();
             }
         }
@@ -104,7 +104,7 @@ vDesk.Contacts.Contact.Editor.Window = function Window(Contact) {
     const DeleteItem = new vDesk.Controls.ToolBar.Item(
         vDesk.Locale.vDesk.Delete,
         vDesk.Visual.Icons.Delete,
-        Contact.ID !== null && Contact.AccessControlList.Delete && vDesk.User.Permissions.DeleteContact,
+        Contact.ID !== null && Contact.AccessControlList.Delete && vDesk.Security.User.Current.Permissions.DeleteContact,
         () => ContactEditor.Delete()
     );
 
@@ -117,7 +117,7 @@ vDesk.Contacts.Contact.Editor.Window = function Window(Contact) {
         vDesk.Visual.Icons.Contacts.Module,
         true,
         () => {
-            if(CurrentEditor !== ContactEditor) {
+            if(CurrentEditor !== ContactEditor){
                 this.Content.replaceChild(ContactEditor.Control, CurrentEditor.Control);
                 CurrentEditor = ContactEditor;
                 ContactItem.Selected = true;
@@ -136,7 +136,7 @@ vDesk.Contacts.Contact.Editor.Window = function Window(Contact) {
         vDesk.Visual.Icons.Security.Lock,
         true,
         () => {
-            if(CurrentEditor !== AccessControlListEditor) {
+            if(CurrentEditor !== AccessControlListEditor){
                 this.Content.replaceChild(AccessControlListEditor.Control, CurrentEditor.Control);
                 CurrentEditor = AccessControlListEditor;
                 ContactItem.Selected = false;

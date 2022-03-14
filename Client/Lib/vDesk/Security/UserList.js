@@ -19,7 +19,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the UserList is enabled.
  * @memberOf vDesk.Security
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.UserList = function UserList(Items = [], Enabled = true) {
     Ensure.Parameter(Items, Array, "Items");
@@ -61,7 +61,7 @@ vDesk.Security.UserList = function UserList(Items = [], Enabled = true) {
             get:        () => Selected,
             set:        Value => {
                 Ensure.Property(Value, vDesk.Security.UserList.Item, "Selected");
-                if(Selected !== null) {
+                if(Selected !== null){
                     Selected.Selected = false;
                 }
                 Selected = Value;
@@ -88,7 +88,7 @@ vDesk.Security.UserList = function UserList(Items = [], Enabled = true) {
     const OnSelect = Event => {
         Event.stopPropagation();
 
-        if(Selected !== null) {
+        if(Selected !== null){
             Selected.Selected = false;
         }
         Selected = Event.detail.sender;
@@ -129,7 +129,7 @@ vDesk.Security.UserList = function UserList(Items = [], Enabled = true) {
     this.Remove = function(Item) {
         Ensure.Parameter(Item, vDesk.Security.UserList.Item, "Item");
         const Index = Items.indexOf(Item);
-        if(~Index) {
+        if(~Index){
             Control.removeChild(Item.Control);
             Items.splice(Index, 1);
         }
@@ -164,7 +164,7 @@ vDesk.Security.UserList = function UserList(Items = [], Enabled = true) {
  * @return {vDesk.Security.UserList} A UserList containing every existing user.
  */
 vDesk.Security.UserList.FromUsers = function(View = true) {
-    if(View) {
+    if(View){
         return new vDesk.Security.UserList(
             vDesk.Security.Users.map(User => new vDesk.Security.UserList.Item(User))
         );
@@ -176,15 +176,15 @@ vDesk.Security.UserList.FromUsers = function(View = true) {
                 Module:     "Security",
                 Command:    "GetUsers",
                 Parameters: {View: false},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         )
     );
-    if(Response.Status) {
+    if(Response.Status){
         return new vDesk.Security.UserList(
             Response.Data.map(User => new vDesk.Security.UserList.Item(vDesk.Security.User.FromDataView(User)))
         );
-    } else {
+    }else{
         alert(Response.Data);
     }
 

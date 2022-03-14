@@ -6,7 +6,7 @@
  * @property {HTMLDivElement} Control Gets the underlying DOM-Node.
  * @memberOf vDesk.Contacts
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Contacts
  */
 vDesk.Contacts.Contact.Viewer = function Viewer(Contact) {
     Ensure.Parameter(Contact, vDesk.Contacts.Contact, "Contact");
@@ -101,7 +101,7 @@ vDesk.Contacts.Contact.Viewer = function Viewer(Contact) {
         const Label = document.createElement("span");
         Label.className = "Label";
         let Text = null;
-        switch(Option.Type) {
+        switch(Option.Type){
             case vDesk.Contacts.Contact.Option.Type.Telephone:
                 Label.textContent = `${vDesk.Locale.Contacts.PhoneNumber}:`;
                 Row.className = "Row PhoneNumber";

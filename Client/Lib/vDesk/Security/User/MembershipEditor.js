@@ -1,5 +1,12 @@
 "use strict";
 /**
+ * Fired if the Group-memberships of the current edited User of the MembershipEditor has been changed.
+ * @event vDesk.Security.User.MembershipEditor#change
+ * @type {CustomEvent}
+ * @property {Object} detail The arguments of the 'change' event.
+ * @property {vDesk.Security.User.MembershipEditor} detail.sender The current instance of the MembershipEditor.
+ */
+/**
  * Initializes a new instance of the MembershipEditor class.
  * @class Represents an editor for administrating the group-memberships of an user.
  * @param {vDesk.Security.User} User Initializes the MembershipEditor with the specified User to edit.
@@ -10,7 +17,7 @@
  * @property {Boolean} Changed Gets a value indicating whether the memberships of the current user of the MembershipEditor has been modified.
  * @memberOf vDesk.Security.User
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled = false) {
     Ensure.Parameter(User, vDesk.Security.User, "User");
@@ -32,13 +39,13 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
      * The added Groups of the MembershipEditor.
      * @type {Array<vDesk.Security.Group>}
      */
-    const Added = [];
+    let Added = [];
 
     /**
      * The deleted Groups of the MembershipEditor.
      * @type {Array<vDesk.Security.Group>}
      */
-    const Deleted = [];
+    let Deleted = [];
 
     Object.defineProperties(this, {
         Control: {
@@ -50,17 +57,17 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
             get:        () => User,
             set:        Value => {
                 Ensure.Property(Value, Type.Object, "User");
-                Added.splice(0);
-                Deleted.splice(0);
+                Added = [];
+                Deleted = [];
                 User = Value;
                 PreviousUser = vDesk.Security.User.FromDataView(Value);
                 MembershipList.Clear();
                 GroupList.Clear();
 
                 vDesk.Security.Groups.forEach(Group => {
-                    if(Value.Memberships.find(ID => ID === Group.ID) !== undefined || Group.ID === vDesk.Security.Group.Everyone) {
+                    if(Value.Memberships.find(ID => ID === Group.ID) !== undefined || Group.ID === vDesk.Security.Group.Everyone){
                         MembershipList.Add(new vDesk.Security.GroupList.Item(Group, true, Enabled && Group.ID !== vDesk.Security.Group.Everyone));
-                    } else {
+                    }else{
                         GroupList.Add(new vDesk.Security.GroupList.Item(Group, true, Enabled));
                     }
                 });
@@ -73,7 +80,7 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
             get:        () => Enabled,
             set:        Value => {
                 Ensure.Property(Value, Type.Boolean, "Enabled");
-                Enabled = Value && vDesk.User.Permissions.UpdateUser;
+                Enabled = Value && vDesk.Security.User.Current.Permissions.UpdateUser;
                 MembershipList.Enabled = Value;
                 GroupList.Enabled = Value;
                 Left.disabled = !Value || GroupList.Selected === null;
@@ -93,7 +100,7 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
      * @param {CustomEvent} Event
      */
     const OnDropMembershipList = Event => {
-        if(!~Added.indexOf(Event.detail.item.Group) && !User.Memberships.some(Group => Group === Event.detail.item.Group.ID)) {
+        if(!~Added.indexOf(Event.detail.item.Group) && !User.Memberships.some(Group => Group === Event.detail.item.Group.ID)){
             Added.push(Event.detail.item.Group);
         }
         Event.stopPropagation();
@@ -115,7 +122,7 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
      */
     const OnDropGroupList = Event => {
         Event.stopPropagation();
-        if(!~Deleted.indexOf(Event.detail.item.Group) && User.Memberships.some(Group => Group === Event.detail.item.Group.ID)) {
+        if(!~Deleted.indexOf(Event.detail.item.Group) && User.Memberships.some(Group => Group === Event.detail.item.Group.ID)){
             Deleted.push(Event.detail.item.Group);
         }
         MembershipList.Remove(Event.detail.item);
@@ -136,10 +143,10 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
     const OnSelectMembershipList = Event => {
         Event.stopPropagation();
         GroupList.Selected = null;
-        if(Event.detail.item.Group.ID !== vDesk.Security.Group.Everyone) {
+        if(Event.detail.item.Group.ID !== vDesk.Security.Group.Everyone){
             Left.disabled = true;
             Right.disabled = false;
-        } else {
+        }else{
             Left.disabled = true;
             Right.disabled = true;
         }
@@ -167,7 +174,7 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
         MembershipList.Add(Item);
         GroupList.Selected = null;
         MembershipList.Selected = Item;
-        if(!~Added.indexOf(Item.Group) && !User.Memberships.some(Group => Group === Item.Group.ID)) {
+        if(!~Added.indexOf(Item.Group) && !User.Memberships.some(Group => Group === Item.Group.ID)){
             Added.push(Item.Group);
         }
         Left.disabled = true;
@@ -186,7 +193,7 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
         GroupList.Add(Item);
         MembershipList.Selected = null;
         GroupList.Selected = Item;
-        if(!~Deleted.indexOf(Item.Group) && User.Memberships.some(Group => Group === Item.Group.ID)) {
+        if(!~Deleted.indexOf(Item.Group) && User.Memberships.some(Group => Group === Item.Group.ID)){
             Deleted.push(Item.Group);
         }
         Left.disabled = false;
@@ -199,7 +206,7 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
      * Saves all made changes on the memberships of the current edited user.
      */
     this.Save = function() {
-        if(User.ID !== null) {
+        if(User.ID !== null){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -210,29 +217,29 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
                             Add:    Added.map(Group => Group.ID),
                             Delete: Deleted.map(Group => Group.ID)
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         User.Memberships = MembershipList.Items.map(Item => Item.Group.ID);
 
                         //Update the permissions of the current logged in User.
-                        if(User.ID === vDesk.User.ID) {
+                        if(User.ID === vDesk.Security.User.Current.ID){
                             vDesk.Connection.Send(
                                 new vDesk.Modules.Command(
                                     {
                                         Module:  "Security",
                                         Command: "ReLogin",
-                                        Ticket:  vDesk.User.Ticket
+                                        Ticket:  vDesk.Security.User.Current.Ticket
                                     }
                                 ),
-                                Response => vDesk.User = vDesk.Security.User.FromDataView(Response.Data)
+                                Response => vDesk.Security.User.Current = vDesk.User = vDesk.Security.User.FromDataView(Response.Data)
                             );
                         }
                         Changed = false;
-                        Added.splice(0);
-                        Deleted.splice(0);
+                        Added = [];
+                        Deleted = [];
                     }
                 }
             );
@@ -291,9 +298,9 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
 
     //Check if an user has been passed.
     vDesk.Security.Groups.forEach(Group => {
-        if(User.Memberships.find(Membership => Membership.ID === Group.ID) !== undefined || Group.ID === vDesk.Security.Group.Everyone) {
+        if(User.Memberships.find(Membership => Membership.ID === Group.ID) !== undefined || Group.ID === vDesk.Security.Group.Everyone){
             MembershipList.Add(new vDesk.Security.GroupList.Item(Group, true, Enabled && Group.ID !== vDesk.Security.Group.Everyone));
-        } else {
+        }else{
             GroupList.Add(new vDesk.Security.GroupList.Item(Group, true, Enabled));
         }
     });

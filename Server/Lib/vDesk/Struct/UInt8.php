@@ -6,26 +6,26 @@ namespace vDesk\Struct;
 /**
  * Represents an unsigned 8-bit integer.
  *
- * @package vDesk\Struct
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class UInt8 {
-    
+
     /**
      * Represents the largest possible value of an unsigned 8-bit integer.
      */
     public const MaxValue = 255;
-    
+
     /**
      * Represents the smallest possible value of an unsigned 8-bit integer.
      */
     public const MinValue = 0;
-    
+
     /**
      * The size in Bytes an unsigned 8-bit integer will address.
      */
     public const Size = 1;
-    
+
     /**
      * Parses an unsigned 8-bit integer from a specified string.
      *
@@ -37,7 +37,7 @@ class UInt8 {
     public static function Parse(string $String): int {
         return Number::ParseUInt8($String);
     }
-    
+
     /**
      * Tries to parse an unsigned 8-bit integer from a specified string.
      *
@@ -48,5 +48,5 @@ class UInt8 {
     public static function TryParse(string $String): ?int {
         return Number::TryParseUInt8($String);
     }
-    
+
 }

@@ -16,7 +16,7 @@ use vDesk\Struct\Collections\Observable\Collection;
 /**
  * Calendar Package manifest class.
  *
- * @package vDesk\Packages
+ * @package vDesk\Calendar
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Calendar extends Package implements Locale\IPackage, Events\IPackage {
@@ -29,7 +29,7 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
+    public const Version = "1.0.1";
     
     /**
      * The name of the Package.
@@ -45,10 +45,10 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Events"   => "1.0.0",
-        "Locale"   => "1.0.0",
-        "Security" => "1.0.0",
-        "Search"   => "1.0.0"
+        "Events"   => "1.0.1",
+        "Locale"   => "1.0.2",
+        "Security" => "1.0.2",
+        "Search"   => "1.0.1"
     ];
     
     /**
@@ -213,7 +213,7 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
     public static function Install(\Phar $Phar, string $Path): void {
         
         Expression::Create()
-                  ->Database("Calendar")
+                  ->Schema("Calendar")
                   ->Execute();
         
         //Create tables.
@@ -364,7 +364,7 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
         
         //Drop database.
         Expression::Drop()
-                  ->Database("Calendar")
+                  ->Schema("Calendar")
                   ->Execute();
         
         //Delete files.

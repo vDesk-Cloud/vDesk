@@ -6,11 +6,11 @@ namespace vDesk\Struct\Collections;
 /**
  * Exception that is thrown when a value with a duplicate key is inserted in a Dictionary.
  *
- * @package vDesk\Struct\Collections\Typed
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class DuplicateKeyException extends \Exception {
-    
+
     /**
      * Initializes a new instance of the DuplicateKeyException class.
      *

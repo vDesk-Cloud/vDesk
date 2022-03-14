@@ -6,7 +6,7 @@
  * @implements vDesk.Search.IResult
  * @memberOf vDesk.Archive
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Archive
  */
 vDesk.Archive.SearchResult = function SearchResult(Result) {
 
@@ -20,7 +20,7 @@ vDesk.Archive.SearchResult = function SearchResult(Result) {
         Viewer: {
             enumerable: true,
             get:        () => {
-                if(Viewer === null) {
+                if(Viewer === null){
                     Viewer = new vDesk.Archive.Element.Viewer(Element);
                 }
                 return Viewer.Control

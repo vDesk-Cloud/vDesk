@@ -5,10 +5,11 @@ namespace vDesk\Struct;
 /**
  * Exception that is thrown when an invalid operation has been performed.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class InvalidOperationException extends \Exception {
-    
+
     /**
      * Initializes a new instance of the InvalidOperationException class.
      *

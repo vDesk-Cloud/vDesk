@@ -1,11 +1,14 @@
+"use strict";
 /**
  * Initializes a new instance of the Search class.
- * @module Search
- * @class The searchmodule.
- * Provides an interface for searching files, events, etc.
+ * @class Search Module
+ * @property {HTMLDivElement} Control gets the underlying DOM-Node.
+ * @property {String} Name Gets the name of the Module.
+ * @property {String} Title Gets the title of the Module.
+ * @property {String} Icon Gets the icon of the Module.
  * @memberOf Modules
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Search
  */
 Modules.Search = function Search() {
 

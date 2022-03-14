@@ -49,7 +49,7 @@ Topic.Control.addEventListener("focus", () => TopicInteraction++, true);
  * @type {vDesk.Controls.EditControl}
  */
 const Email = new vDesk.Controls.EditControl(
-    "How can i contact you?",
+    "To which mail address i should reply?",
     "Please provide an E-Mail address!",
     Extension.Type.Email,
     null,

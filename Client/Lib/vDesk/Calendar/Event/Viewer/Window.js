@@ -6,7 +6,7 @@
  * @memberOf vDesk.Calendar.Event.Viewer
  * @extends vDesk.Controls.Window
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Calendar
  */
 vDesk.Calendar.Event.Viewer.Window = function(Event) {
     Ensure.Parameter(Event, vDesk.Calendar.Event, "Event");

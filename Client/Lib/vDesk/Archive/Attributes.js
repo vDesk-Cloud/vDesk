@@ -3,5 +3,6 @@
  * @namespace
  * @memberOf vDesk.Archive
  * @enum {Function}
+ * @package vDesk\Archive
  */
 vDesk.Archive.Attributes = {};

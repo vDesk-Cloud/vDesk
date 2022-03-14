@@ -40,7 +40,7 @@ final class Tasks extends Package implements IPackage {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Machines" => "1.0.0"];
+    public const Dependencies = ["Machines" => "1.0.2"];
     
     /**
      * The files and directories of the Package.

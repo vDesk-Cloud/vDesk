@@ -1,6 +1,6 @@
 
 #Customization {
-    grid-row: 5 !important;
+    grid-row: 4 !important;
     display: grid;
     grid-template-columns: 60% 40%;
     grid-template-rows: repeat(3, 33.333%);

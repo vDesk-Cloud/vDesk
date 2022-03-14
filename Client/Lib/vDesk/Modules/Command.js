@@ -1,3 +1,4 @@
+"use strict";
 /**
  * @typedef {Object} CommandMap.
  * @property {String} Module The Module of the CommandMap.
@@ -16,8 +17,7 @@
  * @property {Boolean} Canceled Gets a value indicating whether the execution of the command has been canceled.
  * @memberOf vDesk.Modules
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
- * @todo Move to vDesk.Modules-Namespace.
+ * @package vDesk\Modules
  */
 vDesk.Modules.Command = function Command({Module, Command, Parameters = {}, Ticket} = {}) {
 
@@ -78,7 +78,7 @@ vDesk.Modules.Command = function Command({Module, Command, Parameters = {}, Tick
         Cancel();
     };
     //Check if the given command is a default command, which has to be known before fetching the modules and their commands from the server.
-    switch(Command) {
+    switch(Command){
         case vDesk.Modules.Command.Commands.ReLogin:
             Module = CGI.Module + Module;
             Command = CGI.Command + Command + CGI.Ticket + Ticket;
@@ -99,9 +99,8 @@ vDesk.Modules.Command = function Command({Module, Command, Parameters = {}, Tick
         default:
             //Fetch the module.
             const ModuleDescriptor = vDesk.Modules.Commands.find(ModuleDescriptor => ModuleDescriptor.Name === Module);
-            //const ModuleInstance = vDesk.Modules.Running.find(ModuleDescriptor => ModuleDescriptor.Name === Module);
             //Check if the module exists.
-            if(ModuleDescriptor === undefined) {
+            if(ModuleDescriptor === undefined){
                 throw new TypeError(`Undefined module with name: '${Module}'.`);
             }
             Module = CGI.Module + Module;
@@ -109,14 +108,14 @@ vDesk.Modules.Command = function Command({Module, Command, Parameters = {}, Tick
             //Fetch the command.
             const CommandDescriptor = ModuleDescriptor.Commands.find(CommandDescriptor => CommandDescriptor.Name === Command);
             //Check if the command exists.
-            if(CommandDescriptor === undefined) {
+            if(CommandDescriptor === undefined){
                 throw new TypeError(`Undefined command with name: '${Command}' of module '${Module}'.`);
             }
             Command = CGI.Command + Command;
 
             //Check if the command requires a ticket.
-            if(CommandDescriptor.RequireTicket) {
-                if(Ticket === undefined) {
+            if(CommandDescriptor.RequireTicket){
+                if(Ticket === undefined){
                     throw new TypeError(`Missing ticket for command with name: '${Command}' of module '${Module}'.`);
                 }
                 Command += CGI.Ticket + Ticket;
@@ -124,38 +123,37 @@ vDesk.Modules.Command = function Command({Module, Command, Parameters = {}, Tick
 
             Data = CommandDescriptor.Binary ? new FormData() : new vDesk.Utils.FormData();
 
-            //Check if the command awaits parameters.
-
             //Loop through parameters and check passed arguments for completeness and correct type.
             CommandDescriptor?.Parameters?.forEach(Parameter => {
                 //Check if the parameter has been passed.
-                if(Parameters[Parameter.Name] === undefined) {
+                if(Parameters[Parameter.Name] === undefined){
                     //Check if the Parameter is required.
-                    if(!Parameter.Optional) {
+                    if(!Parameter.Optional){
                         throw new TypeError(
-                            `Missing value for required Parameter '${Parameter.Name}' of Command '${ModuleDescriptor.Name}::${CommandDescriptor.Name}'!`);
+                            `Missing value for required Parameter '${Parameter.Name}' of Command '${ModuleDescriptor.Name}::${CommandDescriptor.Name}'!`
+                        );
                     }
-                } else {
+                }else{
                     //Check if the passed value matches the required datatype.
                     if(
                         !Parameter.Nullable
                         && Parameters[Parameter.Name] !== null
                         && !vDesk.Utils.Validate.As(Parameters[Parameter.Name], Parameter.Type)
-                    ) {
+                    ){
                         throw new TypeError(
-                            `Value of Parameter '${Parameter.Name}' of Command '${ModuleDescriptor.Name}::${CommandDescriptor.Name}' must be type of ${Parameter.Type}, ${Parameters[Parameter.Name]?.constructor?.name ?? typeof Parameters[Parameter.Name]} given.`);
+                            `Value of Parameter '${Parameter.Name}' of Command '${ModuleDescriptor.Name}::${CommandDescriptor.Name}' must be type of ${Parameter.Type}, ${Parameters[Parameter.Name]?.constructor?.name ?? typeof Parameters[Parameter.Name]} given.`
+                        );
                     }
                     //Append form data.
                     Data.append(
                         Parameter.Name,
                         Parameter.Type === "file"
-                        ? Parameters[Parameter.Name]
-                        : JSON.stringify(Parameters[Parameter.Name])
+                            ? Parameters[Parameter.Name]
+                            : JSON.stringify(Parameters[Parameter.Name])
                     );
                 }
             });
     }
-
 };
 
 /**

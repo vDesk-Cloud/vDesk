@@ -25,23 +25,23 @@ use vDesk\Security\User;
 use vDesk\Utils\Log;
 
 /**
- * The Contacts Module of vDesk.
+ * Contacts Module.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  * @package vDesk\Contacts
  */
 final class Contacts extends Module implements ISearch {
-    
+
     /**
      * Filter for searching contacts.
      */
     public const FilterContact = "Contact";
-    
+
     /**
      * Filter for searching companies.
      */
     public const FilterCompany = "Company";
-    
+
     /**
      * Gets the data of a Contact.
      *
@@ -57,7 +57,7 @@ final class Contacts extends Module implements ISearch {
         }
         return $Contact;
     }
-    
+
     /**
      * Gets a subset of all existing Contacts.
      *
@@ -74,7 +74,7 @@ final class Contacts extends Module implements ISearch {
             $Offset ?? Command::$Parameters["Offset"]
         );
     }
-    
+
     /**
      * Creates a new Contact.
      * Triggers the {@link \vDesk\Contacts\ContactAdded}-Event for the added {@link \vDesk\Contacts\Contact}.
@@ -94,29 +94,28 @@ final class Contacts extends Module implements ISearch {
      *
      * @return \vDesk\Contacts\Contact The newly created Contact.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to create Contacts.
-     *
      */
     public static function CreateContact(
-        User $Owner = null,
-        int $Gender = null,
-        string $Title = null,
-        string $Forename = null,
-        string $Surname = null,
-        string $Street = null,
-        string $HouseNumber = null,
-        int $ZipCode = null,
-        string $City = null,
+        User    $Owner = null,
+        int     $Gender = null,
+        string  $Title = null,
+        string  $Forename = null,
+        string  $Surname = null,
+        string  $Street = null,
+        string  $HouseNumber = null,
+        int     $ZipCode = null,
+        string  $City = null,
         Country $Country = null,
         Company $Company = null,
-        string $Annotations = null
+        string  $Annotations = null
     ): Contact {
-        if(!\vDesk::$User->Permissions["CreateContact"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to create a new Contact without having permissions.");
+        if(!User::$Current->Permissions["CreateContact"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to create a new Contact without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Contact = new Contact(
             null,
-            $Owner ?? \vDesk::$User,
+            $Owner ?? User::$Current,
             $Gender ?? Command::$Parameters["Gender"],
             $Title ?? Command::$Parameters["Title"],
             $Forename ?? Command::$Parameters["Forename"],
@@ -132,14 +131,14 @@ final class Contacts extends Module implements ISearch {
             new AccessControlList([
                 Entry::FromUser(),
                 Entry::FromGroup(null, false, false, false),
-                Entry::FromUser($Owner ?? \vDesk::$User)
+                Entry::FromUser($Owner ?? User::$Current)
             ])
         );
         $Contact->Save();
         (new Contact\Created($Contact))->Dispatch();
         return $Contact;
     }
-    
+
     /**
      * Updates an existing Contact.
      * Triggers the {@link \vDesk\Contacts\Contact\Updated}-Event for the updated {@link \vDesk\Contacts\Contact}.
@@ -160,25 +159,24 @@ final class Contacts extends Module implements ISearch {
      * @return \vDesk\Contacts\Contact The updated Contact.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Contacts or doesn't have
      *                                                     write permissions on the Contact to update.
-     *
      */
     public static function UpdateContact(
-        int $ID = null,
-        int $Gender = null,
-        string $Title = null,
-        string $Forename = null,
-        string $Surname = null,
-        string $Street = null,
-        string $HouseNumber = null,
-        int $ZipCode = null,
-        string $City = null,
+        int     $ID = null,
+        int     $Gender = null,
+        string  $Title = null,
+        string  $Forename = null,
+        string  $Surname = null,
+        string  $Street = null,
+        string  $HouseNumber = null,
+        int     $ZipCode = null,
+        string  $City = null,
         Country $Country = null,
         Company $Company = null,
-        string $Annotations = null
+        string  $Annotations = null
     ): Contact {
         $Contact = (new Contact($ID ?? Command::$Parameters["ID"]))->Fill();
-        if(!\vDesk::$User->Permissions["UpdateContact"] || !$Contact->AccessControlList->Write) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to update a Contact without having permissions.");
+        if(!User::$Current->Permissions["UpdateContact"] || !$Contact->AccessControlList->Write) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to update a Contact without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Contact->Gender      = $Gender ?? Command::$Parameters["Gender"];
@@ -196,7 +194,7 @@ final class Contacts extends Module implements ISearch {
         (new Updated($Contact))->Dispatch();
         return $Contact;
     }
-    
+
     /**
      * Updates the {@link \vDesk\Contacts\Contact\Option}s of a Contact.
      * Triggers the {@link \vDesk\Contacts\Contact\Updated} Event for the updated {@link \vDesk\Contacts\Contact}.
@@ -209,13 +207,12 @@ final class Contacts extends Module implements ISearch {
      * @return \vDesk\Contacts\Contact\Options The updated Options of the Contact.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Contacts or doesn't have
      *                                                     write permissions on the Contact to update.
-     *
      */
     public static function SetContactOptions(int $ID = null, array $Add = null, array $Update = null, array $Delete = null): Options {
         $Contact = new Contact($ID ?? Command::$Parameters["ID"]);
         $Contact->Options->Fill();
-        if(!\vDesk::$User->Permissions["UpdateContact"] || !$Contact->AccessControlList->Write) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to update the Options of a Contact without having permissions.");
+        if(!User::$Current->Permissions["UpdateContact"] || !$Contact->AccessControlList->Write) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to update the Options of a Contact without having permissions.");
             throw new UnauthorizedAccessException();
         }
         //Add new options.
@@ -225,13 +222,13 @@ final class Contacts extends Module implements ISearch {
             $Option->Value = $Added->Value;
             $Contact->Options->Add($Option);
         }
-        
+
         //Update changed options.
         foreach($Update ?? Command::$Parameters["Update"] as $Updated) {
             $Option        = $Contact->Options->Find(static fn(Contact\Option $Option): bool => $Option->ID === $Updated->ID);
             $Option->Value = $Updated->Value;
         }
-        
+
         //Delete removed options.
         foreach($Delete ?? Command::$Parameters["Delete"] as $Deleted) {
             $Contact->Options->Remove($Contact->Options->Find(static fn(Contact\Option $Option): bool => $Option->ID === $Deleted));
@@ -240,12 +237,12 @@ final class Contacts extends Module implements ISearch {
         (new Updated($Contact))->Dispatch();
         return $Contact->Options;
     }
-    
+
     /**
      * Deletes an existing Contact.
      * Triggers the {@link \vDesk\Contacts\Contact\Deleted}-Event for the deleted {@link \vDesk\Contacts\Contact}.
      *
-     * @param int $ID The ID of the Contact to delete.
+     * @param null|int $ID The ID of the Contact to delete.
      *
      * @return boolean True if the Contact has been successfully deleted.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to delete Contacts or doesn't have
@@ -253,26 +250,26 @@ final class Contacts extends Module implements ISearch {
      */
     public static function DeleteContact(int $ID = null): bool {
         $Contact = new Contact($ID ?? Command::$Parameters["ID"]);
-        if(!\vDesk::$User->Permissions["DeleteContact"] || !$Contact->AccessControlList->Delete) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to delete a Contact without having permissions.");
+        if(!User::$Current->Permissions["DeleteContact"] || !$Contact->AccessControlList->Delete) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to delete a Contact without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Contact->Delete();
         (new Deleted($Contact))->Dispatch();
         return true;
     }
-    
+
     /**
-     * Gets the a Company.
+     * Gets a Company.
      *
-     * @param int $ID The ID of the Company.
+     * @param null|int $ID The ID of the Company.
      *
      * @return \vDesk\Contacts\Company The model-representation of the Company.
      */
     public static function GetCompany(int $ID = null): Company {
         return (new Company($ID ?? Command::$Parameters["ID"]))->Fill();
     }
-    
+
     /**
      * Gets a Collection of views off all existing {@link \vDesk\Contacts\Company} objects.
      *
@@ -281,13 +278,13 @@ final class Contacts extends Module implements ISearch {
     public static function GetCompanyViews(): Companies {
         return CompaniesView::All();
     }
-    
+
     /**
      * Gets a subset of all existing Companies.
      *
-     * @param string $Char   The starting character of the name of the Companies to get.
-     * @param int    $Offset The offset to start to get the Companies from.
-     * @param int    $Amount The amount of Companies to get.
+     * @param null|string $Char   The starting character of the name of the Companies to get.
+     * @param null|int    $Offset The offset to start to get the Companies from.
+     * @param null|int    $Amount The amount of Companies to get.
      *
      * @return \vDesk\Contacts\Companies A Collection of Companies whose names staring with the specified character.
      */
@@ -298,7 +295,7 @@ final class Contacts extends Module implements ISearch {
             $Offset ?? Command::$Parameters["Offset"]
         );
     }
-    
+
     /**
      * Creates a new Company.
      * Triggers the {@link \vDesk\Contacts\Company\Created}-Event for the added {@link \vDesk\Contacts\Company}.
@@ -316,22 +313,21 @@ final class Contacts extends Module implements ISearch {
      *
      * @return \vDesk\Contacts\Company The newly created Company.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to create Companies.
-     *
      */
     public static function CreateCompany(
-        string $Name = null,
-        string $Street = null,
-        string $HouseNumber = null,
-        int $ZipCode = null,
-        string $City = null,
+        string  $Name = null,
+        string  $Street = null,
+        string  $HouseNumber = null,
+        int     $ZipCode = null,
+        string  $City = null,
         Country $Country = null,
-        string $PhoneNumber = null,
-        string $FaxNumber = null,
-        string $Email = null,
-        string $Website = null
+        string  $PhoneNumber = null,
+        string  $FaxNumber = null,
+        string  $Email = null,
+        string  $Website = null
     ): Company {
-        if(!\vDesk::$User->Permissions["CreateCompany"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to create a new Company without having permissions.");
+        if(!User::$Current->Permissions["CreateCompany"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to create a new Company without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Company = new Company(
@@ -351,7 +347,7 @@ final class Contacts extends Module implements ISearch {
         (new Company\Created($Company))->Dispatch();
         return $Company;
     }
-    
+
     /**
      * Updates an existing Company.
      * Triggers the {@link \vDesk\Contacts\Company\Updated}-Event for the updated {@link \vDesk\Contacts\Company}.
@@ -370,23 +366,22 @@ final class Contacts extends Module implements ISearch {
      *
      * @return \vDesk\Contacts\Company The updated Company.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Companies.
-     *
      */
     public static function UpdateCompany(
-        int $ID = null,
-        string $Name = null,
-        string $Street = null,
-        string $HouseNumber = null,
-        int $ZipCode = null,
-        string $City = null,
+        int     $ID = null,
+        string  $Name = null,
+        string  $Street = null,
+        string  $HouseNumber = null,
+        int     $ZipCode = null,
+        string  $City = null,
         Country $Country = null,
-        string $PhoneNumber = null,
-        string $FaxNumber = null,
-        string $Email = null,
-        string $Website = null
+        string  $PhoneNumber = null,
+        string  $FaxNumber = null,
+        string  $Email = null,
+        string  $Website = null
     ): Company {
-        if(!\vDesk::$User->Permissions["UpdateCompany"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to update a Company without having permissions.");
+        if(!User::$Current->Permissions["UpdateCompany"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to update a Company without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Company              = (new Company($ID ?? Command::$Parameters["ID"]))->Fill();
@@ -404,20 +399,19 @@ final class Contacts extends Module implements ISearch {
         (new Company\Updated($Company))->Dispatch();
         return $Company;
     }
-    
+
     /**
      * Deletes a Company.
      * Triggers the {@link \vDesk\Contacts\CompanyDeleted}-Event for the deleted {@link \vDesk\Contacts\Company}.
      *
-     * @param int $ID The ID of the Company to delete.
+     * @param null|int $ID The ID of the Company to delete.
      *
      * @return boolean True if the Company has been successfully deleted.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to delete Companies.
-     *
      */
     public static function DeleteCompany(int $ID = null): bool {
-        if(!\vDesk::$User->Permissions["DeleteCompany"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to delete a Company without having permissions.");
+        if(!User::$Current->Permissions["DeleteCompany"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to delete a Company without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Company = new Company($ID ?? Command::$Parameters["ID"]);
@@ -425,12 +419,12 @@ final class Contacts extends Module implements ISearch {
         (new Company\Deleted($Company))->Dispatch();
         return true;
     }
-    
+
     /**
      * Searches the Contacts Module for Contacts or Companies matching a specified name.
      *
-     * @param string $Value  The name to search for.
-     * @param string $Filter A filter to apply on the search result.
+     * @param string      $Value  The name to search for.
+     * @param null|string $Filter A filter to apply on the search result.
      *
      * @return \vDesk\Search\Results The found results.
      */
@@ -439,12 +433,7 @@ final class Contacts extends Module implements ISearch {
         switch($Filter) {
             case self::FilterContact:
                 foreach(
-                    Expression::Select(
-                        "ID",
-                        "Forename",
-                        "Surname",
-                        "AccessControlList"
-                    )
+                    Expression::Select("ID", "Forename", "Surname", "AccessControlList")
                               ->From("Contacts.Contacts")
                               ->Where(["Surname" => ["LIKE" => "%{$Value}%"]])
                     as
@@ -467,10 +456,7 @@ final class Contacts extends Module implements ISearch {
                 break;
             case self::FilterCompany:
                 foreach(
-                    Expression::Select(
-                        "ID",
-                        "Name"
-                    )
+                    Expression::Select("ID", "Name")
                               ->From("Contacts.Companies")
                               ->Where(["Name" => ["LIKE" => "%{$Value}%"]])
                     as
@@ -491,7 +477,7 @@ final class Contacts extends Module implements ISearch {
         }
         return $Results;
     }
-    
+
     /**
      * Gets the status information of the Contacts.
      *
@@ -505,5 +491,5 @@ final class Contacts extends Module implements ISearch {
                                         ->From("Contacts.Companies")()
         ];
     }
-    
+
 }

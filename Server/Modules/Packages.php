@@ -15,6 +15,7 @@ use vDesk\Packages\DependencyException;
 use vDesk\Packages\IModule;
 use vDesk\Packages\Package;
 use vDesk\Security\UnauthorizedAccessException;
+use vDesk\Security\User;
 use vDesk\Struct\Collections\Collection;
 use vDesk\Struct\Text;
 use vDesk\Utils\Log;
@@ -26,7 +27,7 @@ use vDesk\Utils\Log;
  * @package vDesk\Packages
  */
 final class Packages extends Module {
-    
+
     /**
      * Gets the description of every installed module.
      *
@@ -35,15 +36,15 @@ final class Packages extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to install Packages.
      */
     public static function Installed(): array {
-        if(!\vDesk::$User->Permissions["InstallPackage"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to view installed Packages without having permissions.");
+        if(!User::$Current->Permissions["InstallPackage"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to view installed Packages without having permissions.");
             throw new UnauthorizedAccessException();
         }
         return self::Resolve()
                    ->Map(static fn(Package $Package): array => $Package->ToDataView())
                    ->ToArray();
     }
-    
+
     /**
      * Creates a Package.
      *
@@ -56,13 +57,13 @@ final class Packages extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to install Packages.
      */
     public static function Create(string $Package = null, string $Path = null, int $Compression = null): Package {
-        if(!\vDesk::$User->Permissions["InstallPackage"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to create Package without having permissions.");
+        if(!User::$Current->Permissions["InstallPackage"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to create Package without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Package  ??= Command::$Parameters["Package"];
         $Packages = Package::Server . "/" . Package::Lib . "/vDesk/Packages";
-        
+
         //Create Package.phar
         $Phar = (new \Phar(($Path ?? Command::$Parameters["Path"] ?? \Server) . Path::Separator . "{$Package}.phar"));
         $Phar->setSignatureAlgorithm(\Phar::SHA256);
@@ -77,11 +78,11 @@ final class Packages extends Module {
     __HALT_COMPILER();
 STUB
         );
-        
+
         /** @var \vDesk\Packages\Package $Package */
         $Package = new $Class();
         $Package::Compose($Phar);
-        
+
         //Bundle Package manifest if not already happened by the Package itself.
         if(!isset($Phar[$Packages])) {
             $Phar->addEmptyDir($Packages);
@@ -98,22 +99,22 @@ STUB
                 "{$Packages}/" . $Package::Name . ".php"
             );
         }
-        
+
         if(($Compression ??= Command::$Parameters["Compression"] ?? \Phar::NONE) !== \Phar::NONE) {
             //Yay, this never gets executed but is necessary to prevent PHP from crying about "phar exists and must be unlinked prior to conversion"...
-            if($Compression === \Phar::GZ && File::Exists($Phar->getPath() . ".gz")){
+            if($Compression === \Phar::GZ && File::Exists($Phar->getPath() . ".gz")) {
                 File::Delete($Phar->getPath() . ".gz");
-            }else if($Compression === \Phar::BZ2 && File::Exists($Phar->getPath() . ".bz")){
+            } else if($Compression === \Phar::BZ2 && File::Exists($Phar->getPath() . ".bz")) {
                 File::Delete($Phar->getPath() . ".bz");
             }
             $Phar->compress($Compression)->setStub($Phar->getStub());
         }
         $Phar->stopBuffering();
-        
+
         return $Package;
-        
+
     }
-    
+
     /**
      * Installs a specified Package.
      *
@@ -124,12 +125,12 @@ STUB
      * @throws \vDesk\Packages\DependencyException Thrown if a dependency of the Package cannot be satisfied.
      */
     public static function Install(FileInfo $Package = null): Package {
-        if(!\vDesk::$User->Permissions["InstallPackage"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to install Package without having permissions.");
+        if(!User::$Current->Permissions["InstallPackage"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to install Package without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Package ??= Command::$Parameters["Package"];
-        
+
         //Save Package file.
         $Path       = \sys_get_temp_dir() . Path::Separator . "{$Package->Name}.phar";
         $TargetFile = File::Create($Path);
@@ -141,18 +142,18 @@ STUB
         $TempFile->Close();
         //Delete temp file.
         $Package->Delete();
-        
+
         $Root = Path::GetFullPath(\Server . Path::Separator . "..");
         $Phar = new \Phar($Path);
-        
+
         //Wire autoload to PHAR archive.
         \vDesk::$Load[] = static fn(string $Class): string => "phar://{$Phar->getPath()}/Server/Lib/" . Text::Replace($Class, "\\", "/") . ".php";
         \vDesk::$Load[] = static fn(string $Class): string => "phar://{$Phar->getPath()}/Server/" . Text::Replace($Class, "\\", "/") . ".php";
-        
+
         //Load Package.
         /** @var \vDesk\Packages\Package $Package */
         $Package = include $Phar->getPath();
-        
+
         //Validate dependencies.
         $Packages = self::Resolve();
         foreach($Package::Dependencies as $Dependency => $Version) {
@@ -164,13 +165,13 @@ STUB
                 throw new DependencyException("Requiring dependency package '{$Dependency}' in version '{$Version}', but installed '" . $DependencyPackage::Version . "'!");
             }
         }
-        
+
         //Install Package.
         \vDesk::$Phar = true;
         $Package::PreInstall($Phar, $Root);
         $Package::Install($Phar, $Root);
         $Package::PostInstall($Phar, $Root);
-        
+
         //Deploy Package manifest file if not already happened by the Package itself.
         $Manifest = \Server
                     . Path::Separator
@@ -187,35 +188,35 @@ STUB
                 $Manifest
             );
         }
-        
+
         //Install specialized Packages.
         foreach(\vDesk\Modules::RunAll() as $Module) {
             if($Module instanceof IModule) {
                 $Module::Install($Package, $Phar, $Root);
             }
         }
-        
+
         \vDesk::$Phar = false;
-        
+
         //Delete temporary Phar archive.
         File::Delete($Phar->getPath());
-        
+
         //Create client.
         $Client = new Client();
         foreach(self::Resolve() as $PackageToAdd) {
             $Client->AddPackage($PackageToAdd);
         }
         $Client->Create(\Client);
-        
+
         Settings::$Local->Save();
         Settings::$Remote->Save();
-        
+
         Log::Info(__METHOD__, "Installed Package '" . $Package::Name . "' v" . $Package::Version);
-        
+
         return $Package;
-        
+
     }
-    
+
     /**
      * Uninstalls a specified Package and all dependent Packages.
      *
@@ -225,28 +226,28 @@ STUB
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to uninstall Packages.
      */
     public static function Uninstall(string $Package = null): array {
-        if(!\vDesk::$User->Permissions["UninstallPackage"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to uninstall Package without having permissions.");
+        if(!User::$Current->Permissions["UninstallPackage"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to uninstall Package without having permissions.");
             throw new UnauthorizedAccessException();
         }
-        
+
         $Class = "\\vDesk\\Packages\\" . ($Package ?? Command::$Parameters["Package"]);
         /** @var \vDesk\Packages\Package $Package */
         $Package = new $Class();
-        
+
         $Path        = Path::GetFullPath(\Server . Path::Separator . "..");
         $PackagePath = \Server . Path::Separator . Package::Lib . Path::Separator . "vDesk" . Path::Separator . "Packages" . Path::Separator;
         $Packages    = [];
         foreach(self::ResolveDependencies($Package) as $Dependency) {
             $Packages[] = $Dependency;
         }
-        
+
         $Packages[] = $Package;
         foreach($Packages as $PackageToUninstall) {
             $PackageToUninstall::Uninstall($Path);
             File::Delete($PackagePath . $PackageToUninstall::Name . ".php");
         }
-        
+
         //Uninstall specialized Packages.
         foreach(\vDesk\Modules::RunAll() as $Module) {
             if($Module instanceof IModule) {
@@ -255,17 +256,17 @@ STUB
                 }
             }
         }
-        
+
         //Create client.
         $Client = new Client();
         foreach(self::Resolve() as $PackageToAdd) {
             $Client->AddPackage($PackageToAdd);
         }
         $Client->Create(\Client);
-        
+
         return \array_map(static fn(Package $Package) => $Package::Name, $Packages);
     }
-    
+
     /**
      * Resolves the dependencies of a specified Package.
      *
@@ -285,7 +286,7 @@ STUB
         };
         yield from $GetDependencies($Package);
     }
-    
+
     /**
      * Resolves the installed Packages of vDesk.
      *
@@ -312,12 +313,12 @@ STUB
             /** @var \vDesk\Packages\Package $Package */
             $Packages[] = $Package = new $Class();
         }
-        
+
         //Sort by dependencies and create client.
         $SortedPackages = new Collection();
-        
+
         $Count = \count($Packages);
-        
+
         //Packages without dependencies have the highest priority.
         foreach($Packages as $Index => $Package) {
             if(\count($Package::Dependencies) === 0) {
@@ -325,14 +326,14 @@ STUB
                 \array_splice($Packages, $Index, 1);
             }
         }
-        
+
         //Sort by dependencies.
         for($Resolved = 0; $SortedPackages->Count() < $Count; $Resolved++) {
             foreach($Packages as $Index => $Package) {
                 if($SortedPackages->Any(fn(Package $SortedPackage): bool => $SortedPackage === $Package)) {
                     continue;
                 }
-                
+
                 //Resolve dependencies.
                 foreach($Package::Dependencies as $Dependency => $Version) {
                     if(!$SortedPackages->Any(fn(Package $SortedPackage): bool => $SortedPackage::Name === $Dependency)) {

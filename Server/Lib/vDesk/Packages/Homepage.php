@@ -4,11 +4,10 @@ declare(strict_types=1);
 namespace vDesk\Packages;
 
 use vDesk\Configuration\Settings;
-
 use vDesk\Pages\IPackage;
 
 /**
- * Package that installs the vDesk homepage.
+ * Homepage Package manifest.
  *
  * @package Homepage
  * @author  Kerry <DevelopmentHero@gmail.com>
@@ -26,19 +25,19 @@ class Homepage extends Package implements IPackage {
     public const Version = "1.0.1";
     
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
     
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package that provides the vDesk project website.";
     
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Documentation" => "1.0.0"];
+    public const Dependencies = ["Documentation" => "1.0.1"];
     
     /**
      * The files and directories of the Package.
@@ -75,9 +74,8 @@ class Homepage extends Package implements IPackage {
     public static function Install(\Phar $Phar, string $Path): void {
         
         //Create Package configuration.
-        Settings::$Local["Homepage"] = new Settings\Local\Settings([
-            "Recipient" => "email-address"
-        ],
+        Settings::$Local["Homepage"] = new Settings\Local\Settings(
+            ["Recipient" => "email-address"],
             "Homepage"
         );
         
@@ -90,7 +88,7 @@ class Homepage extends Package implements IPackage {
             "Module"  => "vDesk",
             "Command" => "Send"
         ];
-        Settings::$Local["Routes"]["/vDesk/Page/{Page}"]        = [
+        Settings::$Local["Routes"]["/vDesk/Page/{Page}"]       = [
             "Module"  => "vDesk",
             "Command" => "Page"
         ];

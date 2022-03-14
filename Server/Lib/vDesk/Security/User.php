@@ -77,6 +77,13 @@ class User implements IModel {
      * @var \vDesk\Security\User\Permissions
      */
     public Permissions $Permissions;
+
+    /**
+     * The current logged in User.
+     *
+     * @var null|\vDesk\Security\User
+     */
+    public static ?User $Current = null;
     
     /**
      * Initializes a new instance of the User class.
