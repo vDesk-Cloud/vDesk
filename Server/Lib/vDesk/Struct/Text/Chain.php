@@ -9,33 +9,30 @@ use vDesk\Struct\Text;
  * Stringwrapper class.
  *
  * @property-read int Length Gets the length of the String.
- * @package vDesk\Struct
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Chain implements \IteratorAggregate {
-    
+
     use Properties;
-    
+
     /**
      * The internal string of the Text\Chain.
      *
      * @var string|null
      */
     private ?string $String;
-    
+
     /**
      * Initializes a new instance of the Text\Chain class.
      *
-     * @param string $String Initializes the Text\Chain with the specified string.
+     * @param null|string $String Initializes the Text\Chain with the specified string.
      */
     public function __construct(?string $String = Text::Empty) {
         $this->String = $String;
-        $this->AddProperty("Length",
-            [
-                \Get => fn(): int => \strlen($this->String)
-            ]);
+        $this->AddProperty("Length", [\Get => fn(): int => \strlen($this->String)]);
     }
-    
+
     /**
      * Concatenates the members of a constructed iterable collection of type String, using the specified separator between each member.
      *
@@ -48,7 +45,7 @@ final class Chain implements \IteratorAggregate {
     public function Join(string $Separator, iterable $Strings): Chain {
         return new static(\implode($Separator, [$this->String, ...$Strings]));
     }
-    
+
     /**
      * Indicates whether the Text\Chain is null, empty, or consists only of white-space characters.
      *
@@ -57,7 +54,7 @@ final class Chain implements \IteratorAggregate {
     public function IsNullOrWhitespace(): bool {
         return $this->IsNullOrEmpty() || \ctype_space($this->String);
     }
-    
+
     /**
      * Indicates whether the specified string is null or an empty string.
      *
@@ -66,7 +63,7 @@ final class Chain implements \IteratorAggregate {
     public function IsNullOrEmpty(): bool {
         return $this->String === null || $this->String === Text::Empty;
     }
-    
+
     /**
      * Indicates whether the Text\Chain consists only of alphabetical characters.
      *
@@ -75,7 +72,7 @@ final class Chain implements \IteratorAggregate {
     public function IsAlphabetic(): bool {
         return \ctype_alpha($this->String);
     }
-    
+
     /**
      * Indicates whether the Text\Chain consists only of numerical characters.
      *
@@ -84,7 +81,7 @@ final class Chain implements \IteratorAggregate {
     public function IsNumeric(): bool {
         return \ctype_digit($this->String);
     }
-    
+
     /**
      * Indicates whether the Text\Chain consists only of aphlanumerical characters.
      *
@@ -93,7 +90,7 @@ final class Chain implements \IteratorAggregate {
     public function IsAlphaNumeric(): bool {
         return \ctype_alnum($this->String);
     }
-    
+
     /**
      * Indicates whether the Text\Chaing consists only of printable characters.
      *
@@ -102,7 +99,7 @@ final class Chain implements \IteratorAggregate {
     public function IsPrintable(): bool {
         return \ctype_print($this->String);
     }
-    
+
     /**
      * Indicates whether the Text\Chain consists only of lowercase characters.
      *
@@ -111,7 +108,7 @@ final class Chain implements \IteratorAggregate {
     public function IsLowerCase(): bool {
         return \ctype_lower($this->String);
     }
-    
+
     /**
      * Indicates whether the Text\Chain consists only of uppercase characters.
      *
@@ -120,7 +117,7 @@ final class Chain implements \IteratorAggregate {
     public function IsUpperCase(): bool {
         return \ctype_upper($this->String);
     }
-    
+
     /**
      * Converts the characters of the Text\Chain to lowercase.
      *
@@ -130,7 +127,7 @@ final class Chain implements \IteratorAggregate {
         $this->String = \strtolower($this->String);
         return $this;
     }
-    
+
     /**
      * Converts the characters of the Text\Chain to uppercase.
      *
@@ -140,7 +137,7 @@ final class Chain implements \IteratorAggregate {
         $this->String = \strtoupper($this->String);
         return $this;
     }
-    
+
     /**
      * Replaces all occurrences of the Text\Chains of the Text\Chain with another specified string.
      *
@@ -153,7 +150,7 @@ final class Chain implements \IteratorAggregate {
         $this->String = \str_replace($OldValue, $NewValue, $this->String);
         return $this;
     }
-    
+
     /**
      * Replaces all occurrences of any specified strings of the Text\Chain with another specified string.
      *
@@ -166,7 +163,7 @@ final class Chain implements \IteratorAggregate {
         $this->String = \str_replace($OldValues, $NewValue, $this->String);
         return $this;
     }
-    
+
     /**
      * Checks whether a specified substring exists within the target string.
      *
@@ -178,7 +175,7 @@ final class Chain implements \IteratorAggregate {
     public function Contains(string $SearchString, bool $CaseSensitive = true): bool {
         return $this->IndexOf($SearchString, $CaseSensitive) >= 0;
     }
-    
+
     /**
      * Returns the zero-based index of the first occurrence of the specified search string in the specified string.
      *
@@ -190,7 +187,7 @@ final class Chain implements \IteratorAggregate {
     public function IndexOf(string $Search, bool $CaseSensitive = true): int {
         return ($Position = $CaseSensitive ? \strpos($this->String, $Search) : \stripos($this->String, $Search)) !== false ? $Position : -1;
     }
-    
+
     /**
      * Checks whether any of a set of a substrings exist within the target string. Note: the comparison will be performed case-insensitive.
      *
@@ -206,7 +203,7 @@ final class Chain implements \IteratorAggregate {
         }
         return false;
     }
-    
+
     /**
      * Concatenates two or more strings.
      *
@@ -217,7 +214,7 @@ final class Chain implements \IteratorAggregate {
     public function Concat(string ...$Strings): Chain {
         return $this->Join(Text::Empty, $Strings);
     }
-    
+
     /**
      * Determines whether the start of a string matches the specified string.
      *
@@ -229,7 +226,7 @@ final class Chain implements \IteratorAggregate {
     public function StartsWith(string $Search, bool $CaseSensitive = true): bool {
         return $this->IndexOf($Search, $CaseSensitive) === 0;
     }
-    
+
     /**
      * Determines whether the end of a string matches the specified string.
      *
@@ -241,7 +238,7 @@ final class Chain implements \IteratorAggregate {
     public function EndsWith(string $Search, bool $CaseSensitive = true): bool {
         return $this->LastIndexOf($Search, $CaseSensitive) === (\strlen($this->String) - \strlen($Search));
     }
-    
+
     /**
      * Returns the zero-based index position of the last occurrence of the specified search string in the specified string.
      *
@@ -253,7 +250,7 @@ final class Chain implements \IteratorAggregate {
     public function LastIndexOf(string $Search, bool $CaseSensitive = true): int {
         return ($Position = $CaseSensitive ? \strrpos($this->String, $Search) : \strripos($this->String, $Search)) !== false ? $Position : -1;
     }
-    
+
     /**
      * Returns the amount of characters of the specified string.
      *
@@ -262,7 +259,7 @@ final class Chain implements \IteratorAggregate {
     public function Length(): int {
         return \strlen($this->String);
     }
-    
+
     /**
      * Aligns the characters of the Text\Chain by padding them on both sides with a specified Unicode character, for a specified total length.
      *
@@ -276,7 +273,7 @@ final class Chain implements \IteratorAggregate {
         $this->String = \str_pad($this->String, $Amount, $Char, \STR_PAD_BOTH);
         return $this;
     }
-    
+
     /**
      * Right-aligns the characters in the Text\Chain string by padding them on the left with a specified Unicode
      * character, for a specified total length.
@@ -291,7 +288,7 @@ final class Chain implements \IteratorAggregate {
         $this->String = \str_pad($this->String, $Amount, $Char, \STR_PAD_LEFT);
         return $this;
     }
-    
+
     /**
      * Returns a new string that left-aligns the characters in the specified string by padding them on the right with a specified Unicode
      * character, for a specified total length.
@@ -306,7 +303,7 @@ final class Chain implements \IteratorAggregate {
         $this->String = \str_pad($this->String, $Amount, $Char, \STR_PAD_RIGHT);
         return $this;
     }
-    
+
     /**
      * Splits a string into substrings that are based on the specified delimiter character.
      *
@@ -318,11 +315,11 @@ final class Chain implements \IteratorAggregate {
     public function Split(string $Delimiter): array {
         return \array_map(static fn(): Chain => new static($this->String), \explode($Delimiter, $this->String));
     }
-    
+
     /**
      * Removes all leading and trailing occurrences of a set of characters specified in a character mask from the specified string.
      *
-     * @param string $Chars The characters to trim.
+     * @param null|string $Chars The characters to trim.
      *
      * @return \vDesk\Struct\Text\Chain The current instance of the Text\Chain class for further chaining operations.
      */
@@ -330,11 +327,11 @@ final class Chain implements \IteratorAggregate {
         $this->String = $Chars === null ? \trim($this->String) : \trim($this->String, $Chars);
         return $this;
     }
-    
+
     /**
      * Removes all leading occurrences of a set of characters specified in a character mask from the the specified string.
      *
-     * @param string $Chars The characters to trim.
+     * @param null|string $Chars The characters to trim.
      *
      * @return \vDesk\Struct\Text\Chain The current instance of the Text\Chain class for further chaining operations.
      */
@@ -342,11 +339,11 @@ final class Chain implements \IteratorAggregate {
         $this->String = $Chars === null ? \ltrim($this->String) : \ltrim($this->String, $Chars);
         return $this;
     }
-    
+
     /**
      * Removes all trailing occurrences of a set of characters specified in a character mask from the current String object.
      *
-     * @param string $Chars The characters to trim.
+     * @param null|string $Chars The characters to trim.
      *
      * @return \vDesk\Struct\Text\Chain The current instance of the Text\Chain class for further chaining operations.
      */
@@ -354,7 +351,7 @@ final class Chain implements \IteratorAggregate {
         $this->String = $Chars === null ? \rtrim($this->String) : \rtrim($this->String, $Chars);
         return $this;
     }
-    
+
     /**
      * Repeats the specified string $Amount times.
      *
@@ -366,7 +363,7 @@ final class Chain implements \IteratorAggregate {
         $this->String = \str_repeat($this->String, $Amount);
         return $this;
     }
-    
+
     /**
      * Extracts a substring between two specified identifier chars.
      *
@@ -378,7 +375,7 @@ final class Chain implements \IteratorAggregate {
      * @return \vDesk\Struct\Text\Chain|string A Text\Chain that is equivalent to the substring between $Start and $End,
      * or Text::Empty if at least one delimiter can't be found in the specified searchstring.
      */
-    public function Extract(string $Start, string $End, bool $CaseSensitive = true): Chain {
+    public function Extract(string $Start, string $End, bool $CaseSensitive = true): Chain|string {
         if(
             ($Start = $this->IndexOf($Start[0], $CaseSensitive)) > 0
             && ($End = $this->LastIndexOf($End[0], $CaseSensitive)) > 0
@@ -389,21 +386,21 @@ final class Chain implements \IteratorAggregate {
                 $Start = $End;
                 $End   = $Temp;
             }
-            
+
             //Extract string portion.
             return $this->Substring($Start, $End - $Start);
-            
+
         }
         return Text::Empty;
     }
-    
+
     /**
      * Retrieves a substring from the specified string. The substring starts at a specified character position and has a specified length.
      *
-     * @param int $Index  The zero-based starting character position of a substring in the specified string.
-     * @param int $Length The number of characters in the substring.
+     * @param int      $Index  The zero-based starting character position of a substring in the specified string.
+     * @param null|int $Length The number of characters in the substring.
      *
-     * @return \vDesk\Struct\Text\Chain|string A Text\Chain that is equivalent to the substring of $Length length that begins at $Index in the specified string,
+     * @return \vDesk\Struct\Text\Chain A Text\Chain that is equivalent to the substring of $Length length that begins at $Index in the specified string,
      *                       or Text::Empty if $Index is equal to the length of the specified string and $Length is zero.
      *                       If $Length is omitted, the substring starting from $Index until the end of the string will be returned.
      */
@@ -417,7 +414,7 @@ final class Chain implements \IteratorAggregate {
                 : Text::Empty
         );
     }
-    
+
     /**
      * @return string
      * @ignore
@@ -425,7 +422,7 @@ final class Chain implements \IteratorAggregate {
     public function __toString() {
         return $this->String;
     }
-    
+
     /**
      * Gets a Generator that iterates over the characters of the string-value of the Text.
      *
@@ -436,6 +433,6 @@ final class Chain implements \IteratorAggregate {
             yield $this->String[$Index];
         }
     }
-    
+
 }
 

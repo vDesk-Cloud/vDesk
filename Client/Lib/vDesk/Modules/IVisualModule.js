@@ -5,7 +5,7 @@
  * @memberOf vDesk.Modules
  * @augments vDesk.Modules.IModule
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Modules
  */
 vDesk.Modules.IVisualModule = function() {
 

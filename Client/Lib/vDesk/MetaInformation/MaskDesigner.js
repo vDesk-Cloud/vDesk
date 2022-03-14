@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Initializes a new instance of the MaskDesigner class.
  * @class Represents an editor for creating or modifying masks, defining the structure for DataSets.
@@ -8,7 +9,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the MaskDesigner is enabled.
  * @memberOf vDesk.MetaInformation
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
 
@@ -29,7 +30,7 @@ vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
                 Enabled = Value;
 
                 //Check if the user is allowed to edit masks.
-                if(vDesk.User.Permissions.UpdateMask) {
+                if(vDesk.Security.User.Current.Permissions.UpdateMask){
                     EditSaveButton.disabled = !Value;
                     MaskList.Enabled = Value;
                     MaskEditor.Enabled = Value;
@@ -44,19 +45,17 @@ vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
      * @listens vDesk.Security.Configuration.MaskList#event:select
      */
     const OnSelect = Event => {
-        if(Event.detail.item.Mask.ID !== MaskEditor.Mask.ID) {
-
+        if(Event.detail.item.Mask.ID !== MaskEditor.Mask.ID){
             //Check if the 'new Mask' entry has been selected.
-            if(Event.detail.item.Mask.ID === null) {
+            if(Event.detail.item.Mask.ID === null){
                 ResetButton.disabled = true;
                 DeleteButton.disabled = true;
-            } else {
-                DeleteButton.disabled = !vDesk.User.Permissions.DeleteMask;
+            }else{
+                DeleteButton.disabled = !vDesk.Security.User.Current.Permissions.DeleteMask;
             }
 
             //Display the selected Mask.
             MaskEditor.Mask = Event.detail.item.Mask;
-
         }
     };
 
@@ -66,15 +65,13 @@ vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
      * @listens vDesk.Security.Configuration.Mask.Editor#event:change
      */
     const OnChange = Event => {
-
         EditSaveButton.disabled = MaskEditor.Mask.Name.length === 0 && !MaskEditor.Changed;
         ResetButton.disabled = !MaskEditor.Changed;
 
-        if(MaskEditor.Changed) {
+        if(MaskEditor.Changed){
             EditSaveButton.style.backgroundImage = `url("${vDesk.Visual.Icons.Save}")`;
             EditSaveButton.textContent = vDesk.Locale.vDesk.Save;
         }
-
     };
 
     /**
@@ -85,14 +82,11 @@ vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
     const OnCreate = Event => {
         MaskList.Find(null).Mask = Event.detail.mask;
         vDesk.MetaInformation.Masks.push(Event.detail.mask);
-        DeleteButton.disabled = !vDesk.User.Permissions.DeleteMask;
+        DeleteButton.disabled = !vDesk.Security.User.Current.Permissions.DeleteMask;
         ResetButton.disabled = true;
         MaskList.Add(
             new vDesk.MetaInformation.MaskList.Item(
-                new vDesk.MetaInformation.Mask(
-                    null,
-                    vDesk.Locale.MetaInformation.NewMask
-                )
+                new vDesk.MetaInformation.Mask(null, vDesk.Locale.MetaInformation.NewMask)
             )
         );
     };
@@ -122,10 +116,10 @@ vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
         MaskList.Selected = MaskList.Items?.[0];
         MaskEditor.Mask = MaskList?.Selected?.Mask ?? new vDesk.MetaInformation.Mask();
         MaskEditor.Enabled = false;
-        DeleteButton.disabled = MaskEditor.Mask.ID !== null && !vDesk.User.Permissions.DeleteMask;
+        DeleteButton.disabled = MaskEditor.Mask.ID !== null && !vDesk.Security.User.Current.Permissions.DeleteMask;
         EditSaveButton.style.backgroundImage = `url("${vDesk.Visual.Icons.Edit}")`;
         EditSaveButton.textContent = vDesk.Locale.vDesk.Edit;
-        EditSaveButton.disabled = !vDesk.User.Permissions.UpdateMask;
+        EditSaveButton.disabled = !vDesk.Security.User.Current.Permissions.UpdateMask;
         ResetButton.disabled = true;
     };
 
@@ -133,14 +127,14 @@ vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
      * Saves possible made changes.
      */
     const OnClickEditSaveButton = () => {
-        if(MaskEditor.Enabled) {
-            if(MaskEditor.Changed) {
+        if(MaskEditor.Enabled){
+            if(MaskEditor.Changed){
                 MaskEditor.Save();
             }
             MaskEditor.Enabled = false;
             EditSaveButton.style.backgroundImage = `url("${vDesk.Visual.Icons.Edit}")`;
             EditSaveButton.textContent = vDesk.Locale.vDesk.Edit;
-        } else {
+        }else{
             //Enable MaskEditor.
             EditSaveButton.style.backgroundImage = `url("${vDesk.Visual.Icons.Cancel}")`;
             EditSaveButton.textContent = vDesk.Locale.vDesk.Cancel;
@@ -153,10 +147,10 @@ vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
      */
     const OnClickResetButton = () => {
         MaskEditor.Reset();
-        if(MaskEditor.Enabled) {
+        if(MaskEditor.Enabled){
             EditSaveButton.style.backgroundImage = `url("${vDesk.Visual.Icons.Cancel}")`;
             EditSaveButton.textContent = vDesk.Locale.vDesk.Cancel;
-        } else {
+        }else{
             EditSaveButton.style.backgroundImage = `url("${vDesk.Visual.Icons.Edit}")`;
             EditSaveButton.textContent = vDesk.Locale.vDesk.Edit;
         }
@@ -168,7 +162,7 @@ vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
      * Eventhandler that listens on the 'click' event.
      */
     const OnClickDeleteButton = () => {
-        if(MaskEditor.Mask.ID !== null && confirm(vDesk.Locale.MetaInformation.DeleteMask)) {
+        if(MaskEditor.Mask.ID !== null && confirm(vDesk.Locale.MetaInformation.DeleteMask)){
             MaskEditor.Delete();
         }
     };
@@ -192,7 +186,7 @@ vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
     const MaskList = vDesk.MetaInformation.MaskList.FromMasks();
 
     //Check if the user is allowed to create new masks.
-    if(vDesk.User.Permissions.CreateMask) {
+    if(vDesk.Security.User.Current.Permissions.CreateMask){
         MaskList.Add(
             new vDesk.MetaInformation.MaskList.Item(
                 new vDesk.MetaInformation.Mask(
@@ -222,7 +216,7 @@ vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
     EditSaveButton.className = "Button Icon Save";
     EditSaveButton.style.backgroundImage = `url("${vDesk.Visual.Icons.Edit}")`;
     EditSaveButton.textContent = vDesk.Locale.vDesk.Edit;
-    EditSaveButton.disabled = !vDesk.User.Permissions.UpdateMask;
+    EditSaveButton.disabled = !vDesk.Security.User.Current.Permissions.UpdateMask;
     EditSaveButton.addEventListener("click", OnClickEditSaveButton, false);
 
     /**
@@ -243,7 +237,7 @@ vDesk.MetaInformation.MaskDesigner = function MaskDesigner(Enabled = true) {
     const DeleteButton = document.createElement("button");
     DeleteButton.className = "Button Icon Reset";
     DeleteButton.style.backgroundImage = `url("${vDesk.Visual.Icons.Delete}")`;
-    DeleteButton.disabled = !vDesk.User.Permissions.DeleteMask;
+    DeleteButton.disabled = !vDesk.Security.User.Current.Permissions.DeleteMask;
     DeleteButton.textContent = vDesk.Locale.vDesk.Delete;
     DeleteButton.addEventListener("click", OnClickDeleteButton, false);
 

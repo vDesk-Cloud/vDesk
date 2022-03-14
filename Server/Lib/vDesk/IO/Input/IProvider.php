@@ -6,13 +6,13 @@ namespace vDesk\IO\Input;
 use vDesk\IO\FileInfo;
 
 /**
- * Interface IProvider that represents a ...
+ * Interface for classes to read data from the current API's input stream.
  *
- * @package vDesk\Connection\Input
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 interface IProvider {
-    
+
     /**
      * Pareses the execution relevant parameters either from the CLI or CGI.
      *
@@ -21,7 +21,7 @@ interface IProvider {
      * @return string|null The value of the parameter; otherwise, null.
      */
     public function ParseCommand(string $Name): ?string;
-    
+
     /**
      * Pareses the parameters of the current passed command either from the CLI or CGI.
      *
@@ -30,7 +30,7 @@ interface IProvider {
      * @return string|null The value of the parameter; otherwise, null.
      */
     public function ParseParameter(string $Name): ?string;
-    
+
     /**
      * Fetches a binary file from the current input API.
      *
@@ -39,5 +39,5 @@ interface IProvider {
      * @return \vDesk\IO\FileInfo|null A FileInfo representing the specified file; otherwise, null.
      */
     public function FetchFile(string $Name): ?FileInfo;
-    
+
 }

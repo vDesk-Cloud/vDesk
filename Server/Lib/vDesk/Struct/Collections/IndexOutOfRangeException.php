@@ -6,11 +6,11 @@ namespace vDesk\Struct\Collections;
 /**
  * Exception that is thrown when accessing an index inside of a Collection that doesn't exist.
  *
- * @package vDesk\Struct\Collections
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class IndexOutOfRangeException extends \Exception {
-    
+
     /**
      * Initializes a new instance of the IndexOutOfRangeException class.
      *

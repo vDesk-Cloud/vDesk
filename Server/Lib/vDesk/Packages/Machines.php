@@ -18,7 +18,7 @@ use vDesk\Struct\Guid;
 /**
  * Machines Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Machines
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Machines extends Package implements IPackage {
@@ -31,7 +31,7 @@ final class Machines extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.0.2";
     
     /**
      * The name of the Package.
@@ -46,7 +46,7 @@ final class Machines extends Package implements IPackage {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Archive" => "1.0.0"];
+    public const Dependencies = ["Archive" => "1.0.1"];
     
     /**
      * The files and directories of the Package.
@@ -123,7 +123,7 @@ final class Machines extends Package implements IPackage {
     public static function Install(\Phar $Phar, string $Path): void {
         
         Expression::Create()
-                  ->Database("Machines")
+                  ->Schema("Machines")
                   ->Execute();
         
         //Create tables.
@@ -286,7 +286,7 @@ final class Machines extends Package implements IPackage {
         
         //Drop database.
         Expression::Drop()
-                  ->Database("Machines")
+                  ->Schema("Machines")
                   ->Execute();
         
         //Delete permissions.

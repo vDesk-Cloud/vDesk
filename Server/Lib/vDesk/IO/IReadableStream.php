@@ -6,17 +6,18 @@ namespace vDesk\IO;
 /**
  * Interface for readable byte streams.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 interface IReadableStream extends IStream {
-    
+
     /**
      * Tells whether the current Stream supports reading.
      *
      * @return bool True if the Stream supports reading; otherwise, false.
      */
     public function CanRead(): bool;
-    
+
     /**
      * Reads a given amount of bytes from the Stream.
      *
@@ -25,14 +26,14 @@ interface IReadableStream extends IStream {
      * @return string The read amount of bytes.
      */
     public function Read(int $Amount = IStream::DefaultChunkSize): string;
-    
+
     /**
      * Reads a line from the Stream.
      *
      * @return string The read line.
      */
     public function ReadLine(): string;
-    
+
     /**
      * Reads the entire content of the Stream from the current position until the end of the Stream.
      *
@@ -43,12 +44,12 @@ interface IReadableStream extends IStream {
      * @return mixed The read content.
      */
     public function ReadAll(int $Amount = -1, int $Offset = -1);
-    
+
     /**
      * Reads a single character from the Stream.
      *
      * @return string The read character.
      */
     public function ReadCharacter(): string;
-    
+
 }

@@ -5,6 +5,7 @@
  * @param {vDesk.Archive.Element} Element The element to display the file of.
  * @property {HTMLDivElement} Control Gets the underlying dom node.
  * @memberOf vDesk.Archive.Element.View
+ * @package vDesk\Archive
  */
 vDesk.Archive.Element.View.Text = function Text(Element) {
     Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
@@ -26,7 +27,7 @@ vDesk.Archive.Element.View.Text = function Text(Element) {
                 Module:     "Archive",
                 Command:    "Download",
                 Parameters: {ID: Element.ID},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         Buffer => {
@@ -38,9 +39,9 @@ vDesk.Archive.Element.View.Text = function Text(Element) {
         true
     );
 };
+
 /**
- * The file extensions the plugin can handle
- * @type {Array}
+ * The file extensions the plugin can handle.
  * @enum {String}
  */
 vDesk.Archive.Element.View.Text.Extensions = [

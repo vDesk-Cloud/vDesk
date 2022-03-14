@@ -5,7 +5,7 @@
  * @property {Array<vDesk.Archive.Element>} Elements Gets or sets the Elements of the Cache.
  * @memberOf vDesk.Archive.Element
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Archive
  */
 vDesk.Archive.Element.Cache = function Cache() {
 
@@ -60,9 +60,9 @@ vDesk.Archive.Element.Cache = function Cache() {
             Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
             //Check if the Element already has been cached.
             const Index = this.Elements.findIndex(CachedElement => CachedElement.ID === Element.ID);
-            if(~Index) {
+            if(~Index){
                 this.Elements[Index] = Element;
-            } else {
+            }else{
                 this.Elements.push(Element);
             }
         });
@@ -79,7 +79,7 @@ vDesk.Archive.Element.Cache = function Cache() {
         Ensure.Parameter(Update, Type.Boolean, "Update");
 
         const CachedElement = this.Find(ID);
-        if(CachedElement !== null && !Update) {
+        if(CachedElement !== null && !Update){
             return CachedElement;
         }
         const Response = vDesk.Connection.Send(
@@ -88,11 +88,11 @@ vDesk.Archive.Element.Cache = function Cache() {
                     Module:     "Archive",
                     Command:    "GetElement",
                     Parameters: {ID: ID},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             )
         );
-        if(Response.Status) {
+        if(Response.Status){
             const Element = vDesk.Archive.Element.FromDataView(Response.Data);
             Element.Parent = Elements.find(Parent => Parent.ID === Element.Parent.ID) ?? Element.Parent;
             this.Add(Element);
@@ -113,25 +113,25 @@ vDesk.Archive.Element.Cache = function Cache() {
         Ensure.Parameter(Update, Type.Boolean, "Update");
 
         const CachedElement = this.Find(ID);
-        if(CachedElement !== null && !Update) {
+        if(CachedElement !== null && !Update){
             Callback(CachedElement);
-        } else {
+        }else{
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
                         Module:     "Archive",
                         Command:    "GetElement",
                         Parameters: {ID: ID},
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         const Element = vDesk.Archive.Element.FromDataView(Response.Data);
                         Element.Parent = Elements.find(Parent => Parent.ID === Element.Parent.ID) ?? Element.Parent;
                         this.Add(Element);
                         Callback(Element);
-                    } else {
+                    }else{
                         Callback(null);
                     }
                 }
@@ -151,7 +151,7 @@ vDesk.Archive.Element.Cache = function Cache() {
 
         //Checks if Elements have been already cached.
         let CachedElements = Elements.filter(Element => Element.Parent.ID === Parent);
-        if(CachedElements.length > 0 && !Update) {
+        if(CachedElements.length > 0 && !Update){
             return CachedElements;
         }
         const Response = vDesk.Connection.Send(
@@ -160,11 +160,11 @@ vDesk.Archive.Element.Cache = function Cache() {
                     Module:     "Archive",
                     Command:    "GetElements",
                     Parameters: {ID: Parent},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             )
         );
-        if(Response.Status) {
+        if(Response.Status){
             const Elements = Response.Data.map(vDesk.Archive.Element.FromDataView);
             this.Add(...Elements);
             return Elements;
@@ -185,20 +185,20 @@ vDesk.Archive.Element.Cache = function Cache() {
 
         //Checks if Elements have been already cached.
         let CachedElements = Elements.filter(Element => Element.Parent.ID === Parent);
-        if(CachedElements.length > 0 && !Update) {
+        if(CachedElements.length > 0 && !Update){
             Callback(CachedElements);
-        } else {
+        }else{
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
                         Module:     "Archive",
                         Command:    "GetElements",
                         Parameters: {ID: Parent.ID},
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         const Elements = Response.Data.map(vDesk.Archive.Element.FromDataView);
                         Elements.forEach(Element => Element.Parent = Parent);
                         this.Add(...Elements);
@@ -220,7 +220,7 @@ vDesk.Archive.Element.Cache = function Cache() {
         Index = (~Index) ? Index : this.FindIndex(Element);
 
         //Check if the element is in the cache.
-        if(~Index) {
+        if(~Index){
             //Remove the element from the cache.
             Elements.splice(Index, 1);
             //Remove any children from the index.

@@ -18,7 +18,7 @@
  * @property {Boolean} Changed Gets a value indicating whether the data of the current Contact of the Editor has been modified.
  * @memberOf vDesk.Contacts.Contact.Option
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Contacts
  */
 vDesk.Contacts.Contact.Option.Editor = function Editor(Contact, Enabled = true) {
     Ensure.Parameter(Contact, vDesk.Contacts.Contact, "Contact");
@@ -108,7 +108,7 @@ vDesk.Contacts.Contact.Option.Editor = function Editor(Contact, Enabled = true) 
         Added.push(Option);
         Options.appendChild(Option.Control);
         Changed = true;
-        if(Contact.ID !== null) {
+        if(Contact.ID !== null){
             new vDesk.Events.BubblingEvent("change", {
                 sender:  this,
                 contact: Contact
@@ -126,7 +126,7 @@ vDesk.Contacts.Contact.Option.Editor = function Editor(Contact, Enabled = true) 
         Event.stopPropagation();
         Updated.push(Event.detail.sender);
         Changed = true;
-        if(Contact.ID !== null) {
+        if(Contact.ID !== null){
             new vDesk.Events.BubblingEvent("change", {sender: this}).Dispatch(GroupBox.Control);
         }
     };
@@ -142,12 +142,12 @@ vDesk.Contacts.Contact.Option.Editor = function Editor(Contact, Enabled = true) 
         Contact.Options.splice(Contact.Options.indexOf(Event.detail.sender), 1);
 
         //Remove the option if it has been marked as 'added'.
-        if(Event.detail.sender.ID === null) {
+        if(Event.detail.sender.ID === null){
             Added.splice(Added.indexOf(Event.detail.sender), 1);
-        } else {
+        }else{
             //Check if the option has been updated before
             const Index = Updated.indexOf(Event.detail.sender);
-            if(~Index) {
+            if(~Index){
                 Updated.splice(Index, 1);
             }
             //Mark the option as 'deleted'.
@@ -162,7 +162,7 @@ vDesk.Contacts.Contact.Option.Editor = function Editor(Contact, Enabled = true) 
      * @return {Boolean} True if the made changes have been successfully saved; otherwise, false.
      */
     this.Save = function() {
-        if(Contact.ID !== null) {
+        if(Contact.ID !== null){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -181,14 +181,14 @@ vDesk.Contacts.Contact.Option.Editor = function Editor(Contact, Enabled = true) 
                             })),
                             Delete: Deleted.map(Option => Option.ID)
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         Contact.Options = Response.Data.map(Option => vDesk.Contacts.Contact.Option.FromDataView(Option));
                         this.Contact = Contact;
-                    } else {
+                    }else{
                         alert(Response.Data);
                     }
                 }

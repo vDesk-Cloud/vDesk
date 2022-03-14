@@ -5,6 +5,7 @@
  * @param {vDesk.Archive.Element} Element The Element to display the file of.
  * @property {HTMLDivElement} Control Gets the underlying dom node.
  * @memberOf vDesk.Archive.Element.View
+ * @package vDesk\Archive
  */
 vDesk.Archive.Element.View.Generic = function Generic(Element) {
     Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
@@ -35,7 +36,7 @@ vDesk.Archive.Element.View.Generic = function Generic(Element) {
                 Module:     "Archive",
                 Command:    "Download",
                 Parameters: {ID: Element.ID},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         Buffer => {
@@ -46,11 +47,10 @@ vDesk.Archive.Element.View.Generic = function Generic(Element) {
         },
         true
     );
-
 };
+
 /**
- * The file extensions the plugin can handle
- * @constant
- * @type {Array<String>}
+ * The file extensions the plugin can handle.
+ * @enum {String}
  */
 vDesk.Archive.Element.View.Generic.Extensions = [];

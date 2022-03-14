@@ -3,10 +3,10 @@
  * Initializes a new instance of the AttributeWindow class.
  * @class Window for displaying the atrributes, AccessControlList and metainformations of an element.
  * @param {vDesk.Archive.Element} Element The element to display the attributes of.
- * @augments vDesk.Controls.Window
+ * @extends vDesk.Controls.Window
  * @memberOf vDesk.Archive
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Archive
  */
 vDesk.Archive.AttributeWindow = function(Element) {
     Ensure.Parameter(Element, vDesk.Archive.Element, "Element");

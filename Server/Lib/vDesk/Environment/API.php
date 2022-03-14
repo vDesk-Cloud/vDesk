@@ -3,15 +3,13 @@ declare(strict_types=1);
 
 namespace vDesk\Environment;
 
-use vDesk\Struct\StaticSingleton;
-
 /**
- * Class API represents ...
+ * Enumeration of available APIs.
  *
- * @package vDesk\Environemt
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class API extends StaticSingleton {
+abstract class API {
 
     /**
      * Command line interface.
@@ -33,17 +31,10 @@ class API extends StaticSingleton {
      */
     public static string $Current = self::CGI;
 
-    /**
-     * Initializes the functionality of the API class.
-     */
-    public static function _construct() {
-        static::$Current = match (\PHP_SAPI) {
-            "cli" => static::CLI,
-            "apache", "apache2handler", "nginx", "phpfpm", "cgi-fcgi", "fpm-fcgi", "cli-server", "litespeed " => static::CGI,
-            default => static::Socket
-        };
-    }
-
 }
 
-new API();
+API::$Current = match (\PHP_SAPI) {
+    "cli" => API::CLI,
+    "apache", "apache2handler", "nginx", "phpfpm", "cgi-fcgi", "fpm-fcgi", "cli-server", "litespeed " => API::CGI,
+    default => API::Socket
+};

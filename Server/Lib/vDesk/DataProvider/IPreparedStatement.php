@@ -12,12 +12,13 @@ namespace vDesk\DataProvider;
 interface IPreparedStatement {
     
     /**
-     * @param string $Types
-     * @param mixed  ...$Values
+     * Applies a set of values to the IPreparedStatement.
+     *
+     * @param mixed  ...$Values The values to apply.
      *
      * @return \vDesk\DataProvider\IPreparedStatement The instance itself for further chaining.
      */
-    public function Apply(string $Types, ...$Values): IPreparedStatement;
+    public function Apply(...$Values): IPreparedStatement;
     
     /**
      * Executes the SQL-statement of the IPreparedStatement against a database.

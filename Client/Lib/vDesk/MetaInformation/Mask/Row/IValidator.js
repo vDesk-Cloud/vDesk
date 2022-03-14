@@ -11,7 +11,7 @@
  * @interface
  * @memberOf vDesk.MetaInformation.Mask.Row
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.Mask.Row.IValidator = function IValidator() {
 };

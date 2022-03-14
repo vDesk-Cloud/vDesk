@@ -7,11 +7,10 @@ use vDesk\DataProvider\Expression;
 use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
 use vDesk\Modules\Module\Command;
-
 use vDesk\Struct\Collections\Observable\Collection;
 
 /**
- * Class Packages represents ...
+ * Messenger Package manifest class.
  *
  * @package vDesk\Packages\Packages
  * @author  Kerry <DevelopmentHero@gmail.com>
@@ -26,7 +25,7 @@ final class Modules extends Package {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
+    public const Version = "1.0.1";
     
     /**
      * The name of the Package.
@@ -41,7 +40,7 @@ final class Modules extends Package {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["vDesk" => "1.0.0"];
+    public const Dependencies = ["DataProvider" => "1.0.0"];
     
     /**
      * The files and directories of the Package.
@@ -73,7 +72,7 @@ final class Modules extends Package {
     public static function Install(\Phar $Phar, string $Path): void {
         
         Expression::Create()
-                  ->Database(self::Modules)
+                  ->Schema(self::Modules)
                   ->Execute();
         
         //Create tables.
@@ -182,7 +181,7 @@ final class Modules extends Package {
         
         //Drop database.
         Expression::Drop()
-                  ->Database(self::Modules)
+                  ->Schema(self::Modules)
                   ->Execute();
         
         //Delete files.

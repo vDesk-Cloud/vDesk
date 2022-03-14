@@ -5,6 +5,7 @@
  * @param {vDesk.Archive.Element} Element The element to display the file of.
  * @property {HTMLDivElement} Control Gets the underlying dom node.
  * @memberOf vDesk.Archive.Element.Edit
+ * @package vDesk\Archive
  */
 vDesk.Archive.Element.Edit.Text = function Text(Element) {
     Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
@@ -26,7 +27,7 @@ vDesk.Archive.Element.Edit.Text = function Text(Element) {
                         ID:   Element.ID,
                         File: new Blob([TextArea.value], {type: "text/plain"})
                     },
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
@@ -82,7 +83,6 @@ vDesk.Archive.Element.Edit.Text = function Text(Element) {
     Reset.textContent = vDesk.Locale.vDesk.ResetChanges;
     Reset.addEventListener("click", OnClickReset, false);
 
-
     /**
      * The controls of the TextEditor.
      * @type {HTMLDivElement}
@@ -99,7 +99,7 @@ vDesk.Archive.Element.Edit.Text = function Text(Element) {
                 Module:     "Archive",
                 Command:    "Download",
                 Parameters: {ID: Element.ID},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         Buffer => {
@@ -113,8 +113,7 @@ vDesk.Archive.Element.Edit.Text = function Text(Element) {
 };
 
 /**
- * The file extensions the plugin can handle
- * @type {Array}
+ * The file extensions the plugin can handle.
  * @enum {String}
  */
 vDesk.Archive.Element.Edit.Text.Extensions = ["txt", "xml", "css", "csv", "yaml", "bat", "php", "js", "sql"];

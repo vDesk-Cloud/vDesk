@@ -3,10 +3,10 @@
  * Namespace that contains Module related Classes.
  * @namespace Modules
  * @memberOf vDesk
+ * @package vDesk\Modules
  */
 vDesk.Modules = new Proxy(
     {
-
         /**
          * Collection of server side installed Modules and Commands.
          * @todo Rename to "Installed".
@@ -54,7 +54,7 @@ vDesk.Modules = new Proxy(
          */
         Run(Module) {
             Ensure.Parameter(Module, Type.String, "Module");
-            if(Modules[Module] === undefined) {
+            if(Modules[Module] === undefined){
                 throw new TypeError(`Module '${Module}' doesn't exist!`);
             }
             this.Running[Module] = new Modules[Module];
@@ -66,7 +66,7 @@ vDesk.Modules = new Proxy(
          * @type {Function}
          */
         RunAll() {
-            for(const Module in Modules) {
+            for(const Module in Modules){
                 this.Running[Module] = new Modules[Module];
             }
         }
@@ -82,13 +82,13 @@ vDesk.Load.Modules = {
                     Module:     "Modules",
                     Command:    "GetCommands",
                     Parameters: {},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             )
         );
-        if(Response.Status) {
+        if(Response.Status){
             vDesk.Modules.Commands = Response.Data;
-        } else {
+        }else{
             console.log("Error while initializing Module Collection:" + Response.Data);
         }
     }

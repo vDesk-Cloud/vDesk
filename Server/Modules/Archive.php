@@ -41,17 +41,17 @@ use vDesk\Utils\Log;
  * @todo    Implement method to resolve a /-separated path.
  */
 final class Archive extends Module implements ISearch {
-    
+
     /**
      * The ID of the root Element of the Archive.
      */
     public const Root = 1;
-    
+
     /**
      * The ID of the system-folder of the Archive.
      */
     public const System = 2;
-    
+
     /**
      * Gets an Element.
      *
@@ -67,7 +67,7 @@ final class Archive extends Module implements ISearch {
         }
         return $Element;
     }
-    
+
     /**
      * Returns all child Elements of a specified folder Element.
      *
@@ -106,7 +106,7 @@ final class Archive extends Module implements ISearch {
         }
         return $Elements;
     }
-    
+
     /**
      * Returns a branch of IDs from a specified destination Element starting from the Archive root Element.
      *
@@ -118,9 +118,10 @@ final class Archive extends Module implements ISearch {
     public static function GetBranch(Element $Element = null): array {
         $Element ??= (new Element(Command::$Parameters["ID"]))->Fill();
         if(!$Element->AccessControlList->Read) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to fetch branch of Element without having permissions.");
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to fetch branch of Element without having permissions.");
             throw new UnauthorizedAccessException();
         }
+
         $Elements = [$Element->ID];
         do {
             //Check if user can view the Element.
@@ -133,7 +134,7 @@ final class Archive extends Module implements ISearch {
         } while($Element->ID > self::Root);
         return \array_reverse($Elements);
     }
-    
+
     /**
      * Uploads a file to the Archive.
      * Triggers the {@link \vDesk\Archive\Element\Created}-Event for each uploaded file Element.
@@ -146,27 +147,27 @@ final class Archive extends Module implements ISearch {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have write permissions on the target folder Element.
      */
     public static function Upload(Element $Parent = null, string $Name = null, FileInfo $File = null): Element {
-        
+
         $Parent ??= new Element(Command::$Parameters["Parent"]);
         $Name   ??= Command::$Parameters["Name"];
         $File   ??= Command::$Parameters["File"];
-        
+
         //Check if the User can write to the directory.
         if(!$Parent->AccessControlList->Write) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to upload a file without having permissions.");
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to upload a file without having permissions.");
             throw new UnauthorizedAccessException();
         }
-        
+
         //$File->Move(Settings::$Local["Archive"]["Directory"]);
         //$File->Rename(\uniqid("", true));
-        
+
         //Extract the extension of the file.
         $Extension = \strtolower(Path::GetExtension($Name));
         $Filename  = \uniqid("", true) . ".{$Extension}";
-        
+
         $TargetDirectory = Settings::$Local["Archive"]["Directory"] . Path::Separator;
         $TargetFile      = File::Create($TargetDirectory . $Filename);
-        
+
         //Save uploaded file.
         $TempFile = $File->Open();
         while(!$TempFile->EndOfStream()) {
@@ -174,11 +175,11 @@ final class Archive extends Module implements ISearch {
         }
         $TargetFile->Close();
         $TempFile->Close();
-        
+
         //Create a new Element for the uploaded file.
         $Element = new Element(
             null,
-            \vDesk::$User,
+            User::$Current,
             $Parent,
             (string)Text::Substring($Name, 0, Text::LastIndexOf($Name, ".")),
             Element::File,
@@ -190,14 +191,14 @@ final class Archive extends Module implements ISearch {
             Thumbnail::Create($TargetDirectory . $Filename),
             new AccessControlList($Parent->AccessControlList)
         );
-        
+
         //Save new Element.
         $Element->Save();
         (new Created($Element))->Dispatch();
-        Log::Info(__METHOD__, \vDesk::$User->Name . " uploaded [{$Element->ID}]({$Element->Name}) to [{$Parent->ID}]({$Parent->Name})");
+        Log::Info(__METHOD__, User::$Current->Name . " uploaded [{$Element->ID}]({$Element->Name}) to [{$Parent->ID}]({$Parent->Name})");
         return $Element;
     }
-    
+
     /**
      * Downloads the file of a specified Element.
      *
@@ -210,11 +211,11 @@ final class Archive extends Module implements ISearch {
     public static function Download(Element $Element = null): FileInfo {
         $Element ??= (new Element(Command::$Parameters["ID"]))->Fill();
         if(!$Element->AccessControlList->Read) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to download a file Element without having permissions.");
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to download a file Element without having permissions.");
             throw new UnauthorizedAccessException();
         }
         if($Element->Type !== Element::File) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to download a folder Element.");
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to download a folder Element.");
             throw new InvalidOperationException();
         }
         //Send file.
@@ -226,7 +227,7 @@ final class Archive extends Module implements ISearch {
                                     ->ToValue();
         return $File;
     }
-    
+
     /**
      * Gets the Attributes of an Element.
      *
@@ -236,13 +237,13 @@ final class Archive extends Module implements ISearch {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to read Attributes.
      */
     public static function GetAttributes(Element $Element = null): Element {
-        if(!\vDesk::$User->Permissions["ReadAttributes"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to view Attributes without having permissions.");
+        if(!User::$Current->Permissions["ReadAttributes"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to view Attributes without having permissions.");
             throw new UnauthorizedAccessException();
         }
         return ($Element ?? new Element(Command::$Parameters["ID"]))->Fill();
     }
-    
+
     /**
      * Creates a new folder Element.
      * Triggers the {@link \vDesk\Archive\Element\Created}-Event for the created folder Element.
@@ -257,12 +258,12 @@ final class Archive extends Module implements ISearch {
     public static function CreateFolder(Element $Parent = null, string $Name = null): Element {
         $Parent ??= new Element(Command::$Parameters["Parent"]);
         if(!$Parent->AccessControlList->Write) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to create a new folder Element without having permissions.");
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to create a new folder Element without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Folder = new Element(
             null,
-            \vDesk::$User,
+            User::$Current,
             $Parent,
             $Name ?? Command::$Parameters["Name"],
             Element::Folder,
@@ -281,11 +282,11 @@ final class Archive extends Module implements ISearch {
             )
         );
         $Folder->Save();
-        Log::Info(__METHOD__, \vDesk::$User->Name . " created new directory [{$Folder->ID}]({$Folder->Name}) in directory [{$Parent->ID}]({$Parent->Name})");
+        Log::Info(__METHOD__, User::$Current->Name . " created new directory [{$Folder->ID}]({$Folder->Name}) in directory [{$Parent->ID}]({$Parent->Name})");
         (new Created($Folder))->Dispatch();
         return $Folder;
     }
-    
+
     /**
      * Moves a set of Elements to a new destination folder Element.
      * Triggers the {@link \vDesk\Archive\Element\Moved}-Event for every moved Element.
@@ -299,18 +300,18 @@ final class Archive extends Module implements ISearch {
     public static function Move(Element $Target = null, array $Elements = null): bool {
         $Target ??= new Element(Command::$Parameters["Target"]);
         if(!$Target->AccessControlList->Write) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to move Elements without having permissions.");
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to move Elements without having permissions.");
             throw new UnauthorizedAccessException();
-            
+
         }
-        
+
         //Update the parent entry of the Elements.
         foreach($Elements ?? Command::$Parameters["Elements"] as $ID) {
             $Element = (new Element($ID))->Fill();
             if($Element->ID > self::System && $Element->AccessControlList->Write && $Element->ID !== $Target->ID) {
                 $Element->Parent = $Target;
                 $Element->Save();
-                Log::Info(__METHOD__, \vDesk::$User->Name . " moved [{$Element->ID}]({$Element->Name}) to [{$Target->ID}]({$Target->Name}).");
+                Log::Info(__METHOD__, User::$Current->Name . " moved [{$Element->ID}]({$Element->Name}) to [{$Target->ID}]({$Target->Name}).");
                 (new Moved($Element))->Dispatch();
             } else {
                 continue;
@@ -318,7 +319,7 @@ final class Archive extends Module implements ISearch {
         }
         return true;
     }
-    
+
     /**
      * Copies a set of Elements to a new destination folder Element.
      * Triggers the {@link \vDesk\Archive\Element\Created}-Event for each copied Element.
@@ -334,18 +335,18 @@ final class Archive extends Module implements ISearch {
         $Target ??= new Element(Command::$Parameters["Target"]);
         //Check if the User can write to the target folder Element.
         if(!$Target->AccessControlList->Write) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to copy Elements to [{$Target->ID}]({$Target->Name}) without having permissions.");
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to copy Elements to [{$Target->ID}]({$Target->Name}) without having permissions.");
             throw new UnauthorizedAccessException();
         }
-        
+
         $RecursiveCopy = static function(Element $Target, Element $Element) use (&$RecursiveCopy) {
-            
+
             if($Target->AccessControlList->Write) {
-                
+
                 //Copy values.
                 $CopiedElement = new Element(
                     null,
-                    \vDesk::$User,
+                    User::$Current,
                     $Target,
                     $Element->Name,
                     $Element->Type,
@@ -357,7 +358,7 @@ final class Archive extends Module implements ISearch {
                     $Element->Thumbnail,
                     new AccessControlList($Element->AccessControlList)
                 );
-                
+
                 //Check if copied Element is a file.
                 if($Element->Type === Element::File) {
                     $CopiedElement->File = \uniqid('', false) . "." . $Element->Extension;
@@ -366,11 +367,11 @@ final class Archive extends Module implements ISearch {
                         Settings::$Local["Archive"]["Directory"] . Path::Separator . $CopiedElement->File
                     );
                 }
-                
+
                 //Save new Element.
                 $CopiedElement->Save();
                 (new Created($CopiedElement))->Dispatch();
-                
+
                 //Check if the Element has children.
                 if($Element->HasChildren) {
                     $ChildElements = Elements::FromElement($Element);
@@ -379,7 +380,7 @@ final class Archive extends Module implements ISearch {
                         if($RecursiveCopy($CopiedElement, $ChildElement)) {
                             Log::Info(
                                 __METHOD__,
-                                \vDesk::$User->Name . " copied [{$ChildElement->ID}]({$ChildElement->Name}) to [{$CopiedElement->ID}]({$CopiedElement->Name})"
+                                User::$Current->Name . " copied [{$ChildElement->ID}]({$ChildElement->Name}) to [{$CopiedElement->ID}]({$CopiedElement->Name})"
                             );
                         }
                     }
@@ -387,20 +388,20 @@ final class Archive extends Module implements ISearch {
                 return true;
             }
             return false;
-            
+
         };
-        
+
         //Update the parent entry of the Elements.
         foreach($Elements ?? Command::$Parameters["Elements"] as $ID) {
             $Element = (new Element($ID))->Fill();
             if(($Target->ID !== $Element->ID) && $RecursiveCopy($Target, $Element)) {
-                Log::Info(__METHOD__, \vDesk::$User->Name . " moved [{$Element->ID}]({$Element->Name}) to [{$Target->ID}]({$Target->Name})");
+                Log::Info(__METHOD__, User::$Current->Name . " moved [{$Element->ID}]({$Element->Name}) to [{$Target->ID}]({$Target->Name})");
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Renames an Element.
      * Triggers the {@link \vDesk\Archive\Element\Renamed}-Event for the renamed Element.
@@ -415,16 +416,16 @@ final class Archive extends Module implements ISearch {
         $Element ??= new Element(Command::$Parameters["ID"]);
         $Element->Fill();
         if($Element->ID <= self::System || !$Element->AccessControlList->Write) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to rename Element without having permissions.");
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to rename Element without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Element->Name = $Name ?? Command::$Parameters["Name"];
         $Element->Save();
-        Log::Info(__METHOD__, \vDesk::$User->Name . " renamed Element [{$Element->ID}] to '{$Element->Name}'");
+        Log::Info(__METHOD__, User::$Current->Name . " renamed Element [{$Element->ID}] to '{$Element->Name}'");
         (new Renamed($Element))->Dispatch();
         return true;
     }
-    
+
     /**
      * Updates the file of a specified Element.
      *
@@ -436,7 +437,7 @@ final class Archive extends Module implements ISearch {
     public static function UpdateFile(int $ID = null, FileInfo $File = null): Element {
         $Element         = (new Element($ID ?? Command::$Parameters["ID"]))->Fill();
         $TargetDirectory = Settings::$Local["Archive"]["Directory"] . Path::Separator;
-        
+
         //Overwrite file.
         $TargetFile = new FileStream($TargetDirectory . $Element->File, Mode::Truncate | Mode::Binary);
         $TempFile   = ($File ?? Command::$Parameters["File"])->Open();
@@ -445,14 +446,14 @@ final class Archive extends Module implements ISearch {
         }
         $TargetFile->Close();
         $TempFile->Close();
-        
+
         //Update Element.
         $Element->Size      = File::Size($TargetDirectory . $Element->File);
         $Element->Thumbnail = Thumbnail::Create($TargetDirectory . $Element->File);
         $Element->Save();
         return $Element;
     }
-    
+
     /**
      * Deletes a set of Elements.
      * Recursively deletes any child Elements.
@@ -464,7 +465,7 @@ final class Archive extends Module implements ISearch {
      */
     public static function DeleteElements(array $Elements = null): array {
         $DeletedElements = new Elements();
-        
+
         /**
          * @param \vDesk\Archive\Element $Element
          *
@@ -481,9 +482,9 @@ final class Archive extends Module implements ISearch {
                 yield $Child;
             }
         };
-        
+
         $Path = Settings::$Local["Archive"]["Directory"] . Path::Separator;
-        
+
         //Loop through Elements and check for children.
         foreach($Elements ?? Command::$Parameters["Elements"] as $ID) {
             $Element = (new Element($ID))->Fill();
@@ -504,10 +505,10 @@ final class Archive extends Module implements ISearch {
             (new Deleted($Element))->Dispatch();
             $DeletedElements->Add($Element);
         }
-        
+
         return $DeletedElements->ToDataView(true);
     }
-    
+
     /**
      * Searches the archive for Elements with a similar name.
      *
@@ -548,7 +549,7 @@ final class Archive extends Module implements ISearch {
         }
         return $Results;
     }
-    
+
     /**
      * Gets the status information of the Archive.
      *

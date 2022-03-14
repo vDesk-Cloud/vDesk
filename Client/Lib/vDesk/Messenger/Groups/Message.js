@@ -15,7 +15,7 @@
  * @property {String} Text Gets or sets the text of the Message.
  * @memberOf vDesk.Messenger.Groups
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Messenger
  */
 vDesk.Messenger.Groups.Message = function Message(
     ID     = null,
@@ -24,7 +24,6 @@ vDesk.Messenger.Groups.Message = function Message(
     Date   = new window.Date(),
     Text   = ""
 ) {
-
     Ensure.Parameter(ID, Type.Number, "ID", true);
     Ensure.Parameter(Sender, vDesk.Security.User, "Sender");
     Ensure.Parameter(Group, vDesk.Security.Group, "Group");
@@ -48,8 +47,8 @@ vDesk.Messenger.Groups.Message = function Message(
                 Ensure.Property(Value, vDesk.Security.User, "Sender");
                 Sender = Value;
                 User.textContent = Sender.Name;
-                Control.classList.toggle("Sender", Value.ID === vDesk.User.ID);
-                Control.classList.toggle("Group", Value.ID !== vDesk.User.ID);
+                Control.classList.toggle("Sender", Value.ID === vDesk.Security.User.Current.ID);
+                Control.classList.toggle("Group", Value.ID !== vDesk.Security.User.Current.ID);
             }
         },
         Group:   {
@@ -57,8 +56,8 @@ vDesk.Messenger.Groups.Message = function Message(
             set: Value => {
                 Ensure.Property(Value, vDesk.Security.User, "Group");
                 Group = Value;
-                Control.classList.toggle("Group", Value.ID === vDesk.User.ID);
-                Control.classList.toggle("Sender", Value.ID !== vDesk.User.ID);
+                Control.classList.toggle("Group", Value.ID === vDesk.Security.User.Current.ID);
+                Control.classList.toggle("Sender", Value.ID !== vDesk.Security.User.Current.ID);
             }
         },
         Date:    {
@@ -83,7 +82,7 @@ vDesk.Messenger.Groups.Message = function Message(
      * @type {HTMLLIElement}
      */
     const Control = document.createElement("li");
-    Control.className = `Groups Message ${vDesk.User.ID === Sender.ID ? "Sender" : "Group"} Font Dark`;
+    Control.className = `Groups Message ${vDesk.Security.User.Current.ID === Sender.ID ? "Sender" : "Group"} Font Dark`;
     Control.innerText = Text;
 
     /**
@@ -105,6 +104,7 @@ vDesk.Messenger.Groups.Message = function Message(
     DateIcon.src = vDesk.Visual.Icons.Messenger.Time;
     Control.appendChild(DateIcon);
 };
+
 /**
  * Factory method that creates a Message from a JSON-encoded representation.
  * @param {Object} DataView The Data to use to create an instance of the Message.

@@ -62,7 +62,7 @@
  * Initializes a new instance of the Element class.
  * @class Represents an element within the archive which acts either as a folder or a file.
  * @param {?Number} [ID=null] Initializes the Element with the specified ID.
- * @param {?vDesk.Security.User} [Owner=vDesk.User] Initializes the Element with the specified owner.
+ * @param {?vDesk.Security.User} [Owner=vDesk.Security.User.Current] Initializes the Element with the specified owner.
  * @param {String} [Name=""] Initializes the Element with the specified name.
  * @param {Number} [Type=vDesk.Archive.Element.Folder] Initializes the Element with the specified type.
  * @param {?Number} [Parent=null] Initializes the Element with the specified parent Element.
@@ -89,11 +89,11 @@
  * @property {Boolean} Selected Gets or sets a value indicating whether the Element has been selected.
  * @memberOf vDesk.Archive
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Archive
  */
 vDesk.Archive.Element = function Element(
     ID                = null,
-    Owner             = vDesk.User,
+    Owner             = vDesk.Security.User.Current,
     Parent            = null,
     Name              = "",
     Type              = vDesk.Archive.Element.Folder,
@@ -139,7 +139,7 @@ vDesk.Archive.Element = function Element(
             set:        Value => {
                 Ensure.Property(Value, vDesk.Struct.Type.Number, "ID", true);
                 ID = Value;
-                if(Value === vDesk.Archive.Element.Root) {
+                if(Value === vDesk.Archive.Element.Root){
                     TextArea.textContent = vDesk.Locale.Archive.Module;
                 }
             }
@@ -260,7 +260,7 @@ vDesk.Archive.Element = function Element(
      * @fires vDesk.Archive.Element#open
      */
     const OnDoubleClick = () => {
-        if(ID !== null) {
+        if(ID !== null){
             new vDesk.Events.BubblingEvent("open", {sender: this}).Dispatch(Control);
         }
     };
@@ -273,7 +273,7 @@ vDesk.Archive.Element = function Element(
     const OnContextMenu = Event => {
         Event.stopPropagation();
         Event.preventDefault();
-        if(ID !== null) {
+        if(ID !== null){
             new vDesk.Events.BubblingEvent("context", {
                 sender: this,
                 x:      Event.pageX,
@@ -290,7 +290,7 @@ vDesk.Archive.Element = function Element(
     const OnDragStart = Event => {
         Event.dataTransfer.effectAllowed = "move";
         Event.dataTransfer.setReference(this);
-        if(ID !== null && !Selected) {
+        if(ID !== null && !Selected){
             new vDesk.Events.BubblingEvent("select", {sender: this}).Dispatch(Control);
         }
         return false;
@@ -312,7 +312,7 @@ vDesk.Archive.Element = function Element(
      */
     const OnDragLeave = () => {
         DragCounter--;
-        if(DragCounter === 0) {
+        if(DragCounter === 0){
             this.Selected = false;
         }
         return false;
@@ -336,17 +336,17 @@ vDesk.Archive.Element = function Element(
         if(
             Event.dataTransfer.files !== undefined
             && Event.dataTransfer.files.length > 0
-        ) {
+        ){
             new vDesk.Events.BubblingEvent("filedrop", {
                 sender: Target,
                 files:  Array.from(Event.dataTransfer.files)
             }).Dispatch(Control);
-        } else {
+        }else{
             //Get the ID of the dropped Element.
             const DroppedElement = Event.dataTransfer.getReference();
 
             //Don't fire event, if it's dropped on itself.
-            if(DroppedElement.ID !== Target.ID || DroppedElement.Parent.ID !== Target.ID) {
+            if(DroppedElement.ID !== Target.ID || DroppedElement.Parent.ID !== Target.ID){
                 new vDesk.Events.BubblingEvent("elementdrop", {
                     sender:  Target,
                     element: DroppedElement
@@ -362,9 +362,9 @@ vDesk.Archive.Element = function Element(
      * @param {KeyboardEvent} Event
      */
     const OnKeyDown = Event => {
-        switch(Event.key) {
+        switch(Event.key){
             case "Enter":
-                if(TextArea.textContent !== Name) {
+                if(TextArea.textContent !== Name){
                     Event.stopPropagation();
                     new vDesk.Events.BubblingEvent("renamed", {
                         sender: this,
@@ -392,9 +392,9 @@ vDesk.Archive.Element = function Element(
      * @return {Boolean} Enables selection functionality on the textarea.
      */
     const OnClickWhileEdit = Event => {
-        if(Event.target !== TextArea) {
+        if(Event.target !== TextArea){
             //Check if the name has been changed.
-            if(TextArea.textContent !== Name) {
+            if(TextArea.textContent !== Name){
                 new vDesk.Events.BubblingEvent("renamed", {
                     sender: this,
                     name:   {
@@ -402,7 +402,7 @@ vDesk.Archive.Element = function Element(
                         old: Name
                     }
                 }).Dispatch(Control);
-            } else {
+            }else{
                 new vDesk.Events.BubblingEvent("renamecanceled", {sender: this}).Dispatch(Control);
             }
             this.CancelEdit();
@@ -483,7 +483,7 @@ vDesk.Archive.Element = function Element(
     TextArea.className = "Name Font Dark";
     TextArea.contentEditable = false.toString();
     TextArea.draggable = false;
-    if(ID === vDesk.Archive.Element.Root) {
+    if(ID === vDesk.Archive.Element.Root){
         Name = vDesk.Locale.Archive.Module;
     }
     TextArea.textContent = Name;

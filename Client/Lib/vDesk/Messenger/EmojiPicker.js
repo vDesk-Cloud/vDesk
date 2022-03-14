@@ -9,10 +9,10 @@
  */
 /**
  * Initializes a new instance of the EmojiPicker class.
- * @class Class that represents a [...] for [...]. | Class providing functionality for [...].
+ * @class Class that represents a simple EMOJI picker.
  * @memberOf vDesk.Messenger
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Messenger
  */
 vDesk.Messenger.EmojiPicker = function EmojiPicker() {
 
@@ -32,9 +32,9 @@ vDesk.Messenger.EmojiPicker = function EmojiPicker() {
      * Eventhandler that listens on the 'click' event.
      */
     const OnClickToggle = () => {
-        if(Visible) {
+        if(Visible){
             Emojis.style.display = "none";
-        } else {
+        }else{
             Emojis.style.display = "block";
         }
         Visible = !Visible;
@@ -74,7 +74,7 @@ vDesk.Messenger.EmojiPicker = function EmojiPicker() {
     const Emojis = document.createElement("div");
     Emojis.className = "Emojis";
     Emojis.style.display = "none";
-    for(let Codepoint = 0x1F600; Codepoint <= 0x1F64F; Codepoint++) {
+    for(let Codepoint = 0x1F600; Codepoint <= 0x1F64F; Codepoint++){
         const Emoji = document.createElement("span");
         Emoji.className = "Emoji";
         Emoji.textContent = String.fromCodePoint(Codepoint);

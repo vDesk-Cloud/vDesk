@@ -20,11 +20,12 @@ use vDesk\Struct\Collections\Collection;
  * @property \DateTime     $LastWriteTime  Gets or sets the time the underlying file of the DirectoryInfo has been modified for the last time.
  * @property-read int|null $Size           Gets the size of the underlying file of the DirectoryInfo.
  * @property null|string   $MimeType       Gets or sets the mime-type of the underlying file of the DirectoryInfo.
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  * @todo    Document Properties.
  */
 final class DirectoryInfo extends FileSystemInfo {
-    
+
     /**
      * Initializes a new instance of the DirectoryInfo class, which acts as a wrapper for a directory path.
      *
@@ -83,7 +84,7 @@ final class DirectoryInfo extends FileSystemInfo {
             ]
         ]);
     }
-    
+
     /**
      * Creates a directory.
      *
@@ -102,7 +103,7 @@ final class DirectoryInfo extends FileSystemInfo {
             }
         }
     }
-    
+
     /**
      * Deletes the underlying directory of the DirectoryInfo.
      *
@@ -117,14 +118,14 @@ final class DirectoryInfo extends FileSystemInfo {
         }
         return false;
     }
-    
+
     /**
      * Refreshes the state of the object.
      */
     public function Refresh(): void {
         \clearstatcache(true, $this->Path);
     }
-    
+
     /**
      * Returns the names of files (including their paths) in the specified directory.
      *
@@ -135,7 +136,7 @@ final class DirectoryInfo extends FileSystemInfo {
     public function GetFiles(string $Separator = Path::Separator): Collection {
         return new Collection($this->IterateFiles($Separator));
     }
-    
+
     /**
      * Returns the names of subdirectories (including their paths) in the specified directory.
      *
@@ -146,7 +147,7 @@ final class DirectoryInfo extends FileSystemInfo {
     public function GetDirectories(string $Separator = Path::Separator): Collection {
         return new Collection($this->IterateDirectories($Separator));
     }
-    
+
     /**
      * Returns the names of all files and subdirectories in a specified path.
      *
@@ -157,7 +158,7 @@ final class DirectoryInfo extends FileSystemInfo {
     public function GetFileSystemEntries(string $Separator = Path::Separator): Collection {
         return new Collection($this->IterateFileSystemEntries($Separator));
     }
-    
+
     /**
      * Returns a Generator that iterates over the names of files (including their paths) in the specified directory.
      *
@@ -175,7 +176,7 @@ final class DirectoryInfo extends FileSystemInfo {
         }
         $Stream->Close();
     }
-    
+
     /**
      * Returns a Generator that iterates over the names of subdirectories (including their paths) in the specified directory.
      *
@@ -193,7 +194,7 @@ final class DirectoryInfo extends FileSystemInfo {
         }
         $Stream->Close();
     }
-    
+
     /**
      * Returns a Generator that iterates over the names of all files and subdirectories in a specified path.
      *
@@ -208,6 +209,6 @@ final class DirectoryInfo extends FileSystemInfo {
         }
         $Stream->Close();
     }
-    
+
 }
 

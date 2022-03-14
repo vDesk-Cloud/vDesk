@@ -17,7 +17,7 @@ use vDesk\Struct\Collections\Observable\Collection;
 /**
  * Configuration Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Configuration
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Configuration extends Package implements IPackage {
@@ -30,7 +30,7 @@ final class Configuration extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
+    public const Version = "1.0.2";
     
     /**
      * The name of the Package.
@@ -45,7 +45,7 @@ final class Configuration extends Package implements IPackage {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Locale" => "1.0.0"];
+    public const Dependencies = ["Locale" => "1.0.2"];
     
     /**
      * The files and directories of the Package.
@@ -118,7 +118,7 @@ final class Configuration extends Package implements IPackage {
     public static function Install(\Phar $Phar, string $Path): void {
         
         Expression::Create()
-                  ->Database("Configuration")
+                  ->Schema("Configuration")
                   ->Execute();
         
         //Create tables.
@@ -238,7 +238,7 @@ final class Configuration extends Package implements IPackage {
         
         //Drop database.
         Expression::Drop()
-                  ->Database("Configuration")
+                  ->Schema("Configuration")
                   ->Execute();
         
         //Delete files.

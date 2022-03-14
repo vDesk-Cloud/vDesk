@@ -54,7 +54,7 @@
  * @implements vDesk.Controls.Table.IRow
  * @memberOf vDesk.Contacts
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Contacts
  */
 vDesk.Contacts.Company = function Company(
     ID          = null,
@@ -317,17 +317,17 @@ vDesk.Contacts.Company = function Company(
  */
 vDesk.Contacts.Company.FromDataView = function(DataView) {
     return new vDesk.Contacts.Company(
-        DataView?.ID ??  null,
-        DataView?.Name ??  "",
-        DataView?.Street ??  "",
-        DataView?.HouseNumber ??  "",
-        DataView?.ZipCode ??  0,
-        DataView?.City ??  "",
+        DataView?.ID ?? null,
+        DataView?.Name ?? "",
+        DataView?.Street ?? "",
+        DataView?.HouseNumber ?? "",
+        DataView?.ZipCode ?? 0,
+        DataView?.City ?? "",
         vDesk.Locale.Country.FromDataView(DataView?.Country ?? {}),
-        DataView?.PhoneNumber ??  "",
-        DataView?.FaxNumber ??  "",
-        DataView?.Email ??  "",
-        DataView?.Website ??  ""
+        DataView?.PhoneNumber ?? "",
+        DataView?.FaxNumber ?? "",
+        DataView?.Email ?? "",
+        DataView?.Website ?? ""
     );
 };
 

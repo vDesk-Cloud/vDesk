@@ -10,7 +10,7 @@
  * @property {Array<vDesk.Contacts.Contact>} Contacts Gets the currently cached Contacts of the Cache.
  * @memberOf vDesk.Contacts.Contact
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Contacts
  */
 vDesk.Contacts.Contact.Cache = function Cache() {
 
@@ -46,7 +46,7 @@ vDesk.Contacts.Contact.Cache = function Cache() {
     const Key = Char => (/^[^a-zA-Z]/.test(Char)) ? Symbol : (Char.charAt(0)).toUpperCase();
 
     //Create alphabetical items.
-    for(let i = 65; i < 91; i++) {
+    for(let i = 65; i < 91; i++){
         Alphabet[String.fromCharCode(i)] = {
             Fetched:  false,
             Contacts: []
@@ -73,28 +73,28 @@ vDesk.Contacts.Contact.Cache = function Cache() {
                 Module:     "Contacts",
                 Command:    "GetContact",
                 Parameters: {ID: ID},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         );
         //Check if a callback has been passed.
-        if(Callback !== null) {
+        if(Callback !== null){
             vDesk.Connection.Send(
                 Command,
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         Callback(vDesk.Contacts.Contact.FromDataView(Response.Data));
-                    } else {
+                    }else{
                         Callback(null);
                     }
                 }
             );
         }
         //Otherwise return the fetched contact.
-        else {
+        else{
             const Response = vDesk.Connection.Send(Command);
-            if(Response.Status) {
+            if(Response.Status){
                 return vDesk.Contacts.Contact.FromDataView(Response.Data);
-            } else {
+            }else{
                 return null;
             }
         }
@@ -119,17 +119,17 @@ vDesk.Contacts.Contact.Cache = function Cache() {
         const Storage = Alphabet[Key(Char)];
 
         //check if Contacts whose surname begin with the passed letter have been fetched before.
-        if(Storage.Fetched && !Refetch) {
+        if(Storage.Fetched && !Refetch){
             //Check if the callback has been omitted.
-            if(Callback === null) {
+            if(Callback === null){
                 return Storage.Contacts;
             }
             Callback(Storage.Contacts);
         }
         //Otherwise fetch contacts from the server.
-        else {
+        else{
             //Check if the contacts of the specified alphabetical index should be fetched again.
-            if(Refetch) {
+            if(Refetch){
                 //Clear the alphabetical index and remove the cached contacts from the cache.
                 Storage.Contacts.forEach(Contact => {
                     Contacts.splice(Contacts.indexOf(Contact), 1);
@@ -146,34 +146,34 @@ vDesk.Contacts.Contact.Cache = function Cache() {
                         Amount: Amount,
                         Offset: Offset
                     },
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             );
             //Check if a Callback has been passed.
-            if(Callback !== null) {
+            if(Callback !== null){
                 vDesk.Connection.Send(
                     Command,
                     Response => {
-                        if(Response.Status) {
+                        if(Response.Status){
                             Storage.Contacts = Response.Data.map(Contact => vDesk.Contacts.Contact.FromDataView(Contact));
                             Storage.Fetched = true;
                             Storage.Contacts.forEach(Contact => Contacts.push(Contact));
                             Callback(Storage.Contacts);
-                        } else {
+                        }else{
                             alert(Response.Data);
                         }
                     }
                 );
             }
             //Otherwise fetch and return the Contacts.
-            else {
+            else{
                 const Response = vDesk.Connection.Send(Command);
-                if(Response.Status) {
+                if(Response.Status){
                     Storage.Contacts = Response.Data.map(Contact => vDesk.Contacts.Contact.FromDataView(Contact));
                     Storage.Fetched = true;
                     Storage.Contacts.forEach(Contact => Contacts.push(Contact));
                     return Storage.Contacts;
-                } else {
+                }else{
                     alert(Response.Data);
                 }
             }
@@ -189,11 +189,11 @@ vDesk.Contacts.Contact.Cache = function Cache() {
         Ensure.Parameter(Contact, vDesk.Contacts.Contact, "Contact");
 
         //Check if the contact does not exist within the cache.
-        if(Contacts.find(CachedContact => CachedContact.ID === Contact.ID) === undefined) {
+        if(Contacts.find(CachedContact => CachedContact.ID === Contact.ID) === undefined){
 
             //Append the contact to its (maybe) new according alphabetical index and the cache.
             const Storage = Alphabet[Key(Contact.Surname).toUpperCase()];
-            if(Storage.Fetched) {
+            if(Storage.Fetched){
                 Storage.Contacts.push(Contact);
                 Contacts.push(Contact);
             }
@@ -212,11 +212,11 @@ vDesk.Contacts.Contact.Cache = function Cache() {
 
         //Check if the contact exists within the cache.
         const CachedContact = Contacts.find(CachedContact => CachedContact.ID === Contact.ID);
-        if(CachedContact !== undefined) {
+        if(CachedContact !== undefined){
 
             //Remove the contact temporarily from its according alphabetical index.
-            for(const Char in Alphabet) {
-                if(Alphabet[Char].Contacts.some(Contact => Contact.ID === CachedContact.ID)) {
+            for(const Char in Alphabet){
+                if(Alphabet[Char].Contacts.some(Contact => Contact.ID === CachedContact.ID)){
                     Alphabet[Char].Contacts.splice(Alphabet[Char].Contacts.indexOf(CachedContact), 1);
                     break;
                 }
@@ -224,7 +224,7 @@ vDesk.Contacts.Contact.Cache = function Cache() {
 
             //Reappend the contact to its (maybe) new according alphabetical index.
             const Storage = Alphabet[Key(Contact.Surname)];
-            if(Storage.Fetched) {
+            if(Storage.Fetched){
                 Storage.Contacts.push(Contact);
             }
             return true;
@@ -243,11 +243,11 @@ vDesk.Contacts.Contact.Cache = function Cache() {
 
         //Check if the contact exists within the cache.
         const CachedContact = Contacts.find(CachedContact => CachedContact.ID === Contact.ID);
-        if(CachedContact !== undefined) {
+        if(CachedContact !== undefined){
 
             //Remove the contact from its according alphabetical index.
-            for(const Char in Alphabet) {
-                if(Alphabet[Char].Contacts.some(Contact => Contact.ID === CachedContact.ID)) {
+            for(const Char in Alphabet){
+                if(Alphabet[Char].Contacts.some(Contact => Contact.ID === CachedContact.ID)){
                     Alphabet[Char].Contacts.splice(Alphabet[Char].Contacts.indexOf(CachedContact), 1);
                     break;
                 }

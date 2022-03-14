@@ -6,41 +6,42 @@ namespace vDesk\IO;
 /**
  * Represents an iterator that iterates recursively over the contents of a directory.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class RecursiveFilesystemInfoIterator implements \IteratorAggregate {
-    
+
     /**
      * The base DirectoryInfo of the RecursiveFilesystemInfoIterator.
      *
      * @var null|\vDesk\IO\DirectoryInfo
      */
     protected ?DirectoryInfo $Directory;
-    
+
     /**
      * Flag for yielding files first.
      */
     public const FilesFirst = 0;
-    
+
     /**
      * Flag for yielding directories first.
      */
     public const DirectoriesFirst = 1;
-    
+
     /**
      * The mode of the RecursiveFilesystemInfoIterator.
      *
      * @var bool
      */
     protected bool $FilesFirst;
-    
+
     /**
      * The path separatur to use.
      *
      * @var string
      */
     protected string $Separator;
-    
+
     /**
      * Initializes a new instance of the RecursiveFilesystemInfoIterator class.
      *
@@ -53,7 +54,7 @@ class RecursiveFilesystemInfoIterator implements \IteratorAggregate {
         $this->FilesFirst = $FilesFirst;
         $this->Separator  = $Separator;
     }
-    
+
     /**
      * @return \Generator
      * @ignore
@@ -80,6 +81,6 @@ class RecursiveFilesystemInfoIterator implements \IteratorAggregate {
             };
         yield from $Generator($this->Directory);
     }
-    
+
 }
 
