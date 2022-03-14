@@ -36,14 +36,20 @@ Description;
     public const Files = [
         self::Deploy   => [
             Package::Client => [
-                Package::Lib => [
+                Package::Design => [
+                    "vDesk/Security/LoginDialog.css"
+                ],
+                Package::Lib    => [
                     "vDesk/Security"
                 ]
             ]
         ],
         self::Undeploy => [
             Package::Client => [
-                Package::Lib => [
+                Package::Design => [
+                    "vDesk/LoginDialog.css"
+                ],
+                Package::Lib    => [
                     "vDesk/LoginDialog.js",
                     "vDesk/Security"
                 ]
