@@ -6,9 +6,9 @@ namespace vDesk\Updates;
 use vDesk\Packages\Package;
 
 /**
- * Contacts Update manifest class.
+ * DataProvider Update manifest class.
  *
- * @package vDesk\Contacts
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class DataProvider extends Update {
