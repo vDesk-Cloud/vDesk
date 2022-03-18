@@ -10,6 +10,14 @@ use vDesk\Documentation\Code;
         <h3>Overview</h3>
         <ul class="Topics">
             <li>
+                <a href="#DataProvider">DataProvider</a>
+                <ul class="Topics">
+                    <li><a href="#Configuration">Configuration</a></li>
+                    <li><a href="#Usage">Usage</a></li>
+                    <li><a href="#PreparedStatements">Prepared statements</a></li>
+                </ul>
+            </li>
+            <li>
                 <a href="#Expressions">Expressions</a>
                 <ul class="Topics">
                     <li><a href="#Comparison">Comparison between different DataProviders</a></li>
@@ -86,6 +94,27 @@ use vDesk\Documentation\Code;
         </ul>
     </header>
 <hr>
+    <section id="DataProvider">
+        <h3>Expressions</h3>
+        <p>
+            Besides querying manually the database via passing plain SQL-strings through the <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>()</code>-method,<br>
+            vDesk ships with a library that provides an "expressive" way of working with databases.
+        </p>
+        <p>
+            Expressions are early evaluated fluent interfaces which aim to provide a transformation of the usual well known SQL syntax into an unified injection-safe PHP-API
+            that cares about proper value escaping and building SQL statements compatible to the current configured database.<br>
+        </p>
+        <p>
+            To reduce the required effort of writing code, the Expression library provides a global <code class="Inline">\vDesk\DataProvider\<?= Code::Class("Expression") ?></code>-factory, that creates specific Expression-instances according the current configured DataProvider.<br>
+        </p>
+        <aside class="Note">
+            <h4>Note</h4>
+            <p>
+                Independent of the specific implementation, any Expression instance will use the escaping methods of the current DataProvider-instance.<br>
+                For subsequent calls to different target RDBMS, the global DataProvider interface has to be manually re-initialized via invoking it's constructor before executing the Expression.
+            </p>
+        </aside>
+    </section>
     <section id="Expressions">
         <h3>Expressions</h3>
         <p>
@@ -233,56 +262,56 @@ use vDesk\Documentation\Code;
             <tr>
                 <td>AVG</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
                 <td>COUNT</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
                 <td>CURRENT_TIMESTAMP</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
                 <td>DISTINCT</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
                 <td>MAX</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
                 <td>MIN</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
                 <td>NOW</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
                 <td>SUM</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
-                <td>GROUP_CONCAT</td>
-                <td>✗</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>GROUPING/-_CONCAT</td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
         </table>
     </section>

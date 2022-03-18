@@ -309,13 +309,18 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
         <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Function ?> <?= Code::Function("InstallPackage") ?>(<?= Code::Class("Package") ?> <?= Code::Variable("\$Package") ?>): <?= Code::Class("Package") ?> {
     
-    <?= Code::Comment("//Install Package..") ?>
-        
-    <?= Code::Variable("\$Package") ?>::<?= Code::Function("Install") ?>()<?= Code::Delimiter ?>
-        
-        
-    <?= Code::If ?>(!\<?= Code::Class("vDesk") ?>::<?= Code::Variable("\$User") ?>-><?= Code::Field("Permissions") ?>[<?= Code::String("\"InstallPackage\"") ?>]) {
-        <?= Code::Class("Log") ?>::<?= Code::Function("Warn") ?>(<?= Code::Const("__METHOD__") ?>, \<?= Code::Class("vDesk") ?>::<?= Code::Variable("\$User") ?>-><?= Code::Field("Name") ?> . <?= Code::String("\" tried to install Package without having permissions.\"") ?>);
+    <?= Code::If ?>(<?= Code::Class("User") ?>::<?= Code::Variable("\$Current") ?>-><?= Code::Field("Permissions") ?>[<?= Code::String("\"InstallPackage\"") ?>]) {
+
+        <?= Code::Comment("//Install Package.") ?>
+
+        <?= Code::Variable("\$Package") ?>::<?= Code::Function("Install") ?>()<?= Code::Delimiter ?>
+
+
+        <?= Code::Comment("//Lots of code...") ?>
+
+
+    } <?= Code::Else ?> {
+        <?= Code::Class("Log") ?>::<?= Code::Function("Warn") ?>(<?= Code::Const("__METHOD__") ?>, <?= Code::Class("User") ?>::<?= Code::Variable("\$Current") ?>-><?= Code::Field("Name") ?> . <?= Code::String("\" tried to install Package without having permissions.\"") ?>);
         <?= Code::Throw ?> <?= Code::New ?> <?= Code::Class("UnauthorizedAccessException") ?>();
     }
     
@@ -324,16 +329,18 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
         <pre><code><?= Conventions::Recommended ?>
 <?= Code::Function ?> <?= Code::Function("InstallPackage") ?>(<?= Code::Class("Package") ?> <?= Code::Variable("\$Package") ?>): <?= Code::Class("Package") ?> {
     
-    <?= Code::If ?>(!\<?= Code::Class("vDesk") ?>::<?= Code::Variable("\$User") ?>-><?= Code::Field("Permissions") ?>[<?= Code::String("\"InstallPackage\"") ?>]) {
-        <?= Code::Class("Log") ?>::<?= Code::Function("Warn") ?>(<?= Code::Const("__METHOD__") ?>, \<?= Code::Class("vDesk") ?>::<?= Code::Variable("\$User") ?>-><?= Code::Field("Name") ?> . <?= Code::String("\" tried to install Package without having permissions.\"") ?>);
+    <?= Code::If ?>(!<?= Code::Class("User") ?>::<?= Code::Variable("\$Current") ?>-><?= Code::Field("Permissions") ?>[<?= Code::String("\"InstallPackage\"") ?>]) {
+        <?= Code::Class("Log") ?>::<?= Code::Function("Warn") ?>(<?= Code::Const("__METHOD__") ?>, <?= Code::Class("User") ?>::<?= Code::Variable("\$Current") ?>-><?= Code::Field("Name") ?> . <?= Code::String("\" tried to install Package without having permissions.\"") ?>);
         <?= Code::Throw ?> <?= Code::New ?> <?= Code::Class("UnauthorizedAccessException") ?>();
     }
     
-    <?= Code::Comment("//Install Package..") ?>
+    <?= Code::Comment("//Install Package.") ?>
         
     <?= Code::Variable("\$Package") ?>::<?= Code::Function("Install") ?>()<?= Code::Delimiter ?>
-    
-    
+
+
+    <?= Code::Comment("//Lots of code...") ?>
+
 }
 </code></pre>
     </section>
@@ -430,8 +437,7 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
         <h4>Iteration</h4>
         <h5>JavaScript</h5>
         <p>
-            Use <code class="Inline"><?= Code::Class("Array") ?>.<?= Code::Field("prototype") ?>.<a target="_blank"
-                                                                                                    href="https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach"><?= Code::Function("forEach") ?></a></code>
+            Use <code class="Inline"><?= Code::Class("Array") ?>.<?= Code::Field("prototype") ?>.<a target="_blank" href="https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach"><?= Code::Function("forEach") ?></a></code>
             in combination with lambda predicates over "for" and "while".
         </p>
         <pre><code><?= Conventions::NotRecommended ?>
