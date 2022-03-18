@@ -41,7 +41,7 @@
  * @property {Boolean} Changed Gets a value indicating whether current edited Event of the Editor has been changed.
  * @memberOf vDesk.Calendar.Event
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Calendar
  * @todo Implement controls for changing/setting repeatamount and -interval.
  */
 vDesk.Calendar.Event.Editor = function Editor(Event, Enabled = true) {
@@ -117,7 +117,7 @@ vDesk.Calendar.Event.Editor = function Editor(Event, Enabled = true) {
      * @return {Boolean} True if the changes have been sucessfully saved; otherwise, false.
      */
     this.Save = function() {
-        if(Event.ID === null) {
+        if(Event.ID === null){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -133,11 +133,11 @@ vDesk.Calendar.Event.Editor = function Editor(Event, Enabled = true) {
                             Color:          Color.Value.ToRGBString(),
                             Content:        Content.Value
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         this.Event = vDesk.Calendar.Event.FromDataView(Response.Data);
                         Changed = false;
                         new vDesk.Events.BubblingEvent("create", {
@@ -147,7 +147,7 @@ vDesk.Calendar.Event.Editor = function Editor(Event, Enabled = true) {
                     }
                 }
             );
-        } else {
+        }else{
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -164,11 +164,11 @@ vDesk.Calendar.Event.Editor = function Editor(Event, Enabled = true) {
                             Color:          Color.Value.ToRGBString(),
                             Content:        Content.Value
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         Event.Start = Start.Value;
                         Event.End = End.Value;
                         Event.FullTime = FullTime.Value;
@@ -192,7 +192,7 @@ vDesk.Calendar.Event.Editor = function Editor(Event, Enabled = true) {
      * @fires vDesk.Calendar.Event.Editor#delete
      */
     this.Delete = function() {
-        if(Event.ID !== null) {
+        if(Event.ID !== null){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -201,11 +201,11 @@ vDesk.Calendar.Event.Editor = function Editor(Event, Enabled = true) {
                         Parameters: {
                             ID: Event.ID
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         new vDesk.Events.BubblingEvent("delete", {
                             sender: this,
                             event:  Event

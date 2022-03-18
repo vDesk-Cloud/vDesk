@@ -8,24 +8,16 @@ use vDesk\Modules\Command;
 use vDesk\Modules\Module;
 use vDesk\Search\Results;
 use vDesk\Search\ISearch;
-use vDesk\Struct\Collections\Observable\Collection;
 use vDesk\Utils\Log;
 
 /**
- * Description of Search
+ * Search Module.
  *
- * @author Kerry
+ * @package vDesk\Search
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Search extends Module {
-    
-    /**
-     * @inheritDoc
-     * Stupid PHP...
-     */
-    public function __construct(?int $ID = null, Collection $Commands = null) {
-        parent::__construct($ID, $Commands);
-    }
-    
+
     /**
      * Searches vDesk for a given value.
      *
@@ -35,16 +27,16 @@ final class Search extends Module {
      * @return \vDesk\Search\Results The found results.
      */
     public static function Search(string $Value = null, array $Filters = null): Results {
-        
+
         $ResultCollection = new Results();
-        
+
         //Loop through passed filters.
-        foreach($Filters ?? Command::$Parameters["Filters"] as $Filter) {
-            try {
+        foreach($Filters ?? Command::$Parameters["Filters"] as $Filter){
+            try{
                 //Fetch/load module.
                 $Module = \vDesk\Modules::Run($Filter["Module"]);
                 //Check if the module implements the ISearch-interface.
-                if($Module instanceof ISearch) {
+                if($Module instanceof ISearch){
                     //Perform searchoperation.
                     $ResultCollection->Merge(
                         $Module::Search(
@@ -52,15 +44,15 @@ final class Search extends Module {
                             $Filter["Name"]
                         )
                     );
-                } else {
+                }else{
                     Log::Warn(__METHOD__, "Attempting to perform search operation on Module {$Filter["Module"]} which doesn't implements the ISearch-interface.");
                 }
-            } catch(\Throwable $Exception) {
+            }catch(\Throwable $Exception){
                 Log::Warn(__METHOD__, $Exception->getMessage());
                 continue;
             }
         }
         return $ResultCollection;
     }
-    
+
 }

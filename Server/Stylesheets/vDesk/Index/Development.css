@@ -1,6 +1,6 @@
 
 #Development {
-    grid-row: 6 !important;
+    grid-row: 5 !important;
 }
 
 #Development > .SlideShow {
@@ -63,7 +63,7 @@
 
 #Development .API {
     grid-template-columns: repeat(2, 50%);
-    grid-template-rows: repeat(3, 33.333%);
+    grid-template-rows: repeat(3, auto);
 }
 
 #Development .API > .Box {

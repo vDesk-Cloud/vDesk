@@ -1,6 +1,7 @@
 /**
  * Collection of existing Masks.
  * @type Array<vDesk.MetaInformation.Mask>
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.Masks = [];
 vDesk.Load.Masks = {
@@ -12,11 +13,11 @@ vDesk.Load.Masks = {
                     Module:     "MetaInformation",
                     Command:    "GetMasks",
                     Parameters: {},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             )
         );
-        if(Response.Status) {
+        if(Response.Status){
             vDesk.MetaInformation.Masks = Response.Data.map(Mask => vDesk.MetaInformation.Mask.FromDataView(Mask));
         }
     }

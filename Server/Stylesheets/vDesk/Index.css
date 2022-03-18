@@ -1,9 +1,11 @@
-.Page {
-    grid-template-rows: 50px repeat(5, calc(100% - 50px)) 60px !important;
+
+main {
+    grid-template-rows: 50px calc(500% - 250px) 60px !important;
 }
 
-.Page > footer {
-    grid-row: 7 !important;
+main > article.Index {
+    grid-template-rows: repeat(5, 20%) !important;
+    height: 100%;
 }
 
 h2 > img {
@@ -13,10 +15,8 @@ h2 > img {
 
 #Description, #Features, #Technology, #Customization, #Development {
     animation-duration: 1s;
-    grid-column: 2;
     overflow-x: hidden;
 }
-
 
 .Crumbs > .Crumb:first-of-type {
     animation-delay: 1s !important;
@@ -75,6 +75,11 @@ section.Paused {
         .Box > p {
             margin-top: 0;
         }
+
+        a.Button {
+            padding: 5px !important;
+        }
+
     }
     /* Tablet */
     @media (min-device-width: 768px) and (max-device-width: 1024px) {

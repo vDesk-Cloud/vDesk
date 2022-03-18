@@ -6,18 +6,18 @@ namespace vDesk\Struct\Collections;
 /**
  * Represents an interface for a sequence of elements.
  *
- * @package vDesk\Struct\Collections
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 interface IEnumerable extends \Traversable {
-    
+
     /**
      * Returns the number of elements in a sequence.
      *
      * @return int The number of elements inside a sequence.
      */
     public function Count(): int;
-    
+
     /**
      * Returns the first element in a sequence that satisfies a specified condition.
      *
@@ -27,7 +27,7 @@ interface IEnumerable extends \Traversable {
      *                    passes the test in the specified predicate function.
      */
     public function Find(callable $Predicate): mixed;
-    
+
     /**
      * Sorts the elements of a sequence according a specified function.
      *
@@ -36,7 +36,7 @@ interface IEnumerable extends \Traversable {
      * @return bool True if the sorting was successful; otherwise, false.
      */
     public function Sort(callable $Predicate): bool;
-    
+
     /**
      * Filters a sequence of values based on a predicate.
      *
@@ -46,7 +46,7 @@ interface IEnumerable extends \Traversable {
      *                                               condition.
      */
     public function Filter(callable $Predicate): IEnumerable;
-    
+
     /**
      * Creates a new sequence with the results of applying a provided function on every element in a sequence.
      *
@@ -56,7 +56,7 @@ interface IEnumerable extends \Traversable {
      *                                               function on each element of a sequence.
      */
     public function Map(callable $Predicate): IEnumerable;
-    
+
     /**
      * Applies an accumulator function over a sequence.
      *
@@ -67,7 +67,7 @@ interface IEnumerable extends \Traversable {
      * @return mixed The final accumulator value.
      */
     public function Reduce(callable $Predicate, $InitialValue = null): mixed;
-    
+
     /**
      * Determines whether any element of a sequence satisfies a condition.
      *
@@ -76,7 +76,7 @@ interface IEnumerable extends \Traversable {
      * @return bool True if at least one element inside the IList matches the predicate.
      */
     public function Any(callable $Predicate): bool;
-    
+
     /**
      * Determines whether all elements of a sequence satisfy a condition.
      *
@@ -86,6 +86,6 @@ interface IEnumerable extends \Traversable {
      *              otherwise, false.
      */
     public function Every(callable $Predicate): bool;
-    
+
 }
 

@@ -3,94 +3,86 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\MySQL\Expression;
 
-use vDesk\DataProvider\Expression\ICreate;
-use vDesk\DataProvider\IResult;
 use vDesk\DataProvider;
+use vDesk\DataProvider\IResult;
 
 /**
- * Represents a MySQL compatible CREATE SQL expression.
+ * Represents a MySQL compatible "CREATE" Expression.
  *
- * @package vDesk\DataProvider\Expression\Create
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Create implements ICreate {
-    
+class Create extends DataProvider\AnsiSQL\Expression\Create {
+
     /**
-     * The SQL-statement of the Create\MariaDB.
+     * Flag indicating whether the Database method has been called.
      *
-     * @var string
+     * @var bool
      */
-    private string $Statement = "";
-    
+    private bool $Database = false;
+
     /**
      * @inheritDoc
      */
-    public function Table(string $Name, array $Fields = [], array $Indexes = [], $Options = []): self {
+    public function Database(string $Name): static {
+        $this->Database = true;
+        return $this;
+    }
+
+    /**
+     * Applies a "DATABASE"-statement to the Create Expression due to lack of schema support of MySQL.
+     */
+    public function Schema(string $Name): static {
+        return parent::Database($Name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function Table(string $Name, array $Fields = [], array $Indexes = [], $Options = []): static {
         $Table = [];
         foreach($Fields as $FieldName => $Field) {
             $Table[] = Table::Field(
                 $FieldName,
                 $Field["Type"],
-                $Field["Size"] ?? null,
-                $Field["Collation"] ?? null,
                 $Field["Nullable"] ?? false,
-                \array_key_exists("Default", $Field) ? $Field["Default"] : "",
                 $Field["Autoincrement"] ?? false,
+                $Field["Default"] ?? "",
+                $Field["Collation"] ?? null,
+                $Field["Size"] ?? null,
                 $Field["OnUpdate"] ?? null
             );
         }
         foreach($Indexes as $IndexName => $Index) {
-            $Table[] = Table::Index(
-                $IndexName,
-                $Index["Fields"],
-                $Index["Unique"] ?? false
-            );
+            $Table[] = Table::Index($IndexName, $Index["Unique"] ?? false, $Index["Fields"]);
         }
-        $this->Statement .= "CREATE TABLE " . DataProvider::SanitizeField($Name) . " (" . \implode(", ", $Table) . ")";
-        $this->Statement .= " ENGINE=" . ($Options["Engine"] ?? "INNODB");
+        $this->Statement .= "TABLE " . DataProvider::SanitizeField($Name) . " (" . \implode(", ", $Table) . ")";
+        $this->Engine($Options["Engine"] ?? "INNODB");
         $this->Statement .= " DEFAULT CHARSET=" . ($Options["Charset"] ?? "utf8mb4");
         $this->Statement .= " COLLATE=" . ($Options["Collation"] ?? "utf8mb4_unicode_ci");
         return $this;
     }
-    
+
     /**
-     * @inheritDoc
-     */
-    public function Database(string $Name): self {
-        $this->Statement .= "CREATE DATABASE $Name";
-        return $this;
-    }
-    
-    /**
-     * Applies a storage engine to the Create\MariaDB.
+     * Mysql specific extension for defining storage engines.
      *
      * @param string $Name The name of the storage engine to set.
      *
      * @return \vDesk\DataProvider\MySQL\Expression\Create The current instance for further chaining.
      */
-    public function Engine(string $Name): self {
+    public function Engine(string $Name): static {
         $this->Statement .= " ENGINE=$Name";
         return $this;
     }
-    
+
     /**
      * @inheritDoc
      */
     public function Execute(bool $Buffered = true): IResult {
+        if($this->Database) {
+            return new DataProvider\Result(true);
+        }
         return DataProvider::Execute($this->Statement, $Buffered);
     }
-    
-    /**
-     * @inheritDoc
-     */
-    public function __toString(): string {
-        return $this->Statement;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function __invoke(): IResult|string|null {
-        return $this->Execute()->ToValue();
-    }
+
 }

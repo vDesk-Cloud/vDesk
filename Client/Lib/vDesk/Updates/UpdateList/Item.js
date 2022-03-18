@@ -18,7 +18,7 @@
  * @property {Boolean} Selected Gets or sets a value indicating whether the Item is selected.
  * @memberOf vDesk.Updates.UpdateList
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Updates
  */
 vDesk.Updates.UpdateList.Item = function Item(Update, Enabled = true) {
     Ensure.Parameter(Update, vDesk.Updates.Update, "Update");
@@ -35,7 +35,7 @@ vDesk.Updates.UpdateList.Item = function Item(Update, Enabled = true) {
             enumerable: true,
             get:        () => Control
         },
-        Update:  {
+        Update:   {
             enumerable: true,
             get:        () => Update,
             set:        Value => {
@@ -61,9 +61,9 @@ vDesk.Updates.UpdateList.Item = function Item(Update, Enabled = true) {
 
                 Enabled = Value;
 
-                if(Value) {
+                if(Value){
                     Control.addEventListener("click", OnClick, false);
-                } else {
+                }else{
                     Control.removeEventListener("click", OnClick, false);
                 }
 
@@ -92,7 +92,7 @@ vDesk.Updates.UpdateList.Item = function Item(Update, Enabled = true) {
     Control.classList.toggle("Disabled", !Enabled);
     Control.draggable = Enabled;
     Control.style.cursor = Enabled ? "grab" : "pointer";
-    if(Enabled) {
+    if(Enabled){
         Control.addEventListener("click", OnClick, false);
     }
 

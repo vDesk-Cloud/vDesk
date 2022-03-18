@@ -7,7 +7,7 @@
  * @memberOf vDesk.Security.User
  * @implements vDesk.Configuration.IPlugin
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.User.Configuration = function Configuration() {
 
@@ -22,7 +22,6 @@ vDesk.Security.User.Configuration = function Configuration() {
         }
     });
 
-
     /**
      * Eventhandler that listens on the 'save' event.
      * @listens vDesk.Configuration.Setting#save
@@ -34,11 +33,11 @@ vDesk.Security.User.Configuration = function Configuration() {
                     Module:     "Security",
                     Command:    "UpdateEmail",
                     Parameters: {Email: Email.Value},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     Email.Enabled = false;
                 }
             }
@@ -56,11 +55,11 @@ vDesk.Security.User.Configuration = function Configuration() {
                     Module:     "Security",
                     Command:    "UpdateLocale",
                     Parameters: {Locale: Locale.Value},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     Locale.Enabled = false;
                     alert("Successfully changed locale. You must restart the client until the change takes effect.")
                 }
@@ -87,11 +86,11 @@ vDesk.Security.User.Configuration = function Configuration() {
                         Old: OldPassword.Value,
                         New: NewPassword.Value,
                     },
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     ResetPassword.disabled = true;
                     alert("Successfully reset password!")
                 }
@@ -115,7 +114,7 @@ vDesk.Security.User.Configuration = function Configuration() {
         vDesk.Locale.Security.Email,
         null,
         Extension.Type.Email,
-        vDesk.User.Email,
+        vDesk.Security.User.Current.Email,
         null,
         false,
         true
@@ -131,7 +130,7 @@ vDesk.Security.User.Configuration = function Configuration() {
         vDesk.Locale.vDesk.Language,
         null,
         Extension.Type.Enum,
-        vDesk.User.Locale,
+        vDesk.Security.User.Current.Locale,
         vDesk.Locale.Locales,
         false,
         true

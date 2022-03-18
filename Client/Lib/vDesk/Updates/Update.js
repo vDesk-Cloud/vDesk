@@ -1,23 +1,14 @@
 "use strict";
 /**
- * Fired if the Package has been uninstalled.
- * @event vDesk.Packages.Package#uninstall
- * @type {CustomEvent}
- * @property {Object} detail The arguments of the 'uninstall' event.
- * @property {vDesk.Packages.Package} detail.sender The current instance of the Update.
- * @property {Number} detail.name The name of the uninstalled Package.
- */
-/**
- * Initializes a new instance of the Package class.
- * @class Class that represents a [...] for [...]. | Class providing functionality for [...].
- *
- * @param RequiredVersion
+ * Initializes a new instance of the Update class.
+ * @class Class that represents an Update.
+ * @param {String} [Package=""] Initializes the Update with the specified name of the Update's target Package.
+ * @param {String} [Version=""] Initializes the Update with the specified version.
+ * @param {Object<String, String>} [Dependencies={}] Initializes the Update with the specified dependency Packages.
+ * @param {String} [Vendor=""] Initializes the Update with the specified vendor.
+ * @param {String} [RequiredVersion=""] Initializes the Update with the specified required version.
+ * @param {String} [Description=""] Initializes the Update with the specified description.
  * @param {String} [Source=""] Initializes the Update with the specified source.
- * @param {String} [Package=""] Initializes the Package with the specified name.
- * @param {String} [Version=""] Initializes the Package with the specified version.
- * @param {Object<String, String>} [Dependencies={}] Initializes the Package with the specified dependency Packages.
- * @param {String} [Vendor=""] Initializes the Package with the specified vendor.
- * @param {String} [Description=""] Initializes the Package with the specified description.
  * @param {String} [Hash=""] Initializes the Update with the specified SHA256 hash code.
  * @property {String} Package Gets or sets the name of the Update's target Package.
  * @property {String} Version Gets or sets the version of the Update.
@@ -28,7 +19,7 @@
  * @property {String} LicenseText Gets or sets the license text of the Update.
  * @memberOf vDesk.Updates
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Updates
  */
 vDesk.Updates.Update = function Update(
     Package         = "",
@@ -50,12 +41,12 @@ vDesk.Updates.Update = function Update(
     Ensure.Parameter(Hash, Type.String, "Hash");
 
     Object.defineProperties(this, {
-        Control:      {
+        Control:         {
             enumerable: false,
             get:        () => Control
 
         },
-        Package:      {
+        Package:         {
             enumerable: true,
             get:        () => PackageText.textContent,
             set:        Value => {
@@ -63,7 +54,7 @@ vDesk.Updates.Update = function Update(
                 PackageText.textContent = Value;
             }
         },
-        Version:      {
+        Version:         {
             enumerable: true,
             get:        () => VersionText.textContent,
             set:        Value => {
@@ -71,7 +62,7 @@ vDesk.Updates.Update = function Update(
                 VersionText.textContent = Value;
             }
         },
-        RequiredVersion:     {
+        RequiredVersion: {
             enumerable: true,
             get:        () => VersionText.textContent,
             set:        Value => {
@@ -79,18 +70,18 @@ vDesk.Updates.Update = function Update(
                 RequiredVersionText.textContent = Value;
             }
         },
-        Dependencies: {
+        Dependencies:    {
             enumerable: true,
             get:        () => Dependencies,
             set:        Value => {
                 Ensure.Property(Value, Array, "Dependencies");
                 Dependencies = Value;
 
-                while(DependenciesList.hasChildNodes()) {
+                while(DependenciesList.hasChildNodes()){
                     DependenciesList.removeChild(DependenciesList.lastChild);
                 }
 
-                for(const Dependency in Value) {
+                for(const Dependency in Value){
                     const Module = document.createElement("li");
                     Module.className = "Module Font Dark";
                     Module.textContent = `${Dependency} v${Value[Dependency]}`;
@@ -98,7 +89,7 @@ vDesk.Updates.Update = function Update(
                 }
             }
         },
-        Vendor:       {
+        Vendor:          {
             enumerable: true,
             get:        () => VendorText.textContent,
             set:        Value => {
@@ -106,7 +97,7 @@ vDesk.Updates.Update = function Update(
                 VendorText.textContent = Value;
             }
         },
-        Description:  {
+        Description:     {
             enumerable: true,
             get:        () => DescriptionText.textContent,
             set:        Value => {
@@ -114,7 +105,7 @@ vDesk.Updates.Update = function Update(
                 DescriptionText.textContent = Value;
             }
         },
-        Source:       {
+        Source:          {
             enumerable: true,
             get:        () => SourceText.textContent,
             set:        Value => {
@@ -122,7 +113,7 @@ vDesk.Updates.Update = function Update(
                 SourceText.textContent = Value;
             }
         },
-        Hash:         {
+        Hash:            {
             enumerable: true,
             get:        () => HashText.textContent,
             set:        Value => {
@@ -231,7 +222,7 @@ vDesk.Updates.Update = function Update(
      */
     const DependenciesList = document.createElement("span");
     DependenciesList.className = "Text Font Dark";
-    for(const Dependency in Dependencies) {
+    for(const Dependency in Dependencies){
         const Module = document.createElement("li");
         Module.className = "Module Font Dark";
         Module.textContent = `${Dependency} v${Dependencies[Dependency]}`;

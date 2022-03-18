@@ -3,79 +3,76 @@ declare(strict_types=1);
 
 namespace vDesk\Struct\Collections;
 
-use vDesk\Struct\Collections\IEnumerable;
 use vDesk\Struct\Properties;
 
 /**
  * Represents a variable size last-in-first-out (LIFO) collection.
  *
  * @property-read int $Count Gets the amount of elements in the Stack.
- * @package vDesk\Struct\Collections
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ *
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Stack implements \IteratorAggregate, IEnumerable {
-    
+
     use Properties;
-    
+
     /**
      * The elements of the Stack.
      *
      * @var mixed[]
      */
     protected array $Elements = [];
-    
+
     /**
      * Initializes a new instance of the Stack class.
      *
      * @param iterable $Elements Initializes the Stack with the specified set of elements.
      */
     public function __construct(iterable $Elements = []) {
-        $this->AddProperty("Count",
-            [
-                \Get => fn(): int => \count($this->Elements)
-            ]);
+        $this->AddProperty("Count", [\Get => fn(): int => \count($this->Elements)]);
         foreach($Elements as $Value) {
             $this->Push($Value);
         }
     }
-    
+
     /**
      * Inserts an element at the top of the Stack.
      *
      * @param mixed $Element The element to add.
      */
-    public function Push($Element): void {
+    public function Push(mixed $Element): void {
         $this->Elements[] = $Element;
         \end($this->Elements);
     }
-    
+
     /**
      * Removes and returns the element at the top of the Stack.
      *
-     * @return null|mixed The element removed from the top of the Stack; otherwise if the Stack is emtpy, null.
+     * @return mixed The element removed from the top of the Stack; otherwise if the Stack is emtpy, null.
      */
-    public function Pop() {
+    public function Pop(): mixed {
         $Value = array_pop($this->Elements);
         \end($this->Elements);
         return $Value;
     }
-    
+
     /**
      * Returns the element at the top of the Stack without removing it.
      *
-     * @return null|mixed The element at the top of the Stack; otherwise if the Stack is emtpy, null.
+     * @return mixed The element at the top of the Stack; otherwise if the Stack is emtpy, null.
      */
-    public function Peek() {
+    public function Peek(): mixed {
         return empty($this->Elements) ? null : \end($this->Elements);
     }
-    
+
     /**
      * Removes all elements from the Stack.
      */
     public function Clear(): void {
         \array_splice($this->Elements, 0, \count($this->Elements));
     }
-    
+
     /**
      * Determines whether an element is in the Stack.
      *
@@ -83,10 +80,10 @@ class Stack implements \IteratorAggregate, IEnumerable {
      *
      * @return bool True if the element is in the Stack; otherwise, false.
      */
-    public function Contains($Element): bool {
+    public function Contains(mixed $Element): bool {
         return \in_array($Element, $this->Elements);
     }
-    
+
     /**
      * Returns a \Generator which iterates over the Stack.
      *
@@ -98,7 +95,7 @@ class Stack implements \IteratorAggregate, IEnumerable {
             yield $mKey => $this->Pop();
         }
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Count()
@@ -106,7 +103,7 @@ class Stack implements \IteratorAggregate, IEnumerable {
     public function Count(): int {
         return \count($this->Elements);
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Filter()
@@ -120,12 +117,12 @@ class Stack implements \IteratorAggregate, IEnumerable {
         }
         return $Stack;
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Find()
      */
-    public function Find(callable $Predicate) {
+    public function Find(callable $Predicate): mixed {
         foreach($this->Elements as $Index => $Value) {
             if($Predicate($Value, $Index, $this)) {
                 return $Value;
@@ -133,7 +130,7 @@ class Stack implements \IteratorAggregate, IEnumerable {
         }
         return null;
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Every()
@@ -146,7 +143,7 @@ class Stack implements \IteratorAggregate, IEnumerable {
         }
         return true;
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Sort()
@@ -154,7 +151,7 @@ class Stack implements \IteratorAggregate, IEnumerable {
     public function Sort(callable $Predicate): bool {
         return \usort($this->Elements, $Predicate);
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Map()
@@ -166,19 +163,19 @@ class Stack implements \IteratorAggregate, IEnumerable {
         }
         return $Stack;
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Reduce()
      */
-    public function Reduce(callable $Predicate, $InitialValue = null) {
+    public function Reduce(callable $Predicate, $InitialValue = null): mixed {
         $Accumulator = $InitialValue ?? \reset($this->Elements);
         foreach($this->Elements as $Index => $Value) {
             $Accumulator = $Predicate($Accumulator, $Value, $Index, $this);
         }
         return $Accumulator;
     }
-    
+
     /**
      * @inheritDoc
      * @see \vDesk\Struct\Collections\IEnumerable::Any()
@@ -191,6 +188,6 @@ class Stack implements \IteratorAggregate, IEnumerable {
         }
         return false;
     }
-    
+
 }
 

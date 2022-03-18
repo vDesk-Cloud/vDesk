@@ -23,7 +23,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the Item is enabled.
  * @memberOf vDesk.Security.UserGroupList
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.UserGroupList.Item = function Item(Group = new vDesk.Security.Group(), User = new vDesk.Security.User(), Index = 0, Enabled = true) {
     Ensure.Parameter(Group, vDesk.Security.Group, "Group");
@@ -87,10 +87,10 @@ vDesk.Security.UserGroupList.Item = function Item(Group = new vDesk.Security.Gro
                 Ensure.Property(Value, Type.Boolean, "Enabled");
                 Enabled = Value;
                 Control.draggable = Value;
-                if(Value) {
+                if(Value){
                     Control.style.cursor = "grab";
                     Control.addEventListener("click", OnClick, false);
-                } else {
+                }else{
                     Control.style.cursor = "default";
                     Control.removeEventListener("click", OnClick, false);
                 }
@@ -130,7 +130,7 @@ vDesk.Security.UserGroupList.Item = function Item(Group = new vDesk.Security.Gro
     Control.addEventListener("dragend", OnDragEnd, false);
     Control.draggable = Enabled;
     Control.style.cursor = Enabled ? "grab" : "default";
-    if(Enabled) {
+    if(Enabled){
         Control.addEventListener("click", OnClick, false);
     }
 
@@ -142,10 +142,10 @@ vDesk.Security.UserGroupList.Item = function Item(Group = new vDesk.Security.Gro
     const Icon = document.createElement("img");
     Icon.className = "Icon";
     Icon.src = User.ID !== null
-               ? vDesk.Visual.Icons.Security.User
-               : Group.ID !== null
-                 ? vDesk.Visual.Icons.Security.Group
-                 : vDesk.Visual.Icons.Unknown;
+        ? vDesk.Visual.Icons.Security.User
+        : Group.ID !== null
+            ? vDesk.Visual.Icons.Security.Group
+            : vDesk.Visual.Icons.Unknown;
 
     /**
      * The name span of the Item.

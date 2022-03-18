@@ -18,7 +18,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the Item is enabled.
  * @memberOf vDesk.MetaInformation.MaskList
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.MaskList.Item = function Item(Mask, Selected = false, Enabled = true) {
     Ensure.Parameter(Mask, vDesk.MetaInformation.Mask, "Mask");
@@ -55,10 +55,10 @@ vDesk.MetaInformation.MaskList.Item = function Item(Mask, Selected = false, Enab
                 Ensure.Property(Value, Type.Boolean, "Enabled");
                 Enabled = Value;
                 Control.classList.toggle("Disabled", !Value);
-                if(Enabled) {
+                if(Enabled){
                     Control.addEventListener("click", OnClick, false);
                     Control.classList.toggle("Selected", Selected);
-                } else {
+                }else{
                     Control.removeEventListener("click", OnClick, false);
                 }
             }

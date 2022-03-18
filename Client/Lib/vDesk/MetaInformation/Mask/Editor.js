@@ -41,7 +41,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the Editor is enabled.
  * @memberOf vDesk.MetaInformation.Mask
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.Mask.Editor = function Editor(Mask, Enabled = true) {
     Ensure.Parameter(Mask, vDesk.MetaInformation.Mask, "Mask");
@@ -129,29 +129,29 @@ vDesk.MetaInformation.Mask.Editor = function Editor(Mask, Enabled = true) {
      */
     const OnDrop = Event => {
 
-        if(Event.detail.editor.Row.Index < Event.detail.sender.Row.Index) {
+        if(Event.detail.editor.Row.Index < Event.detail.sender.Row.Index){
 
             //Swap index of the dropped Row with index of the target Row.
             Event.detail.editor.Row.Index = Event.detail.sender.Row.Index;
             //Increment index property of each Row beginning at the drop target.
-            for(let Index = Table.Rows.indexOf(Event.detail.editor) + 1; Index < Table.Rows.length; Index++) {
+            for(let Index = Table.Rows.indexOf(Event.detail.editor) + 1; Index < Table.Rows.length; Index++){
                 Table.Rows[Index].Row.Index--;
                 //Check if the Row is not virtual and add it to the collection of updated Rows.
-                if(Table.Rows[Index].Row.ID !== null && !~Updated.indexOf(Table.Rows[Index].Row)) {
+                if(Table.Rows[Index].Row.ID !== null && !~Updated.indexOf(Table.Rows[Index].Row)){
                     Updated.push(Table.Rows[Index].Row);
                 }
             }
-        } else {
+        }else{
 
             //Swap index of the dropped Row with index of the target Row.
             Event.detail.editor.Row.Index = Event.detail.sender.Row.Index;
 
             //Increment index property of each Row beginning at the drop target.
-            for(let Index = Table.Rows.indexOf(Event.detail.sender); Index < Table.Rows.length; Index++) {
-                if(Table.Rows[Index] !== Event.detail.editor) {
+            for(let Index = Table.Rows.indexOf(Event.detail.sender); Index < Table.Rows.length; Index++){
+                if(Table.Rows[Index] !== Event.detail.editor){
                     Table.Rows[Index].Row.Index++;
                     //Check if the Row is not virtual and add it to the collection of updated Rows.
-                    if(Table.Rows[Index].Row.ID !== null && !~Updated.indexOf(Table.Rows[Index].Row)) {
+                    if(Table.Rows[Index].Row.ID !== null && !~Updated.indexOf(Table.Rows[Index].Row)){
                         Updated.push(Table.Rows[Index].Row);
                     }
                 }
@@ -159,7 +159,7 @@ vDesk.MetaInformation.Mask.Editor = function Editor(Mask, Enabled = true) {
         }
 
         //Check if the Row of the dropped Editor is not virtual and add it to the collection of updated Rows.
-        if(Event.detail.editor.Row.ID !== null && !~Updated.indexOf(Event.detail.editor.Row)) {
+        if(Event.detail.editor.Row.ID !== null && !~Updated.indexOf(Event.detail.editor.Row)){
             Updated.push(Event.detail.editor.Row);
         }
 
@@ -178,7 +178,7 @@ vDesk.MetaInformation.Mask.Editor = function Editor(Mask, Enabled = true) {
      */
     const OnUpdate = Event => {
         Event.stopPropagation();
-        if(Mask.ID !== null && Event.detail.sender.Row.ID !== null && !~Updated.indexOf(Event.detail.sender.Row)) {
+        if(Mask.ID !== null && Event.detail.sender.Row.ID !== null && !~Updated.indexOf(Event.detail.sender.Row)){
             Updated.push(Event.detail.sender.Row)
         }
         Changed = true;
@@ -194,7 +194,7 @@ vDesk.MetaInformation.Mask.Editor = function Editor(Mask, Enabled = true) {
     const OnDelete = Event => {
         Event.stopPropagation();
         Table.Rows.Remove(Event.detail.sender);
-        if(Mask.ID !== null && Event.detail.sender.Row.ID !== null) {
+        if(Mask.ID !== null && Event.detail.sender.Row.ID !== null){
             Deleted.push(Event.detail.sender.Row);
         }
         Mask.Rows.splice(Mask.Rows.indexOf(Event.detail.sender.Row), 1);
@@ -234,7 +234,7 @@ vDesk.MetaInformation.Mask.Editor = function Editor(Mask, Enabled = true) {
      * Saves possible made changes of the current edited Mask.
      */
     this.Save = function() {
-        if(Mask.ID !== null) {
+        if(Mask.ID !== null){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -260,11 +260,11 @@ vDesk.MetaInformation.Mask.Editor = function Editor(Mask, Enabled = true) {
                             })),
                             Delete: Deleted.map(Row => Row.ID)
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         this.Mask = vDesk.MetaInformation.Mask.FromDataView(Response.Data);
                         new vDesk.Events.BubblingEvent("update", {
                             sender: this,
@@ -273,7 +273,7 @@ vDesk.MetaInformation.Mask.Editor = function Editor(Mask, Enabled = true) {
                     }
                 }
             );
-        } else {
+        }else{
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -289,11 +289,11 @@ vDesk.MetaInformation.Mask.Editor = function Editor(Mask, Enabled = true) {
                                 Validator: Row.Validator
                             }))
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         this.Mask = vDesk.MetaInformation.Mask.FromDataView(Response.Data);
                         new vDesk.Events.BubblingEvent("create", {
                             sender: this,
@@ -309,18 +309,18 @@ vDesk.MetaInformation.Mask.Editor = function Editor(Mask, Enabled = true) {
      * Deletes the current edited Mask.
      */
     this.Delete = function() {
-        if(Mask.ID !== null) {
+        if(Mask.ID !== null){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
                         Module:     "MetaInformation",
                         Command:    "DeleteMask",
                         Parameters: {ID: Mask.ID},
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         new vDesk.Events.BubblingEvent("delete", {
                             sender: this,
                             mask:   Mask
@@ -373,31 +373,11 @@ vDesk.MetaInformation.Mask.Editor = function Editor(Mask, Enabled = true) {
      */
     const Table = new vDesk.Controls.Table(
         [
-            {
-                Name:  "Name",
-                Label: vDesk.Locale.vDesk.Name,
-                Type:  HTMLInputElement
-            },
-            {
-                Name:  "Type",
-                Label: vDesk.Locale.vDesk.Type,
-                Type:  HTMLSelectElement
-            },
-            {
-                Name:  "Required",
-                Label: vDesk.Locale.MetaInformation.Required,
-                Type:  HTMLInputElement
-            },
-            {
-                Name:  "Validator",
-                Label: "Validator",
-                Type:  HTMLInputElement
-            },
-            {
-                Name:  "Delete",
-                Label: " ",
-                Type:  HTMLButtonElement
-            }
+            {Name: "Name", Label: vDesk.Locale.vDesk.Name, Type: HTMLInputElement},
+            {Name: "Type", Label: vDesk.Locale.vDesk.Type, Type: HTMLSelectElement},
+            {Name: "Required", Label: vDesk.Locale.MetaInformation.Required, Type: HTMLInputElement},
+            {Name: "Validator", Label: "Validator", Type: HTMLInputElement},
+            {Name: "Delete", Label: " ", Type: HTMLButtonElement}
         ]
     );
     Table.Control.classList.add("Rows");

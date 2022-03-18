@@ -16,41 +16,42 @@ use vDesk\Security\User;
 use vDesk\Struct\Collections\Observable\Collection;
 
 /**
- * Class Security represents ...
+ * Security Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Security
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Security extends Package implements IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Security";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
-    
+    public const Version = "1.0.2";
+
     /**
      * The name of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The name of the Package.
      */
     public const Description = "Package providing a group- and user based access control aswell for single access controlled entities.";
-    
+
     /**
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Configuration" => "1.0.0",
-        "Events"        => "1.0.0"
+        "Modules"       => "1.0.1",
+        "Configuration" => "1.0.2",
+        "Events"        => "1.0.1"
     ];
-    
+
     /**
      * The files and directories of the Package.
      */
@@ -73,7 +74,7 @@ final class Security extends Package implements IPackage {
             ]
         ]
     ];
-    
+
     /**
      * The translations of the Package.
      */
@@ -179,30 +180,30 @@ final class Security extends Package implements IPackage {
             ]
         ]
     ];
-    
+
     /**
      * The password of the system User.
      *
      * @var string
      */
     private static string $Password;
-    
+
     /**
      * @inheritDoc
      */
     public static function PreInstall(\Phar $Phar, string $Path): void {
         self::$Password = \readline("System User password: ");
     }
-    
+
     /**
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         Expression::Create()
-                  ->Database("Security")
+                  ->Schema("Security")
                   ->Execute();
-        
+
         //Create tables.
         Expression::Create()
                   ->Table(
@@ -220,8 +221,8 @@ final class Security extends Package implements IPackage {
                           "UpdateAccessControlList" => ["Type" => Type::Boolean, "Default" => false]
                       ],
                       [
-                          "Primary" => ["Fields" => ["ID"]],
-                          "Name"    => ["Unique" => true, "Fields" => ["Name" => 255]]
+                          "Primary"   => ["Fields" => ["ID"]],
+                          "GroupName" => ["Unique" => true, "Fields" => ["Name" => 255]]
                       ]
                   )
                   ->Execute();
@@ -252,8 +253,8 @@ final class Security extends Package implements IPackage {
                           "LastLogin"        => ["Type" => Type::Timestamp, "Default" => λ::CurrentTimestamp(), "Update" => λ::CurrentTimestamp()]
                       ],
                       [
-                          "Primary" => ["Fields" => ["ID"]],
-                          "Name"    => ["Unique" => true, "Fields" => ["Name" => 255, "Email" => 255]]
+                          "Primary"  => ["Fields" => ["ID"]],
+                          "UserName" => ["Unique" => true, "Fields" => ["Name" => 255, "Email" => 255]]
                       ]
                   )
                   ->Execute();
@@ -299,7 +300,7 @@ final class Security extends Package implements IPackage {
                       ]
                   )
                   ->Execute();
-        
+
         //Install Module.
         /** @var \Modules\Security $Security */
         $Security = \vDesk\Modules::Security();
@@ -549,9 +550,9 @@ final class Security extends Package implements IPackage {
                 ])
             )
         );
-        
+
         $Security->Save();
-        
+
         //Create default Groups.
         $Everyone = new Group(
             null,
@@ -562,7 +563,7 @@ final class Security extends Package implements IPackage {
             ])
         );
         $Everyone->Save();
-        
+
         $Administration = new Group(
             null,
             "Administration",
@@ -578,7 +579,7 @@ final class Security extends Package implements IPackage {
             ])
         );
         $Administration->Save();
-        
+
         //Create system user.
         $User = new User(
             null,
@@ -591,8 +592,8 @@ final class Security extends Package implements IPackage {
             new User\Groups([$Everyone, $Administration])
         );
         $User->Save();
-        \vDesk::$User = $User;
-        
+        User::$Current = \vDesk::$User = $User;
+
         Settings::$Remote["Security"] = new Settings\Remote\Settings(
             [
                 "MaxFailedLogins" => new Settings\Remote\Setting("MaxFailedLogins", 10, \vDesk\Struct\Type::Int),
@@ -600,29 +601,29 @@ final class Security extends Package implements IPackage {
             ],
             "Security"
         );
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
-        
+
     }
-    
+
     /**
      * @inheritDoc
      */
     public static function Uninstall(string $Path): void {
-        
+
         //Uninstall Module.
         /** @var \Modules\Security $Security */
         $Security = \vDesk\Modules::Security();
         $Security->Delete();
-        
+
         //Drop database.
         Expression::Drop()
-                  ->Database("Security")
+                  ->Schema("Security")
                   ->Execute();
-        
+
         //Delete files.
         self::Undeploy();
-        
+
     }
 }

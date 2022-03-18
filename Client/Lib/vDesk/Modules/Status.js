@@ -6,7 +6,7 @@
  * @property {String} Title Gets the title of the Status-plugin.
  * @memberOf vDesk.Configuration.Remote.Plugins
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Modules
  */
 vDesk.Modules.Status = function Status() {
 
@@ -34,11 +34,11 @@ vDesk.Modules.Status = function Status() {
                 Module:     "Modules",
                 Command:    "Status",
                 Parameters: {},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         Response => {
-            if(Response.Status) {
+            if(Response.Status){
                 Response.Data.forEach((Status, Module) => {
                     const List = document.createElement("ul");
                     Status.forEach((Value, Key) => {
@@ -49,7 +49,7 @@ vDesk.Modules.Status = function Status() {
                     const GroupBox = new vDesk.Controls.GroupBox(Module, [List]);
                     Control.appendChild(GroupBox.Control);
                 });
-            } else {
+            }else{
                 alert(Response.Data);
             }
         }

@@ -1,5 +1,5 @@
 #Features {
-    grid-row: 3 !important;
+    grid-row: 2 !important;
 }
 
 #Features > .SlideShow {
@@ -48,14 +48,17 @@
 
             #Features .Package > h2 {
                 font-size: 3rem;
+                grid-column: 1 !important;
             }
 
             #Features .Package > img {
                 grid-row: 2 !important;
+                grid-column: 1 !important;
             }
 
             #Features .Package > .Box {
                 grid-row: 3 !important;
+                grid-column: 1 !important;
             }
         }
         @media (orientation: landscape) {

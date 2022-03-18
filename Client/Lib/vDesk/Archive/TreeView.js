@@ -7,7 +7,7 @@
  * @property {vDesk.Archive.TreeView.Item} RootElement Gets or sets the root element of the archive.
  * @memberOf vDesk.Archive
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Archive
  */
 vDesk.Archive.TreeView = function TreeView() {
 
@@ -45,10 +45,9 @@ vDesk.Archive.TreeView = function TreeView() {
      */
     const GetChildren = function(Item) {
         const Children = [];
-
-        let GetChildren = Item => {
+        const GetChildren = Item => {
             Item.Children.forEach(Child => {
-                if(Child.Children.length > 0) {
+                if(Child.Children.length > 0){
                     GetChildren(Child);
                 }
                 Children.push(Child);
@@ -68,7 +67,7 @@ vDesk.Archive.TreeView = function TreeView() {
 
         //Check if the Element is not already in the list.
         const FoundElement = this.Find(Element);
-        if(FoundElement !== null) {
+        if(FoundElement !== null){
             return FoundElement;
         }
 
@@ -78,7 +77,7 @@ vDesk.Archive.TreeView = function TreeView() {
         Index.push(Item);
         //Add the item to the children collection of its parent.
         const Parent = Index.find(IndexItem => IndexItem.Element.ID === Item.Element.Parent.ID);
-        if(Parent !== undefined) {
+        if(Parent !== undefined){
             Parent.Add(Item);
         }
         return Item;
@@ -95,7 +94,7 @@ vDesk.Archive.TreeView = function TreeView() {
         const Item = Index.find(IndexItem => IndexItem.Element.ID === Element.ID && IndexItem.Element.Name === Element.Name);
         const ParentItem = Index.find(ParentItem => ParentItem.Element.ID === Element.Parent.ID);
 
-        if(Item !== undefined && ParentItem !== undefined) {
+        if(Item !== undefined && ParentItem !== undefined){
             //Remove the Item from the parent Item.
             ParentItem.Remove(Item);
             //Remove the Item and it's children from the index.

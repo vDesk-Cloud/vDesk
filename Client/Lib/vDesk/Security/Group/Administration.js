@@ -1,11 +1,12 @@
 "use strict";
-
 /**
- * Class GroupAdministration represents... blah.
- *
- * @memberOf vDesk.Security.Configuration
+ * Initializes a new instance of the Administration class.
+ * @class Represents a plugin for administrating Groups and their permissions.
+ * @property {HTMLDivElement} Control Gets the underlying DOM-Node.
+ * @property {String} Title Gets the title of the Administration-plugin.
+ * @memberOf vDesk.Security.Group
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.Group.Administration = function Administration() {
 
@@ -26,14 +27,14 @@ vDesk.Security.Group.Administration = function Administration() {
      * @listens vDesk.Security.GroupList#event:select
      */
     const OnSelect = Event => {
-        if(Event.detail.item.Group.ID !== GroupEditor.Group.ID) {
+        if(Event.detail.item.Group.ID !== GroupEditor.Group.ID){
 
             //Check if the 'newgroup' entry has been selected.
-            if(Event.detail.item.Group.ID === null) {
+            if(Event.detail.item.Group.ID === null){
                 Reset.disabled = true;
                 Delete.disabled = true;
-            } else {
-                Delete.disabled = Event.detail.item.Group.ID === vDesk.Security.Group.Everyone || !vDesk.User.Permissions.DeleteGroup;
+            }else{
+                Delete.disabled = Event.detail.item.Group.ID === vDesk.Security.Group.Everyone || !vDesk.Security.User.Current.Permissions.DeleteGroup;
             }
 
             //Display the selected Group.
@@ -52,7 +53,7 @@ vDesk.Security.Group.Administration = function Administration() {
         EditSave.disabled = Event.detail.group.Name.length === 0 && !GroupEditor.Changed;
         Reset.disabled = !GroupEditor.Changed;
 
-        if(GroupEditor.Changed) {
+        if(GroupEditor.Changed){
             EditSave.style.backgroundImage = `url("${vDesk.Visual.Icons.Save}")`;
             EditSave.textContent = vDesk.Locale.vDesk.Save;
         }
@@ -67,7 +68,7 @@ vDesk.Security.Group.Administration = function Administration() {
     const OnCreate = Event => {
         GroupList.Find(Event.detail.group.ID).Group = Event.detail.group;
         vDesk.Security.Groups.push(Event.detail.group);
-        Delete.disabled = !vDesk.User.Permissions.DeleteGroup;
+        Delete.disabled = !vDesk.Security.User.Current.Permissions.DeleteGroup;
         Reset.disabled = true;
 
         GroupList.Add(
@@ -111,7 +112,7 @@ vDesk.Security.Group.Administration = function Administration() {
         Delete.disabled = GroupEditor.Group.ID === vDesk.Security.Group.Everyone;
         EditSave.style.backgroundImage = `url("${vDesk.Visual.Icons.Edit}")`;
         EditSave.textContent = vDesk.Locale.vDesk.Edit;
-        EditSave.disabled = !vDesk.User.Permissions.UpdateGroup;
+        EditSave.disabled = !vDesk.Security.User.Current.Permissions.UpdateGroup;
         Reset.disabled = true;
     };
 
@@ -120,14 +121,14 @@ vDesk.Security.Group.Administration = function Administration() {
      */
     const OnClickEditSaveButton = () => {
 
-        if(GroupEditor.Enabled) {
-            if(GroupEditor.Changed) {
+        if(GroupEditor.Enabled){
+            if(GroupEditor.Changed){
                 GroupEditor.Save();
             }
             GroupEditor.Enabled = false;
             EditSave.style.backgroundImage = `url("${vDesk.Visual.Icons.Edit}")`;
             EditSave.textContent = vDesk.Locale.vDesk.Edit;
-        } else {
+        }else{
             //Enable GroupEditor.
             EditSave.style.backgroundImage = `url("${vDesk.Visual.Icons.Cancel}")`;
             EditSave.textContent = vDesk.Locale.vDesk.Cancel;
@@ -140,10 +141,10 @@ vDesk.Security.Group.Administration = function Administration() {
      */
     const OnClickResetButton = () => {
         GroupEditor.Reset();
-        if(GroupEditor.Enabled) {
+        if(GroupEditor.Enabled){
             EditSave.style.backgroundImage = `url("${vDesk.Visual.Icons.Cancel}")`;
             EditSave.textContent = vDesk.Locale.vDesk.Cancel;
-        } else {
+        }else{
             EditSave.style.backgroundImage = `url("${vDesk.Visual.Icons.Edit}")`;
             EditSave.textContent = vDesk.Locale.vDesk.Edit;
         }
@@ -155,7 +156,7 @@ vDesk.Security.Group.Administration = function Administration() {
      * Eventhandler that listens on the 'click' event.
      */
     const OnClickDeleteButton = () => {
-        if(GroupEditor.Group.ID !== null && confirm(vDesk.Locale.Security.GroupEditorDeleteGroup)) {
+        if(GroupEditor.Group.ID !== null && confirm(vDesk.Locale.Security.GroupEditorDeleteGroup)){
             GroupEditor.Delete();
         }
     };
@@ -173,13 +174,13 @@ vDesk.Security.Group.Administration = function Administration() {
     Control.addEventListener("delete", OnDelete, false);
 
     /**
-     * The GroupList of the GroupAdministration plugin.
+     * The GroupList of the Administration plugin.
      * @type {vDesk.Security.GroupList}
      */
     const GroupList = new vDesk.Security.GroupList();
 
     /**
-     * The GroupEditor of the GroupAdministration plugin.
+     * The GroupEditor of the Administration plugin.
      * @type {vDesk.Security.Group.Editor}
      */
     const GroupEditor = new vDesk.Security.Group.Editor(new vDesk.Security.Group(), false);
@@ -190,18 +191,18 @@ vDesk.Security.Group.Administration = function Administration() {
                 Module:     "Security",
                 Command:    "GetGroups",
                 Parameters: {View: false},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         Response => {
-            if(Response.Status) {
+            if(Response.Status){
                 Response.Data.map(Group => vDesk.Security.Group.FromDataView(Group))
                     .forEach(Group => GroupList.Add(new vDesk.Security.GroupList.Item(Group)));
                 GroupList.Selected = GroupList.Items[0];
                 GroupEditor.Permissions = GroupList.Selected.Group.Permissions;
                 GroupEditor.Group = GroupList.Selected.Group;
 
-                if(vDesk.User.Permissions.CreateGroup) {
+                if(vDesk.Security.User.Current.Permissions.CreateGroup){
                     GroupList.Add(
                         new vDesk.Security.GroupList.Item(
                             new vDesk.Security.Group(
@@ -217,18 +218,18 @@ vDesk.Security.Group.Administration = function Administration() {
     );
 
     /**
-     * The edit/save button of the GroupAdministration plugin.
+     * The edit/save button of the Administration plugin.
      * @type {HTMLButtonElement}
      */
     const EditSave = document.createElement("button");
     EditSave.className = "Button Icon Save";
     EditSave.style.backgroundImage = `url("${vDesk.Visual.Icons.Edit}")`;
     EditSave.textContent = vDesk.Locale.vDesk.Edit;
-    EditSave.disabled = !vDesk.User.Permissions.UpdateGroup;
+    EditSave.disabled = !vDesk.Security.User.Current.Permissions.UpdateGroup;
     EditSave.addEventListener("click", OnClickEditSaveButton, false);
 
     /**
-     * The reset button of the GroupAdministration plugin.
+     * The reset button of the Administration plugin.
      * @type {HTMLButtonElement}
      */
     const Reset = document.createElement("button");
@@ -239,18 +240,18 @@ vDesk.Security.Group.Administration = function Administration() {
     Reset.addEventListener("click", OnClickResetButton, false);
 
     /**
-     * The delete button of the GroupAdministration plugin.
+     * The delete button of the Administration plugin.
      * @type {HTMLButtonElement}
      */
     const Delete = document.createElement("button");
     Delete.className = "Button Icon Reset";
     Delete.style.backgroundImage = `url("${vDesk.Visual.Icons.Delete}")`;
-    Delete.disabled = !vDesk.User.Permissions.DeleteGroup;
+    Delete.disabled = !vDesk.Security.User.Current.Permissions.DeleteGroup;
     Delete.textContent = vDesk.Locale.vDesk.Delete;
     Delete.addEventListener("click", OnClickDeleteButton, false);
 
     /**
-     * The controls row of the GroupAdministration plugin.
+     * The controls row of the Administration plugin.
      * @type {HTMLDivElement}
      */
     const Controls = document.createElement("div");

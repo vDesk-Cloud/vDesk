@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace vDesk\IO;
 
 /**
- * Exception that is thrown when attempting to access a non existing directory.
+ * Exception that is thrown when attempting to access a non-existing directory.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
- * @package vDesk\IO
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class DirectoryNotFoundException extends IOException {
-    
+
     /**
      * Initializes a new instance of the DirectoryNotFoundException class.
      *

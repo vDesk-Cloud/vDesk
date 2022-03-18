@@ -16,6 +16,7 @@ use vDesk\Modules\Module;
 use vDesk\Packages\Package;
 use vDesk\Packages\IModule;
 use vDesk\Security\UnauthorizedAccessException;
+use vDesk\Security\User;
 use vDesk\Struct\Collections\Observable\Collection;
 use vDesk\Struct\Guid;
 use vDesk\Struct\InvalidOperationException;
@@ -25,11 +26,11 @@ use vDesk\Utils\Log;
 /**
  * Machines Module.
  *
- * @package Modules
+ * @package vDesk\Machines
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Machines extends Module implements IModule {
-    
+
     /**
      * Machines constructor.
      *
@@ -45,13 +46,13 @@ final class Machines extends Module implements IModule {
                                                                           ->Where(
                                                                               [
                                                                                   "Parent"    => Settings::$Local["Machines"]["Directory"],
-                                                                                  "Name"      => \str_replace("\\vDesk\\Machines\\", "", $Class),
+                                                                                  "Name"      => \str_replace("vDesk\\Machines\\", "", $Class),
                                                                                   "Extension" => "php"
                                                                               ]
                                                                           )
                                                                           ->Limit(1)();
     }
-    
+
     /**
      * Gets a collection of installed Machines.
      *
@@ -60,8 +61,8 @@ final class Machines extends Module implements IModule {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to run Machines.
      */
     public static function Installed(): array {
-        if(!\vDesk::$User->Permissions["RunMachine"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to get installed Machines without having permissions.");
+        if(!User::$Current->Permissions["RunMachine"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to get installed Machines without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Machines = [];
@@ -80,7 +81,7 @@ final class Machines extends Module implements IModule {
         }
         return $Machines;
     }
-    
+
     /**
      * Gets a collection of installed Machines.
      *
@@ -89,8 +90,8 @@ final class Machines extends Module implements IModule {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to run Machines.
      */
     public static function Running(): array {
-        if(!\vDesk::$User->Permissions["RunMachine"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to get running Machines without having permissions.");
+        if(!User::$Current->Permissions["RunMachine"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to get running Machines without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Running = [];
@@ -108,7 +109,7 @@ final class Machines extends Module implements IModule {
         }
         return $Running;
     }
-    
+
     /**
      * Starts a new Machine.
      *
@@ -118,47 +119,45 @@ final class Machines extends Module implements IModule {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to start the Machine.
      */
     public static function Start(string $Name = null): Machine {
-        if(!\vDesk::$User->Permissions["RunMachine"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to start Machine without having permissions.");
+        if(!User::$Current->Permissions["RunMachine"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to start Machine without having permissions.");
             throw new UnauthorizedAccessException();
         }
-        
+
         //Initialize Machine.
         $Name  ??= Command::$Parameters["Name"];
         $Class = "\\vDesk\\Machines\\{$Name}";
         /** @var \vDesk\Machines\Machine $Machine */
         $Machine = new $Class(
             null,
-            \vDesk::$User,
+            User::$Current,
             Guid::Create()
         );
         $Machine->Save();
-    
+
         //Run Machine.
-        switch(OS::Current) {
-            case OS::NT:
-                \pclose(
-                    \popen(
-                        "start /B php " . \Server . "\\vDesk.php -M=Machines -C=Run --Guid=\"\\\"{$Machine->Guid}\"\\\" --Ticket=\"{$Machine->Owner->Ticket}\"",
-                        "r"
-                    )
-                );
-                break;
-            case OS::Linux:
-                \exec("php " . \Server . "/vDesk.php -M=Machines -C=Run --Guid=\"\\\"{$Machine->Guid}\"\\\" --Ticket=\"{$Machine->Owner->Ticket}\" > /dev/null &");
-                break;
-        }
-        
+        match (OS::Current) {
+            OS::NT =>
+            \pclose(
+                \popen(
+                    "start /B php " . \Server . "\\vDesk.php -M=Machines -C=Run --Guid=\"\\\"{$Machine->Guid}\"\\\" --Ticket=\"{$Machine->Owner->Ticket}\"",
+                    "r"
+                )
+            ),
+            OS::Linux =>
+            \exec("php " . \Server . "/vDesk.php -M=Machines -C=Run --Guid=\"\\\"{$Machine->Guid}\"\\\" --Ticket=\"{$Machine->Owner->Ticket}\" > /dev/null &")
+        };
+
         //Get PID.
         $Machine->Fill();
         while($Machine->ID === 0) {
             \usleep(100000);
             $Machine->Fill();
         }
-        
+
         return $Machine;
     }
-    
+
     /**
      * Runs a specified Machine.
      *
@@ -167,58 +166,62 @@ final class Machines extends Module implements IModule {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to run Machines.
      */
     public static function Run(string $Guid = null): void {
-        if(!\vDesk::$User->Permissions["RunMachine"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to run Machine without having permissions.");
+        if(!User::$Current->Permissions["RunMachine"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to run Machine without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Guid ??= Command::$Parameters["Guid"];
         $Name = Expression::Select("Name")
                           ->From("Machines.Running")
                           ->Where(["Guid" => $Guid])();
-        
+
         $Class = "\\vDesk\\Machines\\{$Name}";
         /** @var \vDesk\Machines\Machine $Machine */
         $Machine = new $Class(
             \getmypid(),
-            \vDesk::$User,
+            User::$Current,
             $Guid,
             \time(),
             Machine::Running
         );
         $Machine->Save();
-        $Machine->Start();
-        
-        $Pointer = \shmop_open($Machine->ID, "c", 0644, 1);
-        \shmop_write($Pointer, Machine::Running, 0);
-        
-        while(true) {
-            switch(\shmop_read($Pointer, 0, 1)) {
-                case Machine::Running:
-                    //Run Machine.
-                    $Machine->Run();
-                    break;
-                case Machine::Suspended:
-                    //Suspend Machine.
-                    $Machine->Status = Machine::Suspended;
-                    $Machine->Suspend();
-                    $Machine->Save();
-                    
-                    //Idle until the status of the Machine has been changed.
-                    while(\shmop_read($Pointer, 0, 1) === Machine::Suspended) {
-                        \usleep(100000);
-                    }
-                    
-                    //Resume Machine.
-                    $Machine->Status = Machine::Running;
-                    $Machine->Resume();
-                    $Machine->Save();
-                    break;
-                case Machine::Stopped:
-                    $Machine->Stop();
+
+        try {
+            $Machine->Start();
+            $Pointer = \shmop_open($Machine->ID, "c", 0644, 1);
+            \shmop_write($Pointer, Machine::Running, 0);
+            while(true) {
+                switch(\shmop_read($Pointer, 0, 1)) {
+                    case Machine::Running:
+                        //Run Machine.
+                        $Machine->Run();
+                        break;
+                    case Machine::Suspended:
+                        //Suspend Machine.
+                        $Machine->Status = Machine::Suspended;
+                        $Machine->Suspend();
+                        $Machine->Save();
+
+                        //Idle until the status of the Machine has been changed.
+                        while(\shmop_read($Pointer, 0, 1) === Machine::Suspended) {
+                            \usleep(100000);
+                        }
+
+                        //Resume Machine.
+                        $Machine->Status = Machine::Running;
+                        $Machine->Resume();
+                        $Machine->Save();
+                        break;
+                    case Machine::Stopped:
+                        $Machine->Stop();
+                }
             }
+        } catch(\Throwable $Exception) {
+            $Machine->Delete();
+            Log::Error(__METHOD__, "Machine \"{$Machine->ID}\" died because of: {$Exception->getMessage()} {$Exception->getTraceAsString()}.");
         }
     }
-    
+
     /**
      * Suspends a running Machine.
      *
@@ -229,8 +232,8 @@ final class Machines extends Module implements IModule {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to run Machines.
      */
     public static function Suspend(string $Guid = null): bool {
-        if(!\vDesk::$User->Permissions["RunMachine"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to suspend Machine without having permissions.");
+        if(!User::$Current->Permissions["RunMachine"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to suspend Machine without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Guid ??= Command::$Parameters["Guid"];
@@ -247,7 +250,7 @@ final class Machines extends Module implements IModule {
         \shmop_write($Pointer, Machine::Suspended, 0);
         return true;
     }
-    
+
     /**
      * Resumes a suspended Machine.
      *
@@ -258,8 +261,8 @@ final class Machines extends Module implements IModule {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to run Machines.
      */
     public static function Resume(string $Guid = null): bool {
-        if(!\vDesk::$User->Permissions["RunMachine"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to resume Machine without having permissions.");
+        if(!User::$Current->Permissions["RunMachine"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to resume Machine without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Guid ??= Command::$Parameters["Guid"];
@@ -276,7 +279,7 @@ final class Machines extends Module implements IModule {
         \shmop_write($Pointer, Machine::Running, 0);
         return true;
     }
-    
+
     /**
      * Stops a Machine.
      *
@@ -287,8 +290,8 @@ final class Machines extends Module implements IModule {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to run Machines.
      */
     public static function Stop(string $Guid = null): bool {
-        if(!\vDesk::$User->Permissions["RunMachine"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to stop Machine without having permissions.");
+        if(!User::$Current->Permissions["RunMachine"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to stop Machine without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Guid ??= Command::$Parameters["Guid"];
@@ -305,7 +308,7 @@ final class Machines extends Module implements IModule {
         \shmop_write($Pointer, Machine::Stopped, 0);
         return true;
     }
-    
+
     /**
      * Terminates a Machine.
      *
@@ -314,8 +317,8 @@ final class Machines extends Module implements IModule {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to run Machines.
      */
     public static function Terminate(string $Guid = null): void {
-        if(!\vDesk::$User->Permissions["RunMachine"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to terminate Machine without having permissions.");
+        if(!User::$Current->Permissions["RunMachine"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to terminate Machine without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Guid ??= Command::$Parameters["Guid"];
@@ -335,7 +338,7 @@ final class Machines extends Module implements IModule {
                   ->Where(["ID" => $ID])
                   ->Execute();
     }
-    
+
     /**
      * Reaps dead Machines.
      *
@@ -343,8 +346,8 @@ final class Machines extends Module implements IModule {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to run Machines.
      */
     public static function Reap(): bool {
-        if(!\vDesk::$User->Permissions["RunMachine"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to reap Machines without having permissions.");
+        if(!User::$Current->Permissions["RunMachine"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to reap Machines without having permissions.");
             throw new UnauthorizedAccessException();
         }
         foreach(
@@ -366,10 +369,10 @@ final class Machines extends Module implements IModule {
                 @\shmop_delete(\shmop_open((int)$Machine["ID"], "c", 0644, 1));
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Installs the Machines of a specified Package.
      *
@@ -380,22 +383,22 @@ final class Machines extends Module implements IModule {
     public static function Install(Package $Package, \Phar $Phar, string $Path): void {
         if($Package instanceof IPackage) {
             Settings::$Local["Log"]["Level"] = Log::Warn;
-            foreach($Package::Machines as $Machine => $File) {
-                
+            foreach($Package::Machines as $Machine) {
+
                 //Check if the path starts with a separator.
-                if(!Text::StartsWith($File, "/") && !Text::StartsWith($File, Path::Separator)) {
-                    $File = Path::Separator . $File;
+                if(!Text::StartsWith($Machine, "/") && !Text::StartsWith($Machine, Path::Separator)) {
+                    $Machine = Path::Separator . $Machine;
                 }
-                
+
                 $FileInfo = new FileInfo(
                     $Path .
                     Path::Separator .
                     Package::Server .
                     Path::Separator .
                     Package::Lib .
-                    Text::Replace($File, "/", Path::Separator)
+                    Text::Replace($Machine, "/", Path::Separator)
                 );
-                
+
                 \vDesk\Modules::Archive()::Upload(
                     new Element(Settings::$Local["Machines"]["Directory"]),
                     "{$FileInfo->Name}.{$FileInfo->Extension}",
@@ -406,7 +409,7 @@ final class Machines extends Module implements IModule {
             Log::Info(__METHOD__, "Successfully installed Machines of Package '" . $Package::Name . "' (v" . $Package::Version . ").");
         }
     }
-    
+
     /**
      * Uninstalls the Machines of a specified Package.
      *
@@ -420,7 +423,7 @@ final class Machines extends Module implements IModule {
                           ->From("Archive.Elements")
                           ->Where([
                               "Parent" => Settings::$Local["Machines"]["Directory"],
-                              "Name"   => ["IN" => \array_map(fn($File): string => Path::GetFileName($File, false), \array_values($Package::Machines))]
+                              "Name"   => ["IN" => \array_map(static fn($File): string => Path::GetFileName($File, false), \array_values($Package::Machines))]
                           ])
                 as $Machine
             ) {
@@ -428,5 +431,5 @@ final class Machines extends Module implements IModule {
             }
         }
     }
-    
+
 }

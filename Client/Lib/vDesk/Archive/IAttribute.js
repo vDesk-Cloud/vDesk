@@ -4,7 +4,7 @@
  * @interface
  * @memberOf vDesk.Archive
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Archive
  */
 vDesk.Archive.IAttribute = function(Element) {
 };

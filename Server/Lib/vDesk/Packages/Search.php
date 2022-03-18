@@ -10,41 +10,41 @@ use vDesk\Struct\Collections\Observable\Collection;
 use vDesk\Struct\Type;
 
 /**
- * Class Search represents ...
+ * Search Package manifest.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Search
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Search extends Package implements IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Search";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
-    
+    public const Version = "1.0.1";
+
     /**
      * The name of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The name of the Package.
      */
     public const Description = "Package providing functionality for searching the modules of the system.";
-    
+
     /**
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Modules" => "1.0.0",
-        "Locale"  => "1.0.0"
+        "Modules" => "1.0.1",
+        "Locale"  => "1.0.2"
     ];
-    
+
     /**
      * The files and directories of the Package.
      */
@@ -71,7 +71,7 @@ final class Search extends Package implements IPackage {
             ]
         ]
     ];
-    
+
     /**
      * The translations of the Package.
      */
@@ -109,12 +109,12 @@ final class Search extends Package implements IPackage {
             ]
         ]
     ];
-    
+
     /**
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         //Install Module.
         /** @var \Modules\Search $Search */
         $Search = \vDesk\Modules::Search();
@@ -133,24 +133,24 @@ final class Search extends Package implements IPackage {
             )
         );
         $Search->Save();
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
-        
+
     }
-    
+
     /**
      * @inheritDoc
      */
     public static function Uninstall(string $Path): void {
-        
+
         //Uninstall Module.
         /** @var \Modules\Search $Search */
         $Search = \vDesk\Modules::Search();
         $Search->Delete();
-        
+
         //Delete files.
         self::Undeploy();
-        
+
     }
 }
