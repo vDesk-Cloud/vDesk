@@ -1,10 +1,6 @@
 <?php
-
 use vDesk\Documentation\Code;
 use vDesk\Pages\Functions;
-
-//@todo Add download links to package phars.
-
 ?>
 <article class="GetvDesk">
     <header>

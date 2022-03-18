@@ -1,9 +1,7 @@
 <?php
-
 use vDesk\Pages\Functions;
-
 ?>
-<section>
+<article class="Roadmap">
     <h2>Roadmap</h2>
     <p>
         This is an enumeration of planned features for the future.<br>
@@ -99,6 +97,7 @@ use vDesk\Pages\Functions;
     <h3 id="Packages">Packages</h3>
     <ul>
         <li>Creating setups and packages bundled with the dependencies of a package file</li>
+        <li>Option for exporting packages as standalone PHP libraries.</li>
     </ul>
     <hr>
     <h3 id="Updates">Updates</h3>
@@ -129,4 +128,4 @@ use vDesk\Pages\Functions;
     <ul>
         <li>Implement changelog</li>
     </ul>
-</section>
+</article>
