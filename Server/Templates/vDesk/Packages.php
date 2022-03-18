@@ -1,5 +1,5 @@
 <?php use vDesk\Pages\Functions; ?>
-<section class="Packages">
+<article class="Packages">
     <header>
         <h2>Packages</h2>
         <p class="Description">
@@ -46,7 +46,7 @@
         <article class="Package" id="Archive">
             <header>
                 <h3>Archive</h3>
-                <p>The Archive package provides a folder based virtual filesystem for archiving and editing files.</p>
+                <p class="Description">The Archive package provides a folder based virtual filesystem for archiving and editing files.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -70,7 +70,6 @@
                 <h4>Download</h4>
                 <p><a href="<?= Functions::URL("Downloads", "Archive.phar") ?>" download>Archive.phar</a></p>
             </header>
-            <hr>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
                     <img src="<?= Functions::Image("Packages/ArchiveOverview.png") ?>">
@@ -89,10 +88,11 @@
                 </aside>
             </section>
         </article>
+        <hr>
         <article class="Package" id="MetaInformation">
             <header>
                 <h3>MetaInformation</h3>
-                <p>
+                <p class="Description">
                     The MetaInformation package provides an index for datasets of metadata describing files and directories of the Archive with an interface for quickly searching
                     elements with matching metadata.
                 </p>
@@ -109,7 +109,6 @@
                 <h4>Download</h4>
                 <p><a href="<?= Functions::URL("Downloads", "MetaInformation.phar") ?>" download>MetaInformation.phar</a></p>
             </header>
-            <hr>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
                     <img src="<?= Functions::Image("Packages/MetaInformationDataSet.png") ?>">
@@ -121,10 +120,11 @@
                 </ul>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Pinboard">
             <header>
                 <h3>Pinboard</h3>
-                <p>The Pinboard package provides a pinboard to attach frequently used files and folders or create and organize text notes.</p>
+                <p class="Description">The Pinboard package provides a pinboard to attach frequently used files and folders or create and organize text notes.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -138,7 +138,6 @@
                 <h4>Download</h4>
                 <p><a href="<?= Functions::URL("Downloads", "Pinboard.phar") ?>" download>Pinboard.phar</a></p>
             </header>
-            <hr>
             <section class="Description">
                 <ul class="Features">
                     <li class="Feature">Creating notes in different colors and sizes</li>
@@ -149,10 +148,11 @@
                 </aside>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Calendar">
             <header>
                 <h3>Calendar</h3>
-                <p>The Calendar package provides a calendar module for organization of events.</p>
+                <p class="Description">The Calendar package provides a calendar module for organization of events.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -169,7 +169,6 @@
                 <h4>Download</h4>
                 <p><a href="<?= Functions::URL("Downloads", "Calendar.phar") ?>" download>Calendar.phar</a></p>
             </header>
-            <hr>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
                     <img src="<?= Functions::Image("Packages/CalendarMonthView.png") ?>">
@@ -187,10 +186,11 @@
                 </aside>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Contacts">
             <header>
                 <h3>Contacts</h3>
-                <p>The Contacts package provides an address management module for private and business contacts.</p>
+                <p class="Description">The Contacts package provides an address management module for private and business contacts.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -207,7 +207,6 @@
                 <h4>Download</h4>
                 <p><a href="<?= Functions::URL("Downloads", "Contacts.phar") ?>" download>Contacts.phar</a></p>
             </header>
-            <hr>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
                     <img src="<?= Functions::Image("Packages/Contacts.png") ?>">
@@ -219,10 +218,11 @@
                 </ul>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Messenger">
             <header>
                 <h3>Messenger</h3>
-                <p>The Messenger package provides a user and group based messenger.</p>
+                <p class="Description">The Messenger package provides a user and group based messenger.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -238,7 +238,6 @@
                 <h4>Download</h4>
                 <p><a href="<?= Functions::URL("Downloads", "Messenger.phar") ?>" download>Messenger.phar</a></p>
             </header>
-            <hr>
             <section class="Description">
                 <ul class="Features">
                     <li class="Feature">Private chats</li>
@@ -250,10 +249,11 @@
                 </aside>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Colors">
             <header>
                 <h3>Colors</h3>
-                <p>The Colors package provides an interface for customizing the colors and fonts of the client.</p>
+                <p class="Description">The Colors package provides an interface for customizing the colors and fonts of the client.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -264,7 +264,6 @@
                 <h4>Download</h4>
                 <p><a href="<?= Functions::URL("Downloads", "Colors.phar") ?>" download>Colors.phar</a></p>
             </header>
-            <hr>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
                     <img src="<?= Functions::Image("Packages/Colors.png") ?>">
@@ -275,10 +274,11 @@
                 </ul>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Locale">
             <header>
                 <h3>Locale</h3>
-                <p>The Locale package provides system wide translations and delivers a system for maintaining language packs.</p>
+                <p class="Description">The Locale package provides system wide translations and delivers a system for maintaining language packs.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p
                 <h4>Dependencies</h4>
@@ -292,7 +292,6 @@
                 <h4>Download</h4>
                 <p><a href="<?= Functions::URL("Downloads", "Locale.phar") ?>" download>Locale.phar</a></p>
             </header>
-            <hr>
             <section class="Description">
                 <ul class="Features">
                     <li class="Feature">System wide translation provider</li>
@@ -303,13 +302,14 @@
                 </aside>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Security">
             <header>
                 <h3>Security</h3>
-                <p>The Security Package implements a security system managed through Access Control Lists and user groups.</p>
+                <p class="Description">The Security Package implements a security system managed through Access Control Lists and user groups.</p>
                 <h4>License</h4>
                 <p>
-                <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p></p>
+                <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
                 <ul class="Dependencies">
                     <li><a href="#Configuration">Configuration</a></li>
@@ -320,7 +320,6 @@
                     <li><span title="Required" class="Required">⚠</span> Separate database</li>
                 </ul>
             </header>
-            <hr>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
                     <img src="<?= Functions::Image("Packages/SecurityACL.png") ?>">
@@ -337,10 +336,11 @@
                 </aside>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Configuration">
             <header>
                 <h3>Configuration</h3>
-                <p>The Configuration package provides a system wide interface for a typesafe key-value storage of configuration settings and multiuser client side configuration</p>
+                <p class="Description">The Configuration package provides a system wide interface for a typesafe key-value storage of configuration settings and multiuser client side configuration</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -352,7 +352,6 @@
                     <li><span title="Required" class="Required">⚠</span> Separate database</li>
                 </ul>
             </header>
-            <hr>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
                     <img src="<?= Functions::Image("Packages/Configuration.png") ?>">
@@ -363,10 +362,11 @@
                 </ul>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Search">
             <header>
                 <h3>Search</h3>
-                <p>The Search package provides an interface for searching entities of compatible packages.</p>
+                <p class="Description">The Search package provides an interface for searching entities of compatible packages.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -377,7 +377,6 @@
                 <h4>Download</h4>
                 <p><a href="<?= Functions::URL("Downloads", "Search.phar") ?>" download>Search.phar</a></p>
             </header>
-            <hr>
             <section class="Description">
                 <ul class="Features">
                     <li class="Feature">Extensible filter API for searching specific components</li>
@@ -389,10 +388,11 @@
                 </aside>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Console">
             <header>
                 <h3>Console</h3>
-                <p>The Console package provides a client side terminal window to perform administrative tasks.</p>
+                <p class="Description">The Console package provides a client side terminal window to perform administrative tasks.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -402,7 +402,6 @@
                 <h4>Download</h4>
                 <p><a href="<?= Functions::URL("Downloads", "Console.phar") ?>" download>Console.phar</a></p>
             </header>
-            <hr>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
                     <img src="<?= Functions::Image("Packages/Console.png") ?>">
@@ -415,10 +414,11 @@
                 </ul>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Packages">
             <header>
                 <h3>Packages</h3>
-                <p>The Packages package provides the package system vDesk is based on.</p>
+                <p class="Description">The Packages package provides the package system vDesk is based on.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -432,7 +432,6 @@
                     <li><span title="Recommended" class="Recommended">✓</span> phar.readonly = 0</li>
                 </ul>
             </header>
-            <hr>
             <section class="Description">
                 <ul class="Features">
                     <li class="Feature">(Un-)Installing feature packages</li>
@@ -443,10 +442,11 @@
                 </aside>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Updates">
             <header>
                 <h3>Updates</h3>
-                <p>The Updates package provides functionality for creating custom updates aswell as fetching and installing updates from remote hosts or local files.</p>
+                <p class="Description">The Updates package provides functionality for creating custom updates aswell as fetching and installing updates from remote hosts or local files.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -462,7 +462,6 @@
                     <li><span title="Required" class="Required">⚠</span> Enabled sockets-extension</li>
                 </ul>
             </header>
-            <hr>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
                     <img src="<?= Functions::Image("Packages/Updates.png") ?>">
@@ -474,10 +473,11 @@
                 </ul>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Setup">
             <header>
                 <h3>Setup</h3>
-                <p>The Setup package provides the functionality for creating and installing setups.</p>
+                <p class="Description">The Setup package provides the functionality for creating and installing setups.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -489,7 +489,6 @@
                     <li><span title="Recommended" class="Recommended">✓</span> phar.readonly = 0</li>
                 </ul>
             </header>
-            <hr>
             <section class="Description">
                 <ul class="Features">
                     <li class="Feature">Creating custom setups bundled with specific packages</li>
@@ -500,10 +499,11 @@
                 </aside>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Events">
             <header>
                 <h3>Events</h3>
-                <p>The Events package provides a system wide event system capable of dispatching public and private events.</p>
+                <p class="Description">The Events package provides a system wide event system capable of dispatching public and private events.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -521,10 +521,11 @@
                 </ul>
             </header>
         </article>
+        <hr>
         <article class="Package" id="Modules">
             <header>
                 <h3>Modules</h3>
-                <p>The Modules core package provides a module system and input parameter validation.</p>
+                <p class="Description">The Modules core package provides a module system and input parameter validation.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -537,10 +538,11 @@
                 </ul>
             </header>
         </article>
+        <hr>
         <article class="Package" id="DataProvider">
             <header>
                 <h3>DataProvider</h3>
-                <p>The DataProvider core package provides an abstract injection safe database access layer for MySQL, Microsoft SQL Server and PostgreSQL.</p>
+                <p class="Description">The DataProvider core package provides an abstract injection safe database access layer for MySQL, Microsoft SQL Server and PostgreSQL.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -553,10 +555,11 @@
                 </ul>
             </header>
         </article>
+        <hr>
         <article class="Package" id="vDesk">
             <header>
                 <h3>vDesk</h3>
-                <p>The vDesk core package provides the underlying framework.</p>
+                <p class="Description">The vDesk core package provides the underlying framework.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Requirements</h4>
@@ -575,7 +578,7 @@
         <article class="Package" id="Pages">
             <header>
                 <h3>Pages</h3>
-                <p>The Pages package provides a simple MVC framework for creating websites.</p>
+                <p class="Description">The Pages package provides a simple MVC framework for creating websites.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -586,10 +589,11 @@
                 <p><a href="<?= Functions::URL("Downloads", "Pages.phar") ?>" download>Pages.phar</a></p>
             </header>
         </article>
+        <hr>
         <article class="Package" id="Homepage">
             <header>
                 <h3>Homepage</h3>
-                <p>The Homepage package provides this website.</p>
+                <p class="Description">The Homepage package provides this website.</p>
                 <h4>License</h4>
                 <p>MIT</p>
                 <h4>Dependencies</h4>
@@ -600,10 +604,11 @@
                 <p><a href="<?= Functions::URL("Downloads", "Homepage.phar") ?>" download>Homepage.phar</a></p>
             </header>
         </article>
+        <hr>
         <article class="Package" id="Documentation">
             <header>
                 <h3>Documentation</h3>
-                <p>The Documentation package provides the <a href="<?= Functions::URL("Documentation", "Index") ?>">Documentation</a> website.</p>
+                <p class="Description">The Documentation package provides the <a href="<?= Functions::URL("Documentation", "Index") ?>">Documentation</a> website.</p>
                 <h4>License</h4>
                 <p>MIT</p>
                 <h4>Dependencies</h4>
@@ -614,10 +619,11 @@
                 <p><a href="<?= Functions::URL("Downloads", "Documentation.phar") ?>" download>Documentation.phar</a></p>
             </header>
         </article>
+        <hr>
         <article class="Package" id="UpdateHost">
             <header>
                 <h3>UpdateHost</h3>
-                <p>The UpdateHost package provides a server for delivering and hosting of (custom)updates.</p>
+                <p class="Description">The UpdateHost package provides a server for delivering and hosting of (custom)updates.</p>
                 <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Dependencies</h4>
@@ -631,7 +637,6 @@
                 <h4>Download</h4>
                 <p><a href="<?= Functions::URL("Downloads", "UpdateHost.phar") ?>" download>UpdateHost.phar</a></p>
             </header>
-            <hr>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
                     <img src="<?= Functions::Image("Packages/UpdateHost.png") ?>">
@@ -641,10 +646,12 @@
                 </ul>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Machines">
             <header>
                 <h3>Machines</h3>
-                <p>The Machines package provides an OS agnostic process management.</p>
+                <p class="Description">The Machines package provides an OS agnostic process management.</p>
+                <h4>License</h4>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Configuration</h4>
                 <ul class="Configuration">
@@ -661,7 +668,6 @@
                 <h4>Download</h4>
                 <p><a href="<?= Functions::URL("Downloads", "Machines.phar") ?>" download>Machines.phar</a></p>
             </header>
-            <hr>
             <section class="Description">
                 <ul class="Features">
                     <li class="Feature">OS agnostic process management</li>
@@ -673,10 +679,11 @@
                 </aside>
             </section>
         </article>
+        <hr>
         <article class="Package" id="Tasks">
             <header>
                 <h3>Tasks</h3>
-                <p>The Machines package provides an OS agnostic process control.</p>
+                <p class="Description">The Tasks package provides an asynchronous task dispatcher.</p>
                 <p><a target="_blank" href="https://directory.fsf.org/wiki/License:MS-PL">Ms-PL</a></p>
                 <h4>Configuration</h4>
                 <ul class="Configuration">
@@ -695,4 +702,4 @@
             </header>
         </article>
     </section>
-</section>
+</article>
