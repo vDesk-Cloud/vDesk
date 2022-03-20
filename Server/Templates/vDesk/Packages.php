@@ -68,7 +68,7 @@
                     <li><span title="Required" class="Required">⚠</span> Separate database</li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "Archive.phar") ?>" download>Archive.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "Archive.phar") ?>" download="Archive.phar">Archive.phar</a></p>
             </header>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
@@ -107,7 +107,7 @@
                     <li><span title="Required" class="Required">⚠</span> Separate database</li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "MetaInformation.phar") ?>" download>MetaInformation.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "MetaInformation.phar") ?>" download="MetaInformation.phar">MetaInformation.phar</a></p>
             </header>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
@@ -136,7 +136,7 @@
                     <li><span title="Required" class="Required">⚠</span> Separate database</li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "Pinboard.phar") ?>" download>Pinboard.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "Pinboard.phar") ?>" download="Pinboard.phar">Pinboard.phar</a></p>
             </header>
             <section class="Description">
                 <ul class="Features">
@@ -167,7 +167,7 @@
                     <li><span title="Required" class="Required">⚠</span> Separate database</li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "Calendar.phar") ?>" download>Calendar.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "Calendar.phar") ?>" download="Calendar.phar">Calendar.phar</a></p>
             </header>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
@@ -205,7 +205,7 @@
                     <li><span title="Required" class="Required">⚠</span> Separate database</li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "Contacts.phar") ?>" download>Contacts.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "Contacts.phar") ?>" download="Contacts.phar">Contacts.phar</a></p>
             </header>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
@@ -236,7 +236,7 @@
                     <li><span title="Required" class="Required">⚠</span> Separate database</li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "Messenger.phar") ?>" download>Messenger.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "Messenger.phar") ?>" download="Messenger.phar">Messenger.phar</a></p>
             </header>
             <section class="Description">
                 <ul class="Features">
@@ -262,7 +262,7 @@
                     <li><a href="#Locale">Locale</a></li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "Colors.phar") ?>" download>Colors.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "Colors.phar") ?>" download="Colors.phar">Colors.phar</a></p>
             </header>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
@@ -290,7 +290,7 @@
                     <li><span title="Required" class="Required">⚠</span> Separate database</li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "Locale.phar") ?>" download>Locale.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "Locale.phar") ?>" download="Locale.phar">Locale.phar</a></p>
             </header>
             <section class="Description">
                 <ul class="Features">
@@ -375,7 +375,7 @@
                     <li><a href="#Locale">Locale</a></li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "Search.phar") ?>" download>Search.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "Search.phar") ?>" download="Search.phar">Search.phar</a></p>
             </header>
             <section class="Description">
                 <ul class="Features">
@@ -400,7 +400,7 @@
                     <li><a href="#Security">Security</a></li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "Console.phar") ?>" download>Console.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "Console.phar") ?>" download="Console.phar">Console.phar</a></p>
             </header>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
@@ -586,7 +586,7 @@
                     <li><a href="#Configuration">Configuration</a></li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "Pages.phar") ?>" download>Pages.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "Pages.phar") ?>" download="Pages.phar">Pages.phar</a></p>
             </header>
         </article>
         <hr>
@@ -601,7 +601,7 @@
                     <li><a href="#Pages">Pages</a></li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "Homepage.phar") ?>" download>Homepage.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "Homepage.phar") ?>" download="Homepage.phar">Homepage.phar</a></p>
             </header>
         </article>
         <hr>
@@ -616,7 +616,7 @@
                     <li><a href="#Pages">Pages</a></li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "Documentation.phar") ?>" download>Documentation.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "Documentation.phar") ?>" download="Documentation.phar">Documentation.phar</a></p>
             </header>
         </article>
         <hr>
@@ -635,7 +635,7 @@
                     <li><span title="Required" class="Required">⚠</span> Separate database</li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "UpdateHost.phar") ?>" download>UpdateHost.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "UpdateHost.phar") ?>" download="UpdateHost.phar">UpdateHost.phar</a></p>
             </header>
             <section class="Description">
                 <aside onclick="this.classList.toggle('Fullscreen')">
@@ -666,7 +666,7 @@
                     <li><a href="#Archive">Archive</a></li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "Machines.phar") ?>" download>Machines.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "Machines.phar") ?>" download="Machines.phar">Machines.phar</a></p>
             </header>
             <section class="Description">
                 <ul class="Features">
@@ -698,7 +698,7 @@
                     <li><a href="#Machines">Machines</a></li>
                 </ul>
                 <h4>Download</h4>
-                <p><a href="<?= Functions::URL("Downloads", "Tasks.phar") ?>" download>Tasks.phar</a></p>
+                <p><a href="<?= Functions::URL("Downloads", "Tasks.phar") ?>" download="Tasks.phar">Tasks.phar</a></p>
             </header>
         </article>
     </section>
