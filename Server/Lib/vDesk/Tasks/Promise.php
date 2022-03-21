@@ -47,7 +47,6 @@ class Promise extends Task {
     public function Run(): \Generator {
         $Key    = null;
         $Value  = null;
-        $Reject = $this->Reject;
         try {
             foreach($this->Task->Run() as $Key => $Value) {
                 if($Key === self::Resolve || $Key === self::Reject) {
@@ -56,16 +55,15 @@ class Promise extends Task {
                 yield;
             }
         } catch(\Throwable $Exception) {
-            $Reject($Exception);
+            ($this->Reject)($Exception);
             yield;
             $this->Tasks->Remove($this);
             return;
         }
         if($Key === self::Reject) {
-            $Reject($Value);
+            ($this->Reject)($Value);
         } else {
-            $Resolve = $this->Resolve;
-            $Resolve($Value);
+            ($this->Resolve)($Value);
         }
         yield;
         $this->Tasks->Remove($this);
