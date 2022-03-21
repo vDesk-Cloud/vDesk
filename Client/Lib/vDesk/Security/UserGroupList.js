@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Initializes a new instance of the UserGroupList class.
  * @class Represents a list of users and groups.
@@ -8,7 +9,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the UserGroupList is enabled.
  * @memberOf vDesk.Security
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.UserGroupList = function UserGroupList(Items = [], Enabled = true) {
     Ensure.Parameter(Items, Array, "Items");
@@ -57,10 +58,10 @@ vDesk.Security.UserGroupList = function UserGroupList(Items = [], Enabled = true
     this.Add = function(Item) {
         Ensure.Parameter(Item, vDesk.Security.UserGroupList.Item, "Item");
         //Check if the entry doesn't already exist.
-        if(Item.User.ID !== null && this.FindByUser(Item.User) === null) {
+        if(Item.User.ID !== null && this.FindByUser(Item.User) === null){
             Items.push(Item);
             Control.appendChild(Item.Control);
-        } else if(Item.Group.ID !== null && this.FindByGroup(Item.Group) === null) {
+        }else if(Item.Group.ID !== null && this.FindByGroup(Item.Group) === null){
             Items.push(Item);
             Control.appendChild(Item.Control);
         }
@@ -102,7 +103,7 @@ vDesk.Security.UserGroupList = function UserGroupList(Items = [], Enabled = true
         Ensure.Parameter(Item, vDesk.Security.UserGroupList.Item, "Item");
         const Index = Items.indexOf(Item);
         //Check if the item to remove exists.
-        if(~Index) {
+        if(~Index){
             Control.removeChild(Item.Control);
             Items.splice(Index, 1);
         }

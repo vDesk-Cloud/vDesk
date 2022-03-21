@@ -6,17 +6,15 @@
  * @memberOf vDesk.Contacts
  * @augments vDesk.Controls.Window
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Contacts
  */
 vDesk.Contacts.ViewerWindow = function(Contact) {
-
     this.Extends(vDesk.Controls.Window);
-
-    if(Contact instanceof vDesk.Contacts.Contact) {
+    if(Contact instanceof vDesk.Contacts.Contact){
         this.Icon = vDesk.Visual.Icons.Security.User;
         this.Title = Contact.Surname + ", " + Contact.Forename;
         this.Content.appendChild((new vDesk.Contacts.Contact.Viewer(Contact)).Control);
-    } else if(Contact instanceof vDesk.Contacts.Company) {
+    }else if(Contact instanceof vDesk.Contacts.Company){
         this.Icon = vDesk.Visual.Icons.Contacts.Module;
         this.Title = Contact.Name;
         this.Content.appendChild((new vDesk.Contacts.Company.Viewer(Contact)).Control);

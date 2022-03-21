@@ -30,7 +30,7 @@ vDesk.UpdateHost = function UpdateHost() {
         }else{
             Container.appendChild(Event.detail.update.Control);
         }
-        Delete.disabled = !vDesk.User.Permissions.InstallPackage;
+        Delete.disabled = !vDesk.Security.User.Current.Permissions.InstallPackage;
     };
 
     /**
@@ -44,7 +44,7 @@ vDesk.UpdateHost = function UpdateHost() {
                     Module:     "UpdateHost",
                     Command:    "Remove",
                     Parameters: {Hash: Item.Update.Hash},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
@@ -83,7 +83,7 @@ vDesk.UpdateHost = function UpdateHost() {
                     Module:     "UpdateHost",
                     Command:    "Host",
                     Parameters: {Update: Update},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
@@ -164,7 +164,7 @@ vDesk.UpdateHost = function UpdateHost() {
     const Upload = document.createElement("button");
     Upload.className = "Button Icon UploadUpdate";
     Upload.style.backgroundImage = `url("${vDesk.Visual.Icons.Updates.Upload}")`;
-    Upload.disabled = !vDesk.User.Permissions.InstallUpdate;
+    Upload.disabled = !vDesk.Security.User.Current.Permissions.InstallUpdate;
     Upload.textContent = vDesk.Locale.Updates.Upload;
     Upload.addEventListener("click", () => OpenFileDialog.click(), false);
     Controls.appendChild(Upload);
@@ -187,7 +187,7 @@ vDesk.UpdateHost = function UpdateHost() {
                 Module:     "UpdateHost",
                 Command:    "Hosted",
                 Parameters: {},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         Response => {
@@ -195,7 +195,7 @@ vDesk.UpdateHost = function UpdateHost() {
                 Updates.Items = Response.Data.map(Update => new vDesk.Updates.UpdateList.Item(vDesk.Updates.Update.FromDataView(Update)));
                 Updates.Selected = Updates.Items?.[0] ?? Updates.Selected;
                 Container.appendChild(Updates.Selected?.Update?.Control ?? document.createTextNode("No updates hosted"));
-                Delete.disabled = Updates.Selected === null || !vDesk.User.Permissions.InstallPackage;
+                Delete.disabled = Updates.Selected === null || !vDesk.Security.User.Current.Permissions.InstallPackage;
             } else {
                 alert(Response.Data);
             }

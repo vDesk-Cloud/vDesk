@@ -8,7 +8,7 @@ use vDesk\Packages\Package;
 /**
  * Security Update manifest class.
  *
- * @package vDesk
+ * @package vDesk\Security
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Security extends Update {
@@ -21,13 +21,13 @@ class Security extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.1";
+    public const RequiredVersion = "1.0.2";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Fixed bugg with missing User instance while installation.
+- Added compatibility to vDesk-1.1.0.
 Description;
 
     /**
@@ -35,16 +35,23 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
-            Package::Server => [
-                Package::Lib => [
-                    "vDesk/Security/User.php"
+            Package::Client => [
+                Package::Design => [
+                    "vDesk/Security/LoginDialog.css"
+                ],
+                Package::Lib    => [
+                    "vDesk/Security"
                 ]
             ]
         ],
         self::Undeploy => [
-            Package::Server => [
-                Package::Lib     => [
-                    "vDesk/Security/User.php"
+            Package::Client => [
+                Package::Design => [
+                    "vDesk/LoginDialog.css"
+                ],
+                Package::Lib    => [
+                    "vDesk/LoginDialog.js",
+                    "vDesk/Security"
                 ]
             ]
         ]
@@ -54,6 +61,7 @@ Description;
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
+        //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
     }

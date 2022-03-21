@@ -41,7 +41,7 @@
  * @property {Boolean} Changed Gets a value indicating whether the data of the current user of the Editor has been modified.
  * @memberOf vDesk.Security.User
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
     Ensure.Parameter(User, vDesk.Security.User, "User");
@@ -75,8 +75,8 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
                 Name.Enabled = Enabled && Value.ID !== vDesk.Security.User.System;
                 Password.Value = null;
                 Password.Label = Value.ID !== null
-                                 ? vDesk.Locale.Security.ResetPassword
-                                 : vDesk.Locale.Security.Password;
+                    ? vDesk.Locale.Security.ResetPassword
+                    : vDesk.Locale.Security.Password;
                 Email.Value = Value.Email;
                 Locale.Value = Value.Locale;
                 Active.Value = Value.Active;
@@ -134,7 +134,7 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
      * @fires vDesk.Security.User.Editor#update
      */
     this.Save = function() {
-        if(User.ID === null) {
+        if(User.ID === null){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -148,11 +148,11 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
                             Locale:   Locale.Value,
                             Active:   Active.Value
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         Changed = false;
                         this.User = vDesk.Security.User.FromDataView(Response.Data);
                         new vDesk.Events.BubblingEvent("create", {
@@ -162,7 +162,7 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
                     }
                 }
             );
-        } else {
+        }else{
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -177,11 +177,11 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
                             Email:            Email.Value,
                             FailedLoginCount: User.FailedLoginCount
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         Control.removeEventListener("update", OnUpdate, false);
                         Changed = false;
                         this.User = vDesk.Security.User.FromDataView(Response.Data);
@@ -201,18 +201,18 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
      * @fires vDesk.Security.User.Editor#delete
      */
     this.Delete = function() {
-        if(User.ID !== null) {
+        if(User.ID !== null){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
                         Module:     "Security",
                         Command:    "DeleteUser",
                         Parameters: {ID: User.ID},
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         new vDesk.Events.BubblingEvent("delete", {
                             sender: this,
                             user:   User
@@ -248,8 +248,8 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
      */
     const Password = new vDesk.Controls.EditControl(
         User.ID !== null
-        ? vDesk.Locale.Security.ResetPassword
-        : vDesk.Locale.Security.Password,
+            ? vDesk.Locale.Security.ResetPassword
+            : vDesk.Locale.Security.Password,
         null,
         Extension.Type.Password,
         null,

@@ -60,11 +60,11 @@
  * @augments vDesk.Controls.Table.Row
  * @memberOf vDesk.Contacts
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Contacts
  */
 vDesk.Contacts.Contact = function Contact(
     ID                = null,
-    Owner             = vDesk.User,
+    Owner             = vDesk.Security.User.Current,
     Gender            = 0,
     Title             = "",
     Forename          = "",

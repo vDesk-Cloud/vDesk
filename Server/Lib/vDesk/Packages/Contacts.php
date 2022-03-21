@@ -14,9 +14,9 @@ use vDesk\Security\AccessControlList;
 use vDesk\Struct\Collections\Observable\Collection;
 
 /**
- * Class Contacts represents ...
+ * Contacts Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Contacts
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Contacts extends Package implements Locale\IPackage, Events\IPackage {
@@ -29,7 +29,7 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
+    public const Version = "1.0.1";
     
     /**
      * The name of the Package.
@@ -45,10 +45,10 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Events"   => "1.0.0",
-        "Locale"   => "1.0.0",
-        "Security" => "1.0.0",
-        "Search"   => "1.0.0"
+        "Events"   => "1.0.1",
+        "Locale"   => "1.0.2",
+        "Security" => "1.0.2",
+        "Search"   => "1.0.1"
     ];
     
     /**

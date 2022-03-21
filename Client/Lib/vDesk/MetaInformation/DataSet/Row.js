@@ -34,7 +34,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the Row is enabled.
  * @memberOf vDesk.MetaInformation.DataSet
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.DataSet.Row = function Row(Row, ID = null, Value = null, Enabled = true) {
     Ensure.Parameter(Row, vDesk.MetaInformation.Mask.Row, "Row");
@@ -70,7 +70,7 @@ vDesk.MetaInformation.DataSet.Row = function Row(Row, ID = null, Value = null, E
             get:        () => EditControl.Value,
             set:        ValueToSet => {
                 Value = ValueToSet;
-                if(ValueToSet !== null) {
+                if(ValueToSet !== null){
                     EditControl.Value = ValueToSet;
                 }
             }
@@ -97,9 +97,9 @@ vDesk.MetaInformation.DataSet.Row = function Row(Row, ID = null, Value = null, E
         Event.stopPropagation();
         Value = EditControl.Value;
         //Check if the Row is virtual.
-        if(ID === null) {
+        if(ID === null){
             new vDesk.Events.BubblingEvent("add", {sender: this}).Dispatch(Control);
-        } else {
+        }else{
             new vDesk.Events.BubblingEvent("update", {sender: this}).Dispatch(Control);
         }
         Control.addEventListener("update", OnUpdate, {once: true});

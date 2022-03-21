@@ -21,30 +21,42 @@ final class Configuration extends Update {
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.0";
+    public const RequiredVersion = "1.0.1";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Fixed wrong serialization of boolean values.
+- Added compatibility to vDesk-1.1.0.
 Description;
 
     /**
-     * The files of the Update.
+     * The files and directories of the Update.
      */
     public const Files = [
-        Update::Deploy   => [
-            Package::Server => [
+        self::Deploy   => [
+            Package::Client => [
                 Package::Lib => [
-                    "vDesk/Configuration/Settings/Local/Settings.php"
+                    "vDesk/Configuration/Settings.js",
+                    "vDesk/Configuration/Remote/Plugins/Log.js",
+                    "vDesk/Configuration/Remote/Plugins/Settings.js"
+                ]
+            ],
+            Package::Server => [
+                Package::Modules => [
+                    "Configuration.php"
                 ]
             ]
         ],
-        Update::Undeploy => [
+        self::Undeploy => [
+            Package::Lib    => [
+                "vDesk/Configuration/Settings.js",
+                "vDesk/Configuration/Remote/Plugins/Log.js",
+                "vDesk/Configuration/Remote/Plugins/Settings.js"
+            ],
             Package::Server => [
-                Package::Lib => [
-                    "vDesk/Configuration/Settings/Local/Settings.php"
+                Package::Modules => [
+                    "Configuration.php"
                 ]
             ]
         ]
@@ -54,6 +66,7 @@ Description;
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
+        //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
     }

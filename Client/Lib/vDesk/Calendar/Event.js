@@ -84,11 +84,11 @@
  * @augments vDesk.Controls.DynamicBox
  * @memberOf vDesk.Calendar
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Calendar
  */
 vDesk.Calendar.Event = function Event(
     ID                = null,
-    Owner             = vDesk.User,
+    Owner             = vDesk.Security.User.Current,
     Start             = new Date(),
     End               = new Date(Date.now() + 7.2e+6),
     FullTime          = false,
@@ -181,7 +181,7 @@ vDesk.Calendar.Event = function Event(
             set:        Value => {
                 Ensure.Property(Value, Date, "Start", true);
                 Start = Value;
-                if(Value !== null) {
+                if(Value !== null){
                     Start.setSeconds(0);
                     this.SetTooltip();
                 }
@@ -193,7 +193,7 @@ vDesk.Calendar.Event = function Event(
             set:        Value => {
                 Ensure.Property(Value, Date, "End", true);
                 End = Value;
-                if(Value !== null) {
+                if(Value !== null){
                     End.setSeconds(0);
                     this.SetTooltip();
                 }
@@ -302,8 +302,8 @@ vDesk.Calendar.Event = function Event(
         Duration:          {
             enumerable: true,
             get:        () => Start !== null && End !== null
-                              ? Number((End - Start) / 36e5).toFixed(1)
-                              : 0
+                ? Number((End - Start) / 36e5).toFixed(1)
+                : 0
         }
     });
 
@@ -374,7 +374,7 @@ vDesk.Calendar.Event = function Event(
      * @param {CustomEvent} Event
      */
     const OnResizeBelow = Event => {
-        if(Event.detail.height.current > 40) {
+        if(Event.detail.height.current > 40){
             this.Header.classList.remove("Half");
             this.Control.removeEventListener("resize", OnResizeBelow, true);
             this.Control.addEventListener("resize", OnResizeAbove, true);
@@ -385,7 +385,7 @@ vDesk.Calendar.Event = function Event(
      * @param {CustomEvent} Event
      */
     const OnResizeAbove = Event => {
-        if(Event.detail.height.current < 40) {
+        if(Event.detail.height.current < 40){
             this.Header.classList.add("Half");
             this.Control.removeEventListener("resize", OnResizeAbove, true);
             this.Control.addEventListener("resize", OnResizeBelow, true);
@@ -415,7 +415,7 @@ vDesk.Calendar.Event.Implements(vDesk.Controls.Calendar.IEvent);
  * Sets the mouseover tooltip according to the specified start and enddate of the Event.
  */
 vDesk.Calendar.Event.prototype.SetTooltip = function() {
-    if(this.Start !== null && this.End !== null) {
+    if(this.Start !== null && this.End !== null){
         this.Control.title = `${vDesk.Locale.Calendar.Start}: ${this.Start.toLocaleString()}\r\n${vDesk.Locale.Calendar.End}: ${this.End.toLocaleString()}`;
     }
 };
@@ -427,17 +427,17 @@ vDesk.Calendar.Event.prototype.SetTooltip = function() {
  */
 vDesk.Calendar.Event.prototype.CollidesWith = function(Event) {
     Ensure.Parameter(Event, vDesk.Calendar.Event, "Event");
-    if(this.Start === null && this.End === null) {
+    if(this.Start === null && this.End === null){
         return false;
     }
     //Check if the Event to compare starts within this Event.
     return (this.Start <= Event.Start && Event.Start <= this.End)
-           //Check if the Event to compare ends within this Event
-           || (this.End >= Event.Start && Event.End >= this.End)
-           //Check if this Event starts within the Event to compare
-           || (Event.Start <= this.Start && this.Start <= Event.End)
-           //Check if this Event ends within the Event to compare
-           || (Event.End >= this.End && this.End >= Event.Start);
+        //Check if the Event to compare ends within this Event
+        || (this.End >= Event.Start && Event.End >= this.End)
+        //Check if this Event starts within the Event to compare
+        || (Event.Start <= this.Start && this.Start <= Event.End)
+        //Check if this Event ends within the Event to compare
+        || (Event.End >= this.End && this.End >= Event.Start);
 };
 
 /**

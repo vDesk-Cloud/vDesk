@@ -1,18 +1,18 @@
 "use strict";
 /**
  * Fired if a successfully login has been performed.
- * @event vDesk.LoginDialog#login
+ * @event vDesk.Security.LoginDialog#login
  * @type {CustomEvent}
  * @property {Object} detail The arguments of the 'login' event.
- * @property {vDesk.LoginDialog} detail.sender The current instance of the LoginDialog.
+ * @property {vDesk.Security.LoginDialog} detail.sender The current instance of the LoginDialog.
  * @property {vDesk.Security.User} detail.user The logged in User.
  */
 /**
  * Fired if an User has been logged out.
- * @event vDesk.LoginDialog#logout
+ * @event vDesk.Security.LoginDialog#logout
  * @type {CustomEvent}
  * @property {Object} detail The arguments of the 'logout' event.
- * @property {vDesk.LoginDialog} detail.sender The current instance of the LoginDialog.
+ * @property {vDesk.Security.LoginDialog} detail.sender The current instance of the LoginDialog.
  * @property {vDesk.Security.User} detail.user The logged out User.
  */
 /**
@@ -23,12 +23,11 @@
  * @property {String} Password Gets or sets the password of the LoginDialog.
  * @property {String} Server Gets or sets the Server of the LoginDialog.
  * @property {String} Status Gets or sets the status text of the LoginDialog.
- * @memberOf vDesk
+ * @memberOf vDesk.Security
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
- * @todo Just call vDesk.Login or vDesk.LoginFromEmail from within this class.
+ * @package vDesk\Security
  */
-vDesk.LoginDialog = function LoginDialog() {
+vDesk.Security.LoginDialog = function LoginDialog() {
 
     Object.defineProperties(this, {
         Name:         {
@@ -57,8 +56,8 @@ vDesk.LoginDialog = function LoginDialog() {
         () => {
             sessionStorage.clear();
             localStorage.removeItem("KeepLoggedIn");
-            new vDesk.Events.BubblingEvent("logout", {sender: this, user: vDesk.User}).Dispatch(GroupBox.Control);
-            vDesk.User = {
+            new vDesk.Events.BubblingEvent("logout", {sender: this, user: vDesk.Security.User.Current}).Dispatch(GroupBox.Control);
+            vDesk.Security.User.Current = vDesk.User = {
                 ID:          null,
                 Name:        "",
                 Locale:      "DE",
@@ -106,7 +105,7 @@ vDesk.LoginDialog = function LoginDialog() {
 
     /**
      * Performs a login with the current credentials of the LoginDialog.
-     * @fires vDesk.LoginDialog#login
+     * @fires vDesk.Security.LoginDialog#login
      */
     this.Login = function() {
         if(!vDesk.Connection.Connect(Server.Value)) {
@@ -125,9 +124,9 @@ vDesk.LoginDialog = function LoginDialog() {
             ),
             Response => {
                 if(Response.Status) {
-                    vDesk.User = vDesk.Security.User.FromDataView(Response.Data);
-                    sessionStorage.Ticket = vDesk.User.Ticket;
-                    new vDesk.Events.BubblingEvent("login", {sender: this, user: vDesk.User}).Dispatch(window);
+                    vDesk.Security.User.Current = vDesk.User = vDesk.Security.User.FromDataView(Response.Data);
+                    sessionStorage.Ticket = vDesk.Security.User.Current.Ticket;
+                    new vDesk.Events.BubblingEvent("login", {sender: this, user: vDesk.Security.User.Current}).Dispatch(window);
                 }
             }
         );
@@ -135,7 +134,7 @@ vDesk.LoginDialog = function LoginDialog() {
 
     /**
      * Performs a login on a specified server with the specified ticket.
-     * @fires vDesk.LoginDialog#login
+     * @fires vDesk.Security.LoginDialog#login
      */
     this.ReLogin = function() {
         if(!vDesk.Connection.Connect(Server.Value)) {
@@ -152,8 +151,8 @@ vDesk.LoginDialog = function LoginDialog() {
             ),
             Response => {
                 if(Response.Status) {
-                    vDesk.User = vDesk.Security.User.FromDataView(Response.Data);
-                    new vDesk.Events.BubblingEvent("login", {sender: this, user: vDesk.User}).Dispatch(window);
+                    vDesk.Security.User.Current = vDesk.User = vDesk.Security.User.FromDataView(Response.Data);
+                    new vDesk.Events.BubblingEvent("login", {sender: this, user: vDesk.Security.User.Current}).Dispatch(window);
                 }
             }
         );
@@ -161,7 +160,7 @@ vDesk.LoginDialog = function LoginDialog() {
 
     /**
      * Performs a logout of the current logged in User.
-     * @fires vDesk.LoginDialog#logout
+     * @fires vDesk.Security.LoginDialog#logout
      */
     this.Logout = function() {
         vDesk.Connection.Send(
@@ -169,8 +168,8 @@ vDesk.LoginDialog = function LoginDialog() {
                 {
                     Module:     "Security",
                     Command:    "Logout",
-                    Parameters: {User: vDesk.User.Name},
-                    Ticket:     vDesk.User.Ticket
+                    Parameters: {User: vDesk.Security.User.Current.Name},
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             )
         );
@@ -179,8 +178,8 @@ vDesk.LoginDialog = function LoginDialog() {
         localStorage.removeItem("Password");
         localStorage.removeItem("KeepLoggedIn");
 
-        new vDesk.Events.BubblingEvent("logout", {sender: this, user: vDesk.User}).Dispatch(window);
-        vDesk.User = {
+        new vDesk.Events.BubblingEvent("logout", {sender: this, user: vDesk.Security.User.Current}).Dispatch(window);
+        vDesk.Security.User.Current = vDesk.User = {
             ID:          null,
             Name:        "",
             Locale:      "DE",
@@ -321,5 +320,11 @@ vDesk.LoginDialog = function LoginDialog() {
     } else if(KeepLoggedIn.Value && Server.Valid && User.Valid && Password.Valid) {
         this.Login();
     }
-
 };
+
+/**
+ * @alias
+ * @deprecated
+ * @type {vDesk.Security.LoginDialog}
+ */
+vDesk.LoginDialog = vDesk.Security.LoginDialog;

@@ -11,6 +11,7 @@ use vDesk\IO\Path;
 use vDesk\Modules\Command;
 use vDesk\Modules\Module;
 use vDesk\Security\UnauthorizedAccessException;
+use vDesk\Security\User;
 use vDesk\Struct\Text;
 use vDesk\Updates\Update;
 use vDesk\Utils\Log;
@@ -18,11 +19,11 @@ use vDesk\Utils\Log;
 /**
  * UpdateHost Module.
  *
- * @package Modules
+ * @package vDesk\Updates
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class UpdateHost extends Module {
-    
+
     /**
      * Gets every available Update for a specified set of Packages.
      *
@@ -33,12 +34,12 @@ final class UpdateHost extends Module {
     public static function Available(array $Packages = null): array {
         $Packages   ??= Command::$Parameters["Packages"];
         $Conditions = [];
-        
+
         foreach($Packages as $Package => $Version) {
             [$Major, $Minor, $Patch] = \explode(".", $Version);
             $Conditions[] = ["Package" => $Package, "Major" => $Major, "Minor" => [">=" => $Minor], "Patch" => [">=" => $Patch]];
         }
-        
+
         $Updates = [];
         foreach(
             Expression::Select("*")
@@ -60,7 +61,7 @@ final class UpdateHost extends Module {
         }
         return $Updates;
     }
-    
+
     /**
      * Gets every hosted Update.
      *
@@ -86,7 +87,7 @@ final class UpdateHost extends Module {
         }
         return $Updates;
     }
-    
+
     /**
      * Uploads an Update for installation or hosting.
      *
@@ -96,12 +97,12 @@ final class UpdateHost extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to install Updates.
      */
     public static function Host(FileInfo $Update = null): array {
-        if(!\vDesk::$User->Permissions["InstallUpdate"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to host Update without having permissions.");
+        if(!User::$Current->Permissions["InstallUpdate"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to host Update without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Update ??= Command::$Parameters["Update"];
-        
+
         //Save Update file.
         $File       = \uniqid("update", true) . ".phar";
         $Path       = Settings::$Local["UpdateHost"]["Directory"] . Path::Separator . $File;
@@ -114,19 +115,19 @@ final class UpdateHost extends Module {
         $TempFile->Close();
         //Delete temp file.
         $Update->Delete();
-        
+
         $Phar = new \Phar($Path);
-        
+
         //Wire autoload to PHAR archive.
         \vDesk::$Load[] = static fn(string $Class): string => "phar://{$Phar->getPath()}/Server/Lib/" . Text::Replace($Class, "\\", "/") . ".php";
         \vDesk::$Load[] = static fn(string $Class): string => "phar://{$Phar->getPath()}/Server/" . Text::Replace($Class, "\\", "/") . ".php";
-        
+
         //Load Update.
         /** @var \vDesk\Updates\Update $Update */
         /** @var \vDesk\Packages\Package $Package */
         [$UpdateManifest, $Package] = include $Phar->getPath();
         [$Major, $Minor, $Patch] = \explode(".", $UpdateManifest::RequiredVersion);
-        
+
         //Check if a similar Update already exists.
         if(
             Expression::Select("1")
@@ -146,7 +147,7 @@ final class UpdateHost extends Module {
                 "Update for Package \"" . $Package::Name . "\" from version " . $UpdateManifest::RequiredVersion . " to " . $Package::Version . " already exists!"
             );
         }
-        
+
         //Save Update manifest.
         Expression::Insert()
                   ->Into("Updates.Hosted")
@@ -163,10 +164,10 @@ final class UpdateHost extends Module {
                       "Description"  => $UpdateManifest::Description
                   ])
                   ->Execute();
-        
+
         return ["Hash" => $Phar->getSignature()["hash"]] + $UpdateManifest->ToDataView();
     }
-    
+
     /**
      * Downloads the file of a specified Update.
      *
@@ -186,7 +187,7 @@ final class UpdateHost extends Module {
         $Update->MimeType = Update::MimeType;
         return $Update;
     }
-    
+
     /**
      * Deletes a hosted Update.
      *
@@ -196,7 +197,7 @@ final class UpdateHost extends Module {
      */
     public static function Remove(string $Hash = null): bool {
         $Hash ??= Command::$Parameters["Hash"];
-        
+
         //Check if the Update exists.
         $File = Expression::Select("File")
                           ->From("Updates.Hosted")
@@ -204,7 +205,7 @@ final class UpdateHost extends Module {
         if($File === null) {
             return false;
         }
-        
+
         //Delete Update.
         Expression::Delete()
                   ->From("Updates.Hosted")

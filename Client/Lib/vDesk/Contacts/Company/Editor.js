@@ -41,7 +41,7 @@
  * @property {Boolean} Changed Gets a value indicating whether the data of the current Company of the Editor has been modified.
  * @memberOf vDesk.Contacts.Company
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Contacts
  * @Todo Make GroupBox and EditControls, move buttons to editor window.
  */
 vDesk.Contacts.Company.Editor = function Editor(Company, Enabled = true) {
@@ -132,7 +132,7 @@ vDesk.Contacts.Company.Editor = function Editor(Company, Enabled = true) {
 
         const FoundCountry = vDesk.Locale.Countries.find(ExistingCountry => ExistingCountry.Name === Country.Value)?.Code ?? null;
 
-        if(Company.ID !== null) {
+        if(Company.ID !== null){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -151,11 +151,11 @@ vDesk.Contacts.Company.Editor = function Editor(Company, Enabled = true) {
                             Email:       Email.Value,
                             Website:     Website.Value
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         this.Company = vDesk.Contacts.Company.FromDataView(Response.Data);
                         new vDesk.Events.BubblingEvent("update", {
                             sender:  this,
@@ -164,7 +164,7 @@ vDesk.Contacts.Company.Editor = function Editor(Company, Enabled = true) {
                     }
                 }
             );
-        } else {
+        }else{
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -182,11 +182,11 @@ vDesk.Contacts.Company.Editor = function Editor(Company, Enabled = true) {
                             Email:       Email.Value,
                             Website:     Website.Value
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         this.Company = vDesk.Contacts.Company.FromDataView(Response.Data);
                         new vDesk.Events.BubblingEvent("create", {
                             sender:  this,
@@ -204,7 +204,7 @@ vDesk.Contacts.Company.Editor = function Editor(Company, Enabled = true) {
      * @fires vDesk.Contacts.Company.Editor#delete
      */
     this.Delete = function() {
-        if(Company.ID !== null) {
+        if(Company.ID !== null){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -213,11 +213,11 @@ vDesk.Contacts.Company.Editor = function Editor(Company, Enabled = true) {
                         Parameters: {
                             ID: Company.ID
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         new vDesk.Events.BubblingEvent("delete", {
                             sender:  this,
                             company: Company
@@ -406,4 +406,3 @@ vDesk.Contacts.Company.Editor = function Editor(Company, Enabled = true) {
     GroupBox.Control.classList.add("CompanyEditor");
     GroupBox.Content.addEventListener("update", OnUpdate, false);
 };
-//700 -> 581 -> 453 -> 403

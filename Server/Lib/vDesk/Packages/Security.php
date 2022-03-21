@@ -16,9 +16,9 @@ use vDesk\Security\User;
 use vDesk\Struct\Collections\Observable\Collection;
 
 /**
- * Class Security represents ...
+ * Security Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Security
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Security extends Package implements IPackage {
@@ -47,9 +47,9 @@ final class Security extends Package implements IPackage {
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "vDesk"         => "1.0.0",
-        "Configuration" => "1.0.0",
-        "Events"        => "1.0.0"
+        "Modules"       => "1.0.1",
+        "Configuration" => "1.0.2",
+        "Events"        => "1.0.1"
     ];
 
     /**

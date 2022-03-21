@@ -1,10 +1,12 @@
 "use strict";
 /**
  * Initializes a new instance of the Administration class.
- * @class Class that represents a [...] for [...]. | Class providing functionality for [...].
+ * @class Class that represents a plugin for installing Updates.
+ * @property {HTMLDivElement} Control gets the underlying DOM-Node.
+ * @property {String} Title Gets the title of the Administration plugin.
  * @memberOf vDesk.Updates
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Updates
  */
 vDesk.Updates.Administration = function Administration() {
 
@@ -25,11 +27,11 @@ vDesk.Updates.Administration = function Administration() {
      * @listens vDesk.Updates.UpdateList#event:select
      */
     const OnSelect = Event => {
-        while(Container.hasChildNodes()) {
+        while(Container.hasChildNodes()){
             Container.removeChild(Container.lastChild);
         }
         Container.appendChild(Event.detail.update.Control);
-        Install.disabled = !vDesk.User.Permissions.InstallUpdate;
+        Install.disabled = !vDesk.Security.User.Current.Permissions.InstallUpdate;
         Download.disabled = false;
     };
 
@@ -42,16 +44,16 @@ vDesk.Updates.Administration = function Administration() {
                 {
                     Module:  "Updates",
                     Command: "Search",
-                    Ticket:  vDesk.User.Ticket
+                    Ticket:  vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(!Response.Status) {
+                if(!Response.Status){
                     alert(Response.Data);
                     return;
                 }
                 Updates.Clear();
-                while(Container.hasChildNodes()) {
+                while(Container.hasChildNodes()){
                     Container.removeChild(Container.lastChild);
                 }
                 Response.Data.forEach(Update => Updates.Add(new vDesk.Updates.UpdateList.Item(vDesk.Updates.Update.FromDataView(Update))));
@@ -81,7 +83,7 @@ vDesk.Updates.Administration = function Administration() {
                         Source: Item.Update.Source,
                         Hash:   Item.Update.Hash
                     },
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Buffer => {
@@ -95,7 +97,7 @@ vDesk.Updates.Administration = function Administration() {
             },
             true,
             Progress => {
-                if(Progress.download.lengthComputable) {
+                if(Progress.download.lengthComputable){
                     ProgressBar.value = (Progress.download.loaded / Progress.download.total) * 100;
                 }
             }
@@ -117,11 +119,11 @@ vDesk.Updates.Administration = function Administration() {
                         Source: Item.Update.Source,
                         Hash:   Item.Update.Hash
                     },
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(!Response.Status) {
+                if(!Response.Status){
                     alert(Response.Data);
                     return;
                 }
@@ -136,7 +138,7 @@ vDesk.Updates.Administration = function Administration() {
                     Install.disabled = true;
                     Download.disabled = true;
                 }
-                while(Container.hasChildNodes()) {
+                while(Container.hasChildNodes()){
                     Container.removeChild(Container.lastChild);
                 }
             }
@@ -166,14 +168,14 @@ vDesk.Updates.Administration = function Administration() {
                     Module:     "Updates",
                     Command:    "Deploy",
                     Parameters: {Update: Update},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     ProgressBar.className = "Finished";
                     Item.Update = vDesk.Updates.Update.FromDataView(Response.Data);
-                } else {
+                }else{
                     ProgressBar.className = "Error";
                     alert(Response.Data);
 
@@ -184,7 +186,7 @@ vDesk.Updates.Administration = function Administration() {
             },
             false,
             Progress => {
-                if(Progress.upload.lengthComputable) {
+                if(Progress.upload.lengthComputable){
                     ProgressBar.value = (Progress.upload.loaded / Progress.upload.total) * 100;
                 }
             }
@@ -249,7 +251,7 @@ vDesk.Updates.Administration = function Administration() {
     const Search = document.createElement("button");
     Search.className = "Button Icon SearchUpdates";
     Search.style.backgroundImage = `url("${vDesk.Visual.Icons.Updates.Search}")`;
-    Search.disabled = !vDesk.User.Permissions.InstallUpdate;
+    Search.disabled = !vDesk.Security.User.Current.Permissions.InstallUpdate;
     Search.textContent = vDesk.Locale.Updates.Search;
     Search.addEventListener("click", OnClickSearch, false);
     Controls.appendChild(Search);
@@ -285,7 +287,7 @@ vDesk.Updates.Administration = function Administration() {
     const Deploy = document.createElement("button");
     Deploy.className = "Button Icon Updates";
     Deploy.style.backgroundImage = `url("${vDesk.Visual.Icons.Updates.Upload}")`;
-    Deploy.disabled = !vDesk.User.Permissions.InstallUpdate
+    Deploy.disabled = !vDesk.Security.User.Current.Permissions.InstallUpdate
     Deploy.textContent = vDesk.Locale.Updates.Deploy;
     Deploy.addEventListener("click", () => OpenFileDialog.click(), false);
     Controls.appendChild(Deploy);

@@ -3,6 +3,7 @@
  * Searchfilter for searching calendar events by their title.
  * @type Object
  * @memberOf vDesk.Calendar.Search
+ * @package vDesk\Calendar
  */
 vDesk.Calendar.Search.Filter = {
     Module: "Calendar",

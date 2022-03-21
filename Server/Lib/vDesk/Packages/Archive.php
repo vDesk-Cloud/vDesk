@@ -25,7 +25,7 @@ use vDesk\Utils\Log;
 /**
  * Archive Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Archive
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Archive extends Package implements Locale\IPackage, Events\IPackage {
@@ -38,7 +38,7 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
+    public const Version = "1.0.1";
     
     /**
      * The name of the Package.
@@ -54,10 +54,10 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Events"   => "1.0.0",
-        "Locale"   => "1.0.0",
-        "Security" => "1.0.0",
-        "Search"   => "1.0.0"
+        "Events"   => "1.0.1",
+        "Locale"   => "1.0.2",
+        "Security" => "1.0.2",
+        "Search"   => "1.0.1"
     ];
     
     /**
@@ -400,7 +400,7 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
         //Create Archive.
         $Archive = new Element(
             null,
-            \vDesk::$User,
+            User::$Current,
             new Element(0),
             "Archive",
             Element::Folder,
@@ -419,7 +419,7 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
         
         $System = new Element(
             null,
-            \vDesk::$User,
+            User::$Current,
             $Archive,
             "System",
             Element::Folder,

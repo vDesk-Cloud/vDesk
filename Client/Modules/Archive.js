@@ -2,16 +2,16 @@
 /**
  * Initializes a new instance of the Archive class.
  * @module Archive
- * @class Module providing functionality for organizing files and folders.
+ * @class Archive Module.
  * @property {HTMLDivElement} Control Gets the underlying DOM-Node.
- * @property {String} Name Gets the name of the Archive Module.
- * @property {String} Title Gets the localized name of the Archive Module.
- * @property {String} Icon Gets the icon of the Archive Module.
- * @property {vDesk.Controls.ContextMenu} ContextMenu Gets the ContextMenu of the Archive Module.
+ * @property {String} Name Gets the name of the Archive.
+ * @property {String} Title Gets the localized name of the Archive.
+ * @property {String} Icon Gets the icon of the Archive.
+ * @property {vDesk.Controls.ContextMenu} ContextMenu Gets the ContextMenu of the Archive.
  * @implements vDesk.Modules.IVisualModule
  * @memberOf Modules
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Archive
  */
 Modules.Archive = function Archive() {
 
@@ -65,7 +65,7 @@ Modules.Archive = function Archive() {
         Event.detail.files.forEach(File => {
             const Element = new vDesk.Archive.Element(
                 null,
-                vDesk.User,
+                vDesk.Security.User.Current,
                 Event.detail.sender,
                 File.name,
                 vDesk.Archive.Element.File,
@@ -76,7 +76,7 @@ Modules.Archive = function Archive() {
                 File.size
             );
             ElementCache.Add(Element);
-            if(Event.detail.sender.ID === FolderView.CurrentFolder.ID) {
+            if(Event.detail.sender.ID === FolderView.CurrentFolder.ID){
                 FolderView.Add(Element);
             }
             Uploader.Upload(File, Element, TreeView.Add(Element));
@@ -93,7 +93,7 @@ Modules.Archive = function Archive() {
             .forEach(File => {
                 const Element = new vDesk.Archive.Element(
                     null,
-                    vDesk.User,
+                    vDesk.Security.User.Current,
                     FolderView.CurrentFolder,
                     File.name
                 );
@@ -109,7 +109,7 @@ Modules.Archive = function Archive() {
      * @param {CustomEvent} Event
      */
     const OnOpen = Event => {
-        if(Event.detail.sender.Type === vDesk.Archive.Element.Folder) {
+        if(Event.detail.sender.Type === vDesk.Archive.Element.Folder){
             //Fetch and display the children of the Element if its a folder.
             ElementCache.FetchElements(
                 Event.detail.sender,
@@ -123,7 +123,7 @@ Modules.Archive = function Archive() {
             FolderView.CurrentFolder = Event.detail.sender;
             Title.textContent = FolderView.CurrentFolder.Name;
             History.Add(Event.detail.sender);
-        } else {
+        }else{
             new vDesk.Archive.Element.Viewer.Window(Event.detail.sender).Show()
         }
 
@@ -135,7 +135,7 @@ Modules.Archive = function Archive() {
      */
     const Open = function(Element) {
         Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
-        if(Element.Type === vDesk.Archive.Element.Folder) {
+        if(Element.Type === vDesk.Archive.Element.Folder){
             FolderView.CurrentFolder = Element;
             History.Add(Element);
             Title.textContent = Element.Name;
@@ -148,7 +148,7 @@ Modules.Archive = function Archive() {
                 })
             );
 
-        } else {
+        }else{
             new vDesk.Archive.Element.Viewer.Window(Element).Show();
         }
     };
@@ -168,7 +168,7 @@ Modules.Archive = function Archive() {
     const AddFolder = function() {
         const Element = new vDesk.Archive.Element(
             null,
-            vDesk.User,
+            vDesk.Security.User.Current,
             FolderView.CurrentFolder,
             vDesk.Locale.Archive.NewFolder,
             vDesk.Archive.Element.Folder,
@@ -202,15 +202,15 @@ Modules.Archive = function Archive() {
                         Parent: Element.Parent.ID,
                         Name:   Element.Name
                     },
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     Element.ID = Response.Data.ID;
                     Element.AccessControlList = vDesk.Security.AccessControlList.FromDataView(Response.Data.AccessControlList);
                     TreeView.Find(Element).Element = Element;
-                } else {
+                }else{
                     alert(Response.Data);
                 }
             }
@@ -238,15 +238,15 @@ Modules.Archive = function Archive() {
                     Module:     "Archive",
                     Command:    "DeleteElements",
                     Parameters: {Elements: [Element.ID]},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     TreeView.Remove(Element);
                     FolderView.Remove(Element);
                     ElementCache.Remove(Element);
-                } else {
+                }else{
                     alert(Response.Data);
                 }
             }
@@ -266,17 +266,17 @@ Modules.Archive = function Archive() {
                     Module:     "Archive",
                     Command:    "DeleteElements",
                     Parameters: {Elements: Elements.map(Element => Element.ID)},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     Elements.forEach(Element => {
                         TreeView.Remove(Element);
                         FolderView.Remove(Element);
                         ElementCache.Remove(Element);
                     });
-                } else {
+                }else{
                     alert(Response.Data);
                 }
             }
@@ -318,11 +318,11 @@ Modules.Archive = function Archive() {
                     Module:     "Archive",
                     Command:    "GetBranch",
                     Parameters: {ID: ID},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     //Loop through branch and fetch its children.
                     Response.Data.forEach(ID => {
                         ElementCache.FetchElements(
@@ -346,10 +346,10 @@ Modules.Archive = function Archive() {
      */
     const OnElementDrop = Event => {
         //Check if more than 1 element has been selected before.
-        if(FolderView.Selected.length > 1) {
+        if(FolderView.Selected.length > 1){
             //Exclude the target if its in the selection.
             MoveTo(ElementCache.GetElement(Event.detail.sender.ID), FolderView.Selected.filter(Element => Element.ID !== Event.detail.sender.ID));
-        } else {
+        }else{
             MoveTo(ElementCache.GetElement(Event.detail.sender.ID), [Event.detail.element]);
         }
     };
@@ -362,10 +362,10 @@ Modules.Archive = function Archive() {
         Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
         window.removeEventListener("click", OnClickDeselect);
         window.removeEventListener("keydown", OnKeyDown);
-        if(!Element.Selected) {
+        if(!Element.Selected){
             Element.Selected = true;
         }
-        if(FolderView.CurrentFolder.ID !== Element.Parent.ID) {
+        if(FolderView.CurrentFolder.ID !== Element.Parent.ID){
             Open(Element.Parent);
         }
         FolderView.Enabled = false;
@@ -379,10 +379,10 @@ Modules.Archive = function Archive() {
      */
     const OnRenamed = Event => {
         //Check if the sender is a newly created folder.
-        if(Event.detail.sender.ID === null && Event.detail.sender.Type === vDesk.Archive.Element.Folder) {
+        if(Event.detail.sender.ID === null && Event.detail.sender.Type === vDesk.Archive.Element.Folder){
             Event.detail.sender.Name = Event.detail.name.new;
             CreateFolder(Event.detail.sender);
-        } else {
+        }else{
             //Else rename the existing element.
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
@@ -393,14 +393,14 @@ Modules.Archive = function Archive() {
                             ID:   Event.detail.sender.ID,
                             Name: Event.detail.name.new
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         Event.detail.sender.Name = Event.detail.name.new;
                         TreeView.Find(Event.detail.sender).Element = Event.detail.sender;
-                    } else {
+                    }else{
                         alert(Response.Data);
                     }
                 }
@@ -418,7 +418,7 @@ Modules.Archive = function Archive() {
      * @param {CustomEvent} Event
      */
     const OnRenameCanceled = Event => {
-        if(Event.detail.sender.ID === null && Event.detail.sender.Type === vDesk.Archive.Element.Folder) {
+        if(Event.detail.sender.ID === null && Event.detail.sender.Type === vDesk.Archive.Element.Folder){
             CreateFolder(Event.detail.sender);
         }
         OnClickDeselect();
@@ -432,16 +432,16 @@ Modules.Archive = function Archive() {
      * @param {KeyboardEvent} Event
      */
     const OnKeyDown = Event => {
-        switch(Event.key) {
+        switch(Event.key){
             case "Enter":
-                if(FolderView.Selected.length > 1) {
+                if(FolderView.Selected.length > 1){
                     FolderView.Selected.filter(Element => Element.Type === vDesk.Archive.Element.File).forEach(Element => Open(Element));
-                } else {
+                }else{
                     Open(FolderView.Selected[0]);
                 }
                 break;
             case "Delete":
-                if(!(Event.target instanceof HTMLSpanElement) && FolderView.Selected.length > 0) {
+                if(!(Event.target instanceof HTMLSpanElement) && FolderView.Selected.length > 0){
                     DeleteSelectedElements();
                 }
                 break;
@@ -450,8 +450,8 @@ Modules.Archive = function Archive() {
                 Open(RootElement);
                 break;
             default:
-                if(Event.ctrlKey) {
-                    switch(Event.key) {
+                if(Event.ctrlKey){
+                    switch(Event.key){
                         case "c":
                             CopyToClipboard();
                             break;
@@ -548,8 +548,8 @@ Modules.Archive = function Archive() {
      */
     const PasteFromClipboard = function() {
 
-        if(Clipboard.ContainsElements) {
-            switch(Clipboard.LastOperation) {
+        if(Clipboard.ContainsElements){
+            switch(Clipboard.LastOperation){
                 case vDesk.Archive.Clipboard.Operations.Copy:
                     CopyTo(FolderView.CurrentFolder, Clipboard.Elements);
                     break;
@@ -573,7 +573,7 @@ Modules.Archive = function Archive() {
         Ensure.Parameter(Elements, Array, "Elements");
 
         //Check if the User is allowed to add Elements to the target.
-        if(Target.Type === vDesk.Archive.Element.Folder && Target.AccessControlList.Write) {
+        if(Target.Type === vDesk.Archive.Element.Folder && Target.AccessControlList.Write){
 
             //Filter Elements the User can edit.
             Elements = Elements.filter(Element => Element.Parent.ID !== Target.ID && Element.ID !== Target.ID && Element.AccessControlList.Write);
@@ -588,21 +588,21 @@ Modules.Archive = function Archive() {
                             Target:   Target.ID,
                             Elements: Elements.map(Element => Element.ID)
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         Elements.forEach(Element => {
                             TreeView.Remove(Element);
                             Element.Parent = Target;
                             TreeView.Add(Element);
                             FolderView.Remove(Element);
                         });
-                        if(FolderView.CurrentFolder.ID === Target.ID) {
+                        if(FolderView.CurrentFolder.ID === Target.ID){
                             Elements.forEach(Element => FolderView.Add(Element));
                         }
-                    } else {
+                    }else{
                         alert(Response.Data);
                     }
                 }
@@ -620,7 +620,7 @@ Modules.Archive = function Archive() {
         Ensure.Parameter(Elements, Array, "Elements");
 
         //Check if the user is allowed to add elements to the target.
-        if(Target.AccessControlList.Write) {
+        if(Target.AccessControlList.Write){
             //Send command to the server.
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
@@ -631,13 +631,13 @@ Modules.Archive = function Archive() {
                             Target:   Target.ID,
                             Elements: Elements.filter(Element => Element.AccessControlList.Write).map(Element => Element.ID)
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         Refresh();
-                    } else {
+                    }else{
                         alert(Response.Data);
                     }
                 }
@@ -656,12 +656,12 @@ Modules.Archive = function Archive() {
      * @param {CustomEvent} Event
      */
     const OnContext = Event => {
-        if(ContextMenu.Visible) {
+        if(ContextMenu.Visible){
             ContextMenu.Hide();
         }
-        if(Event.detail.sender instanceof vDesk.Archive.FolderView) {
+        if(Event.detail.sender instanceof vDesk.Archive.FolderView){
             ContextMenu.Show(FolderView.CurrentFolder, Event.detail.x, Event.detail.y);
-        } else if(Event.detail.sender instanceof vDesk.Archive.Element) {
+        }else if(Event.detail.sender instanceof vDesk.Archive.Element){
             ContextMenu.Show(Event.detail.sender, Event.detail.x, Event.detail.y);
         }
     };
@@ -672,7 +672,7 @@ Modules.Archive = function Archive() {
      * @param {CustomEvent} Event
      */
     const OnSubmit = Event => {
-        switch(Event.detail.action) {
+        switch(Event.detail.action){
             case "open":
                 History.Add(Event.detail.target);
                 Open(Event.detail.target);
@@ -684,7 +684,7 @@ Modules.Archive = function Archive() {
                 Downloader.Download(Event.detail.target);
                 break;
             case "delete":
-                if(ContextMenu.Target.ID > 1) {
+                if(ContextMenu.Target.ID > 1){
                     DeleteElement(Event.detail.target);
                 }
                 break;
@@ -725,10 +725,10 @@ Modules.Archive = function Archive() {
      */
     const OnElementCreated = Event => {
         //Check if the event hasn't occurred before.
-        if(ElementCache.Find(Number.parseInt(Event.data)) === null) {
+        if(ElementCache.Find(Number.parseInt(Event.data)) === null){
             ElementCache.FetchElement(Number.parseInt(Event.data), Element => {
-                if(Element !== null) {
-                    if(FolderView.CurrentFolder.ID === Element.Parent.ID) {
+                if(Element !== null){
+                    if(FolderView.CurrentFolder.ID === Element.Parent.ID){
                         FolderView.Add(Element);
                     }
                     TreeView.Add(Element);
@@ -744,7 +744,7 @@ Modules.Archive = function Archive() {
      */
     const OnElementRenamed = Event => {
         const Element = ElementCache.Find(Number.parseInt(Event.data));
-        if(Element !== null) {
+        if(Element !== null){
             ElementCache.FetchElement(Element.ID, Renamed => Element.Name = Renamed.Name);
             (TreeView.Find(Element)).Element = Element;
         }
@@ -758,9 +758,9 @@ Modules.Archive = function Archive() {
     const OnElementMoved = Event => {
         const Element = ElementCache.Find(Number.parseInt(Event.data)) ?? ElementCache.GetElement(Number.parseInt(Event.data));
         TreeView.Remove(Element);
-        if(FolderView.CurrentFolder.ID === Element.Parent.ID) {
+        if(FolderView.CurrentFolder.ID === Element.Parent.ID){
             FolderView.Add(Element);
-        } else {
+        }else{
             FolderView.Remove(Element);
         }
         TreeView.Add(Element);
@@ -773,7 +773,7 @@ Modules.Archive = function Archive() {
      */
     const OnElementDeleted = Event => {
         const Element = ElementCache.Find(Number.parseInt(Event.data));
-        if(Element !== null) {
+        if(Element !== null){
             FolderView.Remove(Element);
             TreeView.Remove(Element);
             ElementCache.Remove(Element);
@@ -1044,7 +1044,7 @@ Modules.Archive = function Archive() {
             vDesk.Locale.Archive.Attributes,
             "attributes",
             vDesk.Visual.Icons.Archive.Attributes,
-            () => vDesk.User.Permissions.ReadAttributes
+            () => vDesk.Security.User.Current.Permissions.ReadAttributes
         )
     ]);
     ContextMenu.Control.addEventListener("submit", OnSubmit);
@@ -1202,9 +1202,9 @@ Modules.Archive = function Archive() {
         vDesk.Visual.Icons.View,
         false,
         () => {
-            if(FolderView.Selected.length > 1) {
+            if(FolderView.Selected.length > 1){
                 FolderView.Selected.filter(Element => Element.Type === vDesk.Archive.Element.File).forEach(Element => Open(Element));
-            } else {
+            }else{
                 Open(FolderView.Selected[0]);
             }
         }

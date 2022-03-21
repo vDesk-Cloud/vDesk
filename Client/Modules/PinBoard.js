@@ -1,12 +1,16 @@
+"use strict";
 /**
  * Initializes a new instance of the PinBoard class.
- * @module PinBoard
- * @class The pinboard module.
- * Provides functionality for adding and organizing coloured notes and attaching elements of the archivemodule for easy access.
+ * @class PinBoard Module
+ * @property {HTMLDivElement} Control gets the underlying DOM-Node.
+ * @property {String} Name Gets the name of the Module.
+ * @property {String} Title Gets the title of the Module.
+ * @property {String} Icon Gets the icon of the Module.
  * @memberOf Modules
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\PinBoard
  * @todo Implement coordinate system and translate coordinates of the Notes and Attachments to the size of the window.
+ * @todo Provide Interfaces and APIs to attach custom PinBoard-Elements.
  */
 Modules.PinBoard = function PinBoard() {
 
@@ -84,16 +88,16 @@ Modules.PinBoard = function PinBoard() {
                 {
                     Module:     "PinBoard",
                     Command:    Event.detail.sender instanceof vDesk.PinBoard.Note
-                                ? "UpdateNotePosition"
-                                : Event.detail.sender instanceof vDesk.PinBoard.Attachment
-                                  ? "UpdateAttachmentPosition"
-                                  : "",
+                                    ? "UpdateNotePosition"
+                                    : Event.detail.sender instanceof vDesk.PinBoard.Attachment
+                            ? "UpdateAttachmentPosition"
+                            : "",
                     Parameters: {
                         ID: Event.detail.sender.ID,
                         X:  Event.detail.sender.X,
                         Y:  Event.detail.sender.Y
                     },
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             )
         );
@@ -106,7 +110,7 @@ Modules.PinBoard = function PinBoard() {
      * @param {CustomEvent} Event
      */
     const OnResized = Event => {
-        if(Event.detail.sender instanceof vDesk.PinBoard.Note) {
+        if(Event.detail.sender instanceof vDesk.PinBoard.Note){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -119,7 +123,7 @@ Modules.PinBoard = function PinBoard() {
                             Width:  Event.detail.sender.Width,
                             Height: Event.detail.sender.Height
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 )
             );
@@ -133,7 +137,7 @@ Modules.PinBoard = function PinBoard() {
      * @param {CustomEvent} Event
      */
     const OnContentChanged = Event => {
-        if(Event.detail.sender instanceof vDesk.PinBoard.Note) {
+        if(Event.detail.sender instanceof vDesk.PinBoard.Note){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -143,12 +147,12 @@ Modules.PinBoard = function PinBoard() {
                             ID:      Event.detail.sender.ID,
                             Content: Event.detail.sender.Content.textContent
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 )
             );
         }
-        if(NewNote === Event.detail.sender) {
+        if(NewNote === Event.detail.sender){
             NewNote = null;
         }
     };
@@ -159,7 +163,7 @@ Modules.PinBoard = function PinBoard() {
      * @param {String} Color The color to set.
      */
     const ChangeColor = function(Note, Color) {
-        if(Note instanceof vDesk.PinBoard.Note) {
+        if(Note instanceof vDesk.PinBoard.Note){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -169,13 +173,13 @@ Modules.PinBoard = function PinBoard() {
                             ID:    Note.ID,
                             Color: Color
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         Note.Color = Color;
-                    } else {
+                    }else{
                         alert(Response.Data);
                     }
                 }
@@ -189,7 +193,7 @@ Modules.PinBoard = function PinBoard() {
      */
     const Select = function(Element) {
         Ensure.Parameter(Element, [vDesk.PinBoard.Note, vDesk.PinBoard.Attachment], "Element");
-        if(Element instanceof vDesk.PinBoard.Note) {
+        if(Element instanceof vDesk.PinBoard.Note){
             NoteGreenToolBarItem.Enabled = true;
             NoteBlueToolBarItem.Enabled = true;
             NoteYellowToolBarItem.Enabled = true;
@@ -197,7 +201,7 @@ Modules.PinBoard = function PinBoard() {
             NoteRedToolBarItem.Enabled = true;
             NoteCustomColorToolBarItem.Enabled = true;
             ViewAttachmentToolBarItem.Enabled = false;
-        } else if(Element instanceof vDesk.PinBoard.Attachment) {
+        }else if(Element instanceof vDesk.PinBoard.Attachment){
             ViewAttachmentToolBarItem.Enabled = true;
             NoteGreenToolBarItem.Enabled = false;
             NoteBlueToolBarItem.Enabled = false;
@@ -206,7 +210,7 @@ Modules.PinBoard = function PinBoard() {
             NoteRedToolBarItem.Enabled = false;
             NoteCustomColorToolBarItem.Enabled = false;
         }
-        if(SelectedElement !== null) {
+        if(SelectedElement !== null){
             SelectedElement.Selected = false;
         }
         SelectedElement = Element;
@@ -233,7 +237,7 @@ Modules.PinBoard = function PinBoard() {
      * @param {CustomEvent} Event
      */
     const OnOpen = Event => {
-        if(Event.detail.sender instanceof vDesk.PinBoard.Attachment) {
+        if(Event.detail.sender instanceof vDesk.PinBoard.Attachment){
             ShowAttachment(Event.detail.sender);
         }
     };
@@ -242,7 +246,7 @@ Modules.PinBoard = function PinBoard() {
      * Deselects any selected Note or Attachment and disables ToolBar Items and closes the ContextMenu.
      */
     const OnClick = function() {
-        if(SelectedElement !== null) {
+        if(SelectedElement !== null){
             SelectedElement.Selected = false;
         }
         ViewAttachmentToolBarItem.Enabled = false;
@@ -265,12 +269,12 @@ Modules.PinBoard = function PinBoard() {
      * @listens vDesk.PinBoard.Attachment#event:context
      */
     const OnContext = Event => {
-        if(ContextMenu.Visible) {
+        if(ContextMenu.Visible){
             ContextMenu.Hide();
         }
-        if(Event.target === Control) {
+        if(Event.target === Control){
             ContextMenu.Show(Control, Event.pageX, Event.pageY);
-        } else if(IsNoteOrAttachment(Event.detail.sender)) {
+        }else if(IsNoteOrAttachment(Event.detail.sender)){
             ContextMenu.Show(Event.detail.sender, Event.detail.x, Event.detail.y);
         }
     };
@@ -281,7 +285,7 @@ Modules.PinBoard = function PinBoard() {
      * @param {CustomEvent} Event
      */
     const OnSubmit = Event => {
-        switch(Event.detail.action) {
+        switch(Event.detail.action){
             case "Open":
                 ShowAttachment(Event.detail.target);
                 break;
@@ -321,7 +325,7 @@ Modules.PinBoard = function PinBoard() {
      * @param {CustomEvent} Event
      */
     const OnSubmitArchive = Event => {
-        if(Event.detail.action === "CreateattAchment") {
+        if(Event.detail.action === "CreateattAchment"){
             CreateAttachment(Event.detail.target);
         }
     };
@@ -330,7 +334,7 @@ Modules.PinBoard = function PinBoard() {
      * Creates and adds a new note to the PinBoard.
      */
     const CreateNote = function() {
-        if(NewNote === null) {
+        if(NewNote === null){
             //Execute command against the server.
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
@@ -344,11 +348,11 @@ Modules.PinBoard = function PinBoard() {
                             Y:      50,
                             Color:  vDesk.PinBoard.Note.Yellow
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         const Note = new vDesk.PinBoard.Note(
                             Response.Data,
                             160,
@@ -357,12 +361,7 @@ Modules.PinBoard = function PinBoard() {
                             120,
                             vDesk.PinBoard.Note.Yellow,
                             "",
-                            {
-                                Left:   10,
-                                Top:    10,
-                                Right:  10,
-                                Bottom: 10
-                            }
+                            {Left: 10, Top: 10, Right: 10, Bottom: 10}
                         );
                         Elements.push(Note);
                         NewNote = Note;
@@ -370,23 +369,21 @@ Modules.PinBoard = function PinBoard() {
                         SetOnTop(NewNote);
                         Select(NewNote);
                         NewNote.Content.focus();
-                    } else {
+                    }else{
                         alert(Response.Data);
                     }
                 }
             );
-        } else {
+        }else{
             SetOnTop(NewNote);
             Select(NewNote);
             NewNote.Content.focus();
         }
-
     };
 
     /**
      * Attaches a vDesk.Archive.Element on the PinBoard.
      * @param {vDesk.Archive.Element} Element The Element to add.
-     * @todo Provide Interfaces and APIs to attach custom PinBoard-Elements.
      */
     const CreateAttachment = function(Element) {
         Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
@@ -400,27 +397,22 @@ Modules.PinBoard = function PinBoard() {
                         Y:       200,
                         Element: Element.ID
                     },
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     const Attachment = new vDesk.PinBoard.Attachment(
                         Response.Data,
                         200,
                         200,
                         Element,
-                        {
-                            Left:   10,
-                            Top:    10,
-                            Right:  10,
-                            Bottom: 10
-                        }
+                        {Left: 10, Top: 10, Right: 10, Bottom: 10}
                     );
                     Elements.push(Attachment);
                     SetOnTop(Attachment);
                     Control.appendChild(Attachment.Control);
-                } else {
+                }else{
                     alert(Response.Data);
                 }
             }
@@ -434,7 +426,7 @@ Modules.PinBoard = function PinBoard() {
     const ShowAttachment = function(Attachment) {
         Ensure.Parameter(Attachment, vDesk.PinBoard.Attachment, "Attachment");
         const Module = vDesk.Modules.Archive;
-        if(Attachment.Element.Type === vDesk.Archive.Element.Folder) {
+        if(Attachment.Element.Type === vDesk.Archive.Element.Folder){
             vDesk.WorkSpace.Module = Module;
         }
         Module.GoToID(Attachment.Element.ID);
@@ -451,25 +443,25 @@ Modules.PinBoard = function PinBoard() {
                 {
                     Module:     "PinBoard",
                     Command:    Element instanceof vDesk.PinBoard.Note
-                                ? "DeleteNote"
-                                : Element instanceof vDesk.PinBoard.Attachment
-                                  ? "DeleteAttachment"
-                                  : "",
+                                    ? "DeleteNote"
+                                    : Element instanceof vDesk.PinBoard.Attachment
+                            ? "DeleteAttachment"
+                            : "",
                     Parameters: {ID: Element.ID},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
-                    if(SelectedElement === Element) {
+                if(Response.Status){
+                    if(SelectedElement === Element){
                         SelectedElement = null;
                     }
-                    if(NewNote === Element) {
+                    if(NewNote === Element){
                         NewNote = null;
                     }
                     Elements.splice(Elements.indexOf(Element), 1);
                     Control.removeChild(Element.Control);
-                } else {
+                }else{
                     alert(Response.Data);
                 }
             });
@@ -766,23 +758,18 @@ Modules.PinBoard = function PinBoard() {
                 Module:     "PinBoard",
                 Command:    "GetEntries",
                 Parameters: {},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         Response => {
-            if(Response.Status) {
+            if(Response.Status){
                 let Index = DefaultIndex;
                 const Fragment = document.createDocumentFragment();
                 //Add Notes to the PinBoard.
                 Response.Data.Notes.forEach(DataView => {
                     const Note = vDesk.PinBoard.Note.FromDataView(
                         DataView,
-                        {
-                            Left:   10,
-                            Top:    10,
-                            Right:  10,
-                            Bottom: 10
-                        }
+                        {Left: 10, Top: 10, Right: 10, Bottom: 10}
                     );
                     Note.StackOrder = Index;
                     Elements.push(Note);
@@ -792,12 +779,7 @@ Modules.PinBoard = function PinBoard() {
                 Response.Data.Attachments.forEach(DataView => {
                     const Attachment = vDesk.PinBoard.Attachment.FromDataView(
                         DataView,
-                        {
-                            Left:   10,
-                            Top:    10,
-                            Right:  10,
-                            Bottom: 10
-                        }
+                        {Left: 10, Top: 10, Right: 10, Bottom: 10}
                     );
                     Attachment.StackOrder = Index;
                     Index += 10;
@@ -805,10 +787,11 @@ Modules.PinBoard = function PinBoard() {
                     Fragment.appendChild(Attachment.Control);
                 });
                 Control.appendChild(Fragment);
-            } else {
+            }else{
                 alert(Response.Data);
             }
-        });
+        }
+    );
 };
 
 Modules.PinBoard.Implements(vDesk.Modules.IVisualModule);

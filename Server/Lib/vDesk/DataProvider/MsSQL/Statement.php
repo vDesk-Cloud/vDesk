@@ -32,15 +32,14 @@ class Statement implements IPreparedStatement {
      * Initializes a new instance of the Statement class.
      *
      * @param mixed  $Provider  Initializes the Statement with the specified connection resource.
-     * @param string $Statement Initializes the Statement with the specified resource returned from @see \pg_prepare().
-     * @param string $Name      Initializes the Statement with the specified optional name.
+     * @param string $Statement Initializes the Statement with the specified SQL-Statement.
      *
-     * @throws \vDesk\DataProvider\SQLException Thrown if the preparation of the statement failed.
+     * @throws \vDesk\DataProvider\SQLException Thrown if the preparation of the Statement failed.
      */
-    public function __construct(private mixed $Provider, public string $Statement, public string $Name = "") {
-        $this->Resource = \pg_prepare($this->Provider, $Name, $Statement);
+    public function __construct(private mixed $Provider, public string $Statement) {
+        $this->Resource = \sqlsrv_prepare($this->Provider, $Statement, $this->Values);
         if($this->Resource === false) {
-            throw new SQLException(\pg_last_error($Provider));
+            throw new SQLException(\sqlsrv_errors(\SQLSRV_ERR_ERRORS)[0] ?? "Couldn't prepare Statement!");
         }
     }
 
@@ -51,10 +50,8 @@ class Statement implements IPreparedStatement {
      *
      * @return \vDesk\DataProvider\MsSQL\Statement The current instance for further chaining.
      */
-    public function Apply(...$Values): self {
-        foreach($Values as $Value){
-            $this->Values[] = $Value;
-        }
+    public function Apply(mixed ...$Values): self {
+        $this->Values = $Values;
         return $this;
     }
 
@@ -65,9 +62,9 @@ class Statement implements IPreparedStatement {
      * @throws \vDesk\DataProvider\SQLException
      */
     public function Execute(): Result {
-        $Result = \pg_execute($this->Resource, $this->Statement, $this->Values);
+        $Result = \sqlsrv_execute($this->Resource);
         if($Result === false) {
-            throw new SQLException(\pg_last_error($this->Provider));
+            throw new SQLException(\sqlsrv_errors(\SQLSRV_ERR_ERRORS)[0] ?? "Couldn't execute Statement!");
         }
         return new Result($Result);
     }

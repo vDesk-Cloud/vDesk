@@ -43,7 +43,7 @@
  * @property {Boolean} Changed Gets a value indicating whether the Group of the GroupEditor has been changed.
  * @memberOf vDesk.Security.Configuration
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.Group.Editor = function Editor(Group, Enabled = false) {
     Ensure.Parameter(Group, vDesk.Security.Group, "Group");
@@ -109,7 +109,7 @@ vDesk.Security.Group.Editor = function Editor(Group, Enabled = false) {
 
                 //Apply new Permissions.
                 const Fragment = document.createDocumentFragment();
-                for(const Name in Value) {
+                for(const Name in Value){
                     const Permission = new vDesk.Security.Group.Permission(
                         Name,
                         vDesk.Locale.Permissions[Name],
@@ -146,7 +146,7 @@ vDesk.Security.Group.Editor = function Editor(Group, Enabled = false) {
     this.Save = function() {
 
         //Check if the group is not virtual.
-        if(Group.ID !== null) {
+        if(Group.ID !== null){
             //Populate changed permissions.
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
@@ -158,11 +158,11 @@ vDesk.Security.Group.Editor = function Editor(Group, Enabled = false) {
                             Name:        Group.Name,
                             Permissions: Group.Permissions
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         PreviousName = Group.Name;
                         PreviousPermissions = Object.assign({}, Group.Permissions);
                         Control.removeEventListener("update", OnUpdate, false);
@@ -176,7 +176,7 @@ vDesk.Security.Group.Editor = function Editor(Group, Enabled = false) {
                 }
             );
 
-        } else {
+        }else{
             //Save new group.
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
@@ -187,11 +187,11 @@ vDesk.Security.Group.Editor = function Editor(Group, Enabled = false) {
                             Name:        Group.Name,
                             Permissions: Group.Permissions
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         Group.ID = Response.Data.ID;
                         PreviousName = Group.Name;
                         PreviousPermissions = Object.assign({}, Group.Permissions);
@@ -210,18 +210,18 @@ vDesk.Security.Group.Editor = function Editor(Group, Enabled = false) {
      * @fires vDesk.Security.Group.Editor#delete
      */
     this.Delete = function() {
-        if(Group.ID !== null) {
+        if(Group.ID !== null){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
                         Module:     "Security",
                         Command:    "DeleteGroup",
                         Parameters: {ID: Group.ID},
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         new vDesk.Events.BubblingEvent("delete", {
                             sender: this,
                             group:  Group
@@ -270,7 +270,7 @@ vDesk.Security.Group.Editor = function Editor(Group, Enabled = false) {
             || Event.target === NameTextBox
             && Group.ID === null
             && vDesk.Security.Groups.find(Group => Group.Name.toLowerCase() === NameTextBox.value.toLowerCase()) !== undefined
-        ) {
+        ){
             NameTextBox.classList.add("Error");
             return;
         }
@@ -321,7 +321,7 @@ vDesk.Security.Group.Editor = function Editor(Group, Enabled = false) {
     PermissionsList.className = "Permissions";
     PermissionsList.addEventListener("change", OnChange, false);
 
-    for(const Name in Group.Permissions) {
+    for(const Name in Group.Permissions){
         const Permission = new vDesk.Security.Group.Permission(
             Name,
             vDesk.Locale.Permissions[Name],

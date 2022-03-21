@@ -19,33 +19,32 @@ use vDesk\Struct\Text;
 use vDesk\Utils\Log;
 
 /**
- * The central EventDispatcher of vDesk.
- * This module is responsible for dispatching and handling of occurring Events within the entire system.
+ * Events Module.
  *
- * @package Events
+ * @package vDesk\Events
  * @author  Kerry Holz <DevelopmentHero@gmail.com>
  */
 final class EventDispatcher extends Module implements IModule {
-    
+
     /**
      * The ID of the server-scripts-folder in the archive.
      */
     public const Scripts = 3;
-    
+
     /**
      * The dispatched Events of the EventDispatcher
      *
      * @var \vDesk\Struct\Collections\Dictionary
      */
     public static Dictionary $Events;
-    
+
     /**
      * The EventListeners of the EventDispatcher.
      *
      * @var \vDesk\Struct\Collections\Dictionary
      */
     private static Dictionary $Listeners;
-    
+
     /**
      * Initializes a new instance of the EventDispatcher class.
      *
@@ -56,7 +55,7 @@ final class EventDispatcher extends Module implements IModule {
         self::$Events    = new Dictionary();
         self::$Listeners = new Dictionary();
     }
-    
+
     /**
      * Dispatches an Event to the registered eventlisteners of the EventDispatcher.
      *
@@ -72,7 +71,7 @@ final class EventDispatcher extends Module implements IModule {
             self::$Events->Add($Event::Name, $Collection);
         }
     }
-    
+
     /**
      * Registers an EventListener for an Event.
      *
@@ -88,18 +87,18 @@ final class EventDispatcher extends Module implements IModule {
             self::$Listeners->Add($Listener->Name, $Collection);
         }
     }
-    
+
     /**
      * Handles all dispatched events.
      */
     public static function Schedule(): void {
-        
+
         //Change context to systemuser.
-        \vDesk::$User = new User(User::System);
-        
-        //Check if events have occured.
+        User::$Current = new User(User::System);
+
+        //Check if events have occurred.
         if(self::$Events->Count > 0) {
-            
+
             //if(Settings::$Local["Events"]["Directory"] !== null)
             //Load eventlistener-scripts.
             //@todo Check in the future if the Archive Module is installed.
@@ -117,16 +116,16 @@ final class EventDispatcher extends Module implements IModule {
             ) {
                 self::AddEventListener(include Settings::$Local["Archive"]["Directory"] . Path::Separator . $Listener["File"]);
             }
-            
+
             //Loop through dispatched events.
             foreach(self::$Events as $Name => $Events) {
-                
+
                 //Check if a listener has been registered for the event.
                 if(self::$Listeners->ContainsKey($Name)) {
-                    
+
                     //Loop through events of the same name.
                     foreach($Events as $Event) {
-                        
+
                         //Pass Event to registered listeners.
                         /** @var \vDesk\Events\EventListener $Listener */
                         foreach(self::$Listeners[$Name] as $Listener) {
@@ -144,23 +143,23 @@ final class EventDispatcher extends Module implements IModule {
             }
         }
     }
-    
+
     /**
      * Gets a Generator that continuously provides event-messages.
      *
      * @return \Generator A Generator that yields the recent occurred events as a SSE-conform string representation.
      */
     public static function GetEvents(): \Generator {
-        
+
         if(\ob_get_level() > 0) {
             \ob_end_clean();
         }
-        
+
         \header("Cache-Control: no-cache");
         \header("Content-Type: text/event-stream\n\n");
-        
+
         while(true) {
-            
+
             $TimeStamp = \time();
             //Fetch public events.
             foreach(
@@ -173,20 +172,20 @@ final class EventDispatcher extends Module implements IModule {
                 yield "event: {$Event["Name"]}\ndata: {$Event["Data"]}\n\n";
                 \flush();
             }
-            
+
             //Delete public events that occurred before the twice amount of interval seconds of the current time.
             Expression::Delete()
                       ->From("Events.Public")
                       ->Where(["TimeStamp" => ["<" => $TimeStamp - Settings::$Remote["Events"]["Interval"]]])
                       ->Execute();
-            
+
             //Fetch private events.
             foreach(
                 Expression::Select("*")
                           ->From("Events.Private")
                           ->Where([
                               "TimeStamp" => ["<=" => $TimeStamp],
-                              "Receiver"  => \vDesk::$User
+                              "Receiver"  => User::$Current
                           ])
                 as
                 $Event
@@ -194,36 +193,36 @@ final class EventDispatcher extends Module implements IModule {
                 yield "event: {$Event["Name"]}\ndata: {$Event["Data"]}\n\n";
                 \flush();
             }
-            
+
             //Delete private events.
             Expression::Delete()
                       ->From("Events.Private")
                       ->Where([
                           "TimeStamp" => ["<=" => $TimeStamp],
-                          "Receiver"  => \vDesk::$User
+                          "Receiver"  => User::$Current
                       ])
                       ->Execute();
             \sleep(Settings::$Remote["Events"]["Interval"]);
         }
     }
-    
+
     /**
      * Installs the eventlisteners of a specified Package.
      *
      * @param \vDesk\Packages\Package $Package The Package to install.
-     * @param \Phar          $Phar    The Phar archive of the Package.
-     * @param string         $Path    The installation path of the Package.
+     * @param \Phar                   $Phar    The Phar archive of the Package.
+     * @param string                  $Path    The installation path of the Package.
      */
     public static function Install(Package $Package, \Phar $Phar, string $Path): void {
         if($Package instanceof Events\IPackage) {
             Settings::$Local["Log"]["Level"] = Log::Warn;
             foreach($Package::Events as $Event => $File) {
-                
+
                 //Check if the path starts with a separator.
                 if(!Text::StartsWith($File, "/") && !Text::StartsWith($File, Path::Separator)) {
                     $File = Path::Separator . $File;
                 }
-                
+
                 $Listener = new FileInfo(
                     $Path .
                     Path::Separator .
@@ -232,7 +231,7 @@ final class EventDispatcher extends Module implements IModule {
                     Package::Lib .
                     Text::Replace($File, "/", Path::Separator)
                 );
-                
+
                 //@todo Use Fallback-directory if the Archive is not installed.
                 \vDesk\Modules::Archive()::Upload(
                     new Element(Settings::$Local["Events"]["Directory"]),
@@ -244,12 +243,12 @@ final class EventDispatcher extends Module implements IModule {
             Log::Info(__METHOD__, "Successfully installed eventlisteners of Package '" . $Package::Name . "' (v" . $Package::Version . ").");
         }
     }
-    
+
     /**
      * Uninstalls the eventlisteners of a specified Package.
      *
      * @param \vDesk\Packages\Package $Package The Package to uninstall.
-     * @param string         $Path    The installation path of the Package.
+     * @param string                  $Path    The installation path of the Package.
      */
     public static function Uninstall(Package $Package, string $Path): void {
         if($Package instanceof Events\IPackage) {

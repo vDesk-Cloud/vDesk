@@ -5,6 +5,7 @@
  * @param {vDesk.Archive.Element} Element Initializes the VideoPlayer with the Element to display.
  * @property {HTMLVideoElement} Control Gets the underlying DOM-Node.
  * @memberOf vDesk.Archive.Element.View
+ * @package vDesk\Archive
  */
 vDesk.Archive.Element.View.VideoPlayer = function VideoPlayer(Element) {
     Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
@@ -29,7 +30,7 @@ vDesk.Archive.Element.View.VideoPlayer = function VideoPlayer(Element) {
                 Module:     "Archive",
                 Command:    "Download",
                 Parameters: {ID: Element.ID},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         Buffer => {
@@ -39,11 +40,10 @@ vDesk.Archive.Element.View.VideoPlayer = function VideoPlayer(Element) {
         },
         true
     );
-
 };
+
 /**
- * The file extensions the plugin can handle
- * @type {Array}
+ * The file extensions the plugin can handle.
  * @enum {String}
  */
 vDesk.Archive.Element.View.VideoPlayer.Extensions = ["mp4", "webm", "avi", "mpg"];

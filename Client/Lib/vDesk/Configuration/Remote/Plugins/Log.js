@@ -1,13 +1,12 @@
 "use strict";
 /**
- *
  * Initializes a new instance of the Log class.
  * @class Plugin for viewing the system log of vDesk.
  * @property {HTMLDivElement} Control Gets the underlying DOM-Node.
  * @property {String} Title Gets the title of the Log plugin.
  * @memberOf vDesk.Configuration.Remote.Plugins
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Configuration
  */
 vDesk.Configuration.Remote.Plugins.Log = function Log() {
 
@@ -32,7 +31,7 @@ vDesk.Configuration.Remote.Plugins.Log = function Log() {
                     Module:     "Configuration",
                     Command:    "GetLog",
                     Parameters: {},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             FillTable,
@@ -50,13 +49,13 @@ vDesk.Configuration.Remote.Plugins.Log = function Log() {
                     Module:     "Configuration",
                     Command:    "ClearLog",
                     Parameters: {},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     Table.Rows.Clear();
-                } else {
+                }else{
                     alert(Response.Data);
                 }
             }
@@ -71,7 +70,7 @@ vDesk.Configuration.Remote.Plugins.Log = function Log() {
 
         const Bytes = new Uint8Array(Buffer);
 
-        if(Bytes.byteLength === 0) {
+        if(Bytes.byteLength === 0){
             return;
         }
 
@@ -82,12 +81,12 @@ vDesk.Configuration.Remote.Plugins.Log = function Log() {
         let Offset = (Bytes[0] === 239 && Bytes[1] === 187 && Bytes[2] === 191) ? 3 : 0;
 
         //Parse the logfile.
-        while(Offset < Bytes.length) {
+        while(Offset < Bytes.length){
 
             //Fetch line until next linefeed.
             let Index = Bytes.indexOf(0x0A, Offset);
             //Check if the last line has been reached.
-            if(!~Index) {
+            if(!~Index){
                 Index = Bytes.length;
             }
             const Line = Decoder.decode(Bytes.slice(Offset, Index++));
@@ -100,7 +99,7 @@ vDesk.Configuration.Remote.Plugins.Log = function Log() {
             Row.Module = Line.substring(Line.indexOf("{") + 1, Line.indexOf("}"));
             Row.Entry = Line.substring(Line.indexOf("}") + 2, Line.length);
 
-            switch(Row.Type) {
+            switch(Row.Type){
                 case "ERROR" :
                     Row.Control.classList.add("Error");
                     break;
@@ -192,7 +191,7 @@ vDesk.Configuration.Remote.Plugins.Log = function Log() {
     Clear.className = "Button Icon";
     Clear.style.backgroundImage = `url("${vDesk.Visual.Icons.Delete}")`;
     Clear.textContent = vDesk.Locale.vDesk.MaximizeClear;
-    Clear.disabled = !vDesk.User.Permissions.UpdateSettings;
+    Clear.disabled = !vDesk.Security.User.Current.Permissions.UpdateSettings;
     Clear.addEventListener("click", OnClickClearButton, false);
     Controls.appendChild(Clear);
 
@@ -202,7 +201,7 @@ vDesk.Configuration.Remote.Plugins.Log = function Log() {
                 Module:     "Configuration",
                 Command:    "GetLog",
                 Parameters: {},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         FillTable,

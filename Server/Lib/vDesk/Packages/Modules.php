@@ -7,11 +7,10 @@ use vDesk\DataProvider\Expression;
 use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
 use vDesk\Modules\Module\Command;
-
 use vDesk\Struct\Collections\Observable\Collection;
 
 /**
- * Class Packages represents ...
+ * Messenger Package manifest class.
  *
  * @package vDesk\Packages\Packages
  * @author  Kerry <DevelopmentHero@gmail.com>
@@ -26,7 +25,7 @@ final class Modules extends Package {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
+    public const Version = "1.0.1";
     
     /**
      * The name of the Package.

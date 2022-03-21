@@ -5,7 +5,7 @@
  * @memberOf vDesk.Calendar
  * @extends vDesk.Controls.Window
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Calendar
  */
 vDesk.Calendar.GotoDialog = function GotoDialog() {
     this.Extends(vDesk.Controls.Window);

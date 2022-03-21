@@ -20,7 +20,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the Permission is enabled.
  * @memberOf vDesk.Security.Group
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.Group.Permission = function Permission(Name = "", Description = "", Value = false, Enabled = true) {
     Ensure.Parameter(Name, Type.String, "Name");
