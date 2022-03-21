@@ -6,15 +6,14 @@ namespace vDesk\Packages;
 use vDesk\DataProvider\Expression;
 use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
-use vDesk\Locale\LocaleDictionary;
 use vDesk\Modules\Module\Command;
 use vDesk\Modules\Module\Command\Parameter;
 use vDesk\Struct\Collections\Observable\Collection;
 
 /**
- * Class Locale represents ...
+ * Locale Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Locale
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Locale extends Package {
@@ -27,7 +26,7 @@ final class Locale extends Package {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.0.2";
 
     /**
      * The name of the Package.
@@ -42,10 +41,7 @@ final class Locale extends Package {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = [
-        "vDesk"   => "1.0.1",
-        "Modules" => "1.0.0"
-    ];
+    public const Dependencies = ["Modules" => "1.0.1"];
 
     /**
      * The files and directories of the Package.
@@ -582,7 +578,7 @@ final class Locale extends Package {
     public static function Install(\Phar $Phar, string $Path): void {
 
         Expression::Create()
-                  ->Database("Locale")
+                  ->Schema("Locale")
                   ->Execute();
 
         Expression::Create()
@@ -710,7 +706,7 @@ final class Locale extends Package {
 
         //Drop database.
         Expression::Drop()
-                  ->Database("Locale")
+                  ->Schema("Locale")
                   ->Execute();
 
         //Delete files.

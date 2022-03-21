@@ -36,7 +36,7 @@ vDesk.Events.EventDispatcher = (function EventDispatcher() {
             Source.close();
         }
         Source = new EventSource(
-            `${vDesk.Connection.Address}&Module=EventDispatcher&Command=GetEvents&Ticket=${vDesk.User.Ticket}`);
+            `${vDesk.Connection.Address}&Module=EventDispatcher&Command=GetEvents&Ticket=${vDesk.Security.User.Current.Ticket}`);
         window.addEventListener("beforeunload", OnBeforeUnload, true);
         Source.onerror = e => console.log(e);
     };

@@ -6,11 +6,11 @@ namespace vDesk\IO;
 /**
  * Exception that is thrown when a connection error occurred.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
- * @package vDesk\IO
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class SocketException extends IOException {
-    
+
     /**
      * Initializes a new instance of the SocketException class.
      *

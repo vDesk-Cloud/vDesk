@@ -21,7 +21,7 @@
  * @property {Object<Boolean>} Permissions Gets or sets the rights of the User.
  * @memberOf vDesk.Security
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.User = function User(
     ID               = null,
@@ -44,7 +44,7 @@ vDesk.Security.User = function User(
     Ensure.Parameter(Memberships, Array, "Memberships");
     Ensure.Parameter(Permissions, Type.Object, "Permissions");
 
-    if(ID === vDesk.Security.User.System) {
+    if(ID === vDesk.Security.User.System){
         Object.keys(Permissions).forEach(Permission => Permissions[Permission] = true);
     }
 
@@ -119,7 +119,7 @@ vDesk.Security.User = function User(
             set:        Value => {
                 Ensure.Property(Value, Type.Object, "Permissions");
                 Permissions = Value;
-                if(ID === vDesk.Security.User.System) {
+                if(ID === vDesk.Security.User.System){
                     Object.keys(Permissions).forEach(Permission => Permissions[Permission] = true);
                 }
             }
@@ -152,3 +152,18 @@ vDesk.Security.User.FromDataView = function(DataView) {
  * @const
  */
 vDesk.Security.User.System = 1;
+
+/**
+ * The current logged in User.
+ * @type {Object|vDesk.Security.User}
+ */
+vDesk.Security.User.Current = {
+    ID:          null,
+    Name:        "",
+    Locale:      "DE",
+    Email:       null,
+    Permissions: {}
+};
+
+/** @alias */
+const User = vDesk.Security.User;

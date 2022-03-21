@@ -14,16 +14,17 @@ use vDesk\Search\Results;
 use vDesk\Search\Result;
 use vDesk\Security\AccessControlList;
 use vDesk\Security\UnauthorizedAccessException;
+use vDesk\Security\User;
 use vDesk\Utils\Log;
 
 /**
- * Central module for creating DataSets defining metadata of Elements and administrating Masks which define schemas for DataSets.
+ * MetaInformation Module.
  *
- * @package Archive/MetaInformation
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\MetaInformation
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class MetaInformation extends Module {
-    
+
     /**
      * Gets all existing Masks.
      *
@@ -41,7 +42,7 @@ final class MetaInformation extends Module {
         }
         return $Masks;
     }
-    
+
     /**
      * Creates a new Mask.
      *
@@ -50,16 +51,15 @@ final class MetaInformation extends Module {
      *
      * @return \vDesk\MetaInformation\Mask The newly created Mask.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to create new Masks.
-     *
      */
     public static function CreateMask(string $Name = null, array $Rows = null): Mask {
-        if(!\vDesk::$User->Permissions["CreateMask"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to create Mask without having permissions.");
+        if(!User::$Current->Permissions["CreateMask"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to create Mask without having permissions.");
             throw new UnauthorizedAccessException();
         }
-        
+
         $Mask = new Mask([], null, $Name ?? Command::$Parameters["Name"]);
-        
+
         //Append new rows.
         foreach($Rows ?? Command::$Parameters["Rows"] as $Row) {
             $Mask->Add(
@@ -74,13 +74,13 @@ final class MetaInformation extends Module {
                 )
             );
         }
-        
+
         $Mask->Save();
         (new Mask\Created($Mask))->Dispatch();
         return $Mask;
-        
+
     }
-    
+
     /**
      * Updates a Mask.
      *
@@ -94,19 +94,19 @@ final class MetaInformation extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Masks.
      */
     public static function UpdateMask(int $ID = null, string $Name = null, array $Add = null, array $Update = null, array $Delete = null): Mask {
-        if(!\vDesk::$User->Permissions["UpdateMask"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to update Mask " . Command::$Parameters["ID"] . " without having permissions.");
+        if(!User::$Current->Permissions["UpdateMask"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to update Mask " . Command::$Parameters["ID"] . " without having permissions.");
             throw new UnauthorizedAccessException();
         }
-        
+
         $Mask       = (new Mask([], $ID ?? Command::$Parameters["ID"]))->Fill();
         $Mask->Name = $Name ?? Command::$Parameters["Name"];
-        
+
         //Delete removed rows.
         foreach($Delete ?? Command::$Parameters["Delete"] as $Deleted) {
             $Mask->Remove($Mask->Find(static fn(Mask\Row $Row): bool => $Row->ID === $Deleted));
         }
-        
+
         //Update changed rows.
         foreach($Update ?? Command::$Parameters["Update"] as $Updated) {
             $MaskRow            = $Mask->Find(static fn(Mask\Row $Row): bool => $Row->ID === $Updated["ID"]);
@@ -116,7 +116,7 @@ final class MetaInformation extends Module {
             $MaskRow->Required  = $Updated["Required"];
             $MaskRow->Validator = $Updated["Validator"] ?? null;
         }
-        
+
         //Append added rows.
         foreach($Add ?? Command::$Parameters["Add"] as $Added) {
             $Mask->Add(
@@ -131,13 +131,13 @@ final class MetaInformation extends Module {
                 )
             );
         }
-        
+
         $Mask->Save();
         (new Mask\Updated($Mask))->Dispatch();
         return $Mask;
-        
+
     }
-    
+
     /**
      * Deletes a Mask.
      *
@@ -147,8 +147,8 @@ final class MetaInformation extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to delete Masks.
      */
     public static function DeleteMask(int $ID = null): bool {
-        if(!\vDesk::$User->Permissions["DeleteMask"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to delete Mask " . Command::$Parameters["ID"] . " without having permissions.");
+        if(!User::$Current->Permissions["DeleteMask"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to delete Mask " . Command::$Parameters["ID"] . " without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Mask = new Mask([], $ID ?? Command::$Parameters["ID"]);
@@ -156,7 +156,7 @@ final class MetaInformation extends Module {
         (new Mask\Deleted($Mask))->Dispatch();
         return true;
     }
-    
+
     /**
      * Gets the DataSet of a specified Element.
      *
@@ -166,8 +166,8 @@ final class MetaInformation extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to read DataSets.
      */
     public static function GetDataSet(Element $Element = null): ?DataSet {
-        if(!\vDesk::$User->Permissions["ReadDataSet"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to get DataSet without having permissions.");
+        if(!User::$Current->Permissions["ReadDataSet"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to get DataSet without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $Element ??= new Element(Command::$Parameters["Element"]);
@@ -187,7 +187,7 @@ final class MetaInformation extends Module {
         }
         return null;
     }
-    
+
     /**
      * Creates a new DataSet.
      *
@@ -199,14 +199,14 @@ final class MetaInformation extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to create new DataSets.
      */
     public static function CreateDataSet(Element $Element = null, Mask $Mask = null, array $Rows = null): DataSet {
-        if(!\vDesk::$User->Permissions["CreateDataSet"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to create DataSet without having permissions.");
+        if(!User::$Current->Permissions["CreateDataSet"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to create DataSet without having permissions.");
             throw new UnauthorizedAccessException();
         }
-        
+
         $DataSet          = DataSet::FromMask(($Mask ?? new Mask([], Command::$Parameters["Mask"]))->Fill());
         $DataSet->Element = $Element ?? new Element(Command::$Parameters["Element"]);
-        
+
         //Set values.
         foreach($Rows ?? Command::$Parameters["Rows"] as $Row) {
             /** @var DataSet\Row $DataSetRow */
@@ -216,12 +216,12 @@ final class MetaInformation extends Module {
             }
             $DataSetRow->Value = $Row["Value"];
         }
-        
+
         $DataSet->Save();
         (new DataSet\Created($DataSet))->Dispatch();
         return $DataSet;
     }
-    
+
     /**
      * Updates a DataSet.
      *
@@ -232,13 +232,13 @@ final class MetaInformation extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update DataSets.
      */
     public static function UpdateDataSet(int $ID = null, array $Rows = null): DataSet {
-        if(!\vDesk::$User->Permissions["UpdateDataSet"]) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to see update DataSet  without having permissions.");
+        if(!User::$Current->Permissions["UpdateDataSet"]) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to see update DataSet  without having permissions.");
             throw new UnauthorizedAccessException();
         }
-        
+
         $DataSet = (new DataSet([], $ID ?? Command::$Parameters["ID"]))->Fill();
-        
+
         //Set values.
         foreach($Rows ?? Command::$Parameters["Rows"] as $Row) {
             /** @var DataSet\Row $DataSetRow */
@@ -248,12 +248,12 @@ final class MetaInformation extends Module {
             }
             $DataSetRow->Value = $Row["Value"];
         }
-        
+
         $DataSet->Save();
         (new DataSet\Updated($DataSet))->Dispatch();
         return $DataSet;
     }
-    
+
     /**
      * Deletes a DataSet.
      *
@@ -263,8 +263,8 @@ final class MetaInformation extends Module {
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to delete DataSets.
      */
     public static function DeleteDataSet(int $ID = null): bool {
-        if(!\vDesk::$User->Permissions["DeleteDataSet"]) {
-            Log::Info(__METHOD__, \vDesk::$User->Name . " tried to delete DataSet without having permissions.");
+        if(!User::$Current->Permissions["DeleteDataSet"]) {
+            Log::Info(__METHOD__, User::$Current->Name . " tried to delete DataSet without having permissions.");
             throw new UnauthorizedAccessException();
         }
         $DataSet = new DataSet([], $ID ?? Command::$Parameters["ID"]);
@@ -272,7 +272,7 @@ final class MetaInformation extends Module {
         (new DataSet\Deleted($DataSet))->Dispatch();
         return true;
     }
-    
+
     /**
      * Searches the DataSets for a specified matching set of values.
      *
@@ -287,7 +287,7 @@ final class MetaInformation extends Module {
         $Values  ??= Command::$Parameters["Values"];
         $Strict  ??= Command::$Parameters["Strict"] ?? false;
         $Results = new Results();
-        
+
         $Expression = Expression::Select()
                                 ->Distinct(
                                     "Elements.ID",
@@ -302,7 +302,7 @@ final class MetaInformation extends Module {
                                     "DataSets.Element" => "Elements.ID",
                                     "DataSets.Mask"    => $ID ?? Command::$Parameters["ID"]
                                 ]);
-        
+
         if($All ?? Command::$Parameters["All"] ?? false) {
             foreach($Values as $Row) {
                 $Expression->InnerJoin("MetaInformation.DataSetRows", $Alias = "Row{$Row["ID"]}")
@@ -327,9 +327,9 @@ final class MetaInformation extends Module {
                                $Values
                            )
                        ]);
-            
+
         }
-        
+
         foreach($Expression as $Element) {
             if((new AccessControlList([], (int)$Element["AccessControlList"]))->Read) {
                 $Results->Add(
@@ -347,7 +347,7 @@ final class MetaInformation extends Module {
         }
         return $Results;
     }
-    
+
     /**
      * Gets the status information of the MetaInformation.
      *
@@ -359,5 +359,5 @@ final class MetaInformation extends Module {
                                         ->From("MetaInformation.DataSets")()
         ];
     }
-    
+
 }

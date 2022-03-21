@@ -6,7 +6,7 @@
  * @extends vDesk.Controls.Window
  * @memberOf vDesk.Contacts.Company.Editor
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Contacts
  */
 vDesk.Contacts.Company.Editor.Window = function Window(Company) {
     Ensure.Property(Company, vDesk.Contacts.Company, "Company");
@@ -63,7 +63,7 @@ vDesk.Contacts.Company.Editor.Window = function Window(Company) {
         vDesk.Visual.Icons.Save,
         false,
         () => {
-            if(CompanyEditor.Changed) {
+            if(CompanyEditor.Changed){
                 CompanyEditor.Save();
             }
         }
@@ -90,7 +90,7 @@ vDesk.Contacts.Company.Editor.Window = function Window(Company) {
     const DeleteItem = new vDesk.Controls.ToolBar.Item(
         vDesk.Locale.vDesk.Delete,
         vDesk.Visual.Icons.Delete,
-        Company.ID !== null && vDesk.User.Permissions.DeleteCompany,
+        Company.ID !== null && vDesk.Security.User.Current.Permissions.DeleteCompany,
         () => CompanyEditor.Delete()
     );
 

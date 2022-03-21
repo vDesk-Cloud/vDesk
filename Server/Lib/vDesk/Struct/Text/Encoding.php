@@ -6,6 +6,7 @@ namespace vDesk\Struct\Text;
 /**
  * Enumeration of string encoding sequences.
  *
+ * @package vDesk
  * @author Kerry <DevelopmentHero@gmail.com>
  */
 final class Encoding {

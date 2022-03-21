@@ -83,7 +83,7 @@ class User implements IModel {
      *
      * @var null|\vDesk\Security\User
      */
-    public static ?User $Current;
+    public static ?User $Current = null;
     
     /**
      * Initializes a new instance of the User class.

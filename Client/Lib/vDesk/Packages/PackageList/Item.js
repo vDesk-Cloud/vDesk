@@ -18,7 +18,7 @@
  * @property {Boolean} Selected Gets or sets a value indicating whether the Item is selected.
  * @memberOf vDesk.Packages.PackageList
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Packages
  */
 vDesk.Packages.PackageList.Item = function Item(Package, Enabled = true) {
     Ensure.Parameter(Package, vDesk.Packages.Package, "Package");
@@ -61,9 +61,9 @@ vDesk.Packages.PackageList.Item = function Item(Package, Enabled = true) {
 
                 Enabled = Value;
 
-                if(Value) {
+                if(Value){
                     Control.addEventListener("click", OnClick, false);
-                } else {
+                }else{
                     Control.removeEventListener("click", OnClick, false);
                 }
 
@@ -92,10 +92,9 @@ vDesk.Packages.PackageList.Item = function Item(Package, Enabled = true) {
     Control.classList.toggle("Disabled", !Enabled);
     Control.draggable = Enabled;
     Control.style.cursor = Enabled ? "grab" : "pointer";
-    if(Enabled) {
+    if(Enabled){
         Control.addEventListener("click", OnClick, false);
     }
-
 
     /**
      * The name span of the Item.

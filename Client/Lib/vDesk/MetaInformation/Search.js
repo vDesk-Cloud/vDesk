@@ -9,7 +9,7 @@
  * @memberOf vDesk.MetaInformation
  * @implements vDesk.Search.ICustomSearch
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.Search = function Search() {
 
@@ -47,7 +47,7 @@ vDesk.MetaInformation.Search = function Search() {
      * Eventhandler that listens on the 'click' event.
      */
     const OnClick = () => {
-        if(!DataSet.Rows.every(Row => Row.Value === null)) {
+        if(!DataSet.Rows.every(Row => Row.Value === null)){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -64,15 +64,15 @@ vDesk.MetaInformation.Search = function Search() {
                             All:    AllCheckBox.checked,
                             Strict: StrictCheckBox.checked
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         ResultList.Items = Response.Data.map(DataView => {
                             const Result = new vDesk.Search.Results[DataView.Type](DataView);
                             //Check if the result implements the IResult interface.
-                            if(Result instanceof vDesk.Search.IResult) {
+                            if(Result instanceof vDesk.Search.IResult){
                                 return new vDesk.Search.ResultList.Item(Result);
                             }
                             //Otherwise use the default result.

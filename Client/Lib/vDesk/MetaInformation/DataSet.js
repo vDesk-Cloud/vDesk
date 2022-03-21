@@ -1,10 +1,10 @@
+"use strict";
 /**
  * @typedef {Object} DataSet Represents the data of a dataset.
  * @property {Number} ID Gets the ID of the dataset.
  * @property {Number} MaskID Gets the ID of the mask the dataset has been tagged under.
  * @property {Number} Rows Gets the DataRows of the dataset.
  */
-
 /**
  * Initializes a new instance of the DataSet class.
  * @class Represents a set of metadata of an @link vDesk.Archive.Element
@@ -19,7 +19,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the DataSet is enabled.
  * @memberOf vDesk.MetaInformation
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.DataSet = function DataSet(Mask, ID = null, Rows = [], Enabled = true) {
     Ensure.Parameter(Mask, vDesk.MetaInformation.Mask, "Mask");
@@ -78,7 +78,7 @@ vDesk.MetaInformation.DataSet = function DataSet(Mask, ID = null, Rows = [], Ena
                 const Fragment = document.createDocumentFragment();
                 Value.forEach(DataRow => {
                     Ensure.Parameter(DataRow, vDesk.MetaInformation.DataSet.Row, "DataRow");
-                    if(Mask.Rows.find(MaskRow => MaskRow.ID === DataRow.Row.ID) === undefined) {
+                    if(Mask.Rows.find(MaskRow => MaskRow.ID === DataRow.Row.ID) === undefined){
                         throw new ArgumentError(`MaskRow with ID: [${DataRow.Row.ID}] of Mask: [${Mask.Name}] doesn't exist!`);
                     }
                     Rows.push(DataRow);
@@ -109,13 +109,12 @@ vDesk.MetaInformation.DataSet = function DataSet(Mask, ID = null, Rows = [], Ena
         Ensure.Parameter(Row, vDesk.MetaInformation.DataSet.Row, "Row");
 
         //Check if the associated MaskRow exists.
-        if(Rows.find(DataRow => DataRow.Row.ID === Row.Row.ID) !== undefined) {
+        if(Rows.find(DataRow => DataRow.Row.ID === Row.Row.ID) !== undefined){
             throw new ArgumentError(`Data for MaskRow with ID: [${Row.Row.ID}] has been already set!`);
         }
 
         Rows.push(Row);
         Control.appendChild(Row.Control);
-
     };
 
     /**
@@ -124,7 +123,6 @@ vDesk.MetaInformation.DataSet = function DataSet(Mask, ID = null, Rows = [], Ena
     this.Clear = function() {
         //Remove elements.
         Rows.forEach(DataRow => Control.removeChild(DataRow.Control));
-
         //Clear array
         Rows = [];
     };
@@ -149,7 +147,7 @@ vDesk.MetaInformation.DataSet = function DataSet(Mask, ID = null, Rows = [], Ena
     //Fill DataSet with empty DataSet.Rows.
     Mask.Rows.forEach(MaskRow => {
         let DataRow = Rows.find(DataRow => DataRow.Row.ID === MaskRow.ID);
-        if(DataRow === undefined) {
+        if(DataRow === undefined){
             DataRow = new vDesk.MetaInformation.DataSet.Row(MaskRow);
             Rows.push(DataRow);
         }
@@ -172,8 +170,8 @@ vDesk.MetaInformation.DataSet.FromDataView = function(DataView) {
         DataView?.Rows?.map(
             Row => new vDesk.MetaInformation.DataSet.Row(
                 Mask.Rows.find(MaskRow => MaskRow.ID === Row.Row?.ID),
-        Row?.ID ?? null,
-        Row?.Value ?? null
+                Row?.ID ?? null,
+                Row?.Value ?? null
             )
         ) ?? []
     );

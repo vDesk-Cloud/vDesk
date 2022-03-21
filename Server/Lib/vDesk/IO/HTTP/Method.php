@@ -6,7 +6,7 @@ namespace vDesk\IO\HTTP;
 /**
  * Enumeration of common HTTP request methods.
  *
- * @package vDesk\IO\HTTP\Request
+ * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Method {

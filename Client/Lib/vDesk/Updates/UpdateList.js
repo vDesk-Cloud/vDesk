@@ -8,10 +8,9 @@
  * @property {vDesk.Updates.UpdateList.Item} detail.item The selected Item.
  * @property {vDesk.Updates.Update} detail.user The Update of the selected Item.
  */
-
 /**
  * Initializes a new instance of the UpdateList class.
- * @class Represents a list of all installed Updates.
+ * @class Represents a list of  Updates.
  * @param {Array<vDesk.Updates.UpdateList.Item>} [Items=[]] Initializes the UpdateList with the specified set of Items.
  * @param {Boolean} [Enabled=true] Flag indicating whether the UpdateList is enabled.
  * @property {HTMLUListElement} Control Gets the underlying DOM-Node.
@@ -20,7 +19,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the UpdateList is enabled.
  * @memberOf vDesk.Updates
  * @author Kerry <DevelopmentHero@gmail.com>
- * @todo Seriously, create a f*ckin generic List-Control...
+ * @package vDesk\Updates
  */
 vDesk.Updates.UpdateList = function UpdateList(Items = [], Enabled = true) {
     Ensure.Parameter(Items, Array, "Items");
@@ -58,11 +57,11 @@ vDesk.Updates.UpdateList = function UpdateList(Items = [], Enabled = true) {
             get:        () => Selected,
             set:        Value => {
                 Ensure.Property(Value, vDesk.Updates.UpdateList.Item, "Selected", true);
-                if(Selected !== null) {
+                if(Selected !== null){
                     Selected.Selected = false;
                 }
                 Selected = Value;
-                if(Value !== null) {
+                if(Value !== null){
                     Selected.Selected = true;
                 }
             }
@@ -87,7 +86,7 @@ vDesk.Updates.UpdateList = function UpdateList(Items = [], Enabled = true) {
     const OnSelect = Event => {
         Event.stopPropagation();
 
-        if(Selected !== null) {
+        if(Selected !== null){
             Selected.Selected = false;
         }
         Selected = Event.detail.sender;
@@ -129,7 +128,7 @@ vDesk.Updates.UpdateList = function UpdateList(Items = [], Enabled = true) {
     this.Remove = function(Item) {
         Ensure.Parameter(Item, vDesk.Updates.UpdateList.Item, "Item");
         const Index = Items.indexOf(Item);
-        if(~Index) {
+        if(~Index){
             Control.removeChild(Item.Control);
             Items.splice(Index, 1);
         }
@@ -168,15 +167,15 @@ vDesk.Updates.UpdateList.FromUpdates = function() {
             {
                 Module:  "Updates",
                 Command: "Hosted",
-                Ticket:  vDesk.User.Ticket
+                Ticket:  vDesk.Security.User.Current.Ticket
             }
         )
     );
-    if(Response.Status) {
+    if(Response.Status){
         return new vDesk.Updates.UpdateList(
             Response.Data.map(Update => new vDesk.Updates.UpdateList.Item(vDesk.Updates.Update.FromDataView(Update)))
         );
-    } else {
+    }else{
         alert(Response.Data);
     }
 };

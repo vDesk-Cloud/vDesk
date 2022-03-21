@@ -55,7 +55,7 @@ vDesk.Search.ResultList = function ResultList() {
      * The collator of the ResultList.
      * @type {Intl.Collator}
      */
-    const Collator = new Intl.Collator(vDesk.User.Locale.toLowerCase(), {
+    const Collator = new Intl.Collator(vDesk.Security.User.Current.Locale.toLowerCase(), {
         sensitivity: "base",
         numeric:     true
     });

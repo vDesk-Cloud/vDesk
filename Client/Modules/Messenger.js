@@ -1,3 +1,12 @@
+"use strict";
+/**
+ * Initializes a new instance of the Messenger class.
+ * @class Messenger Module
+ * @extends vDesk.Controls.Window
+ * @memberOf Modules
+ * @author Kerry <DevelopmentHero@gmail.com>
+ * @package vDesk\Messenger
+ */
 Modules.Messenger = function Messenger() {
 
     this.Extends(vDesk.Controls.Window, vDesk.Visual.Icons.Messenger.Message, vDesk.Locale.Messenger.Messages);
@@ -8,10 +17,10 @@ Modules.Messenger = function Messenger() {
      * @param {CustomEvent} Event
      */
     const OnSelectUserChats = Event => {
-        if(UserConversation.hasChildNodes()) {
+        if(UserConversation.hasChildNodes()){
             UserConversation.removeChild(UserConversation.lastChild);
         }
-        if(Event.detail.chat.Unread > 0) {
+        if(Event.detail.chat.Unread > 0){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -22,11 +31,11 @@ Modules.Messenger = function Messenger() {
                             Date:   new Date(),
                             Amount: Event.detail.chat.Unread
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         Event.detail.chat.Conversation.AddMessages(
                             ...Response.Data.map(Message => vDesk.Messenger.Users.Message.FromDataView(Message)));
                         Event.detail.chat.Unread = 0;
@@ -48,13 +57,13 @@ Modules.Messenger = function Messenger() {
                 {
                     Module:  "Messenger",
                     Command: "GetUnreadUserMessages",
-                    Ticket:  vDesk.User.Ticket
+                    Ticket:  vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
                 Response.Data.forEach((Amount, Sender) => {
                     const Chat = UserChats.Chats.find(Chat => Chat.Sender.ID === Number(Sender));
-                    if(Chat === UserChats.Selected) {
+                    if(Chat === UserChats.Selected){
                         vDesk.Connection.Send(
                             new vDesk.Modules.Command(
                                 {
@@ -65,11 +74,11 @@ Modules.Messenger = function Messenger() {
                                         Date:   new Date(),
                                         Amount: 1
                                     },
-                                    Ticket:     vDesk.User.Ticket
+                                    Ticket:     vDesk.Security.User.Current.Ticket
                                 }
                             ),
                             Response => {
-                                if(Response.Status) {
+                                if(Response.Status){
                                     Chat.Conversation.AddMessages(
                                         ...Response.Data.map(Message => vDesk.Messenger.Users.Message.FromDataView(Message))
                                     );
@@ -77,7 +86,7 @@ Modules.Messenger = function Messenger() {
                                 }
                             }
                         );
-                    } else {
+                    }else{
                         Chat.Unread = Amount;
                     }
                 });
@@ -102,9 +111,9 @@ Modules.Messenger = function Messenger() {
     const OnMessengerUsersMessageReceived = Event => {
         const Message = JSON.parse(Event.data);
         const Chat = UserChats.Chats.find(Chat => Chat.Sender.ID === Message.Recipient);
-        if(Chat !== undefined) {
+        if(Chat !== undefined){
             const ReceivedMessage = Chat.Conversation.Messages.find(ReceivedMessage => ReceivedMessage.ID === Message.ID);
-            if(ReceivedMessage !== undefined && ReceivedMessage.Status < vDesk.Messenger.Users.Message.Received) {
+            if(ReceivedMessage !== undefined && ReceivedMessage.Status < vDesk.Messenger.Users.Message.Received){
                 ReceivedMessage.Status = vDesk.Messenger.Users.Message.Received;
             }
         }
@@ -119,9 +128,9 @@ Modules.Messenger = function Messenger() {
     const OnMessengerUsersMessageRead = Event => {
         const Message = JSON.parse(Event.data);
         const Chat = UserChats.Chats.find(Chat => Chat.Sender.ID === Message.Recipient);
-        if(Chat !== undefined) {
+        if(Chat !== undefined){
             const ReadMessage = Chat.Conversation.Messages.find(ReadMessage => ReadMessage.ID === Message.ID);
-            if(ReadMessage !== undefined) {
+            if(ReadMessage !== undefined){
                 ReadMessage.Status = vDesk.Messenger.Users.Message.Read;
             }
         }
@@ -135,10 +144,10 @@ Modules.Messenger = function Messenger() {
      * @param {CustomEvent} Event
      */
     const OnSelectGroupChats = Event => {
-        if(GroupConversation.hasChildNodes()) {
+        if(GroupConversation.hasChildNodes()){
             GroupConversation.removeChild(GroupConversation.lastChild);
         }
-        if(Event.detail.chat.Unread > 0) {
+        if(Event.detail.chat.Unread > 0){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -149,11 +158,11 @@ Modules.Messenger = function Messenger() {
                             Date:   new Date(),
                             Amount: Event.detail.chat.Unread
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         Event.detail.chat.Conversation.AddMessages(
                             ...Response.Data.map(Message => vDesk.Messenger.Groups.Message.FromDataView(Message)));
                         Event.detail.chat.Unread = 0;
@@ -182,16 +191,16 @@ Modules.Messenger = function Messenger() {
                         Date:   new Date(),
                         Amount: 1
                     },
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Chat === GroupChats.Selected) {
+                if(Chat === GroupChats.Selected){
                     Chat.Conversation.AddMessages(
                         ...Response.Data.map(Message => vDesk.Messenger.Groups.Message.FromDataView(Message))
                     );
                     Chat.Conversation.Scroll();
-                } else {
+                }else{
                     Chat.Unread += Response.Data.length;
                 }
 

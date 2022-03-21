@@ -43,7 +43,7 @@
  * @property {Boolean} Changed Gets a value indicating whether the data of the current edited DataSet of Editor has been changed.
  * @memberOf vDesk.MetaInformation.DataSet
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, Enabled = false) {
     Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
@@ -99,7 +99,7 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
             set:        Value => {
                 Ensure.Property(Value, vDesk.MetaInformation.DataSet, "DataSet", true);
 
-                if(DataSet !== null) {
+                if(DataSet !== null){
                     Control.removeChild(DataSet.Control);
                 }
 
@@ -110,13 +110,13 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
                 Updated = [];
                 Deleted = [];
 
-                if(Value !== null) {
+                if(Value !== null){
                     Control.textContent = "";
-                    if(Value.ID !== null) {
+                    if(Value.ID !== null){
                         PreviousDataSet = vDesk.MetaInformation.DataSet.FromDataView(Value);
                     }
                     Control.appendChild(Value.Control);
-                } else {
+                }else{
                     Control.textContent = vDesk.Locale.MetaInformation.NoDataSet;
                 }
             }
@@ -131,7 +131,7 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
             set:        Value => {
                 Ensure.Property(Value, Type.Boolean, "Enabled");
                 Enabled = Value;
-                if(DataSet !== null) {
+                if(DataSet !== null){
                     DataSet.Enabled = Value;
                 }
             }
@@ -144,7 +144,7 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
      */
     const OnAdd = Event => {
         Event.stopPropagation();
-        if(DataSet.ID !== null && !~Added.indexOf(Event.detail.sender)) {
+        if(DataSet.ID !== null && !~Added.indexOf(Event.detail.sender)){
             Added.push(Event.detail.sender);
         }
         Changed = true;
@@ -159,11 +159,11 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
      */
     const OnUpdate = Event => {
         Event.stopPropagation();
-        if(DataSet.ID !== null && Event.detail.sender.ID !== null && !~Updated.indexOf(Event.detail.sender)) {
+        if(DataSet.ID !== null && Event.detail.sender.ID !== null && !~Updated.indexOf(Event.detail.sender)){
             Updated.push(Event.detail.sender);
             //Check if the Row has been cleared before.
             const Index = Deleted.indexOf(Event.detail.sender);
-            if(~Index) {
+            if(~Index){
                 Deleted.splice(Index, 1);
             }
         }
@@ -181,11 +181,11 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
     const OnDelete = Event => {
         Event.stopPropagation();
 
-        if(DataSet.ID !== null && Event.detail.sender.ID !== null && !~Deleted.indexOf(Event.detail.sender)) {
+        if(DataSet.ID !== null && Event.detail.sender.ID !== null && !~Deleted.indexOf(Event.detail.sender)){
             Deleted.push(Event.detail.sender);
             //Check if the Row has been updated before.
             const Index = Updated.indexOf(Event.detail.sender);
-            if(~Index) {
+            if(~Index){
                 Updated.splice(Index, 1);
             }
         }
@@ -198,15 +198,15 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
      * Saves possible changes.
      */
     this.Save = function() {
-        if(DataSet === null) {
+        if(DataSet === null){
             throw new SyntaxError("DataSet to save is null!");
         }
         //Check if the DataSet is not virtual.
-        if(DataSet.ID !== null) {
+        if(DataSet.ID !== null){
             //Delete DataSet if all Rows have been cleared.
-            if(DataSet.Rows.every(Row => Row.Value === null)) {
+            if(DataSet.Rows.every(Row => Row.Value === null)){
                 this.Delete();
-            } else {
+            }else{
                 //Update DataSet.
                 vDesk.Connection.Send(
                     new vDesk.Modules.Command(
@@ -220,11 +220,11 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
                                     Value: Row.Value
                                 })),
                             },
-                            Ticket:     vDesk.User.Ticket
+                            Ticket:     vDesk.Security.User.Current.Ticket
                         }
                     ),
                     Response => {
-                        if(Response.Status) {
+                        if(Response.Status){
                             this.DataSet = vDesk.MetaInformation.DataSet.FromDataView(Response.Data);
                             this.Enabled = false;
                             Control.removeEventListener("update", OnUpdate);
@@ -233,27 +233,27 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
                                 dataset: DataSet
                             }).Dispatch(Control);
                             Control.addEventListener("update", OnUpdate);
-                        } else {
+                        }else{
                             alert(Response.Data);
                             this.Reset();
                         }
                     }
                 );
             }
-        } else {
+        }else{
             //Check if the Mask has been changed.
-            if(PreviousDataSet !== null && PreviousDataSet.Mask.ID !== DataSet.Mask.ID) {
+            if(PreviousDataSet !== null && PreviousDataSet.Mask.ID !== DataSet.Mask.ID){
                 vDesk.Connection.Send(
                     new vDesk.Modules.Command(
                         {
                             Module:     "MetaInformation",
                             Command:    "DeleteDataSet",
                             Parameters: {ID: PreviousDataSet.ID},
-                            Ticket:     vDesk.User.Ticket
+                            Ticket:     vDesk.Security.User.Current.Ticket
                         }
                     ),
                     Response => {
-                        if(!Response.Status) {
+                        if(!Response.Status){
                             this.Reset();
                             alert(Response.Data);
                         }
@@ -273,19 +273,19 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
                                 Value: Row.Value
                             }))
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
                     //Check if the Command has been successfully executed and populate data to a new DataSet.
-                    if(Response.Status) {
+                    if(Response.Status){
                         this.DataSet = vDesk.MetaInformation.DataSet.FromDataView(Response.Data);
                         this.Enabled = false;
                         new vDesk.Events.BubblingEvent("create", {
                             sender:  this,
                             dataset: DataSet
                         }).Dispatch(Control);
-                    } else {
+                    }else{
                         this.Reset();
                         alert(Response.Data);
                     }
@@ -299,7 +299,7 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
      * Deletes the current edited DataSet.
      */
     this.Delete = function() {
-        if(DataSet.ID !== null) {
+        if(DataSet.ID !== null){
             //Delete DataSet.
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
@@ -307,13 +307,13 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
                         Module:     "MetaInformation",
                         Command:    "DeleteDataSet",
                         Parameters: {ID: PreviousDataSet.ID},
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         this.DataSet = null;
-                    } else {
+                    }else{
                         this.Reset();
                         alert(Response.Data);
                     }
@@ -339,11 +339,11 @@ vDesk.MetaInformation.DataSet.Editor = function Editor(Element, DataSet = null, 
     Control.addEventListener("update", OnUpdate);
     Control.addEventListener("delete", OnDelete);
 
-    if(DataSet !== null) {
+    if(DataSet !== null){
         PreviousDataSet = vDesk.MetaInformation.DataSet.FromDataView(DataSet);
         DataSet.Enabled = Enabled;
         Control.appendChild(DataSet.Control);
-    } else {
+    }else{
         Control.textContent = vDesk.Locale.MetaInformation.NoDataSet;
     }
 };
@@ -364,12 +364,12 @@ vDesk.MetaInformation.DataSet.Editor.FromElement = function(Element) {
                 Module:     "MetaInformation",
                 Command:    "GetDataSet",
                 Parameters: {Element: Element.ID},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         )
     );
 
-    if(!Response.Status) {
+    if(!Response.Status){
         alert(Response.Data);
     }
     return new vDesk.MetaInformation.DataSet.Editor(

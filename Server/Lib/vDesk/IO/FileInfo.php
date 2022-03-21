@@ -21,17 +21,18 @@ use vDesk\IO\Stream\Mode;
  * @property \DateTime                    $LastWriteTime  Gets or sets the time the underlying file of the FileInfo has been modified for the last time.
  * @property-read int|null                $Size           Gets the size of the underlying file of the FileInfo.
  * @property null|string                  $MimeType       Gets or sets the MIME-Type of the underlying file of the FileInfo.
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class FileInfo extends FileSystemInfo {
-    
+
     /**
      * The MIME-Type of the FileInfo.
      *
      * @var null|string
      */
     protected ?string $MimeType = null;
-    
+
     /**
      * Initializes a new instance of the FileInfo class, which acts as a wrapper for a file path.
      *
@@ -104,7 +105,7 @@ final class FileInfo extends FileSystemInfo {
             ]
         ]);
     }
-    
+
     /**
      * Creates or overwrites a file in the specified path of the FileInfo.
      *
@@ -118,7 +119,7 @@ final class FileInfo extends FileSystemInfo {
         }
         return File::Create($this->Path);
     }
-    
+
     /**
      * Deletes the underlying file of the FileInfo.
      *
@@ -132,7 +133,7 @@ final class FileInfo extends FileSystemInfo {
         }
         return false;
     }
-    
+
     /**
      * Refreshes the state of the file of the FileInfo in the underlying filesystem-cache.
      */
@@ -143,7 +144,7 @@ final class FileInfo extends FileSystemInfo {
         $this->Size      = null;
         $this->Exists    = null;
     }
-    
+
     /**
      * Moves the file of the FileInfo to a new destination.
      *
@@ -162,7 +163,7 @@ final class FileInfo extends FileSystemInfo {
         }
         return false;
     }
-    
+
     /**
      * Renames the file of the FileInfo to a specified new name.
      *
@@ -181,7 +182,7 @@ final class FileInfo extends FileSystemInfo {
         }
         return false;
     }
-    
+
     /**
      * Copies the file of the FileInfo to a new file.
      *
@@ -196,7 +197,7 @@ final class FileInfo extends FileSystemInfo {
         }
         return false;
     }
-    
+
     /**
      * Opens a FileStream on the specified path of the FileInfo with read/write access.
      *
@@ -208,6 +209,6 @@ final class FileInfo extends FileSystemInfo {
     public function Open(int $Mode = Mode::Read | Mode::Binary): FileStream {
         return File::Open($this->Path, $Mode);
     }
-    
+
 }
 

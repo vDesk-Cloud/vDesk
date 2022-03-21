@@ -13,7 +13,7 @@
  * @property {Array<EventStorage>} Months Gets the cached months and their Events of the Cache.
  * @memberOf vDesk.Calendar.Event
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Calendar
  */
 vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.DefaultCacheSize, Prefetch = false) {
     Ensure.Parameter(Size, Type.Number, "Size");
@@ -72,28 +72,28 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
                 Module:     "Calendar",
                 Command:    "GetEvent",
                 Parameters: {ID: ID},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         );
         //Check if a callback has been passed.
-        if(Callback !== null) {
+        if(Callback !== null){
             vDesk.Connection.Send(
                 Command,
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         Callback(vDesk.Calendar.Event.FromDataView(Response.Data));
-                    } else {
+                    }else{
                         Callback(null);
                     }
                 }
             );
         }
         //Otherwise return the fetched Event.
-        else {
+        else{
             const Response = vDesk.Connection.Send(Command);
-            if(Response.Status) {
+            if(Response.Status){
                 return vDesk.Calendar.Event.FromDataView(Response.Data);
-            } else {
+            }else{
                 return null;
             }
         }
@@ -112,8 +112,8 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
         return this.GetMonth(Day, Refetch)
             .filter(
                 Event => (Event.Start < Day && Event.End > Day)
-                         || (Event.Start.getDate() === Day.getDate())
-                         || (Event.End.getDate() === Day.getDate() && (Event.End.getMinutes() > 0 || Event.End.getHours() > 0))
+                    || (Event.Start.getDate() === Day.getDate())
+                    || (Event.End.getDate() === Day.getDate() && (Event.End.getMinutes() > 0 || Event.End.getHours() > 0))
             );
     };
 
@@ -132,9 +132,9 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
             Month => Callback(
                 Month.filter(
                     Event => Event.Start < Day && Event.End > Day
-                             || Event.Start.getDate() === Day.getDate()
-                             || Event.End.getDate() === Day.getDate()
-                             && (Event.End.getMinutes() > 0 || Event.End.getHours() > 0)
+                        || Event.Start.getDate() === Day.getDate()
+                        || Event.End.getDate() === Day.getDate()
+                        && (Event.End.getMinutes() > 0 || Event.End.getHours() > 0)
                 )
             ),
             Refetch
@@ -156,18 +156,18 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
 
             //Check if the Event exists already within the Cache.
             const CachedEvent = Cache.find(CachedEvent => CachedEvent.ID === Event.ID);
-            if(CachedEvent !== undefined) {
+            if(CachedEvent !== undefined){
 
                 //Check if the cached Event should get replaced with the fetched Event.
-                if(Replace) {
+                if(Replace){
                     Cache[Events.indexOf(CachedEvent)] = Event;
                     UniqueEvents.push(Event);
-                } else {
+                }else{
                     UniqueEvents.push(CachedEvent);
                 }
             }
             //Otherwise add the Event to the Cache.
-            else {
+            else{
                 Cache.push(Event);
                 UniqueEvents.push(Event);
             }
@@ -193,11 +193,11 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
 
         const CachedMonth = Months.find(
             CachedMonth => CachedMonth.Date.getFullYear() === Month.getFullYear()
-                           && CachedMonth.Date.getMonth() === Month.getMonth()
+                && CachedMonth.Date.getMonth() === Month.getMonth()
         );
 
-        if(CachedMonth === undefined) {
-            if(Months.length === Size) {
+        if(CachedMonth === undefined){
+            if(Months.length === Size){
                 Months.shift().Events.forEach(Event => Cache.splice(Cache.indexOf(Event), 1));
             }
             const Response = vDesk.Connection.Send(
@@ -209,11 +209,11 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
                             From,
                             To
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 )
             );
-            if(Response.Status) {
+            if(Response.Status){
                 Months.push(
                     {
                         Date:   From,
@@ -223,7 +223,7 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
                 return Months[Months.length - 1].Events;
             }
         }
-        if(Refetch) {
+        if(Refetch){
             const Response = vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -233,18 +233,18 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
                             From,
                             To
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 )
             );
-            if(Response.Status) {
+            if(Response.Status){
                 Months[Months.indexOf(CachedMonth)] = {
                     Date:   From,
                     Events: this.AddEvents(Response.Data.map(Event => new vDesk.Calendar.Event(Event)), true)
                 };
                 return Months[Months.length - 1].Events;
             }
-        } else {
+        }else{
             return CachedMonth.Events;
         }
         return [];
@@ -269,11 +269,11 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
 
         const CachedMonth = Months.find(
             CachedMonth => CachedMonth.Date.getFullYear() === Month.getFullYear()
-                           && CachedMonth.Date.getMonth() === Month.getMonth()
+                && CachedMonth.Date.getMonth() === Month.getMonth()
         );
 
-        if(CachedMonth === undefined) {
-            if(Months.length === Size) {
+        if(CachedMonth === undefined){
+            if(Months.length === Size){
                 Months.shift().Events.forEach(Event => Cache.splice(Cache.indexOf(Event), 1));
             }
             vDesk.Connection.Send(
@@ -285,11 +285,11 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
                             From,
                             To
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         Months.push(
                             {
                                 Date:   From,
@@ -300,8 +300,8 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
                     }
                 });
 
-        } else {
-            if(Refetch) {
+        }else{
+            if(Refetch){
                 vDesk.Connection.Send(
                     new vDesk.Modules.Command(
                         {
@@ -311,11 +311,11 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
                                 From,
                                 To
                             },
-                            Ticket:     vDesk.User.Ticket
+                            Ticket:     vDesk.Security.User.Current.Ticket
                         }
                     ),
                     Response => {
-                        if(Response.Status) {
+                        if(Response.Status){
                             Months.push(
                                 {
                                     Date:   From,
@@ -325,7 +325,7 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
                             Callback(Months[Months.length - 1].Events);
                         }
                     });
-            } else {
+            }else{
                 Callback(CachedMonth.Events);
             }
         }
@@ -333,9 +333,9 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
     };
 
     //Prefetch months since actual month.
-    if(Prefetch) {
+    if(Prefetch){
         const Today = new Date();
-        for(let i = 0; i < Size; i++) {
+        for(let i = 0; i < Size; i++){
             this.FetchMonth(Today, () => {
             });
             Today.setMonth(Today.getMonth() + 1);
@@ -350,7 +350,7 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
      */
     this.Add = function(Event, Replace = false) {
         Ensure.Parameter(Event, vDesk.Calendar.Event, "Event");
-        if(Cache.find(CachedEvent => CachedEvent.ID === Event.ID) === undefined) {
+        if(Cache.find(CachedEvent => CachedEvent.ID === Event.ID) === undefined){
             Cache.push(Event);
             //Append Event on matching months.
             Months.filter(Month => {
@@ -358,9 +358,9 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
                 LastDate.setMonth(LastDate.getMonth() + 1);
                 LastDate.setDate(0);
                 return ((Event.Start > Month.Date) && (Event.End < LastDate))
-                       || ((Event.Start > Month.Date && Event.Start < LastDate) && (Event.End > LastDate))
-                       || ((Event.Start < Month.Date) && (Event.End > Month.Date && Event.End < LastDate))
-                       || ((Event.Start < Month.Date) && (Event.End > LastDate));
+                    || ((Event.Start > Month.Date && Event.Start < LastDate) && (Event.End > LastDate))
+                    || ((Event.Start < Month.Date) && (Event.End > Month.Date && Event.End < LastDate))
+                    || ((Event.Start < Month.Date) && (Event.End > LastDate));
 
             }).forEach(Month => Month.Events.push(Event));
 
@@ -378,12 +378,12 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
         Ensure.Parameter(Event, vDesk.Calendar.Event, "Event");
         //Check if the Event exists within the Cache.
         const CachedEvent = Cache.find(CachedEvent => CachedEvent.ID === Event.ID);
-        if(CachedEvent !== undefined) {
+        if(CachedEvent !== undefined){
             Cache[Cache.indexOf(CachedEvent)] = Event;
             //Replace Event in months.
             Months.forEach(Month => {
                 const CachedEvent = Month.Events.find(CachedEvent => CachedEvent.ID === Event.ID);
-                if(CachedEvent !== undefined) {
+                if(CachedEvent !== undefined){
                     Month.Events[Month.Events.indexOf(CachedEvent)] = Event;
                 }
             });
@@ -402,13 +402,13 @@ vDesk.Calendar.Event.Cache = function Cache(Size = vDesk.Calendar.Event.Cache.De
 
         const CachedEvent = Cache.find(CachedEvent => CachedEvent.ID === Event.ID);
         //Remove the Event from the cache if it exists.
-        if(CachedEvent !== undefined) {
+        if(CachedEvent !== undefined){
             Cache.splice(Cache.indexOf(CachedEvent), 1);
 
             //Remove Event in months.
             Months.forEach(Month => {
                 const CachedEvent = Month.Events.find(CachedEvent => CachedEvent.ID === Event.ID);
-                if(CachedEvent !== undefined) {
+                if(CachedEvent !== undefined){
                     Month.Events.splice(Month.Events.indexOf(CachedEvent), 1);
                 }
             });

@@ -9,8 +9,7 @@
  */
 /**
  * Initializes a new instance of the Package class.
- * @class Class that represents a [...] for [...]. | Class providing functionality for [...].
- *
+ * @class Class that represents a Package.
  * @param {String} [Name=""] Initializes the Package with the specified name.
  * @param {String} [Version=""] Initializes the Package with the specified version.
  * @param {Object<String, String>} [Dependencies={}] Initializes the Package with the specified dependency Packages.
@@ -27,7 +26,7 @@
  * @property {String} LicenseText Gets or sets the license text of the Package.
  * @memberOf vDesk.Packages
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Packages
  */
 vDesk.Packages.Package = function Package(
     Name         = "",
@@ -75,11 +74,11 @@ vDesk.Packages.Package = function Package(
                 Ensure.Property(Value, Array, "Dependencies");
                 Dependencies = Value;
 
-                while(DependenciesList.hasChildNodes()) {
+                while(DependenciesList.hasChildNodes()){
                     DependenciesList.removeChild(DependenciesList.lastChild);
                 }
 
-                for(const Dependency in Value) {
+                for(const Dependency in Value){
                     const Module = document.createElement("li");
                     Module.className = "Module Font Dark";
                     Module.textContent = `${Dependency} v${Value[Dependency]}`;
@@ -194,7 +193,7 @@ vDesk.Packages.Package = function Package(
      */
     const DependenciesList = document.createElement("span");
     DependenciesList.className = "Text Font Dark";
-    for(const Dependency in Dependencies) {
+    for(const Dependency in Dependencies){
         const Module = document.createElement("li");
         Module.className = "Module Font Dark";
         Module.textContent = `${Dependency} v${Dependencies[Dependency]}`;
@@ -316,18 +315,18 @@ vDesk.Packages.Package = function Package(
      * @fires vDesk.Packages.Package#uninstall
      */
     this.Uninstall = function() {
-        if(Name !== null) {
+        if(Name !== null){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
                         Module:     "Packages",
                         Command:    "Uninstall",
                         Parameters: {Name},
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         new vDesk.Events.BubblingEvent("uninstall", {
                             sender: this,
                             name:   Name

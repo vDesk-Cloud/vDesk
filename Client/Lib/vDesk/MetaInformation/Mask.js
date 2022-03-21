@@ -10,7 +10,7 @@
  * @property {Array<vDesk.MetaInformation.Mask.Row>} Rows Gets or sets the Rows of the Mask.
  * @memberOf vDesk.MetaInformation
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.Mask = function Mask(ID = null, Name = vDesk.Locale.MetaInformation.NewMask, Rows = []) {
     Ensure.Parameter(ID, Type.Number, "ID", true);

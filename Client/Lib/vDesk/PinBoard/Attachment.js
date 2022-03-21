@@ -36,7 +36,8 @@
  * @property {vDesk.Archive.Element} Element Gets or sets the Element of the Attachment.
  * @property {Boolean} Selected Gets or sets a value indicating whether the Attachment is selected.
  * @memberOf vDesk.PinBoard
- * @augments vDesk.Controls.FloatingBox
+ * @extends vDesk.Controls.FloatingBox
+ * @package vDesk\PinBoard
  */
 vDesk.PinBoard.Attachment = function Attachment(
     ID             = null,
@@ -58,7 +59,7 @@ vDesk.PinBoard.Attachment = function Attachment(
     let Delay = null;
 
     Object.defineProperties(this, {
-        ID:         {
+        ID:       {
             enumerable: true,
             get:        () => ID,
             set:        Value => {
@@ -66,7 +67,7 @@ vDesk.PinBoard.Attachment = function Attachment(
                 ID = Value;
             }
         },
-        X:          {
+        X:        {
             enumerable: true,
             get:        () => this.Left,
             set:        Value => {
@@ -74,7 +75,7 @@ vDesk.PinBoard.Attachment = function Attachment(
                 this.Left = Value;
             }
         },
-        Y:          {
+        Y:        {
             enumerable: true,
             get:        () => this.Top,
             set:        Value => {
@@ -82,7 +83,7 @@ vDesk.PinBoard.Attachment = function Attachment(
                 this.Top = Value;
             }
         },
-        Element:    {
+        Element:  {
             enumerable: true,
             get:        () => Element,
             set:        Value => {
@@ -92,7 +93,7 @@ vDesk.PinBoard.Attachment = function Attachment(
                 Icon.src = vDesk.Visual.Icons.Archive?.[Value?.Extension ?? "Folder"] ?? vDesk.Visual.Icons.Archive.Folder;
             }
         },
-        Selected:   {
+        Selected: {
             get: () => Selected,
             set: Value => {
                 Ensure.Property(Value, vDesk.Struct.Type.Boolean, "Selected");
@@ -206,7 +207,7 @@ vDesk.PinBoard.Attachment = function Attachment(
  */
 vDesk.PinBoard.Attachment.FromDataView = function(DataView, BoundingSphere = vDesk.PinBoard.Attachment.BoundingSphere) {
     Ensure.Parameter(DataView, "object", "DataView");
-    DataView.Element.Owner = vDesk.User;
+    DataView.Element.Owner = vDesk.Security.User.Current;
     return new vDesk.PinBoard.Attachment(
         DataView?.ID ?? null,
         DataView?.Y ?? 0,

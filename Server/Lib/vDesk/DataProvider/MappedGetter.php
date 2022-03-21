@@ -22,16 +22,11 @@ abstract class MappedGetter {
      *
      * @param mixed                                       $Property     A reference to the field or value the getter should return.
      * @param string                                      $Type         The return-type of the getter.
-     *
      * @param bool                                        $Nullable     Flag indicating whether the referenced property is nullable.
      * @param null                                        $ID           The ID the MappedGetter belongs to.
-     * @param null|\vDesk\DataProvider\Expression\ISelect $Expression   The Expression to execute to retrieve the requested property's
-     *                                                                  value from the database.
-     *
+     * @param null|\vDesk\DataProvider\Expression\ISelect $Expression   The Expression to execute to retrieve the requested property's value from the database.
      * @param string                                      $Field        The field of the identifier to use in the where condition of the specified Expression.
-     *
-     * @param string                                      $FieldType    The type of the field of the identifier to use in the where condition of the specified
-     *                                                                  Expression.
+     * @param string                                      $FieldType    The type of the field of the identifier to use in the where condition of the specified Expression.
      *
      * @return callable A generated getter.
      */

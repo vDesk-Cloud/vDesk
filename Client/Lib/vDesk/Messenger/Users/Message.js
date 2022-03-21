@@ -17,7 +17,7 @@
  * @property {String} Text Gets or sets the text of the Message.
  * @memberOf vDesk.Messenger.Users
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Messenger
  */
 vDesk.Messenger.Users.Message = function Message(
     ID        = null,
@@ -27,7 +27,6 @@ vDesk.Messenger.Users.Message = function Message(
     Date      = new window.Date(),
     Text      = ""
 ) {
-
     Ensure.Parameter(ID, Type.Number, "ID", true);
     Ensure.Parameter(Sender, vDesk.Security.User, "Sender");
     Ensure.Parameter(Recipient, vDesk.Security.User, "Recipient");
@@ -51,8 +50,8 @@ vDesk.Messenger.Users.Message = function Message(
             set: Value => {
                 Ensure.Property(Value, vDesk.Security.User, "Sender");
                 Sender = Value;
-                Control.classList.toggle("Sender", Value.ID === vDesk.User.ID);
-                Control.classList.toggle("Recipient", Value.ID !== vDesk.User.ID);
+                Control.classList.toggle("Sender", Value.ID === vDesk.Security.User.Current.ID);
+                Control.classList.toggle("Recipient", Value.ID !== vDesk.Security.User.Current.ID);
             }
         },
         Recipient: {
@@ -60,8 +59,8 @@ vDesk.Messenger.Users.Message = function Message(
             set: Value => {
                 Ensure.Property(Value, vDesk.Security.User, "Recipient");
                 Recipient = Value;
-                Control.classList.toggle("Recipient", Value.ID === vDesk.User.ID);
-                Control.classList.toggle("Sender", Value.ID !== vDesk.User.ID);
+                Control.classList.toggle("Recipient", Value.ID === vDesk.Security.User.Current.ID);
+                Control.classList.toggle("Sender", Value.ID !== vDesk.Security.User.Current.ID);
             }
         },
         Status:    {
@@ -69,7 +68,7 @@ vDesk.Messenger.Users.Message = function Message(
             set: Value => {
                 Ensure.Property(Value, Type.Number, "Status");
                 Status = Value;
-                switch(Value) {
+                switch(Value){
                     case vDesk.Messenger.Users.Message.Sent:
                         StatusText.textContent = "✓";
                         StatusText.className = "Status Sent";
@@ -107,7 +106,7 @@ vDesk.Messenger.Users.Message = function Message(
      * @type {HTMLLIElement}
      */
     const Control = document.createElement("li");
-    Control.className = `Users Message ${vDesk.User.ID === Sender.ID ? "Sender" : "Recipient"} Font Dark`;
+    Control.className = `Users Message ${vDesk.Security.User.Current.ID === Sender.ID ? "Sender" : "Recipient"} Font Dark`;
     Control.innerText = Text;
 
     /**
@@ -115,7 +114,7 @@ vDesk.Messenger.Users.Message = function Message(
      * @type {HTMLSpanElement}
      */
     const StatusText = document.createElement("span");
-    switch(Status) {
+    switch(Status){
         case vDesk.Messenger.Users.Message.Sent:
             StatusText.textContent = "✓";
             StatusText.className = "Status Sent";
@@ -139,11 +138,9 @@ vDesk.Messenger.Users.Message = function Message(
     DateIcon.className = "Date Icon";
     DateIcon.title = Date.toLocaleString();
     DateIcon.src = vDesk.Visual.Icons.Messenger.Time;
-
     Control.appendChild(DateIcon);
-
-
 };
+
 /**
  * Factory method that creates a Message from a JSON-encoded representation.
  * @param {Object} DataView The Data to use to create an instance of the Message.
@@ -160,6 +157,24 @@ vDesk.Messenger.Users.Message.FromDataView = function(DataView) {
         DataView?.Text ?? ""
     );
 };
+
+/**
+ * Status value for sent Messages.
+ * @constant
+ * @type {Number}
+ */
 vDesk.Messenger.Users.Message.Sent = 0;
+
+/**
+ * Status value for received Messages.
+ * @constant
+ * @type {Number}
+ */
 vDesk.Messenger.Users.Message.Received = 1;
+
+/**
+ * Status value for read Messages.
+ * @constant
+ * @type {Number}
+ */
 vDesk.Messenger.Users.Message.Read = 2;

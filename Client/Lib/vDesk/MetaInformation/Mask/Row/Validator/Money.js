@@ -12,7 +12,7 @@
  * @memberOf vDesk.MetaInformation.Mask.Row.Validator
  * @implements vDesk.MetaInformation.Mask.Row.IValidator
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.Mask.Row.Validator.Money = function Money(Validator = null, Enabled = true) {
     Ensure.Parameter(Validator, Type.Object, "Validator", true);
@@ -42,8 +42,8 @@ vDesk.MetaInformation.Mask.Row.Validator.Money = function Money(Validator = null
             enumerable: true,
             get:        () => {
                 return {
-                    Min: Min.Value,
-                    Max: Max.Value,
+                    Min:      Min.Value,
+                    Max:      Max.Value,
                     Currency: Currency.Value
                 };
             },
@@ -128,14 +128,7 @@ vDesk.MetaInformation.Mask.Row.Validator.Money = function Money(Validator = null
         null,
         Extension.Type.Enum,
         Validator?.Currency ?? null,
-        [
-            "€",
-            "$",
-            "£",
-            "¥",
-            "₽",
-            "₿"
-        ],
+        ["€", "$", "£", "¥", "₽", "₿"],
         true,
         Enabled
     );

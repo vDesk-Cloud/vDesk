@@ -28,7 +28,7 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the GroupList is enabled.
  * @memberOf vDesk.Security
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.GroupList = function GroupList(Items = [], Drop = false, Enabled = true) {
     Ensure.Parameter(Items, Array, "Items");
@@ -75,11 +75,11 @@ vDesk.Security.GroupList = function GroupList(Items = [], Drop = false, Enabled 
             get:        () => Selected,
             set:        Value => {
                 Ensure.Property(Value, vDesk.Security.GroupList.Item, "Selected", true);
-                if(Selected !== null) {
+                if(Selected !== null){
                     Selected.Selected = false;
                 }
                 Selected = Value;
-                if(Value !== null) {
+                if(Value !== null){
                     Value.Selected = true;
                 }
             }
@@ -91,12 +91,12 @@ vDesk.Security.GroupList = function GroupList(Items = [], Drop = false, Enabled 
                 Ensure.Property(Value, Type.Boolean, "Enabled");
                 Drop = Value;
                 Items.forEach(Item => Item.Draggable = Value);
-                if(Value) {
+                if(Value){
                     Control.addEventListener("drop", OnDrop, false);
                     Control.addEventListener("dragenter", OnDragEnter, false);
                     Control.addEventListener("dragleave", OnDragLeave, false);
                     Control.addEventListener("dragover", OnDragOver, false);
-                } else {
+                }else{
                     Control.removeEventListener("drop", OnDrop, false);
                     Control.removeEventListener("dragenter", OnDragEnter, false);
                     Control.removeEventListener("dragleave", OnDragLeave, false);
@@ -124,7 +124,7 @@ vDesk.Security.GroupList = function GroupList(Items = [], Drop = false, Enabled 
     const OnSelect = Event => {
         Event.stopPropagation();
 
-        if(Selected !== null) {
+        if(Selected !== null){
             Selected.Selected = false;
         }
         Selected = Event.detail.sender;
@@ -170,7 +170,7 @@ vDesk.Security.GroupList = function GroupList(Items = [], Drop = false, Enabled 
 
         //Check if the dropped Item is not in the GroupList.
         const Item = Event.dataTransfer.getReference();
-        if(!~Items.indexOf(Item)) {
+        if(!~Items.indexOf(Item)){
             new vDesk.Events.BubblingEvent("drop", {
                 sender: this,
                 item:   Item
@@ -196,7 +196,7 @@ vDesk.Security.GroupList = function GroupList(Items = [], Drop = false, Enabled 
     const OnDragLeave = Event => {
         Event.preventDefault();
         DragCount--;
-        if(DragCount === 0) {
+        if(DragCount === 0){
             Control.classList.remove("Hover");
         }
     };
@@ -234,7 +234,7 @@ vDesk.Security.GroupList = function GroupList(Items = [], Drop = false, Enabled 
     this.Remove = function(Item) {
         Ensure.Parameter(Item, vDesk.Security.GroupList.Item, "Item");
         const Index = Items.indexOf(Item);
-        if(~Index) {
+        if(~Index){
             Control.removeChild(Item.Control);
             Items.splice(Index, 1);
         }
@@ -276,7 +276,7 @@ vDesk.Security.GroupList = function GroupList(Items = [], Drop = false, Enabled 
  * @return {vDesk.Security.GroupList} A GroupList containing every existing group.
  */
 vDesk.Security.GroupList.FromGroups = function(View = true) {
-    if(View) {
+    if(View){
         return new vDesk.Security.GroupList(
             vDesk.Security.Groups.map(Group => new vDesk.Security.GroupList.Item(Group))
         );
@@ -288,15 +288,15 @@ vDesk.Security.GroupList.FromGroups = function(View = true) {
                 Module:     "Security",
                 Command:    "GetGroups",
                 Parameters: {View: false},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         )
     );
-    if(Response.Status) {
+    if(Response.Status){
         return new vDesk.Security.GroupList(
             Response.Data.map(Group => new vDesk.Security.GroupList.Item(vDesk.Security.Group.FromDataView(Group)))
         );
-    } else {
+    }else{
         alert(Response.Data);
     }
 };
