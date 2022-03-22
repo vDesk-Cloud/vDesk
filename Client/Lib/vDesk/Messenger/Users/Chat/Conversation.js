@@ -10,7 +10,7 @@
  * @property {Number} UnreadMessages Gets or sets the amount of unread Messages of the Conversation.
  * @memberOf vDesk.Messenger.Users.Chat
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Messenger
  */
 vDesk.Messenger.Users.Chat.Conversation = function Conversation(Sender = new vDesk.Security.User(), Messages = []) {
     Ensure.Parameter(Sender, vDesk.Security.User, "Sender");
@@ -32,7 +32,7 @@ vDesk.Messenger.Users.Chat.Conversation = function Conversation(Sender = new vDe
             set: Value => {
                 Ensure.Property(Value, Array, "Messages");
                 window.requestAnimationFrame(() => {
-                    while(MessageList.hasChildNodes()) {
+                    while(MessageList.hasChildNodes()){
                         MessageList.removeChild(MessageList.lastChild);
                     }
                     Messages = Value;
@@ -52,7 +52,7 @@ vDesk.Messenger.Users.Chat.Conversation = function Conversation(Sender = new vDe
      */
     const OnSent = Event => {
         window.requestAnimationFrame(() => {
-            while(MessageList.hasChildNodes()) {
+            while(MessageList.hasChildNodes()){
                 MessageList.removeChild(MessageList.lastChild);
             }
             Messages.push(Event.detail.message);
@@ -67,7 +67,7 @@ vDesk.Messenger.Users.Chat.Conversation = function Conversation(Sender = new vDe
      * Eventhandler that listens on the 'scroll' event.
      */
     const OnScroll = () => {
-        if(MessageList.scrollTop === 0) {
+        if(MessageList.scrollTop === 0){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -78,17 +78,17 @@ vDesk.Messenger.Users.Chat.Conversation = function Conversation(Sender = new vDe
                             Date:   Messages[0].Date,
                             Amount: 10
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
-                        if(Response.Data.length < 10) {
+                    if(Response.Status){
+                        if(Response.Data.length < 10){
                             MessageList.removeEventListener("scroll", OnScroll, false);
                         }
                         window.requestAnimationFrame(() => {
                             const Height = MessageList.scrollHeight;
-                            while(MessageList.hasChildNodes()) {
+                            while(MessageList.hasChildNodes()){
                                 MessageList.removeChild(MessageList.lastChild);
                             }
                             Messages.unshift(...Response.Data.map(Message => vDesk.Messenger.Users.Message.FromDataView(Message)));
@@ -109,7 +109,7 @@ vDesk.Messenger.Users.Chat.Conversation = function Conversation(Sender = new vDe
      */
     this.AddMessages = function(...NewMessages) {
         window.requestAnimationFrame(() => {
-            while(MessageList.hasChildNodes()) {
+            while(MessageList.hasChildNodes()){
                 MessageList.removeChild(MessageList.lastChild);
             }
             Messages.push(...NewMessages);
@@ -124,9 +124,9 @@ vDesk.Messenger.Users.Chat.Conversation = function Conversation(Sender = new vDe
      * @param {Boolean} [Top=false] Flag indicating whether to scroll to the top instead of the bottom.
      */
     this.Scroll = function(Top = false) {
-        if(Top) {
+        if(Top){
             MessageList.scrollTop = 0;
-        } else {
+        }else{
             MessageList.scrollTop = MessageList.scrollHeight;
         }
     };
@@ -174,11 +174,11 @@ vDesk.Messenger.Users.Chat.Conversation.FromSender = function(Sender) {
                     Date:   new Date(),
                     Amount: 10
                 },
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         Response => {
-            if(Response.Status) {
+            if(Response.Status){
                 Conversation.Messages = Response.Data.map(Message => vDesk.Messenger.Users.Message.FromDataView(Message));
             }
         }

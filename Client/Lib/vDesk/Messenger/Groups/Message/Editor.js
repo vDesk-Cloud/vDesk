@@ -15,10 +15,11 @@
  * @property {vDesk.Security.User} Recipient Gets or sets the Recipient of the Editor.
  * @memberOf vDesk.Messenger.Groups.Message
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Messenger
  */
 vDesk.Messenger.Groups.Message.Editor = function Editor(Group) {
     Ensure.Parameter(Group, vDesk.Security.Group, "Group");
+
     Object.defineProperties(this, {
         Control: {
             get: () => Control
@@ -37,7 +38,7 @@ vDesk.Messenger.Groups.Message.Editor = function Editor(Group) {
      * @fires vDesk.Messenger.Groups.Message.Editor#sent
      */
     this.Send = function() {
-        if(Text.validity.valid) {
+        if(Text.validity.valid){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -47,11 +48,11 @@ vDesk.Messenger.Groups.Message.Editor = function Editor(Group) {
                             Group: Group.ID,
                             Text:  Text.value
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         new vDesk.Events.BubblingEvent("sent", {
                             sender:  this,
                             message: vDesk.Messenger.Groups.Message.FromDataView(Response.Data)
@@ -80,7 +81,7 @@ vDesk.Messenger.Groups.Message.Editor = function Editor(Group) {
     Text.maxLength = 65535;
     Text.addEventListener("input", () => Send.disabled = !Text.validity.valid);
     Text.addEventListener("keydown", Event => {
-        if(Event.ctrlKey && Event.key === "Enter") {
+        if(Event.ctrlKey && Event.key === "Enter"){
             this.Send();
         }
     }, false);

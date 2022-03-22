@@ -3,59 +3,47 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\MySQL\Expression;
 
-use vDesk\DataProvider\Expression\IDrop;
 use vDesk\DataProvider\IResult;
 use vDesk\DataProvider;
 
 /**
- * Represents a MySQL compatible DROP SQL expression.
+ * Represents a MySQL compatible "DROP" Expression.
  *
- * @package vDesk\DataProvider\Expression\Drop
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Drop implements IDrop {
-    
+class Drop extends DataProvider\AnsiSQL\Expression\Drop {
+
     /**
-     * The SQL-statement of the Create\MariaDB.
+     * Flag indicating whether the Database method has been called.
      *
-     * @var string
+     * @var bool
      */
-    private string $Statement = "";
-    
-    /**
-     * @inheritDoc
-     */
-    public function Table(string $Name, ...$Fields): self {
-        $this->Statement .= "DROP TABLE {$Name}";
-        return $this;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function Database(string $Name): self {
-        $this->Statement .= "DROP DATABASE {$Name}";
-        return $this;
-    }
-    
+    private bool $Database = false;
+
     /**
      * @inheritDoc
      */
     public function Execute(bool $Buffered = true): IResult {
+        if($this->Database){
+            return new DataProvider\Result(true);
+        }
         return DataProvider::Execute($this->Statement, $Buffered);
     }
-    
+
     /**
      * @inheritDoc
      */
-    public function __toString(): string {
-        return $this->Statement;
+    public function Database(string $Name): static {
+        $this->Database = true;
+        return $this;
     }
-    
+
     /**
      * @inheritDoc
      */
-    public function __invoke(): IResult|string|null {
-        return $this->Execute()->ToValue();
+    public function Schema(string $Name): static {
+        return parent::Database($Name);
     }
+
 }

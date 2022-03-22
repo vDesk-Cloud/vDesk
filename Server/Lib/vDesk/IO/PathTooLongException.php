@@ -6,11 +6,11 @@ namespace vDesk\IO;
 /**
  * Is thrown when a specified path exceeds the maximum supported length of paths.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
- * @package vDesk\IO
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class PathTooLongException extends IOException {
-    
+
     /**
      * Initializes a new instance of the PathTooLongException class.
      *

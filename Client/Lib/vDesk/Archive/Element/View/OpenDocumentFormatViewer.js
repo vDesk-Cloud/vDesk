@@ -5,10 +5,10 @@
  * @param {vDesk.Archive.Element} Element The element to display the image of.
  * @property {HTMLDivElement} Control Gets the underlying dom node.
  * @memberOf vDesk.Archive
+ * @package vDesk\Archive
  */
 vDesk.Archive.Element.View.OpenDocumentFormatViewer = function OpenDocumentFormatViewer(Element) {
     Ensure.Parameter(Element, vDesk.Archive.Element, "Element", false);
-
 
     Object.defineProperty(this, "Control", {
         get: () => Control
@@ -33,7 +33,7 @@ vDesk.Archive.Element.View.OpenDocumentFormatViewer = function OpenDocumentForma
                 Module:     "Archive",
                 Command:    "Download",
                 Parameters: {ID: Element.ID},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         Buffer => {
@@ -46,10 +46,10 @@ vDesk.Archive.Element.View.OpenDocumentFormatViewer = function OpenDocumentForma
     );
 
 };
+
 /**
- * The file extensions the plugin can handle
- * @constant
- * @type {Array<String>}
+ * The file extensions the plugin can handle.
+ * @enum {String}
  */
 vDesk.Archive.Element.View.OpenDocumentFormatViewer.Extensions = ["odt", "ods", "odp", "odc"];
 

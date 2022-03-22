@@ -8,16 +8,17 @@ use vDesk\Struct\Collections\Collection;
 /**
  * Provides static methods for creating, copying, deleting, moving, and opening directories.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Directory {
-    
+
     /**
      * Prevent instantiation.
      */
     private function __construct() {
     }
-    
+
     /**
      * Creates a directory in the specified path.
      *
@@ -39,7 +40,7 @@ final class Directory {
         }
         return new DirectoryInfo($Path);
     }
-    
+
     /**
      * Moves an existing directory to a new destination.
      *
@@ -68,7 +69,7 @@ final class Directory {
             throw new IOException("Cannot move directory from '$Directory' to '$TargetPath'.");
         }
     }
-    
+
     /**
      * Copies an existing directory to a new directory.
      *
@@ -97,7 +98,7 @@ final class Directory {
             throw new IOException("Cannot copy directory from '$Directory' to '$TargetPath'.");
         }
     }
-    
+
     /**
      * Deletes the specified directory.
      *
@@ -112,11 +113,11 @@ final class Directory {
         if(!self::Exists($Directory)) {
             throw new DirectoryNotFoundException("The directory '$Directory' does not exist.");
         }
-        
+
         if(!self::IsWritable($Directory)) {
             throw new DirectoryNotFoundException("Cannot delete directory '$Directory'. The directory is not writable.");
         }
-        
+
         if($Children === true) {
             // Delete children.
             foreach((new DirectoryInfo($Directory))->IterateFileSystemEntries() as $Entry) {
@@ -133,7 +134,7 @@ final class Directory {
             throw new IOException("Cannot delete directory '$Directory'.");
         }
     }
-    
+
     /**
      * Renames a directory to a specified new name.
      *
@@ -158,7 +159,7 @@ final class Directory {
             throw new IOException("Cannot rename directory '$Directory' to '$Name'.");
         }
     }
-    
+
     /**
      * Determines whether the specified directory exists.
      *
@@ -169,7 +170,7 @@ final class Directory {
     public static function Exists(string $Directory): bool {
         return \is_dir($Directory);
     }
-    
+
     /**
      * Determines whether the specified directory exists and is readable.
      *
@@ -180,7 +181,7 @@ final class Directory {
     public static function IsReadable(string $Directory): bool {
         return \is_readable($Directory);
     }
-    
+
     /**
      * Determines whether the specified directory exists and is writable.
      *
@@ -191,13 +192,13 @@ final class Directory {
     public static function IsWritable(string $Directory): bool {
         return \is_writable($Directory);
     }
-    
+
     /**
      * Gets the amount of child folders and files of the specified directory.
      *
      * @param string $Directory The path to the directory.
      *
-     * @return int The amount of child files and folders, or null if the directory doesn't exist.
+     * @return null|int The amount of child files and folders, or null if the directory doesn't exist.
      */
     public static function Size(string $Directory): ?int {
         if(self::Exists($Directory)) {
@@ -205,7 +206,7 @@ final class Directory {
         }
         return null;
     }
-    
+
     /**
      * Returns the names of files (including their paths) in the specified directory.
      *
@@ -231,7 +232,7 @@ final class Directory {
         $Stream->Close();
         return $Files;
     }
-    
+
     /**
      * Returns the names of subdirectories (including their paths) in the specified directory.
      *
@@ -257,7 +258,7 @@ final class Directory {
         $Stream->Close();
         return $Directories;
     }
-    
+
     /**
      * Returns the names of all files and subdirectories in a specified path.
      *
@@ -282,7 +283,7 @@ final class Directory {
         $Stream->Close();
         return $Entries;
     }
-    
+
     /**
      * Returns a Generator that iterates over the names of files (including their paths) in the specified directory.
      *
@@ -309,7 +310,7 @@ final class Directory {
         }
         $Stream->Close();
     }
-    
+
     /**
      * Returns a Generator that iterates over the names of subdirectories (including their paths) in the specified directory.
      *
@@ -335,7 +336,7 @@ final class Directory {
         }
         $Stream->Close();
     }
-    
+
     /**
      * Returns a Generator that iterates over the names of all files and subdirectories in a specified path.
      *
@@ -358,5 +359,5 @@ final class Directory {
         }
         $Stream->Close();
     }
-    
+
 }

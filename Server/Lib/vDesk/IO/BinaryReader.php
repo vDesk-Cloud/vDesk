@@ -12,12 +12,14 @@ use vDesk\Struct\Text\Encoding;
  *
  * @property \vDesk\IO\IStream Stream   Gets the input Stream of the BinaryReader.
  * @property string            Encoding Gets or sets the encoding of the BinaryReader.
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ *
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class BinaryReader {
-    
+
     use Properties;
-    
+
     /**
      * The supported encodings of the BinaryReader.
      */
@@ -25,76 +27,76 @@ class BinaryReader {
         Encoding::ASCII,
         Encoding::UTF8
     ];
-    
+
     /**
      * Unsigned 8-bit integer.
      */
     public const UInt8 = 0;
-    
+
     /**
      * Signed 8-bit integer.
      */
     public const Int8 = 1;
-    
+
     /**
      * Unsigned 16-bit integer.
      */
     public const UInt16 = 2;
-    
+
     /**
      * Signed 16-bit integer.
      */
     public const Int16 = 3;
-    
+
     /**
      * Unsigned 32-bit integer.
      */
     public const UInt32 = 4;
-    
+
     /**
      * Signed 32-bit integer.
      */
     public const Int32 = 5;
-    
+
     /**
      * Unsigned 64-bit integer.
      */
     public const UInt64 = 6;
-    
+
     /**
      * Signed 64-bit integer.
      */
     public const Int64 = 7;
-    
+
     /**
      * Unsigned 32-bit floating point number.
      */
     public const Float = 8;
-    
+
     /**
      * Unsigned 64-bit floating point number.
      */
     public const Double = 9;
-    
+
     /**
      * Boolean.
      */
     public const Boolean = 10;
-    
+
     /**
      * The current Stream of the BinaryReader.
      *
      * @var \vDesk\IO\IStream|null
      */
     protected ?IStream $Stream;
-    
+
     /**
      * The current encoding of the BinaryReader.
      *
      * @var string
      */
     protected string $Encoding;
-    
+
     /**
      * Initializes a new instance of the BinaryReader class based on the specified stream and character encoding.
      *
@@ -103,7 +105,7 @@ class BinaryReader {
      *
      * @throws \InvalidArgumentException Thrown if the specified encoding is not supported.
      */
-    public function __construct(IStream $Stream, $Encoding = Encoding::UTF8) {
+    public function __construct(IStream $Stream, string $Encoding = Encoding::UTF8) {
         if(!$Stream->CanRead()) {
             throw new \InvalidArgumentException("The provided Stream doesn't support 'read'-operations.");
         }
@@ -127,7 +129,7 @@ class BinaryReader {
             ]
         ]);
     }
-    
+
     /**
      * Reads a specified amount of values from the current Stream beginning at a specified offset
      * and advances the current position of the Stream by the byte-length of the amount of read values.
@@ -147,61 +149,37 @@ class BinaryReader {
         if($this->Stream->EndOfStream()) {
             throw new EndOfStreamException("Can not read from end of Stream.");
         }
-        switch($Type) {
-            case self::Int8:
-                $Method = "ReadByte";
-                break;
-            case self::UInt8:
-                $Method = "ReadSByte";
-                break;
-            case self::Int16:
-                $Method = "ReadInt16";
-                break;
-            case self::UInt16:
-                $Method = "ReadUInt16";
-                break;
-            case self::Int32:
-                $Method = "ReadInt32";
-                break;
-            case self::UInt32:
-                $Method = "ReadUInt32";
-                break;
-            case self::Int64:
-                $Method = "ReadInt64";
-                break;
-            case self::UInt64:
-                $Method = "ReadUInt64";
-                break;
-            case self::Float:
-                $Method = "ReadFloat";
-                break;
-            case self::Double:
-                $Method = "ReadDouble";
-                break;
-            case self::Boolean:
-                $Method = "ReadBoolean";
-                break;
-            default:
-                throw new \InvalidArgumentException("The specified type is invalid.");
-                break;
-        }
-        
+        $Method = match ($Type) {
+            self::Int8 => "ReadByte",
+            self::UInt8 => "ReadSByte",
+            self::Int16 => "ReadInt16",
+            self::UInt16 => "ReadUInt16",
+            self::Int32 => "ReadInt32",
+            self::UInt32 => "ReadUInt32",
+            self::Int64 => "ReadInt64",
+            self::UInt64 => "ReadUInt64",
+            self::Float => "ReadFloat",
+            self::Double => "ReadDouble",
+            self::Boolean => "ReadBoolean",
+            default => throw new \InvalidArgumentException("The specified type \"{$Type}\" is invalid."),
+        };
+
         $Values = [];
         for($i = 0; $i < $Amount && !$this->Stream->EndOfStream(); $i++) {
             $Values[] = $this->{$Method}();
         }
         return $Values;
     }
-    
+
     /**
      * Reads a specified amount of bytes from the current Stream beginning at a specified offset
      * and advances the current position of the Stream by the specified amount of bytes.
      *
-     * @param int $Amount The amount of bytes to read.
-     * @param int $Offset The offset where reading begins.
+     * @param int      $Amount The amount of bytes to read.
+     * @param null|int $Offset The offset where reading begins.
      *
      * @return array The read bytes from the current Stream.
-     * @throws EndOfStreamException Thrown if the current Stream has reached its end.
+     * @throws \vDesk\IO\EndOfStreamException Thrown if the current Stream has reached its end.
      */
     public function ReadBytes(int $Amount = 1, int $Offset = null): array {
         if($Offset !== null && $this->Stream->CanSeek()) {
@@ -216,7 +194,7 @@ class BinaryReader {
         }
         return $Bytes;
     }
-    
+
     /**
      * Reads the next byte from the current Stream and advances the current position of the Stream by one byte.
      *
@@ -229,7 +207,7 @@ class BinaryReader {
         }
         return Text::IsNullOrEmpty($Char = $this->Stream->Read(1)) ? 0x00 : unpack("C", $Char)[1];
     }
-    
+
     /**
      * Reads a signed byte from this Stream and advances the current position of the Stream by one byte.
      *
@@ -242,7 +220,7 @@ class BinaryReader {
         }
         return Text::IsNullOrEmpty($Char = $this->Stream->Read(1)) ? 0x00 : \unpack("c", $Char)[1];
     }
-    
+
     /**
      * Reads a 1-byte signed integer from the current Stream and advances the current position of the Stream by one byte.
      * Alias of {@see BinaryReader::ReadSByte()}
@@ -252,7 +230,7 @@ class BinaryReader {
     public function ReadInt8(): int {
         return $this->ReadSByte();
     }
-    
+
     /**
      * Reads a 1-byte unsigned integer from the current Stream and advances the position of the Stream by one byte.
      * Alias of {@see BinaryReader::ReadByte()}
@@ -262,7 +240,7 @@ class BinaryReader {
     public function ReadUInt8(): int {
         return $this->ReadByte();
     }
-    
+
     /**
      * Reads a 2-byte signed integer from the current Stream and advances the current position of the Stream by two bytes.
      *
@@ -275,7 +253,7 @@ class BinaryReader {
         }
         return (Text::Length($Char = $this->Stream->Read(2)) < 2) ? 0x00 : \unpack("s", $Char)[1];
     }
-    
+
     /**
      * Reads a 2-byte unsigned integer from the current Stream and advances the position of the Stream by two bytes.
      *
@@ -288,7 +266,7 @@ class BinaryReader {
         }
         return (Text::Length($Char = $this->Stream->Read(2)) < 2) ? 0x00 : \unpack("S", $Char)[1];
     }
-    
+
     /**
      * Reads a 4-byte signed integer from the current Stream and advances the current position of the Stream by four bytes.
      *
@@ -301,7 +279,7 @@ class BinaryReader {
         }
         return (Text::Length($Char = $this->Stream->Read(4)) < 4) ? 0x00 : \unpack("l", $Char)[1];
     }
-    
+
     /**
      * Reads a 4-byte unsigned integer from the current Stream and advances the position of the Stream by four bytes.
      *
@@ -314,7 +292,7 @@ class BinaryReader {
         }
         return (Text::Length($Char = $this->Stream->Read(4)) < 4) ? 0x00 : \unpack("L", $Char)[1];
     }
-    
+
     /**
      * Reads an 8-byte signed integer from the current Stream and advances the current position of the Stream by eight bytes.
      *
@@ -327,7 +305,7 @@ class BinaryReader {
         }
         return (Text::Length($Char = $this->Stream->Read(8)) < 8) ? 0x00 : \unpack("q", $Char)[1];
     }
-    
+
     /**
      * Reads an 8-byte unsigned integer from the current Stream and advances the position of the Stream by eight bytes.
      *
@@ -340,7 +318,7 @@ class BinaryReader {
         }
         return (Text::Length($Char = $this->Stream->Read(8)) < 8) ? 0x00 : \unpack("Q", $Char)[1];
     }
-    
+
     /**
      * Reads an 4-byte floating point value from the current Stream and advances the current position of the Stream by four bytes.
      *
@@ -353,7 +331,7 @@ class BinaryReader {
         }
         return (Text::Length($Char = $this->Stream->Read(4)) < 4) ? 0x00 : \unpack("f", $Char)[1];
     }
-    
+
     /**
      * Reads an 8-byte floating point value from the current Stream and advances the current position of the Stream by eight bytes.
      *
@@ -366,7 +344,7 @@ class BinaryReader {
         }
         return (Text::Length($Char = $this->Stream->Read(8)) < 8) ? 0x00 : \unpack("d", $Char)[1];
     }
-    
+
     /**
      * Reads the next character from the current Stream and advances the current position of the Stream
      * in accordance with the encoding used and the specific character being read from the Stream.
@@ -378,7 +356,7 @@ class BinaryReader {
         if($this->Stream->EndOfStream()) {
             throw new EndOfStreamException("Can not read from end of Stream.");
         }
-        
+
         switch($this->Encoding) {
             case Encoding::ASCII:
                 return \chr($this->ReadByte());
@@ -386,16 +364,16 @@ class BinaryReader {
                 $Chars = [
                     $this->ReadByte()
                 ];
-                
+
                 // Return if the high-bit is set in the first read character.
                 // UTF-8 sequences start with ASCII-values below 128.
                 if($Chars[0] & 128) {
                     return Text::Empty;
                 }
-                
+
                 // Read a maximum amount of 3 bytes or until the next escape sequence.
                 for($i = 0; $i < 3 && !$this->Stream->EndOfStream(); $i++) {
-                    
+
                     $Char = $this->ReadByte();
                     if(!($Char & 128)) {
                         $this->Stream->Seek($this->Stream->Tell() - 1);
@@ -403,7 +381,7 @@ class BinaryReader {
                     }
                     $Chars[] = $Char;
                 }
-                
+
                 // Combine codepoints.
                 $Result = "";
                 foreach($Chars as $Char) {
@@ -413,7 +391,7 @@ class BinaryReader {
         }
         return "";
     }
-    
+
     /**
      * Reads a specified amount of characters according the encoding from the current Stream
      * and advances the current position of the Stream by the byte-length of the amount of read characters.
@@ -433,7 +411,7 @@ class BinaryReader {
         }
         return $Chars;
     }
-    
+
     /**
      * Reads a Boolean value from the current Stream and advances the current position of the Stream by one byte.
      *
@@ -442,20 +420,20 @@ class BinaryReader {
     public function ReadBoolean(): bool {
         return (bool)$this->ReadByte();
     }
-    
+
     /**
      * Closes the current BinaryReader and the underlying Stream.
      */
     public function Close(): void {
         $this->Stream->Close();
     }
-    
+
     /**
      *
      */
     public function __destruct() {
         $this->Close();
     }
-    
+
 }
 

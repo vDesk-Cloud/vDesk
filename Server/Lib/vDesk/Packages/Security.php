@@ -16,9 +16,9 @@ use vDesk\Security\User;
 use vDesk\Struct\Collections\Observable\Collection;
 
 /**
- * Class Security represents ...
+ * Security Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Security
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Security extends Package implements IPackage {
@@ -31,7 +31,7 @@ final class Security extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.0.2";
 
     /**
      * The name of the Package.
@@ -47,9 +47,9 @@ final class Security extends Package implements IPackage {
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "vDesk"         => "1.0.1",
-        "Configuration" => "1.0.0",
-        "Events"        => "1.0.0"
+        "Modules"       => "1.0.1",
+        "Configuration" => "1.0.2",
+        "Events"        => "1.0.1"
     ];
 
     /**
@@ -201,7 +201,7 @@ final class Security extends Package implements IPackage {
     public static function Install(\Phar $Phar, string $Path): void {
 
         Expression::Create()
-                  ->Database("Security")
+                  ->Schema("Security")
                   ->Execute();
 
         //Create tables.
@@ -221,8 +221,8 @@ final class Security extends Package implements IPackage {
                           "UpdateAccessControlList" => ["Type" => Type::Boolean, "Default" => false]
                       ],
                       [
-                          "Primary" => ["Fields" => ["ID"]],
-                          "Name"    => ["Unique" => true, "Fields" => ["Name" => 255]]
+                          "Primary"   => ["Fields" => ["ID"]],
+                          "GroupName" => ["Unique" => true, "Fields" => ["Name" => 255]]
                       ]
                   )
                   ->Execute();
@@ -253,8 +253,8 @@ final class Security extends Package implements IPackage {
                           "LastLogin"        => ["Type" => Type::Timestamp, "Default" => λ::CurrentTimestamp(), "Update" => λ::CurrentTimestamp()]
                       ],
                       [
-                          "Primary" => ["Fields" => ["ID"]],
-                          "Name"    => ["Unique" => true, "Fields" => ["Name" => 255, "Email" => 255]]
+                          "Primary"  => ["Fields" => ["ID"]],
+                          "UserName" => ["Unique" => true, "Fields" => ["Name" => 255, "Email" => 255]]
                       ]
                   )
                   ->Execute();
@@ -592,7 +592,7 @@ final class Security extends Package implements IPackage {
             new User\Groups([$Everyone, $Administration])
         );
         $User->Save();
-        \vDesk::$User = $User;
+        User::$Current = \vDesk::$User = $User;
 
         Settings::$Remote["Security"] = new Settings\Remote\Settings(
             [
@@ -619,7 +619,7 @@ final class Security extends Package implements IPackage {
 
         //Drop database.
         Expression::Drop()
-                  ->Database("Security")
+                  ->Schema("Security")
                   ->Execute();
 
         //Delete files.

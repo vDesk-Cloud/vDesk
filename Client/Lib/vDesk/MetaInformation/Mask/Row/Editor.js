@@ -33,7 +33,7 @@
  * @memberOf vDesk.MetaInformation.Mask.Row
  * @implements vDesk.Controls.Table.IRow
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
     Ensure.Parameter(Row, vDesk.MetaInformation.Mask.Row, "Row");
@@ -59,14 +59,14 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
                 TypeSelect.selectedIndex = TypeSelect.namedItem(Row.Type)?.index ?? 0;
                 RequiredCheckbox.checked = Row.Required;
 
-                if(Validator !== null) {
+                if(Validator !== null){
                     ValidatorCell.removeChild(Validator.Control);
                     Validator = null;
                 }
                 //Loop through registered IValidators and load found.
-                for(const IValidator of Object.values(vDesk.MetaInformation.Mask.Row.Validator)) {
+                for(const IValidator of Object.values(vDesk.MetaInformation.Mask.Row.Validator)){
                     //Check if the IValidator can handle the type.
-                    if(~IValidator.Types.indexOf(Row.Type)) {
+                    if(~IValidator.Types.indexOf(Row.Type)){
                         Validator = new IValidator(Row.Validator, Enabled);
                         ValidatorCell.appendChild(Validator.Control);
                         break;
@@ -92,7 +92,7 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
                 TypeSelect.disabled = !Value;
                 RequiredCheckbox.disabled = !Value;
                 DeleteButton.disabled = !Value;
-                if(Validator !== null) {
+                if(Validator !== null){
                     Validator.Enabled = Value;
                 }
             }
@@ -116,14 +116,14 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
     const OnChange = Event => {
         Event.stopPropagation();
         Row.Type = TypeSelect.options[TypeSelect.selectedIndex].id;
-        if(Validator !== null) {
+        if(Validator !== null){
             ValidatorCell.removeChild(Validator.Control);
             Validator = null;
         }
         //Loop through registered IValidators and load matching Validator.
-        for(const IValidator of Object.values(vDesk.MetaInformation.Mask.Row.Validator)) {
+        for(const IValidator of Object.values(vDesk.MetaInformation.Mask.Row.Validator)){
             //Check if the IValidator can handle the type.
-            if(~IValidator.Types.indexOf(Row.Type)) {
+            if(~IValidator.Types.indexOf(Row.Type)){
                 Validator = new IValidator(Row.Validator, Enabled);
                 ValidatorCell.appendChild(Validator.Control);
                 break;
@@ -165,7 +165,7 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
     const OnDragStart = Event => {
         if(
             Event.target === Control
-        ) {
+        ){
             Event.dataTransfer.effectAllowed = "move";
             Event.dataTransfer.setReference(this);
             Control.style.cssText = "cursor: grabbing;";
@@ -196,7 +196,7 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
         Event.preventDefault();
         Event.stopPropagation();
         const Editor = Event.dataTransfer.getReference();
-        if(Editor !== this) {
+        if(Editor !== this){
             Control.removeEventListener("drop", OnDrop, false);
             new vDesk.Events.BubblingEvent("drop", {
                 sender: this,
@@ -225,7 +225,7 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
     const OnDragLeave = Event => {
         Event.preventDefault();
         DragCount--;
-        if(DragCount === 0) {
+        if(DragCount === 0){
             Control.classList.remove("Hover");
         }
     };
@@ -382,12 +382,6 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
     TypeCell.appendChild(TypeSelect);
     Control.appendChild(TypeCell);
 
-    /**
-     * The name cell of the Editor.
-     * @type {HTMLTableCellElement}
-     */
-    const RequiredCell = document.createElement("td");
-    RequiredCell.className = "Required Cell BorderLight";
 
     /**
      * The required checkbox of the Editor.
@@ -400,6 +394,12 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
     RequiredCheckbox.disabled = !Enabled;
     RequiredCheckbox.addEventListener("click", OnClickCheckbox, false);
 
+    /**
+     * The name cell of the Editor.
+     * @type {HTMLTableCellElement}
+     */
+    const RequiredCell = document.createElement("td");
+    RequiredCell.className = "Required Cell BorderLight";
     RequiredCell.appendChild(RequiredCheckbox);
     Control.appendChild(RequiredCell);
 
@@ -417,23 +417,15 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
      */
     let Validator = null;
     //Loop through registered IValidators and load found.
-    for(const IValidator of Object.values(vDesk.MetaInformation.Mask.Row.Validator)) {
+    for(const IValidator of Object.values(vDesk.MetaInformation.Mask.Row.Validator)){
         //Check if the IValidator can handle the type.
-        if(~IValidator.Types.indexOf(Row.Type)) {
+        if(~IValidator.Types.indexOf(Row.Type)){
             Validator = new IValidator(Row.Validator, Enabled);
             ValidatorCell.appendChild(Validator.Control);
             break;
         }
     }
-
     Control.appendChild(ValidatorCell);
-
-    /**
-     * The delete button cell of the Editor.
-     * @type {HTMLTableCellElement}
-     */
-    const DeleteCell = document.createElement("td");
-    DeleteCell.className = "Cell Delete BorderLight";
 
     /**
      * The delete button of the Editor.
@@ -446,6 +438,12 @@ vDesk.MetaInformation.Mask.Row.Editor = function Editor(Row, Enabled = true) {
     DeleteButton.disabled = !Enabled;
     DeleteButton.addEventListener("click", OnClickDeleteButton, false);
 
+    /**
+     * The delete button cell of the Editor.
+     * @type {HTMLTableCellElement}
+     */
+    const DeleteCell = document.createElement("td");
+    DeleteCell.className = "Cell Delete BorderLight";
     DeleteCell.appendChild(DeleteButton);
     Control.appendChild(DeleteCell);
 

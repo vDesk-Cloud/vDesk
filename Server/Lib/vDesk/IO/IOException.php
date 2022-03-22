@@ -6,7 +6,8 @@ namespace vDesk\IO;
 /**
  * Exception that is thrown when I/O-related errors occurred.
  *
- * @author Kerry <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class IOException extends \Exception {
     /**

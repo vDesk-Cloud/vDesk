@@ -3,6 +3,7 @@
  * Searchfilter for searching Companies by name.
  * @type Object
  * @memberOf vDesk.Contacts.Company.Search
+ * @package vDesk\Contacts
  */
 vDesk.Contacts.Company.Search.Filter = {
     Module: "Contacts",

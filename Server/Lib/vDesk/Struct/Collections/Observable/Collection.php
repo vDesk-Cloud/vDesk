@@ -13,46 +13,46 @@ use vDesk\Struct\Collections\Typed\CallableCollection;
  * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnChange $Gets the "OnChange"-Eventlisteners of the Collection.
  * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnClear  $Gets the "OnClear"-Eventlisteners of the Collection.
  *
- * @package vDesk\Struct\Collections\Typed
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Collection extends \vDesk\Struct\Collections\Collection {
-    
+
     /**
      * The 'OnAdd' callbacks of the Collection.
      *
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
     protected CallableCollection $OnAdd;
-    
+
     /**
      * The 'OnDelete' callbacks of the Collection.
      *
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
     protected CallableCollection $OnDelete;
-    
+
     /**
      * The 'OnChange' callbacks of the Collection.
      *
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
     protected CallableCollection $OnChange;
-    
+
     /**
      * The 'OnClear' callbacks of the Collection.
      *
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
     protected CallableCollection $OnClear;
-    
+
     /**
      * Flag indicating whether the Collection is currently dispatching events.
      *
      * @var bool
      */
     private bool $Dispatching = false;
-    
+
     /**
      * Initializes a new instance of the Collection class.
      *
@@ -66,21 +66,13 @@ class Collection extends \vDesk\Struct\Collections\Collection {
         parent::__construct($Elements);
         $this->Dispatching = true;
         $this->AddProperties([
-            "OnAdd"    => [
-                \Get => fn&(): CallableCollection => $this->OnAdd
-            ],
-            "OnDelete" => [
-                \Get => fn&(): CallableCollection => $this->OnDelete
-            ],
-            "OnChange" => [
-                \Get => fn&(): CallableCollection => $this->OnChange
-            ],
-            "OnClear"  => [
-                \Get => fn&(): CallableCollection => $this->OnClear
-            ]
+            "OnAdd"    => [\Get => fn&(): CallableCollection => $this->OnAdd],
+            "OnDelete" => [\Get => fn&(): CallableCollection => $this->OnDelete],
+            "OnChange" => [\Get => fn&(): CallableCollection => $this->OnChange],
+            "OnClear"  => [\Get => fn&(): CallableCollection => $this->OnClear]
         ]);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -92,7 +84,7 @@ class Collection extends \vDesk\Struct\Collections\Collection {
         }
         parent::Add($Element);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -104,7 +96,7 @@ class Collection extends \vDesk\Struct\Collections\Collection {
         }
         parent::Insert($Index, $Element);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -116,7 +108,7 @@ class Collection extends \vDesk\Struct\Collections\Collection {
         }
         return parent::Remove($Element);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -130,7 +122,7 @@ class Collection extends \vDesk\Struct\Collections\Collection {
         }
         return parent::RemoveAt($Index);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -142,7 +134,7 @@ class Collection extends \vDesk\Struct\Collections\Collection {
         }
         parent::Replace($Element, $Element);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -154,7 +146,7 @@ class Collection extends \vDesk\Struct\Collections\Collection {
         }
         parent::Replace($Element, $Element);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -166,19 +158,19 @@ class Collection extends \vDesk\Struct\Collections\Collection {
         }
         parent::Clear();
     }
-    
+
     /**
      * Enables/starts dispatching of events.
      */
     public function StartDispatch(): void {
         $this->Dispatching = true;
     }
-    
+
     /**
      * Disables/stops dispatching of events.
      */
     public function StopDispatch(): void {
         $this->Dispatching = false;
     }
-    
+
 }

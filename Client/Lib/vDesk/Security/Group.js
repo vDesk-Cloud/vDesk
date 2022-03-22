@@ -10,7 +10,7 @@
  * @property {Object<Boolean>} Permissions Gets or sets the permissions of the Group.
  * @memberOf vDesk.Security
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.Group = function Group(ID = null, Name = "", Permissions = {}) {
     Ensure.Parameter(ID, Type.Number, "ID", true);

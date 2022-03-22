@@ -10,7 +10,7 @@
  * @property {Array<vDesk.Contacts.Company>} Companies Gets the currently cached Companies of the Cache.
  * @memberOf vDesk.Contacts.Company
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Contacts
  */
 vDesk.Contacts.Company.Cache = function Cache() {
 
@@ -44,7 +44,7 @@ vDesk.Contacts.Company.Cache = function Cache() {
     });
 
     //Create alphabetical items.
-    for(let i = 65; i < 91; i++) {
+    for(let i = 65; i < 91; i++){
         Alphabet[String.fromCharCode(i)] = {
             Fetched:   false,
             Companies: []
@@ -71,28 +71,28 @@ vDesk.Contacts.Company.Cache = function Cache() {
                 Module:     "Contacts",
                 Command:    "GetCompany",
                 Parameters: {ID: ID},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         );
         //Check if a callback has been passed.
-        if(Callback !== null) {
+        if(Callback !== null){
             vDesk.Connection.Send(
                 Command,
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         Callback(vDesk.Contacts.Company.FromDataView(Response.Data));
-                    } else {
+                    }else{
                         Callback(null);
                     }
                 }
             );
         }
         //Otherwise return the fetched Company.
-        else {
+        else{
             const Response = vDesk.Connection.Send(Command);
-            if(Response.Status) {
+            if(Response.Status){
                 return vDesk.Contacts.Company.FromDataView(Response.Data);
-            } else {
+            }else{
                 return null;
             }
         }
@@ -118,17 +118,17 @@ vDesk.Contacts.Company.Cache = function Cache() {
         const Storage = Alphabet[Key(Char)];
 
         //check if Companies whose name begin with the passed letter have been fetched before.
-        if(Storage.Fetched && !Refetch) {
+        if(Storage.Fetched && !Refetch){
             //Check if the callback has been omitted.
-            if(Callback === null) {
+            if(Callback === null){
                 return Storage.Companies;
             }
             Callback(Storage.Companies);
         }
         //Otherwise fetch Companies from the server.
-        else {
+        else{
             //Check if the Companies of the specified alphabetical index should be fetched again.
-            if(Refetch) {
+            if(Refetch){
                 //Clear the alphabetical index and remove the cached Companies from the cache.
                 Storage.Companies.forEach(Company => {
                     Companies.splice(Companies.indexOf(Company), 1);
@@ -145,34 +145,34 @@ vDesk.Contacts.Company.Cache = function Cache() {
                         Amount: Amount,
                         Offset: Offset
                     },
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             );
             //Check if a callback has been passed.
-            if(Callback !== null) {
+            if(Callback !== null){
                 vDesk.Connection.Send(
                     Command,
                     Response => {
-                        if(Response.Status) {
+                        if(Response.Status){
                             Storage.Companies = Response.Data.map(Company => vDesk.Contacts.Company.FromDataView(Company));
                             Storage.Fetched = true;
                             Storage.Companies.forEach(Company => Companies.push(Company));
                             Callback(Storage.Companies);
-                        } else {
+                        }else{
                             alert(Response.Data);
                         }
                     }
                 );
             }
             //Otherwise fetch and return the Companies.
-            else {
+            else{
                 const Response = vDesk.Connection.Send(Command);
-                if(Response.Status) {
+                if(Response.Status){
                     Storage.Companies = Response.Data.map(Company => vDesk.Contacts.Company.FromDataView(Company));
                     Storage.Fetched = true;
                     Storage.Companies.forEach(Company => Companies.push(Company));
                     return Storage.Companies;
-                } else {
+                }else{
                     alert(Response.Data);
                 }
             }
@@ -188,11 +188,11 @@ vDesk.Contacts.Company.Cache = function Cache() {
         Ensure.Parameter(Company, vDesk.Contacts.Company, "Company");
 
         //Check if the Company does not exist within the cache.
-        if(Companies.find(CachedCompany => CachedCompany.ID === Company.ID) === undefined) {
+        if(Companies.find(CachedCompany => CachedCompany.ID === Company.ID) === undefined){
 
             //Append the Company to its (maybe) new according alphabetical index and the cache.
             const Storage = Alphabet[Key(Company.Name)];
-            if(Storage.Fetched) {
+            if(Storage.Fetched){
                 Storage.Companies.push(Company);
                 Companies.push(Company);
             }
@@ -211,11 +211,11 @@ vDesk.Contacts.Company.Cache = function Cache() {
 
         //Check if the Company exists within the cache.
         const CachedCompany = Companies.find(CachedCompany => CachedCompany.ID === Company.ID);
-        if(CachedCompany !== undefined) {
+        if(CachedCompany !== undefined){
 
             //Remove the Company temporarily from its according alphabetical index.
-            for(const Char in Alphabet) {
-                if(Alphabet[Char].Companies.some(Company => Company.ID === CachedCompany.ID)) {
+            for(const Char in Alphabet){
+                if(Alphabet[Char].Companies.some(Company => Company.ID === CachedCompany.ID)){
                     Alphabet[Char].Companies.splice(Alphabet[Char].Companies.indexOf(CachedCompany), 1);
                     break;
                 }
@@ -223,7 +223,7 @@ vDesk.Contacts.Company.Cache = function Cache() {
 
             //Reappend the Company to its (maybe) new according alphabetical index.
             const Storage = Alphabet[Key(Company.Name)];
-            if(Storage.Fetched) {
+            if(Storage.Fetched){
                 Storage.Companies.push(Company);
             }
             return true;
@@ -242,11 +242,11 @@ vDesk.Contacts.Company.Cache = function Cache() {
 
         //Check if the Company exists within the cache.
         const CachedCompany = Companies.find(CachedCompany => CachedCompany.ID === Company.ID);
-        if(CachedCompany !== undefined) {
+        if(CachedCompany !== undefined){
 
             //Remove the Company from its according alphabetical index.
-            for(const Char in Alphabet) {
-                if(Alphabet[Char].Companies.some(Company => Company.ID === CachedCompany.ID)) {
+            for(const Char in Alphabet){
+                if(Alphabet[Char].Companies.some(Company => Company.ID === CachedCompany.ID)){
                     Alphabet[Char].Companies.splice(Alphabet[Char].Companies.indexOf(CachedCompany), 1);
                     break;
                 }

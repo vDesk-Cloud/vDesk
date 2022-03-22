@@ -29,8 +29,7 @@
  * @property {Array<vDesk.Archive.TreeView.Item>} Children Gets or sets the children of the Item.
  * @memberOf vDesk.Archive.TreeView
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
- *
+ * @package vDesk\Archive
  */
 vDesk.Archive.TreeView.Item = function(Element) {
     Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
@@ -63,10 +62,10 @@ vDesk.Archive.TreeView.Item = function(Element) {
                 Ensure.Property(Value, vDesk.Archive.Element, "Element");
                 Element = Value;
                 Title.textContent = Value.Name;
-                if(Value.Type === vDesk.Archive.Element.File) {
+                if(Value.Type === vDesk.Archive.Element.File){
                     Expander.removeEventListener("click", OnClickExpander);
                     Expander.textContent = "";
-                } else {
+                }else{
                     Expander.addEventListener("click", OnClickExpander);
                     Expander.textContent = "+";
                 }
@@ -123,12 +122,12 @@ vDesk.Archive.TreeView.Item = function(Element) {
      */
     const OnClickExpander = Event => {
         Event.stopPropagation();
-        if(Expanded) {
+        if(Expanded){
             Expander.textContent = "+";
             ChildList.classList.remove("Expanded");
             Expanded = false;
-        } else {
-            if(Children.length === 0) {
+        }else{
+            if(Children.length === 0){
                 new vDesk.Events.BubblingEvent("expand", {sender: this}).Dispatch(Control);
             }
             Expander.textContent = "-";
@@ -145,7 +144,7 @@ vDesk.Archive.TreeView.Item = function(Element) {
     const OnContextMenu = Event => {
         Event.stopPropagation();
         Event.preventDefault();
-        if(Element.ID !== null) {
+        if(Element.ID !== null){
             new vDesk.Events.BubblingEvent("context", {
                 sender: Element,
                 x:      Event.pageX,
@@ -184,7 +183,7 @@ vDesk.Archive.TreeView.Item = function(Element) {
     const OnDragLeave = Event => {
         Event.stopPropagation();
         DragCounter--;
-        if(DragCounter === 0) {
+        if(DragCounter === 0){
             Control.classList.toggle("DropTarget", false);
         }
         return false;
@@ -213,17 +212,17 @@ vDesk.Archive.TreeView.Item = function(Element) {
         if(
             Event.dataTransfer.files !== undefined
             && Event.dataTransfer.files.length > 0
-        ) {
+        ){
             new vDesk.Events.BubblingEvent("filedrop", {
                 sender: Target,
                 files:  Array.from(Event.dataTransfer.files)
             }).Dispatch(Control);
-        } else {
+        }else{
             //Get the ID of the dropped Element.
             const DroppedElement = Event.dataTransfer.getReference();
 
             //Don't fire event, if it's dropped on itself.
-            if(DroppedElement.ID !== Target.ID && DroppedElement.Parent.ID !== Target.ID) {
+            if(DroppedElement.ID !== Target.ID && DroppedElement.Parent.ID !== Target.ID){
                 new vDesk.Events.BubblingEvent("elementdrop", {
                     sender:  Target,
                     element: DroppedElement
@@ -241,7 +240,7 @@ vDesk.Archive.TreeView.Item = function(Element) {
         Ensure.Parameter(Item, [vDesk.Archive.TreeView.Item, vDesk.Archive.Element], "Item");
 
         //Check if an Element has been passed and transform it into an Item.
-        if(Item instanceof vDesk.Archive.Element) {
+        if(Item instanceof vDesk.Archive.Element){
             Item = new vDesk.Archive.TreeView.Item(Item);
         }
 
@@ -260,7 +259,7 @@ vDesk.Archive.TreeView.Item = function(Element) {
         //Get the Item to remove.
         const Child = Children.find(Child => Child.Element.ID === Item.Element.ID);
         //Remove the control from the child list and collection.
-        if(Child !== undefined) {
+        if(Child !== undefined){
             ChildList.removeChild(Child.Control);
             Children.splice(Children.indexOf(Child), 1);
         }
@@ -289,10 +288,10 @@ vDesk.Archive.TreeView.Item = function(Element) {
     Expander.className = "Expander Font Dark";
 
     //Check if the Item represents a folder.
-    if(Element.Type === vDesk.Archive.Element.Folder) {
+    if(Element.Type === vDesk.Archive.Element.Folder){
         Expander.textContent = "+";
         Expander.addEventListener("click", OnClickExpander);
-    } else {
+    }else{
         Expander.textContent = "";
     }
     Control.appendChild(Expander);

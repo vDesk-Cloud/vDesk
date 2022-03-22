@@ -4,47 +4,54 @@ declare(strict_types=1);
 namespace vDesk;
 
 use vDesk\Configuration\Settings;
-use vDesk\DataProvider\Expression;
-use vDesk\DataProvider\Expression\Functions;
+use vDesk\DataProvider\AnsiSQL\Provider;
 use vDesk\DataProvider\IPreparedStatement;
 use vDesk\DataProvider\IProvider;
 use vDesk\DataProvider\IResult;
 use vDesk\DataProvider\ITransaction;
-use vDesk\Struct\StaticSingleton;
 
 /**
  * Provides abstract database access.
  *
  * @author  Kerry Holz <DevelopmentHero@gmail.com>
  */
-final class DataProvider extends StaticSingleton {
-    
+final class DataProvider {
+
     /**
-     * Database null value.
+     * The null value of the current DataProvider.
+     *
+     * @var null|string
      */
-    public static $NULL = null;
-    
+    public static ?string $NULL = null;
+
+    /**
+     * The field separator character of the current DataProvider.
+     *
+     * @var string
+     */
+    public static string $Separator = Provider::Separator;
+
+    /**
+     * The quotation character for escaping strings of the current DataProvider.
+     *
+     * @var string
+     */
+    public static string $Quote = Provider::Quote;
+
+    /**
+     * The quotation character for escaping reserved keywords and field identifiers of the current DataProvider.
+     *
+     * @var string
+     */
+    public static string $Field = Provider::Field;
+
     /**
      * The IProvider of the DataProvider
      *
      * @var  null|\vDesk\DataProvider\IProvider
      */
-    public static ?IProvider $Provider;
-    
-    /**
-     * The Expressions of the DataProvider.
-     *
-     * @var \vDesk\DataProvider\Expression|null
-     */
-    public static ?Expression $Expression;
-    
-    /**
-     * The Functions of the DataProvider
-     *
-     * @var \vDesk\DataProvider\Expression\Functions|null
-     */
-    public static ?Expression\Functions $Functions;
-    
+    public static ?IProvider $Provider = null;
+
     /**
      * Retrieves the last auto generated ID of an INSERT-SQL-Statement.
      *
@@ -53,7 +60,7 @@ final class DataProvider extends StaticSingleton {
     public static function LastInsertID(): int {
         return self::$Provider->LastInsertID();
     }
-    
+
     /**
      * Executes a SQL-Statement on the database-server.
      *
@@ -62,10 +69,10 @@ final class DataProvider extends StaticSingleton {
      *
      * @return IResult The result-set yielding the values the SQL-server returned from the specified statement.
      */
-    public static function Execute(string $Statement, $Buffered = true): IResult {
+    public static function Execute(string $Statement, bool $Buffered = true): IResult {
         return self::$Provider->Execute($Statement, $Buffered);
     }
-    
+
     /**
      * Calls a Stored-Procedure on the database-server.
      *
@@ -77,7 +84,7 @@ final class DataProvider extends StaticSingleton {
     public static function Call(string $Procedure, ...$Parameters): IResult {
         return self::$Provider->Call($Procedure, $Parameters);
     }
-    
+
     /**
      * Escapes special characters in a string according to the current database-specification.
      *
@@ -88,7 +95,7 @@ final class DataProvider extends StaticSingleton {
     public static function Escape(string $String): string {
         return self::$Provider->Escape($String);
     }
-    
+
     /**
      * Escapes special characters or reserved words in a field according to the current database-specification.
      *
@@ -99,7 +106,7 @@ final class DataProvider extends StaticSingleton {
     public static function EscapeField(string $Field): string {
         return self::$Provider->EscapeField($Field);
     }
-    
+
     /**
      * Sanitizes a value according to the current database-specification.
      *
@@ -110,7 +117,7 @@ final class DataProvider extends StaticSingleton {
     public static function Sanitize(mixed $Value): mixed {
         return self::$Provider->Sanitize($Value);
     }
-    
+
     /**
      * Sanitizes special characters or reserved words in a field according to the current database-specification.
      *
@@ -121,7 +128,7 @@ final class DataProvider extends StaticSingleton {
     public static function SanitizeField(mixed $Field): string {
         return self::$Provider->SanitizeField($Field);
     }
-    
+
     /**
      * Prepares a SQL-statement to execute on a SQL-server.
      *
@@ -130,10 +137,10 @@ final class DataProvider extends StaticSingleton {
      *
      * @return \vDesk\DataProvider\IPreparedStatement The prepared statement to execute.
      */
-    public static function Prepare(string $Statement, $Buffered = true): IPreparedStatement {
+    public static function Prepare(string $Statement, bool $Buffered = true): IPreparedStatement {
         return self::$Provider->Prepare($Statement, $Buffered);
     }
-    
+
     /**
      * Begins a SQL-transaction to execute on a SQL-server.
      *
@@ -150,44 +157,40 @@ final class DataProvider extends StaticSingleton {
     public static function Transact(string $Statement, bool $Buffered = false, ?string $Name = null, bool $AutoRollback = false, bool $AutoCommit = false): ITransaction {
         return self::$Provider->Transact($Statement, $Buffered, $Name, $AutoRollback, $AutoCommit);
     }
-    
+
     /**
      * Initializes a new instance of the DataProvider class.
      *
-     * @param string      $Provider Initializes the DataProvider with the specified data provider.
-     * @param string      $Server   Initializes the DataProvider with the specified server address.
-     * @param int|null    $Port     Initializes the DataProvider with the specified port.
-     * @param string      $User     Initializes the DataProvider with the specified database user.
-     * @param string      $Password Initializes the DataProvider with the specified password of the database user.
-     * @param string|null $Charset  Initializes the DataProvider with the specified charset.
+     * @param string      $Provider   Initializes the DataProvider with the specified data provider.
+     * @param string      $Server     Initializes the DataProvider with the specified server address.
+     * @param int|null    $Port       Initializes the DataProvider with the specified port.
+     * @param string      $User       Initializes the DataProvider with the specified database user.
+     * @param string      $Password   Initializes the DataProvider with the specified password of the database user.
+     * @param null|string $Database   Initializes the DataProvider with the specified database.
+     * @param bool        $Persistent Initializes the DataProvider with the specified flag indicating whether to use persistent connections.
      */
-    protected static function _construct(
-        string $Provider = "",
-        string $Server = "localhost",
-        int $Port = null,
-        string $User = "",
-        string $Password = "",
-        string $Charset = null
+    public function __construct(
+        string  $Provider = "",
+        string  $Server = "localhost",
+        int     $Port = null,
+        string  $User = "",
+        string  $Password = "",
+        ?string $Database = null,
+        bool    $Persistent = false
     ) {
+        //Close previous connection.
+        self::$Provider?->Close();
+
         $Class          = "vDesk\\DataProvider\\{$Provider}\\Provider";
-        self::$Provider = new $Class(
-            $Server,
-            $User,
-            $Password,
-            $Port,
-            $Charset
-        );
-        
-        //Populate database specific NULL value.
-        self::$NULL = self::$Provider::NULL;
-        
-        //Initialize Expressions.
-        self::$Expression = new Expression($Provider);
-        
-        //Initialize Functions.
-        self::$Functions = new Functions($Provider);
+        self::$Provider = new $Class($Server, $User, $Password, $Database, $Port, null, $Persistent);
+
+        //Populate database specific values.
+        self::$NULL      = self::$Provider::NULL;
+        self::$Separator = self::$Provider::Separator;
+        self::$Quote     = self::$Provider::Quote;
+        self::$Field     = self::$Provider::Field;
     }
-    
+
 }
 
 //Initialize DataProvider.
@@ -198,6 +201,7 @@ if(Settings::$Local["DataProvider"]->Count > 0) {
         Settings::$Local["DataProvider"]["Port"],
         Settings::$Local["DataProvider"]["User"],
         Settings::$Local["DataProvider"]["Password"],
-        Settings::$Local["DataProvider"]["Charset"] ?? null
+        Settings::$Local["DataProvider"]["Database"],
+        Settings::$Local["DataProvider"]["Persistent"] ?? false
     );
 }

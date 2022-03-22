@@ -12,26 +12,36 @@ use vDesk\Struct\Collections\Dictionary;
 use vDesk\Struct\Text;
 use vDesk\Struct\Type;
 use vDesk\IO\HTTP\Method;
-use vDesk\Utils\Log;
 
+/**
+ * Class that provides functionality for sending and receiving HTTP requests through a low level Socket connection.
+ *
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
+ */
 class Request {
-    
+
+    /**
+     * The underlying Socket of the Request.
+     *
+     * @var \vDesk\IO\Socket
+     */
     protected Socket $Socket;
-    
+
     /**
      * The CGI parameters of the Request.
      *
      * @var \vDesk\Struct\Collections\Dictionary
      */
     public Dictionary $Parameters;
-    
+
     /**
      * The multipart boundary of the Request.
      *
      * @var null|string
      */
     private ?string $Boundary;
-    
+
     /**
      * The default HTTP headers of the Request.
      */
@@ -40,9 +50,9 @@ class Request {
         "User-Agent"   => self::class,
         "Content-Type" => "text/plain"
     ];
-    
+
     /**
-     * Initializes an new instance of the Request class.
+     * Initializes a new instance of the Request class.
      *
      * @param string   $Method     Initializes the Request with the specified HTTP method.
      * @param string   $Host       Initializes the Request with the specified target host.
@@ -57,14 +67,14 @@ class Request {
     public function __construct(
         public string $Method = Method::Get,
         public string $Host = "",
-        public int $Port = 80,
+        public int    $Port = 80,
         public string $Resource = "/",
-        public array $Headers = self::DefaultHeaders,
-        iterable $Parameters = [],
-        public mixed $Message = null
+        public array  $Headers = self::DefaultHeaders,
+        iterable      $Parameters = [],
+        public mixed  $Message = null
     ) {
         $this->Parameters = new Dictionary($Parameters);
-        
+
         //Calculate size.
         //Welcome to the switch of death...
         switch($Method) {
@@ -110,11 +120,11 @@ class Request {
                         $this->Headers["Content-Length"] += \strlen((string)$Message);
                 }
         }
-        
+
         $this->Socket = new Socket("tcp://{$Host}:{$Port}", Socket::Remote);
-        
+
     }
-    
+
     /**
      * Sends the Request.
      *
@@ -137,21 +147,21 @@ class Request {
             $this->Socket->Send("{$this->Method} {$this->Resource} HTTP/1.1\r\n");
         }
         $this->Socket->Send("Host: {$this->Host}\r\n");
-        
+
         //Send headers.
         foreach($this->Headers as $Header => $Value) {
             $this->Socket->Send("{$Header}: {$Value}\r\n");
         }
-        
+
         //End header section.
         $this->Socket->Send("\r\n");
-        
+
         //Check if the default formatting should get bypassed.
         if($BypassUpstream !== null) {
             $BypassUpstream($this->Socket, $this);
             return new Response($this->Socket, $BypassDownstream);
         }
-        
+
         //Send message.
         //...the madness continues...
         switch($this->Method) {
@@ -222,11 +232,11 @@ class Request {
                         $this->Socket->Send((string)$this->Message);
                 }
         }
-        
+
         return new Response($this->Socket, $BypassDownstream);
         //...and now I need a therapy.
     }
-    
+
     /**
      * Factory method that creates a new instance of the Request class representing a HTTP "GET" request that only
      * supports the transmission of headers and CGI parameters.
@@ -241,7 +251,7 @@ class Request {
         [$Host, $Port, $Resource] = static::ParseURL($URL);
         return new static(Method::Get, $Host, $Port, $Resource, $Headers, $Parameters);
     }
-    
+
     /**
      * Factory method that creates a new instance of the Request class representing a HTTP "HEAD" request that only
      * supports the transmission of headers and CGI parameters.
@@ -256,7 +266,7 @@ class Request {
         [$Host, $Port, $Resource] = static::ParseURL($URL);
         return new static(Method::Head, $Host, $Port, $Resource, $Headers, $Parameters);
     }
-    
+
     /**
      * Factory method that creates a new instance of the Request class representing a HTTP "POST" request that supports
      * the transmission of headers, CGI parameters and custom data.
@@ -272,7 +282,7 @@ class Request {
         [$Host, $Port, $Resource] = static::ParseURL($URL);
         return new static(Method::Post, $Host, $Port, $Resource, $Headers, $Parameters, $Message);
     }
-    
+
     /**
      * Factory method that creates a new instance of the Request class representing a HTTP "PUT" request that supports
      * the transmission of headers, CGI parameters and binary data.
@@ -288,7 +298,7 @@ class Request {
         [$Host, $Port, $Resource] = static::ParseURL($URL);
         return new static(Method::Put, $Host, $Port, $Resource, $Headers, $Parameters, $File);
     }
-    
+
     /**
      * Factory method that creates a new instance of the Request class representing a HTTP "PATCH" request that
      * supports the transmission of headers, CGI parameters and binary data.
@@ -304,7 +314,7 @@ class Request {
         [$Host, $Port, $Resource] = static::ParseURL($URL);
         return new static(Method::Patch, $Host, $Port, $Resource, $Headers, $Parameters, $File);
     }
-    
+
     /**
      * Parses an URL into its parts.
      *
@@ -318,7 +328,7 @@ class Request {
         $Host          = null;
         $Port          = 80;
         $Resource      = "/";
-        
+
         //Check if the URL contains a port.
         if($PortIndex > 2) {
             if($ResourceIndex > $PortIndex) {
@@ -335,8 +345,8 @@ class Request {
         } else {
             $Host = $URL;
         }
-        
+
         return [$Host, $Port, $Resource];
     }
-    
+
 }

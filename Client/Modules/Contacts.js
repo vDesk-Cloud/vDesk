@@ -1,10 +1,14 @@
 "use strict";
 /**
  * Initializes a new instance of the Contacts class.
- * @module Contacts
- * @class The central Contacts module of vDesk.
+ * @class Contacts Module
+ * @property {HTMLDivElement} Control gets the underlying DOM-Node.
+ * @property {String} Name Gets the name of the Module.
+ * @property {String} Title Gets the title of the Module.
+ * @property {String} Icon Gets the icon of the Module.
  * @memberOf Modules
  * @author Kerry <DevelopmentHero@gmail.com>
+ * @package vDesk\Contacts
  */
 Modules.Contacts = function Contacts() {
 
@@ -23,8 +27,7 @@ Modules.Contacts = function Contacts() {
     Object.defineProperties(this, {
         Control: {
             enumerable: true,
-
-            get: () => Control
+            get:        () => Control
         },
         Name:    {
             enumerable: true,
@@ -53,17 +56,17 @@ Modules.Contacts = function Contacts() {
      */
     const Create = function(Model) {
         Ensure.Parameter(Model, [vDesk.Contacts.Contact, vDesk.Contacts.Company], "Model");
-        if(Model instanceof vDesk.Contacts.Contact) {
+        if(Model instanceof vDesk.Contacts.Contact){
             //Add the Contact to the ContactCache.
             ContactCache.Add(Model);
 
             //Add the Contact to the Contacts Table if the first letter of its surname matches the letter of the current displayed contacts.
-            if(SelectedItem.textContent === Key(Model.Surname)) {
+            if(SelectedItem.textContent === Key(Model.Surname)){
                 ContactsTable.Rows.Add(Model);
             }
-        } else if(Model instanceof vDesk.Contacts.Company) {
+        }else if(Model instanceof vDesk.Contacts.Company){
             //Add the Company to the global Company collection.
-            if(vDesk.Contacts.Companies.find(Company => Company.ID === Model.ID) === undefined) {
+            if(vDesk.Contacts.Companies.find(Company => Company.ID === Model.ID) === undefined){
                 vDesk.Contacts.Companies.push(
                     {
                         ID:   Model.ID,
@@ -76,7 +79,7 @@ Modules.Contacts = function Contacts() {
             CompanyCache.Add(Model);
 
             //Add the Company to the Companies Table if the first letter of its name matches the letter of the current displayed Companies.
-            if(SelectedItem.textContent === Key(Model.Name)) {
+            if(SelectedItem.textContent === Key(Model.Name)){
                 CompaniesTable.Rows.Add(Model);
             }
         }
@@ -88,7 +91,7 @@ Modules.Contacts = function Contacts() {
      */
     const Update = function(Model) {
         Ensure.Parameter(Model, [vDesk.Contacts.Contact, vDesk.Contacts.Company], "Model");
-        if(Model instanceof vDesk.Contacts.Contact) {
+        if(Model instanceof vDesk.Contacts.Contact){
             //Update the Contact of the ContactCache.
             ContactCache.Update(Model);
 
@@ -96,13 +99,13 @@ Modules.Contacts = function Contacts() {
             ContactsTable.Rows.RemoveWhere(Row => Row.ID === Model.ID);
 
             //Add the Contact to the Contacts Table if the first letter of its surname matches the letter of the current displayed Contacts.
-            if(SelectedItem.textContent === Key(Model.Surname)) {
+            if(SelectedItem.textContent === Key(Model.Surname)){
                 ContactsTable.Rows.Add(Model);
             }
-        } else if(Model instanceof vDesk.Contacts.Company) {
+        }else if(Model instanceof vDesk.Contacts.Company){
             //Update the Company of the global Company collection.
             const Company = vDesk.Contacts.Companies.find(Company => Company.ID === Model.ID);
-            if(typeof Company !== undefined) {
+            if(typeof Company !== undefined){
                 Company.Name = Model.Name;
             }
 
@@ -113,7 +116,7 @@ Modules.Contacts = function Contacts() {
             CompaniesTable.Rows.RemoveWhere(Row => Row.ID === Model.ID);
 
             //Add the Company to the Companies Table if the first letter of its name matches the letter of the current displayed Companies.
-            if(SelectedItem.textContent === Key(Model.Name)) {
+            if(SelectedItem.textContent === Key(Model.Name)){
                 CompaniesTable.Rows.Add(Model);
             }
         }
@@ -125,16 +128,16 @@ Modules.Contacts = function Contacts() {
      */
     const Delete = function(Model) {
         Ensure.Parameter(Model, [vDesk.Contacts.Contact, vDesk.Contacts.Company], "Model");
-        if(Model instanceof vDesk.Contacts.Contact) {
+        if(Model instanceof vDesk.Contacts.Contact){
             //Remove the Contact from the ContactCache.
             ContactCache.Remove(Model);
 
             //Remove the Contact from the Contacts Table.
             ContactsTable.Rows.RemoveWhere(Row => Row.ID === Model.ID);
-        } else if(Model instanceof vDesk.Contacts.Company) {
+        }else if(Model instanceof vDesk.Contacts.Company){
             //Remove the Company to the global Company collection.
             const Company = vDesk.Contacts.Companies.find(Company => Company.ID === Model.ID);
-            if(Company !== undefined) {
+            if(Company !== undefined){
                 vDesk.Contacts.Companies.splice(vDesk.Contacts.Companies.indexOf(Company), 1);
             }
 
@@ -150,7 +153,7 @@ Modules.Contacts = function Contacts() {
      * Deselects any selected contact or company.
      */
     const OnClick = () => {
-        if(Selected !== null) {
+        if(Selected !== null){
             Selected.Selected = false;
             Selected = null;
         }
@@ -170,7 +173,7 @@ Modules.Contacts = function Contacts() {
         SelectedItem = Event.target;
         SelectedItem.classList.add("Selected");
 
-        if(ContactsTabItem.Selected) {
+        if(ContactsTabItem.Selected){
             ContactsTable.Rows.Clear();
             ContactCache.FetchContacts(
                 SelectedItem.textContent,
@@ -179,7 +182,7 @@ Modules.Contacts = function Contacts() {
                 false,
                 Contacts => ContactsTable.Rows = Contacts
             );
-        } else if(CompaniesTabItem.Selected) {
+        }else if(CompaniesTabItem.Selected){
             CompaniesTable.Rows.Clear();
             CompanyCache.FetchCompanies(
                 SelectedItem.textContent,
@@ -199,20 +202,20 @@ Modules.Contacts = function Contacts() {
      * @param {CustomEvent} Event
      */
     const OnSelect = Event => {
-        if(Selected !== null) {
+        if(Selected !== null){
             Selected.Selected = false;
         }
         Selected = Event.detail.sender;
         Selected.Selected = true;
         ViewToolBarItem.Enabled = true;
         EditToolBarItem.Enabled = Selected instanceof vDesk.Contacts.Company
-                                  && vDesk.User.Permissions.UpdateCompany
-                                  || Selected.AccessControlList.Write
-                                  && vDesk.User.Permissions.UpdateContact;
+            && vDesk.Security.User.Current.Permissions.UpdateCompany
+            || Selected.AccessControlList.Write
+            && vDesk.Security.User.Current.Permissions.UpdateContact;
         DeleteToolBarItem.Enabled = Selected instanceof vDesk.Contacts.Company
-                                    && vDesk.User.Permissions.DeleteCompany
-                                    || Selected.AccessControlList.Delete
-                                    && vDesk.User.Permissions.DeleteContact;
+            && vDesk.Security.User.Current.Permissions.DeleteCompany
+            || Selected.AccessControlList.Delete
+            && vDesk.Security.User.Current.Permissions.DeleteContact;
         ContextMenu.Hide();
     };
 
@@ -230,7 +233,7 @@ Modules.Contacts = function Contacts() {
      * @param {MouseEvent|CustomEvent} Event
      */
     const OnContext = Event => {
-        if(ContextMenu.Visible) {
+        if(ContextMenu.Visible){
             ContextMenu.Hide();
         }
         ContextMenu.Show(Event?.detail?.sender ?? Control, Event?.detail?.x ?? Event.pageX, Event?.detail?.y ?? Event.pageY);
@@ -242,7 +245,7 @@ Modules.Contacts = function Contacts() {
      * @param {CustomEvent} Event
      */
     const OnSubmit = Event => {
-        switch(Event.detail.action) {
+        switch(Event.detail.action){
             case "open":
                 new vDesk.Contacts.ViewerWindow(ContextMenu.Target).Show();
                 break;
@@ -256,13 +259,13 @@ Modules.Contacts = function Contacts() {
                 if(
                     ContextMenu.Target instanceof vDesk.Contacts.Contact
                     && ContextMenu.Target.AccessControlList.Write
-                    && vDesk.User.Permissions.UpdateContact
-                ) {
+                    && vDesk.Security.User.Current.Permissions.UpdateContact
+                ){
                     this.UpdateContact(ContextMenu.Target);
-                } else if(
+                }else if(
                     ContextMenu.Target instanceof vDesk.Contacts.Company
-                    && vDesk.User.Permissions.UpdateCompany
-                ) {
+                    && vDesk.Security.User.Current.Permissions.UpdateCompany
+                ){
                     this.UpdateCompany(ContextMenu.Target);
                 }
                 break;
@@ -270,10 +273,10 @@ Modules.Contacts = function Contacts() {
                 if(
                     ContextMenu.Target instanceof vDesk.Contacts.Contact
                     && ContextMenu.Target.AccessControlList.Delete
-                    && vDesk.User.Permissions.DeleteContact
-                ) {
+                    && vDesk.Security.User.Current.Permissions.DeleteContact
+                ){
                     this.DeleteContact(ContextMenu.Target);
-                } else if(ContextMenu.Target instanceof vDesk.Contacts.Company) {
+                }else if(ContextMenu.Target instanceof vDesk.Contacts.Company){
                     this.DeleteCompany(ContextMenu.Target);
                 }
                 break;
@@ -293,7 +296,7 @@ Modules.Contacts = function Contacts() {
      * @param {MessageEvent} Event
      */
     const OnContactsContactCreated = Event => {
-        if(ContactCache.Find(Number.parseInt(Event.data)) === null) {
+        if(ContactCache.Find(Number.parseInt(Event.data)) === null){
             ContactCache.FetchContact(Number.parseInt(Event.data), Create);
         }
     };
@@ -316,7 +319,7 @@ Modules.Contacts = function Contacts() {
      * @param {MessageEvent} Event
      */
     const OnContactsContactUpdated = Event => {
-        if(ContactCache.Find(Number.parseInt(Event.data)) !== null) {
+        if(ContactCache.Find(Number.parseInt(Event.data)) !== null){
             ContactCache.FetchContact(Number.parseInt(Event.data), Update)
         }
     };
@@ -348,7 +351,7 @@ Modules.Contacts = function Contacts() {
      */
     const OnContactsContactDeleted = Event => {
         const Contact = ContactCache.Find(Number.parseInt(Event.data));
-        if(Contact !== null) {
+        if(Contact !== null){
             Delete(Contact);
         }
     };
@@ -377,7 +380,7 @@ Modules.Contacts = function Contacts() {
      * @param {MessageEvent} Event
      */
     const OnContactsCompanyCreated = Event => {
-        if(CompanyCache.Find(Number.parseInt(Event.data)) === null) {
+        if(CompanyCache.Find(Number.parseInt(Event.data)) === null){
             CompanyCache.FetchCompany(Number.parseInt(Event.data), Create);
         }
     };
@@ -400,7 +403,7 @@ Modules.Contacts = function Contacts() {
      * @param {MessageEvent} Event
      */
     const OnContactsCompanyUpdated = Event => {
-        if(CompanyCache.Find(Number.parseInt(Event.data)) !== null) {
+        if(CompanyCache.Find(Number.parseInt(Event.data)) !== null){
             CompanyCache.FetchCompany(Number.parseInt(Event.data), Update)
         }
     };
@@ -432,7 +435,7 @@ Modules.Contacts = function Contacts() {
      */
     const OnContactsCompanyDeleted = Event => {
         const Company = CompanyCache.Find(Number.parseInt(Event.data));
-        if(Company !== null) {
+        if(Company !== null){
             Delete(Company);
         }
     };
@@ -489,15 +492,21 @@ Modules.Contacts = function Contacts() {
                 vDesk.Locale.vDesk.Edit,
                 "Edit",
                 vDesk.Visual.Icons.Edit,
-                Model => Model instanceof vDesk.Contacts.Contact && Model.AccessControlList.Write && vDesk.User.Permissions.UpdateContact
-                         || Model instanceof vDesk.Contacts.Company && vDesk.User.Permissions.UpdateCompany
+                Model => Model instanceof vDesk.Contacts.Contact
+                    && Model.AccessControlList.Write
+                    && vDesk.Security.User.Current.Permissions.UpdateContact
+                    || Model instanceof vDesk.Contacts.Company
+                    && vDesk.Security.User.Current.Permissions.UpdateCompany
             ),
             new vDesk.Controls.ContextMenu.Item(
                 vDesk.Locale.vDesk.Delete,
                 "delete",
                 vDesk.Visual.Icons.Delete,
-                Model => Model instanceof vDesk.Contacts.Contact && Model.AccessControlList.Delete && vDesk.User.Permissions.DeleteContact
-                         || Model instanceof vDesk.Contacts.Company && vDesk.User.Permissions.DeleteCompany
+                Model => Model instanceof vDesk.Contacts.Contact
+                    && Model.AccessControlList.Delete
+                    && vDesk.Security.User.Current.Permissions.DeleteContact
+                    || Model instanceof vDesk.Contacts.Company
+                    && vDesk.Security.User.Current.Permissions.DeleteCompany
             ),
             new vDesk.Controls.ContextMenu.Group(
                 vDesk.Locale.vDesk.New,
@@ -528,7 +537,7 @@ Modules.Contacts = function Contacts() {
     AlphabetList.addEventListener("click", OnClickAlphabetList, false);
 
     //Create alphabetical items.
-    for(let i = 65; i < 91; i++) {
+    for(let i = 65; i < 91; i++){
         const Item = document.createElement("li");
         Item.className = "Char Font Dark BorderLight";
         Item.textContent = String.fromCharCode(i);
@@ -684,7 +693,7 @@ Modules.Contacts = function Contacts() {
     const NewContactToolBarItem = new vDesk.Controls.ToolBar.Item(
         vDesk.Locale.Contacts.Contact,
         vDesk.Visual.Icons.Security.CreateUser,
-        vDesk.User.Permissions.CreateContact,
+        vDesk.Security.User.Current.Permissions.CreateContact,
         this.CreateContact
     );
 
@@ -695,7 +704,7 @@ Modules.Contacts = function Contacts() {
     const NewCompanyToolBarItem = new vDesk.Controls.ToolBar.Item(
         vDesk.Locale.Contacts.CompanyContact,
         vDesk.Visual.Icons.Contacts.CreateCompany,
-        vDesk.User.Permissions.CreateCompany,
+        vDesk.Security.User.Current.Permissions.CreateCompany,
         this.CreateCompany
     );
 
@@ -720,7 +729,7 @@ Modules.Contacts = function Contacts() {
         vDesk.Visual.Icons.View,
         false,
         () => {
-            if(Selected !== null) {
+            if(Selected !== null){
                 new vDesk.Contacts.ViewerWindow(Selected).Show();
             }
         }
@@ -738,13 +747,13 @@ Modules.Contacts = function Contacts() {
             if(
                 Selected instanceof vDesk.Contacts.Contact
                 && Selected.AccessControlList.Write
-                && vDesk.User.Permissions.UpdateContact
-            ) {
+                && vDesk.Security.User.Current.Permissions.UpdateContact
+            ){
                 this.UpdateContact(Selected);
-            } else if(
+            }else if(
                 Selected instanceof vDesk.Contacts.Company
-                && vDesk.User.Permissions.UpdateCompany
-            ) {
+                && vDesk.Security.User.Current.Permissions.UpdateCompany
+            ){
                 this.UpdateCompany(Selected);
             }
         }
@@ -762,14 +771,14 @@ Modules.Contacts = function Contacts() {
             if(
                 Selected instanceof vDesk.Contacts.Contact
                 && Selected.AccessControlList.Delete
-                && vDesk.User.Permissions.DeleteContact
-            ) {
+                && vDesk.Security.User.Current.Permissions.DeleteContact
+            ){
                 this.DeleteContact(Selected);
-            } else if(
+            }else if(
                 Selected instanceof vDesk.Contacts.Company
-                && vDesk.User.Permissions.DeleteCompany
+                && vDesk.Security.User.Current.Permissions.DeleteCompany
 
-            ) {
+            ){
                 this.DeleteCompany(Selected);
             }
         }

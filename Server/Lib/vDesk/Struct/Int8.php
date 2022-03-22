@@ -6,26 +6,26 @@ namespace vDesk\Struct;
 /**
  * Represents a signed 8-bit integer.
  *
- * @package vDesk\Struct
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Int8 {
-    
+
     /**
      * Represents the largest possible value of a signed 8-bit integer.
      */
     public const MaxValue = 127;
-    
+
     /**
      * Represents the smallest possible value of a signed 8-bit integer.
      */
     public const MinValue = -128;
-    
+
     /**
      * The size in Bytes a signed 8-bit integer will address.
      */
     public const Size = 2;
-    
+
     /**
      * Parses a signed 8-bit integer from a specified string.
      *
@@ -37,7 +37,7 @@ class Int8 {
     public static function ParseInt8(string $String): int {
         return Number::ParseInt8($String);
     }
-    
+
     /**
      * Tries to parse a signed 8-bit integer from a specified string.
      *
@@ -48,5 +48,5 @@ class Int8 {
     public static function TryParseInt8(string $String): ?int {
         return Number::TryParseInt8($String);
     }
-    
+
 }

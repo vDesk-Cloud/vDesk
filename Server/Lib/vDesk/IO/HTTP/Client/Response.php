@@ -8,35 +8,34 @@ use vDesk\IO\FileInfo;
 use vDesk\IO\IOException;
 use vDesk\IO\Path;
 use vDesk\IO\Socket;
-use vDesk\Utils\Log;
 
 /**
  * Class that represents a HTTP response providing functionality for reading and formatting data from a Socket.
  *
- * @package vDesk\IO\HTTP
+ * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Response {
-    
+
     /**
      * The status code of the Response.
      *
      * @var int
      */
     public int $Code;
-    
+
     /**
      * The headers of the Response.
      *
      * @var array
      */
     public array $Headers = [];
-    
+
     /**
      * @var mixed|string|\vDesk\IO\Socket
      */
-    public $Message;
-    
+    public mixed $Message;
+
     /**
      * Initializes a new instance of the Response class.
      *
@@ -47,22 +46,22 @@ class Response {
      * @throws \vDesk\IO\IOException Thrown if a malformed response has been received.
      */
     public function __construct(Socket $Socket, callable $Bypass = null) {
-        
+
         //Parse response status.
         [$Protocol, $Code] = \explode(" ", $Socket->ReadLine());
         [, $Version] = explode("/", $Protocol);
         $this->Code = (int)$Code;
-        
+
         if($this->Code === 0) {
             throw new IOException("Malformed response without status code received.");
         }
-        
+
         //Parse response headers.
         while(($Line = \trim($Socket->ReadLine())) !== "") {
             [$Header, $Value] = \explode(":", $Line);
             $this->Headers[\trim($Header)] = \trim($Value);
         }
-        
+
         //Transform headers.
         if(isset($this->Headers["Content-Length"])) {
             $this->Headers["Content-Length"] = (int)$this->Headers["Content-Length"];
@@ -80,7 +79,7 @@ class Response {
         if(isset($this->Headers["Last-Modified"])) {
             $this->Headers["Last-Modified"] = \DateTime::createFromFormat("D, d M Y G", $this->Headers["Last-Modified"]);
         }
-        
+
         //Check if the default formatting should get bypassed.
         if($Bypass !== null) {
             $this->Message = $Bypass($Socket, $this);
@@ -107,7 +106,7 @@ class Response {
                         [, $Filename] = \explode("=", $Filename);
                         $Path = \sys_get_temp_dir() . Path::Separator . $Filename;
                         $File = File::Create($Path);
-                        
+
                         if($this->Headers["Transfer-Encoding"] ?? null === "chunked") {
                             //Skip frame length indicator.
                             $Socket->ReadLine();
@@ -123,7 +122,7 @@ class Response {
                                 $File->Write($Socket->Read());
                             }
                         }
-                        
+
                         $this->Message           = new FileInfo($Path);
                         $this->Message->MimeType = $this->Headers["Content-Type"];
                         \register_shutdown_function(fn() => $this->Message->Delete());

@@ -6,7 +6,7 @@
  * @extends vDesk.Controls.Window
  * @memberOf vDesk.Calendar.Event.Editor
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Calendar
  */
 vDesk.Calendar.Event.Editor.Window = function Window(Event) {
     Ensure.Parameter(Event, vDesk.Calendar.Event, "Event");
@@ -46,7 +46,7 @@ vDesk.Calendar.Event.Editor.Window = function Window(Event) {
     const OnUpdate = Event => {
         ResetItem.Enabled = false;
         SaveItem.Enabled = false;
-        if(Event.detail.accesscontrollist !== undefined) {
+        if(Event.detail.accesscontrollist !== undefined){
             Event.stopPropagation();
         }
     };
@@ -72,13 +72,13 @@ vDesk.Calendar.Event.Editor.Window = function Window(Event) {
         vDesk.Visual.Icons.Save,
         false,
         () => {
-            if(EventEditor.Changed) {
+            if(EventEditor.Changed){
                 EventEditor.Save();
             }
-            if(ParticipantEditor.Changed) {
+            if(ParticipantEditor.Changed){
                 //ParticipantEditor.Save();
             }
-            if(AccessControlListEditor.Changed) {
+            if(AccessControlListEditor.Changed){
                 AccessControlListEditor.Save();
             }
         }
@@ -106,7 +106,7 @@ vDesk.Calendar.Event.Editor.Window = function Window(Event) {
     const DeleteItem = new vDesk.Controls.ToolBar.Item(
         vDesk.Locale.vDesk.Delete,
         vDesk.Visual.Icons.Delete,
-        Event.ID !== null && Event.AccessControlList.Delete /*&& vDesk.User.Permissions.DeleteEvent*/,
+        Event.ID !== null && Event.AccessControlList.Delete /*&& vDesk.Security.User.Current.Permissions.DeleteEvent*/,
         () => {
             EventEditor.Delete();
             vDesk.Connection.Send(
@@ -114,14 +114,12 @@ vDesk.Calendar.Event.Editor.Window = function Window(Event) {
                     {
                         Module:     "Calendar",
                         Command:    "DeleteEvent",
-                        Parameters: {
-                            ID: Event.ID
-                        },
-                        Ticket:     vDesk.User.Ticket
+                        Parameters: {ID: Event.ID},
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         this.Close();
                     }
                 }
@@ -138,7 +136,7 @@ vDesk.Calendar.Event.Editor.Window = function Window(Event) {
         vDesk.Visual.Icons.Calendar.Module,
         true,
         () => {
-            if(CurrentEditor !== EventEditor) {
+            if(CurrentEditor !== EventEditor){
                 this.Content.replaceChild(EventEditor.Control, CurrentEditor.Control);
                 CurrentEditor = EventEditor;
                 EventItem.Selected = true;
@@ -158,7 +156,7 @@ vDesk.Calendar.Event.Editor.Window = function Window(Event) {
         vDesk.Visual.Icons.Security.Group,
         true,
         () => {
-            if(CurrentEditor !== ParticipantEditor) {
+            if(CurrentEditor !== ParticipantEditor){
                 this.Content.replaceChild(ParticipantEditor.Control, CurrentEditor.Control);
                 CurrentEditor = ParticipantEditor;
                 EventItem.Selected = false;
@@ -177,7 +175,7 @@ vDesk.Calendar.Event.Editor.Window = function Window(Event) {
         vDesk.Visual.Icons.Security.Lock,
         true,
         () => {
-            if(CurrentEditor !== AccessControlListEditor) {
+            if(CurrentEditor !== AccessControlListEditor){
                 this.Content.replaceChild(AccessControlListEditor.Control, CurrentEditor.Control);
                 CurrentEditor = AccessControlListEditor;
                 EventItem.Selected = false;
@@ -221,6 +219,7 @@ vDesk.Calendar.Event.Editor.Window = function Window(Event) {
     EventEditor.Control.addEventListener("create", OnCreate);
     EventEditor.Control.addEventListener("update", OnUpdate);
     EventEditor.Control.addEventListener("delete", OnDelete);
+
     /**
      * The Participant.Editor of the Window.
      * @type {vDesk.Calendar.Event.Participant.Editor}

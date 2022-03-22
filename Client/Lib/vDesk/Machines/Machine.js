@@ -8,8 +8,7 @@
  */
 /**
  * Initializes a new instance of the Machine class.
- * @class Class that represents a running Machine.
- *
+ * @class Class that represents a Machine.
  * @param {Number} [ID=null] Initializes the Machine with the specified process ID name.
  * @param {vDesk.Security.User} Owner Initializes the Machine with the specified name.
  * @param {String} [Guid=null] Initializes the Machine with the specified guid.
@@ -27,11 +26,11 @@
  * @property {Boolean} Enabled Gets or sets a value indicating whether the Machine is enabled.
  * @memberOf vDesk.Machines
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0
+ * @package vDesk\Machines
  */
 vDesk.Machines.Machine = function Machine(
     ID        = null,
-    Owner     = vDesk.User,
+    Owner     = vDesk.Security.User.Current,
     Guid      = null,
     TimeStamp = 0,
     Status    = vDesk.Machines.Machine.Virtual,
@@ -66,7 +65,6 @@ vDesk.Machines.Machine = function Machine(
         Control:   {
             enumerable: false,
             get:        () => Control
-
         },
         ID:        {
             enumerable: true,

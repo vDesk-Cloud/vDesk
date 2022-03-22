@@ -76,7 +76,7 @@
  * @memberOf vDesk.PinBoard
  * @augments vDesk.Controls.DynamicBox
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\PinBoard
  */
 vDesk.PinBoard.Note = function Note(
     ID             = null,
@@ -245,11 +245,9 @@ vDesk.PinBoard.Note = function Note(
     //Construct.
     this.Control.classList.add("Note", "Font", "Dark");
     this.Content.contentEditable = "true";
-
     this.Color = Color;
     this.Content.textContent = Content;
     this.Control.classList.toggle("Selected", Selected);
-
     this.Control.addEventListener("resized", OnResized, false);
     this.Control.addEventListener("moved", OnMoved, false);
     this.Content.addEventListener("input", OnInput, false);

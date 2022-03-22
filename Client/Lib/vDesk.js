@@ -22,6 +22,7 @@ const vDesk = (function() {
          * Represents the actual logged in User.
          * @type {Object|vDesk.Security.User}
          * @memberOf vDesk
+         * @deprecated
          */
         User: {
             ID:          null,

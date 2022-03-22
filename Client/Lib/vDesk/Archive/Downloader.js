@@ -4,8 +4,7 @@
  * @class Provides functionality for downloading files from the server.
  * @memberOf vDesk.Archive
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
- * @todo Make singleton.
+ * @package vDesk\Archive
  */
 vDesk.Archive.Downloader = function() {
 
@@ -30,7 +29,7 @@ vDesk.Archive.Downloader = function() {
                     Module:     "Archive",
                     Command:    "Download",
                     Parameters: {ID: Element.ID},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Buffer => {

@@ -1,5 +1,4 @@
 "use strict";
-
 /**
  * Initializes a new instance of the Row class.
  * @class Represents a row defining the name, order and type, of a mask.
@@ -17,7 +16,7 @@
  * @property {Object} Validator Gets or sets the validator of the Row.
  * @memberOf vDesk.MetaInformation.Mask
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.Mask.Row = function Row(
     ID        = null,

@@ -3,154 +3,116 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\MySQL\Expression;
 
-use vDesk\DataProvider\Expression\IAlter;
 use vDesk\DataProvider\IResult;
 use vDesk\DataProvider;
 
 /**
- * Represents a MySQL compatible ALTER SQL expression.
+ * Represents a MySQL compatible "ALTER" Expression.
  *
- * @package vDesk\DataProvider\Expression\Alter
+ * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Alter implements IAlter {
-    
+class Alter extends DataProvider\AnsiSQL\Expression\Alter {
+
     /**
-     * The SQL-statement of the Create\MariaDB.
+     * Flag indicating whether the Database method has been called.
      *
-     * @var string
+     * @var bool
      */
-    private string $Statement = "";
-    
-    /**
-     * The statements of the Expression.
-     *
-     * @var string[]
-     */
-    private array  $Statements = [];
-    
+    private bool $Database = false;
+
     /**
      * @inheritDoc
      */
-    public function Table(string $Name): self {
-        $this->Statement .= "ALTER TABLE " . DataProvider::SanitizeField($Name) . " ";
+    public function Database(string $Name): static {
+        $this->Database  = true;
         return $this;
     }
-    
+
     /**
      * @inheritDoc
      */
-    public function Database(string $Name): self {
-        $this->Statement .= "CREATE DATABASE $Name";
+    public function Schema(string $Name): static {
+        $this->Statement .= "DATABASE " . DataProvider::SanitizeField($Name) . " ";
         return $this;
     }
-    
+
     /**
-     * Applies a storage engine to the Create\MariaDB.
+     * @inheritDoc
+     */
+    public function Rename(string $Name): static {
+        $this->Statements[] = "RENAME " . DataProvider::SanitizeField($Name);
+        return $this;
+    }
+
+    /**
+     * Applies a storage engine to the Alter.
      *
      * @param string $Name The name of the storage engine to set.
      *
      * @return \vDesk\DataProvider\MySQL\Expression\Alter The current instance for further chaining.
      */
-    public function Engine(string $Name): self {
+    public function Engine(string $Name): static {
         $this->Statement .= " ENGINE=$Name";
         return $this;
     }
-    
+
     /**
      * @inheritDoc
      */
-    public function Add(array $Columns, array $Indexes = []): self {
+    public function Add(array $Columns, array $Indexes = []): static {
         foreach($Columns as $Name => $Column) {
             $this->Statements[] = "ADD COLUMN " . Table::Field(
                     $Name,
                     $Column["Type"],
-                    $Column["Size"] ?? null,
-                    $Column["Collation"] ?? null,
                     $Column["Nullable"] ?? false,
-                    \array_key_exists("Default", $Column) ? $Column["Default"] : "",
                     $Column["Autoincrement"] ?? false,
+                    $Column["Default"] ?? "",
+                    $Column["Collation"] ?? null,
+                    $Column["Size"] ?? null,
                     $Column["OnUpdate"] ?? null
                 );
         }
         foreach($Indexes as $Name => $Index) {
-            $this->Statements[] = "ADD INDEX " . Table::Index(
-                    $Name,
-                    $Index["Fields"],
-                    $Index["Unique"] ?? false
-                );
+            $this->Statements[] = "ADD " . Table::Index($Name, $Index["Unique"] ?? false, $Index["Fields"]);
         }
         return $this;
     }
-    
+
     /**
      * @inheritDoc
      */
-    public function Rename(array $Columns): self {
-        foreach($Columns as $Name => $NewName) {
-            $this->Statements[] = "RENAME COLUMN " . DataProvider::SanitizeField($Name) . " TO " . DataProvider::SanitizeField($NewName);
-        }
-        return $this;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function Modify(array $Columns, array $Indexes = []): self {
+    public function Modify(array $Columns, array $Indexes = []): static {
         foreach($Columns as $Name => $Column) {
-            $this->Statements[] = "MODIFY COLUMN " . Table::Field(
-                    $Name,
-                    $Column["Type"],
-                    $Column["Size"] ?? null,
-                    $Column["Collation"] ?? null,
-                    $Column["Nullable"] ?? false,
-                    \array_key_exists("Default", $Column) ? $Column["Default"] : "",
-                    $Column["Autoincrement"] ?? false,
-                    $Column["OnUpdate"] ?? null
-                );
+            if(\is_array($Column)) {
+                $this->Statements[] = "MODIFY COLUMN " . Table::Field(
+                        $Name,
+                        $Column["Type"],
+                        $Column["Nullable"] ?? false,
+                        $Column["Autoincrement"] ?? false,
+                        $Column["Default"] ?? "",
+                        $Column["Collation"] ?? null,
+                        $Column["Size"] ?? null,
+                        $Column["OnUpdate"] ?? null
+                    );
+            } else {
+                $this->Statements[] = "RENAME COLUMN " . DataProvider::SanitizeField($Name) . " TO " . DataProvider::SanitizeField($Column);
+            }
         }
-        foreach($Indexes as $Name => $Index) {
-            $this->Statements[] = "MODIFY INDEX " . Table::Index(
-                    $Name,
-                    $Index["Fields"],
-                    $Index["Unique"] ?? false
-                );
-        }
-        return $this;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function Drop(array $Columns, array $Indexes = []): self {
-        foreach($Columns as $Column) {
-            $this->Statements[] = "DROP COLUMN " . DataProvider::SanitizeField($Column);
-        }
-        foreach($Indexes as $Index) {
-            $this->Statements[] = "DROP INDEX " . ($Index === "Primary" ? "PRIMARY KEY" : "INDEX {$Index}");
+        foreach($Indexes as $Old => $New) {
+            $this->Statements[] = "RENAME INDEX " . DataProvider::SanitizeField($Old) . " TO " . DataProvider::SanitizeField($New);
         }
         return $this;
     }
-    
+
     /**
      * @inheritDoc
      */
     public function Execute(bool $Buffered = true): IResult {
+        if($this->Database) {
+            return new DataProvider\Result(true);
+        }
         return DataProvider::Execute((string)$this, $Buffered);
     }
-    
-    /**
-     * @inheritDoc
-     */
-    public function __toString(): string {
-        return $this->Statement . \implode(", ", $this->Statements);
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function __invoke(): IResult|string|null {
-        return $this->Execute()->ToValue();
-    }
-    
+
 }

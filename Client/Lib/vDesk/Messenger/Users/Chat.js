@@ -22,7 +22,7 @@
  * @extends vDesk.Security.UserList.Item
  * @memberOf vDesk.Messenger.Users
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Messenger
  */
 vDesk.Messenger.Users.Chat = function Chat(Sender, Unread = 0, Enabled = true) {
     Ensure.Parameter(Sender, vDesk.Security.User, "User");
@@ -68,7 +68,7 @@ vDesk.Messenger.Users.Chat = function Chat(Sender, Unread = 0, Enabled = true) {
         Conversation: {
             enumerable: true,
             get:        () => {
-                if(Conversation === null) {
+                if(Conversation === null){
                     Conversation = vDesk.Messenger.Users.Chat.Conversation.FromSender(Sender);
                 }
                 return Conversation;
@@ -89,9 +89,9 @@ vDesk.Messenger.Users.Chat = function Chat(Sender, Unread = 0, Enabled = true) {
             set:        Value => {
                 Ensure.Property(Value, Type.Boolean, "Enabled");
                 Enabled = Value;
-                if(Value) {
+                if(Value){
                     Control.addEventListener("click", OnClick, false);
-                } else {
+                }else{
                     Control.removeEventListener("click", OnClick, false);
                 }
                 Control.classList.toggle("Disabled", !Value);
@@ -115,7 +115,7 @@ vDesk.Messenger.Users.Chat = function Chat(Sender, Unread = 0, Enabled = true) {
     const Control = document.createElement("li");
     Control.className = "Chat Font Dark BorderLight";
     Control.classList.toggle("Disabled", !Enabled);
-    if(Enabled) {
+    if(Enabled){
         Control.addEventListener("click", OnClick, false);
     }
 

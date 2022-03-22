@@ -18,7 +18,7 @@ use vDesk\Struct\Type;
  * @property-read string[] $Keys   Gets all keys of the Dictionary
  * @property-read mixed[]  $Values Gets all values of the Dictionary
  * @package vDesk\Struct
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Dictionary implements IDictionary {
     
