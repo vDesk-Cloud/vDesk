@@ -14,14 +14,14 @@ use vDesk\Pages\Cached\Page;
 class Search extends Page {
     
     /**
-     * The name of the Tutorial.
+     * The name of the Page.
      *
      * @var string
      */
     public string $Name = "Search";
     
     /**
-     * The nav label of the Tutorial
+     * The nav label of the Page.
      *
      * @var string
      */

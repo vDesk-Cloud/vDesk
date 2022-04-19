@@ -8,7 +8,7 @@ use vDesk\Pages\Page;
 /**
  * Controls Page.
  *
- * @package Pages\Documentation
+ * @package vDesk\Documentation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Controls extends Page {

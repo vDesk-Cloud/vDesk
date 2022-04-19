@@ -5,17 +5,23 @@ namespace Pages\Documentation\Server;
 
 use vDesk\Pages\Cached\Page;
 
+/**
+ * Machines Documentation Page.
+ *
+ * @package vDesk\Documentation
+ * @author  Kerry <DevelopmentHero@gmail.com>
+ */
 class Machines extends Page {
 
     /**
-     * The name of the Topic.
+     * The name of the Page.
      *
      * @var string
      */
     public string $Name = "Machines";
 
     /**
-     * The nav label of the Topic.
+     * The nav label of the Page.
      *
      * @var string
      */
