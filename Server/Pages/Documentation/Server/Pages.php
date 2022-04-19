@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Pages\Documentation;
+namespace Pages\Documentation\Server;
 
 use vDesk\Pages\Cached\Page;
 
@@ -37,7 +37,7 @@ class Pages extends Page {
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Documentation/Pages"],
+        ?iterable $Templates = ["Documentation/Server/Pages"],
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = []
     ) {

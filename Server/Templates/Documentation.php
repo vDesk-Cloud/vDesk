@@ -31,7 +31,7 @@ use vDesk\Pages\Functions;
         <nav class="Hidden">
 <?php foreach($Page->Pages as $ExistingPage): ?>
 <?php if($ExistingPage->Name !== "Index"): ?>
-            <a class="<?= $ExistingPage->Name === $Page->Content->Name ? "Current" : "" ?>" href="<?= Functions::URL("Documentation", "Page", $ExistingPage->Name) ?>"><?= $ExistingPage->Description ?></a>
+            <a class="<?= $ExistingPage->Name === $Page->Content->Name ? "Current" : "" ?>" href="<?= Functions::URL("Documentation", "Topic", $ExistingPage->Name) ?>"><?= $ExistingPage->Description ?></a>
 <?php endif; ?>
 <?php endforeach; ?>
             <a href="https://www.github.com/vDesk-Cloud">Github</a>

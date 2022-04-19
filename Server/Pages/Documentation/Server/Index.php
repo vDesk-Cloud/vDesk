@@ -1,10 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Pages\Documentation\Tutorials;
+namespace Pages\Documentation\Server;
 
-use Pages\Documentation\Tutorials;
-use vDesk\Pages\Page;
+use Pages\Documentation\Server;
 
 /**
  * Class Index
@@ -12,7 +11,7 @@ use vDesk\Pages\Page;
  * @package Pages\vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Index extends Tutorials {
+class Index extends Server {
     
     /**
      * The name of the Tutorial.
@@ -40,7 +39,7 @@ class Index extends Tutorials {
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Documentation/Tutorials/Index"],
+        ?iterable $Templates = ["Documentation/Server/Index"],
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         public array $Pages = [],

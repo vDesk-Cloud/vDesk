@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Pages\Documentation;
 
-use vDesk\Pages\Cached\Page;
+use vDesk\Pages\Page;
+//use vDesk\Pages\Cached\Page;
 
 /**
  * Class CustomReleases
@@ -38,7 +39,7 @@ class Development extends Page {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Development"],
-        ?iterable $Stylesheets = [],
+        ?iterable $Stylesheets = ["Documentation/Tutorials"],
         ?iterable $Scripts = []
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
