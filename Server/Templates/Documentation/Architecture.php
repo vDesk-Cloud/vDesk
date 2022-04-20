@@ -7,9 +7,9 @@ use vDesk\Pages\Functions;
 ?>
 <article>
     <header>
-    <h2>Modules & Commands</h2>
+    <h2>Architecture</h2>
     <p>
-        This tutorial describes the registration and execution of Commands against modules of the server.
+        This document describes how vDesk works, interaction between client and server and how to register modules and call commands.
     </p>
     <h3>Overview</h3>
     <ul class="Topics">
@@ -45,17 +45,14 @@ use vDesk\Pages\Functions;
             From a global point of view, the application flow of vDesk can be described as a client/server "View-(Controller-Model)-system, where the client represents the "View",
             <br> whereas the server represents the "Controller"-host which manage the "Models".
         </p>
-        <p>
-            The application-flow exists usually of
-        </p>
-    </section>
-    <section id="Overview">
-    <h4>Overview</h4>
     <img alt="Conceptual description of vDesk's application flow" title="Conceptual description of vDesk's application flow" style="width: 100%"
          src="<?= Functions::Image("Documentation", "Concept.svg") ?>">
     </section>
     <section id="OverviewClient">
         <h4>Client</h4>
+        <p>
+            The client is a JavaScript-based application run by a modern browser.
+        </p>
         <h5>Load</h5>
         <ol>
             <li>Performing a handshake with the specified server while sending a list of installed client-side packages and their versions to check for compatibility.</li>
