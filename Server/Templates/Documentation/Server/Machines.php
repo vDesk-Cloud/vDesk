@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 use vDesk\Documentation\Code;
 use vDesk\Pages\Functions;
-
 ?>
 <article class="Machines">
     <header>
@@ -40,7 +39,7 @@ use vDesk\Pages\Functions;
             <br>The scheduling Module will spawn new Machines with its current process ID and initializes them with an additional GUID.
             After startup, the scheduler Module opens a single-byte shared memory page with the PID as the identifier - this is used for communicating with the scheduler from foreign processes.
             <br>
-            Scheduling Modules will continuously scan the value of the shared memory page at the beginning of the main-loop and further run, suspend/resume or stop/terminate the process.
+            Scheduling Modules will continuously scan the value of the shared memory page at the beginning of the main-loop and further run, suspend/resume or stop/terminate the process according the value of the shared memory page.
         </p>
         <p style="text-align: center">
             <img style="box-shadow: #333333 3px 3px 3px" src="<?= Functions::Image("Documentation/MachinesArchive.png") ?>" alt="Location of Machines in the Archive">
@@ -55,15 +54,12 @@ use vDesk\Pages\Functions;
             <img style="box-shadow: #333333 3px 3px 3px" src="<?= Functions::Image("Documentation/MachinesControl.png") ?>" alt="Location of Machines in the Archive">
         </p>
         <p>
-            New Machines can be spawned via selecting the desired Machine in the dropdown-menu and and clicking the "Start"-button afterwards.
+            New Machines can be spawned via selecting the desired Machine in the dropdown-menu and clicking the "Start"-button afterwards.
             <br>The PID and GUID should appear after a short amount of time if the Machine has been successfully started; otherwise a messagebox containing the message-text of any occurred Exception will be displayed.
         </p>
         <p>
             Machines can be suspended by selecting them in the table of running Machines and clicking the "Suspend"-button.
             If an already suspended Machine has been selected, the content of the button will display "Resume" instead and clicking it will continue the execution of the Machine.
-        </p>
-        <p>
-            The scythe-button can be used to scan and clear the system of zombie-processes.
         </p>
         <aside class="Note">
             <h4>Note</h4>
@@ -77,7 +73,9 @@ use vDesk\Pages\Functions;
             To stop a Machine, a click on the "Stop"-button after a running Machine has been selected, will gracefully attempt to stop the Machine.
             If a Machine can't be stopped, clicking on the "Terminate"-button kills the process, whether it is running or not and deletes the database representation of the Machine.
         </p>
-
+        <p>
+            The scythe-button can be used to scan and clear the system of zombie-processes.
+        </p>
     </section>
     <section id="Development">
         <h3>Writing Machines</h3>
@@ -287,7 +285,7 @@ use vDesk\Pages\Functions;
     }
 
     <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("Schedule") ?>(<?= Code::Class("Task") ?> <?= Code::Variable("\$Task") ?>): <?= Code::Keyword("void") ?> {
-        <?= Code::Variable("\$this") ?>-><?= Code::Function("Start") ?>(<?= Code::Variable("\$this") ?>)<?= Code::Delimiter ?>
+        <?= Code::Variable("\$this") ?>-><?= Code::Function("Start") ?>(<?= Code::Variable("\$Task") ?>)<?= Code::Delimiter ?>
 
         <?= Code::Variable("\$this") ?>-><?= Code::Field("Running") ?>-><?= Code::Function("Enqueue") ?>(<?= Code::Variable("\$Task") ?>)<?= Code::Delimiter ?>
 
@@ -319,7 +317,7 @@ use vDesk\Pages\Functions;
             <?= Code::Variable("\$Task") ?>-><?= Code::Function("Stop") ?>(<?= Code::Variable("\$Code") ?>)<?= Code::Delimiter ?>
 
         }
-        <?= Code::Parent ?>::<?= Code::Function("Stop") ?><?= Code::Variable("\$Code") ?>)<?= Code::Delimiter ?>
+        <?= Code::Parent ?>::<?= Code::Function("Stop") ?>(<?= Code::Variable("\$Code") ?>)<?= Code::Delimiter ?>
 
     }
 
