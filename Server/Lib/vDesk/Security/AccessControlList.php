@@ -22,33 +22,33 @@ use vDesk\Struct\Collections\Typed\Observable\Collection;
  * @author  Kerry Holz <DevelopmentHero@gmail.com>
  */
 class AccessControlList extends Collection implements ICollectionModel {
-    
+
     /**
      * The Type of the AccessControlList.
      */
     public const Type = Entry::class;
-    
+
     /**
      * Flag indicating whether the AccessControlList has been accessed.
      *
      * @var bool
      */
     private bool $Accessed = false;
-    
+
     /**
      * The added Entries of the AccessControlList.
      *
      * @var \vDesk\Security\AccessControlList\Entry[]
      */
     private array $Added = [];
-    
+
     /**
      * The deleted Entries of the AccessControlList.
      *
      * @var \vDesk\Security\AccessControlList\Entry[]
      */
     private array $Deleted = [];
-    
+
     /**
      * Initializes a new instance of the AccessControlList class.
      *
@@ -59,7 +59,7 @@ class AccessControlList extends Collection implements ICollectionModel {
      * @param bool                                                    $Delete  Initializes the AccessControlList with the specified delete permission of the current User.
      */
     public function __construct(
-        iterable $Entries = [],
+        iterable       $Entries = [],
         protected ?int $ID = null,
         protected bool $Read = true,
         protected bool $Write = true,
@@ -114,7 +114,7 @@ class AccessControlList extends Collection implements ICollectionModel {
                 }
             ]
         ]);
-        
+
         /**
          * Listens on the 'OnAdd'-event.
          *
@@ -127,7 +127,7 @@ class AccessControlList extends Collection implements ICollectionModel {
                 $this->Added[] = $Entry;
             }
         };
-        
+
         /**
          * Listens on the 'OnDelete'-event.
          *
@@ -135,51 +135,21 @@ class AccessControlList extends Collection implements ICollectionModel {
          * @param \vDesk\Security\AccessControlList\Entry $ACLEntry
          */
         $this->OnDelete[] = function(AccessControlList $Sender, Entry $ACLEntry): void {
-            //Check if the AccessControlList is not virtual and if the Entry to remove is not the system-User or the everyone-Group.
-            if($this->ID !== null && ($ACLEntry->User->ID !== User::System || $ACLEntry->Group->ID !== Group::Everyone)) {
+            //Check if the Entry to remove is not the system-User or the everyone-Group.
+            if(
+                ($ACLEntry->User->ID !== null && $ACLEntry->User->ID !== User::System)
+                ||
+                ($ACLEntry->Group->ID !== null && $ACLEntry->Group->ID !== Group::Everyone)
+            ) {
+                return;
+            }
+            //Check if the AccessControlList and Entry is not virtual.
+            if($this->ID !== null && $ACLEntry->ID !== null) {
                 $this->Deleted[] = $ACLEntry;
             }
         };
     }
-    
-    /**
-     * @inheritDoc
-     */
-    public function ID(): ?int {
-        return $this->ID;
-    }
-    
-    /**
-     * @inheritdoc
-     */
-    public function Find(callable $Predicate): ?Entry {
-        return parent::Find($Predicate);
-    }
-    
-    /**
-     * @inheritdoc
-     */
-    public function Remove($Element): Entry {
-        return parent::Remove($Element);
-    }
-    
-    /**
-     * @inheritdoc
-     */
-    public function RemoveAt(int $Index): Entry {
-        return parent::RemoveAt($Index);
-    }
-    
-    /**
-     * @inheritdoc
-     */
-    public function offsetGet($Index): Entry {
-        if(!$this->Accessed && $this->ID !== null) {
-            $this->Fill();
-        }
-        return parent::offsetGet($Index);
-    }
-    
+
     /**
      * @inheritdoc
      */
@@ -188,7 +158,7 @@ class AccessControlList extends Collection implements ICollectionModel {
             parent::Add($Element);
         }
     }
-    
+
     /**
      * Fills the AccessControlList with its values from the database.
      *
@@ -198,14 +168,14 @@ class AccessControlList extends Collection implements ICollectionModel {
      * @throws \vDesk\Data\IDNullException Thrown if the AccessControlList is virtual.
      */
     public function Fill(?User $User = null): AccessControlList {
-        
+
         if($this->ID === null) {
             throw new IDNullException("Cannot Fill Model without ID");
         }
-        
+
         // Stop/disable dispatching of events.
         $this->StopDispatch();
-        
+
         if($this->Count() > 0) {
             $this->Clear();
         }
@@ -226,7 +196,7 @@ class AccessControlList extends Collection implements ICollectionModel {
                     (bool)$Entry["Delete"]
                 )
             );
-            if((int)$Entry["User"] === $User ?? \vDesk::$User->ID) {
+            if((int)$Entry["User"] === $User ?? User::$Current->ID) {
                 if((bool)$Entry["Read"]) {
                     $this->Read = true;
                 }
@@ -241,15 +211,15 @@ class AccessControlList extends Collection implements ICollectionModel {
         if($User !== null && (!$this->Read || !$this->Write || !$this->Delete)) {
             $this->GetPermissions($User);
         }
-        
+
         $this->Accessed = true;
-        
+
         // Start/re-enable dispatching of events.
         $this->StartDispatch();
         return $this;
-        
+
     }
-    
+
     /**
      * Gets the permissions of the current User according the Entries of the AccessControlList.
      *
@@ -261,6 +231,14 @@ class AccessControlList extends Collection implements ICollectionModel {
         if($this->ID === null) {
             throw new IDNullException();
         }
+        $User ??= User::$Current;
+        if($User->ID === User::System) {
+            $this->Read   = true;
+            $this->Write  = true;
+            $this->Delete = true;
+            return;
+        }
+
         $Permissions  = Expression
             ::Select(
                 [λ::Max("Read"), "Read"],
@@ -279,7 +257,7 @@ class AccessControlList extends Collection implements ICollectionModel {
                     ->On(["AccessControlListEntries.Group" => "GroupMemberships.Group"])
                     ->Where([
                         "AccessControlListEntries.AccessControlList" => $this->ID,
-                        "GroupMemberships.User"                      => $User ?? \vDesk::$User
+                        "GroupMemberships.User"                      => $User
                     ])
                     ->Union(
                         Expression
@@ -291,7 +269,7 @@ class AccessControlList extends Collection implements ICollectionModel {
                             ->From(["Security.AccessControlListEntries" => "Entries"])
                             ->Where([
                                 "Entries.AccessControlList" => $this->ID,
-                                "Entries.User"              => $User ?? \vDesk::$User
+                                "Entries.User"              => $User
                             ])
                     ),
                 "Permissions"
@@ -302,14 +280,14 @@ class AccessControlList extends Collection implements ICollectionModel {
         $this->Write  = (bool)($Permissions["Write"] ?? false);
         $this->Delete = (bool)($Permissions["Delete"] ?? false);
     }
-    
+
     /**
      * Saves possible changes if a valid ID has been supplied, or creates a new database-entry if none were supplied.
      */
     public function Save(): void {
-        
+
         if($this->ID !== null) {
-            
+
             //Save new entries.
             foreach($this->Added as $Added) {
                 //Retrieve Entry ID.
@@ -326,10 +304,17 @@ class AccessControlList extends Collection implements ICollectionModel {
                                        ])
                                        ->ID();
             }
-            
+
             //Update changed entries.
             foreach($this->Elements as $Updated) {
-                if($Updated->Changed) {
+
+                //Check if the Entry to remove is not the system-User or the everyone-Group.
+                if(
+                    ($Updated->User->ID !== null && $Updated->User->ID !== User::System)
+                ) {
+                    continue;
+                }
+                if($Updated->Changed && $Updated->User->ID) {
                     Expression::Update("Security.AccessControlListEntries")
                               ->Set([
                                   "Read"   => $Updated->Read,
@@ -340,7 +325,7 @@ class AccessControlList extends Collection implements ICollectionModel {
                               ->Execute();
                 }
             }
-            
+
             //Delete removed entries.
             foreach($this->Deleted as $Deleted) {
                 Expression::Delete()
@@ -349,17 +334,17 @@ class AccessControlList extends Collection implements ICollectionModel {
                           ->Execute();
             }
         }
-        
+
         if($this->ID === null && $this->Count === 0) {
             //New standard ACL.
             $this->ID = Expression::Insert()
                                   ->Into("Security.AccessControlLists")
                                   ->Values(["ID" => null])
                                   ->ID();
-            
+
             //Set system User permissions to rwd.
             $SystemUserEntry = Entry::FromUser();
-            
+
             //Retrieve Entry ID.
             $SystemUserEntry->ID = Expression::Insert()
                                              ->Into("Security.AccessControlListEntries")
@@ -374,10 +359,10 @@ class AccessControlList extends Collection implements ICollectionModel {
                                              ])
                                              ->ID();
             $this->Add($SystemUserEntry);
-            
+
             //Set Group everyone to rwd.
             $EveryoneGroupEntry = Entry::FromGroup();
-            
+
             //Retrieve Entry ID.
             $EveryoneGroupEntry->ID = Expression::Insert()
                                                 ->Into("Security.AccessControlListEntries")
@@ -391,22 +376,22 @@ class AccessControlList extends Collection implements ICollectionModel {
                                                     "Delete"            => $EveryoneGroupEntry->Delete
                                                 ])
                                                 ->ID();
-            
+
             $this->Add($EveryoneGroupEntry);
-            
+
         }
         if($this->ID === null && $this->Count > 0) {
-            
+
             $this->ID = Expression::Insert()
                                   ->Into("Security.AccessControlLists")
                                   ->Values(["ID" => null])
                                   ->ID();
-            
+
             //Set system User permissions to rwd.
             $SystemUserEntry = Entry::FromUser();
-            
+
             $this->Add($SystemUserEntry);
-            
+
             /** @var Entry $Entry */
             foreach($this as $Entry) {
                 //Retrieve Entry ID.
@@ -425,7 +410,7 @@ class AccessControlList extends Collection implements ICollectionModel {
             }
         }
     }
-    
+
     /**
      * Deletes the AccessControlList.
      */
@@ -441,7 +426,7 @@ class AccessControlList extends Collection implements ICollectionModel {
                       ->Execute();
         }
     }
-    
+
     /**
      * Creates an AccessControlList from a specified data view.
      *
@@ -459,7 +444,7 @@ class AccessControlList extends Collection implements ICollectionModel {
             $DataView["ID"] ?? null
         );
     }
-    
+
     /**
      * Creates a data view of the AccessControlList.
      *
@@ -485,7 +470,7 @@ class AccessControlList extends Collection implements ICollectionModel {
         }
         return $DataView;
     }
-    
+
     /**
      * Determines whether the AccessControlList contains an Entry that determines that a specified User has read permissions.
      *
@@ -501,7 +486,7 @@ class AccessControlList extends Collection implements ICollectionModel {
         }
         return false;
     }
-    
+
     /**
      * Determines whether the AccessControlList contains an Entry that determines that a specified User has write permissions.
      *
@@ -517,7 +502,7 @@ class AccessControlList extends Collection implements ICollectionModel {
         }
         return false;
     }
-    
+
     /**
      * Determines whether the AccessControlList contains an Entry that determines that a specified User has delete permissions.
      *
@@ -533,7 +518,7 @@ class AccessControlList extends Collection implements ICollectionModel {
         }
         return false;
     }
-    
+
     /**
      * Determines whether an Entry currently exists in the AccessControlList.
      *
@@ -546,5 +531,44 @@ class AccessControlList extends Collection implements ICollectionModel {
                 static fn(Entry $Compare): bool => $Compare->Group->ID === $Entry->Group->ID
                                                    && $Compare->User->ID === $Entry->User->ID
             ) !== null;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function ID(): ?int {
+        return $this->ID;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function Find(callable $Predicate): ?Entry {
+        return parent::Find($Predicate);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function Remove($Element): Entry {
+        return parent::Remove($Element);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function RemoveAt(int $Index): Entry {
+        return parent::RemoveAt($Index);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetGet($Index): Entry {
+        if(!$this->Accessed && $this->ID !== null) {
+            $this->Fill();
+        }
+        return parent::offsetGet($Index);
     }
 }
