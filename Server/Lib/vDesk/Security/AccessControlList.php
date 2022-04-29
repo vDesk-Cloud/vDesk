@@ -135,11 +135,10 @@ class AccessControlList extends Collection implements ICollectionModel {
          * @param \vDesk\Security\AccessControlList\Entry $ACLEntry
          */
         $this->OnDelete[] = function(AccessControlList $Sender, Entry $ACLEntry): void {
-            //Check if the Entry to remove is not the system-User or the everyone-Group.
+            //Skip mandatory Entries.
             if(
                 ($ACLEntry->User->ID !== null && $ACLEntry->User->ID !== User::System)
-                ||
-                ($ACLEntry->Group->ID !== null && $ACLEntry->Group->ID !== Group::Everyone)
+                || ($ACLEntry->Group->ID !== null && $ACLEntry->Group->ID !== Group::Everyone)
             ) {
                 return;
             }
@@ -232,6 +231,8 @@ class AccessControlList extends Collection implements ICollectionModel {
             throw new IDNullException();
         }
         $User ??= User::$Current;
+
+        //Avoid useless DB
         if($User->ID === User::System) {
             $this->Read   = true;
             $this->Write  = true;
@@ -307,11 +308,8 @@ class AccessControlList extends Collection implements ICollectionModel {
 
             //Update changed entries.
             foreach($this->Elements as $Updated) {
-
-                //Check if the Entry to remove is not the system-User or the everyone-Group.
-                if(
-                    ($Updated->User->ID !== null && $Updated->User->ID !== User::System)
-                ) {
+                //Skip mandatory Entries.
+                if(($Updated->User->ID !== null && $Updated->User->ID !== User::System)) {
                     continue;
                 }
                 if($Updated->Changed && $Updated->User->ID) {
@@ -333,64 +331,54 @@ class AccessControlList extends Collection implements ICollectionModel {
                           ->Where(["ID" => $Deleted->ID])
                           ->Execute();
             }
-        }
-
-        if($this->ID === null && $this->Count === 0) {
+        } else {
             //New standard ACL.
             $this->ID = Expression::Insert()
                                   ->Into("Security.AccessControlLists")
                                   ->Values(["ID" => null])
                                   ->ID();
 
-            //Set system User permissions to rwd.
-            $SystemUserEntry = Entry::FromUser();
+            //Create "System" User Entry.
+            $Entry = $this->Find(static fn(Entry $Entry): bool => $Entry->User->ID === User::System);
+            if($Entry !== null) {
+                $Entry->Read   = true;
+                $Entry->Write  = true;
+                $Entry->Delete = true;
+            } else {
+                //Create "System" User Entry.
+                $Entry     = Entry::FromUser();
+                $Entry->ID = Expression::Insert()
+                                       ->Into("Security.AccessControlListEntries")
+                                       ->Values([
+                                           "ID"                => null,
+                                           "AccessControlList" => $this->ID,
+                                           "Group"             => null,
+                                           "User"              => $Entry->User,
+                                           "Read"              => $Entry->Read,
+                                           "Write"             => $Entry->Write,
+                                           "Delete"            => $Entry->Delete
+                                       ])
+                                       ->ID();
+                $this->Add($Entry);
+            }
 
-            //Retrieve Entry ID.
-            $SystemUserEntry->ID = Expression::Insert()
-                                             ->Into("Security.AccessControlListEntries")
-                                             ->Values([
-                                                 "ID"                => null,
-                                                 "AccessControlList" => $this->ID,
-                                                 "Group"             => null,
-                                                 "User"              => $SystemUserEntry->User,
-                                                 "Read"              => $SystemUserEntry->Read,
-                                                 "Write"             => $SystemUserEntry->Write,
-                                                 "Delete"            => $SystemUserEntry->Delete
-                                             ])
-                                             ->ID();
-            $this->Add($SystemUserEntry);
-
-            //Set Group everyone to rwd.
-            $EveryoneGroupEntry = Entry::FromGroup();
-
-            //Retrieve Entry ID.
-            $EveryoneGroupEntry->ID = Expression::Insert()
-                                                ->Into("Security.AccessControlListEntries")
-                                                ->Values([
-                                                    "ID"                => null,
-                                                    "AccessControlList" => $this->ID,
-                                                    "Group"             => $EveryoneGroupEntry->Group,
-                                                    "User"              => null,
-                                                    "Read"              => $EveryoneGroupEntry->Read,
-                                                    "Write"             => $EveryoneGroupEntry->Write,
-                                                    "Delete"            => $EveryoneGroupEntry->Delete
-                                                ])
-                                                ->ID();
-
-            $this->Add($EveryoneGroupEntry);
-
-        }
-        if($this->ID === null && $this->Count > 0) {
-
-            $this->ID = Expression::Insert()
-                                  ->Into("Security.AccessControlLists")
-                                  ->Values(["ID" => null])
-                                  ->ID();
-
-            //Set system User permissions to rwd.
-            $SystemUserEntry = Entry::FromUser();
-
-            $this->Add($SystemUserEntry);
+            //Create "Everyone" Group Entry.
+            if(!$this->Any(fn(Entry $Entry): bool => $Entry->Group->ID === Group::Everyone)) {
+                $EveryoneGroupEntry     = Entry::FromGroup();
+                $EveryoneGroupEntry->ID = Expression::Insert()
+                                                    ->Into("Security.AccessControlListEntries")
+                                                    ->Values([
+                                                        "ID"                => null,
+                                                        "AccessControlList" => $this->ID,
+                                                        "Group"             => $EveryoneGroupEntry->Group,
+                                                        "User"              => null,
+                                                        "Read"              => $EveryoneGroupEntry->Read,
+                                                        "Write"             => $EveryoneGroupEntry->Write,
+                                                        "Delete"            => $EveryoneGroupEntry->Delete
+                                                    ])
+                                                    ->ID();
+                $this->Add($EveryoneGroupEntry);
+            }
 
             /** @var Entry $Entry */
             foreach($this as $Entry) {
@@ -479,6 +467,9 @@ class AccessControlList extends Collection implements ICollectionModel {
      * @return bool True if the AccessControlList contains an Entry that determines that the specified User has read permissions; otherwise, false.
      */
     public function CanRead(User $User): bool {
+        if($User->ID === User::System) {
+            return true;
+        }
         foreach($this->Users as $Entry) {
             if($Entry->User->ID === $User->ID && $Entry->Read) {
                 return true;
@@ -495,6 +486,9 @@ class AccessControlList extends Collection implements ICollectionModel {
      * @return bool True if the AccessControlList contains an Entry that determines that the specified User has write permissions; otherwise, false.
      */
     public function CanWrite(User $User): bool {
+        if($User->ID === User::System) {
+            return true;
+        }
         foreach($this->Users as $Entry) {
             if($Entry->User->ID === $User->ID && $Entry->Write) {
                 return true;
@@ -511,6 +505,9 @@ class AccessControlList extends Collection implements ICollectionModel {
      * @return bool True if the AccessControlList contains an Entry that determines that the specified User has delete permissions; otherwise, false.
      */
     public function CanDelete(User $User): bool {
+        if($User->ID === User::System) {
+            return true;
+        }
         foreach($this->Users as $Entry) {
             if($Entry->User->ID === $User->ID && $Entry->Delete) {
                 return true;
