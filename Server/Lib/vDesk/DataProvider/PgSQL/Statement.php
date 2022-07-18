@@ -32,7 +32,7 @@ class Statement implements IPreparedStatement {
      * Initializes a new instance of the Statement class.
      *
      * @param mixed  $Provider  Initializes the Statement with the specified connection resource.
-     * @param string $Statement Initializes the Statement with the specified resource returned from @see \pg_prepare().
+     * @param string $Statement Initializes the Statement with the specified SQL-Statement.
      * @param string $Name      Initializes the Statement with the specified optional name.
      *
      * @throws \vDesk\DataProvider\SQLException Thrown if the preparation of the statement failed.
@@ -51,10 +51,8 @@ class Statement implements IPreparedStatement {
      *
      * @return \vDesk\DataProvider\PgSQL\Statement The current instance for further chaining.
      */
-    public function Apply(...$Values): self {
-        foreach($Values as $Value){
-            $this->Values[] = $Value;
-        }
+    public function Apply(mixed ...$Values): self {
+        $this->Values[] = $Values;
         return $this;
     }
 

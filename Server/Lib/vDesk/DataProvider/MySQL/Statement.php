@@ -32,7 +32,7 @@ class Statement implements IPreparedStatement {
      *
      * @return \vDesk\DataProvider\MySQL\Statement The current instance for further chaining.
      */
-    public function Apply(...$Values): self {
+    public function Apply(mixed ...$Values): self {
         $Types = "";
         foreach($Values as $Value){
             $Types .= match (Type::Of($Value)) {

@@ -28,6 +28,7 @@ final class DataProvider extends Update {
      */
     public const Description = <<<Description
 - Reduced amount of escaped characters in strings of MsSQL-DataProvider.
+- Fixed prepared statements of MsSQL-DataProvider.
 Description;
 
     /**
@@ -37,14 +38,22 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk/DataProvider/MsSQL/Provider.php"
+                    "vDesk/DataProvider/IPreparedStatement.php",
+                    "vDesk/DataProvider/MsSQL/Provider.php",
+                    "vDesk/DataProvider/MsSQL/Statement.php",
+                    "vDesk/DataProvider/MySQL/Statement.php",
+                    "vDesk/DataProvider/PPgSQL/Statement.php"
                 ]
             ]
         ],
         self::Undeploy => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk/DataProvider/MsSQL/Provider.php"
+                    "vDesk/DataProvider/IPreparedStatement.php",
+                    "vDesk/DataProvider/MsSQL/Provider.php",
+                    "vDesk/DataProvider/MsSQL/Statement.php",
+                    "vDesk/DataProvider/MySQL/Statement.php",
+                    "vDesk/DataProvider/PPgSQL/Statement.php"
                 ]
             ]
         ]
