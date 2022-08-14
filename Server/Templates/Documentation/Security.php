@@ -51,20 +51,29 @@ use vDesk\Pages\Functions;
     </section>
     <section id="Users">
         <h3>Users</h3>
+        <p>
+            If a
+        </p>
+        <p>
+            After login, the user instance is propagated through the global
+            <code class="Inline">\vDesk\Security\<?= Code::Class("User") ?>::<?= Code::Variable("\$Current") ?></code> and
+            <code class="Inline">vDesk.Security.<?= Code::Class("User") ?>.<?= Code::Field("Current") ?></code>-properties.<br>
+            On the server, the property is only propagated once after login, preserving the session of the current user while further logins.
+        </p>
     </section>
     <section id="Groups">
         <h3>Groups</h3>
         <p>
-            Groups are dictionaries of global permissions
+            Groups are dictionaries of global permissions which target more common tasks like being able to access the administration window, using the calendar or editing contacts for example.
         </p>
-        <aside onclick="this.classList.toggle('Fullscreen')">
-            <img src="<?= Functions::Image("Documentation/Groups.png") ?>" alt="Image showing the administrative view of the group- and rights management">
+        <aside onclick="this.classList.toggle('Fullscreen')" style="text-align: center; width: 50%">
+            <img src="<?= Functions::Image("Documentation/Groups.png") ?>"  alt="Image showing the administrative view of the group- and rights management">
         </aside>
     </section>
     <section id="GroupPermissions">
         <h4>Adding/removing Group permissions</h4>
         <p>
-            The permissions of a group are defined over the database where each column of the <code class="Inline"><?= Code::Const("Security") ?>.<?= Code::Field("Groups") ?></code>-table
+            The permissions of groups are defined over the database where each column of the <code class="Inline"><?= Code::Const("Security") ?>.<?= Code::Field("Groups") ?></code>-table
             represents a certain permission.
         </p>
         <p>
@@ -72,7 +81,7 @@ use vDesk\Pages\Functions;
             <code class="Inline"><?= Code::Class("Security") ?>::<?= Code::Function("DeletePermission") ?>(<?= Code::Keyword("string") ?> <?= Code::Variable("\$Name") ?>)</code>-methods.
         </p>
         <p>
-            Both operations require the current user to be a member of a group which has the "UpdateGroup"-permission been granted.
+            Both operations require the current user to be a member of a group which the "UpdateGroup"-permission has been granted.
         </p>
         <aside class="Note">
             <h4>Note</h4>
@@ -87,6 +96,10 @@ use vDesk\Pages\Functions;
         <h3>Access Control Lists</h3>
         <p>
             "Access Control Lists" or "ACLs" are collections of individual permissions on certain "access controlled" entities.
+            <br>These permissions are separated between direct user and group based permissions.
+        </p>
+        <p>
+            Deleting a user or a group results in the deletion of all associated ACL entries.
         </p>
     </section>
 </article>
