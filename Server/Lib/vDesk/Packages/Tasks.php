@@ -7,6 +7,7 @@ use vDesk\Archive\Element;
 use vDesk\Configuration\Settings;
 use vDesk\Machines\IPackage;
 use vDesk\Security\AccessControlList;
+use vDesk\Security\User;
 use vDesk\Struct\Guid;
 
 /**
@@ -68,7 +69,7 @@ final class Tasks extends Package implements IPackage {
         $Machines = new Element(Settings::$Local["Machines"]["Directory"]);
         $Tasks    = new Element(
             null,
-            \vDesk::$User,
+            User::$Current,
             $Machines,
             "Tasks",
             Element::Folder,
