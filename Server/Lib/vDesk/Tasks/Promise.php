@@ -11,7 +11,7 @@ use vDesk\Machines\Tasks;
  * @package vDesk\Tasks
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Promise extends Task {
+final class Promise extends Task {
 
     /**
      * Control value indicating the Promise to manually resolve.
@@ -24,13 +24,24 @@ class Promise extends Task {
     public const Reject = "Reject";
 
     /**
+     * The resolving Task of the Promise.
+     * @var \vDesk\Tasks\Task
+     */
+    public Task $Task;
+
+    /**
      * Initializes a new instance of the Promise class.
      *
-     * @param \vDesk\Tasks\Task $Task    Initializes the Promise with the specified Task to resolve.
-     * @param null|\Closure     $Resolve Initializes the Promise with the specified resolve callback.
-     * @param null|\Closure     $Reject  Initializes the Promise with the specified reject callback.
+     * @param \vDesk\Tasks\Task|\Generator|\Closure $Task    Initializes the Promise with the specified Task to resolve.
+     * @param null|\Closure                         $Resolve Initializes the Promise with the specified resolve callback.
+     * @param null|\Closure                         $Reject  Initializes the Promise with the specified reject callback.
      */
-    public function __construct(public Task $Task, protected ?\Closure $Resolve = null, protected ?\Closure $Reject = null) {
+    public function __construct(Task|\Generator|\Closure $Task, protected ?\Closure $Resolve = null, protected ?\Closure $Reject = null) {
+        if($Task instanceof Task) {
+            $this->Task = $Task;
+        } else {
+            $this->Task = new \vDesk\Tasks\Inline\Task($Task);
+        }
     }
 
     /**
@@ -45,8 +56,8 @@ class Promise extends Task {
      * @inheritDoc
      */
     public function Run(): \Generator {
-        $Key    = null;
-        $Value  = null;
+        $Key   = null;
+        $Value = null;
         try {
             foreach($this->Task->Run() as $Key => $Value) {
                 if($Key === self::Resolve || $Key === self::Reject) {
