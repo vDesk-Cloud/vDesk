@@ -33,9 +33,7 @@ class Tasks extends Machine {
      */
     protected Queue $Running;
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function Start(): void {
         $this->Running = new Queue();
         $this->Tasks   = new Collection();
@@ -68,19 +66,17 @@ class Tasks extends Machine {
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function Run(): void {
         $Start = \microtime(true);
 
         //Get pending Tasks.
-        /** @var \vDesk\Tasks\Task $Task */
         foreach($this->Tasks->Filter(static fn(Task $Task): bool => $Task->TimeStamp <= $Start) as $Task) {
             $this->Running->Enqueue($Task);
         }
 
         //Schedule Tasks.
+        /** @var \vDesk\Tasks\Task $Task */
         foreach($this->Running as $Task) {
             if($Task->Schedule()) {
                 $this->Running->Enqueue($Task);
@@ -136,27 +132,21 @@ class Tasks extends Machine {
         $this->Tasks->Remove($Task);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function Suspend(): void {
         foreach($this->Tasks as $Task) {
             $Task->Suspend();
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function Resume(): void {
         foreach($this->Tasks as $Task) {
             $Task->Resume();
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function Stop(int $Code = 0): void {
         foreach($this->Tasks as $Task) {
             $Task->Stop($Code);
