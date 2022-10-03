@@ -232,7 +232,7 @@ class AccessControlList extends Collection implements ICollectionModel {
         }
         $User ??= User::$Current;
 
-        //Avoid useless DB
+        //Avoid useless DB access.
         if($User->ID === User::System) {
             $this->Read   = true;
             $this->Write  = true;
