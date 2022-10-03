@@ -20,6 +20,7 @@ code.Inline {
     background-color: #333333;
     padding: 1px 3px 1px 3px;
     border-radius: 5px;
+    display: inline-block;
 }
 
 code .Class {
@@ -339,6 +340,12 @@ main > footer {
     text-align: center;
 }
 
+aside.Image {
+    padding: 10px;
+    background-color: #999999;
+    border-radius: 5px;
+}
+
 aside > img {
     cursor: zoom-in;
     max-width: 100%;
@@ -348,6 +355,7 @@ aside > img {
 aside.Fullscreen > img {
     cursor: zoom-out !important;
     max-height: 100%;
+
 }
 
 aside.Fullscreen {
@@ -359,6 +367,7 @@ aside.Fullscreen {
     border-radius: 0 !important;
     top: 0 !important;
     left: 0 !important;
+    z-index: 10000;
 }
 
 @media only screen and (orientation: portrait) {
