@@ -11,7 +11,7 @@ use vDesk\Security\AccessControlList\Entry;
 use vDesk\Struct\Collections\Typed\Observable\Collection;
 
 /**
- * Represents an accescontrollist (ACL), defining permissions to users/groups for access controlled objects.
+ * Represents an AccessControlList (ACL), defining permissions to users/groups for access controlled objects.
  *
  * @property int                                            $ID     (write once) Gets or sets the ID of the AccessControlList.
  * @property-read \vDesk\Security\AccessControlList\Entry[] Users   Gets a Generator that iterates over the User related Entries of the AccessControlList.
@@ -19,7 +19,7 @@ use vDesk\Struct\Collections\Typed\Observable\Collection;
  * @property-read bool                                      $Read   Gets a value indicating whether the current User has read permissions on the AccessControlList.
  * @property-read bool                                      $Write  Gets a value indicating whether the current User has write permissions on the AccessControlList.
  * @property-read bool                                      $Delete Gets a value indicating whether the current User has delete permissions on the AccessControlList.
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class AccessControlList extends Collection implements ICollectionModel {
 
@@ -132,19 +132,19 @@ class AccessControlList extends Collection implements ICollectionModel {
          * Listens on the 'OnDelete'-event.
          *
          * @param \vDesk\Security\AccessControlList       $Sender
-         * @param \vDesk\Security\AccessControlList\Entry $ACLEntry
+         * @param \vDesk\Security\AccessControlList\Entry $Entry
          */
-        $this->OnDelete[] = function(AccessControlList $Sender, Entry $ACLEntry): void {
+        $this->OnDelete[] = function(AccessControlList $Sender, Entry $Entry): void {
             //Skip mandatory Entries.
             if(
-                ($ACLEntry->User->ID !== null && $ACLEntry->User->ID !== User::System)
-                || ($ACLEntry->Group->ID !== null && $ACLEntry->Group->ID !== Group::Everyone)
+                ($Entry->User->ID !== null && $Entry->User->ID !== User::System)
+                || ($Entry->Group->ID !== null && $Entry->Group->ID !== Group::Everyone)
             ) {
                 return;
             }
             //Check if the AccessControlList and Entry is not virtual.
-            if($this->ID !== null && $ACLEntry->ID !== null) {
-                $this->Deleted[] = $ACLEntry;
+            if($this->ID !== null && $Entry->ID !== null) {
+                $this->Deleted[] = $Entry;
             }
         };
     }
@@ -195,7 +195,7 @@ class AccessControlList extends Collection implements ICollectionModel {
                     (bool)$Entry["Delete"]
                 )
             );
-            if((int)$Entry["User"] === $User ?? User::$Current->ID) {
+            if((int)$Entry["User"] === ($User->ID ?? User::$Current->ID)) {
                 if((bool)$Entry["Read"]) {
                     $this->Read = true;
                 }
