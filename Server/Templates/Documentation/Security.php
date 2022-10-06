@@ -159,11 +159,5 @@ use vDesk\Pages\Functions;
         <p>
             Permissions of ACLs follow the principle of "permission over prohibition", this means a single granted permission overrides any prohibition, no matter how many of them exist.
         </p>
-        <p>
-           ACLs provide a set of shorthand properties to read-, write- and delete-permission according the current logged in user.
-        </p>
-        <p>
-            Compared to windows ACLs, the "list" and "execute" permissions are usually (package dependent) merged into the "read" permission.
-        </p>
     </section>
 </article>
