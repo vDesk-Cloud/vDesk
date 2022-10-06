@@ -29,7 +29,6 @@ use vDesk\Pages\Functions;
             <li>
                 <a href="#ACL">Access Control Lists</a>
                 <ul class="Topics">
-                    <li><a href="#ACLManagement">Administrating ACLs</a></li>
                     <li><a href="#Entities">Access control entities</a></li>
                 </ul>
             </li>
@@ -151,7 +150,6 @@ use vDesk\Pages\Functions;
             and extends the <code class="Inline"><?= Code::Class("IModel") ?>::<?= Code::Function("Fill") ?>()</code>-, <code class="Inline"><?= Code::Class("IModel") ?>::<?= Code::Function("Save") ?>()</code>-
             and <code class="Inline"><?= Code::Class("IModel") ?>::<?= Code::Function("Delete") ?>()</code>-methods
             accepting an optional <code class="Inline">\vDesk\Security\<?= Code::Class("User") ?></code>-parameter to check for permissions on the desired actions.
-
         </p>
         <p>
             Upon accessing the <code class="Inline"><?= Code::Class("AccessControl") ?>-><?= Code::Field("AccessControlList") ?></code>-property, the trait will automatically load
@@ -162,9 +160,8 @@ use vDesk\Pages\Functions;
             Permissions of ACLs follow the principle of "permission over prohibition", this means a single granted permission overrides any prohibition, no matter how many of them exist.
         </p>
         <p>
-            Deleting a user or a group results in the deletion of all associated ACL entries.
+           ACLs provide a set of shorthand properties to read-, write- and delete-permission according the current logged in user.
         </p>
-        <p></p>
         <p>
             Compared to windows ACLs, the "list" and "execute" permissions are usually (package dependent) merged into the "read" permission.
         </p>
