@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pages\Documentation;
 
-use vDesk\Pages\Page;
+use vDesk\Pages\Cached\Page;
 
 /**
  * Security Documentation Page.
