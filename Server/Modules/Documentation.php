@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Modules;
 
+use Pages\Documentation\Client;
 use Pages\Documentation\Index;
+use Pages\Documentation\Server;
 use Pages\Documentation\Tutorials;
 use vDesk\Configuration\Settings;
 use vDesk\IO\DirectoryInfo;
@@ -29,7 +31,7 @@ class Documentation extends Module {
     public static function Index(): \Pages\Documentation {
         return new \Pages\Documentation(
             Pages: static::GetPages(),
-            Content: new \Pages\Documentation\Index(Pages: static::GetPages(), Tutorials: static::GetTutorials())
+            Content: new \Pages\Documentation\Index(Pages: static::GetPages(), Client: static::ClientPages(), Server: static::ServerPages())
         );
     }
     
@@ -50,13 +52,13 @@ class Documentation extends Module {
     /**
      * Displays a specified Page.
      *
-     * @param string|null $Page The Page to display.
+     * @param string|null $Topic The Page to display.
      *
      * @return \Pages\Documentation The requested Page.
      */
-    public static function Page(string $Page = null): Page {
-        $Page  ??= Request::$Parameters["Page"];
-        $Class = "\\Pages\\Documentation\\{$Page}";
+    public static function Topic(string $Topic = null): Page {
+        $Topic ??= Request::$Parameters["Topic"];
+        $Class = "\\Pages\\Documentation\\{$Topic}";
         return new \Pages\Documentation(
             Pages: static::GetPages(),
             Content: new $Class()
@@ -64,46 +66,62 @@ class Documentation extends Module {
     }
     
     /**
-     * Gets the currently installed Tutorial Pages.
+     * Gets the currently installed Client Documentation Pages.
      *
      * @return array
      */
-    public static function GetTutorials(): array {
-        return (new DirectoryInfo(Settings::$Local["Pages"]["Pages"] . Path::Separator . "Documentation" . Path::Separator . "Tutorials"))
+    public static function ClientPages(): array {
+        return (new DirectoryInfo(Settings::$Local["Pages"]["Pages"] . Path::Separator . "Documentation" . Path::Separator . "Client"))
             ->GetFiles()
-            ->Map(static fn(FileInfo $Tutorial): string => "\\Pages\\Documentation\\Tutorials\\{$Tutorial->Name}")
-            ->Map(static fn(string $Tutorial): Page => new $Tutorial())
+            ->Map(static fn(FileInfo $Topic): string => "\\Pages\\Documentation\\Client\\{$Topic->Name}")
+            ->Map(static fn(string $Topic): Page => new $Topic())
             ->ToArray();
     }
-    
+
     /**
-     * Displays the Tutorials index Page.
+     * Displays a specified Client Documentation Pages.
      *
-     * @return \Pages\Documentation\Tutorials The requested tutorial.
+     * @param string|null $Topic The Client Documentation Page to display.
+     *
+     * @return \Pages\Documentation\Client\Page The requested Client Documentation Page.
      */
-    public static function Tutorials(): Tutorials {
-        $Tutorials = static::GetTutorials();
-        return new Tutorials(
+    public static function ClientPage(string $Topic = null): Client\Page {
+        $Topic ??= Request::$Parameters["Topic"];
+        $Class = "\\Pages\\Documentation\\Client\\{$Topic}";
+        return new Client\Page(
             Pages: static::GetPages(),
-            Tutorials: $Tutorials,
-            Tutorial: new Tutorials\Index(Tutorials: $Tutorials)
+            Topics: static::ClientPages(),
+            Topic: new $Class()
         );
     }
-    
+
     /**
-     * Displays a specified Tutorial Page.
+     * Gets the currently installed Server Documentation Pages.
      *
-     * @param string|null $Tutorial The Tutorial Page to display.
-     *
-     * @return \Pages\Documentation\Tutorials The requested tutorial.
+     * @return array
      */
-    public static function Tutorial(string $Tutorial = null): Tutorials {
-        $Tutorial ??= Request::$Parameters["Tutorial"];
-        $Class = "\\Pages\\Documentation\\Tutorials\\{$Tutorial}";
-        return new Tutorials(
+    public static function ServerPages(): array {
+        return (new DirectoryInfo(Settings::$Local["Pages"]["Pages"] . Path::Separator . "Documentation" . Path::Separator . "Server"))
+            ->GetFiles()
+            ->Map(static fn(FileInfo $Topic): string => "\\Pages\\Documentation\\Server\\{$Topic->Name}")
+            ->Map(static fn(string $Topic): Page => new $Topic())
+            ->ToArray();
+    }
+
+    /**
+     * Displays a specified Server Documentation Pages.
+     *
+     * @param string|null $Topic The Server Documentation Page to display.
+     *
+     * @return \Pages\Documentation\Server\Page The requested Server Documentation Page.
+     */
+    public static function ServerPage(string $Topic = null): Server\Page {
+        $Topic ??= Request::$Parameters["Topic"];
+        $Class = "\\Pages\\Documentation\\Server\\{$Topic}";
+        return new Server\Page(
             Pages: static::GetPages(),
-            Tutorials: static::GetTutorials(),
-            Tutorial: new $Class()
+            Topics: static::ServerPages(),
+            Topic: new $Class()
         );
     }
     

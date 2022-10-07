@@ -1,31 +1,31 @@
 <?php
 declare(strict_types=1);
 
-namespace Pages\Documentation\Tutorials;
+namespace Pages\Documentation\Client;
 
 use vDesk\Pages\Cached\Page;
 
 /**
- * Class Search
+ * Search filters and -results Documentation Page.
  *
- * @package Pages\Documentation\Tutorials
+ * @package vDesk\Documentation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Search extends Page {
     
     /**
-     * The name of the Tutorial.
+     * The name of the Page.
      *
      * @var string
      */
     public string $Name = "Search";
     
     /**
-     * The nav label of the Tutorial
+     * The nav label of the Page.
      *
      * @var string
      */
-    public string $Description = "Searchfilters and -results";
+    public string $Description = "Search filters and -results";
     
     /**
      * Initializes a new instance of the Search Page.
@@ -37,7 +37,7 @@ class Search extends Page {
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Documentation/Tutorials/Search"],
+        ?iterable $Templates = ["Documentation/Client/Search"],
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = []
     ) {
