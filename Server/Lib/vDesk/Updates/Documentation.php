@@ -52,11 +52,15 @@ Description;
                     "Documentation"
                 ],
                 IPackage::Stylesheets => [
+                    "Documentation/Stylesheet.css",
                     "Documentation/Topics.css"
                 ],
                 IPackage::Images      => [
                     "Documentation/MachinesArchive.png",
-                    "Documentation/MachinesControl.png"
+                    "Documentation/MachinesControl.png",
+                    "Documentation/Users.png",
+                    "Documentation/Groups.png",
+                    "Documentation/ACL.png"
                 ]
             ]
         ],
@@ -74,6 +78,7 @@ Description;
                     "Documentation"
                 ],
                 IPackage::Stylesheets => [
+                    "Documentation/Stylesheet.css",
                     "Documentation/Tutorials.css"
                 ]
             ]
