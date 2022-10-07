@@ -27,7 +27,9 @@ class Security extends Update {
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to vDesk-1.1.0.
+- Fixed wrong parameter type of updating ACLs.
+- Fixed localisation in user editor.
+- Made ACLs compatible to previous changes.
 Description;
 
     /**
@@ -36,22 +38,31 @@ Description;
     public const Files = [
         self::Deploy   => [
             Package::Client => [
-                Package::Design => [
-                    "vDesk/Security/LoginDialog.css"
+                Package::Lib => [
+                    "vDesk/Security/User/Editor.js"
+                ]
+            ],
+            Package::Server => [
+                Package::Lib     => [
+                    "vDesk/Security/AccessControlList.php"
                 ],
-                Package::Lib    => [
-                    "vDesk/Security"
+                Package::Modules => [
+                    "Security.php"
                 ]
             ]
         ],
         self::Undeploy => [
             Package::Client => [
-                Package::Design => [
-                    "vDesk/LoginDialog.css"
+                Package::Lib => [
+                    "vDesk/Security/User/Editor.js"
+                ]
+            ],
+            Package::Server => [
+                Package::Lib     => [
+                    "vDesk/Security/AccessControlList.php"
                 ],
-                Package::Lib    => [
-                    "vDesk/LoginDialog.js",
-                    "vDesk/Security"
+                Package::Modules => [
+                    "Security.php"
                 ]
             ]
         ]

@@ -6,26 +6,26 @@ namespace Pages\Documentation;
 use vDesk\Pages\Cached\Page;
 
 /**
- * Development Documentation Page.
+ * Security Documentation Page.
  *
  * @package vDesk\Documentation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Development extends Page {
+class Security extends Page {
     
     /**
      * The name of the Page.
      *
      * @var string
      */
-    public string $Name = "Development";
+    public string $Name = "Security";
     
     /**
      * The nav label of the Page.
      *
      * @var string
      */
-    public string $Description = "Development";
+    public string $Description = "Security";
     
     /**
      * Initializes a new instance of the Development Page.
@@ -37,7 +37,7 @@ class Development extends Page {
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Documentation/Development"],
+        ?iterable $Templates = ["Documentation/Security"],
         ?iterable $Stylesheets = ["Documentation/Topics"],
         ?iterable $Scripts = []
     ) {

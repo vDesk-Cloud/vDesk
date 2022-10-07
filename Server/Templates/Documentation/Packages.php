@@ -325,7 +325,7 @@ use vDesk\Pages\Functions;
         <h4>Custom packages</h4>
         <p>
             The installer of vDesk comes with an API for providing installable custom packages.<br>
-            While installation, the package gets passed to ever "installer"-module, that has to care for itself for a compatible package type, in setup context; this applies to every
+            While installation, the package gets passed to every "installer"-module, that has to care for itself for a compatible package type, in setup context; this applies to every
             bundled package.
         </p>
         <p>

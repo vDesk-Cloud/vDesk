@@ -13,10 +13,13 @@ use vDesk\Pages\Functions;
         <h3>Overview</h3>
         <ul class="Topics">
             <li>
+                <a href="#LanguageLevels">Language levels</a>
+            </li>
+            <li>
                 <a href="#CodingStyle">Coding style</a>
                 <ul class="Topics">
                     <li><a href="#GeneralRecommendations">General recommendations</a></li>
-                    <li><a href="#NamingConventions">Naming conventions</a></li>
+                    <li><a href="#CodeNamingConventions">Naming conventions</a></li>
                     <li><a href="#TypeCompliance">Type compliance</a></li>
                     <li><a href="#CodeBlocks">Code blocks</a></li>
                     <li><a href="#VariablesFieldsConstants">Variables, Fields and Constants</a></li>
@@ -31,12 +34,14 @@ use vDesk\Pages\Functions;
                     <li><a href="#Iteration">Iteration</a></li>
                     <li><a href="#Arrays">Arrays</a></li>
                     <li><a href="#Strings">Strings</a></li>
+                    <li><a href="#Keywords">Keywords</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#UI">UI</a>
+                <a href="#UI">User interface</a>
                 <ul class="Topics">
                     <li><a href="#CSS">CSS</a></li>
+                    <li><a href="#Colors">Colors</a></li>
                     <li><a href="#Icons">Icons</a></li>
                 </ul>
             </li>
@@ -44,29 +49,70 @@ use vDesk\Pages\Functions;
                 <a href="#Database">Database</a>
                 <ul class="Topics">
                     <li><a href="#SQL">SQL</a></li>
+                    <li><a href="#DatabaseNamingConventions">Naming conventions</a></li>
                     <li><a href="#Models">Models</a></li>
                 </ul>
             </li>
         </ul>
     </header>
+    <section id="LanguageLevels">
+        <h3>Language levels</h3>
+        <table>
+            <tr>
+                <th>Language/runtime</th>
+                <th>Minimum version</th>
+                <th>Recommended version</th>
+            </tr>
+            <tr>
+                <td>JavaScript</td>
+                <td>ECMAScript 2020</td>
+                <td>ECMAScript 2020 or higher</td>
+            </tr>
+            <tr>
+                <td>CSS</td>
+                <td>Custom Properties Level 1</td>
+                <td>Custom Properties Level 1 or higher</td>
+            </tr>
+            <tr>
+                <td>PHP</td>
+                <td>8.0</td>
+                <td>8.1 or higher</td>
+            </tr>
+            <tr>
+                <td>MySQL</td>
+                <td>5.6</td>
+                <td>5.7 or higher</td>
+            </tr>
+            <tr>
+                <td>PostgreSQL</td>
+                <td>13</td>
+                <td>13 or higher</td>
+            </tr>
+            <tr>
+                <td>MS SQL Server</td>
+                <td>2019</td>
+                <td>2019 or higher</td>
+            </tr>
+        </table>
+    </section>
     <section id="CodingStyle">
         <h3>Coding style</h3>
         <p>
-            This section describes the conventions and requirements on source code.
+           Source code files must be must be encoded in UTF-8 without a BOM and use a combination of carriage-return&linefeed characters (\r\n) as a line delimiter.
         </p>
         <hr>
         <h4 id="GeneralRecommendations">General recommendations</h4>
         <ul>
             <li>Follow the "DRY", "KISS" and "YAGNI"(except utility-methods/-classes)-principles.</li>
             <li>Use "static" instead of "self" unless you want to explicitly reference the current class.</li>
-            <li>Use "private" instead of "protected" unless you want to explicitly grant access to the extending class.</li>
+            <li>Use "protected" instead of "private" unless you want to explicitly restrict access to extending classes.</li>
             <li>Provide as much useful documentation as possible; code is read more often than written.</li>
-            <li>Avoid instance-based utility methods, consider using static instead.</li>
+            <li>Avoid instance-based utility methods, consider using static methods instead.</li>
             <li>Consider using generators instead of iterators for huge arrays.</li>
             <li>Consider providing interfaces over abstract classes.</li>
         </ul>
     </section>
-    <section id="NamingConventions">
+    <section id="CodeNamingConventions">
         <h4>Naming conventions</h4>
         <p>
             vDesk strictly uses the "PascalCase"-notation except for the names of JavaScript <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent">CustomEvents</a>
@@ -309,13 +355,18 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
         <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Function ?> <?= Code::Function("InstallPackage") ?>(<?= Code::Class("Package") ?> <?= Code::Variable("\$Package") ?>): <?= Code::Class("Package") ?> {
     
-    <?= Code::Comment("//Install Package..") ?>
-        
-    <?= Code::Variable("\$Package") ?>::<?= Code::Function("Install") ?>()<?= Code::Delimiter ?>
-        
-        
-    <?= Code::If ?>(!\<?= Code::Class("vDesk") ?>::<?= Code::Variable("\$User") ?>-><?= Code::Field("Permissions") ?>[<?= Code::String("\"InstallPackage\"") ?>]) {
-        <?= Code::Class("Log") ?>::<?= Code::Function("Warn") ?>(<?= Code::Const("__METHOD__") ?>, \<?= Code::Class("vDesk") ?>::<?= Code::Variable("\$User") ?>-><?= Code::Field("Name") ?> . <?= Code::String("\" tried to install Package without having permissions.\"") ?>);
+    <?= Code::If ?>(<?= Code::Class("User") ?>::<?= Code::Variable("\$Current") ?>-><?= Code::Field("Permissions") ?>[<?= Code::String("\"InstallPackage\"") ?>]) {
+
+        <?= Code::Comment("//Install Package.") ?>
+
+        <?= Code::Variable("\$Package") ?>::<?= Code::Function("Install") ?>()<?= Code::Delimiter ?>
+
+
+        <?= Code::Comment("//Lots of code...") ?>
+
+
+    } <?= Code::Else ?> {
+        <?= Code::Class("Log") ?>::<?= Code::Function("Warn") ?>(<?= Code::Const("__METHOD__") ?>, <?= Code::Class("User") ?>::<?= Code::Variable("\$Current") ?>-><?= Code::Field("Name") ?> . <?= Code::String("\" tried to install Package without having permissions.\"") ?>);
         <?= Code::Throw ?> <?= Code::New ?> <?= Code::Class("UnauthorizedAccessException") ?>();
     }
     
@@ -324,16 +375,18 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
         <pre><code><?= Conventions::Recommended ?>
 <?= Code::Function ?> <?= Code::Function("InstallPackage") ?>(<?= Code::Class("Package") ?> <?= Code::Variable("\$Package") ?>): <?= Code::Class("Package") ?> {
     
-    <?= Code::If ?>(!\<?= Code::Class("vDesk") ?>::<?= Code::Variable("\$User") ?>-><?= Code::Field("Permissions") ?>[<?= Code::String("\"InstallPackage\"") ?>]) {
-        <?= Code::Class("Log") ?>::<?= Code::Function("Warn") ?>(<?= Code::Const("__METHOD__") ?>, \<?= Code::Class("vDesk") ?>::<?= Code::Variable("\$User") ?>-><?= Code::Field("Name") ?> . <?= Code::String("\" tried to install Package without having permissions.\"") ?>);
+    <?= Code::If ?>(!<?= Code::Class("User") ?>::<?= Code::Variable("\$Current") ?>-><?= Code::Field("Permissions") ?>[<?= Code::String("\"InstallPackage\"") ?>]) {
+        <?= Code::Class("Log") ?>::<?= Code::Function("Warn") ?>(<?= Code::Const("__METHOD__") ?>, <?= Code::Class("User") ?>::<?= Code::Variable("\$Current") ?>-><?= Code::Field("Name") ?> . <?= Code::String("\" tried to install Package without having permissions.\"") ?>);
         <?= Code::Throw ?> <?= Code::New ?> <?= Code::Class("UnauthorizedAccessException") ?>();
     }
     
-    <?= Code::Comment("//Install Package..") ?>
+    <?= Code::Comment("//Install Package.") ?>
         
     <?= Code::Variable("\$Package") ?>::<?= Code::Function("Install") ?>()<?= Code::Delimiter ?>
-    
-    
+
+
+    <?= Code::Comment("//Lots of code...") ?>
+
 }
 </code></pre>
     </section>
@@ -430,8 +483,7 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
         <h4>Iteration</h4>
         <h5>JavaScript</h5>
         <p>
-            Use <code class="Inline"><?= Code::Class("Array") ?>.<?= Code::Field("prototype") ?>.<a target="_blank"
-                                                                                                    href="https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach"><?= Code::Function("forEach") ?></a></code>
+            Use <code class="Inline"><?= Code::Class("Array") ?>.<?= Code::Field("prototype") ?>.<a target="_blank" href="https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach"><?= Code::Function("forEach") ?></a></code>
             in combination with lambda predicates over "for" and "while".
         </p>
         <pre><code><?= Conventions::NotRecommended ?>
@@ -535,28 +587,206 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
 Text<?= Code::Delimiter ?>
 </code></pre>
     </section>
-    <section id="UI">
-        <h3>UI</h3>
-        <p>This section describes visual guidelines.</p>
+    <section id="Keywords">
+        <h4>Keywords</h4>
         <p>
-            As a general rule for frontend-development, is to keep the user interface as simple as possible.<br>
-            Consider the following rules as a "recommendation" for designing graphical interfaces.
+            Keywords have to be written in lowercase, except for referencing fields like <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Field("\$Null") ?></code>.
+        </p>
+        <pre><code><?= Conventions::NotRecommended ?>
+<?= Code::If ?>(<?= Code::Variable("\$Value") ?> === <?= Code::Keyword("NULL") ?>) { }
+</code></pre>
+        <pre><code><?= Conventions::Recommended ?>
+<?= Code::If ?>(<?= Code::Variable("\$Value") ?> === <?= Code::Keyword("null") ?>) { }
+</code></pre>
+    </section>
+    <section id="UI">
+        <h3>User Interface</h3>
+        <p>
+            This section describes visual guidelines and interaction rules of the client.
         </p>
         <p>
-            The client uses currently the box model with floatings for alignment of controls but may get refactored to the CSS-grid.<br>
-            
+            As a general rule of thumb, it is recommended aiming to use as less as possible controls to achieve the desired functionality.
+            <br>The primary focus of interaction lies on mouse control. Keyboard control may be implemented in scenarios where they provide an increase of value,
+            <br>like navigating through grid elements, capturing certain keystrokes or deleting selected elements.
         </p>
     </section>
     <section id="CSS">
         <h4>CSS</h4>
         <p>
-            CSS-classes must be named like the control's class they represent, located in a namespace-equivalent directory.<br>
-            If a classname intersects with a different one, consider using combined classnames for CSS-classes consisting of the bottom-most namespace and control's classname.<br>
-            Focus the viewmodel the current namespace concerns in order of least combined classnames.<br>
-            For example,
-            Try to use the least combined classnames for
-            Use cascading styles to design controls while re-using as much CSS-classes as possible.<br>
+            CSS-classes must be named like the control's class they represent, located in a sub-directory located in the <code class="Inline">/vDesk/Client/Design</code>-directory, whose structure must represent the namespace of the control.
+            <br>To avoid undefined behaviour and unnecessary intersections, selectors must be declared as explicit as possible.
+            <br>This means if a control's class is named as <code class="Inline">.<?= Code::Class("ExampleControl") ?></code> and is a child of a DOM-node with the class <code class="Inline">.<?= Code::Class("ExampleParent") ?></code>,
+            <br>the selector may limit the CSS declarations by using the <code class="Inline"><?= Code::Keyword(">") ?></code>-operator like
+            <code class="Inline">.<?= Code::Class("Parent") ?> > .<?= Code::Class("ExampleControl") ?> { }</code>.
         </p>
+        <p>
+            If a classname intersects with a different one, consider using combined classnames for CSS-classes consisting of the bottom-most namespace and control's classname.
+            <br>This means if for example the combination of <code class="Inline">.<?= Code::Class("CustomControl") ?></code><code class="Inline">.<?= Code::Class("Effect") ?></code> already exist, <code class="Inline">.<?= Code::Class("CustomControlEffect") ?></code> may be used instead.
+        </p>
+        <p>
+            The client currently uses the box model and has been developed with the focus of running in all major desktop browsers,
+            while the website already has been refactored to the CSS grid model.<br>
+            Until it's not clear if it's easier to provide a single multi-device client or separate clients for desktop and mobile devices, the box model may still be used for new UI elements.
+        </p>
+        <p>
+            The stack-order(z-index) range from 0 to 999 is reserved for controls of Packages in official releases.
+        </p>
+        <p>
+            However if possible, it's recommended to use the CSS grid model at least within the workspace container of the client for modules which provide an UI.
+        </p>
+    </section>
+    <section id="Colors">
+        <h4>Colors</h4>
+        <p>
+            UI-controls have to use the colors of the table below according their purpose.
+            If a control type is not listed in the color table, then it's recommend sticking to the next similar control type.
+        </p>
+        <table>
+            <tr>
+                <th>Control</th>
+                <th>CSS class(es)</th>
+                <th>CSS variable</th>
+                <th>Runtime property</th>
+                <th>Default color</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>Foreground areas, contrast color</td>
+                <td><code class="Inline">.<?= Code::Class("Foreground") ?></code></td>
+                <td><code class="Inline">--Foreground</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.Foreground</code></td>
+                <td>rgba(42, 176, 237, 1)</td>
+                <td style="color: rgba(42, 176, 237, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Background areas</td>
+                <td><code class="Inline">.<?= Code::Class("Background") ?></code></td>
+                <td><code class="Inline">--Background</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.Background</code></td>
+                <td>rgba(255, 255, 255, 1)</td>
+                <td style="background-color: black; color: rgba(255, 255, 255, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Light borders, disabled textboxes and windows out of focus</td>
+                <td><code class="Inline">.<?= Code::Class("BorderLight") ?></code></td>
+                <td><code class="Inline">--BorderLight</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.BorderLight</code></td>
+                <td>rgba(153, 153, 153, 1)</td>
+                <td style="color: rgba(153, 153, 153, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Dark borders of active and enabled controls and textboxes</td>
+                <td><code class="Inline">.<?= Code::Class("BorderDark") ?></code></td>
+                <td><code class="Inline">--BorderDark</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.BorderDark</code></td>
+                <td>rgba(0, 0, 0, 1)</td>
+                <td style="color: rgba(0, 0, 0, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Text in contrast areas</td>
+                <td><code class="Inline">.<?= Code::Class("Font") ?></code> <code class="Inline">.<?= Code::Class("Light") ?></code></td>
+                <td><code class="Inline">--FontLight</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.FontLight</code></td>
+                <td>rgba(255, 255, 255, 1)</td>
+                <td style="background-color: black; color: rgba(255, 255, 255, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Text in active and enabled controls</td>
+                <td><code class="Inline">.<?= Code::Class("Font") ?></code> <code class="Inline">.<?= Code::Class("Dark") ?></code></td>
+                <td><code class="Inline">--FontDark</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.FontDark</code></td>
+                <td>rgba(0, 0, 0, 1)</td>
+                <td style="color: rgba(0, 0, 0, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Text in disabled controls or windows out of focus</td>
+                <td><code class="Inline">.<?= Code::Class("Font") ?></code> <code class="Inline">.<?= Code::Class("Disabled") ?></code></td>
+                <td><code class="Inline">--FontDisabled</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.FontDisabled</code></td>
+                <td>rgba(153, 153, 153, 1)</td>
+                <td style="color: rgba(153, 153, 153, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Selected button controls and list elements</td>
+                <td><code class="Inline">.<?= Code::Class("Control") ?></code> <code class="Inline">.<?= Code::Class("Selected") ?></code></td>
+                <td><code class="Inline">--ControlSelected</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.Control.Selected</code></td>
+                <td>rgba(255, 207, 50, 1)</td>
+                <td style="color: rgba(255, 207, 50, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Hover effect for button controls and list elements</td>
+                <td><code class="Inline">.<?= Code::Class("Control") ?></code> <code class="Inline">.<?= Code::Class("Hover") ?></code></td>
+                <td><code class="Inline">--ControlHover</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.Control.Hover</code></td>
+                <td>rgba(42, 176, 237, 1)</td>
+                <td style="color: rgba(42, 176, 237, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Pressed button controls and list elements</td>
+                <td><code class="Inline">.<?= Code::Class("Control") ?></code> <code class="Inline">.<?= Code::Class("Press") ?></code></td>
+                <td><code class="Inline">--ControlPress</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.Control.Press</code></td>
+                <td>rgba(70, 140, 207, 1)</td>
+                <td style="color: rgba(70, 140, 207, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Selected buttons</td>
+                <td><code class="Inline">.<?= Code::Class("Button") ?></code> <code class="Inline">.<?= Code::Class("Selected") ?></code></td>
+                <td><code class="Inline">--ButtonSelected</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.Button.Selected</code></td>
+                <td>rgba(170,170,170, 1)</td>
+                <td style="color: rgba(170,170,170, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Hover effect for buttons</td>
+                <td><code class="Inline">.<?= Code::Class("Button") ?></code> <code class="Inline">.<?= Code::Class("Hover") ?></code></td>
+                <td><code class="Inline">--ButtonHover</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.Button.Hover</code></td>
+                <td>rgba(153, 153, 153, 1)</td>
+                <td style="color: rgba(153, 153, 153, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Pressed buttons</td>
+                <td><code class="Inline">.<?= Code::Class("Button") ?></code> <code class="Inline">.<?= Code::Class("Press") ?></code></td>
+                <td><code class="Inline">--ButtonPress</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.Button.Press</code></td>
+                <td>rgba(119, 119, 119, 1)</td>
+                <td style="color: rgba(119, 119, 119, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Background areas of buttons</td>
+                <td><code class="Inline">.<?= Code::Class("Button") ?></code> <code class="Inline">.<?= Code::Class("Background") ?></code></td>
+                <td><code class="Inline">--ButtonPress</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.Button.Background</code></td>
+                <td>rgba(219,219,219, 1)</td>
+                <td style="color: rgba(219,219,219, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Borders of selected textboxes</td>
+                <td><code class="Inline">.<?= Code::Class("TextBox") ?></code> <code class="Inline">.<?= Code::Class("Selected") ?></code></td>
+                <td><code class="Inline">--TextBoxSelected</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.TextBox.Selected</code></td>
+                <td>rgba(255, 207, 50, 1)</td>
+                <td style="color: rgba(255, 207, 50, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Borders of textboxes with invalid input</td>
+                <td><code class="Inline">.<?= Code::Class("TextBox") ?></code> <code class="Inline">.<?= Code::Class("Error") ?></code></td>
+                <td><code class="Inline">--TextBoxError</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.TextBox.Error</code></td>
+                <td>rgba(255, 51, 0, 1)</td>
+                <td style="color: rgba(255, 51, 0, 1)">⬤</td>
+            </tr>
+            <tr>
+                <td>Borders of disabled and inactive textboxes</td>
+                <td><code class="Inline">.<?= Code::Class("TextBox") ?></code> <code class="Inline">.<?= Code::Class("Disabled") ?></code></td>
+                <td><code class="Inline">--TextBoxDisabled</code></td>
+                <td><code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Colors") ?>.TextBox.Disabled</code></td>
+                <td>rgba(153, 153, 153, 1)</td>
+                <td style="color: rgba(153, 153, 153, 1)">⬤</td>
+            </tr>
+        </table>
     </section>
     <section id="Icons">
         <h4>Icons</h4>
@@ -578,25 +808,22 @@ Text<?= Code::Delimiter ?>
     <section id="Database">
         <h3>Database</h3>
         <p>
-            This section describes the access on SQL-database servers.
-        </p>
-        <p>
-            In general, it is recommended using the <a href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", "Expressions") ?>">Expressions</a>-library instead of executing plain SQL against the database server.
+            This section describes the access on database servers, SQL-code requirements and naming conventions.
         </p>
     </section>
     <section id="SQL">
         <h4>SQL</h4>
         <p>
-            Although the "Structured Query Language" already provides an abstract way of communicating with database servers, there are still exist some inconsistencies between certain
+            Although the "Structured Query Language" already provides an abstract way of communicating with database servers, there still exist some inconsistencies between certain
             RDBMS.<br>
-            These differences occur mostly while working with schemas, tables, column definitions and datatypes and are usually minor implementation details.<br>
-            So it still may happen that for example database "A" only supports the "MODIFY"-kewyord, while database "B" only supports the "ALTER"-keyword while database "C" supports both,
+            These differences occur mostly while working with schemas, tables, column definitions and data types and are usually minor implementation details.<br>
+            So it still may happen that for example database "A" only supports the "MODIFY"-keyword, while database "B" only supports the "ALTER"-keyword while database "C" supports both,
             and so on..
         </p>
         <p>
-            To address the common differences between several RDBMs, vDesk's dataprovider ships with an <a href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", "Expressions") ?>">Expression</a>-library, that allows the developer to "express" the operation you want
-            to perform against the database server in a parametrized monade that translates the action into a query that is compatible to the current configured database system.
-            The expression library covers most oft the usual CRUD and DB/Table-manipulation functions that SQL defines.
+            To address common differences between several RDBMs, vDesk's DataProvider ships with an <a href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", "Expressions") ?>">Expression</a>-library, that allows developers to "express" the operation they want
+            to perform against the database server in a fluent interface that translates the action into a query compatible to the current configured database system.
+            <br>The expression library covers most oft the usual CRUD and DB/Table-manipulation functions that SQL defines.
         </p>
         <p>
             If you're currently missing a feature and as long as your code only consists of standard conform SQL-statements,<br>
@@ -604,7 +831,7 @@ Text<?= Code::Delimiter ?>
             driver (like <a target="_blank" href="https://www.php.net/manual/de/mysqli.real-query.php">mysqli::real_query()</a>, <a target="_blank"
                                                                                                                                     href="https://www.php.net/manual/de/function.pg-query.php">pg_query()</a>
             or <a target="_blank" href="https://www.php.net/manual/de/pdo.query.php">PDO::query()</a>.<br>
-            Anyway, consider at least opening an issue on <a href="https://www.github.com/vDesk-Cloud">Github</a> or implementing the required function into the expression-library.
+            However, consider opening an issue on <a href="https://www.github.com/vDesk-Cloud">Github</a> or submitting a pull request.
         </p>
         <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Variable("\$ResultSet") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::String("\"SELECT * FROM Table WHERE ID = 1\"") ?>)<?= Code::Delimiter ?>
@@ -615,6 +842,16 @@ Text<?= Code::Delimiter ?>
                                            -><?= Code::Function("Where") ?>([<?= Code::String("\"ID\"") ?> => <?= Code::Int("1") ?>])
                                            -><?= Code::Function("Execute") ?>()<?= Code::Delimiter ?>
 </code></pre>
+    </section>
+    <section id="DatabaseNamingConventions">
+        <h4>Naming conventions</h4>
+        <p>
+            Databases, schemas and tables have to be written in "PascalCase"-notation, while schemas (databases in case of MySQL) have to be named like the Package the schema belongs.
+            <br>Tables must be named with a pluralized version of the model they represent, in case the schema name implies it's purpose, table names may be written as an adjective.
+        </p>
+        <p>
+            Tables must be strictly prefixed in plain SQL statements and Expressions with their parent schema or database while fields only may be prefixed if the statement references more than one table.
+        </p>
     </section>
     <section id="Models">
         <h4>Models</h4>

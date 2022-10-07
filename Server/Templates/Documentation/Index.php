@@ -15,22 +15,32 @@ use vDesk\Pages\Functions;
         If you want to contribute to the project, consider reading the <a href="<?= Functions::URL("vDesk", "Page", "Contribute") ?>">Contribution guideline</a> first.
     </p>
     <h3>Overview</h3>
-    <h4>Pages</h4>
+    <h4>General topcis</h4>
     <ul>
         <?php foreach($Page->Pages as $Page): ?>
             <?php if($Page->Name !== "Index"): ?>
                 <li>
-                    <a href="<?= Functions::URL("Documentation", "Page", $Page->Name) ?>"><?= $Page->Description ?></a>
+                    <a href="<?= Functions::URL("Documentation", "Topic", $Page->Name) ?>"><?= $Page->Description ?></a>
                 </li>
             <?php endif; ?>
         <?php endforeach; ?>
     </ul>
-    <h4>Tutorials</h4>
+    <h4>Client topics</h4>
     <ul>
-        <?php foreach(\vDesk\Modules::Documentation()::GetTutorials() as $Tutorial): ?>
-            <?php if($Tutorial->Name !== "Index"): ?>
+        <?php foreach(\vDesk\Modules::Documentation()::ClientPages() as $Topic): ?>
+            <?php if($Topic->Name !== "Index"): ?>
                 <li>
-                    <a href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", $Tutorial->Name) ?>"><?= $Tutorial->Description ?></a>
+                    <a href="<?= Functions::URL("Documentation", "Category", "Client", "Topic", $Topic->Name) ?>"><?= $Topic->Description ?></a>
+                </li>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </ul>
+    <h4>Server topics</h4>
+    <ul>
+        <?php foreach(\vDesk\Modules::Documentation()::ServerPages() as $Topic): ?>
+            <?php if($Topic->Name !== "Index"): ?>
+                <li>
+                    <a href="<?= Functions::URL("Documentation", "Category", "Server", "Topic", $Topic->Name) ?>"><?= $Topic->Description ?></a>
                 </li>
             <?php endif; ?>
         <?php endforeach; ?>

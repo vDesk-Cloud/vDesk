@@ -1,27 +1,27 @@
 <?php
 declare(strict_types=1);
 
-namespace Pages\Documentation;
+namespace Pages\Documentation\Server;
 
 use vDesk\Pages\Cached\Page;
 
 /**
  * Pages Documentation Page.
  *
- * @package Pages\Tutorials
+ * @package vDesk\Documentation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Pages extends Page {
     
     /**
-     * The name of the Tutorial.
+     * The name of the Page.
      *
      * @var string
      */
     public string $Name = "Pages";
     
     /**
-     * The nav label of the Tutorial
+     * The nav label of the Page.
      *
      * @var string
      */
@@ -37,7 +37,7 @@ class Pages extends Page {
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Documentation/Pages"],
+        ?iterable $Templates = ["Documentation/Server/Pages"],
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = []
     ) {
