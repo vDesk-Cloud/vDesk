@@ -37,6 +37,8 @@ use vDesk\Pages\Functions;
                 </li>
             </ul>
         </li>
+        <li><a href="#Models">Models</a></li>
+        <li><a href="#Controls">Controls</a></li>
     </ul>
     </header>
     <section id="ApplicationFlow">
@@ -57,7 +59,7 @@ use vDesk\Pages\Functions;
         <ol>
             <li>Performing a handshake with the specified server while sending a list of installed client-side packages and their versions to check for compatibility.</li>
             <li>Perform a login with the specified or stored credentials.</li>
-            <li>Running startup-scripts located in <code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Load") ?></code>-namespace.</li>
+            <li>Running startup-scripts located in the <code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Load") ?></code>-namespace.</li>
             <li>Initializing installed Modules.</li>
         </ol>
         <h5>Run</h5>
@@ -93,7 +95,8 @@ use vDesk\Pages\Functions;
         </p>
         <p>
             To register a class as a client-side Module, the class to be located in the <code class="Inline">Modules</code>-namespace and must implement either the <code class="Inline">vDesk.Modules.<?= Code::Class("IModule") ?></code>-
-            or <code class="Inline">vDesk.Modules.<?= Code::Class("IVisualModule") ?></code>-interface.
+            or <code class="Inline">vDesk.Modules.<?= Code::Class("IVisualModule") ?></code>-interface.<br>
+            Modules are available in the global  <code class="Inline">vDesk.<?= Code::Class("Modules") ?></code>-dictionary after startup.
         </p>
     </section>
     <section id="Server">
@@ -104,7 +107,10 @@ use vDesk\Pages\Functions;
         <p>
             To register a class as a server-side Module, the class has to be located in the <code class="Inline">Modules</code>-namespace and must inherit from the <code class="Inline">\vDesk\Modules\<?= Code::Class("Module") ?></code>-class.<br>
             The Module base-class implements the <code class="Inline">\vDesk\Data\<?= Code::Class("IModel") ?></code>-interface which allows to simply instantiate the Module once and call
-            its "Save"-method to register it.
+            its <code class="Inline"><?= Code::Function("Save") ?>()</code>-method to register it.
+        </p>
+        <p>
+            Modules can be initialized via the global <code class="Inline">\vDesk\<?= Code::Class("Modules") ?></code>-facade by calling the desired Module as a method.
         </p>
         <p>
             Modules are stored in the <code class="Inline"><?= Code::Class("Modules") ?>.<?= Code::Const("Modules") ?></code>-table.
@@ -312,5 +318,246 @@ use vDesk\Pages\Functions;
             <td>\vDesk\IO\FileInfo</td>
         </tr>
     </table>
+    </section>
+    <section id="Models">
+        <h4>Models</h4>
+        <p>
+            Models represent database records and must implement the <code class="Inline">\vDesk\Data\<?= Code::Class("IModel") ?></code>-interface
+            for being recognized as such.<br>
+            They must implement the <code class="Inline"><?= Code::Class("IModel") ?>::<?= Code::Function("Fill") ?>()</code>-,
+            <code class="Inline"><?= Code::Function("Save") ?>()</code>- and <code class="Inline"><?= Code::Function("Delete") ?>()</code>-methods for database communication
+            as well as a <code class="Inline"><?= Code::Function("FromDataView") ?>()</code>- and <code class="Inline"><?= Code::Function("ToDataView") ?>()</code>-method
+            which transforms the values of a model into a JSON-encodable representation or creates a new instance from it.
+        </p>
+        <p>
+            If a module returns a model due to the execution of a command, the system automatically calls its
+            <code class="Inline"><?= Code::Function("ToDataView") ?>()</code>-method and sends the returned value to the client.
+        </p>
+        <h5>Example implementation of a Model</h5>
+        <pre><code><?= Language::PHP ?>
+<?= Code::Use ?> vDesk\Data\<?= Code::Class("IModel") ?><?= Code::Delimiter ?>
+
+<?= Code::Use ?> vDesk\DataProvider\<?= Code::Class("Expression") ?><?= Code::Delimiter ?>
+
+
+<?= Code::ClassDeclaration ?> <?= Code::Class("Product") ?> <?= Code::Implements ?> <?= Code::Class("IModel") ?> {
+
+    <?= Code::Use ?> vDesk\Struct\<?= Code::Class("Properties") ?><?= Code::Delimiter ?>
+
+
+    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("__construct") ?>(
+        <?= Code::Private ?> ?<?= Code::Keyword("int") ?> <?= Code::Variable("\$ID") ?> = <?= Code::Null ?>,
+        <?= Code::Private ?> ?<?= Code::Keyword("string") ?> <?= Code::Variable("\$Name") ?> = <?= Code::Null ?>,
+        <?= Code::Private ?> ?<?= Code::Keyword("float") ?> <?= Code::Variable("\$Price") ?> = <?= Code::Null ?>,
+        <?= Code::Private ?> ?<?= Code::Keyword("int") ?> <?= Code::Variable("\$Stock") ?> = <?= Code::Null ?>
+
+    ) {
+        <?= Code::Variable("\$this") ?>-><?= Code::Function("AddProperties") ?>([
+            <?= Code::String("\"ID\"") ?> => [
+                \<?= Code::Const("Get") ?> => <?= Code::Keyword("fn") ?>(): ?<?= Code::Keyword("int") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("ID") ?>,
+                \<?= Code::Const("Set") ?> => <?= Code::Keyword("fn") ?>(<?= Code::Keyword("int") ?> <?= Code::Variable("\$Value") ?>) => <?= Code::Variable("\$this") ?>-><?= Code::Field("ID") ?> = <?= Code::Variable("\$Value") ?>
+
+            ],
+            <?= Code::String("\"Name\"") ?> => [
+                \<?= Code::Const("Get") ?> => <?= Code::Keyword("fn") ?>(): ?<?= Code::Keyword("string") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("Name") ?>,
+                \<?= Code::Const("Set") ?> => <?= Code::Keyword("fn") ?>(<?= Code::Keyword("string") ?> <?= Code::Variable("\$Value") ?>) => <?= Code::Variable("\$this") ?>-><?= Code::Field("Name") ?> = <?= Code::Variable("\$Value") ?>
+
+            ],
+            <?= Code::String("\"Price\"") ?> => [
+                \<?= Code::Const("Get") ?> => <?= Code::Keyword("fn") ?>(): ?<?= Code::Keyword("float") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("Price") ?>,
+                \<?= Code::Const("Set") ?> => <?= Code::Keyword("fn") ?>(<?= Code::Keyword("float") ?> <?= Code::Variable("\$Value") ?>) => <?= Code::Variable("\$this") ?>-><?= Code::Field("Price") ?> = <?= Code::Variable("\$Value") ?>
+
+            ],
+            <?= Code::String("\"Stock\"") ?> => [
+                \<?= Code::Const("Get") ?> => <?= Code::Keyword("fn") ?>(): ?<?= Code::Keyword("int") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("Stock") ?>,
+                \<?= Code::Const("Set") ?> => <?= Code::Keyword("fn") ?>(<?= Code::Keyword("int") ?> <?= Code::Variable("\$Value") ?>) => <?= Code::Variable("\$this") ?>-><?= Code::Field("Stock") ?> = <?= Code::Variable("\$Value") ?>
+
+            ]
+        ])<?= Code::Delimiter ?>
+
+    }
+
+    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("Fill") ?>(): <?= Code::Keyword("self") ?> {
+        <?= Code::Variable("\$Product") ?> = <?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"*\"") ?>)
+                             -><?= Code::Function("From") ?>(<?= Code::String("\"Shop.Products\"") ?>)
+                             -><?= Code::Function("Where") ?>([<?= Code::String("\"ID\"") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("ID") ?>])
+                             -><?= Code::Function("Execute") ?>()
+                             -><?= Code::Function("ToMap") ?>()<?= Code::Delimiter ?>
+
+
+        <?= Code::Variable("\$this") ?>-><?= Code::Field("Name") ?> = <?= Code::Variable("\$Product") ?>[<?= Code::String("\"Name\"") ?>]<?= Code::Delimiter ?>
+
+        <?= Code::Variable("\$this") ?>-><?= Code::Field("Price") ?> = (<?= Code::Keyword("float") ?>)<?= Code::Variable("\$Product") ?>[<?= Code::String("\"Price\"") ?>]<?= Code::Delimiter ?>
+
+        <?= Code::Variable("\$this") ?>-><?= Code::Field("Stock") ?> = (<?= Code::Keyword("int") ?>)<?= Code::Variable("\$Product") ?>[<?= Code::String("\"Stock\"") ?>]<?= Code::Delimiter ?>
+
+
+        <?= Code::Return ?>> <?= Code::Variable("\$this") ?><?= Code::Delimiter ?>
+
+    }
+
+    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("Save") ?>(): <?= Code::Keyword("void") ?> {
+        <?= Code::If ?>(<?= Code::Variable("\$this") ?>-><?= Code::Field("ID") ?> === <?= Code::Null ?>) {
+            <?= Code::Comment("//Create new dataset") ?>
+
+            <?= Code::Variable("\$this") ?>-><?= Code::Field("ID") ?> = <?= Code::Class("Expression") ?>::<?= Code::Function("Insert") ?>()
+                                  -><?= Code::Function("Into") ?>(<?= Code::String("\"Shop.Products\"") ?>)
+                                  -><?= Code::Function("Values") ?>([
+                                      <?= Code::String("\"ID\"") ?> => <?= Code::Null ?>,
+                                      <?= Code::String("\"Name\"") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("Name") ?>,
+                                      <?= Code::String("\"Price\"") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("Price") ?>,
+                                      <?= Code::String("\"Stock\"") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("Stock") ?>
+
+                                  ])
+                                  -><?= Code::Function("ID") ?>()<?= Code::Delimiter ?>
+
+        } <?= Code::Else ?> {
+            <?= Code::Comment("//Update existing dataset") ?>
+
+            <?= Code::Class("Expression") ?>::<?= Code::Function("Update") ?>(<?= Code::String("\"Shop.Products\"") ?>)
+                      -><?= Code::Function("Set") ?>([
+                          <?= Code::String("\"Name\"") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("Name") ?>,
+                          <?= Code::String("\"Price\"") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("Price") ?>,
+                          <?= Code::String("\"Stock\"") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("Stock") ?>
+
+                      ])
+                      -><?= Code::Function("Where") ?>([<?= Code::String("\"ID\"") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("ID") ?>])
+                      -><?= Code::Function("Execute") ?>()<?= Code::Delimiter ?>
+
+        }
+    }
+
+    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("Delete") ?>(): <?= Code::Keyword("void") ?> {
+        <?= Code::If ?>(<?= Code::Variable("\$this") ?>-><?= Code::Field("ID") ?> !== <?= Code::Null ?>) {
+            <?= Code::Class("Expression") ?>::<?= Code::Function("Delete") ?>()
+                      -><?= Code::Function("From") ?>(<?= Code::String("\"Shop.Products\"") ?>)
+                      -><?= Code::Function("Where") ?>([<?= Code::String("\"ID\"") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("ID") ?>])
+                      -><?= Code::Function("Execute") ?>()<?= Code::Delimiter ?>
+
+        }
+    }
+
+
+    <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("FromDataView") ?>(<?= Code::Variable("\$DataView") ?>): <?= Code::Static ?> {
+        <?= Code::Return ?> <?= Code::New ?> <?= Code::Static ?>(
+            (<?= Code::Keyword("int") ?>)<?= Code::Variable("\$DataView") ?>[<?= Code::String("\"ID\"") ?>],
+            <?= Code::Variable("\$DataView") ?>[<?= Code::String("\"Name\"") ?>],
+            (<?= Code::Keyword("float") ?>)<?= Code::Variable("\$DataView") ?>[<?= Code::String("\"Price\"") ?>],
+            (<?= Code::Keyword("int") ?>)<?= Code::Variable("\$DataView") ?>[<?= Code::String("\"Stock\"") ?>]
+        )<?= Code::Delimiter ?>
+
+    }
+
+    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("ToDataView") ?>(): <?= Code::Keyword("array") ?> {
+        <?= Code::Return ?> [
+            <?= Code::String("\"ID\"") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("ID") ?>,
+            <?= Code::String("\"Name\"") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("Name") ?>,
+            <?= Code::String("\"Price\"") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("Price") ?>,
+            <?= Code::String("\"Stock\"") ?> => <?= Code::Variable("\$this") ?>-><?= Code::Field("Stock") ?>
+
+        ]<?= Code::Delimiter ?>
+
+    }
+}
+</code></pre>
+    </section>
+    <section id="Controls">
+        <h4>Controls</h4>
+        <p>
+            Controls are JavaScript-classes which can be compared with "ViewModels" and follow a certain pattern.<br>
+            They have to implement a "Control"-property that contains the container node of the control and besides generic layout controls usually provide a <code class="Inline"><?= Code::Function("FromDataView") ?>()</code>-factorymethod
+            that creates a new instance from the data returned by a server side model's <code class="Inline"><?= Code::Function("ToDataView") ?>()</code>-method.
+        </p>
+        <p>
+            Controls never should directly execute a command against the server on state change, they should be administrated by a dedicated "Editor"-control.<br>
+            To communicate with such editors, controls may fire custom events that have to include a "sender"-property reference the instance of the emitting Control next to the event data.
+        </p>
+        <p>
+            A list of all generic controls is available under the <a href="<?= Functions::URL("Documentation", "Category", "Client", "Topic", "Controls") ?>">Controls</a> client topic.
+        </p>
+        <h5>Example implementation of a control</h5>
+        <pre style="margin: 10px"><code><?= Language::JS ?>
+<?= Code::Variable("Shop") ?>.<?= Code::Class("Product") ?> = <?= Code::Function ?>(<?= Code::Variable("ID") ?>, <?= Code::Variable("Name") ?>, <?= Code::Variable("Price") ?>, <?= Code::Variable("Stock") ?>) {
+
+    <?= Code::Variable("Object") ?>.<?= Code::Function("defineProperties") ?>(
+        <?= Code::Variable("this") ?>,
+        {
+            <?= Code::Field("Control") ?>: {
+                <?= Code::Field("get") ?>: () => <?= Code::Const("Control") ?>
+
+            },
+            <?= Code::Field("ID") ?>: {
+                <?= Code::Field("get") ?>: () => <?= Code::Variable("ID") ?>,
+                <?= Code::Field("set") ?>:  <?= Code::Variable("Value") ?> => <?= Code::Variable("ID") ?> = <?= Code::Variable("Value") ?>
+
+            },
+            <?= Code::Field("Name") ?>: {
+                <?= Code::Field("get") ?>: () => <?= Code::Const("NameLabel") ?>.<?= Code::Field("textContent") ?>,
+                <?= Code::Field("set") ?>: <?= Code::Variable("Value") ?> => <?= Code::Const("NameLabel") ?>.<?= Code::Field("textContent") ?> = <?= Code::Variable("Value") ?>
+
+            },
+            <?= Code::Field("Price") ?>: {
+                <?= Code::Field("get") ?>: () => <?= Code::Variable("Number") ?>.<?= Code::Function("parseFloat") ?>(<?= Code::Const("PriceLabel") ?>.<?= Code::Field("textContent") ?>),
+                <?= Code::Field("set") ?>: <?= Code::Variable("Value") ?> => <?= Code::Const("PriceLabel") ?>.<?= Code::Field("textContent") ?> = <?= Code::Variable("Value") ?>
+
+            },
+            <?= Code::Field("Stock") ?>: {
+                <?= Code::Field("get") ?>: () => <?= Code::Variable("Number") ?>.<?= Code::Function("parseInt") ?>(<?= Code::Const("StockLabel") ?>.<?= Code::Field("textContent") ?>),
+                <?= Code::Field("set") ?>: <?= Code::Variable("Value") ?> => <?= Code::Const("StockLabel") ?>.<?= Code::Field("textContent") ?> = <?= Code::Variable("Value") ?>
+
+            }
+        }
+    )<?= Code::Delimiter ?>
+
+
+    <?= Code::Constant ?> <?= Code::Const("Control") ?> = <?= Code::Variable("document") ?>.<?= Code::Function("createElement") ?>(<?= Code::String("\"div\"") ?>)<?= Code::Delimiter ?>
+
+    <?= Code::Const("Control") ?>.<?= Code::Field("className") ?> = <?= Code::String("\"Product\"") ?><?= Code::Delimiter ?>
+
+
+    <?= Code::Constant ?> <?= Code::Const("NameLabel") ?> = <?= Code::Variable("document") ?>.<?= Code::Function("createElement") ?>(<?= Code::String("\"span\"") ?>)<?= Code::Delimiter ?>
+
+    <?= Code::Const("NameLabel") ?>.<?= Code::Field("textContent") ?> = <?= Code::Variable("Name") ?><?= Code::Delimiter ?>
+
+    <?= Code::Const("Control") ?>.<?= Code::Function("appendChild") ?>(<?= Code::Const("NameLabel") ?>)<?= Code::Delimiter ?>
+
+
+    <?= Code::Constant ?> <?= Code::Const("PriceLabel") ?> = <?= Code::Variable("document") ?>.<?= Code::Function("createElement") ?>(<?= Code::String("\"span\"") ?>)<?= Code::Delimiter ?>
+
+    <?= Code::Const("PriceLabel") ?>.<?= Code::Field("textContent") ?> = <?= Code::Variable("Price") ?><?= Code::Delimiter ?>
+
+    <?= Code::Const("Control") ?>.<?= Code::Function("appendChild") ?>(<?= Code::Const("PriceLabel") ?>)<?= Code::Delimiter ?>
+
+
+    <?= Code::Constant ?> <?= Code::Const("StockLabel") ?> = <?= Code::Variable("document") ?>.<?= Code::Function("createElement") ?>(<?= Code::String("\"span\"") ?>)<?= Code::Delimiter ?>
+
+    <?= Code::Const("StockLabel") ?>.<?= Code::Field("textContent") ?> = <?= Code::Variable("Stock") ?><?= Code::Delimiter ?>
+
+    <?= Code::Const("Control") ?>.<?= Code::Function("appendChild") ?>(<?= Code::Const("StockLabel") ?>)<?= Code::Delimiter ?>
+
+
+    <?= Code::Constant ?> <?= Code::Const("Buy") ?> = <?= Code::Variable("document") ?>.<?= Code::Function("createElement") ?>(<?= Code::String("\"button\"") ?>)<?= Code::Delimiter ?>
+
+    <?= Code::Const("Buy") ?>.<?= Code::Field("textContent") ?> = <?= Code::String("\"Buy\"") ?><?= Code::Delimiter ?>
+
+    <?= Code::Const("Buy") ?>.<?= Code::Function("addEventListener") ?>(<?= Code::String("\"click\"") ?>, () => <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Events") ?>.<?= Code::Class("BubblingEvent") ?>(<?= Code::String("\"buy\"") ?>, {<?= Code::Field("sender") ?>: <?= Code::Keyword("this") ?>}).<?= Code::Function("Dispatch") ?>(<?= Code::Const("Control") ?>))<?= Code::Delimiter ?>
+
+    <?= Code::Const("Control") ?>.<?= Code::Function("appendChild") ?>(<?= Code::Const("Buy") ?>)<?= Code::Delimiter ?>
+
+
+}<?= Code::Delimiter ?>
+
+
+<?= Code::Variable("Shop") ?>.<?= Code::Class("Product") ?>.<?= Code::Function("FromDataView") ?>(<?= Code::Variable("DataView") ?>) {
+    <?= Code::Return ?> <?= Code::New ?> <?= Code::Variable("Shop") ?>.<?= Code::Class("Product") ?>(
+        <?= Code::Variable("DataView") ?>.<?= Code::Field("ID") ?>,
+        <?= Code::Variable("DataView") ?>.<?= Code::Field("Name") ?>,
+        <?= Code::Variable("DataView") ?>.<?= Code::Field("Price") ?>,
+        <?= Code::Variable("DataView") ?>.<?= Code::Field("Stock") ?>
+
+    )<?= Code::Delimiter ?>
+
+}<?= Code::Delimiter ?>
+</code></pre>
     </section>
 </article>
