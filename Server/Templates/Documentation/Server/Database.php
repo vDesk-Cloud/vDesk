@@ -3,17 +3,32 @@ use vDesk\Documentation\Code;
 ?>
 <article>
     <header>
-        <h2>Database-Expressions</h2>
+        <h2>Database</h2>
         <p>
-            This tutorial describes working with databases using vDesk's "Expression"-library.<br>
+            This document describes working with databases using vDesk's "DataProvider"-facade and "Expression"-library.
+        </p>
+        <p>
+            Any SQL source code shown in this document targets MySQL-compatible RDBM-systems.
         </p>
         <h3>Overview</h3>
         <ul class="Topics">
             <li>
+                <a href="#DataProvider">DataProvider</a>
+                <ul class="Topics">
+                    <li><a href="#Configuration">Configuration</a></li>
+                    <li><a href="#Escaping">Sanitizing and escaping</a></li>
+                    <li><a href="#Statements">Executing statements</a></li>
+                    <li><a href="#DataProviderResultsets">Result sets</a></li>
+                    <li><a href="#StoredProcedures">Stored procedures</a></li>
+                    <li><a href="#PreparedStatements">Prepared statements</a></li>
+                    <li><a href="#Transactions">Transactions (wip)</a></li>
+                </ul>
+            </li>
+            <li>
                 <a href="#Expressions">Expressions</a>
                 <ul class="Topics">
                     <li><a href="#Comparison">Comparison between different DataProviders</a></li>
-                    <li><a href="#Resultsets">Result sets</a></li>
+                    <li><a href="#ExpressionResultsets">Result sets</a></li>
                 </ul>
             </li>
             <li>
@@ -86,6 +101,169 @@ use vDesk\Documentation\Code;
         </ul>
     </header>
 <hr>
+    <section id="DataProvider">
+        <h3>DataProvider</h3>
+        <p>
+            Database access in vDesk is performed through a static, auto-initializing facade which provides access to MySQL, PostgreSQL and MS SQLserver databases and escaping methods.
+            <br>
+            Via simply referencing the static <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?></code>-facade, the class will automatically establish a connection to a database server if a valid map of credentials exist.
+            <br>
+            Invoking the constructor of the facade will close any previous connection and create a new DataProvider-instance according the specified parameters.
+        </p>
+        <pre><code><?= Code\Language::PHP ?>
+<?= Code::New ?> \vDesk\<?= Code::Class("DataProvider") ?>(<?= Code::String("\"MySQL\"") ?>, <?= Code::String("\"localhost\"") ?>, <?= Code::Int("3306") ?>, <?= Code::String("\"dbuser\"") ?>, <?= Code::String("\"dbpass\"") ?>, ...)<?= Code::Delimiter ?>
+
+<?= Code::Variable("\$Result") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::String("\"SELECT * FROM `TableA`\"") ?>)<?= Code::Delimiter ?>
+
+
+<?= Code::New ?> \vDesk\<?= Code::Class("DataProvider") ?>(<?= Code::String("\"PgSQL\"") ?>, <?= Code::String("\"remotehost\"") ?>, <?= Code::Int("5432") ?>, ...)<?= Code::Delimiter ?>
+
+<?= Code::Variable("\$Result") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::String("\"SELECT * FROM `TableB`\"") ?>)<?= Code::Delimiter ?>
+            </code></pre>
+    </section>
+    <section id="Configuration">
+        <h4>Configuration</h4>
+        <p>
+            The configuration is located in the <code class="Inline">%installdir%/Server/Settings/DataProvider.php</code>-file and will be created filled with user input while installation.
+            <br>
+            The configuration values can be accessed through the global <code class="Inline"><?= Code::Class("Settings") ?>::<?= Code::Variable("\$Local") ?>[<?= Code::String("\"DataProvider\"") ?>]</code>-settings dictionary.
+        </p>
+        <pre><code><?= Code\Language::PHP ?>
+<?= Code::Comment("//vDesk/Server/Settings/DataProvider.php") ?>
+
+<?= Code::Return ?> [
+    <?= Code::Comment("//DataProvider name [MySQL, PgSQL, MsSQL].") ?>
+
+    <?= Code::String("\"Provider\"") ?> => <?= Code::String("\"MySQL\"") ?>,
+    <?= Code::Comment("//Server name or address.") ?>
+
+    <?= Code::String("\"Server\"") ?>  => <?= Code::String("\"localhost\"") ?>,
+    <?= Code::Comment("//Server port, defaults to the standard port of the specified target server if set to null.") ?>
+
+    <?= Code::String("\"Port\"") ?> => <?= Code::Int("3306") ?>
+
+    <?= Code::String("\"User\"") ?>  => <?= Code::String("\"dbuser\"") ?>,
+    <?= Code::String("\"Password\"") ?>  => <?= Code::String("\"dbpass\"") ?>,
+    <?= Code::Comment("//Database name, ignored while using the MySQL DataProvider.") ?>
+
+    <?= Code::String("\"Database\"") ?>  => <?= Code::String("\"vDesk\"") ?>,
+    <?= Code::Comment("//Connection pooling true/false.") ?>
+
+    <?= Code::String("\"Persistent\"") ?>  => <?= Code::Bool("\"false\"") ?>
+
+]<?= Code::Delimiter ?>
+</code></pre>
+    </section>
+    <section id="Statements">
+        <h4>Executing statements</h4>
+        <p>
+            Pure SQL-statements can be executed on the server via passing a string containing SQL-code to the <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>()</code>-method.
+        </p>
+        <pre><code><?= Code\Language::PHP ?>
+<?= Code::Variable("\$Result") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::String("\"SELECT * FROM `Table`\"") ?>)<?= Code::Delimiter ?>
+</code></pre>
+    </section>
+    <section id="Escaping">
+        <h4>Sanitizing and escaping</h4>
+        <p>
+            Values can be prepared to insert via passing them to the <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Sanitize") ?>()</code>-method,
+            <br>which transforms the passed value into a database conform format, passes it through the <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Escape") ?>()</code>-method and quotes any strings.
+            <br><code class="Inline"><?= Code::Keyword("NULL") ?></code>-values will be replaced with the target RDBMS specific <code class="Inline"><?= Code::Keyword("NULL") ?></code>-value,
+            arrays and objects will be converted to a JSON-string.
+            <br>If an object implements the <code class="Inline">\vDesk\Data\<?= Code::Class("IModel") ?></code>-interface, the value returned by it's <code class="Inline"><?= Code::Class("IModel") ?>-><?= Code::Function("ID") ?>()</code>-method will be used.
+
+            <br>Strings containing the value "DEFAULT" will be ignored an just returned.
+        </p>
+        <p>
+            Databases, schemas, tables and fields can be sanitized by passing them to the <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("SanitizeField") ?>()</code>-method,
+            that will pass every value delimited by the target RDBMS specific field separator to the <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("EscapeField") ?>()</code>-method.
+            <br>This will quote all reserved keywords occurring in the field identifier.
+        </p>
+    </section>
+    <section id="DataProviderResultsets">
+        <h4>Result sets</h4>
+        <p>
+            Result sets are collections of data rows retrieved from the database server by either executing directly a string on the server or by executing Expressions, prepared statements as well as transactions.
+            <br>
+            Upon data is available, the DataProvider returns an instance of the <code class="Inline">\vDesk\DataProvider\<?= Code::Class("IResult") ?></code>-interface
+            that implements the <code class="Inline">\vDesk\Struct\Collections\<?= Code::Class("IEnumerable") ?></code>-interface and yields the return-value of the
+            <code class="Inline">\vDesk\Struct\Collections\<?= Code::Class("IResult") ?>-><?= Code::Function("ToMap") ?>()</code>-method as an iteration-value.
+
+            <br>
+        </p>
+        <pre><code><?= Code\Language::PHP ?>
+<?= Code::Variable("\$Result") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::String("\"SELECT `Field` FROM `Table`\"") ?>)<?= Code::Delimiter ?>
+
+
+<?= Code::If ?>(<?= Code::Variable("\$Result") ?>-><?= Code::Field("Count") ?> > <?= Code::Int("0") ?>) {
+    <?= Code::ForEach ?>(<?= Code::Variable("\$Result") ?> <?= Code::Keyword("as") ?> <?= Code::Variable("\$Row") ?>) {
+        <?= Code::Keyword("print") ?> <?= Code::Variable("\$Row") ?>[<?= Code::String("\"Field\"") ?>]<?= Code::Delimiter ?>
+
+    }
+}
+</code></pre>
+        <p>
+            Result set streaming can be controlled via passing a boolean false as a second parameter to the <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::Variable("\$Statement") ?>, <?= Code::Bool("false") ?>)</code>-method,
+            <br>this will disable result set buffering, so every row of any last result set has to be retrieved before executing any following statement.
+        </p>
+        <p>
+            If the retrieval of a result set is being canceled from inside a loop,
+            <br>the <code class="Inline">\vDesk\DataProvider\<?= Code::Class("IResult") ?>::<?= Code::Function("Free") ?>()</code>-method
+            of the result set has be to called first before attempting any further calls against the database.
+        </p>
+    </section>
+    <section id="StoredProcedures">
+        <h4>Stored procedures</h4>
+        <p>
+            Stored procedures can be conveniently called via passing a string containing the name of the procedure followed by any argument to the <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Call") ?>()</code>-method,
+            <br>this will disable result set buffering, so every row of any last result set has to be retrieved before executing any following statement.
+
+            <br>
+        </p>
+        <pre><code><?= Code\Language::PHP ?>
+<?= Code::ForEach ?>(
+    \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Call") ?>(<?= Code::String("\"UnreadMessages\"") ?>, <?= Code::String("\"Username\"") ?>)
+    <?= Code::Keyword("as") ?>
+
+    <?= Code::Variable("\$Message") ?>
+
+) {
+    <?= Code::Keyword("print") ?> <?= Code::Variable("\$Message") ?>[<?= Code::String("\"Topic\"") ?>]<?= Code::Delimiter ?>
+
+}
+</code></pre>
+    </section>
+    <section id="PreparedStatements">
+        <h4>Prepared statements</h4>
+        <p>
+            Prepared statements can be created via passing a string containing SQL-code to the <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Prepare") ?>()</code>-method,
+            <br>which returns a target RDBMS specific instance of the <code class="Inline">\vDesk\DataProvider\<?= Code::Class("IPreparedStatement") ?></code>-interface.
+
+            <br>
+        </p>
+        <pre><code><?= Code\Language::PHP ?>
+<?= Code::Variable("\$Statement") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Prepare") ?>(<?= Code::String("\"INSERT INTO Users (Name, Password) VALUES (?, ?)\"")?>)<?= Code::Delimiter ?>
+
+
+<?= Code::ForEach ?>(<?= Code::Variable("\$Batch") ?> <?= Code::Keyword("as") ?> <?= Code::Variable("\$User") ?>
+) {
+    <?= Code::Variable("\$Result") ?> = <?= Code::Variable("\$Statement") ?>-><?= Code::Function("Apply") ?>(<?= Code::Variable("\$User") ?>[<?= Code::String("\"Name\"") ?>], <?= Code::Variable("\$User") ?>[<?= Code::String("\"Password\"") ?>])
+                        -><?= Code::Function("Execute") ?>()<?= Code::Delimiter ?>
+
+
+    <?= Code::If ?>(<?= Code::Variable("\$Result") ?>-><?= Code::Field("Status") ?>) {
+        <?= Code::Keyword("print") ?> <?= Code::Class("DataProvider") ?>::<?= Code::Function("LastInsertID") ?>()<?= Code::Delimiter ?>
+
+    }
+}
+</code></pre>
+    </section>
+    <section id="Transactions">
+        <h4>Transactions</h4>
+        <p>
+            Transactions are currently unavailable and under development.
+        </p>
+    </section>
     <section id="Expressions">
         <h3>Expressions</h3>
         <p>
@@ -138,12 +316,12 @@ use vDesk\Documentation\Code;
         <h5>Tables</h5>
         <p>
             While the MySQL version of the "CREATE/ALTER TABLE" statement is rather a simple enumeration of sub-statements,
-            Postgres and SQL servers require a bit more workarounds to achieve the same syntax.<br>
+            Postgres and MS SQL servers require a bit more workarounds to achieve the same syntax.<br>
             The PgSQL and MsSQL providers will append any index creation or modification in a separate list of SQL statements to the final Expression while dropped indices will get prepended.<br>
             Updating tables using the MsSQL provider will result in a whole list of separate SQL statements for each modification.
         </p>
     </section>
-    <section id="Resultsets">
+    <section id="ExpressionResultsets">
         <h4>Result sets</h4>
         <p>
             To execute an Expression and retrieve it's result set, an Expression has to be finished with a call to the <code
@@ -233,56 +411,56 @@ use vDesk\Documentation\Code;
             <tr>
                 <td>AVG</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
                 <td>COUNT</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
                 <td>CURRENT_TIMESTAMP</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
                 <td>DISTINCT</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
                 <td>MAX</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
                 <td>MIN</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
                 <td>NOW</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
                 <td>SUM</td>
                 <td>✓</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
             <tr>
-                <td>GROUP_CONCAT</td>
-                <td>✗</td>
-                <td>✗</td>
-                <td>✗</td>
+                <td>GROUPING/-_CONCAT</td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✓</td>
             </tr>
         </table>
     </section>
@@ -294,7 +472,7 @@ use vDesk\Documentation\Code;
         <p>
             To filter records, the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("ISelect") ?></code>-, <code class="Inline"><?= Code::Class("IUpdate") ?></code> and
             <code class="Inline"><?= Code::Class("IDelete") ?></code>-Expressions provide the
-            <code class="Inline"><?= Code::Class("IExpression") ?>::<?= Code::Function("Where") ?></code>-method which accepts a map of filtering conditions.
+            <code class="Inline"><?= Code::Class("IExpression") ?>::<?= Code::Function("Where") ?>()</code>-method which accepts a map of filtering conditions.
         </p>
         <div style="display: flex; justify-content: space-around;">
             <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
@@ -322,11 +500,11 @@ use vDesk\Documentation\Code;
     <?= Code::Field("ID") ?> = <?= Code::Keyword("IN") ?> (<?= Code::Int("1") ?>, <?= Code::Int("2") ?>, <?= Code::Int("3") ?>)
 <?= Code::Keyword("AND") ?>
             
-    <?= Code::Field("Name") ?> <?= Code::Keyword("LIKE") ?> <?= Code::String("\"%invoice%\"") ?>
+    <?= Code::Field("Name") ?> <?= Code::Keyword("LIKE") ?> <?= Code::String("'%invoice%'") ?>
     
 <?= Code::Keyword("AND") ?>
 
-    <?= Code::Field("Extension") ?> = <?= Code::String("\"pdf\"") ?>
+    <?= Code::Field("Extension") ?> = <?= Code::String("'pdf'") ?>
 
 <?= Code::Keyword("AND") ?>
 
@@ -363,10 +541,10 @@ use vDesk\Documentation\Code;
 
 <?= Code::Keyword("WHERE") ?>
 
-    <?= Code::Field("Name") ?> <?= Code::Keyword("LIKE") ?> <?= Code::String("\"%invoice%\"") ?>
+    <?= Code::Field("Name") ?> <?= Code::Keyword("LIKE") ?> <?= Code::String("'%invoice%'") ?>
 
 <?= Code::Keyword("OR") ?> (
-        <?= Code::Field("Extension") ?> = <?= Code::String("\"pdf\"") ?>
+        <?= Code::Field("Extension") ?> = <?= Code::String("'pdf'") ?>
             
     <?= Code::Keyword("AND") ?>
             
@@ -406,11 +584,11 @@ use vDesk\Documentation\Code;
     <?= Code::Class("Contacts") ?>.<?= Code::Const("Companies") ?>
 
 <?= Code::Keyword("WHERE") ?> (
-        <?= Code::Field("Country") ?> = <?= Code::String("\"US\"") ?>
+        <?= Code::Field("Country") ?> = <?= Code::String("'US'") ?>
             
     <?= Code::Keyword("AND") ?>
             
-        <?= Code::Field("Name") ?> <?= Code::Keyword("LIKE") ?> <?= Code::String("\"%Example%Corporation%\"") ?>
+        <?= Code::Field("Name") ?> <?= Code::Keyword("LIKE") ?> <?= Code::String("'%Example%Corporation%'") ?>
         
       )
 <?= Code::Keyword("OR") ?>
@@ -454,9 +632,9 @@ use vDesk\Documentation\Code;
         <p>
             To join the records of a different table into the resultset, the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("ISelect") ?></code>-Expression provides
             the <br>
-            <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("InnerJoin") ?></code>, <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("LeftJoin") ?></code>, <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("RightJoin") ?></code> and <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("FullJoin") ?></code>-methods which accept the name
+            <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("InnerJoin") ?>()</code>, <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("LeftJoin") ?>()</code>, <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("RightJoin") ?>()</code> and <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("FullJoin") ?>()</code>-methods which accept the name
             of the table to join.<br>
-            Comparison rules can be applied through the <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("On") ?></code>-method by following the same rules of
+            Comparison rules can be applied through the <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("On") ?>()</code>-method by following the same rules of
             filtering result sets.
         </p>
         <div style="display: flex; justify-content: space-around;">
@@ -552,7 +730,7 @@ use vDesk\Documentation\Code;
         <h5>Selecting from multiple resultsets</h5>
         <p>
             To select from multiple resultsets, the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("ISelect") ?></code>-Expression provides the <br>
-            <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("Union") ?></code>-method which accepts an <code class="Inline"><?= Code::Class("ISelect") ?></code>-Expression
+            <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("Union") ?>()</code>-method which accepts an <code class="Inline"><?= Code::Class("ISelect") ?></code>-Expression
             followed by an optional flag allowing duplicate values (UNION ALL).
         </p>
         <div style="display: flex; justify-content: space-around;">
@@ -637,6 +815,98 @@ use vDesk\Documentation\Code;
 </code></pre>
         </div>
     </section>
+    <section id="Filter">
+        <h5>Filtering database records</h5>
+        <p>
+            To filter resultsets, the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("ISelect") ?></code>-Expression provides the
+            <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("Where") ?>()</code>-method which accepts one or multiple arrays of filter conditions.
+            <br>
+            Every specified set of filter conditions will be chained together with an "OR"-statement, while each single value or nested set of conditions will be chained in a bracket-enclosed block of "AND"-statements.
+        </p>
+        <p>
+            The keys of filter-conditions define the fields to filter, while the values must consist of either a scalar value, an instance of the <code class="Inline">\vDesk\Data\<?= Code::Class("IModel") ?></code>-interface
+            <br>or an array with a single key that defines the condition and holds the value(s) to apply.
+        </p>
+        <div style="display: flex; justify-content: space-around;">
+            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
+<?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"*\"") ?>)
+-><?= Code::Function("From") ?>(<?= Code::String("\"Accounting.Invoices\"") ?>)
+-><?= Code::Function("Where") ?>([
+    <?= Code::String("\"Country\"") ?>  => <?= Code::String("\"US\"") ?>,
+    <?= Code::String("\"Customer\"") ?> => <?= Code::New ?> <?= Code::Class("Customer") ?>(<?= Code::Variable("\$ID") ?>:  <?= Code::Int("1325") ?>),
+    <?= Code::String("\"Name\"") ?>     => [<?= Code::String("\"John\"") ?>, <?= Code::String("\"Jane\"") ?>],
+    <?= Code::String("\"Surname\"") ?>  => [<?= Code::Class("Where") ?>::<?= Code::Const("Like") ?> => <?= Code::String("\"%Doe%\"") ?>],
+    <?= Code::String("\"Status\"") ?>   => [<?= Code::Class("Where") ?>::<?= Code::Const("In") ?> => [<?= Code::Int("1") ?>, <?= Code::Int("2") ?>, <?= Code::Int("3") ?>]],
+    <?= Code::String("\"Source\"") ?>   => [<?= Code::Class("Where") ?>::<?= Code::Const("NotIn") ?> => [<?= Code::String("\"Store\"") ?>, <?= Code::String("\"Reseller\"") ?>]],
+    <?= Code::String("\"Price\"") ?>    => [<?= Code::Class("Where") ?>::<?= Code::Const("Between") ?> => [<?= Code::Float("19.90") ?>, <?= Code::Float("60.34") ?>]],
+    <?= Code::String("\"Amount\"") ?>   => [<?= Code::Class("Where") ?>::<?= Code::Const("NotBetween") ?> => [<?= Code::Int("5") ?>, <?= Code::Int("10") ?>]],
+    <?= Code::String("\"Product\"") ?>  => [<?= Code::Class("Where") ?>::<?= Code::Const("Regex") ?> => <?= Code::String("\"^[abc]$\"") ?>],
+    <?= Code::String("\"Vendor\"") ?>   => [<?= Code::Class("Where") ?>::<?= Code::Const("NotRegex") ?> => <?= Code::String("\"^[ABC]$\"") ?>],
+    <?= Code::String("\"Stock\"") ?>    => [<?= Code::String("\">\"") ?> => <?= Code::Int("20") ?>]
+])<?= Code::Delimiter ?>
+
+    </code></pre>
+            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
+<?= Code::Keyword("SELECT") ?>
+
+    <?= Code::Field("*") ?>
+
+<?= Code::Keyword("FROM") ?>
+
+    <?= Code::Class("Accounting") ?>.<?= Code::Const("Invoices") ?>
+
+<?= Code::Keyword("WHERE") ?>
+
+    <?= Code::Field("Country") ?> = <?= Code::String("'US'") ?>
+
+<?= Code::Keyword("AND") ?>
+
+    <?= Code::Field("Customer") ?> =  <?= Code::Int("1325") ?>
+
+<?= Code::Keyword("AND") ?>
+
+    (<?= Code::Field("Name") ?> = <?= Code::String("'John'") ?> <?= Code::Keyword("OR") ?> <?= Code::Field("Name") ?> = <?= Code::String("'Jane'") ?>)
+<?= Code::Keyword("AND") ?>
+
+    <?= Code::Field("Surname") ?> <?= Code::Keyword("LIKE") ?> <?= Code::String("'%Example%Corporation%'") ?>
+
+<?= Code::Keyword("AND") ?>
+
+    <?= Code::Field("Status") ?> <?= Code::Keyword("IN") ?> (<?= Code::Int("1") ?>, <?= Code::Int("2") ?>, <?= Code::Int("3") ?>)
+<?= Code::Keyword("AND") ?>
+
+    <?= Code::Field("Source") ?> <?= Code::Keyword("NOT IN") ?> (<?= Code::String("'Store'") ?>, <?= Code::String("'Reseller'") ?>>)
+<?= Code::Keyword("AND") ?>
+
+    <?= Code::Field("Price") ?> <?= Code::Keyword("BETWEEN") ?> <?= Code::Float("19.90") ?> <?= Code::Keyword("AND") ?> <?= Code::Float("60.34") ?>
+
+<?= Code::Keyword("AND") ?>
+
+    <?= Code::Field("Amount") ?> <?= Code::Keyword("NOT BETWEEN") ?> <?= Code::Int("5") ?> <?= Code::Keyword("AND") ?> <?= Code::Int("10") ?>
+
+<?= Code::Keyword("AND") ?>
+
+    <?= Code::Field("Product") ?> <?= Code::Keyword("REGEX") ?> <?= Code::String("'^[abc]\$'") ?>
+
+<?= Code::Keyword("AND") ?>
+
+    <?= Code::Field("Vendor") ?> <?= Code::Keyword("NOT REGEX") ?> <?= Code::String("'^[ABC]\$'") ?>
+
+<?= Code::Keyword("AND") ?>
+
+    <?= Code::Field("Stock") ?> > <?= Code::Int("20") ?>
+</code></pre>
+        </div>
+
+
+        <aside class="Note">
+            <h4>Note</h4>
+            <p>
+                Search terms of "LIKE"-conditions are currently not being escaped due to different escaping rules compared to current implementations.
+                <br>This will be addressed in the next version of the DataProvider-package.
+            </p>
+        </aside>
+    </section>
     <section id="Insert">
         <h4>Creating database records</h4>
         <p>
@@ -661,7 +931,7 @@ use vDesk\Documentation\Code;
     <?= Code::Class("Security") ?>.<?= Code::Const("User") ?>(<?= Code::Field("ID") ?>, <?= Code::Field("Name") ?>)
 <?= Code::Keyword("VALUES") ?>
     
-    (<?= Code::Keyword("NULL") ?>, <?= Code::String("\"Username\"") ?>)<?= Code::Delimiter ?>
+    (<?= Code::Keyword("NULL") ?>, <?= Code::String("'Username'") ?>)<?= Code::Delimiter ?>
 </code></pre>
         </div>
     </section>
@@ -765,7 +1035,7 @@ use vDesk\Documentation\Code;
     <section id="Create">
         <h3>Creating databases, schemas and tables</h3>
         <p>
-            To create new databases, schemas and tables, the Expression-library provides the global <code class="Inline">Expression::<?= Code::Class("Create") ?></code> factory-method;<br>
+            To create new databases, schemas and tables, the Expression-library provides the global <code class="Inline">Expression::<?= Code::Class("Create") ?>()</code> factory-method;<br>
             which creates a new instance of the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("ICreate") ?></code>-Expression according the current configured
             DataProvider.
         </p>
@@ -869,7 +1139,7 @@ use vDesk\Documentation\Code;
     <section id="Alter">
         <h3>Updating databases, schemas and tables</h3>
         <p>
-            To update existing tables, the Expression-library provides the global <code class="Inline">Expression::<?= Code::Class("Alter") ?></code> factory-method;<br>
+            To update existing tables, the Expression-library provides the global <code class="Inline">Expression::<?= Code::Class("Alter") ?>()</code> factory-method;<br>
             which creates a new instance of the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("IAlter") ?></code>-Expression according the current configured
             DataProvider.
         </p>
@@ -966,11 +1236,9 @@ use vDesk\Documentation\Code;
         <aside class="Note">
             <h4>Note</h4>
             <p>
-                While using the PgSQL or MsSQL DataProvider, any dropped indices will be prepended to the final statement.<br>
-                While using the MsSQL DataProvider, any dropped indices will be prepended to the final statement.
-                Dropped indices will be prepended to the final statement while using the PgSQL or MsSQL DataProvider.
+                Dropped indices will be prepended to the final statement while using the PgSQL or MsSQL DataProvider.<br>
                 This method currently just transforms a single entity to another schema while using the MsSQL DataProvider.<br>
-                Unfortunately, renaming schemas on a Ms SQL server isn't a trivial task and would require in it's simplest approach to scan the schema for it's entities first,<br>
+                Unfortunately, renaming schemas on a MS SQL server isn't a trivial task and would require in it's simplest approach to scan the schema for it's entities first,
                 creating then a new schema with the new name and copying over every found entity and dropping the old schema afterwards.
             </p>
             <p>
@@ -995,7 +1263,7 @@ use vDesk\Documentation\Code;
     <section id="Drop">
         <h3>Deleting databases, schemas and tables</h3>
         <p>
-            To delete databases, schemas and tables, the Expression-library provides the global <code class="Inline">Expression::<?= Code::Class("Drop") ?></code> factory-method;
+            To delete databases, schemas and tables, the Expression-library provides the global <code class="Inline">Expression::<?= Code::Class("Drop") ?>()</code> factory-method;
             which creates a new instance of the <code class="Inline">\vDesk\DataProvider\Expression\<?= Code::Class("IDrop") ?></code>-Expression according the current configured
             DataProvider.
         </p>
