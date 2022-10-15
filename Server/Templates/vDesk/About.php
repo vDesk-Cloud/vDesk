@@ -18,18 +18,15 @@ use vDesk\Pages\Functions;
             Today, the most fitting term would be a self hosted "groupware" written in PHP and JavaScript with a configurable featureset powered by vDesk's package system.
         </p>
         <p>
-            At least i can tell it lets me access my archived files, important dates and contacts and quickly wrote down notes from anywhere hosted on a RasPi 4 with a pair of SSDs attached.
-            <br>I'm organizing important events and write down quick notes or writing down a shopping list.
-            store bills and important data, music and pictures
+            At least I can tell it lets me access my archived files, important dates and contacts and quickly written down notes from anywhere hosted on a RasPi 4 with a pair of SSDs attached.
+            <br>It even went that far, that I started to control and survey my paludaria with an unreleased <a href="https://github.com/vDesk-Cloud/vDesk/tree/GPIO-1.0.0">GPIO</a> package
+            distributed over a small self written <a href="https://github.com/vDesk-Cloud/vDesk/tree/Relay-1.0.0">message queue system</a>,
+            both driven by the <a href="<?= Functions::URL("vDesk", "Page", "Packages#Machines") ?>">Machines</a> package as shown on the picture below.
+            (The GPIO package will be released when all general types of sensors are supported)
         </p>
         <aside class="Image" style="text-align: center" onclick="this.classList.toggle('Fullscreen')">
             <img style="max-width: 50%" src="<?= Functions::Image("vDesk", "GPIO.jpg") ?>" class="Author" alt="Author">
         </aside>
-        <p>
-            In the meantime I started to control and survey my paludaria with an unreleased  <a href="https://github.com/vDesk-Cloud/vDesk/tree/GPIO-1.0.0">GPIO</a> package
-            distributed over a small self written <a href="https://github.com/vDesk-Cloud/vDesk/tree/Relay-1.0.0">message queue system</a>,
-            both driven by the <a href="<?= Functions::URL("vDesk", "Page", "Packages#Machines") ?>">Machines</a> package.
-        </p>
     </section>
     <section>
         <h3>Who the heck made all this stuff?</h3>

@@ -38,7 +38,7 @@ use vDesk\Pages\Functions;
     </header>
     <?= $Page->Content ?>
     <footer>
-        Copyright © 2020 Kerry Holz
+        Copyright © 2022 Kerry Holz
         <aside>This website uses icons from <a target="_blank" href="https://www.icons8.com">icons8.com</a></aside>
     </footer>
 </main>
