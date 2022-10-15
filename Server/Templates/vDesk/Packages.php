@@ -6,7 +6,7 @@
             vDesk comes with a variety of preselected packages composed in the standard release.
         <br>
             For further information about packages and bundling resources, consider reading the <a
-                    href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", "CustomReleases") ?>">Custom releases</a>-tutorial.
+                    href="<?= Functions::URL("Documentation", "Category", "Server", "Topic", "CustomReleases") ?>">Custom releases</a>-tutorial.
         </p>
         <h3>Current Packages</h3>
         <ul class="Packages Core">

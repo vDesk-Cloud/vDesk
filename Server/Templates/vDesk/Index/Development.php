@@ -11,7 +11,7 @@ use vDesk\Documentation\Code;
                 <p>
                     v<span style="color: #2AB0ED">D</span>esk aims to provide a high level of modularity through APIs to establish a developer friendly environment.<br>
                 </p>
-                <a class="Button" href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", "ModulesCommands") ?>">Learn more about how vDesk works</a>
+                <a class="Button" href="<?= Functions::URL("Documentation", "Category", "Server", "Topic", "Architecture") ?>">Learn more about how vDesk works</a>
             </div>
                 <pre><code><?= Code\Language::JS ?>
 <?= Code::BlockComment("/**

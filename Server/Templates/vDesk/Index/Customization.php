@@ -21,6 +21,6 @@
             v<span style="color: #2AB0ED">D</span>esk is licensed under the Microsoft Public License which allows package-authors to create custom setups bundled with their own
             licensed packages.<br>
         </p>
-        <a class="Button" href="<?= Functions::URL("Documentation", "Page", "Packages") ?>">Learn more about custom packages</a>
+        <a class="Button" href="<?= Functions::URL("Documentation", "Topic", "Packages") ?>">Learn more about custom packages</a>
     </div>
 </section>
