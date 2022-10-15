@@ -44,9 +44,9 @@ git checkout origin/master -- .gitignore") ?></code></pre>
     <section>
         <h3>Contribution of source code</h3>
         <p>
-            Before opening a pull request against the Development-branch, consider reading the documentation about <a
-                    href="<?= Functions::URL("Documentation", "Page", "Development") ?>">Development</a> and <a href="<?= Functions::URL("Documentation", "Page", "Packages") ?>">Package</a>
-            specifications.
+            Before opening a pull request against the Development-branch, consider reading the documentation about
+            <a href="<?= Functions::URL("Documentation", "Topic", "Development") ?>">Development</a> and
+            <a href="<?= Functions::URL("Documentation", "Topic", "Packages") ?>">Package</a> specifications.
         </p>
         <h4>Branches</h4>
         <p>
@@ -54,8 +54,8 @@ git checkout origin/master -- .gitignore") ?></code></pre>
             Branch names must consist of the target package's name and targeted new version number.<br>
             For example, a bugg-fix for the "Archive"-package in version 1.0.0 would result in a branch-name like <code class="Inline">Archive-1.0.1</code>.<br>
 
-            Visit the <a href="<?= Functions::URL("Documentation", "Page", "Packages#Versioning") ?>">Versioning</a>-section of the <a
-                    href="<?= Functions::URL("Documentation", "Page", "Packages#CustomPackages") ?>">Packages, Updates and
+            Visit the <a href="<?= Functions::URL("Documentation", "Topic", "Packages#Versioning") ?>">Versioning</a>-section of the <a
+                    href="<?= Functions::URL("Documentation", "Topic", "Packages") ?>">Packages, Updates and
                 Setups</a>-documentation for further information about versioning.
         </p>
         <h4>Pull requests</h4>
@@ -65,7 +65,7 @@ git checkout origin/master -- .gitignore") ?></code></pre>
         </p>
         <h4>Translations</h4>
         <p>
-            If you want to contribute a language-pack, consider reading the <a href="<?= Functions::URL("Documentation", "Page", "Packages#CustomPackages") ?>">Packages, Updates and
+            If you want to contribute a language-pack, consider reading the <a href="<?= Functions::URL("Documentation", "Topic", "Packages#CustomPackages") ?>">Packages, Updates and
                 Setups</a>-documentation for an example implementation of a translation package.<br>
             Language-packs must reference the target package followed by the locale the language-pack addresses separated by a dot.<br>
             For example, if you want to contribute spain translations for the "Archive"-package, name your package <code class="Inline">Archive.ES</code>.
