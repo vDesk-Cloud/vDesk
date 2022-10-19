@@ -18,7 +18,7 @@
  * @property {Boolean} Selected Gets or sets a value indicating whether the Item is selected.
  * @memberOf vDesk.Security.UserList
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.UserList.Item = function Item(User, Enabled = true) {
     Ensure.Parameter(User, vDesk.Security.User, "User");
@@ -59,9 +59,9 @@ vDesk.Security.UserList.Item = function Item(User, Enabled = true) {
             set:        Value => {
                 Ensure.Property(Value, Type.Boolean, "Enabled");
                 Enabled = Value;
-                if(Value) {
+                if(Value){
                     Control.addEventListener("click", OnClick, false);
-                } else {
+                }else{
                     Control.removeEventListener("click", OnClick, false);
                 }
                 Control.classList.toggle("Disabled", !Value);
@@ -86,7 +86,7 @@ vDesk.Security.UserList.Item = function Item(User, Enabled = true) {
     Control.className = "Item Font Dark BorderLight";
     Control.textContent = User.Name;
     Control.classList.toggle("Disabled", !Enabled);
-    if(Enabled) {
+    if(Enabled){
         Control.addEventListener("click", OnClick, false);
     }
 };

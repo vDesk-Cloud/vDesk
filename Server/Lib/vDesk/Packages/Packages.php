@@ -27,7 +27,7 @@ final class Packages extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.0.2";
     
     /**
      * The name of the Package.
@@ -43,9 +43,9 @@ final class Packages extends Package implements IPackage {
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Events"   => "1.0.0",
-        "Locale"   => "1.0.0",
-        "Security" => "1.0.0"
+        "Events"   => "1.0.1",
+        "Locale"   => "1.0.2",
+        "Security" => "1.0.2"
     ];
     
     /**

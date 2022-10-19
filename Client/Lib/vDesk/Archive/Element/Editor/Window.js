@@ -4,9 +4,9 @@
  * @class Window for displaying the file of an element.
  * @param {vDesk.Archive.Element} Element The element to display the content of.
  * @memberOf vDesk.Archive.Element.Editor
- * @augments vDesk.Controls.Window
+ * @extends vDesk.Controls.Window
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Archive
  */
 vDesk.Archive.Element.Editor.Window = function ViewerWindow(Element) {
     Ensure.Parameter(Element, vDesk.Archive.Element, "Element", false);

@@ -1,27 +1,18 @@
 "use strict";
 /**
- * @typedef {Object} User Represents the data of an user.
- * @property {Number} ID Gets the ID of the user.
- * @property {String} Name Gets or sets the name of the user.
- * @property {String} Email Gets or sets the email-address of the user.
- * @property {Boolean} Active Gets or sets a value indicating whether the account of the user is active.
- * @property {Number} FailedLoginCount Gets or sets the amount of failed login attempts of the user.
- * @property {Array<Number>} Memberships Gets or sets the IDs of the groups the user is a member of.
- */
-/**
- * Initializes a new instance of the UserAccountControl class.
- * @class Represents a plugin for administrating user-accounts and their group-based permissions.
+ * Initializes a new instance of the Administration class.
+ * @class Represents a plugin for administrating Users and their Group-based permissions.
  * @property {HTMLDivElement} Control Gets the underlying DOM-Node.
- * @property {String} Title Gets the title of the useraccountvontrol-plugin.
+ * @property {String} Title Gets the title of the Administration-plugin.
  * @memberOf vDesk.Security.User
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Security
  */
 vDesk.Security.User.Administration = function Administration() {
 
     /**
      * The users of the UserAccountControl plugin.
-     * @type{ Array<User>}
+     * @type{Array<User>}
      */
     let Users = [];
 
@@ -45,7 +36,7 @@ vDesk.Security.User.Administration = function Administration() {
         UserEditor.User = Event.detail.item.User;
         MembershipEditor.User = Event.detail.item.User;
         Delete.disabled = Event.detail.item.User.ID === vDesk.Security.User.System;
-        if(UserEditor.Enabled) {
+        if(UserEditor.Enabled){
             EditSave.style.backgroundImage = `url("${vDesk.Visual.Icons.Cancel}")`;
             EditSave.textContent = vDesk.Locale.vDesk.Cancel;
             Reset.disabled = true;
@@ -56,18 +47,18 @@ vDesk.Security.User.Administration = function Administration() {
      * Saves possible made changes.
      */
     const OnClickEditSave = () => {
-        if(UserEditor.Enabled && MembershipEditor.Enabled) {
-            if(UserEditor.Changed) {
+        if(UserEditor.Enabled && MembershipEditor.Enabled){
+            if(UserEditor.Changed){
                 UserEditor.Save();
             }
             UserEditor.Enabled = false;
-            if(MembershipEditor.Changed) {
+            if(MembershipEditor.Changed){
                 MembershipEditor.Save();
             }
             MembershipEditor.Enabled = false;
             EditSave.style.backgroundImage = `url("${vDesk.Visual.Icons.Edit}")`;
             EditSave.textContent = vDesk.Locale.vDesk.Edit;
-        } else {
+        }else{
             EditSave.style.backgroundImage = `url("${vDesk.Visual.Icons.Cancel}")`;
             EditSave.textContent = vDesk.Locale.vDesk.Cancel;
             UserEditor.Enabled = true;
@@ -82,10 +73,10 @@ vDesk.Security.User.Administration = function Administration() {
     const OnClickReset = () => {
         UserEditor.Reset();
         MembershipEditor.Reset();
-        if(UserEditor.Enabled || MembershipEditor.Enabled) {
+        if(UserEditor.Enabled || MembershipEditor.Enabled){
             EditSave.style.backgroundImage = `url("${vDesk.Visual.Icons.Cancel}")`;
             EditSave.textContent = vDesk.Locale.vDesk.Cancel;
-        } else {
+        }else{
             EditSave.style.backgroundImage = `url("${vDesk.Visual.Icons.Edit}")`;
             EditSave.textContent = vDesk.Locale.vDesk.Edit;
         }
@@ -102,7 +93,7 @@ vDesk.Security.User.Administration = function Administration() {
         EditSave.disabled = false;
         Reset.disabled = !UserEditor.Changed && !MembershipEditor.Changed;
 
-        if(UserEditor.Changed || MembershipEditor.Changed) {
+        if(UserEditor.Changed || MembershipEditor.Changed){
             EditSave.style.backgroundImage = `url("${vDesk.Visual.Icons.Save}")`;
             EditSave.textContent = vDesk.Locale.vDesk.Save;
         }
@@ -114,13 +105,13 @@ vDesk.Security.User.Administration = function Administration() {
      * @param {CustomEvent} Event
      */
     const OnCreate = Event => {
-        if(MembershipEditor.Changed) {
+        if(MembershipEditor.Changed){
             MembershipEditor.User.ID = Event.detail.user.ID;
             MembershipEditor.Save();
         }
         UserList.Find(Event.detail.user.ID).User = Event.detail.user;
         vDesk.Security.Users.push(Event.detail.user);
-        Delete.disabled = !vDesk.User.Permissions.DeleteUser;
+        Delete.disabled = !vDesk.Security.User.Current.Permissions.DeleteUser;
         Reset.disabled = true;
 
         UserList.Add(
@@ -146,7 +137,7 @@ vDesk.Security.User.Administration = function Administration() {
         MembershipEditor.User = UserEditor.User = UserList.Selected.User;
 
         //Check if the User has deleted himself.
-        if(Event.detail.user.ID === vDesk.User.ID) {
+        if(Event.detail.user.ID === vDesk.Security.User.Current.ID){
             vDesk.Stop();
         }
     };
@@ -166,7 +157,7 @@ vDesk.Security.User.Administration = function Administration() {
     const UserList = new vDesk.Security.UserList.FromUsers(false);
     UserList.Control.addEventListener("select", OnSelect, false);
     UserList.Selected = UserList.Items[0];
-    if(vDesk.User.Permissions.CreateUser) {
+    if(vDesk.Security.User.Current.Permissions.CreateUser){
         UserList.Add(
             new vDesk.Security.UserList.Item(
                 new vDesk.Security.User(
@@ -179,7 +170,7 @@ vDesk.Security.User.Administration = function Administration() {
     Control.appendChild(UserList.Control);
 
     /**
-     * The UserEditor of the UserAccountControl plugin.
+     * The UserEditor of the Administration plugin.
      * @type {vDesk.Security.User.Editor}
      */
     const UserEditor = new vDesk.Security.User.Editor(UserList.Selected.User);
@@ -188,25 +179,25 @@ vDesk.Security.User.Administration = function Administration() {
     Control.appendChild(UserEditor.Control);
 
     /**
-     * The MembershipEditor of the UserAccountControl plugin.
+     * The MembershipEditor of the Administration plugin.
      * @type {vDesk.Security.User.MembershipEditor}
      */
     const MembershipEditor = new vDesk.Security.User.MembershipEditor(UserList.Selected.User);
     Control.appendChild(MembershipEditor.Control);
 
     /**
-     * The edit/save button of the MaskDesigner.
+     * The edit/save button of the Administration plugin.
      * @type {HTMLButtonElement}
      */
     const EditSave = document.createElement("button");
     EditSave.className = "Button Icon Save";
     EditSave.style.backgroundImage = `url("${vDesk.Visual.Icons.Edit}")`;
     EditSave.textContent = vDesk.Locale.vDesk.Edit;
-    EditSave.disabled = !vDesk.User.Permissions.UpdateUser;
+    EditSave.disabled = !vDesk.Security.User.Current.Permissions.UpdateUser;
     EditSave.addEventListener("click", OnClickEditSave, false);
 
     /**
-     * The reset button of the MaskDesigner.
+     * The reset button of the Administration plugin.
      * @type {HTMLButtonElement}
      */
     const Reset = document.createElement("button");
@@ -217,18 +208,18 @@ vDesk.Security.User.Administration = function Administration() {
     Reset.addEventListener("click", OnClickReset, false);
 
     /**
-     * The delete button of the MaskDesigner.
+     * The delete button of the Administration plugin.
      * @type {HTMLButtonElement}
      */
     const Delete = document.createElement("button");
     Delete.className = "Button Icon Reset";
     Delete.style.backgroundImage = `url("${vDesk.Visual.Icons.Delete}")`;
-    Delete.disabled = !vDesk.User.Permissions.DeleteUser || UserList.Selected.User.ID === vDesk.Security.User.System;
+    Delete.disabled = !vDesk.Security.User.Current.Permissions.DeleteUser || UserList.Selected.User.ID === vDesk.Security.User.System;
     Delete.textContent = vDesk.Locale.vDesk.Delete;
     Delete.addEventListener("click", () => UserEditor.Delete(), false);
 
     /**
-     * The controls of the Administration.
+     * The controls of the Administration plugin.
      * @type {HTMLDivElement}
      */
     const Controls = document.createElement("div");

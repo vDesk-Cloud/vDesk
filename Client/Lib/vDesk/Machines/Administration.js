@@ -1,10 +1,10 @@
 "use strict";
 /**
  * Initializes a new instance of the Administration class.
- * @class Class that represents a [...] for [...]. | Class providing functionality for [...].
+ * @class Class that represents a plugin for administrating Machines.
  * @memberOf vDesk.Machines
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Machines
  */
 vDesk.Machines.Administration = function Administration() {
 
@@ -31,16 +31,16 @@ vDesk.Machines.Administration = function Administration() {
      * @listens vDesk.Security.GroupList#event:select
      */
     const OnSelect = Event => {
-        if(Selected != null) {
+        if(Selected != null){
             Selected.Selected = false;
         }
         Selected = Event.detail.sender;
         Selected.Selected = true;
         SuspendResume.disabled = false;
-        if(Selected.Status === vDesk.Machines.Machine.Suspended) {
+        if(Selected.Status === vDesk.Machines.Machine.Suspended){
             SuspendResume.style.backgroundImage = `url("${vDesk.Visual.Icons.Archive.Refresh}")`;
             SuspendResume.textContent = vDesk.Locale.Machines.Resume;
-        } else {
+        }else{
             SuspendResume.style.backgroundImage = `url("${vDesk.Visual.Icons.Machines.Suspend}")`;
             SuspendResume.textContent = vDesk.Locale.Machines.Suspend;
         }
@@ -52,7 +52,7 @@ vDesk.Machines.Administration = function Administration() {
      * Eventhandler that listens on the 'click' event.
      */
     const OnClickDeselect = () => {
-        if(Selected != null) {
+        if(Selected != null){
             Selected.Selected = false;
         }
         Selected = null;
@@ -72,11 +72,11 @@ vDesk.Machines.Administration = function Administration() {
                     Module:     "Machines",
                     Command:    "Start",
                     Parameters: {Name: Installed.Value},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(!Response.Status) {
+                if(!Response.Status){
                     alert(Response.Data);
                     return;
                 }
@@ -96,19 +96,19 @@ vDesk.Machines.Administration = function Administration() {
                     Module:     "Machines",
                     Command:    Selected.Status === vDesk.Machines.Machine.Running ? "Suspend" : "Resume",
                     Parameters: {Guid: Selected.Guid},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(!Response.Status) {
+                if(!Response.Status){
                     alert(Response.Data);
                     return;
                 }
-                if(Selected.Status === vDesk.Machines.Machine.Running) {
+                if(Selected.Status === vDesk.Machines.Machine.Running){
                     Selected.Status = vDesk.Machines.Machine.Suspended;
                     SuspendResume.style.backgroundImage = `url("${vDesk.Visual.Icons.Archive.Refresh}")`;
                     SuspendResume.textContent = vDesk.Locale.Machines.Resume;
-                } else {
+                }else{
                     Selected.Status = vDesk.Machines.Machine.Running;
                     SuspendResume.style.backgroundImage = `url("${vDesk.Visual.Icons.Machines.Suspend}")`;
                     SuspendResume.textContent = vDesk.Locale.Machines.Suspend;
@@ -128,14 +128,14 @@ vDesk.Machines.Administration = function Administration() {
                     Module:     "Machines",
                     Command:    "Stop",
                     Parameters: {Guid: Selected.Guid},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     Running.Rows.Remove(Selected);
                     Selected = null;
-                } else {
+                }else{
                     alert(Response.Data);
                 }
             }
@@ -153,14 +153,14 @@ vDesk.Machines.Administration = function Administration() {
                     Module:     "Machines",
                     Command:    "Terminate",
                     Parameters: {Guid: Selected.Guid},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     Running.Rows.Remove(Selected);
                     Selected = null;
-                } else {
+                }else{
                     alert(Response.Data);
                 }
             }
@@ -177,13 +177,13 @@ vDesk.Machines.Administration = function Administration() {
                 {
                     Module:  "Machines",
                     Command: "Reap",
-                    Ticket:  vDesk.User.Ticket
+                    Ticket:  vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     this.Running();
-                } else {
+                }else{
                     alert(Response.Data);
                 }
             }
@@ -252,13 +252,13 @@ vDesk.Machines.Administration = function Administration() {
                     Module:     "Machines",
                     Command:    "Running",
                     Parameters: {},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     Running.Rows = Response.Data.map(Machine => vDesk.Machines.Machine.FromDataView(Machine));
-                } else {
+                }else{
                     alert(Response.Data);
                 }
             }
@@ -283,7 +283,7 @@ vDesk.Machines.Administration = function Administration() {
         Extension.Type.Enum,
         null,
     )
-    Installed.Control.addEventListener("update", () => Start.disabled = !vDesk.User.Permissions.RunMachine);
+    Installed.Control.addEventListener("update", () => Start.disabled = !vDesk.Security.User.Current.Permissions.RunMachine);
     Installed.Control.addEventListener("clear", () => Start.disabled = true);
     Controls.appendChild(Installed.Control);
     this.Running();
@@ -293,14 +293,14 @@ vDesk.Machines.Administration = function Administration() {
                 Module:     "Machines",
                 Command:    "Installed",
                 Parameters: {},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         Response => {
-            if(Response.Status) {
+            if(Response.Status){
                 Installed.Validator = Response.Data;
                 Installed.Enabled = true;
-            } else {
+            }else{
                 alert(Response.Data);
             }
         }
@@ -325,7 +325,7 @@ vDesk.Machines.Administration = function Administration() {
     const SuspendResume = document.createElement("button");
     SuspendResume.className = "Button Icon SuspendResume";
     SuspendResume.style.backgroundImage = `url("${vDesk.Visual.Icons.Machines.Suspend}")`;
-    SuspendResume.disabled = !vDesk.User.Permissions.RunMachine;
+    SuspendResume.disabled = !vDesk.Security.User.Current.Permissions.RunMachine;
     SuspendResume.textContent = vDesk.Locale.Machines.Suspend;
     SuspendResume.addEventListener("click", OnClickSuspendResume);
     Controls.appendChild(SuspendResume);
@@ -337,7 +337,7 @@ vDesk.Machines.Administration = function Administration() {
     const Stop = document.createElement("button");
     Stop.className = "Button Icon Stop";
     Stop.style.backgroundImage = `url("${vDesk.Visual.Icons.Logout}")`;
-    Stop.disabled = !vDesk.User.Permissions.RunMachine;
+    Stop.disabled = !vDesk.Security.User.Current.Permissions.RunMachine;
     Stop.textContent = vDesk.Locale.Machines.Stop;
     Stop.addEventListener("click", OnClickStop);
     Controls.appendChild(Stop);
@@ -349,7 +349,7 @@ vDesk.Machines.Administration = function Administration() {
     const Terminate = document.createElement("button");
     Terminate.className = "Button Icon Terminate";
     Terminate.style.backgroundImage = `url("${vDesk.Visual.Icons.Machines.Terminate}")`;
-    Terminate.disabled = vDesk.User.Permissions.RunMachine;
+    Terminate.disabled = vDesk.Security.User.Current.Permissions.RunMachine;
     Terminate.textContent = vDesk.Locale.Machines.Terminate;
     Terminate.addEventListener("click", OnClickTerminate);
     Controls.appendChild(Terminate);
@@ -361,7 +361,7 @@ vDesk.Machines.Administration = function Administration() {
     const Reap = document.createElement("button");
     Reap.className = "Button Icon Reap";
     Reap.style.backgroundImage = `url("${vDesk.Visual.Icons.Machines.Reap}")`;
-    Reap.disabled = !vDesk.User.Permissions.RunMachine;
+    Reap.disabled = !vDesk.Security.User.Current.Permissions.RunMachine;
     Reap.title = vDesk.Locale.Machines.Reap;
     Reap.addEventListener("click", OnClickReap);
     Controls.appendChild(Reap);

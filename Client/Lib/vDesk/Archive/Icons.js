@@ -2,6 +2,7 @@
  * Enumeration of Archive Package icons.
  * @enum{String}
  * @memberOf vDesk.Visual.Icons
+ * @package vDesk\Archive
  */
 vDesk.Visual.Icons.Archive = {
     Home:         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAQhJREFUeNrsluENgjAQheXiAHUDRjBhARnBDRgBJ1AnkA0cBRcgcRPZAO/MmZRLKb0W+eVLLke5tB9XXgowDMNmjYDNSsq0E4qiuFHuuu7kqL0wGYwe6zu7BkrIHVNNwddSRmQ9iBeu6Gk5qgmYUxABKTlUMIiAfKWCbSMgrQUqeUywuI48EMPRys7UoBmI7TAJCwcFQtQwSIB4YdIgkAjxwUZuhAUgQbCMz646EWLLtU4DnmKsXJ3lmfWO9jOQK57IF2EeGp99neGcp3SdtxMJYTWBnY1A6u1CeB+wjfrvUYr+oN+D2Mr22Mh7E/Py0V8Q3iArHhZu5IHOLGVHRyosCeE1P3oLMAC/4L8tbYaZ4QAAAABJRU5ErkJggg==",

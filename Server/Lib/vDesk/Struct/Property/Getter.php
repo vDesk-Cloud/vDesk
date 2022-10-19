@@ -8,8 +8,8 @@ use vDesk\Struct\Type;
 /**
  * Represents a static factory-class for creating getter-callback-functions to use in properties.
  *
- * @package vDesk\Struct\Property
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Getter {
     
@@ -23,7 +23,7 @@ abstract class Getter {
      *
      * @return callable A generated getter.
      */
-    public static function Create(&$Property, string $Type = Type::Mixed, bool $Nullable = false): callable {
+    public static function Create(mixed &$Property, string $Type = Type::Mixed, bool $Nullable = false): callable {
         switch($Type) {
             case Type::String:
                 return $Nullable

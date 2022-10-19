@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace vDesk\Struct\Collections;
 
 /**
- * Is Thrown when a non existent key of a Dictionary is being accessed.
+ * Is Thrown when a non-existent key of a Dictionary is being accessed.
  *
- * @package vDesk\Struct
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class KeyNotFoundException extends \Exception {
-    
+
     /**
      * Initializes a new instance of the KeyNotFoundException class.
      *

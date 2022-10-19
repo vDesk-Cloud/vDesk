@@ -11,37 +11,38 @@ use vDesk\Struct\Properties;
  * @property string $Type   Gets or sets the image type of the Image.
  * @property int    $Width  Gets or sets the width of the Image.
  * @property int    $Height Gets or sets the height of the Image.
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Image {
-    
+
     use Properties;
-    
+
     /**
      * JPEG Image type.
      */
     public const JPG = "jpg";
-    
+
     /**
      * JPEG Image type.
      */
     public const JPEG = "jpeg";
-    
+
     /**
      * Portable network graphics Image type.
      */
     public const PNG = "png";
-    
+
     /**
      * Gif Image type.
      */
     public const GIF = "gif";
-    
+
     /**
      * Bitmap Image type.
      */
     public const BMP = "bmp";
-    
+
     /**
      * The supported types of the Image.
      */
@@ -53,42 +54,42 @@ class Image {
             self::GIF,
             self::BMP
         ];
-    
+
     /**
      * The path to the underlying file of the Image.
      *
      * @var string
      */
     private string $Path;
-    
+
     /**
      * The pointer to the underlying image of the Image.
      *
      * @var resource|null
      */
     private $Image;
-    
+
     /**
      * The type of the Image.
      *
      * @var string
      */
     private string $Type;
-    
+
     /**
      * The width of the Image.
      *
      * @var int
      */
     private int $Width;
-    
+
     /**
      * The height of the Image.
      *
      * @var int
      */
     private int $Height;
-    
+
     /**
      * Initializes a new instance of the Image class.
      *
@@ -123,7 +124,7 @@ class Image {
             ]
         ]);
     }
-    
+
     /**
      * Saves the Image to a specified file.
      *
@@ -137,7 +138,7 @@ class Image {
             static::BMP => \imagebmp($this->Image, Path::ChangeExtension($Path ?? $this->Path, static::BMP))
         };
     }
-    
+
     /**
      * Creates a base64 encoded string representation of the Image.
      *
@@ -153,12 +154,12 @@ class Image {
         };
         return "data:image;base64," . \base64_encode(\ob_get_clean());
     }
-    
+
     /**
      *
      */
     public function __destruct() {
         \imagedestroy($this->Image);
     }
-    
+
 }

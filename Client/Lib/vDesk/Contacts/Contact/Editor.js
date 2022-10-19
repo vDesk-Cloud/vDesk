@@ -42,7 +42,7 @@
  * @fires changed Fired if the data of the contact of the Editor has been modified.
  * @memberOf vDesk.Contacts.Contact
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Contacts
  */
 vDesk.Contacts.Contact.Editor = function Editor(Contact, Enabled = true) {
     Ensure.Parameter(Contact, vDesk.Contacts.Contact, "Contact");
@@ -130,7 +130,7 @@ vDesk.Contacts.Contact.Editor = function Editor(Contact, Enabled = true) {
      * @return {Boolean} True if the made changes have been successfully saved; otherwise, false.
      */
     this.Save = function() {
-        if(Contact.ID === null) {
+        if(Contact.ID === null){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -149,12 +149,12 @@ vDesk.Contacts.Contact.Editor = function Editor(Contact, Enabled = true) {
                             Company:     vDesk.Contacts.Companies.find(ExistingCompany => ExistingCompany.Name === Company.Value)?.ID ?? null,
                             Annotations: Annotations.Value
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
-                        if(ContactOptionEditor.Changed) {
+                    if(Response.Status){
+                        if(ContactOptionEditor.Changed){
                             Contact.ID = Response.Data.ID;
                             ContactOptionEditor.Save();
                         }
@@ -166,11 +166,11 @@ vDesk.Contacts.Contact.Editor = function Editor(Contact, Enabled = true) {
                     }
                 }
             );
-        } else {
-            if(ContactOptionEditor.Changed) {
+        }else{
+            if(ContactOptionEditor.Changed){
                 ContactOptionEditor.Save();
             }
-            if(Changed) {
+            if(Changed){
                 vDesk.Connection.Send(
                     new vDesk.Modules.Command(
                         {
@@ -190,11 +190,11 @@ vDesk.Contacts.Contact.Editor = function Editor(Contact, Enabled = true) {
                                 Company:     vDesk.Contacts.Companies.find(ExistingCompany => ExistingCompany.Name === Company.Value)?.ID ?? null,
                                 Annotations: Annotations.Value
                             },
-                            Ticket:     vDesk.User.Ticket
+                            Ticket:     vDesk.Security.User.Current.Ticket
                         }
                     ),
                     Response => {
-                        if(Response.Status) {
+                        if(Response.Status){
                             this.Contact = vDesk.Contacts.Contact.FromDataView(Response.Data);
                             new vDesk.Events.BubblingEvent("update", {
                                 sender:  this,
@@ -212,7 +212,7 @@ vDesk.Contacts.Contact.Editor = function Editor(Contact, Enabled = true) {
      * @fires vDesk.Contacts.Contact.Editor#delete
      */
     this.Delete = function() {
-        if(Contact.ID !== null) {
+        if(Contact.ID !== null){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -221,11 +221,11 @@ vDesk.Contacts.Contact.Editor = function Editor(Contact, Enabled = true) {
                         Parameters: {
                             ID: Contact.ID
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         new vDesk.Events.BubblingEvent("delete", {
                             sender:  this,
                             contact: Contact
@@ -454,4 +454,3 @@ vDesk.Contacts.Contact.Editor = function Editor(Contact, Enabled = true) {
     GroupBox.Control.classList.add("ContactEditor");
     GroupBox.Content.addEventListener("update", OnUpdate, false);
 };
-//824 -> 677 -> 416

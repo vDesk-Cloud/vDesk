@@ -10,17 +10,18 @@ use vDesk\Modules\Command;
 use vDesk\Modules\ICommand;
 
 /**
- * Class Input
+ * Class that parses commands from teh current API's input stream.
  *
- * @package vDesk\IO
+ * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Input {
-    
+
     /**
      * Reads the input from the current API and parses a Command from the read data.
      *
      * @return \vDesk\Modules\ICommand The parsed Command.
+     * @todo Remove dependency.
      */
     public static function Read(): ICommand {
         switch(API::$Current) {

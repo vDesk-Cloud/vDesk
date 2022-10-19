@@ -1,76 +1,42 @@
 <?php
 declare(strict_types=1);
 
-use vDesk\Configuration\Settings;
-use vDesk\DataProvider;
 use vDesk\IO\FileNotFoundException;
 use vDesk\IO\Input;
 use vDesk\IO\Output;
-use vDesk\Locale\LocaleDictionary;
 use vDesk\Modules;
 use vDesk\Security\User;
 use vDesk\Utils\Log;
 
 /**
- * vDesk baseclass, providing access to core objects.
+ * vDesk baseclass that bootstraps and executes the system.
  *
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class vDesk {
-    
+
     /**
-     * The version number of vDesk.
-     */
-    public const Version = "0.1.2";
-    
-    /**
-     * @var \vDesk\Configuration\Settings Gets the configuration.
-     */
-    public static Settings $Configuration;
-    
-    /**
-     * Gets the locales.
+     * The current logged in User of vDesk.
      *
-     * @var \vDesk\Locale\LocaleDictionary
+     * @var null|\vDesk\Security\User
+     * @deprecated
      */
-    public static LocaleDictionary $Locale;
-    
-    /**
-     * Gets logged in user.
-     *
-     * @todo     Use \Request::$User instead?
-     *
-     * @internal Set by {@link \Security}.
-     * @var \vDesk\Security\User
-     */
-    public static User $User;
-    
-    /**
-     *
-     * @var null|\vDesk\DataProvider
-     */
-    private static ?DataProvider $DataProvider;
-    
-    /**
-     *
-     * @var null|\vDesk\Utils\Log
-     */
-    private static ?Log $Log;
-    
+    public static ?User $User;
+
     /**
      * Flag indicating whether vDesk is running inside a Phar archive.
      *
      * @var bool
      */
     public static bool $Phar;
-    
+
     /**
      * The autoload callbacks of vDesk.
      *
      * @var callable[]
      */
     public static array $Load = [];
-    
+
     /**
      * Initializes vDesk and all related functionality.
      *
@@ -85,30 +51,16 @@ class vDesk {
             self::$Load[] = static fn(string $Class): string => __DIR__ . \DIRECTORY_SEPARATOR . \str_replace("\\", \DIRECTORY_SEPARATOR, $Class) . ".php";
         }
         \spl_autoload_register("\\vDesk::Load");
-        
-        if(Settings::$Local["DataProvider"]->Count > 0) {
-            //Initialize DataProvider.
-            self::$DataProvider = new DataProvider(
-                Settings::$Local["DataProvider"]["Provider"],
-                Settings::$Local["DataProvider"]["Server"],
-                Settings::$Local["DataProvider"]["Port"],
-                Settings::$Local["DataProvider"]["User"],
-                Settings::$Local["DataProvider"]["Password"],
-                Settings::$Local["DataProvider"]["Charset"] ?? null
-            );
-        }
-        
-        //Initialize translations.
-        self::$Locale = new LocaleDictionary();
-        
         \set_error_handler(static fn($Code, $Message, $File, $Line, $Context = []) => Log::Error(
-            __METHOD__,
-            "[{$Code}]{$Message} in file: {$File} on line: {$Line}" . \print_r($Context, true)
+            "{$File}::{$Line}",
+            "[{$Code}]{$Message}. " . \json_encode($Context)
         ));
-        \set_exception_handler(static fn(\Throwable $Exception) => Log::Error(__METHOD__, $Exception->getMessage() . $Exception->getTraceAsString()));
-        
+        \set_exception_handler(static fn(\Throwable $Exception) => Log::Error(
+            ($Exception?->getTrace()[0]["class"] ?? $Exception->getFile()) . "::" . ($Exception?->getTrace()[0]["function"] ?? $Exception->getLine()),
+            $Exception->getMessage() . " " . \json_encode($Exception->getTrace())
+        ));
     }
-    
+
     /**
      * Runs the according method of the Module of the current Command.
      */
@@ -118,16 +70,18 @@ class vDesk {
             if(Modules\Command::$Ticket !== null) {
                 Modules::Security()::ValidateTicket();
             }
-            
+
             //Call Module.
             Output::Write(Modules::Call(Modules\Command::$Module, Modules\Command::$Name));
         } catch(Throwable $Exception) {
             Output::Write($Exception);
         } finally {
-            Modules::EventDispatcher()::Schedule();
+            if(Modules::$Running->ContainsKey("EventDispatcher")) {
+                Modules::EventDispatcher()::Schedule();
+            }
         }
     }
-    
+
     /**
      * Stops the execution of the system and performs cleanup operations.
      */
@@ -136,7 +90,7 @@ class vDesk {
         \restore_exception_handler();
         \restore_error_handler();
     }
-    
+
     /**
      * Loads the source file of a specified class.
      *
@@ -153,5 +107,5 @@ class vDesk {
         }
         throw new FileNotFoundException("Cannot load any class file of requested class '$Class'.");
     }
-    
+
 }

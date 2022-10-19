@@ -12,19 +12,20 @@ use vDesk\Struct\Type;
  *
  * @property-read int $Count Gets the amount of elements in the Collection.
  *
- * @package vDesk\Struct\Collections
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Collection implements ICollection {
-    
+
     use Properties;
-    
+
     /**
      * The elements of the Collection.
+     *
      * @var array
      */
     protected array $Elements = [];
-    
+
     /**
      * Initializes a new instance of the Collection class.
      *
@@ -32,11 +33,11 @@ class Collection implements ICollection {
      */
     public function __construct(iterable $Elements = []) {
         $this->AddProperty("Count", [\Get => fn(): int => \count($this->Elements)]);
-        foreach($Elements as $Element){
+        foreach($Elements as $Element) {
             $this->Add($Element);
         }
     }
-    
+
     /**
      * Adds an element to the Collection.
      *
@@ -48,7 +49,7 @@ class Collection implements ICollection {
     public function Add(mixed $Element): void {
         $this->Elements[] = $Element;
     }
-    
+
     /**
      * Inserts an element into the Collection at the specified index.
      *
@@ -62,17 +63,18 @@ class Collection implements ICollection {
         if($Index < 0 || $Index > ($iCount = $this->Count())) {
             throw new IndexOutOfRangeException("Undefined index at " . __CLASS__ . "[$Index].");
         }
-        
+
         if($Index === $iCount) {
             $this->Add($Element);
         } else {
             $Temp             = \array_splice($this->Elements, $Index);
             $this->Elements[] = $Element;
-            \array_merge($this->Elements, $Temp);
-            $this->Elements = \array_values($this->Elements);
+            foreach($Temp as $Element) {
+                $this->Elements[] = $Element;
+            }
         }
     }
-    
+
     /**
      * Inserts an element into the Collection after the element at the specified index.
      *
@@ -82,7 +84,7 @@ class Collection implements ICollection {
     public function InsertAfter(int $Index, mixed $Element): void {
         $this->Insert(++$Index, $Element);
     }
-    
+
     /**
      * Replaces an element of the ICollection with a different element.
      * If the element to replace doesn't exist in the Collection, nothing is replaced nor added.
@@ -97,7 +99,7 @@ class Collection implements ICollection {
             $this->Elements[$iIndex] = $Replacement;
         }
     }
-    
+
     /**
      * Replaces the element at the specified index.
      *
@@ -112,7 +114,7 @@ class Collection implements ICollection {
         }
         $this->Elements[$Index] = $Element;
     }
-    
+
     /**
      * Removes the specified element from the Collection.
      *
@@ -126,7 +128,7 @@ class Collection implements ICollection {
         $this->Elements = \array_values($this->Elements);
         return $Value;
     }
-    
+
     /**
      * Determines whether any element of a sequence satisfies a condition.
      *
@@ -143,7 +145,7 @@ class Collection implements ICollection {
         }
         return false;
     }
-    
+
     /**
      * Removes all elements from the Collection.
      *
@@ -152,7 +154,7 @@ class Collection implements ICollection {
     public function Clear(): void {
         $this->Elements = [];
     }
-    
+
     /**
      * Determines whether an element is in the Collection.
      *
@@ -164,7 +166,7 @@ class Collection implements ICollection {
     public function Contains(mixed $Element): bool {
         return \in_array($Element, $this->Elements);
     }
-    
+
     /**
      * Determines whether an element at the specified index exists.
      *
@@ -183,7 +185,7 @@ class Collection implements ICollection {
         }
         return isset($this->Elements[$Index]);
     }
-    
+
     /**
      * Unsets an element and its index from the Collection.
      * Note: Using 'unset()' to delete an element within the Collection isn't supported, use {@see \vDesk\Struct\Collections\Collection::RemoveAt()}
@@ -199,7 +201,7 @@ class Collection implements ICollection {
     public function offsetUnset($Index): void {
         throw new InvalidOperationException("Cannot unset element at index " . __CLASS__ . "[$Index]. Use " . __CLASS__ . "::RemoveAt($Index) instead.");
     }
-    
+
     /**
      * Returns the element at the specified index.
      *
@@ -216,7 +218,7 @@ class Collection implements ICollection {
         }
         return $this->Elements[$Index];
     }
-    
+
     /**
      * Searches for an element inside the Collection and returns the first element which satisfies a test provided by the specified
      * predicate function.
@@ -240,7 +242,7 @@ class Collection implements ICollection {
         }
         return null;
     }
-    
+
     /**
      * @see \Iterator::rewind()
      * @ignore
@@ -248,7 +250,7 @@ class Collection implements ICollection {
     public function rewind(): void {
         \reset($this->Elements);
     }
-    
+
     /**
      * Sorts the Collection by value.
      *
@@ -265,7 +267,7 @@ class Collection implements ICollection {
     public function Sort(callable $Predicate): bool {
         return \usort($this->Elements, $Predicate);
     }
-    
+
     /**
      *
      * @return mixed
@@ -276,7 +278,7 @@ class Collection implements ICollection {
     public function current(): mixed {
         return \current($this->Elements);
     }
-    
+
     /**
      * Returns a new Collection containing all elements that satisfy a test provided by the specified predicate function.
      *
@@ -299,7 +301,7 @@ class Collection implements ICollection {
         }
         return $Collection;
     }
-    
+
     /**
      * @return int
      * @ignore
@@ -309,7 +311,7 @@ class Collection implements ICollection {
     public function key(): int {
         return \key($this->Elements);
     }
-    
+
     /**
      * Creates a new Collection with the results of calling a function for every Collection element.
      *
@@ -325,7 +327,7 @@ class Collection implements ICollection {
         }
         return $Collection;
     }
-    
+
     /**
      * @see \Iterator::next()
      * @ignore
@@ -333,7 +335,7 @@ class Collection implements ICollection {
     public function next(): void {
         \next($this->Elements);
     }
-    
+
     /**
      * Reduces the values of the Collection to a single value.
      *
@@ -351,7 +353,7 @@ class Collection implements ICollection {
         }
         return $Accumulator;
     }
-    
+
     /**
      * @return bool
      * @ignore
@@ -361,7 +363,7 @@ class Collection implements ICollection {
     public function valid(): bool {
         return \key($this->Elements) !== null;
     }
-    
+
     /**
      * Tests if every element in the Collection passes the test implemented by the specified predicate.
      *
@@ -379,7 +381,7 @@ class Collection implements ICollection {
         }
         return true;
     }
-    
+
     /**
      * Returns the index of an element.
      *
@@ -396,7 +398,7 @@ class Collection implements ICollection {
         }
         return -1;
     }
-    
+
     /**
      * Removes an element at the specified index.
      *
@@ -413,7 +415,7 @@ class Collection implements ICollection {
         }
         return null;
     }
-    
+
     /**
      * Copies the elements of the Collection into an array.
      *
@@ -426,7 +428,7 @@ class Collection implements ICollection {
     public function ToArray(int $From = null, int $To = null): array {
         return \array_slice($this->Elements, $From ?? 0, ($To !== null) ? ($To - $From) : $this->Count);
     }
-    
+
     /**
      * Merges the objects of a different {@link \vDesk\Struct\Collections\Collection} into the Collection.
      *
@@ -439,7 +441,7 @@ class Collection implements ICollection {
             $this->Add($Item);
         }
     }
-    
+
     /**
      * Sets the value at an existing index within the Collection.
      * Note: Adding new values to the Collection isn't supported,
@@ -465,7 +467,7 @@ class Collection implements ICollection {
             $this->Add($Value);
         }
     }
-    
+
     /**
      * Returns the number of elements in the Collection.
      *

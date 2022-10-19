@@ -10,17 +10,17 @@ use vDesk\IO\Output\CLI;
 /**
  * Provides abstract access to the current output stream.
  *
- * @package vDesk\IO
+ * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Output {
-    
+
     /**
      * Writes data to the output-stream.
      *
      * @param mixed $Data The data to write.
      */
-    public static function Write($Data): void {
+    public static function Write(mixed $Data): void {
         switch(API::$Current) {
             case API::CGI:
                 CGI::Write($Data);
@@ -35,5 +35,5 @@ abstract class Output {
                 ("\\vDesk\\IO\\Output\\" . API::$Current)::Write($Data);
         }
     }
-    
+
 }

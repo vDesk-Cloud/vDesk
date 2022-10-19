@@ -6,10 +6,11 @@ namespace vDesk\Struct;
 /**
  * Exception that is thrown when a private Property is accessed.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class AccessViolationException extends \Exception {
-    
+
     /**
      * Initializes a new instance of the AccessViolationException class.
      *

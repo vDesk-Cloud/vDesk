@@ -5,6 +5,7 @@
  * @param {vDesk.Archive.Element} Element The element to display the image of.
  * @property {HTMLDivElement} Control Gets the underlying dom node.
  * @memberOf vDesk.Archive.Element.View
+ * @package vDesk\Archive
  */
 vDesk.Archive.Element.View.AudioPlayer = function AudioPlayer(Element) {
     Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
@@ -12,14 +13,12 @@ vDesk.Archive.Element.View.AudioPlayer = function AudioPlayer(Element) {
     /**
      * The ID3Tag of the AudioPlayer.
      * @type vDesk.Media.Audio.ID3.Tag
-     * @ignore
      */
     let ID3Tag = null;
 
     /**
      * The ID of the interval of the attribute scheduler.
      * @type {Number}
-     * @ignore
      */
     let SchedulerID = null;
 
@@ -87,20 +86,20 @@ vDesk.Archive.Element.View.AudioPlayer = function AudioPlayer(Element) {
             Module:     "Archive",
             Command:    "Download",
             Parameters: {ID: Element.ID},
-            Ticket:     vDesk.User.Ticket
+            Ticket:     vDesk.Security.User.Current.Ticket
         }
     );
     vDesk.Connection.Send(
         Command,
         Buffer => {
-            if(Command.Canceled) {
+            if(Command.Canceled){
                 return;
             }
 
             ID3Tag = vDesk.Media.Audio.ID3.Parse(Buffer);
 
             //Check if the ID3-Tag contains any frames.
-            if(ID3Tag.Frames !== undefined) {
+            if(ID3Tag.Frames !== undefined){
 
                 const Frames = ID3Tag.Frames.filter(Frame => vDesk.Media.Audio.ID3.Frames[Frame.ID] !== undefined && Frame.Data.length > 0);
 
@@ -115,7 +114,7 @@ vDesk.Archive.Element.View.AudioPlayer = function AudioPlayer(Element) {
 
                 //Check if the audiofile has an attached picture.
                 const PictureFrame = ID3Tag.Frames.find(Frame => Frame instanceof vDesk.Media.Audio.ID3.V2.PictureFrame);
-                if(PictureFrame !== undefined) {
+                if(PictureFrame !== undefined){
                     Image.src = URL.createObjectURL(PictureFrame.Data);
                 }
             }
@@ -127,11 +126,12 @@ vDesk.Archive.Element.View.AudioPlayer = function AudioPlayer(Element) {
                 URL.revokeObjectURL(Image.src);
             };
         },
-        true);
+        true
+    );
 };
+
 /**
- * The file extensions the plugin can handle
- * @constant
- * @type {Array<String>}
+ * The file extensions the plugin can handle.
+ * @enum {String}
  */
 vDesk.Archive.Element.View.AudioPlayer.Extensions = ["mp3", "ogg", "wav", "flac"];

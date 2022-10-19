@@ -15,7 +15,7 @@
  * @property {vDesk.Security.User} Recipient Gets or sets the Recipient of the Editor.
  * @memberOf vDesk.Messenger.Users.Message
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Messenger
  */
 vDesk.Messenger.Users.Message.Editor = function Editor(Recipient) {
 
@@ -37,7 +37,7 @@ vDesk.Messenger.Users.Message.Editor = function Editor(Recipient) {
      * @fires vDesk.Messenger.Users.Message.Editor#sent
      */
     this.Send = function() {
-        if(Text.value.length > 0) {
+        if(Text.value.length > 0){
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
@@ -47,11 +47,11 @@ vDesk.Messenger.Users.Message.Editor = function Editor(Recipient) {
                             Recipient: Recipient.ID,
                             Text:      Text.value
                         },
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         new vDesk.Events.BubblingEvent("sent", {
                             sender:  this,
                             message: vDesk.Messenger.Users.Message.FromDataView(Response.Data)
@@ -80,7 +80,7 @@ vDesk.Messenger.Users.Message.Editor = function Editor(Recipient) {
     Text.maxLength = 65535;
     Text.addEventListener("input", () => Send.disabled = !Text.validity.valid);
     Text.addEventListener("keydown", Event => {
-        if(Event.ctrlKey && Event.key === "Enter") {
+        if(Event.ctrlKey && Event.key === "Enter"){
             this.Send();
         }
     }, false);
@@ -102,7 +102,6 @@ vDesk.Messenger.Users.Message.Editor = function Editor(Recipient) {
     Send.style.backgroundImage = `url("${vDesk.Visual.Icons.Messenger.Send}")`;
     Send.textContent = "Send";
     Send.addEventListener("click", this.Send, false);
-
 
     /**
      * The controls container of the Editor.

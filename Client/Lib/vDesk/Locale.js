@@ -1,3 +1,4 @@
+"use strict";
 /**
  * @typedef {Object} Country
  * @property {String} Code The code of the Country.
@@ -14,6 +15,7 @@ const EmptyDomain = new Proxy({}, {get: () => "[Undefined Translation]"});
  * @namespace Locale
  * @memberOf vDesk
  * @type {{Status: string, Load: vDesk.Locale.Load, Translations: {}}}
+ * @package vDesk\Locale
  */
 vDesk.Locale = new Proxy(
     {
@@ -32,7 +34,7 @@ vDesk.Locale = new Proxy(
          * @type {Array<vDesk.Locale.Country>}
          * @name vDesk.Locale.Countries
          */
-        Countries:    [],
+        Countries: [],
 
         /**
          * Initializes a new instance of the Country class.
@@ -71,18 +73,18 @@ vDesk.Locale = new Proxy(
          * @param {String} Locale The locale to load.
          * @name vDesk.Locale.Load
          */
-        Load:    function(Locale = vDesk.User.Locale) {
+        Load:   function(Locale = vDesk.Security.User.Current.Locale) {
             //Load locales.
             vDesk.Connection.Send(
                 new vDesk.Modules.Command(
                     {
                         Module:  "Locale",
                         Command: "GetLocales",
-                        Ticket:  vDesk.User.Ticket
+                        Ticket:  vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         this.Locales = Response.Data;
                     }
                 }
@@ -96,13 +98,13 @@ vDesk.Locale = new Proxy(
                         Module:     "Locale",
                         Command:    "GetLocale",
                         Parameters: {Locale: Locale},
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 )
             );
-            if(Response.Status) {
+            if(Response.Status){
                 //Apply proxies.
-                for(const Domain in Response.Data) {
+                for(const Domain in Response.Data){
                     new Proxy(Response.Data[Domain], {get: (Domain, Tag) => Domain?.[Tag] ?? "[Undefined Translation]"});
                 }
                 this.Translations = new Proxy(Response.Data, {get: (Translations, Domain) => Translations?.[Domain] ?? EmptyDomain});
@@ -115,17 +117,17 @@ vDesk.Locale = new Proxy(
                         Module:     "Locale",
                         Command:    "GetCountries",
                         Parameters: {Locale: Locale},
-                        Ticket:     vDesk.User.Ticket
+                        Ticket:     vDesk.Security.User.Current.Ticket
                     }
                 ),
                 Response => {
-                    if(Response.Status) {
+                    if(Response.Status){
                         this.Countries = Response.Data.map(Country => vDesk.Locale.Country.FromDataView(Country));
                     }
                 }
             );
         },
-        Status:  "Loading translations"
+        Status: "Loading translations"
     },
     {get: (Locale, Property) => Locale?.[Property] ?? Locale.Translations[Property]}
 );

@@ -6,7 +6,7 @@
  * @property {HTMLDivElement} Control Gets the underlying DOM-Node.
  * @memberOf vDesk.Contacts
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Contacts
  */
 vDesk.Contacts.Company.Viewer = function Viewer(Company) {
     Ensure.Parameter(Company, vDesk.Contacts.Company, "Company");

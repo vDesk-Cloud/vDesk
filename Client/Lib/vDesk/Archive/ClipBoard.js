@@ -9,8 +9,7 @@
  * @property {Boolean} ContainsElements Gets a value that determines if the Clipboard has stored elements.
  * @memberOf vDesk.Archive
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
- * @todo Check why items are lost on clicking on the header.
+ * @package vDesk\Archive
  */
 vDesk.Archive.Clipboard = function Clipboard() {
 
@@ -74,7 +73,7 @@ vDesk.Archive.Clipboard = function Clipboard() {
         //Get the item to remove.
         const FoundElement = Elements.find(ClipboardElement => ClipboardElement.ID === Element.ID);
         //Remove the control from the childlist and the collection.
-        if(FoundElement !== undefined) {
+        if(FoundElement !== undefined){
             Elements.splice(Elements.indexOf(FoundElement), 1);
         }
     };

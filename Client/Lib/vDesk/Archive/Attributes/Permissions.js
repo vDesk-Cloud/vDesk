@@ -8,7 +8,7 @@
  * @memberOf vDesk.Archive.Attributes
  * @implements vDesk.Archive.IAttribute
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Archive
  */
 vDesk.Archive.Attributes.Permissions = function Permissions(Element) {
     Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
@@ -35,7 +35,7 @@ vDesk.Archive.Attributes.Permissions = function Permissions(Element) {
      * Eventhandler that listens on the 'click' event.
      */
     const OnClickSaveButton = () => {
-        if(AccessControlListEditor.Changed) {
+        if(AccessControlListEditor.Changed){
             AccessControlListEditor.Save();
         }
         SaveButton.disabled = true;
@@ -63,7 +63,7 @@ vDesk.Archive.Attributes.Permissions = function Permissions(Element) {
      * The AccessControlListEditor of the Permissions.
      * @type {vDesk.Security.AccessControlList.Editor}
      */
-    const AccessControlListEditor = new vDesk.Security.AccessControlList.Editor(Element.AccessControlList, vDesk.User.Permissions.UpdateAccessControlList);
+    const AccessControlListEditor = new vDesk.Security.AccessControlList.Editor(Element.AccessControlList, vDesk.Security.User.Current.Permissions.UpdateAccessControlList);
     Element.AccessControlList.Fill(AccessControlList => AccessControlListEditor.AccessControlList = AccessControlList);
     Control.appendChild(AccessControlListEditor.Control);
 
@@ -89,12 +89,15 @@ vDesk.Archive.Attributes.Permissions = function Permissions(Element) {
     ResetButton.textContent = vDesk.Locale.vDesk.ResetChanges;
     ResetButton.addEventListener("click", OnClickResetButton, false);
 
-    //Save/reset buttons here.
+    /**
+     * The controls of the Permissions.
+     * @type {HTMLDivElement}
+     */
     const Controls = document.createElement("div");
     Controls.className = "Controls";
     Controls.appendChild(SaveButton);
     Controls.appendChild(ResetButton);
     Control.appendChild(Controls);
 };
-vDesk.Archive.Attributes.Permissions.Permission = () => vDesk.User.Permissions.ReadAccessControlList;
+vDesk.Archive.Attributes.Permissions.Permission = () => vDesk.Security.User.Current.Permissions.ReadAccessControlList;
 vDesk.Archive.Attributes.Permissions.Implements(vDesk.Archive.IAttribute);

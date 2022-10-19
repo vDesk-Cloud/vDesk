@@ -8,21 +8,22 @@ use vDesk\IO\Stream\Mode;
 /**
  * Provides static methods for creating, copying, deleting, moving, and opening files.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class File {
-    
+
     /**
      * Enumeration of invalid filename-characters.
      */
     public const InvalidChars = Path::InvalidChars;
-    
+
     /**
      * Prevent instantiation.
      */
     private function __construct() {
     }
-    
+
     /**
      * Creates or overwrites a file in the specified path.
      *
@@ -39,7 +40,7 @@ final class File {
                 : Mode::Create | Mode::Duplex | Mode::Binary
         );
     }
-    
+
     /**
      * Opens a FileStream on the specified path with read/write access.
      *
@@ -58,7 +59,7 @@ final class File {
         }
         return new FileStream($File, $Mode);
     }
-    
+
     /**
      * Opens an existing file for reading.
      *
@@ -69,7 +70,7 @@ final class File {
     public static function OpenRead(string $File): FileStream {
         return self::Open($File, Mode::Read | Mode::Binary);
     }
-    
+
     /**
      * Opens an existing file or creates a new file for writing.
      *
@@ -80,7 +81,7 @@ final class File {
     public static function OpenWrite(string $File): FileStream {
         return self::Open($File, Mode::Read | Mode::Create | Mode::Duplex | Mode::Binary);
     }
-    
+
     /**
      * Moves an existing file to a new destination.
      *
@@ -110,7 +111,7 @@ final class File {
             throw new IOException("Cannot move file from '$File' to '$TargetPath'.");
         }
     }
-    
+
     /**
      * Copies an existing file to a new file.
      *
@@ -142,7 +143,7 @@ final class File {
             throw new IOException("Cannot copy file from '$File' to '$TargetPath'.");
         }
     }
-    
+
     /**
      * Deletes the specified file.
      *
@@ -163,7 +164,7 @@ final class File {
             throw new IOException("Cannot delete file '$File'.");
         }
     }
-    
+
     /**
      * Renames a file to a specified new name.
      *
@@ -189,7 +190,7 @@ final class File {
             throw new IOException("Cannot rename file '$File' to '$Name'.$TargetPath");
         }
     }
-    
+
     /**
      * Determines whether the specified file exists.
      *
@@ -200,7 +201,7 @@ final class File {
     public static function Exists(string $File): bool {
         return \is_file($File);
     }
-    
+
     /**
      * Determines whether the specified file exists and is readable.
      *
@@ -211,7 +212,7 @@ final class File {
     public static function IsReadable(string $File): bool {
         return \is_readable($File);
     }
-    
+
     /**
      * Determines whether the specified file exists and is writable.
      *
@@ -222,18 +223,18 @@ final class File {
     public static function IsWritable(string $File): bool {
         return \is_writable($File);
     }
-    
+
     /**
      * Determines the size of a file in bytes.
      *
      * @param string $File The path to the file whose size to determine.
      *
-     * @return int The size of the specified file in bytes, or null if the file doesn't exist.
+     * @return null|int The size of the specified file in bytes, or null if the file doesn't exist.
      */
     public static function Size(string $File): ?int {
         return self::Exists($File) ? \filesize($File) : null;
     }
-    
+
     /**
      * Reads the lines of a file.
      *
@@ -251,7 +252,7 @@ final class File {
         }
         return \file($File, \FILE_IGNORE_NEW_LINES | \FILE_SKIP_EMPTY_LINES);
     }
-    
+
     /**
      * Writes the lines of an array to a file.
      *
@@ -273,5 +274,5 @@ final class File {
         }
         $FileStream->Close();
     }
-    
+
 }

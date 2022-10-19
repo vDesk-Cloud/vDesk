@@ -11,8 +11,8 @@
  * @class Represents a numeric validator.
  * @memberOf vDesk.MetaInformation.Mask.Row.Validator
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
  * @implements vDesk.MetaInformation.Mask.Row.IValidator
+ * @package vDesk\MetaInformation
  */
 vDesk.MetaInformation.Mask.Row.Validator.Number = function Number(Validator = null, Enabled = true) {
     Ensure.Parameter(Validator, Type.Object, "Validator", true);
@@ -42,8 +42,8 @@ vDesk.MetaInformation.Mask.Row.Validator.Number = function Number(Validator = nu
             enumerable: true,
             get:        () => {
                 return {
-                    Min: Min.Value,
-                    Max: Max.Value,
+                    Min:   Min.Value,
+                    Max:   Max.Value,
                     Steps: Steps.Value
                 };
             },

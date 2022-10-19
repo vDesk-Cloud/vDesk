@@ -4,7 +4,7 @@
  * @class Class that represents a [...] for [...]. | Class providing functionality for [...].
  * @memberOf vDesk.Packages
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Packages
  */
 vDesk.Packages.Administration = function Administration() {
 
@@ -49,11 +49,11 @@ vDesk.Packages.Administration = function Administration() {
                     Module:     "Packages",
                     Command:    "Install",
                     Parameters: {Package: Package},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(Response.Status) {
+                if(Response.Status){
                     ProgressBar.className = "Finished";
                     Item.Package = vDesk.Packages.Package.FromDataView(Response.Data);
                 }else{
@@ -65,7 +65,7 @@ vDesk.Packages.Administration = function Administration() {
             },
             false,
             Progress => {
-                if(Progress.upload.lengthComputable) {
+                if(Progress.upload.lengthComputable){
                     ProgressBar.value = (Progress.upload.loaded / Progress.upload.total) * 100;
                 }
             }
@@ -82,11 +82,11 @@ vDesk.Packages.Administration = function Administration() {
                     Module:     "Packages",
                     Command:    "Uninstall",
                     Parameters: {Package: Packages.Selected.Package.Name},
-                    Ticket:     vDesk.User.Ticket
+                    Ticket:     vDesk.Security.User.Current.Ticket
                 }
             ),
             Response => {
-                if(!Response.Status) {
+                if(!Response.Status){
                     alert(Response.Data);
                     return;
                 }
@@ -146,7 +146,7 @@ vDesk.Packages.Administration = function Administration() {
     const Install = document.createElement("button");
     Install.className = "Button Icon Packages";
     Install.style.backgroundImage = `url("${vDesk.Visual.Icons.Packages.Install}")`;
-    Install.disabled = !vDesk.User.Permissions.InstallPackage;
+    Install.disabled = !vDesk.Security.User.Current.Permissions.InstallPackage;
     Install.textContent = vDesk.Locale.Packages.Install;
     Install.addEventListener("click", () => OpenFileDialog.click());
     Controls.appendChild(Install);
@@ -158,7 +158,7 @@ vDesk.Packages.Administration = function Administration() {
     const Uninstall = document.createElement("button");
     Uninstall.className = "Button Icon Uninstall";
     Uninstall.style.backgroundImage = `url("${vDesk.Visual.Icons.Delete}")`;
-    Uninstall.disabled = !vDesk.User.Permissions.UninstallPackage;
+    Uninstall.disabled = !vDesk.Security.User.Current.Permissions.UninstallPackage;
     Uninstall.textContent = vDesk.Locale.Packages.Uninstall;
     Uninstall.addEventListener("click", OnClick, false);
     Controls.appendChild(Uninstall);
@@ -170,15 +170,15 @@ vDesk.Packages.Administration = function Administration() {
                 Module:     "Packages",
                 Command:    "Installed",
                 Parameters: {},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         Response => {
-            if(Response.Status) {
+            if(Response.Status){
                 Packages.Items = Response.Data.map(Package => new vDesk.Packages.PackageList.Item(vDesk.Packages.Package.FromDataView(Package)));
                 Packages.Selected = Packages.Items[0];
                 Container.appendChild(Packages.Selected.Package.Control)
-            } else {
+            }else{
                 alert(Response.Data);
             }
         }

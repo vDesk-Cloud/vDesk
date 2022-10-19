@@ -5,6 +5,7 @@
  * @param {vDesk.Archive.Element} Element The element to display the file of.
  * @property {HTMLTableElement} Control Gets the underlying dom node.
  * @memberOf vDesk.Archive.Element.View
+ * @package vDesk\Archive
  */
 vDesk.Archive.Element.View.CSV = function CSV(Element) {
     Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
@@ -25,7 +26,7 @@ vDesk.Archive.Element.View.CSV = function CSV(Element) {
                 Module:     "Archive",
                 Command:    "Download",
                 Parameters: {ID: Element.ID},
-                Ticket:     vDesk.User.Ticket
+                Ticket:     vDesk.Security.User.Current.Ticket
             }
         ),
         Buffer => {
@@ -49,11 +50,11 @@ vDesk.Archive.Element.View.CSV = function CSV(Element) {
             Offset = Index;
 
             //Parse CSV file.
-            while(Offset < Bytes.length) {
+            while(Offset < Bytes.length){
                 //Fetch line until next linefeed.
                 Index = Bytes.indexOf(0x0A, Offset);
                 //Check if the last line has been reached.
-                if(!~Index) {
+                if(!~Index){
                     Index = Bytes.length;
                 }
                 const Row = Table.CreateRow();
@@ -68,11 +69,9 @@ vDesk.Archive.Element.View.CSV = function CSV(Element) {
         true
     );
 };
+
 /**
- * The file extensions the plugin can handle
- * @type {Array}
+ * The file extensions the plugin can handle.
  * @enum {String}
  */
-vDesk.Archive.Element.View.CSV.Extensions = [
-    "csv"
-];
+vDesk.Archive.Element.View.CSV.Extensions = ["csv"];

@@ -38,7 +38,7 @@
  * @property {Boolean} Selected Gets or sets a value indicating whether the FolderView is enabled.
  * @memberOf vDesk.Archive
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Archive
  */
 vDesk.Archive.FolderView = function FolderView(CurrentFolder = null, Elements = [], Enabled = true) {
     Ensure.Parameter(CurrentFolder, vDesk.Archive.Element, "CurrentFolder", true);
@@ -142,10 +142,10 @@ vDesk.Archive.FolderView = function FolderView(CurrentFolder = null, Elements = 
             set:        Value => {
                 Ensure.Property(Value, Type.Boolean, "Enabled");
                 Enabled = Value;
-                if(Value) {
+                if(Value){
                     window.addEventListener("keydown", OnKeyDown);
                     Control.addEventListener("mousedown", OnMouseDown);
-                } else {
+                }else{
                     window.removeEventListener("keydown", OnKeyDown);
                     Control.removeEventListener("mousedown", OnMouseDown);
                 }
@@ -162,7 +162,7 @@ vDesk.Archive.FolderView = function FolderView(CurrentFolder = null, Elements = 
     const OnSelect = Event => {
         Event.stopPropagation();
         //Reset Elements.
-        if(!ControlKeyPressed) {
+        if(!ControlKeyPressed){
             Elements.forEach(Element => Element.Selected = false);
         }
         Event.detail.sender.Selected = !Event.detail.sender.Selected;
@@ -200,45 +200,45 @@ vDesk.Archive.FolderView = function FolderView(CurrentFolder = null, Elements = 
             || Event.key === "ArrowRight"
             || Event.key === "ArrowUp"
             || Event.key === "ArrowDown"
-        ) {
+        ){
             const Selected = this.Selected;
 
-            if(Selected.length > 0) {
+            if(Selected.length > 0){
                 let Element;
                 let Index;
                 let RowLength;
-                switch(Event.key) {
+                switch(Event.key){
                     case "ArrowLeft":
                         Index = Elements.indexOf(Selected[0]);
-                        if(Index > 0) {
+                        if(Index > 0){
                             Element = Elements[--Index];
-                        } else {
+                        }else{
                             Element = Selected.shift();
                         }
                         break;
                     case "ArrowRight":
                         Index = Elements.indexOf(Selected[Selected.length - 1]);
-                        if(Index < Elements.length - 1) {
+                        if(Index < Elements.length - 1){
                             Element = Elements[++Index];
-                        } else {
+                        }else{
                             Element = Selected.pop();
                         }
                         break;
                     case "ArrowUp":
                         Index = Elements.indexOf(Selected[0]);
                         RowLength = Math.floor(Control.offsetWidth / 100);
-                        if(Index >= RowLength) {
+                        if(Index >= RowLength){
                             Element = Elements[Index - RowLength];
-                        } else {
+                        }else{
                             Element = Selected.shift();
                         }
                         break;
                     case "ArrowDown":
                         Index = Elements.indexOf(Selected[0]);
                         RowLength = Math.floor(Control.offsetWidth / 100);
-                        if(Index + RowLength < Elements.length) {
+                        if(Index + RowLength < Elements.length){
                             Element = Elements[Index + RowLength];
-                        } else {
+                        }else{
                             Element = Elements[Elements.length - 1];
                         }
                         break;
@@ -257,7 +257,7 @@ vDesk.Archive.FolderView = function FolderView(CurrentFolder = null, Elements = 
             }
         }
     };
-    if(Enabled) {
+    if(Enabled){
         window.addEventListener("keydown", OnKeyDown);
     }
 
@@ -275,14 +275,14 @@ vDesk.Archive.FolderView = function FolderView(CurrentFolder = null, Elements = 
     const OnDrop = Event => {
         Event.preventDefault();
         Event.stopPropagation();
-        if(Event.dataTransfer.files !== undefined && Event.dataTransfer.files.length > 0) {
+        if(Event.dataTransfer.files !== undefined && Event.dataTransfer.files.length > 0){
             new vDesk.Events.BubblingEvent("filedrop", {
                 sender: CurrentFolder,
                 files:  Array.from(Event.dataTransfer.files)
             }).Dispatch(Control);
-        } else {
+        }else{
             const DroppedElement = Event.dataTransfer.getReference();
-            if(DroppedElement.ID !== CurrentFolder.ID || DroppedElement.Parent.ID !== CurrentFolder.ID) {
+            if(DroppedElement.ID !== CurrentFolder.ID || DroppedElement.Parent.ID !== CurrentFolder.ID){
                 new vDesk.Events.BubblingEvent("elementdrop", {
                     sender:  CurrentFolder,
                     element: DroppedElement
@@ -297,7 +297,7 @@ vDesk.Archive.FolderView = function FolderView(CurrentFolder = null, Elements = 
      */
     const OnMouseDown = Event => {
 
-        if(Event.target === Control) {
+        if(Event.target === Control){
             // Event.preventDefault();
 
             //Display rectangle.
@@ -340,7 +340,7 @@ vDesk.Archive.FolderView = function FolderView(CurrentFolder = null, Elements = 
         Event.stopPropagation();
 
         //Reset Elements if a normal selection occurred.
-        if(!Event.ctrlKey) {
+        if(!Event.ctrlKey){
             Elements.forEach(Element => Element.Selected = false);
         }
 
@@ -400,7 +400,7 @@ vDesk.Archive.FolderView = function FolderView(CurrentFolder = null, Elements = 
     this.Add = function(Element) {
         Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
         //Check if the Element is not already in the list.
-        if(Element.ID === null || !Elements.some(Current => Current.ID === Element.ID)) {
+        if(Element.ID === null || !Elements.some(Current => Current.ID === Element.ID)){
             Control.appendChild(Element.Control);
             Elements.push(Element);
         }
@@ -415,16 +415,16 @@ vDesk.Archive.FolderView = function FolderView(CurrentFolder = null, Elements = 
 
         //Check if the element is currently being displayed.
         const Index = Elements.indexOf(Element);
-        if(~Index) {
+        if(~Index){
             Control.removeChild(Element.Control);
             Elements.splice(Index, 1);
         }
         //Otherwise check if an similar element with the same ID is currently being displayed.
-        else {
+        else{
             //Get the Element.
             const FoundElement = Elements.find(DisplayedElement => DisplayedElement.ID === Element.ID);
             //Remove the Element.
-            if(FoundElement !== undefined) {
+            if(FoundElement !== undefined){
                 Control.removeChild(FoundElement.Control);
                 Elements.splice(Elements.indexOf(FoundElement), 1);
             }
@@ -479,50 +479,46 @@ vDesk.Archive.FolderView = function FolderView(CurrentFolder = null, Elements = 
 
 /**
  * Enumeration of predefined predicates for sorting the Elements of the FolderView.
- * @readonly
  * @enum {Function}
  */
-Object.defineProperty(vDesk.Archive.FolderView, "Sort", {
-    value: {
-        /**
-         * Predicate for sorting Elements based on their name according in an ascending alphabetical order.
-         * @constant
-         * @type Function
-         * @memberOf vDesk.Archive.FolderView.Sort
-         */
-        NameAscending:  (Collator => (A, B) => Collator.compare(A.Name, B.Name))
-                        (new Intl.Collator(
-                            vDesk.User.Locale.toLowerCase(), {
-                                sensitivity: "base",
-                                numeric:     true
-                            }
-                        )),
-        /**
-         * Predicate for sorting Elements based on their name according in an descending alphabetical order.
-         * @constant
-         * @type Function
-         * @memberOf vDesk.Archive.FolderView.Sort
-         */
-        NameDescending: (Collator => (A, B) => Collator.compare(A.Name, B.Name) * -1)
-                        (new Intl.Collator(
-                            vDesk.User.Locale.toLowerCase(), {
-                                sensitivity: "base",
-                                numeric:     true
-                            }
-                        )),
-        /**
-         * Predicate for sorting Elements based on their type according in an ascending order. (Folder < File).
-         * @constant
-         * @type Function
-         * @memberOf vDesk.Archive.FolderView.Sort
-         */
-        TypeAscending:  (A, B) => A.Type - B.Type,
-        /**
-         * Predicate for sorting Elements based on their type according in an descending order. (Folder > File).
-         * @constant
-         * @type Function
-         * @memberOf vDesk.Archive.FolderView.Sort
-         */
-        TypeDescending: (A, B) => B.Type - A.Type
-    }
-});
+vDesk.Archive.FolderView.Sort = {
+    /**
+     * Predicate for sorting Elements based on their name according in an ascending alphabetical order.
+     * @constant
+     * @type Function
+     */
+    NameAscending: (Collator => (A, B) => Collator.compare(A.Name, B.Name))
+                   (new Intl.Collator(
+                       vDesk.Security.User.Current.Locale.toLowerCase(), {
+                           sensitivity: "base",
+                           numeric:     true
+                       }
+                   )),
+
+    /**
+     * Predicate for sorting Elements based on their name according in an descending alphabetical order.
+     * @constant
+     * @type Function
+     */
+    NameDescending: (Collator => (A, B) => Collator.compare(A.Name, B.Name) * -1)
+                    (new Intl.Collator(
+                        vDesk.Security.User.Current.Locale.toLowerCase(), {
+                            sensitivity: "base",
+                            numeric:     true
+                        }
+                    )),
+
+    /**
+     * Predicate for sorting Elements based on their type according in an ascending order. (Folder < File).
+     * @constant
+     * @type Function
+     */
+    TypeAscending: (A, B) => A.Type - B.Type,
+
+    /**
+     * Predicate for sorting Elements based on their type according in an descending order. (Folder > File).
+     * @constant
+     * @type Function
+     */
+    TypeDescending: (A, B) => B.Type - A.Type
+};

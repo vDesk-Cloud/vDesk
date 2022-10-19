@@ -8,7 +8,7 @@
  * @memberOf vDesk.Archive.Attributes
  * @implements vDesk.Archive.IAttribute
  * @author Kerry <DevelopmentHero@gmail.com>
- * @version 1.0.0.
+ * @package vDesk\Archive
  */
 vDesk.Archive.Attributes.GeneralInfo = function GeneralInfo(Element) {
     Ensure.Parameter(Element, vDesk.Archive.Element, "Element");
@@ -95,6 +95,7 @@ vDesk.Archive.Attributes.GeneralInfo = function GeneralInfo(Element) {
 
     Control.appendChild(Attributes);
 };
+
 /**
  * Utility-method that rounds and formats a specified file-size into a human readable string.
  * @param {Number} Size The size to format.
@@ -104,27 +105,27 @@ vDesk.Archive.Attributes.GeneralInfo = function GeneralInfo(Element) {
 vDesk.Archive.Attributes.GeneralInfo.RoundFileSize = function(Size, IEC = true) {
     const Factor = IEC ? 1024 : 1000;
 
-    if(Size < Factor) {
+    if(Size < Factor){
         return `${Size} Byte`;
     }
 
-    if(Size < (Factor * Factor)) {
+    if(Size < (Factor * Factor)){
         return `${Number(Size / Factor).toFixed(2)} ${IEC ? "KiB" : "KB"}`;
     }
 
-    if(Size < (Factor * Factor * Factor)) {
+    if(Size < (Factor * Factor * Factor)){
         return `${Number(Size / (Factor * Factor)).toFixed(2)} ${IEC ? "MiB" : "MB"}`;
     }
 
-    if(Size < (Factor * Factor * Factor * Factor)) {
+    if(Size < (Factor * Factor * Factor * Factor)){
         return `${Number(Size / (Factor * Factor * Factor)).toFixed(2)} ${IEC ? "GiB" : "GB"}`;
     }
 
-    if(Size < (Factor * Factor * Factor * Factor * Factor)) {
+    if(Size < (Factor * Factor * Factor * Factor * Factor)){
         return `${Number(Size / (Factor * Factor * Factor * Factor)).toFixed(2)} ${IEC ? "TiB" : "TB"}`;
     }
 };
 
-vDesk.Archive.Attributes.GeneralInfo.Permission = () => vDesk.User.Permissions.ReadAttributes;
+vDesk.Archive.Attributes.GeneralInfo.Permission = () => vDesk.Security.User.Current.Permissions.ReadAttributes;
 
 vDesk.Archive.Attributes.GeneralInfo.Implements(vDesk.Archive.IAttribute);
