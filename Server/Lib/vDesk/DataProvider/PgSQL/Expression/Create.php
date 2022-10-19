@@ -26,6 +26,7 @@ class Create extends DataProvider\AnsiSQL\Expression\Create {
                 $Field["Nullable"] ?? false,
                 $Field["Autoincrement"] ?? false,
                 $Field["Default"] ?? "",
+                $Field["Size"] ?? null,
                 $Field["OnUpdate"] ?? null
             );
         }
