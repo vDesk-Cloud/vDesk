@@ -277,7 +277,7 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
      * @type {vDesk.Controls.EditControl}
      */
     const Locale = new vDesk.Controls.EditControl(
-        vDesk.Locale.vDesk.MaximizeLanguage,
+        vDesk.Locale.vDesk.Language,
         null,
         Extension.Type.Enum,
         User.Locale,
@@ -291,7 +291,7 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
      * @type {vDesk.Controls.EditControl}
      */
     const Active = new vDesk.Controls.EditControl(
-        vDesk.Locale.vDesk.MaximizeActive,
+        vDesk.Locale.vDesk.Active,
         null,
         Type.Boolean,
         User.Active,
