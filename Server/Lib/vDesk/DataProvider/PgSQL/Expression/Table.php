@@ -64,8 +64,9 @@ abstract class Table {
      * @param string      $Name          The name of the table field.
      * @param int         $Type          The type of the table field.
      * @param bool        $Nullable      Flag indicating whether the table field is nullable.
-     * @param string      $Default       The default value of the table field.
      * @param bool        $AutoIncrement The size of the table field.
+     * @param string      $Default       The default value of the table field.
+     * @param int|null    $Size          The size of the table field.
      * @param string|null $OnUpdate      The size of the table field.
      *
      * @return string A PgSQL conform table field.
@@ -76,6 +77,7 @@ abstract class Table {
         bool    $Nullable = false,
         bool    $AutoIncrement = false,
         mixed   $Default = "",
+        ?int    $Size = null,
         ?string $OnUpdate = null
     ): string {
 
@@ -89,7 +91,7 @@ abstract class Table {
                 static::Types[Type::BigInt] => "BIGSERIAL"
             };
         } else {
-            $Field[] = static::Types[$Type & ~DataProvider\Type::Unsigned];
+            $Field[] = static::Types[$Type & ~DataProvider\Type::Unsigned] . ($Size !== null ? "({$Size})" : "");;
         }
 
         $Field[] = $Nullable ? DataProvider::$NULL : "NOT " . DataProvider::$NULL;

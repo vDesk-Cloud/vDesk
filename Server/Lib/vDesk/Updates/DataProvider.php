@@ -28,6 +28,7 @@ final class DataProvider extends Update {
      */
     public const Description = <<<Description
 - Fixed field escapement of CREATE and DROP statements.
+- Fixed missing field size indicator.
 Description;
 
     /**
@@ -39,6 +40,10 @@ Description;
                 Package::Lib => [
                     "vDesk/DataProvider/AnsiSQL/Expression/Create.php",
                     "vDesk/DataProvider/AnsiSQL/Expression/Drop.php",
+                    "vDesk/DataProvider/AnsiSQL/Expression/Functions/Distinct.php",
+                    "vDesk/DataProvider/PgSQL/Expression/Create.php",
+                    "vDesk/DataProvider/PgSQL/Expression/Alter.php",
+                    "vDesk/DataProvider/PgSQL/Expression/Table.php"
                 ]
             ]
         ],
@@ -47,6 +52,10 @@ Description;
                 Package::Lib => [
                     "vDesk/DataProvider/AnsiSQL/Expression/Create.php",
                     "vDesk/DataProvider/AnsiSQL/Expression/Drop.php",
+                    "vDesk/DataProvider/AnsiSQL/Expression/Functions/Distinct.php",
+                    "vDesk/DataProvider/PgSQL/Expression/Create.php",
+                    "vDesk/DataProvider/PgSQL/Expression/Alter.php",
+                    "vDesk/DataProvider/PgSQL/Expression/Table.php"
                 ]
             ]
         ]
