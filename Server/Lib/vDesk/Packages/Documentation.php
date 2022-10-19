@@ -76,17 +76,25 @@ final class Documentation extends Package implements IPackage {
     public static function Install(\Phar $Phar, string $Path): void {
         
         //Create routes.
-        Settings::$Local["Routes"]["/Documentation/Page/Tutorials/Tutorial/{Tutorial}"] = [
+        Settings::$Local["Routes"]["/Documentation/Category/Client/Topic/{Topic}"] = [
             "Module"  => "Documentation",
-            "Command" => "Tutorial"
+            "Command" => "ClientPage"
         ];
-        Settings::$Local["Routes"]["/Documentation/Page/Tutorials"]                     = [
+        Settings::$Local["Routes"]["/Documentation/Category/Client"]               = [
             "Module"  => "Documentation",
-            "Command" => "Tutorials"
+            "Command" => "ClientPages"
         ];
-        Settings::$Local["Routes"]["/Documentation/Page/{Page}"]                        = [
+        Settings::$Local["Routes"]["/Documentation/Category/Server/Topic/{Topic}"] = [
             "Module"  => "Documentation",
-            "Command" => "Page"
+            "Command" => "ServerPage"
+        ];
+        Settings::$Local["Routes"]["/Documentation/Category/Server"]               = [
+            "Module"  => "Documentation",
+            "Command" => "ServerPages"
+        ];
+        Settings::$Local["Routes"]["/Documentation/Topic/{Topic}"]                 = [
+            "Module"  => "Documentation",
+            "Command" => "Topic"
         ];
         
         //Extract files.
