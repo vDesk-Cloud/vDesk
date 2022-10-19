@@ -10,7 +10,7 @@ use vDesk\Pages\Functions;
         <p>
             This document describes the specifications of packages, updates and setups.
             <br>
-            For further information about creating packages and setups, visit the <a href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", "CustomReleases") ?>">Custom
+            For further information about creating packages and setups, visit the <a href="<?= Functions::URL("Documentation", "Category", "Server", "Topic", "CustomReleases") ?>">Custom
                 releases</a>-tutorial.
         </p>
         <h3>Overview</h3>
