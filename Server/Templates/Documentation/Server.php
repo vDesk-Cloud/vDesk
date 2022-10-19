@@ -1,12 +1,12 @@
 <?php
 use vDesk\Pages\Functions;
-/** @var \Pages\Documentation\Server\Index $Page */
+/** @var \Pages\Documentation\Server $Page */
 ?>
 <article>
     <header>
         <h2>Server</h2>
         <p>
-            The server category contains documents about server-side development, database related articles
+            The server category contains documents about server-side development, database related articles and tutorials about creating pages and working with machines.
         </p>
     </header>
     <section>

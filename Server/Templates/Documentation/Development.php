@@ -288,8 +288,8 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
         <p>
             Interfaces must be named as (agent) nouns or adjectives starting with a capital "I" letter and reflect their purposes.<br>
             <br>
-            For a JavaScript based code example, visit the "<a href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", "ClassicalInheritance#Interfaces") ?>">Classical
-                inheritance and interfaces in JavaScript</a>"-tutorial.
+            For a JavaScript based code example, visit the "<a href="<?= Functions::URL("Documentation", "Category", "Client", "Topic", "ClassicalInheritance#Interfaces") ?>">Classical
+                inheritance and interfaces in JavaScript</a>"-section.
         </p>
         <pre><code><?= Conventions::NotRecommended ?>
 <?= Code::Interface ?> <?= Code::Class("ModelInterface") ?> {}
@@ -821,7 +821,7 @@ Text<?= Code::Delimiter ?>
             and so on..
         </p>
         <p>
-            To address common differences between several RDBMs, vDesk's DataProvider ships with an <a href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", "Expressions") ?>">Expression</a>-library, that allows developers to "express" the operation they want
+            To address common differences between several RDBMs, vDesk's DataProvider ships with an <a href="<?= Functions::URL("Documentation", "Category", "Server", "Topic", "Database#Expressions") ?>">Expression</a>-library, that allows developers to "express" the operation they want
             to perform against the database server in a fluent interface that translates the action into a query compatible to the current configured database system.
             <br>The expression library covers most oft the usual CRUD and DB/Table-manipulation functions that SQL defines.
         </p>

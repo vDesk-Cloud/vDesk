@@ -1,12 +1,12 @@
 <?php
 use vDesk\Pages\Functions;
-/** @var \Pages\Documentation\Client\Index $Page */
+/** @var \Pages\Documentation\Client $Page */
 ?>
 <article>
     <header>
         <h2>Client</h2>
         <p>
-            The client category contains JavaScript-tutorials and controls previews.
+            The client category contains documents about JavaScript and client APIs as well as previews of controls.
         </p>
     </header>
     <section>

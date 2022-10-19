@@ -25,7 +25,7 @@ use vDesk\Pages\Functions;
 <main class="Tutorials">
     <header>
         <h1>
-            <a href="<?= Functions::URL("vDesk", "Index") ?>">v<span style="color: #2AB0ED">D</span>esk</a>\<a href="<?= Functions::URL("Documentation", "Index") ?>"><span style="color: #2AB0ED">D</span>ocumentation</a>\<a href="<?= Functions::URL("Documentation", "Category", "Server", "Topic", "Index") ?>"><span style="color: #2AB0ED">S</span>erver</a>
+            <a href="<?= Functions::URL("vDesk", "Index") ?>">v<span style="color: #2AB0ED">D</span>esk</a>\<a href="<?= Functions::URL("Documentation", "Index") ?>"><span style="color: #2AB0ED">D</span>ocumentation</a>\<a href="<?= Functions::URL("Documentation", "Topic", "Server") ?>"><span style="color: #2AB0ED">S</span>erver</a>
         </h1>
         <button class="Toggle" onclick="this.nextElementSibling.classList.toggle('Hidden');">☰</button>
         <section class="Hidden">
