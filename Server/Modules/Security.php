@@ -425,7 +425,7 @@ final class Security extends Module {
         $Group = new Group(
             null,
             $Name ?? Command::$Parameters["Name"],
-            new Group\Permissions($Permissions ?? Command::$Parameters["Permissions"])
+            new Group\Permissions($Permissions ?? (array)Command::$Parameters["Permissions"])
         );
         $Group->Save();
         (new Group\Added($Group))->Dispatch();

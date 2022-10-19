@@ -154,7 +154,7 @@ use vDesk\Documentation\Code;
         <h3>Modules</h3>
         <p>
             Modules are the equivalent of Controllers and are responsible for validating requests, storing data and building Pages.<br>
-            Instead of manually registering <a href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", "ModulesCommands#Commands") ?>">Commands</a>, the Pages framework provides a specialized <code class="Inline">\vDesk\Pages\<?= Code::Class("Request") ?>::<?= Code::Variable("\$Parameters") ?></code>-Dictionary that provides access to the submitted values of the querystring.
+            Instead of manually registering <a href="<?= Functions::URL("Documentation", "Topic", "Architecture#Commands") ?>">Commands</a>, the Pages framework provides a specialized <code class="Inline">\vDesk\Pages\<?= Code::Class("Request") ?>::<?= Code::Variable("\$Parameters") ?></code>-Dictionary that provides access to the submitted values of the querystring.
             Modules are located in the system's <code class="Inline">/vDesk/Server/Modules</code>-directory, accessible via the global <code class="Inline">\vDesk\<?= Code::Class("Modules") ?></code>-facade.
         </p>
         <pre><code><?= Code\Language::PHP ?>

@@ -3,10 +3,8 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider\MsSQL;
 
-use vDesk\Data\IManagedModel;
 use vDesk\DataProvider\IResult;
 use vDesk\IO\IOException;
-use vDesk\Struct\Type;
 
 /**
  * Abstract data-provider for MsSQL databases.
@@ -34,6 +32,16 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
      * @var false|resource
      */
     protected mixed $Provider;
+
+    /**
+     * Enumeration of characters to escape within SQL statements.
+     */
+    public const Escape = ["'"];
+
+    /**
+     * Enumeration of escaped control characters.
+     */
+    public const Escaped = ["''"];
 
     /**
      * Initializes a new instance of the Provider class.
@@ -133,10 +141,8 @@ class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
      * @param string      $Statement    The SQL-transaction-statement to execute.
      * @param bool        $Buffered     Determines whether the result-set will be buffered.
      * @param null|string $Name         The name of the SQL-statement.
-     * @param bool        $AutoRollback Determines whether the changes of the transaction will be rolled back automatically if an error has
-     *                                  occurred or the transaction was unsuccessful.
-     * @param bool        $AutoCommit   Determines whether the changes of the transaction will be committed automatically if the
-     *                                  transaction was successful.
+     * @param bool        $AutoRollback Determines whether the changes of the transaction will be rolled back automatically if an error has occurred or the transaction was unsuccessful.
+     * @param bool        $AutoCommit   Determines whether the changes of the transaction will be committed automatically if the transaction was successful.
      *
      * @return \vDesk\DataProvider\MsSQL\Transaction The transaction to execute.
      */

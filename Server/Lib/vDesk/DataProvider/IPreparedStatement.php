@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace vDesk\DataProvider;
 
 /**
- * Interface IPreparedStatement that represents a ...
+ * Interface for prepared statements.
  *
  * @package vDesk\DataProvider
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 interface IPreparedStatement {
     
@@ -18,7 +18,7 @@ interface IPreparedStatement {
      *
      * @return \vDesk\DataProvider\IPreparedStatement The instance itself for further chaining.
      */
-    public function Apply(...$Values): IPreparedStatement;
+    public function Apply(mixed ...$Values): IPreparedStatement;
     
     /**
      * Executes the SQL-statement of the IPreparedStatement against a database.

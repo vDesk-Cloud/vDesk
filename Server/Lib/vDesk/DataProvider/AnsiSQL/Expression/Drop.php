@@ -34,7 +34,7 @@ abstract class Drop implements IDrop {
      * @inheritDoc
      */
     public function Schema(string $Name): static {
-        $this->Statement .= "SCHEMA " . DataProvider::EscapeField($Name);
+        $this->Statement .= "SCHEMA " . DataProvider::SanitizeField($Name);
         return $this;
     }
 
@@ -42,7 +42,7 @@ abstract class Drop implements IDrop {
      * @inheritDoc
      */
     public function Table(string $Name): static {
-        $this->Statement .= "TABLE " . DataProvider::EscapeField($Name);
+        $this->Statement .= "TABLE " . DataProvider::SanitizeField($Name);
         return $this;
     }
 
