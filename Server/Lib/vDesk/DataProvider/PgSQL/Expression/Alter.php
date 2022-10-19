@@ -56,6 +56,7 @@ class Alter extends DataProvider\AnsiSQL\Expression\Alter {
                     $Column["Nullable"] ?? false,
                     $Column["Autoincrement"] ?? false,
                     $Column["Default"] ?? "",
+                    $Column["Size"] ?? null,
                     $Column["OnUpdate"] ?? null
                 );
         }
