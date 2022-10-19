@@ -34,7 +34,7 @@ abstract class Distinct implements IAggregateFunction {
      * @return string The string representation of the Distinct.
      */
     public function __toString(): string {
-        return static::Name . "(" . ($this->Distinct ? "DISTINCT " : "") . DataProvider::EscapeField($this->Field) . ")";
+        return static::Name . "(" . ($this->Distinct ? "DISTINCT " : "") . DataProvider::SanitizeField($this->Field) . ")";
     }
 
 }
