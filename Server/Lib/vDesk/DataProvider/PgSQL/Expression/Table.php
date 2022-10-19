@@ -91,7 +91,10 @@ abstract class Table {
                 static::Types[Type::BigInt] => "BIGSERIAL"
             };
         } else {
-            $Field[] = static::Types[$Type & ~DataProvider\Type::Unsigned] . ($Size !== null ? "({$Size})" : "");
+            $Field[] = match (static::Types[$Type & ~Type::Unsigned]) {
+                static::Types[Type::Char], static::Types[Type::VarChar] => static::Types[$Type] . ($Size !== null ? "({$Size})" : ""),
+                default => static::Types[$Type & ~DataProvider\Type::Unsigned]
+            };
         }
 
         $Field[] = $Nullable ? DataProvider::$NULL : "NOT " . DataProvider::$NULL;
