@@ -128,8 +128,8 @@ use vDesk\Pages\Functions;
     <section id="TypeCompliance">
         <h4>Type compliance</h4>
         <p>
-            vDesk strictly follows a strictly type-safe approach of development.<br>
-            That means source code has to written as much type-safe as possible.
+            vDesk follows a strict type-safe approach of development.<br>
+            That means source code has to be written as much type-safe as possible.
         </p>
         <h5>PHP</h5>
         <p>

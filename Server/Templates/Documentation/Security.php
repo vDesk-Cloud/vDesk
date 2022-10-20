@@ -40,7 +40,7 @@ use vDesk\Pages\Functions;
             Security is managed through groups for global rights and "Access Control Lists" for single elements.
         </p>
         <p>
-            In general, the permissions follow the principle of "permission over prohibition", this means if a user has
+            In general, the permissions follow the principle of "permission over prohibition", this means if a user has a permission, it will be granted no matter how many prohibitions exist.
         </p>
     </section>
     <section id="Users">
