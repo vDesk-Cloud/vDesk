@@ -23,7 +23,7 @@ In the installation directory, run ```php Setup.phar```.
 
 The installer will guide you through the rest of the setup.
 
-Are more detailed overview of the installation process is available [here](https://vdesk.cloud/vDesk/Page/GetvDesk)
+A more detailed overview of the installation process is available [here](https://vdesk.cloud/vDesk/Page/GetvDesk)
 
 ## Contribute
 If you want to contribute to this project, consider reading the [contribution-guideline](https://vdesk.cloud/vDesk/Page/Contribute) first.
