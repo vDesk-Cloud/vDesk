@@ -16,12 +16,12 @@ use vDesk\Pages\Functions;
         </p>
         <h4>Standard release</h4>
         <ul class="Downloads">
-            <li>GitHub.com <a href="https://www.github.com/vDesk-Cloud/vDesk/releases/Setup.phar" download>Setup.phar</a></li>
+            <li>GitHub.com <a href="https://github.com/vDesk-Cloud/vDesk/releases/download/Current/Setup.phar" download>Setup.phar</a></li>
             <li>vDesk.cloud <a href="<?= Functions::URL("Downloads", "Setup.phar") ?>" download>Setup.phar</a></li>
         </ul>
         <h4>Development bundle</h4>
         <ul class="Downloads">
-            <li>GitHub.com <a href="https://www.github.com/vDesk-Cloud/vDesk/releases/Setup-Dev.phar" download>Setup-Dev.phar</a></li>
+            <li>GitHub.com <a href="https://github.com/vDesk-Cloud/vDesk/releases/download/Current/Setup-Dev.phar" download>Setup-Dev.phar</a></li>
             <li>vDesk.cloud <a href="<?= Functions::URL("Downloads", "Setup-Dev.phar") ?>" download>Setup-Dev.phar</a></li>
         </ul>
         <p>The development bundle contains every package existing within the repository</p>
