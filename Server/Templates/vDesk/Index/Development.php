@@ -11,7 +11,7 @@ use vDesk\Documentation\Code;
                 <p>
                     v<span style="color: #2AB0ED">D</span>esk aims to provide a high level of modularity through APIs to establish a developer friendly environment.<br>
                 </p>
-                <a class="Button" href="<?= Functions::URL("Documentation", "Category", "Server", "Topic", "Architecture") ?>">Learn more about how vDesk works</a>
+                <a class="Button" href="<?= Functions::URL("Documentation", "Topic", "Architecture") ?>">Learn more about how vDesk works</a>
             </div>
                 <pre><code><?= Code\Language::JS ?>
 <?= Code::BlockComment("/**
@@ -67,7 +67,7 @@ use vDesk\Documentation\Code;
                     Instead of relying on a complicated ORM, vDesk brings it's own abstract way of communicating with databases that allows developers to just "express" in an
                     SQL-esque manner what they really want to do.<br>
                 </p>
-                <a class="Button" href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", "Expressions") ?>">Learn more about Expressions</a>
+                <a class="Button" href="<?= Functions::URL("Documentation", "Category", "Server", "Topic", "Database#Expressions") ?>">Learn more about Expressions</a>
             </div>
                 <pre class="Permissions"><code><?= Code\Language::PHP ?>
 <?= Code::Variable("\$Permissions") ?> = \vDesk\DataProvider\<?= Code::Class("Expression") ?>
