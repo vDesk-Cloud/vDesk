@@ -31,38 +31,55 @@ use vDesk\Pages\Functions;
     <section>
         <h3>Who the heck made all this stuff?</h3>
         <p>
-            <img style="max-width: 250px !important; float:left; padding: 5px; background-color: #333333; margin: 25px" src="<?= Functions::Image("vDesk", "Me.jpg") ?>" class="Author"
+            <img style="max-width: 250px !important; float:right; padding: 5px; background-color: #333333; margin: 25px" src="<?= Functions::Image("vDesk", "Me.jpg") ?>" class="Author"
                  alt="Author"><br>
             If you're wondering who's the person behind this project, let me answer this question and introduce myself:<br>
-            Hi, I'm Kerry!<br><br>
-            I'm the cause of this huge pile of code.
-            I am a passionate PHP-, JS-, C#- and SQL-developer living in the beautiful and castle-rich german federal state of "Hessen" and I'm the author of this huge pile of source
-            code to hopefully <span style="text-decoration: line-through;">conquer</span> support the world.<br><br>
-
+        </p>
+        <p>
+            Hi, I'm Kerry!<br>
+            I am a passionate PHP-, JS-, C#- and SQL-developer living in the beautiful and castle-rich german federal state of "Hessen" and I'm the cause of this huge pile of source
+            code to hopefully <span style="text-decoration: line-through;">conquer</span> support the world.
+        </p>
+        <p>
+            If I'm not occupied with developing software and abusing coffee machines, you can usually find me enjoying pizza, bullying my cats or screwing on car engines,
+            but after all hobbies I've tried so far, I can clearly tell that programming is my favorite passion of all.
+        </p>
+        <p>
+            Due to earning my first money with small Wordpress projects while being a teenager,
+            I've spent the most of my life now as a developer for document management systems, booking and eventplanning solutions as well as shop systems for insurances or clothing.<br>
+            So I came to know deep technical abysses in the past which sometimes let me doubt about humanity.
+        </p>
+        <p>
+            So you may wondering why I made a cloud system with a bit of an "enterprise" and "collaborative" touch then?<br>
+            Well, I've never thought that I would make the same "mistake", but working on "historically grown" software with unrealistic deadlines
+            somehow sparked the need to create something different than those in me, resulting in the project you're currently reading about.
             <br>
-            PS: I'm hoping this project never won't punish any commercial developers over the work day which have to deal with crappy APIs and packages.<br>
-            ...I've come to know deep technical abysses in the past with certain enterprise "Document Management Systems"<br>
-            <br>
-            So you may wonder why I made a cloud system with a bit of an "enterprise" and "collaborative" touch?<br>
-            <br>
-            Well, at least I would say, I know how you shouldn't do it, but after all; it makes a lot of fun developing "fancy stuff" 😅.
-        </p><br>
+            At least I would say, I know how you shouldn't do it, but after all; it still makes a lot of fun developing software and being challenged with customer requirements.
+        </p>
+        <p>
+            PS: I'm hoping this project never won't punish any commercial developers over the work day which have to deal with crappy APIs and packages 😅.
+        </p>
     </section>
     <section>
         <h3>How this mess started</h3>
         <p>
             It all started with the need for a simple password protected cloud system where i can just throw in my files and access them from anywhere.<br>
-            But because I had a constant flow of new ideas for additional features, I kept on developing and improving the system in my freetime until it became, what iti is now.
+            Unfortunately, every current available solution at this time felt somehow clunky and over-engineered while still not satisfying my rather simple requirements
+            or simply hasn't been able to host on my own server.
         </p>
         <p>
-            While development, vDesk became kind of a "playground" for me, where I can try out new technologies and improve my skills as a developer.<br>
+            So i began experimenting with JavaScript and PHP and created a small interface to my webserver although I've been working as a .NET-developer at this moment.<br>
+            But because I had a constant flow of new ideas for additional features, I kept on developing and improving the system in my freetime until it became, what it is now.
+        </p>
+        <p>
+            While development, vDesk became kind of a "playground" for me, where I can try out new technologies and constantly improve my skills as a developer.<br>
             After many years of figuring out the best way to develop and continuously refactoring,<br>
             I've reached a point, where I thought "hey, maybe someone could use it all" and
-            finally took the step to release vDesk to the public.
+            finally took the step to release vDesk to the public domain.
         </p>
         <p>
             vDesk has now reached such a scale that it is no longer easy to work on it alone.<br>
-            Therefore I have the hope to lay the foundation for a great community, creating together an even greater project.<br>
+            Therefore I have the hope to lay down the foundation for a great community, creating together an even greater project.<br>
         </p>
     </section>
 
