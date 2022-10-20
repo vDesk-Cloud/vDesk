@@ -1,5 +1,5 @@
 # vDesk
-This is the vDesk project repository.
+This is the official vDesk project repository.
 
 vDesk is an entirely handcrafted platform-independent and modular open source cloud platform based on pure JavaScript, PHP and SQL
 
