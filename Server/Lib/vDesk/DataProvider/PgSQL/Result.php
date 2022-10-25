@@ -4,8 +4,6 @@ declare(strict_types=1);
 namespace vDesk\DataProvider\PgSQL;
 
 use vDesk\DataProvider\IResult;
-use vDesk\Struct\Collections\Collection;
-use vDesk\Struct\Collections\IEnumerable;
 use vDesk\Struct\Properties;
 
 /**
@@ -165,52 +163,4 @@ class Result implements \Iterator, IResult {
         return $this?->ResultSet?->num_rows ?? 0;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function Find(callable $Predicate): mixed {
-        return (new Collection($this))->Find($Predicate);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function Sort(callable $Predicate): bool {
-        return (new Collection($this))->Sort($Predicate);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function Filter(callable $Predicate): IEnumerable {
-        return (new Collection($this))->Filter($Predicate);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function Map(callable $Predicate): IEnumerable {
-        return (new Collection($this))->Map($Predicate);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function Reduce(callable $Predicate, $InitialValue = null): mixed {
-        return (new Collection($this))->Reduce($Predicate, $InitialValue);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function Any(callable $Predicate): bool {
-        return (new Collection($this))->Any($Predicate);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function Every(callable $Predicate): bool {
-        return (new Collection($this))->Every($Predicate);
-    }
 }
