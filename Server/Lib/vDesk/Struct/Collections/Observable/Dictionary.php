@@ -3,19 +3,20 @@ declare(strict_types=1);
 
 namespace vDesk\Struct\Collections\Observable;
 
+use vDesk\Struct\Collections\IObservable;
 use vDesk\Struct\Collections\Typed\CallableCollection;
 
 /**
  * Represents an observable generic Dictionary.
  *
- * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnAdd    $Gets the "OnAdd"-Eventlisteners of the Dictionary.
- * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnDelete $Gets the "OnDelete"-Eventlisteners of the Dictionary.
- * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnChange $Gets the "OnChange"-Eventlisteners of the Dictionary.
- * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnClear  $Gets the "OnClear"-Eventlisteners of the Dictionary.
+ * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnAdd     $Gets the "OnAdd"-Eventlisteners of the Dictionary.
+ * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnRemove  $Gets the "OnRemove"-Eventlisteners of the Dictionary.
+ * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnReplace $Gets the "OnReplace"-Eventlisteners of the Dictionary.
+ * @property \vDesk\Struct\Collections\Typed\CallableCollection $OnClear   $Gets the "OnClear"-Eventlisteners of the Dictionary.
  * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Dictionary extends \vDesk\Struct\Collections\Dictionary {
+class Dictionary extends \vDesk\Struct\Collections\Dictionary implements IObservable {
 
     /**
      * The 'OnAdd' callbacks of the Collection.
@@ -25,18 +26,18 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
     protected CallableCollection $OnAdd;
 
     /**
-     * The 'OnDelete' callbacks of the Collection.
+     * The 'OnRemove' callbacks of the Collection.
      *
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
-    protected CallableCollection $OnDelete;
+    protected CallableCollection $OnRemove;
 
     /**
-     * The 'OnChange' callbacks of the Collection.
+     * The 'OnReplace' callbacks of the Collection.
      *
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
-    protected CallableCollection $OnChange;
+    protected CallableCollection $OnReplace;
 
     /**
      * The 'OnClear' callbacks of the Collection.
@@ -52,23 +53,19 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
      */
     private bool $Dispatching = false;
 
-    /**
-     * Initializes a new instance of the Dictionary class.
-     *
-     * @param iterable $Elements Initializes the Dictionary with the specified map of elements.
-     */
-    public function __construct(iterable $Elements = []) {
-        $this->OnAdd    = new CallableCollection();
-        $this->OnDelete = new CallableCollection();
-        $this->OnChange = new CallableCollection();
-        $this->OnClear  = new CallableCollection();
+    /** @inheritdoc */
+    public function __construct(iterable $Elements = [], iterable $Add = [], iterable $Remove = [], iterable $Replace = [], iterable $Clear = []) {
+        $this->OnAdd     = new CallableCollection($Add);
+        $this->OnRemove  = new CallableCollection($Remove);
+        $this->OnReplace = new CallableCollection($Replace);
+        $this->OnClear   = new CallableCollection($Clear);
         parent::__construct($Elements);
         $this->Dispatching = true;
         $this->AddProperties([
-            "OnAdd"    => [\Get => fn&(): CallableCollection => $this->OnAdd],
-            "OnDelete" => [\Get => fn&(): CallableCollection => $this->OnDelete],
-            "OnChange" => [\Get => fn&(): CallableCollection => $this->OnChange],
-            "OnClear"  => [\Get => fn&(): CallableCollection => $this->OnClear]
+            "OnAdd"     => [\Get => fn&(): CallableCollection => $this->OnAdd],
+            "OnRemove"  => [\Get => fn&(): CallableCollection => $this->OnRemove],
+            "OnReplace" => [\Get => fn&(): CallableCollection => $this->OnReplace],
+            "OnClear"   => [\Get => fn&(): CallableCollection => $this->OnClear]
         ]);
     }
 
@@ -86,7 +83,9 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
     public function Insert(string $Before, string $Key, mixed $Element): void {
         if($this->Dispatching) {
             foreach($this->OnAdd as $OnAdd) {
-                $OnAdd($this, $Element);
+                if(!($OnAdd($Element, $this) ?? true)) {
+                    return;
+                }
             }
         }
         parent::Insert($Before, $Key, $Element);
@@ -96,7 +95,9 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
     public function InsertAfter(string $After, string $Key, mixed $Element): void {
         if($this->Dispatching) {
             foreach($this->OnAdd as $OnAdd) {
-                $OnAdd($this, $Element);
+                if(!($OnAdd($Element, $this) ?? true)) {
+                    return;
+                }
             }
         }
         parent::InsertAfter($After, $Key, $Element);
@@ -105,8 +106,10 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
     /** @inheritdoc */
     public function Remove(mixed $Element): mixed {
         if($this->Dispatching) {
-            foreach($this->OnDelete as $OnDelete) {
-                $OnDelete($this, $Element);
+            foreach($this->OnRemove as $OnRemove) {
+                if(!($OnRemove($Element, $this) ?? true)) {
+                    return null;
+                }
             }
         }
         return parent::Remove($Element);
@@ -114,12 +117,12 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
 
     /** @inheritdoc */
     public function RemoveAt(string $Key): mixed {
-        if($this->Dispatching) {
-            $Element = parent::RemoveAt($Key);
-            foreach($this->OnDelete as $OnDelete) {
-                $OnDelete($this, $Element);
+        if($this->Dispatching && isset($this->Elements[$Key])) {
+            foreach($this->OnRemove as $OnRemove) {
+                if(!($OnRemove($this->Elements[$Key], $this) ?? true)) {
+                    return null;
+                }
             }
-            return $Element;
         }
         return parent::RemoveAt($Key);
     }
@@ -127,8 +130,10 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
     /** @inheritdoc */
     public function Replace(mixed $Element, mixed $Replacement): void {
         if($this->Dispatching) {
-            foreach($this->OnChange as $OnChange) {
-                $OnChange($this, $Replacement);
+            foreach($this->OnReplace as $OnReplace) {
+                if(!($OnReplace($Element, $Replacement, $this) ?? true)) {
+                    return;
+                }
             }
         }
         parent::Replace($Element, $Replacement);
@@ -136,9 +141,11 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
 
     /** @inheritdoc */
     public function ReplaceAt(string $Key, mixed $Element): mixed {
-        if($this->Dispatching) {
-            foreach($this->OnChange as $OnChange) {
-                $OnChange($this, $Element);
+        if($this->Dispatching && isset($this->Elements[$Key])) {
+            foreach($this->OnReplace as $OnReplace) {
+                if(!($OnReplace($this->Elements[$Key], $Element, $this) ?? true)) {
+                    return null;
+                }
             }
         }
         return parent::ReplaceAt($Key, $Element);
@@ -148,7 +155,9 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
     public function Clear(): void {
         if($this->Dispatching) {
             foreach($this->OnClear as $OnClear) {
-                $OnClear($this);
+                if(!($OnClear($this) ?? true)) {
+                    return;
+                }
             }
         }
         parent::Clear();
@@ -166,5 +175,30 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary {
      */
     public function StopDispatch(): void {
         $this->Dispatching = false;
+    }
+
+    /** @inheritDoc */
+    public function Dispatching(?bool $Dispatching): bool {
+        return $Dispatching === null ? $this->Dispatching : $this->Dispatching = $Dispatching;
+    }
+
+    /** @inheritDoc */
+    public function AddEventListener(string $Event, callable $Listener): void {
+        match ($Event) {
+            IObservable::Add => $this->OnAdd->Add($Listener),
+            IObservable::Remove => $this->OnRemove->Add($Listener),
+            IObservable::Replace => $this->OnReplace->Add($Listener),
+            IObservable::Clear => $this->OnClear->Add($Listener)
+        };
+    }
+
+    /** @inheritDoc */
+    public function RemoveEventListener(string $Event, callable $Listener): void {
+        match ($Event) {
+            IObservable::Add => $this->OnAdd->Remove($Listener),
+            IObservable::Remove => $this->OnRemove->Remove($Listener),
+            IObservable::Replace => $this->OnReplace->Remove($Listener),
+            IObservable::Clear => $this->OnClear->Remove($Listener)
+        };
     }
 }
