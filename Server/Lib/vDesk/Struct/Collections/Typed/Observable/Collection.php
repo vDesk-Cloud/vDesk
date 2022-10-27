@@ -23,28 +23,28 @@ class Collection extends \vDesk\Struct\Collections\Typed\Collection implements I
      *
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
-    protected CallableCollection $OnAdd;
+    public CallableCollection $OnAdd;
 
     /**
      * The 'OnDelete' callbacks of the Collection.
      *
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
-    protected CallableCollection $OnRemove;
+    public CallableCollection $OnRemove;
 
     /**
      * The 'OnChange' callbacks of the Collection.
      *
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
-    protected CallableCollection $OnReplace;
+    public CallableCollection $OnReplace;
 
     /**
      * The 'OnClear' callbacks of the Collection.
      *
      * @var \vDesk\Struct\Collections\Typed\CallableCollection
      */
-    protected CallableCollection $OnClear;
+    public CallableCollection $OnClear;
 
     /**
      * Flag indicating whether the Collection is currently dispatching events.
@@ -54,19 +54,13 @@ class Collection extends \vDesk\Struct\Collections\Typed\Collection implements I
     private bool $Dispatching = false;
 
     /** @inheritdoc */
-    public function __construct(iterable $Elements = [], iterable $Add = [], iterable $Remove = [], iterable $Replace = [], iterable $Clear = []) {
-        $this->OnAdd     = new CallableCollection($Add);
-        $this->OnRemove  = new CallableCollection($Remove);
-        $this->OnReplace = new CallableCollection($Replace);
-        $this->OnClear   = new CallableCollection($Clear);
+    public function __construct(iterable $Elements = []) {
         parent::__construct($Elements);
+        $this->OnAdd       = new CallableCollection();
+        $this->OnRemove    = new CallableCollection();
+        $this->OnReplace   = new CallableCollection();
+        $this->OnClear     = new CallableCollection();
         $this->Dispatching = true;
-        $this->AddProperties([
-            "OnAdd"     => [\Get => fn&(): CallableCollection => $this->OnAdd],
-            "OnRemove"  => [\Get => fn&(): CallableCollection => $this->OnRemove],
-            "OnReplace" => [\Get => fn&(): CallableCollection => $this->OnReplace],
-            "OnClear"   => [\Get => fn&(): CallableCollection => $this->OnClear]
-        ]);
     }
 
     /** @inheritdoc */

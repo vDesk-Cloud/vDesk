@@ -32,17 +32,6 @@ interface IObservable extends IEnumerable {
     public const Clear = "Clear";
 
     /**
-     * Initializes a new instance of the IObservable class.
-     *
-     * @param iterable $Elements Initializes the IObservable with the specified set or map of elements.
-     * @param iterable $Add      Initializes the IObservable with the specified set of callables that listen on the "Add" event.
-     * @param iterable $Remove   Initializes the IObservable with the specified set of callables that listen on the "Remove" event.
-     * @param iterable $Replace  Initializes the IObservable with the specified set of callables that listen on the "Replace" event.
-     * @param iterable $Clear    Initializes the IObservable with the specified set of callables that listen on the "Clear" event.
-     */
-    public function __construct(iterable $Elements = [], iterable $Add = [], iterable $Remove = [], iterable $Replace = [], iterable $Clear = []);
-
-    /**
      * Enables or disables dispatching of events on the IObservable.
      *
      * @param null|bool $Dispatching Flag indicating whether to dispatch events.
