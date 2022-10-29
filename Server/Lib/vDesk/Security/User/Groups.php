@@ -14,39 +14,38 @@ use vDesk\Struct\Collections\Typed\Observable\Collection;
  * Represents the {@link \vDesk\Security\Group} memberships of an {@link \vDesk\Security\User}.
  *
  * @property-read int                  $Count  Gets the amount of elements in the Collection<Group>Membership.
- * @property \vDesk\Security\User|null $User   (set once) Gets or sets the ID of the belonging {@link \vDesk\Security\User} of the
- *           Groups.
+ * @property \vDesk\Security\User|null $User   (set once) Gets or sets the ID of the belonging {@link \vDesk\Security\User} of the Groups.
  * @package vDesk\Security
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Groups extends Collection implements ICollectionModel {
-    
+
     /**
      * The Type of the Groups Collection.
      */
     public const Type = Group::class;
-    
+
     /**
      * The the User of the Groups Collection.
      *
      * @var \vDesk\Security\User|null
      */
     private ?User $User;
-    
+
     /**
      * The added Groups of the Groups Collection.
      *
      * @var \vDesk\Security\Group[]
      */
     private array $Added = [];
-    
+
     /**
      * The deleted Groups of the Groups Collection.
      *
      * @var \vDesk\Security\Group[]
      */
     private array $Deleted = [];
-    
+
     /**
      * Initializes a new instance of the Groups class.
      *
@@ -63,26 +62,14 @@ class Groups extends Collection implements ICollectionModel {
                 \Set => fn(User $Value) => $this->User ??= $Value
             ]
         );
-        
-        /**
-         * Listens on the 'OnDelete'-event.
-         *
-         * @param \vDesk\Security\Groups $Sender
-         * @param \vDesk\Security\Group  $Group
-         */
-        $this->OnAdd[] = function(&$Sender, Group $Group): void {
+
+        $this->OnAdd[] = function(Group $Group): void {
             if($this->User !== null && $this->User->ID !== null) {
                 $this->Added[] = $Group;
             }
         };
-        
-        /**
-         * Listens on the 'OnDelete'-event.
-         *
-         * @param \vDesk\Security\Groups $Sender
-         * @param \vDesk\Security\Group  $Group
-         */
-        $this->OnDelete[] = function(&$Sender, Group $Group): void {
+
+        $this->OnRemove[] = function(Group $Group): void {
             if(
                 $this->User !== null
                 && $this->User->ID !== null
@@ -91,16 +78,15 @@ class Groups extends Collection implements ICollectionModel {
                 $this->Deleted[] = $Group;
             }
         };
-        $this->Added      = $this->Elements;
+
+        $this->Added = $this->Elements;
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public function ID(): ?int {
         return $this->User->ID;
     }
-    
+
     /**
      * Fills the Groups with all Groups the specified User is a member of.
      *
@@ -111,7 +97,7 @@ class Groups extends Collection implements ICollectionModel {
     public static function FromUser(User $User): Groups {
         return (new static([], $User))->Fill();
     }
-    
+
     /**
      * Fills the Groups with all Groups the specified User is a member of.
      *
@@ -122,35 +108,27 @@ class Groups extends Collection implements ICollectionModel {
     public static function FromUserID(int $ID): Groups {
         return (new static([], new User($ID)))->Fill();
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritDoc */
     public function Find(callable $Predicate): ?Group {
         return parent::Find($Predicate);
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritDoc */
     public function Remove($Element): Group {
         return parent::Remove($Element);
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritDoc */
     public function RemoveAt(int $Index): Group {
         return parent::RemoveAt($Index);
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritDoc */
     public function offsetGet($Index): Group {
         return parent::offsetGet($Index);
     }
-    
+
     /**
      * Fills the Groups Collection with its values from the database.
      *
@@ -175,7 +153,7 @@ class Groups extends Collection implements ICollectionModel {
         $this->StartDispatch();
         return $this;
     }
-    
+
     /**
      * Saves possible changes if an ID of a valid {@link \vDesk\Security\User} has been supplied.
      */
@@ -185,7 +163,7 @@ class Groups extends Collection implements ICollectionModel {
             if(!$this->Any(static fn(Group $Group): bool => $Group->ID === Group::Everyone)) {
                 $this->Add(new Group(Group::Everyone));
             }
-            
+
             //Save added Groups.
             foreach($this->Added as $Added) {
                 Expression::Insert()
@@ -208,7 +186,7 @@ class Groups extends Collection implements ICollectionModel {
             }
         }
     }
-    
+
     /**
      * Deletes all {@link \vDesk\Security\Group} memberships of the associated {@link \vDesk\Security\User}.
      */
@@ -220,7 +198,7 @@ class Groups extends Collection implements ICollectionModel {
                       ->Execute();
         }
     }
-    
+
     /**
      * Creates a Groups from a specified data view.
      *
@@ -237,7 +215,7 @@ class Groups extends Collection implements ICollectionModel {
             })()
         );
     }
-    
+
     /**
      * Creates a data view of the Groups.
      *
@@ -257,5 +235,5 @@ class Groups extends Collection implements ICollectionModel {
             []
         );
     }
-    
+
 }

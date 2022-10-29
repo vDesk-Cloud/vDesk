@@ -21,15 +21,13 @@ class Security extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.2";
+    public const RequiredVersion = "1.0.3";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Fixed wrong parameter type of updating ACLs.
-- Fixed localisation in user editor.
-- Made ACLs compatible to previous changes.
+- Added compatibility to vDesk-1.2.0.
 Description;
 
     /**
@@ -37,32 +35,18 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
-            Package::Client => [
-                Package::Lib => [
-                    "vDesk/Security/User/Editor.js"
-                ]
-            ],
             Package::Server => [
-                Package::Lib     => [
-                    "vDesk/Security/AccessControlList.php"
-                ],
-                Package::Modules => [
-                    "Security.php"
+                Package::Lib => [
+                    "vDesk/Security/AccessControlList.php",
+                    "vDesk/Security/User/Groups.php"
                 ]
             ]
         ],
         self::Undeploy => [
-            Package::Client => [
-                Package::Lib => [
-                    "vDesk/Security/User/Editor.js"
-                ]
-            ],
             Package::Server => [
-                Package::Lib     => [
-                    "vDesk/Security/AccessControlList.php"
-                ],
-                Package::Modules => [
-                    "Security.php"
+                Package::Lib => [
+                    "vDesk/Security/AccessControlList.php",
+                    "vDesk/Security/User/Groups.php"
                 ]
             ]
         ]

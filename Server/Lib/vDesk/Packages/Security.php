@@ -31,7 +31,7 @@ final class Security extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.3";
+    public const Version = "1.0.4";
 
     /**
      * The name of the Package.
