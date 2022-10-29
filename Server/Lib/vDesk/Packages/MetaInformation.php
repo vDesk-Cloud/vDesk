@@ -28,7 +28,7 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.3";
+    public const Version = "1.0.4";
     
     /**
      * The name of the Package.
