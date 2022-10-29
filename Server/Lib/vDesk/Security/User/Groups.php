@@ -139,7 +139,7 @@ class Groups extends Collection implements ICollectionModel {
         if($this->User === null || $this->User->ID === null) {
             throw new IDNullException();
         }
-        $this->StopDispatch();
+        $this->Dispatching(false);
         foreach(
             Expression::Select("Group")
                       ->From("Security.GroupMemberships")
@@ -150,7 +150,7 @@ class Groups extends Collection implements ICollectionModel {
         ) {
             $this->Add(new Group((int)$Group["Group"]));
         }
-        $this->StartDispatch();
+        $this->Dispatching(true);
         return $this;
     }
 
