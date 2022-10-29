@@ -13,56 +13,56 @@ use vDesk\Struct\Collections\Typed\Observable\Dictionary;
  *
  * @property-read string|null $Domain Gets the domain of the Settings.
  * @package vDesk\Configuration\Settings\Remote
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Settings extends Dictionary implements IModel {
-    
+
     /**
      * The Type of the value of the Settings.
      */
     public const Type = Setting::class;
-    
+
     /**
      * The domain access-key of the Settings.
      *
      * @var null|string
      */
     protected ?string $Domain;
-    
+
     /**
      * The added Settings of the Settings Dictionary.
      *
      * @var array
      */
     protected array $Added = [];
-    
+
     /**
      * The deleted Settings of the Settings Dictionary.
      *
      * @var array
      */
     protected array $Deleted = [];
-    
+
     /**
      * Initializes a new instance of the Settings class.
      *
      * @param \vDesk\Configuration\Settings\Remote\Setting[] $Settings Initializes the Settings with the specified Dictionary of Settings.
-     * @param string|null                                         $Domain   Initializes the Settings with the specified domain.
+     * @param string|null                                    $Domain   Initializes the Settings with the specified domain.
      */
     public function __construct(iterable $Settings = [], ?string $Domain = null) {
         parent::__construct($Settings);
-        $this->StopDispatch();
-        $this->OnAdd[]    = fn($_, Setting $Setting) => $this->Added[] = $Setting;
-        $this->OnDelete[] = function($_, Setting $Setting) {
-            if(!\in_array($this->Added)) {
+        $this->Dispatching(false);
+        $this->OnAdd[]    = fn(Setting $Setting) => $this->Added[] = $Setting;
+        $this->OnDelete[] = function(Setting $Setting) {
+            if(!\in_array($Setting, $this->Added)) {
                 $this->Deleted[] = $Setting;
             }
         };
         $this->Domain     = $Domain;
         $this->AddProperty("Domain", [\Get => fn(): ?string => $this->Domain]);
-        $this->StartDispatch();
+        $this->Dispatching(true);
     }
-    
+
     /**
      * Fills the Settings with the configuration settings stored in the database.
      *
@@ -70,7 +70,7 @@ class Settings extends Dictionary implements IModel {
      */
     public function Fill(): Settings {
         if($this->Domain !== null) {
-            $this->StopDispatch();
+            $this->Dispatching(false);
             foreach(
                 Expression::Select("Tag", "Value", "Type")
                           ->From("Configuration.Settings")
@@ -80,11 +80,11 @@ class Settings extends Dictionary implements IModel {
             ) {
                 $this->Add($Setting["Tag"], new Setting($Setting["Tag"], $Setting["Value"], $Setting["Type"]));
             }
-            $this->StartDispatch();
+            $this->Dispatching(true);
         }
         return $this;
     }
-    
+
     /**
      * Saves the values of the Settings to the database.
      *
@@ -125,7 +125,7 @@ class Settings extends Dictionary implements IModel {
                           )
                           ->Execute();
             }
-            
+
             /** @var \vDesk\Configuration\Settings\Remote\Setting $Setting */
             foreach(
                 $this->Filter(fn(Setting $Setting): bool => !\in_array($Setting, $this->Added))
@@ -153,32 +153,32 @@ class Settings extends Dictionary implements IModel {
                               ]
                           )
                           ->Execute();
-                
+
             }
         }
     }
-    
+
     /**
      * @inheritdoc
      */
     public function Find(callable $Predicate): ?Setting {
         return parent::Find($Predicate);
     }
-    
+
     /**
      * @inheritdoc
      */
     public function Remove($Element): Setting {
         return parent::Remove($Element);
     }
-    
+
     /**
      * @inheritdoc
      */
     public function RemoveAt($Key): Setting {
         return parent::RemoveAt($Key);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -187,21 +187,21 @@ class Settings extends Dictionary implements IModel {
             ? $this->Elements[$Tag]->Value
             : parent::offsetGet($Tag);
     }
-    
+
     /**
      * @inheritDoc
      */
     public static function FromDataView(mixed $DataView): IDataView {
         // TODO: Implement FromDataView() method.
     }
-    
+
     /**
      * @inheritDoc
      */
     public function ID(): ?string {
         return $this->Domain;
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -214,7 +214,7 @@ class Settings extends Dictionary implements IModel {
             []
         );
     }
-    
+
     /**
      * @inheritDoc
      */
