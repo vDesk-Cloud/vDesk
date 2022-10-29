@@ -19,7 +19,7 @@ use vDesk\Struct\Type;
  * @property int    $ID     Gets or sets the ID of the Mask.
  * @property string $Name   Gets or sets the Name of the Mask.
  * @package vDesk/MetaInformation
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Mask extends Collection implements ICollectionModel {
 
@@ -55,13 +55,13 @@ class Mask extends Collection implements ICollectionModel {
      * @var \vDesk\MetaInformation\Mask\Row[]
      */
     protected array $Deleted = [];
-    
+
     /**
      * Initializes a new instance of the Mask class.
      *
-     * @param iterable $Rows Initializes the Mask with the specified Collection of Rows.
-     * @param int|null      $ID   Initializes the Mask with the specified ID.
-     * @param string|null   $Name Initializes the Mask with the specified name.
+     * @param iterable    $Rows Initializes the Mask with the specified Collection of Rows.
+     * @param int|null    $ID   Initializes the Mask with the specified ID.
+     * @param string|null $Name Initializes the Mask with the specified name.
      */
     public function __construct(iterable $Rows = [], protected ?int $ID = null, protected ?string $Name = null) {
         parent::__construct($Rows);
@@ -89,68 +89,43 @@ class Mask extends Collection implements ICollectionModel {
             ]
         ]);
 
-        /**
-         * Listens on the 'OnAdd'-event
-         *
-         * @param \vDesk\MetaInformation\Mask     $Sender
-         * @param \vDesk\MetaInformation\Mask\Row $Row
-         */
-        $this->OnAdd[] = function(&$Sender, Row $Row): void {
+        $this->OnAdd[] = function(Row $Row): void {
 
             //Check if the row has a set index, else set it to the last one.
             if($Row->Index === null) {
-                $Row->Index = ($this->Count > 0) ? $this->Elements[$this->Count - 1]->Index + 1 : 0;
+                $Row->Index = $this->Count > 0 ? $this->Elements[$this->Count - 1]->Index + 1 : 0;
             } else if(
                 $this->Count > 0
                 && ($TempRow = $this->Find(static fn(Row $Compare): bool => $Compare->Index === $Row->Index)) !== null
             ) {
-                //$this->Insert($this->IndexOf($oTempRow), $Row);
                 //If true, append it between and shift the index of the following rows.
                 for($Index = $this->IndexOf($TempRow); $Index < $this->Count; $Index++) {
                     $this->Elements[$Index]->Index++;
                 }
             }
 
-            //Check if the mask is not virtual and if the row to add is virtual.
             if($this->ID !== null && $Row->ID === null) {
                 $this->Added[] = $Row;
             }
-
-            //Reorder the indices.
             $this->Reorder();
         };
 
-        /**
-         * Listens on the 'OnDelete'-event
-         *
-         * @param \vDesk\MetaInformation\Mask     $Sender
-         * @param \vDesk\MetaInformation\Mask\Row $Row
-         */
-        $this->OnDelete[] = function(&$Sender, Row $Row): void {
-
-            //Check if the mask and row are not virtual.
+        $this->OnRemove[] = function(Row $Row): void {
             if($this->ID !== null && $Row->ID !== null) {
                 $this->Deleted[] = $Row;
             }
-
-            //Reorder the indices.
             $this->Reorder();
         };
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritdoc */
     public function ID(): ?int {
         return $this->ID;
     }
 
     /**
-     * Fills the Mask with its values from the database.
-     *
-     * @return \vDesk\MetaInformation\Mask The filled Mask.
      * @throws \vDesk\Data\IDNullException Thrown if the Mask is virtual.
-     *
+     * @inheritdoc
      */
     public function Fill(): Mask {
 
@@ -201,10 +176,8 @@ class Mask extends Collection implements ICollectionModel {
         $this->StartDispatch();
         return $this;
     }
-    
-    /**
-     * Saves possible changes if a valid ID was supplied, or creates a new database-entry if none was supplied.
-     */
+
+    /** @inheritdoc */
     public function Save(): void {
 
         $this->Sort(static fn(Row $First, Row $Second) => $First->Index <=> $Second->Index);
@@ -286,9 +259,7 @@ class Mask extends Collection implements ICollectionModel {
         }
     }
 
-    /**
-     * Deletes the Mask, its MaskRows and vDesk\Data\DataSets set under this Mask.
-     */
+    /** @inheritdoc */
     public function Delete(): void {
         if($this->ID !== null) {
 
@@ -322,13 +293,7 @@ class Mask extends Collection implements ICollectionModel {
         }
     }
 
-    /**
-     * Creates a Mask from a specified data view.
-     *
-     * @param array $DataView The data to use to create a Mask.
-     *
-     * @return \vDesk\MetaInformation\Mask A Mask created from the specified data view.
-     */
+    /** @inheritdoc */
     public static function FromDataView(mixed $DataView): Mask {
         return new static(
             (static function() use ($DataView): \Generator {
@@ -341,13 +306,7 @@ class Mask extends Collection implements ICollectionModel {
         );
     }
 
-    /**
-     * Creates a data view of the Mask.
-     *
-     * @param bool $Reference Flag indicating whether the data view should represent only a reference of the Mask.
-     *
-     * @return array The data view representing the current state of the Mask.
-     */
+    /** @inheritdoc */
     public function ToDataView(bool $Reference = false): array {
         return $Reference
             ? ["ID" => $this->ID]
@@ -364,23 +323,17 @@ class Mask extends Collection implements ICollectionModel {
             ];
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function Find(callable $Predicate): ?Row {
         return parent::Find($Predicate);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function RemoveAt(int $Index): Row {
         return parent::RemoveAt($Index);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function offsetGet($Offset): Row {
         if(!$this->Accessed && $this->ID !== null) {
             $this->Fill();
@@ -392,11 +345,7 @@ class Mask extends Collection implements ICollectionModel {
      * Reorders the rows of the mask ascending by their indices.
      */
     private function Reorder(): void {
-
-        //Sort the indices ascending.
         $this->Sort(static fn(Row $First, Row $Second): int => $First->Index <=> $Second->Index);
-
-        //Loop through rows and set the indices.
         foreach($this->Elements as $Index => $Row) {
             $Row->Index = $Index;
         }
