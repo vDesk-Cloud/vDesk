@@ -35,26 +35,16 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
-            Package::Client => [
+            Package::Server => [
                 Package::Lib => [
                     "vDesk/MetaInformation"
-                ]
-            ],
-            Package::Server => [
-                Package::Modules => [
-                    "MetaInformation.php"
                 ]
             ]
         ],
         self::Undeploy => [
-            Package::Client => [
+            Package::Server => [
                 Package::Lib => [
                     "vDesk/MetaInformation"
-                ]
-            ],
-            Package::Server => [
-                Package::Modules => [
-                    "MetaInformation.php"
                 ]
             ]
         ]

@@ -134,7 +134,7 @@ class Mask extends Collection implements ICollectionModel {
         }
 
         //Disable events.
-        $this->StopDispatch();
+        $this->Dispatching(false);
 
         //Refresh if filled before.
         if($this->Count > 0) {
@@ -173,7 +173,7 @@ class Mask extends Collection implements ICollectionModel {
         $this->Accessed = true;
 
         //Re-enable events.
-        $this->StartDispatch();
+        $this->Dispatching(true);
         return $this;
     }
 

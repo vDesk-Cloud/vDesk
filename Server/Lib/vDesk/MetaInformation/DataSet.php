@@ -208,21 +208,11 @@ class DataSet extends Collection implements ICollectionModel {
      * @return \vDesk\MetaInformation\DataSet A DataSet created from the specified data view.
      */
     public static function FromDataView(mixed $DataView): DataSet {
-
         $DataSet = new static(null, $DataView["ID"] ?? null);
-
-        // Stop/disable event dispatching,
-        $DataSet->StopDispatch();
-
         foreach($DataView["Rows"] ?? [] as $Data) {
             $DataSet->Add(Row::FromDataView($Data));
         }
-
         $DataSet->Mask = new Mask($DataView["Mask"] ?? null);
-
-        // Start/re-enable event dispatching,
-        $DataSet->StartDispatch();
-
         return $DataSet;
     }
 
