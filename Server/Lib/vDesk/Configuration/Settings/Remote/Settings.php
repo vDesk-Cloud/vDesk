@@ -53,7 +53,7 @@ class Settings extends Dictionary implements IModel {
         parent::__construct($Settings);
         $this->Dispatching(false);
         $this->OnAdd[]    = fn(Setting $Setting) => $this->Added[] = $Setting;
-        $this->OnDelete[] = function(Setting $Setting) {
+        $this->OnRemove[] = function(Setting $Setting) {
             if(!\in_array($Setting, $this->Added)) {
                 $this->Deleted[] = $Setting;
             }
@@ -158,53 +158,39 @@ class Settings extends Dictionary implements IModel {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritDoc */
     public function Find(callable $Predicate): ?Setting {
         return parent::Find($Predicate);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritDoc */
     public function Remove($Element): Setting {
         return parent::Remove($Element);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritDoc */
     public function RemoveAt($Key): Setting {
         return parent::RemoveAt($Key);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritDoc */
     public function offsetGet($Tag) {
         return $this->offsetExists($Tag)
             ? $this->Elements[$Tag]->Value
             : parent::offsetGet($Tag);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function FromDataView(mixed $DataView): IDataView {
         // TODO: Implement FromDataView() method.
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function ID(): ?string {
         return $this->Domain;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function ToDataView(bool $Reference = false) {
         return $this->Reduce(
             static function(array $Settings, Setting $Setting): array {
@@ -215,9 +201,7 @@ class Settings extends Dictionary implements IModel {
         );
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function Delete(): void {
         if($this->Domain !== null) {
             Expression::Delete()
