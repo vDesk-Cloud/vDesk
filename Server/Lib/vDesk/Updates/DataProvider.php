@@ -21,14 +21,13 @@ final class DataProvider extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.1";
+    public const RequiredVersion = "1.0.2";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Fixed field escapement of CREATE and DROP statements.
-- Fixed missing field size indicator.
+- Removed IEnumerable dependency.
 Description;
 
     /**
@@ -38,24 +37,20 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk/DataProvider/AnsiSQL/Expression/Create.php",
-                    "vDesk/DataProvider/AnsiSQL/Expression/Drop.php",
-                    "vDesk/DataProvider/AnsiSQL/Expression/Functions/Distinct.php",
-                    "vDesk/DataProvider/PgSQL/Expression/Create.php",
-                    "vDesk/DataProvider/PgSQL/Expression/Alter.php",
-                    "vDesk/DataProvider/PgSQL/Expression/Table.php"
+                    "vDesk/DataProvider/IResult.php",
+                    "vDesk/DataProvider/MySQL/Result.php",
+                    "vDesk/DataProvider/MsQL/Result.php",
+                    "vDesk/DataProvider/PgSQL/Result.php"
                 ]
             ]
         ],
         self::Undeploy => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk/DataProvider/AnsiSQL/Expression/Create.php",
-                    "vDesk/DataProvider/AnsiSQL/Expression/Drop.php",
-                    "vDesk/DataProvider/AnsiSQL/Expression/Functions/Distinct.php",
-                    "vDesk/DataProvider/PgSQL/Expression/Create.php",
-                    "vDesk/DataProvider/PgSQL/Expression/Alter.php",
-                    "vDesk/DataProvider/PgSQL/Expression/Table.php"
+                    "vDesk/DataProvider/IResult.php",
+                    "vDesk/DataProvider/MySQL/Result.php",
+                    "vDesk/DataProvider/MsQL/Result.php",
+                    "vDesk/DataProvider/PgSQL/Result.php"
                 ]
             ]
         ]
