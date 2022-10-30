@@ -132,11 +132,6 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
         return $Stream;
     }
 
-    /** @inheritDoc */
-    public function __destruct() {
-        \fclose($this->Pointer);
-    }
-
     public function Close(): bool {
         return true;
     }

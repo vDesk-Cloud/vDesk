@@ -215,9 +215,4 @@ class Socket implements IReadableStream, IWritableStream {
         return $Socket;
     }
 
-    /** @inheritDoc */
-    public function __destruct() {
-        \fclose($this->Pointer);
-    }
-
 }
