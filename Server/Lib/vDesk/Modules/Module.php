@@ -17,38 +17,38 @@ use vDesk\Modules\Module\Command;
  * @property string|null     $Name                  Gets the name of the Module.
  * @property Collection|null $Commands              Gets or sets the Commands of the Module.
  *
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Module implements IModel {
-    
+
     use Properties;
-    
+
     /**
      * Flag indicating whether the Module is running remote.
      */
     public const Remote = false;
-    
+
     /**
      * The lazy evaluated name of the Module.
      *
      * @var string
      */
     private string $Name;
-    
+
     /**
      * The newly added Commands of the Module.
      *
      * @var \vDesk\Modules\Module\Command[]
      */
     private array $Added = [];
-    
+
     /**
      * The deleted Commands of the Module.
      *
      * @var \vDesk\Modules\Module\Command[]
      */
     private array $Deleted = [];
-    
+
     /**
      * Initializes a new instance of the Module class.
      *
@@ -56,24 +56,24 @@ abstract class Module implements IModel {
      * @param \vDesk\Struct\Collections\Observable\Collection|null $Commands Initializes the Module with the specified Collection of Commands.
      */
     public function __construct(protected ?int $ID = null, protected ?Collection $Commands = null) {
-        $this->Name     = (string)Text::Substring(static::class, Text::LastIndexOf(static::class, "\\") + 1);
+        $this->Name = (string)Text::Substring(static::class, Text::LastIndexOf(static::class, "\\") + 1);
         if($Commands !== null) {
-            $this->Commands->OnAdd[]    = function($Sender, Command $Command): void {
+            $this->Commands->OnAdd[]    = function(Command $Command, Collection $Commands): void {
                 if($this->ID !== null) {
-                    if($Sender->Any(fn(Command $Existing): bool => $Existing->Name === $Command->Name)) {
+                    if($Commands->Any(fn(Command $Existing): bool => $Existing->Name === $Command->Name)) {
                         throw new \InvalidArgumentException("Command with name '$Command->Name' already exists!");
                     }
                     $this->Added[] = $Command;
                 }
                 $Command->Module = $this;
             };
-            $this->Commands->OnDelete[] = function($Sender, Command $Command): void {
+            $this->Commands->OnRemove[] = function(Command $Command): void {
                 if($this->ID !== null && $Command->ID !== null) {
                     $this->Deleted[] = $Command;
                 }
             };
         }
-        
+
         $this->AddProperties([
             "ID"       => [
                 \Get => fn(): ?int => $this->ID,
@@ -106,16 +106,16 @@ abstract class Module implements IModel {
                                 );
                             }
                         }
-                        $this->Commands->OnAdd[]    = function($Sender, Command $Command): void {
+                        $this->Commands->OnAdd[]    = function(Command $Command, Collection $Commands): void {
                             if($this->ID !== null) {
-                                if($Sender->Any(fn(Command $Existing): bool => $Existing->Name === $Command->Name)) {
+                                if($Commands->Any(fn(Command $Existing): bool => $Existing->Name === $Command->Name)) {
                                     throw new \InvalidArgumentException("Command with name '$Command->Name' already exists!");
                                 }
                                 $this->Added[] = $Command;
                             }
                             $Command->Module = $this;
                         };
-                        $this->Commands->OnDelete[] = function($Sender, Command $Command): void {
+                        $this->Commands->OnRemove[] = function(Command $Command): void {
                             if($this->ID !== null && $Command->ID !== null) {
                                 $this->Deleted[] = $Command;
                             }
@@ -126,14 +126,14 @@ abstract class Module implements IModel {
             ]
         ]);
     }
-    
+
     /**
      * @inheritDoc
      */
     final public function ID() {
         return $this->ID;
     }
-    
+
     /**
      * Fills the Module with it's values from the database.
      *
@@ -165,10 +165,10 @@ abstract class Module implements IModel {
                 )
             );
         }
-        
+
         return $this;
     }
-    
+
     /**
      * Saves the Module.
      */
@@ -198,7 +198,7 @@ abstract class Module implements IModel {
             }
         }
     }
-    
+
     /**
      * Deletes the Module from the database.
      */
@@ -213,7 +213,7 @@ abstract class Module implements IModel {
             }
         }
     }
-    
+
     /**
      * Creates a Module from a specified data view.
      *
@@ -224,15 +224,15 @@ abstract class Module implements IModel {
     final public static function FromDataView(mixed $DataView): Module {
         // TODO: Implement FromDataView() method.
     }
-    
+
     /**
      * Creates a data view of the Module.
      *
      * @param bool $Reference Flag indicating whether the data view should represent only a reference to the Module.
      *
-     * @return mixed The data view representing the current state of the Module.
+     * @return array The data view representing the current state of the Module.
      */
-    final public function ToDataView(bool $Reference = false) {
+    final public function ToDataView(bool $Reference = false): array {
         return $Reference
             ? ["ID" => $this->ID]
             : [
@@ -248,14 +248,14 @@ abstract class Module implements IModel {
                 )
             ];
     }
-    
+
     /**
      * Gets the status information of the Module.
      *
      * @return null|array An array containing the status information of the Module; otherwise, null.
      */
-    public static function Status(): ?array{
+    public static function Status(): ?array {
         return null;
     }
-    
+
 }
