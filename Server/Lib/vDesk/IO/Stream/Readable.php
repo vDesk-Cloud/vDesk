@@ -10,6 +10,9 @@ use vDesk\IO\Stream;
 
 /**
  * Trait containing functionality for readable IStreams.
+ *
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 trait Readable {
 
@@ -55,8 +58,7 @@ trait Readable {
      * Reads the entire content of the Stream from the current position until the end of the Stream.
      *
      * @param int $Amount The amount of bytes to read. If $Amount is set to -1, the entire content is read until the end of the Stream.
-     * @param int $Offset The offset to start reading from. If $Offset is set to -1, reading starts from the current position of the
-     *                    Stream.
+     * @param int $Offset The offset to start reading from. If $Offset is set to -1, reading starts from the current position of the Stream.
      *
      * @return null|string The read content or null if an error occurred.
      * @throws \vDesk\IO\EndOfStreamException Thrown if the Stream has reached its end.

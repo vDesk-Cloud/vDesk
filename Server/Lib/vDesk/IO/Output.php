@@ -128,13 +128,14 @@ abstract class Output {
         if($Data instanceof IDataView) {
             \header("Content-Type: application/json");
             $Stream->Write(
-                \json_encode([
-                    "Status"  => true,
-                    "Code"    => Command::Successful,
-                    "Module"  => Command::$Module,
-                    "Command" => Command::$Name,
-                    "Data"    => $Data->ToDataView()
-                ],
+                \json_encode(
+                    [
+                        "Status"  => true,
+                        "Code"    => Command::Successful,
+                        "Module"  => Command::$Module,
+                        "Command" => Command::$Name,
+                        "Data"    => $Data->ToDataView()
+                    ],
                     \JSON_THROW_ON_ERROR
                 )
             );
@@ -173,14 +174,15 @@ abstract class Output {
         //Check if an Exception has been thrown.
         if($Data instanceof \Throwable) {
             $Stream->Write(
-                \json_encode([
-                    "Status"  => false,
-                    "Code"    => $Data->getCode(),
-                    "Module"  => Command::$Module,
-                    "Command" => Command::$Name,
-                    "Data"    => $Data->getMessage(),
-                    "Stack"   => $Data->getTrace()
-                ],
+                \json_encode(
+                    [
+                        "Status"  => false,
+                        "Code"    => $Data->getCode(),
+                        "Module"  => Command::$Module,
+                        "Command" => Command::$Name,
+                        "Data"    => $Data->getMessage(),
+                        "Stack"   => $Data->getTrace()
+                    ],
                     \JSON_THROW_ON_ERROR
                 )
             );
@@ -189,13 +191,14 @@ abstract class Output {
 
         //Create a default response.
         $Stream->Write(
-            \json_encode([
-                "Status"  => true,
-                "Code"    => Command::Successful,
-                "Module"  => Command::$Module,
-                "Command" => Command::$Name,
-                "Data"    => $Data
-            ],
+            \json_encode(
+                [
+                    "Status"  => true,
+                    "Code"    => Command::Successful,
+                    "Module"  => Command::$Module,
+                    "Command" => Command::$Name,
+                    "Data"    => $Data
+                ],
                 \JSON_THROW_ON_ERROR
             )
         );

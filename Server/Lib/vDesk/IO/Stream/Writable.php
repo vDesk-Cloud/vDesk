@@ -8,6 +8,9 @@ use vDesk\IO\Stream;
 
 /**
  * Trait containing functionality for writable IStreams.
+ *
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 trait Writable {
 

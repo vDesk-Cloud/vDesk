@@ -19,7 +19,7 @@ interface ISeekableStream extends IStream {
     public function CanSeek(): bool;
 
     /**
-     * Determines current position of the pointer of the ISeekableStream.
+     * Determines the current position of the pointer of the ISeekableStream.
      *
      * @return null|int The current byte-offset of the pointer of the ISeekableStream or null if an error occurred.
      */

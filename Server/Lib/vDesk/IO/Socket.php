@@ -10,6 +10,9 @@ use vDesk\Struct\Properties;
 /**
  * Class that represents a bytestream over an udp or tcp/ip socket.
  *
+ * @property-read resource $Pointer  Gets the underlying pointer of the Socket.
+ * @property bool          $Blocking Gets or sets a flag indicating whether the Socket is blocking.
+ *
  * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
@@ -62,16 +65,12 @@ class Socket implements IReadableStream, IWritableStream {
 
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function CanRead(): bool {
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function CanWrite(): bool {
         return true;
     }
@@ -200,27 +199,25 @@ class Socket implements IReadableStream, IWritableStream {
     /**
      * Shuts the channels of the Socket down.
      *
-     * @param int $Stream
+     * @param int $Channels The channels to shut down. Must be one of \STREAM_SHUT_*-constants.
      *
-     * @return bool
+     * @return bool True if the specified channels have been shut down; otherwise, false.
      */
-    public function Shutdown(int $Stream = \STREAM_SHUT_RDWR): bool {
-        return \stream_socket_shutdown($this->Pointer, $Stream);
+    public function Shutdown(int $Channels = \STREAM_SHUT_RDWR): bool {
+        return \stream_socket_shutdown($this->Pointer, $Channels);
     }
 
-
-    /**
-     * Creates a new Socket as wrapper of a specified pointer resource.
-     *
-     * @param resource $Pointer The pointer to wrap.
-     *
-     * @return \vDesk\IO\Socket A new instance of the Socket class yielding the specified pointer.
-     */
+    /** @inheritDoc */
     public static function FromPointer($Pointer, int $Mode, bool $Blocking = true): static {
         $Socket           = new static(null, $Mode);
         $Socket->Pointer  = $Pointer;
         $Socket->Blocking = $Blocking;
         return $Socket;
+    }
+
+    /** @inheritDoc */
+    public function __destruct() {
+        \fclose($this->Pointer);
     }
 
 }

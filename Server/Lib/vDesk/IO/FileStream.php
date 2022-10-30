@@ -13,11 +13,9 @@ use vDesk\Struct\Properties;
 /**
  * Provides a generic view of a sequence of bytes.
  *
- * @property-read bool $CanSeek     Gets a value indicating whether the current FileStream supports seeking.
- * @property-read bool $CanRead     Gets a value indicating whether the current FileStream supports reading.
- * @property-read bool $CanWrite    Gets a value indicating whether the current FileStream supports writing.
- * @property-read int  $Position    Gets the current position of the pointer of the FileStream.
- * @property-read bool $EndOfStream Gets a value indicating whether the current FileStream has reached its end.
+ * @property-read resource $Pointer      Gets the underlying pointer of the FileStream.
+ * @property bool          $Blocking     Gets or sets a flag indicating whether the FileStream is blocking.
+ *
  * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
@@ -46,11 +44,9 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
             ]
         ]);
         if($File !== null) {
-
             if(!$Mode & Mode::Create && !File::Exists($File)) {
                 throw new FileNotFoundException("Cannot open FileStream without create-mode on non-existent file \"$File\"!");
             }
-
 
             $FileMode = "";
             if($Mode & Mode::Read) {
@@ -84,45 +80,11 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
                 $FileMode .= "+";
             }
 
-           // $FileMode      = self::ConvertMode($Mode);
             $this->Pointer = @\fopen($File, $FileMode);
             if($this->Pointer === false) {
                 throw new IOException("Can't open FileStream on file: \"{$File}\" with mode: \"{$FileMode}\"");
             }
         }
-    }
-
-    /**
-     * Creates a FileStream access mode identifier from a specified bitset.
-     *
-     * @param int $Mode The bitset to create the identifier of.
-     *
-     * @return string An access mode identifier compatible to PHP's "\fopen()"-function.
-     */
-    private static function ConvertMode(int $Mode): string {
-        $FileMode = "";
-        if($Mode & Mode::Read) {
-            $FileMode .= "r";
-        }
-        if($Mode & Mode::Truncate) {
-            $FileMode .= "w";
-        }
-        if($Mode & Mode::Append) {
-            $FileMode .= "a";
-        }
-        if($Mode & Mode::Read && $Mode & Mode::Create) {
-            $FileMode .= "c";
-        }
-        if($Mode & Mode::Create) {
-            $FileMode .= "x";
-        }
-        if($Mode & Mode::Binary) {
-            $FileMode .= "b";
-        }
-        if($Mode & Mode::Duplex) {
-            $FileMode .= "+";
-        }
-        return $FileMode;
     }
 
     /**
@@ -168,6 +130,11 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
         $Stream          = new static(null, $Mode);
         $Stream->Pointer = $Pointer;
         return $Stream;
+    }
+
+    /** @inheritDoc */
+    public function __destruct() {
+        \fclose($this->Pointer);
     }
 
     public function Close(): bool {
