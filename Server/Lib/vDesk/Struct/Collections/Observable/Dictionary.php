@@ -67,7 +67,9 @@ class Dictionary extends \vDesk\Struct\Collections\Dictionary implements IObserv
     public function Add(string $Key, mixed $Element): void {
         if($this->Dispatching) {
             foreach($this->OnAdd as $OnAdd) {
-                $OnAdd($this, $Element);
+                if(!($OnAdd($Element, $this) ?? true)) {
+                    return;
+                }
             }
         }
         parent::Add($Key, $Element);

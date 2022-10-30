@@ -88,6 +88,18 @@ class Dictionary extends \vDesk\Struct\Collections\Typed\Dictionary implements I
     }
 
     /** @inheritdoc */
+    public function InsertAfter(string $After, string $Key, mixed $Element): void {
+        if($this->Dispatching) {
+            foreach($this->OnAdd as $OnAdd) {
+                if(!($OnAdd($Element, $this) ?? true)) {
+                    return;
+                }
+            }
+        }
+        parent::InsertAfter($After, $Key, $Element);
+    }
+
+    /** @inheritdoc */
     public function Remove(mixed $Element): mixed {
         if($this->Dispatching) {
             foreach($this->OnRemove as $OnRemove) {
