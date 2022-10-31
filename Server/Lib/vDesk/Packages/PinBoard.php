@@ -117,6 +117,23 @@ final class PinBoard extends Package implements Locale\IPackage, Events\IPackage
                 "NoteCount"       => "Amount of notes",
                 "AttachmentCount" => "Amount of attachments"
             ]
+        ],
+        "NL" => [
+            "PinBoard" => [
+                "Blue"            => "Blauw",
+                "Custom"          => "Aangepast",
+                "CustomColor"     => "Aangepaste kleur",
+                "Green"           => "Groen",
+                "Module"          => "Prikbord",
+                "NewNote"         => "Nieuwe nota",
+                "Note"            => "Nota",
+                "Notes"           => "Notities",
+                "Red"             => "Rood",
+                "White"           => "Wit",
+                "Yellow"          => "Geel",
+                "NoteCount"       => "Aantal van de notities",
+                "AttachmentCount" => "Aantal bijlagen"
+            ]
         ]
     ];
     

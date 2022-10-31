@@ -69,6 +69,11 @@ final class Console extends Package implements IPackage {
             "Permissions" => [
                 "UseConsole" => "Determines whether members of the group are allowed to use the console"
             ]
+        ],
+        "NL" => [
+            "Permissions" => [
+                "UseConsole" => "Bepaalt of leden van de groep de console mogen gebruiken"
+            ]
         ]
     ];
     

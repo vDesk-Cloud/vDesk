@@ -79,6 +79,12 @@ final class UpdateHost extends Package implements IPackage {
                 "Hosted" => "Hosted Updates",
                 "Host"   => "Host"
             ]
+        ],
+        "NL" => [
+            "UpdateHost" => [
+                "Hosted" => "Gehoste updates",
+                "Host"   => "Host"
+            ]
         ]
     ];
 

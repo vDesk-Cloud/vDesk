@@ -98,6 +98,26 @@ final class Colors extends Package implements IPackage {
                 "Press"      => "Press",
                 "Error"      => "Error"
             ]
+        ],
+        "NL" => [
+            "Colors" => [
+                "Foreground" => "Voorgrond",
+                "Background" => "Achtergrond",
+                "Border"     => "Kader",
+                "Light"      => "Licht",
+                "Dark"       => "Donker",
+                "Font"       => "Lettertype",
+                "Color"      => "Kleur",
+                "Colors"     => "Kleuren",
+                "Disabled"   => "Uitgeschakeld",
+                "Control"    => "Besturingselement",
+                "Button"     => "Knop",
+                "TextBox"    => "Tekstvak",
+                "Selected"   => "Geselecteerde",
+                "Hover"      => "Hover",
+                "Press"      => "Druk op",
+                "Error"      => "Fout"
+            ]
         ]
     ];
     

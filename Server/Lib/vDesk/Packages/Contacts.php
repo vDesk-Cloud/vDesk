@@ -175,6 +175,50 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
                 "UpdateContact" => "Determines whether members of the group are allowed to update contacts"
             
             ]
+        ],
+        "NL" => [
+            "Contacts"    => [
+                "AddContactOption"    => "Contactoptie toevoegen.",
+                "Address"             => "Adres",
+                "Annotations"         => "Aantekeningen",
+                "City"                => "Stad",
+                "Companies"           => "Bedrijven",
+                "Company"             => "Bedrijf",
+                "CompanyContact"      => "Bedrijfscontact",
+                "Contact"             => "Contact",
+                "ContactOptions"      => "Contactopties",
+                "Country"             => "Land",
+                "DeleteContactOption" => "Optie contact verwijderen",
+                "EditCompany"         => "Bedrijfscontact bewerken",
+                "EditContact"         => "Contact bewerken",
+                "Email"               => "E-mailadres",
+                "FaxNumber"           => "Faxnummer",
+                "Forename"            => "Voornaam",
+                "Gender"              => "Aanspreektitel",
+                "GenderFemale"        => "Mvr.",
+                "GenderMale"          => "Hr.",
+                "HouseNumber"         => "Huisnummer",
+                "Module"              => "Contacten",
+                "Name"                => "Naam",
+                "NewCompany"          => "Nieuw bedrijfscontact",
+                "NewContact"          => "Nieuw contact",
+                "PhoneNumber"         => "Telefoonnummer",
+                "Street"              => "Straat",
+                "Surname"             => "Achternaam",
+                "Website"             => "Website",
+                "ZipCode"             => "Postcode",
+                "ContactCount"        => "Aantal persoonlijke contacten",
+                "CompanyCount"        => "Aantal bedrijfscontacten"
+            ],
+            "Permissions" => [
+                "CreateCompany" => "Bepaalt of leden van de groep nieuwe bedrijfscontacten mogen aanmaken",
+                "CreateContact" => "Bepaalt of leden van de groep nieuwe contacten mogen aanmaken",
+                "DeleteCompany" => "Bepaalt of leden van de groep bedrijfscontacten mogen verwijderen",
+                "DeleteContact" => "Bepaalt of leden van de groep contacten mogen verwijderen",
+                "UpdateCompany" => "Bepaalt of leden van de groep bedrijfscontacten mogen bijwerken",
+                "UpdateContact" => "Bepaalt of leden van de groep contacten mogen bijwerken"
+            
+            ]
         ]
     ];
     

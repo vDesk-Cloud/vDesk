@@ -114,6 +114,24 @@ final class Machines extends Package implements IPackage {
             "Permissions" => [
                 "RunMachine" => "Determines whether members of the group are allowed to run machines"
             ]
+        ],
+        "NL" => [
+            "Machines" => [
+                "Machines"  => "Machines",
+                "Running"   => "Lopend",
+                "Suspended" => "Geschorst",
+                "Start"     => "Start",
+                "Suspend"   => "Schorsing",
+                "Resume"    => "Ga verder",
+                "Stop"      => "Stop",
+                "Terminate" => "Beëindig",
+                "Reap"      => "Verwijder zombiemachines",
+                "Status"    => "Status",
+                "TimeStamp" => "Starttijd"
+            ],
+            "Permissions" => [
+                "RunMachine" => "Bepaalt of leden van de groep machines mogen besturen"
+            ]
         ]
     ];
     

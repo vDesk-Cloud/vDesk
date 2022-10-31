@@ -106,6 +106,22 @@ final class Packages extends Package implements IPackage {
                 "InstallPackage"   => "Determines whether members of the group are allowed to install Packages",
                 "UninstallPackage" => "Determines whether members of the group are allowed to uninstall Packages"
             ]
+        ],
+        "NL" => [
+            "Packages"    => [
+                "Install"      => "Installeer",
+                "Uninstall"    => "Verwijder",
+                "Packages"     => "Pakketten",
+                "Package"      => "Pakket",
+                "Version"      => "Versie",
+                "Dependencies" => "Afhankelijkheden",
+                "Vendor"       => "Verkoper",
+                "Description"  => "Beschrijving"
+            ],
+            "Permissions" => [
+                "InstallPackage"   => "Bepaalt of leden van de groep Pakketten mogen installeren",
+                "UninstallPackage" => "Bepaalt of leden van de groep Pakketten mogen verwijderen"
+            ]
         ]
     ];
     

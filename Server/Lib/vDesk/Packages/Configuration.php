@@ -109,6 +109,24 @@ final class Configuration extends Package implements IPackage {
                 "ReadSettings"   => "Determines whether members of the group are allowed to see system settings",
                 "UpdateSettings" => "Determines whether members of the group are allowed to update system settings"
             ]
+        ],
+        "NL" => [
+            "Configuration" => [
+                "Administration"            => "Administratie",
+                "AdministrationDescription" => "Systeemgerelateerde instellingen. Hier heeft u de mogelijkheid om de systeeminstellingen te beheren.",
+                "Entry"                     => "Toegang",
+                "Log"                       => "Logboek",
+                "Module"                    => "Configuratie",
+                "Presentation"              => "Presentatie",
+                "Settings"                  => "Instellingen",
+                "SettingsDescription"       => "Gebruikersinstellingen. Hier heeft u de mogelijkheid om persoonlijke instellingen te maken en het uiterlijk van vDesk te personaliseren.",
+                "SystemInformations"        => "Systeeminformatie",
+                "SystemSettings"            => "Systeeminstellingen"
+            ],
+            "Permissions"   => [
+                "ReadSettings"   => "Bepaalt of leden van de groep systeeminstellingen mogen zien",
+                "UpdateSettings" => "Bepaalt of leden van de groep systeeminstellingen mogen bijwerken"
+            ]
         ]
     ];
     

@@ -100,6 +100,21 @@ final class Updates extends Package implements IPackage {
             "Permissions" => [
                 "InstallUpdate" => "Determines whether members of the group are allowed to install Updates"
             ]
+        ],
+        "NL" => [
+            "Updates"     => [
+                "Search"          => "Zoeken naar updates",
+                "Upload"          => "Upload",
+                "Download"        => "Download",
+                "Source"          => "Bron",
+                "Updates"         => "Updates",
+                "Hash"            => "Hash",
+                "Deploy"          => "Inzetten",
+                "RequiredVersion" => "Vereiste versie"
+            ],
+            "Permissions" => [
+                "InstallUpdate" => "Bepaalt of leden van de groep updates mogen installeren"
+            ]
         ]
     ];
     

@@ -81,6 +81,11 @@ final class Events extends Package implements IPackage {
             "Settings" => [
                 "Events:Interval" => "Defines the interval in seconds at which new events are dispatched."
             ]
+        ],
+        "NL" => [
+            "Settings" => [
+                "Events:Interval" => "Bepaalt het interval in seconden waarmee nieuwe gebeurtenissen worden verzonden."
+            ]
         ]
     ];
     

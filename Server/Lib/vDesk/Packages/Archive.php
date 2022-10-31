@@ -157,6 +157,36 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
             "Settings"    => [
                 "Archive:UploadMode" => "Defines whether files are loaded into the archive in parallel or consecutively."
             ]
+        ],
+        "NL" => [
+            "Archive"     => [
+                "AddFile"              => "Bestand toevoegen",
+                "Attributes"           => "Attributen",
+                "AttributeWindowTitle" => "Attributen van",
+                "Clipboard"            => "Klembord",
+                "CreationTime"         => "Tijd van maken",
+                "Details"              => "Details",
+                "Element"              => "Element",
+                "Entry"                => "Begin van het archief",
+                "File"                 => "Bestand",
+                "Size"                 => "Grootte",
+                "Folder"               => "Map",
+                "Module"               => "Archief",
+                "NewFolder"            => "Nieuwe map",
+                "Owner"                => "Eigenaar",
+                "PinBoard"             => "Toevoegen aan prikbord",
+                "Refresh"              => "Vernieuwen",
+                "Rename"               => "Hernoemen",
+                "FileCount"            => "Aantal bestanden",
+                "FolderCount"          => "Aantal mappen",
+                "DiskUsage"            => "Hoeveelheid gebruikte schijfruimte"
+            ],
+            "Permissions" => [
+                "ReadAttributes" => "Bepaalt of leden van de groep attributen van een archiefelement mogen zien",
+            ],
+            "Settings"    => [
+                "Archive:UploadMode" => "Bepaalt of bestanden parallel of na elkaar in het archief worden geladen."
+            ]
         ]
     ];
     

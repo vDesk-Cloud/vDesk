@@ -92,6 +92,13 @@ final class Messenger extends Package implements IPackage {
                 "MessageCount"      => "Amount of private messages",
                 "GroupMessageCount" => "Amount of group messages"
             ]
+        ],
+        "NL" => [
+            "Messenger" => [
+                "Messages"          => "Berichten",
+                "MessageCount"      => "Aantal privéberichten",
+                "GroupMessageCount" => "Aantal groepsberichten"
+            ]
         ]
     ];
     

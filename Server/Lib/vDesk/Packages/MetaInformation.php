@@ -152,6 +152,43 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
                 "UpdateMask"    => "Determines whether members of the group are allowed to update metadata masks",
                 "DeleteMask"    => "Determines whether members of the group are allowed to delete metadata masks"
             ]
+        ],
+        "NL" => [
+            "MetaInformation" => [
+                "AddRow"        => "Nieuwe rij toevoegen",
+                "Boolean"       => "Booleaanse waarde",
+                "ChangeMask"    => "Wanneer u het masker wijzigt, gaan bestaande gegevens verloren. Mask wijzigen?",
+                "Currency"      => "Valuta",
+                "Date"          => "Datum",
+                "DateTime"      => "Datum en tijd",
+                "Decimal"       => "decimaal",
+                "DeleteDataSet" => "Dataset verwijderen?",
+                "DeleteMask"    => "Het verwijderen van het mask heeft tot gevolg dat alle datasets die onder dit mask zijn aangemaakt, verloren gaan. Mask verwijderen?",
+                "DeleteRow"     => "Rij verwijderen",
+                "MaskDesigner"  => "Maskontwerper",
+                "Max"           => "Max",
+                "MetaData"      => "Metadata",
+                "Min"           => "Min",
+                "Money"         => "Geld",
+                "NewMask"       => "Nieuw mask",
+                "NoDataSet"     => "Het element heeft geen metadata.",
+                "Numeric"       => "Numeriek",
+                "Pattern"       => "Patroon",
+                "Required"      => "Vereist",
+                "Steps"         => "Stappen",
+                "Text"          => "Tekst",
+                "Time"          => "Tijd",
+                "DataSetCount"  => "Aantal datasets"
+            ],
+            "Permissions"     => [
+                "ReadDataSet"   => "Bepaalt of leden van de groep metadatasets mogen zien",
+                "CreateDataSet" => "Bepaalt of leden van de groep nieuwe metadatasets mogen aanmaken",
+                "UpdateDataSet" => "Bepaalt of leden van de groep metadatasets mogen bijwerken",
+                "DeleteDataSet" => "Bepaalt of leden van de groep metadatasets mogen verwijderen",
+                "CreateMask"    => "Bepaalt of leden van de groep nieuwe metadata masks mogen aanmaken",
+                "UpdateMask"    => "Bepaalt of leden van de groep metadata masks mogen bijwerken",
+                "DeleteMask"    => "Bepaalt of leden van de groep metadata masks mogen verwijderen"
+            ]
         ]
     ];
     
