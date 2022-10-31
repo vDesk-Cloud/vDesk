@@ -122,18 +122,16 @@ class AccessControlList extends Collection implements ICollectionModel {
             }
         };
 
-        $this->OnRemove[] = function(Entry $Entry): void {
+        $this->OnRemove[] = function(Entry $Entry): bool {
             //Skip mandatory Entries.
-            if(
-                ($Entry->User->ID !== null && $Entry->User->ID !== User::System)
-                || ($Entry->Group->ID !== null && $Entry->Group->ID !== Group::Everyone)
-            ) {
-                return;
+            if($Entry->User->ID === User::System || $Entry->Group->ID === Group::Everyone) {
+                return false;
             }
             //Check if the AccessControlList and Entry is not virtual.
             if($this->ID !== null && $Entry->ID !== null) {
                 $this->Deleted[] = $Entry;
             }
+            return true;
         };
     }
 
@@ -527,7 +525,7 @@ class AccessControlList extends Collection implements ICollectionModel {
     }
 
     /** @inheritdoc */
-    public function Remove($Element): Entry {
+    public function Remove($Element): ?Entry {
         return parent::Remove($Element);
     }
 
