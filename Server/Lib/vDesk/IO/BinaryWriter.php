@@ -273,12 +273,5 @@ class BinaryWriter {
     public function __destruct() {
     }
 
-    /**
-     * Closes the current BinaryWriter and the underlying Stream.
-     */
-    public function Close(): void {
-        $this->Stream->Close();
-    }
-
 }
 

@@ -76,7 +76,6 @@ class Client {
     public function Create(string $Path): void {
         $File = new FileStream(($Path ?? \Client) . Path::Separator . "vDesk.html", Mode::Truncate);
         $File->Write($this->ToHTML());
-        $File->Close();
     }
     
     /**

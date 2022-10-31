@@ -131,8 +131,4 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
         $Stream->Pointer = $Pointer;
         return $Stream;
     }
-
-    public function Close(): bool {
-        return true;
-    }
 }

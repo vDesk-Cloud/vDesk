@@ -421,18 +421,5 @@ class BinaryReader {
         return (bool)$this->ReadByte();
     }
 
-    /**
-     * Closes the current BinaryReader and the underlying Stream.
-     */
-    public function Close(): void {
-    }
-
-    /**
-     *
-     */
-    public function __destruct() {
-        $this->Close();
-    }
-
 }
 

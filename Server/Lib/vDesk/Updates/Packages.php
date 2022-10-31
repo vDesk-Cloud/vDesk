@@ -21,13 +21,13 @@ final class Packages extends Update {
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.1";
+    public const RequiredVersion = "1.0.2";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to vDesk-1.1.0.
+- Added compatibility to vDesk-1.2.0.
 Description;
 
     /**
@@ -35,11 +35,6 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
-            Package::Client => [
-                Package::Lib => [
-                    "vDesk/Packages"
-                ]
-            ],
             Package::Server => [
                 Package::Modules => [
                     "Packages.php"
@@ -47,11 +42,6 @@ Description;
             ]
         ],
         self::Undeploy => [
-            Package::Client => [
-                Package::Lib => [
-                    "vDesk/Packages"
-                ]
-            ],
             Package::Server => [
                 Package::Modules => [
                     "Packages.php"
@@ -60,9 +50,7 @@ Description;
         ]
     ];
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
         //Update files.
         self::Undeploy();
