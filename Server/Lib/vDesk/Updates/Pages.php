@@ -37,6 +37,9 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib => [
+                    "Pages.php",
+                    "vDesk/Pages/Request.php",
+                    "vDesk/Pages/Response.php",
                     "vDesk/Pages/Cached/Page.php"
                 ]
             ]
@@ -44,6 +47,9 @@ Description;
         self::Undeploy => [
             Package::Server => [
                 Package::Lib => [
+                    "Pages.php",
+                    "vDesk/Pages/Request.php",
+                    "vDesk/Pages/Response.php",
                     "vDesk/Pages/Cached/Page.php"
                 ]
             ]

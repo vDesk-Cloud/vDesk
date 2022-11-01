@@ -37,6 +37,7 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib => [
+                    "vDesk/Modules/Command.php",
                     "vDesk/Modules/Module.php",
                     "vDesk/Modules/Module/Command.php"
                 ]
@@ -45,6 +46,7 @@ Description;
         self::Undeploy => [
             Package::Server => [
                 Package::Lib => [
+                    "vDesk/Modules/Command.php",
                     "vDesk/Modules/Module.php",
                     "vDesk/Modules/Module/Command.php"
                 ]

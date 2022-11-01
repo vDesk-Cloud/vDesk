@@ -38,6 +38,7 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib => [
+                    "vDesk.php",
                     "vDesk/IO",
                     "vDesk/Struct/Collections",
                     "vDesk/Client.php"
@@ -47,6 +48,7 @@ Description;
         self::Undeploy => [
             Package::Server => [
                 Package::Lib => [
+                    "vDesk.php",
                     "vDesk/IO",
                     "vDesk/Struct/Collections",
                     "vDesk/Client.php"

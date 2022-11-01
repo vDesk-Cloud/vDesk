@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 use vDesk\IO\FileNotFoundException;
-use vDesk\IO\Input;
 use vDesk\IO\Output;
 use vDesk\Modules;
 use vDesk\Security\User;
@@ -66,13 +65,12 @@ class vDesk {
      */
     public static function Run(): void {
         try {
-            Input::Read();
-            if(Modules\Command::$Ticket !== null) {
+            $Command = Modules\Command::Parse();
+            if($Command::$Ticket !== null) {
                 Modules::Security()::ValidateTicket();
             }
-
             //Call Module.
-            Output::Write(Modules::Call(Modules\Command::$Module, Modules\Command::$Name));
+            Output::Write(Modules::Call($Command::$Module, $Command::$Name));
         } catch(Throwable $Exception) {
             Output::Write($Exception);
         } finally {
