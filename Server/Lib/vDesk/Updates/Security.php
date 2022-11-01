@@ -39,6 +39,9 @@ Description;
                 Package::Lib => [
                     "vDesk/Security/AccessControlList.php",
                     "vDesk/Security/User/Groups.php"
+                ],
+                Package::Modules => [
+                    "Security.php"
                 ]
             ]
         ],
@@ -47,6 +50,9 @@ Description;
                 Package::Lib => [
                     "vDesk/Security/AccessControlList.php",
                     "vDesk/Security/User/Groups.php"
+                ],
+                Package::Modules => [
+                    "Security.php"
                 ]
             ]
         ]

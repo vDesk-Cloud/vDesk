@@ -188,16 +188,12 @@ final class Security extends Package implements IPackage {
      */
     private static string $Password;
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function PreInstall(\Phar $Phar, string $Path): void {
         self::$Password = \readline("System User password: ");
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
 
         Expression::Create()
@@ -592,7 +588,7 @@ final class Security extends Package implements IPackage {
             new User\Groups([$Everyone, $Administration])
         );
         $User->Save();
-        User::$Current = \vDesk::$User = $User;
+        User::$Current = $User;
 
         Settings::$Remote["Security"] = new Settings\Remote\Settings(
             [
@@ -607,9 +603,7 @@ final class Security extends Package implements IPackage {
 
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
 
         //Uninstall Module.

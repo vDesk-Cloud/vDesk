@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace vDesk\Locale;
 
 use vDesk\DataProvider\Expression;
+use vDesk\Security\User;
 use vDesk\Struct\Collections\Dictionary;
 
 /**
@@ -33,12 +34,12 @@ class LocaleDictionary extends Dictionary {
             return parent::offsetGet($Key);
         }
         
-        if($this->offsetExists(\vDesk::$User->Locale)) {
-            return parent::offsetGet(\vDesk::$User->Locale)[$Key];
+        if($this->offsetExists(User::$Current->Locale)) {
+            return parent::offsetGet(User::$Current->Locale)[$Key];
         }
         
-        $this->LoadDomain(\vDesk::$User->Locale, $Key);
-        return parent::offsetGet(\vDesk::$User->Locale)[$Key];
+        $this->LoadDomain(User::$Current->Locale, $Key);
+        return parent::offsetGet(User::$Current->Locale)[$Key];
     }
     
     /**

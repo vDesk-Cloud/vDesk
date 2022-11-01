@@ -26,7 +26,7 @@ final class Locale extends Package {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.2";
+    public const Version = "1.0.3";
 
     /**
      * The name of the Package.
@@ -41,7 +41,7 @@ final class Locale extends Package {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Modules" => "1.0.1"];
+    public const Dependencies = ["Modules" => "1.0.2"];
 
     /**
      * The files and directories of the Package.
@@ -572,9 +572,7 @@ final class Locale extends Package {
         ]
     ];
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
 
         Expression::Create()
@@ -694,9 +692,7 @@ final class Locale extends Package {
 
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
 
         //Uninstall Module.

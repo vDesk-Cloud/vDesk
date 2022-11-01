@@ -6,22 +6,22 @@ namespace vDesk\Updates;
 use vDesk\Packages\Package;
 
 /**
- * Machines Update manifest class.
+ * Tasks Update manifest class.
  *
  * @package vDesk\Machines
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-final class Machines extends Update {
-    
+final class Tasks extends Update {
+
     /**
      * The Package of the Update.
      */
-    public const Package = \vDesk\Packages\Machines::class;
-    
+    public const Package = \vDesk\Packages\Tasks::class;
+
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.2";
+    public const RequiredVersion = "1.0.0";
 
     /**
      * The description of the Update.
@@ -35,28 +35,16 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
-            Package::Client => [
-                Package::Lib => [
-                    "vDesk/Machines/Machine.js",
-                    "vDesk/Machines/Administration.js"
-                ]
-            ],
             Package::Server => [
-                Package::Modules => [
-                    "Machines.php"
+                Package::Lib => [
+                    "vDesk/Tasks/Tasks.php"
                 ]
             ]
         ],
         self::Undeploy => [
-            Package::Client => [
-                Package::Lib => [
-                    "vDesk/Machines/Machine.js",
-                    "vDesk/Machines/Administration.js"
-                ]
-            ],
             Package::Server => [
-                Package::Modules => [
-                    "Machines.php"
+                Package::Lib => [
+                    "vDesk/Tasks/Tasks.php"
                 ]
             ]
         ]
@@ -69,5 +57,8 @@ Description;
         //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
+
+
+
     }
 }

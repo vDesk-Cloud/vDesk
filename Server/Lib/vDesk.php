@@ -4,7 +4,6 @@ declare(strict_types=1);
 use vDesk\IO\FileNotFoundException;
 use vDesk\IO\Output;
 use vDesk\Modules;
-use vDesk\Security\User;
 use vDesk\Utils\Log;
 
 /**
@@ -13,14 +12,6 @@ use vDesk\Utils\Log;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class vDesk {
-
-    /**
-     * The current logged in User of vDesk.
-     *
-     * @var null|\vDesk\Security\User
-     * @deprecated
-     */
-    public static ?User $User;
 
     /**
      * Flag indicating whether vDesk is running inside a Phar archive.
