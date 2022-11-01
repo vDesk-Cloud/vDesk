@@ -70,7 +70,6 @@ class Settings extends Dictionary {
         }
         $File->Write(\implode("," . \PHP_EOL, $Values) . \PHP_EOL);
         $File->Write("];" . \PHP_EOL);
-        $File->Close();
     }
     
     /**

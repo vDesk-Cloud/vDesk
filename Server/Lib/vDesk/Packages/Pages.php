@@ -27,7 +27,7 @@ final class Pages extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.1.1";
+    public const Version = "1.1.2";
     
     /**
      * The name of the Package.

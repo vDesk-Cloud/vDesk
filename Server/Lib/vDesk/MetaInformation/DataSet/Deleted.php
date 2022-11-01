@@ -12,17 +12,17 @@ use vDesk\Events\PublicEvent;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Deleted extends PublicEvent {
-    
+
     /**
      * The name of the Event.
      */
     public const Name = "vDesk.MetaInformation.DataSet.Deleted";
-    
+
     /**
      * @inheritdoc
      */
-    public function ToDataView() {
+    public function ToDataView(): array {
         return ["ID" => $this->Arguments->ID];
     }
-    
+
 }

@@ -143,7 +143,6 @@ final class Log extends StaticSingleton {
         ) {
             File::Rename($Path, "Log_" . (new \DateTime())->format("Ymdhis") . ".txt");
         }
-        self::$Stream->Close();
     }
     
 }

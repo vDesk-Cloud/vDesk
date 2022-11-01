@@ -38,7 +38,7 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.0.2";
     
     /**
      * The name of the Package.

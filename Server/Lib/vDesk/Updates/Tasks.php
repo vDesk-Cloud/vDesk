@@ -6,22 +6,22 @@ namespace vDesk\Updates;
 use vDesk\Packages\Package;
 
 /**
- * Updates Update manifest class.
+ * Tasks Update manifest class.
  *
- * @package vDesk\Updates
+ * @package vDesk\Machines
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Updates extends Update {
+final class Tasks extends Update {
 
     /**
      * The Package of the Update.
      */
-    public const Package = \vDesk\Packages\Updates::class;
+    public const Package = \vDesk\Packages\Tasks::class;
 
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.1";
+    public const RequiredVersion = "1.0.0";
 
     /**
      * The description of the Update.
@@ -36,24 +36,29 @@ Description;
     public const Files = [
         self::Deploy   => [
             Package::Server => [
-                Package::Modules => [
-                    "Updates.php"
+                Package::Lib => [
+                    "vDesk/Tasks/Tasks.php"
                 ]
             ]
         ],
         self::Undeploy => [
             Package::Server => [
-                Package::Modules => [
-                    "Updates.php"
+                Package::Lib => [
+                    "vDesk/Tasks/Tasks.php"
                 ]
             ]
         ]
     ];
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     */
     public static function Install(\Phar $Phar, string $Path): void {
         //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
+
+
+
     }
 }

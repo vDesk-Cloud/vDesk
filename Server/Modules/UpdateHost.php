@@ -111,8 +111,7 @@ final class UpdateHost extends Module {
         while(!$TempFile->EndOfStream()) {
             $TargetFile->Write($TempFile->Read());
         }
-        $TargetFile->Close();
-        $TempFile->Close();
+
         //Delete temp file.
         $Update->Delete();
 

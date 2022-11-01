@@ -50,7 +50,7 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
      *
      * @throws \vDesk\IO\IOException
      */
-    public function __construct(public ?string $Directory) {
+    public function __construct(public ?string $Directory, protected int $Mode = 0, protected bool $Blocking = true) {
         $this->AddProperties([
             "CanSeek"     => [
                 \Get => fn(): bool => $this->CanSeek()
@@ -84,49 +84,7 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
         }
     }
 
-    /**
-     * Reads an entry from the DirectoryStream.
-     *
-     * @param int $Amount This parameter doesn't have any effect.
-     *
-     * @return string The name of the next entry in the directory or @see DirectoryStream::EndOfDirectory if the end of the DirectoryStream
-     *                has been reached. The entries are returned in the order in which they are stored by the filesystem.
-     */
-    public function Read(int $Amount = IStream::DefaultChunkSize): string {
-        if($this->Entry !== null && $this->Entry !== "." && $this->Entry !== "..") {
-            $Element     = $this->Entry;
-            $this->Entry = null;
-            return $Element;
-        }
-        if($this->Pointer && ($Element = \readdir($this->Pointer)) !== false) {
-            $this->Entry = null;
-            if($Element === "." || $Element === "..") {
-                return $this->Read();
-            }
-            return $Element;
-        }
-        $this->EndOfStream = true;
-        return Text::Empty;
-    }
-
-    /**
-     * Resets the position of the internal pointer of the DirectoryStream.
-     *
-     * @return bool True on success, false on failure.
-     */
-    public function Rewind(): bool {
-        \rewinddir($this->Pointer);
-        $this->Entry       = null;
-        $this->EndOfStream = false;
-        return true;
-    }
-
-    /**
-     * Tells whether the current DirectoryStream has reached its end.
-     * EndOfStream is a convenience method that is equivalent to the value of the EndOfStream property of the current instance.
-     *
-     * @return bool True if the DirectoryStream has reached its end; otherwise, false.
-     */
+    /** @inheritDoc */
     public function EndOfStream(): bool {
         if($this->EndOfStream || !$this->Pointer) {
             return $this->EndOfStream;
@@ -149,17 +107,27 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
         return $this->EndOfStream;
     }
 
-    /**
-     * Closes the DirectoryStream.
-     *
-     * @return bool True on success; otherwise, false.
-     */
-    public function Close(): bool {
-        if(\is_resource($this->Pointer)) {
-            \closedir($this->Pointer);
-            return true;
+    /** @inheritDoc */
+    public function CanRead(): bool {
+        return true;
+    }
+
+    /** @inheritDoc */
+    public function Read(int $Amount = IStream::DefaultChunkSize): string {
+        if($this->Entry !== null && $this->Entry !== "." && $this->Entry !== "..") {
+            $Element     = $this->Entry;
+            $this->Entry = null;
+            return $Element;
         }
-        return false;
+        if($this->Pointer && ($Element = \readdir($this->Pointer)) !== false) {
+            $this->Entry = null;
+            if($Element === "." || $Element === "..") {
+                return $this->Read();
+            }
+            return $Element;
+        }
+        $this->EndOfStream = true;
+        return Text::Empty;
     }
 
     /**
@@ -172,42 +140,12 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
     }
 
     /**
-     * Unlocks the Stream, granting access for other processes.
-     *
-     * @return bool True on success, false on failure.
-     */
-    public function Unlock(): bool {
-        return false;
-    }
-
-    /**
      * Reads a line from the Stream.
      *
      * @return string The read line.
      */
     public function ReadLine(): string {
         return $this->Read();
-    }
-
-    /**
-     * Determines current position of the pointer of the Stream.
-     *
-     * @return int The current byte-offset of the pointer of the Stream.
-     */
-    public function Tell(): int {
-        return \ftell($this->Pointer);
-    }
-
-    /**
-     * Sets the current position of the pointer of the Stream to a specified offset.
-     *
-     * @param int $Offset The offset to set the pointer to.
-     *
-     * @return bool True on success; otherwise, false.
-     */
-    public function Seek(int $Offset): bool {
-        \fseek($this->Pointer, $Offset);
-        return true;
     }
 
     /**
@@ -223,22 +161,43 @@ class DirectoryStream implements IReadableStream, ISeekableStream {
         // TODO: Implement ReadAll() method.
     }
 
-    /**
-     * Sets a lock on the Stream, limiting or prohibiting access for other processes.
-     *
-     * @param int $Type The type of the lock. Either one value of {@link \vDesk\IO\Stream\Lock}.
-     *
-     * @return bool True on success, false on failure.
-     */
-    public function Lock(int $Type = Lock::Shared): bool {
-        // TODO: Implement Lock() method.
-    }
-
-    public function CanRead(): bool {
+    /** @inheritDoc */
+    public function CanSeek(): bool {
         return true;
     }
 
-    public function CanSeek(): bool {
+    /** @inheritDoc */
+    public function Tell(): int {
+        return \ftell($this->Pointer);
+    }
+
+    /** @inheritDoc */
+    public function Seek(int $Offset): bool {
+        \fseek($this->Pointer, $Offset);
+        return true;
+    }
+
+    /** @inheritDoc */
+    public function Rewind(): bool {
+        \rewinddir($this->Pointer);
+        $this->Entry       = null;
+        $this->EndOfStream = false;
+        return true;
+    }
+
+    /**
+     * Closes the DirectoryStream.
+     */
+    public function __destruct() {
+        if(\is_resource($this->Pointer)) {
+            \closedir($this->Pointer);
+        }
+    }
+
+    public static function FromPointer($Pointer, int $Mode, bool $Blocking = true): static {
+        // TODO: Implement FromPointer() method.
+    }
+    public function Close(): bool {
         return true;
     }
 }

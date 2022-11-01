@@ -21,13 +21,13 @@ class Locale extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.1";
+    public const RequiredVersion = "1.0.2";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to vDesk-1.1.0.
+- Added compatibility to vDesk-1.2.0.
 Description;
 
     /**
@@ -35,24 +35,22 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
-            Package::Client => [
+            Package::Server => [
                 Package::Lib => [
-                    "vDesk/Locale.js"
+                    "vDesk/Locale/LocaleDictionary.php"
                 ]
             ]
         ],
         self::Undeploy => [
-            Package::Client => [
+            Package::Server => [
                 Package::Lib => [
-                    "vDesk/Locale.js"
+                    "vDesk/Locale/LocaleDictionary.php"
                 ]
             ]
         ]
     ];
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
         //Update files.
         self::Undeploy();

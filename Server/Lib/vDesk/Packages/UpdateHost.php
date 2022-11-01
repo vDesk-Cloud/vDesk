@@ -31,7 +31,7 @@ final class UpdateHost extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.0.2";
 
     /**
      * The name of the Package.
@@ -46,7 +46,7 @@ final class UpdateHost extends Package implements IPackage {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Updates" => "1.0.1"];
+    public const Dependencies = ["Updates" => "1.0.2"];
 
     /**
      * The files and directories of the Package.
