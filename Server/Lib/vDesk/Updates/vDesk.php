@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace vDesk\Updates;
 
-use vDesk\Configuration\Settings;
 use vDesk\Packages\Package;
 
 /**
@@ -30,6 +29,7 @@ class vDesk extends Update {
 - Reworked collections.
 - Reworked streams.
 - Removed global reference to current User.
+- Simplified input-/output-API.
 Description;
 
     /**
