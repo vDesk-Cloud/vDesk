@@ -29,6 +29,7 @@ class vDesk extends Update {
     public const Description = <<<Description
 - Reworked collections.
 - Reworked streams.
+- Removed global reference to current User.
 Description;
 
     /**
@@ -41,7 +42,9 @@ Description;
                     "vDesk.php",
                     "vDesk/IO",
                     "vDesk/Struct/Collections",
-                    "vDesk/Client.php"
+                    "vDesk/Client.php",
+                    "vDesk/Utils/Log.php",
+                    "vDesk/Utils/Validate.php"
                 ]
             ]
         ],
@@ -51,7 +54,9 @@ Description;
                     "vDesk.php",
                     "vDesk/IO",
                     "vDesk/Struct/Collections",
-                    "vDesk/Client.php"
+                    "vDesk/Client.php",
+                    "vDesk/Utils/Log.php",
+                    "vDesk/Utils/Validate.php"
                 ]
             ]
         ]
