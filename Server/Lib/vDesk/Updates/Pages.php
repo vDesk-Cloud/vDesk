@@ -39,6 +39,7 @@ Description;
                 Package::Lib => [
                     "Pages.php",
                     "vDesk/Pages/Request.php",
+                    "vDesk/Pages/Request/Parameters.php",
                     "vDesk/Pages/Response.php",
                     "vDesk/Pages/Cached/Page.php"
                 ]
@@ -49,6 +50,7 @@ Description;
                 Package::Lib => [
                     "Pages.php",
                     "vDesk/Pages/Request.php",
+                    "vDesk/Pages/Request/Parameters.php",
                     "vDesk/Pages/Response.php",
                     "vDesk/Pages/Cached/Page.php"
                 ]
