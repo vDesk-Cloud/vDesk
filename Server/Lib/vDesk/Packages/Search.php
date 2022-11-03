@@ -25,7 +25,7 @@ final class Search extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.1.0";
 
     /**
      * The vendor of the Package.
@@ -41,8 +41,8 @@ final class Search extends Package implements IPackage {
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Modules" => "1.0.1",
-        "Locale"  => "1.0.2"
+        "Modules" => "1.0.2",
+        "Locale"  => "1.1.0"
     ];
 
     /**
@@ -126,9 +126,7 @@ final class Search extends Package implements IPackage {
         ]
     ];
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
 
         //Install Module.
@@ -155,9 +153,7 @@ final class Search extends Package implements IPackage {
 
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
 
         //Uninstall Module.

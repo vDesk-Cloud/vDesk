@@ -20,37 +20,37 @@ use vDesk\Struct\Collections\Observable\Collection;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Calendar extends Package implements Locale\IPackage, Events\IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Calendar";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.2";
-    
+    public const Version = "1.1.0";
+
     /**
      * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The description of the Package.
      */
     public const Description = "Package providing functionality for organizing events and meetings.";
-    
+
     /**
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Events"   => "1.0.1",
-        "Locale"   => "1.0.3",
-        "Security" => "1.0.4",
-        "Search"   => "1.0.1"
+        "Events"   => "1.1.0",
+        "Locale"   => "1.1.0",
+        "Security" => "1.1.0",
+        "Search"   => "1.1.0"
     ];
-    
+
     /**
      * The files and directories of the Package.
      */
@@ -77,14 +77,14 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
             ]
         ]
     ];
-    
+
     /**
      * The eventlisteners of the Package.
      */
     public const Events = [
         "vDesk.Security.User.Deleted" => "/vDesk/Calendar/vDesk.Security.User.Deleted.php"
     ];
-    
+
     /**
      * The translations of the Package.
      */
@@ -264,16 +264,14 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
             ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         Expression::Create()
                   ->Schema("Calendar")
                   ->Execute();
-        
+
         //Create tables.
         Expression::Create()
                   ->Table(
@@ -296,7 +294,7 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
                       ]
                   )
                   ->Execute();
-        
+
         //Install Module.
         /** @var \Modules\Calendar $Calendar */
         $Calendar = \vDesk\Modules::Calendar();
@@ -393,22 +391,20 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
             )
         );
         $Calendar->Save();
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
-        
+
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
-        
+
         //Uninstall Module.
         /** @var \Modules\Calendar $Calendar */
         $Calendar = \vDesk\Modules::Calendar();
         $Calendar->Delete();
-        
+
         //Delete ACLs
         foreach(
             Expression::Select("AccessControlList")
@@ -419,14 +415,14 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
             $AccessControlList = new AccessControlList([], (int)$Event["AccessControlList"]);
             $AccessControlList->Delete();
         }
-        
+
         //Drop database.
         Expression::Drop()
                   ->Schema("Calendar")
                   ->Execute();
-        
+
         //Delete files.
         self::Undeploy();
-        
+
     }
 }

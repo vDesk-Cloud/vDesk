@@ -10,7 +10,7 @@ use vDesk\Locale\IPackage;
 use vDesk\Utils\Log;
 
 /**
- * vDesk base Package class.
+ * vDesk Package manifest.
  *
  * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
@@ -25,7 +25,7 @@ final class vDesk extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.2.0";
+    public const Version = "1.3.0";
 
     /**
      * The vendor of the Package.
@@ -284,9 +284,7 @@ final class vDesk extends Package implements IPackage {
     ];
 
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
 
         //Create system structure.
@@ -319,10 +317,7 @@ final class vDesk extends Package implements IPackage {
 
     }
 
-
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
         //Delete files.
         Directory::Delete($Path, true);

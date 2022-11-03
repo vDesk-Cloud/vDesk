@@ -19,32 +19,32 @@ use vDesk\Struct\Collections\Observable\Collection;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class MetaInformation extends Package implements Locale\IPackage, Events\IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "MetaInformation";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.4";
-    
+    public const Version = "1.1.0";
+
     /**
      * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The description of the Package.
      */
     public const Description = "Package providing functionality for indexing and searching for files and folders of an Archive";
-    
+
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Archive" => "1.0.2"];
-    
+    public const Dependencies = ["Archive" => "1.1.0"];
+
     /**
      * The files and directories of the Package.
      */
@@ -67,14 +67,14 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
             ]
         ]
     ];
-    
+
     /**
      * The eventlisteners of the Package.
      */
     public const Events = [
         "vDesk.Archive.Element.Deleted" => "/vDesk/MetaInformation/vDesk.Archive.Element.Deleted.php"
     ];
-    
+
     /**
      * The translations of the Package.
      */
@@ -191,16 +191,14 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
             ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         Expression::Create()
                   ->Schema("MetaInformation")
                   ->Execute();
-        
+
         //Create tables.
         Expression::Create()
                   ->Table(
@@ -259,7 +257,7 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
                       ]
                   )
                   ->Execute();
-        
+
         //Install Module.
         /** @var \Modules\MetaInformation $MetaInformation */
         $MetaInformation = \vDesk\Modules::MetaInformation();
@@ -384,7 +382,7 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
             )
         );
         $MetaInformation->Save();
-        
+
         //Create permissions.
         /** @var \Modules\Security $Security */
         $Security = \vDesk\Modules::Security();
@@ -395,21 +393,19 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
         $Security::CreatePermission("CreateDataSet", true);
         $Security::CreatePermission("UpdateDataSet", true);
         $Security::CreatePermission("DeleteDataSet", true);
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
-        
+
         //Uninstall Module.
         /** @var \Modules\MetaInformation $MetaInformation */
         $MetaInformation = \vDesk\Modules::MetaInformation();
         $MetaInformation->Delete();
-        
+
         //Delete permissions.
         /** @var \Modules\Security $Security */
         $Security = \vDesk\Modules::Security();
@@ -420,14 +416,14 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
         $Security::DeletePermission("CreateDataSet");
         $Security::DeletePermission("UpdateDataSet");
         $Security::DeletePermission("DeleteDataSet");
-        
+
         //Drop database.
         Expression::Drop()
                   ->Schema("MetaInformation")
                   ->Execute();
-        
+
         //Delete files.
         self::Undeploy();
-        
+
     }
 }

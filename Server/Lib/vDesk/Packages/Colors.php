@@ -11,35 +11,35 @@ use vDesk\Locale\IPackage;
  * @package vDesk\Packages
  */
 final class Colors extends Package implements IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Colors";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.0";
-    
+    public const Version = "1.1.0";
+
     /**
      * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The description of the Package.
      */
     public const Description = "Package providing functionality for changing the \"look&feel\" of vDesk.";
-    
+
     /**
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Configuration" => "1.0.0",
-        "Locale"        => "1.0.0"
+        "Configuration" => "1.1.0",
+        "Locale"        => "1.1.0"
     ];
-    
+
     /**
      * The files and directories of the Package.
      */
@@ -54,7 +54,7 @@ final class Colors extends Package implements IPackage {
             ]
         ]
     ];
-    
+
     /**
      * The translations of the Package.
      */
@@ -120,18 +120,14 @@ final class Colors extends Package implements IPackage {
             ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
         //Extract files.
         self::Deploy($Phar, $Path);
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
         //Delete files.
         self::Undeploy();

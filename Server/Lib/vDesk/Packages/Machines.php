@@ -23,32 +23,32 @@ use vDesk\Struct\Guid;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Machines extends Package implements IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Machines";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.3";
-    
+    public const Version = "1.1.0";
+
     /**
      * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The description of the Package.
      */
     public const Description = "Package providing an OS agnostic process manager for PHP.";
-    
+
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Archive" => "1.0.2"];
-    
+    public const Dependencies = ["Archive" => "1.1.0"];
+
     /**
      * The files and directories of the Package.
      */
@@ -75,13 +75,13 @@ final class Machines extends Package implements IPackage {
             ]
         ]
     ];
-    
+
     /**
      * The translations of the Package.
      */
     public const Locale = [
         "DE" => [
-            "Machines" => [
+            "Machines"    => [
                 "Machines"  => "Machines",
                 "Running"   => "Running",
                 "Suspended" => "Suspended",
@@ -99,7 +99,7 @@ final class Machines extends Package implements IPackage {
             ]
         ],
         "EN" => [
-            "Machines" => [
+            "Machines"    => [
                 "Machines"  => "Machines",
                 "Running"   => "Running",
                 "Suspended" => "Suspended",
@@ -117,7 +117,7 @@ final class Machines extends Package implements IPackage {
             ]
         ],
         "NL" => [
-            "Machines" => [
+            "Machines"    => [
                 "Machines"  => "Machines",
                 "Running"   => "Lopend",
                 "Suspended" => "Geschorst",
@@ -135,16 +135,14 @@ final class Machines extends Package implements IPackage {
             ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         Expression::Create()
                   ->Schema("Machines")
                   ->Execute();
-        
+
         //Create tables.
         Expression::Create()
                   ->Table(
@@ -161,7 +159,7 @@ final class Machines extends Package implements IPackage {
                       ["Engine" => "MEMORY"]
                   )
                   ->Execute();
-        
+
         //Install Module.
         /** @var \Modules\Machines $Machines */
         $Machines = \vDesk\Modules::Machines();
@@ -259,9 +257,9 @@ final class Machines extends Package implements IPackage {
             )
         );
         $Machines->Save();
-    
+
         //Create Machines folder.
-        $System   = new Element(2);
+        $System    = new Element(2);
         $Directory = new Element(
             null,
             User::$Current,
@@ -277,44 +275,42 @@ final class Machines extends Package implements IPackage {
             new AccessControlList($System->AccessControlList)
         );
         $Directory->Save();
-        
+
         Settings::$Local["Machines"]  = new Settings\Local\Settings(["Directory" => $Directory->ID], "Machines");
         Settings::$Remote["Machines"] = new Settings\Remote\Settings(
             ["Limit" => new Settings\Remote\Setting("Limit", 24, \vDesk\Struct\Type::Int)],
             "Machines"
         );
-        
+
         //Create permissions.
         /** @var \Modules\Security $Security */
         $Security = \vDesk\Modules::Security();
         $Security::CreatePermission("RunMachine", false);
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
-        
+
         //Uninstall Module.
         /** @var \Modules\Machines $Machines */
         $Machines = \vDesk\Modules::Machines();
         $Machines->Delete();
-        
+
         //Drop database.
         Expression::Drop()
                   ->Schema("Machines")
                   ->Execute();
-        
+
         //Delete permissions.
         /** @var \Modules\Security $Security */
         $Security = \vDesk\Modules::Security();
         $Security::DeletePermission("RunMachine");
-        
+
         //Delete files.
         self::Undeploy();
-        
+
     }
 }

@@ -31,7 +31,7 @@ final class Security extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.4";
+    public const Version = "1.1.0";
 
     /**
      * The vendor of the Package.
@@ -48,8 +48,8 @@ final class Security extends Package implements IPackage {
      */
     public const Dependencies = [
         "Modules"       => "1.0.2",
-        "Configuration" => "1.0.3",
-        "Events"        => "1.0.1"
+        "Configuration" => "1.1.0",
+        "Events"        => "1.1.0"
     ];
 
     /**
