@@ -32,12 +32,12 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
     public const Version = "1.0.2";
     
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
     
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing functionality for organizing events and meetings.";
     
@@ -46,8 +46,8 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
      */
     public const Dependencies = [
         "Events"   => "1.0.1",
-        "Locale"   => "1.0.2",
-        "Security" => "1.0.2",
+        "Locale"   => "1.0.3",
+        "Security" => "1.0.4",
         "Search"   => "1.0.1"
     ];
     

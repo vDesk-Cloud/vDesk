@@ -30,19 +30,19 @@ final class Updates extends Package implements IPackage {
     public const Version = "1.0.2";
     
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
     
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing functionality for creating setups and creating, installing and uninstalling packages.";
     
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Packages" => "1.0.1"];
+    public const Dependencies = ["Packages" => "1.0.3"];
     
     /**
      * The files and directories of the Package.

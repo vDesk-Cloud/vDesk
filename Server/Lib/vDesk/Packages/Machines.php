@@ -35,12 +35,12 @@ final class Machines extends Package implements IPackage {
     public const Version = "1.0.3";
     
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
     
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing an OS agnostic process manager for PHP.";
     

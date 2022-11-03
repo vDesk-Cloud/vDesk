@@ -33,19 +33,19 @@ final class Configuration extends Package implements IPackage {
     public const Version = "1.0.3";
     
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
     
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing functionality for managing local and system configuration settings.";
     
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Locale" => "1.0.2"];
+    public const Dependencies = ["Locale" => "1.0.3"];
     
     /**
      * The files and directories of the Package.
