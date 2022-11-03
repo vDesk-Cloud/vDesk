@@ -37,6 +37,7 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib => [
+                    "vDesk/Configuration/Settings/Local/Settings.php",
                     "vDesk/Configuration/Settings/Remote/Settings.php"
                 ]
             ]
@@ -44,6 +45,7 @@ Description;
         self::Undeploy => [
             Package::Server => [
                 Package::Lib => [
+                    "vDesk/Configuration/Settings/Local/Settings.php",
                     "vDesk/Configuration/Settings/Remote/Settings.php"
                 ]
             ]

@@ -29,12 +29,12 @@ final class Locale extends Package {
     public const Version = "1.0.3";
 
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
 
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package enabling multi-language support and providing functionality for managing localized packages";
 

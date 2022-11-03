@@ -28,19 +28,19 @@ final class Modules extends Package {
     public const Version = "1.0.2";
     
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
     
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing functionality for running Modules and inter process communication between Modules.";
     
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["DataProvider" => "1.0.0"];
+    public const Dependencies = ["DataProvider" => "1.1.0"];
     
     /**
      * The files and directories of the Package.

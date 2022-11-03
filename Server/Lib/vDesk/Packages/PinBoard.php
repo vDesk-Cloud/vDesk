@@ -31,19 +31,19 @@ final class PinBoard extends Package implements Locale\IPackage, Events\IPackage
     public const Version = "1.0.1";
     
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
     
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing functionality for organizing notes and pinning Archive elements.";
     
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Archive" => "1.0.1"];
+    public const Dependencies = ["Archive" => "1.0.2"];
     
     /**
      * The files and directories of the Package.

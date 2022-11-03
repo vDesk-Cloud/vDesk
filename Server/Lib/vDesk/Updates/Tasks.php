@@ -50,15 +50,16 @@ Description;
         ]
     ];
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
+        //Remove old Task dispatcher.
+        \vDesk\Modules::Machines()::Uninstall(new self::Package, $Phar, $Path);
+
         //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
 
-
-
+        //Reinstall Package.
+        \vDesk\Modules::Machines()::Install(new self::Package, $Path);
     }
 }

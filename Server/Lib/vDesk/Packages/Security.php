@@ -34,12 +34,12 @@ final class Security extends Package implements IPackage {
     public const Version = "1.0.4";
 
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
 
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing a group- and user based access control aswell for single access controlled entities.";
 
@@ -47,8 +47,8 @@ final class Security extends Package implements IPackage {
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Modules"       => "1.0.1",
-        "Configuration" => "1.0.2",
+        "Modules"       => "1.0.2",
+        "Configuration" => "1.0.3",
         "Events"        => "1.0.1"
     ];
 
