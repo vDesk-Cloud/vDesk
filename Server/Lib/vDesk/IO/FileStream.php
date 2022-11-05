@@ -32,7 +32,7 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
      *
      * @throws \vDesk\IO\IOException Thrown if the FileStream couldn't be opened on the specified file.
      */
-    public function __construct(public ?string $File, public int $Mode = Mode::Read | Mode::Duplex | Mode::Binary, protected bool $Blocking = true) {
+    public function __construct(public ?string $File, public int $Mode = Mode::Read | Mode::Write | Mode::Binary, protected bool $Blocking = true) {
         $this->AddProperties([
             "Pointer"  => [\Get => fn() => $this->Pointer],
             "Blocking" => [
@@ -43,41 +43,45 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
                 }
             ]
         ]);
-        if($File !== null) {
-            if(!$Mode & Mode::Create && !File::Exists($File)) {
-                throw new FileNotFoundException("Cannot open FileStream without create-mode on non-existent file \"$File\"!");
-            }
 
+        if($File !== null) {
             $FileMode = "";
-            if($Mode & Mode::Read) {
-                if(File::Exists($File) && !\is_readable($File)) {
-                    throw new IOException("Cannot open FileStream in read-mode on file \"$File\" without having permission!");
+
+            //Transform file mode bitmask into "open()" compatible string.
+            if(
+                ($Mode & Mode::Write)
+                && ($Mode & (Mode::Create | Mode::Append | Mode::Truncate | Mode::Overwrite))
+            ) {
+                //Special modes.
+                if($Mode & Mode::Create) {
+                    if(File::Exists($File)) {
+                        throw new IOException("Can't open FileStream in create mode on file \"{$File}\"! File already exists.");
+                    }
+                    $FileMode = "x";
+                } else if($Mode & Mode::Append) {
+                    $FileMode = "a";
+                } else if($Mode & Mode::Truncate) {
+                    $FileMode = "w";
+                } else if($Mode & Mode::Overwrite) {
+                    $FileMode = "c";
                 }
-                $FileMode .= "r";
-            }
-            if($Mode & Mode::Truncate) {
-                if(!File::Exists($File)) {
-                    throw new FileNotFoundException("Cannot open FileStream in truncate-mode on non-existent file \"$File\"!");
+                if($Mode & Mode::Read) {
+                    $FileMode .= "+";
                 }
-                $FileMode .= "w";
-            }
-            if($Mode & Mode::Append) {
-                $FileMode .= "a";
-            }
-            if($Mode & Mode::Read && $Mode & Mode::Create) {
-                $FileMode .= "c";
-            }
-            if($Mode & Mode::Create) {
-                if(File::Exists($File)) {
-                    throw new FileNotFoundException("Cannot open FileStream in create-mode on existing file \"$File\"!");
+            } else if(($Mode & Mode::Read) || ($Mode & Mode::Write)) {
+                //Basic read/write.
+                if(!\str_starts_with($File, "php://") && !File::Exists($File)) {
+                    throw new FileNotFoundException("Can't open FileStream on file \"{$File}\"! File doesn't exist.");
                 }
-                $FileMode .= "x";
+                $FileMode = "r";
+                if($Mode & Mode::Write) {
+                    $FileMode .= "+";
+                }
+            } else {
+                throw new \InvalidArgumentException("Unsupported file mode specified!");
             }
             if($Mode & Mode::Binary) {
                 $FileMode .= "b";
-            }
-            if($Mode & Mode::Duplex) {
-                $FileMode .= "+";
             }
 
             $this->Pointer = @\fopen($File, $FileMode);
@@ -109,17 +113,17 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
 
     /** @inheritDoc */
     public function CanSeek(): bool {
-        return (bool)($this->Mode ^ Mode::Append);
+        return !($this->Mode & Mode::Append);
     }
 
     /** @inheritDoc */
     public function CanRead(): bool {
-        return (bool)($this->Mode ^ Mode::Truncate ^ Mode::Append ^ Mode::Create);
+        return (bool)($this->Mode & Mode::Read);
     }
 
     /** @inheritDoc */
     public function CanWrite(): bool {
-        return (bool)($this->Mode ^ Mode::Read);
+        return (bool)($this->Mode & Mode::Write);
     }
 
     /** @inheritDoc */

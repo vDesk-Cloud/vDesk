@@ -30,7 +30,7 @@ class Response extends Output {
      */
     public static function Write(mixed $Data): void {
 
-        $Stream = new FileStream("php://output", Mode::Append | Mode::Binary);
+        $Stream = new FileStream("php://output", Mode::Write | Mode::Binary);
         \header("Content-type: text/html", true, static::$Code);
 
         if($Data instanceof Page) {

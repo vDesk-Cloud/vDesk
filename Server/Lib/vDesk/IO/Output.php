@@ -123,7 +123,7 @@ abstract class Output {
     public static function CGI(mixed $Data): void {
         \header('Access-Control-Allow-Origin: *');
         \header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-        $Stream = new FileStream("php://output", Stream\Mode::Append | Stream\Mode::Binary);
+        $Stream = new FileStream("php://output", Stream\Mode::Write | Stream\Mode::Binary);
         //Check if the passed data implements the IDataView interface.
         if($Data instanceof IDataView) {
             \header("Content-Type: application/json");
@@ -149,7 +149,7 @@ abstract class Output {
             \header("Content-Length: " . $Data->Size);
             $FileStream = $Data->Open();
             while(!$FileStream->EndOfStream()) {
-                $Stream->Write($FileStream->Read());
+                $Stream->Write((string)$FileStream->Read());
             }
             return;
         }
@@ -157,7 +157,7 @@ abstract class Output {
         //Check if a Stream has been passed.
         if($Data instanceof IReadableStream) {
             while(!$Data->EndOfStream()) {
-                $Stream->Write($Data->Read());
+                $Stream->Write((string)$Data->Read());
             }
             return;
         }
