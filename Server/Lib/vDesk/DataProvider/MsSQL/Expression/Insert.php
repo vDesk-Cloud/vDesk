@@ -19,6 +19,11 @@ class Insert extends \vDesk\DataProvider\AnsiSQL\Expression\Insert {
         $Fields   = $this->Fields ?? \array_keys($Values);
         $Identity = \current($Fields);
         if(\current($Values) === null && \str_ends_with($Identity, "ID")) {
+            //Check if only an identity column exists.
+            if(\count($Fields) === 1) {
+                $this->Statement .= "DEFAULT VALUES";
+                return $this;
+            }
             //Omit null values.
             if(($this->Fields[0] ?? null) === $Identity) {
                 unset($this->Fields[0], $Values[0]);

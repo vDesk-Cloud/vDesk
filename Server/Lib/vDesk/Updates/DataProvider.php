@@ -27,7 +27,8 @@ final class DataProvider extends Update {
      * The description of the Update.
      */
     public const Description = <<<Description
-- Removed IEnumerable dependency.
+- Added possibility for inserting rows into tables consisting only of a single identity column.
+- Added missing reserved keywords.
 Description;
 
     /**
@@ -37,20 +38,16 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk/DataProvider/IResult.php",
-                    "vDesk/DataProvider/MySQL/Result.php",
-                    "vDesk/DataProvider/MsQL/Result.php",
-                    "vDesk/DataProvider/PgSQL/Result.php"
+                    "vDesk/DataProvider/MsQL/Provider.php",
+                    "vDesk/DataProvider/MsQL/Expression/Insert.php"
                 ]
             ]
         ],
         self::Undeploy => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk/DataProvider/IResult.php",
-                    "vDesk/DataProvider/MySQL/Result.php",
-                    "vDesk/DataProvider/MsQL/Result.php",
-                    "vDesk/DataProvider/PgSQL/Result.php"
+                    "vDesk/DataProvider/MsQL/Provider.php",
+                    "vDesk/DataProvider/MsQL/Expression/Insert.php"
                 ]
             ]
         ]
