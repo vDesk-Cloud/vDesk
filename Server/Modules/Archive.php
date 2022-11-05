@@ -171,7 +171,7 @@ final class Archive extends Module implements ISearch {
         //Save uploaded file.
         $TempFile = $File->Open();
         while(!$TempFile->EndOfStream()) {
-            $TargetFile->Write($TempFile->Read());
+            $TargetFile->Write((string)$TempFile->Read());
         }
 
         //Create a new Element for the uploaded file.
