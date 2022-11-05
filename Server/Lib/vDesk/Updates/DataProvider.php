@@ -21,14 +21,14 @@ final class DataProvider extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.0";
+    public const RequiredVersion = "1.0.2";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Reduced amount of escaped characters in strings of MsSQL-DataProvider.
-- Fixed prepared statements of MsSQL-DataProvider.
+- Added possibility for inserting rows into tables consisting only of a single identity column.
+- Added missing reserved keywords.
 Description;
 
     /**
@@ -38,22 +38,16 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk/DataProvider/IPreparedStatement.php",
-                    "vDesk/DataProvider/MsSQL/Provider.php",
-                    "vDesk/DataProvider/MsSQL/Statement.php",
-                    "vDesk/DataProvider/MySQL/Statement.php",
-                    "vDesk/DataProvider/PPgSQL/Statement.php"
+                    "vDesk/DataProvider/MsQL/Provider.php",
+                    "vDesk/DataProvider/MsQL/Expression/Insert.php"
                 ]
             ]
         ],
         self::Undeploy => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk/DataProvider/IPreparedStatement.php",
-                    "vDesk/DataProvider/MsSQL/Provider.php",
-                    "vDesk/DataProvider/MsSQL/Statement.php",
-                    "vDesk/DataProvider/MySQL/Statement.php",
-                    "vDesk/DataProvider/PPgSQL/Statement.php"
+                    "vDesk/DataProvider/MsQL/Provider.php",
+                    "vDesk/DataProvider/MsQL/Expression/Insert.php"
                 ]
             ]
         ]

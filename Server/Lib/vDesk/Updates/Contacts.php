@@ -21,13 +21,13 @@ final class Contacts extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.0";
+    public const RequiredVersion = "1.0.1";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to vDesk-1.1.0.
+- Added compatibility to vDesk-1.2.0.
 Description;
 
     /**
@@ -35,32 +35,16 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
-            Package::Client => [
-                Package::Lib     => [
-                    "vDesk/Contacts"
-                ],
-                Package::Modules => [
-                    "Contacts.js"
-                ]
-            ],
             Package::Server => [
-                Package::Modules => [
-                    "Contacts.php"
+                Package::Lib => [
+                    "vDesk/Contacts/Contact/Options.php"
                 ]
             ]
         ],
         self::Undeploy => [
-            Package::Client => [
-                Package::Lib     => [
-                    "vDesk/Contacts"
-                ],
-                Package::Modules => [
-                    "Contacts.js"
-                ]
-            ],
             Package::Server => [
-                Package::Modules => [
-                    "Contacts.php"
+                Package::Lib => [
+                    "vDesk/Contacts/Contact/Options.php"
                 ]
             ]
         ]

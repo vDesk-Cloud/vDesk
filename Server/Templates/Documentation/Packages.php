@@ -10,7 +10,7 @@ use vDesk\Pages\Functions;
         <p>
             This document describes the specifications of packages, updates and setups.
             <br>
-            For further information about creating packages and setups, visit the <a href="<?= Functions::URL("Documentation", "Page", "Tutorials", "Tutorial", "CustomReleases") ?>">Custom
+            For further information about creating packages and setups, visit the <a href="<?= Functions::URL("Documentation", "Category", "Server", "Topic", "CustomReleases") ?>">Custom
                 releases</a>-tutorial.
         </p>
         <h3>Overview</h3>
@@ -325,7 +325,7 @@ use vDesk\Pages\Functions;
         <h4>Custom packages</h4>
         <p>
             The installer of vDesk comes with an API for providing installable custom packages.<br>
-            While installation, the package gets passed to ever "installer"-module, that has to care for itself for a compatible package type, in setup context; this applies to every
+            While installation, the package gets passed to every "installer"-module, that has to care for itself for a compatible package type, in setup context; this applies to every
             bundled package.
         </p>
         <p>

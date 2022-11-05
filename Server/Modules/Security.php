@@ -114,7 +114,7 @@ final class Security extends Module {
                   ])();
 
         Log::Info(__METHOD__, "User '{$User->Name}' logged in.");
-        User::$Current = \vDesk::$User ??= $User;
+        User::$Current ??= $User;
         return $User;
     }
 
@@ -150,7 +150,7 @@ final class Security extends Module {
                   ->Execute();
         Log::Info(__METHOD__, "User " . ($User ?? User::$Current)->Name . " logged out.");
         if($User === null) {
-            User::$Current = \vDesk::$User = null;
+            User::$Current = null;
         }
         return true;
     }
@@ -182,7 +182,7 @@ final class Security extends Module {
                   ->Where(["Ticket" => $Ticket])
                   ->Execute();
 
-        User::$Current = \vDesk::$User ??= User::FromTicket($Ticket);
+        User::$Current ??= User::FromTicket($Ticket);
     }
 
     /**
@@ -425,7 +425,7 @@ final class Security extends Module {
         $Group = new Group(
             null,
             $Name ?? Command::$Parameters["Name"],
-            new Group\Permissions($Permissions ?? Command::$Parameters["Permissions"])
+            new Group\Permissions($Permissions ?? (array)Command::$Parameters["Permissions"])
         );
         $Group->Save();
         (new Group\Added($Group))->Dispatch();

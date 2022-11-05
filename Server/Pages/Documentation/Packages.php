@@ -8,7 +8,7 @@ use vDesk\Pages\Cached\Page;
 /**
  * Packages Documentation
  *
- * @package Pages\Tutorials
+ * @package vDesk\Documentation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Packages extends Page {

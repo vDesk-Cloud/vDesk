@@ -27,15 +27,15 @@ final class Pages extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.1.1";
+    public const Version = "1.1.2";
     
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
     
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package that provides a simple MVC-framework.";
     

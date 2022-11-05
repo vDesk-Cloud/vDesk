@@ -34,7 +34,7 @@ abstract class Create implements ICreate {
      * @inheritDoc
      */
     public function Schema(string $Name): static {
-        $this->Statement .= "SCHEMA " . DataProvider::EscapeField($Name);
+        $this->Statement .= "SCHEMA " . DataProvider::SanitizeField($Name);
         return $this;
     }
 

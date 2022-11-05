@@ -9,7 +9,6 @@ use vDesk\Struct\Properties;
  * Represents a variable size last-in-first-out (LIFO) collection.
  *
  * @property-read int $Count Gets the amount of elements in the Stack.
- *
  * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
@@ -20,7 +19,7 @@ class Stack implements \IteratorAggregate, IEnumerable {
     /**
      * The elements of the Stack.
      *
-     * @var mixed[]
+     * @var array
      */
     protected array $Elements = [];
 
@@ -52,7 +51,7 @@ class Stack implements \IteratorAggregate, IEnumerable {
      * @return mixed The element removed from the top of the Stack; otherwise if the Stack is emtpy, null.
      */
     public function Pop(): mixed {
-        $Value = array_pop($this->Elements);
+        $Value = \array_pop($this->Elements);
         \end($this->Elements);
         return $Value;
     }
@@ -66,20 +65,12 @@ class Stack implements \IteratorAggregate, IEnumerable {
         return empty($this->Elements) ? null : \end($this->Elements);
     }
 
-    /**
-     * Removes all elements from the Stack.
-     */
+    /** @inheritDoc */
     public function Clear(): void {
         \array_splice($this->Elements, 0, \count($this->Elements));
     }
 
-    /**
-     * Determines whether an element is in the Stack.
-     *
-     * @param mixed $Element The element to check.
-     *
-     * @return bool True if the element is in the Stack; otherwise, false.
-     */
+    /** @inheritDoc */
     public function Contains(mixed $Element): bool {
         return \in_array($Element, $this->Elements);
     }
@@ -96,19 +87,13 @@ class Stack implements \IteratorAggregate, IEnumerable {
         }
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Count()
-     */
+    /** @inheritDoc */
     public function Count(): int {
         return \count($this->Elements);
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Filter()
-     */
-    public function Filter(callable $Predicate): IEnumerable {
+    /** @inheritDoc */
+    public function Filter(callable $Predicate): static {
         $Stack = new static();
         foreach($this->Elements as $Index => $Value) {
             if($Predicate($Value, $Index, $this)) {
@@ -118,10 +103,7 @@ class Stack implements \IteratorAggregate, IEnumerable {
         return $Stack;
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Find()
-     */
+    /** @inheritDoc */
     public function Find(callable $Predicate): mixed {
         foreach($this->Elements as $Index => $Value) {
             if($Predicate($Value, $Index, $this)) {
@@ -131,10 +113,7 @@ class Stack implements \IteratorAggregate, IEnumerable {
         return null;
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Every()
-     */
+    /** @inheritDoc */
     public function Every(callable $Predicate): bool {
         foreach($this->Elements as $Index => $Value) {
             if(!$Predicate($Value, $Index, $this)) {
@@ -144,19 +123,15 @@ class Stack implements \IteratorAggregate, IEnumerable {
         return true;
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Sort()
-     */
-    public function Sort(callable $Predicate): bool {
-        return \usort($this->Elements, $Predicate);
+    /** @inheritDoc */
+    public function Sort(callable $Predicate): static {
+        $Sorted = $this->ToArray();
+        \usort($Sorted, $Predicate);
+        return new static($Sorted);
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Map()
-     */
-    public function Map(callable $Predicate): IEnumerable {
+    /** @inheritDoc */
+    public function Map(callable $Predicate): static {
         $Stack = new static();
         foreach($this->Elements as $Index => $Value) {
             $Stack->Push($Predicate($Value, $Index, $this));
@@ -164,10 +139,7 @@ class Stack implements \IteratorAggregate, IEnumerable {
         return $Stack;
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Reduce()
-     */
+    /** @inheritDoc */
     public function Reduce(callable $Predicate, $InitialValue = null): mixed {
         $Accumulator = $InitialValue ?? \reset($this->Elements);
         foreach($this->Elements as $Index => $Value) {
@@ -176,10 +148,7 @@ class Stack implements \IteratorAggregate, IEnumerable {
         return $Accumulator;
     }
 
-    /**
-     * @inheritDoc
-     * @see \vDesk\Struct\Collections\IEnumerable::Any()
-     */
+    /** @inheritDoc */
     public function Any(callable $Predicate): bool {
         foreach($this->Elements as $Index => $Value) {
             if($Predicate($Value, $Index, $this)) {

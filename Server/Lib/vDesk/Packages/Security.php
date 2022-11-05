@@ -31,15 +31,15 @@ final class Security extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.2";
+    public const Version = "1.1.0";
 
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
 
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing a group- and user based access control aswell for single access controlled entities.";
 
@@ -47,9 +47,9 @@ final class Security extends Package implements IPackage {
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Modules"       => "1.0.1",
-        "Configuration" => "1.0.2",
-        "Events"        => "1.0.1"
+        "Modules"       => "1.0.2",
+        "Configuration" => "1.1.0",
+        "Events"        => "1.1.0"
     ];
 
     /**
@@ -178,6 +178,56 @@ final class Security extends Package implements IPackage {
                 "Security:MaxFailedLogins" => "Defines the maximum number of failed login attempts before a user account is automatically deactivated.",
                 "Security:SessionLifeTime" => "Defines the time span after which a user session expires."
             ]
+        ],
+        "NL" => [
+            "Security"    => [
+                "AddUser"                => "Gebruiker toevoegen",
+                "ChangeEmail"            => "E-mailadres wijzigen",
+                "DeleteEntry"            => "Item verwijderen",
+                "DeleteGroup"            => "Groep verwijderen",
+                "Email"                  => "E-mailadres",
+                "Everyone"               => "Iedereen",
+                "FailedLogins"           => "Mislukte logins",
+                "GroupEditorChangeGroup" => "Bij het wijzigen van de groep gaan niet opgeslagen wijzigingen verloren. Groep wijzigen?",
+                "GroupEditorDeleteGroup" => "Het verwijderen van een groep verliest alle permissies en ACL entries. Groep verwijderen?",
+                "Groups"                 => "Groepen",
+                "KeepLoggedin"           => "Ingelogd blijven",
+                "Memberships"            => "Lidmaatschappen",
+                "NewGroup"               => "Nieuwe groep",
+                "NewPassword"            => "Nieuw wachtwoord",
+                "NewUser"                => "Nieuwe gebruiker",
+                "OldPassword"            => "Oud wachtwoord",
+                "Owner"                  => "Eigenaar",
+                "Password"               => "Wachtwoord",
+                "Permissions"            => "Toestemmingen",
+                "Read"                   => "Lezen",
+                "ResetPassword"          => "Wachtwoord opnieuw instellen",
+                "Status"                 => "Status",
+                "User"                   => "Gebruiker",
+                "UserConfiguration"      => "Gebruikersinstellingen",
+                "UserGroup"              => "Gebruiker/Groep",
+                "Username"               => "Gebruikersnaam",
+                "Users"                  => "Gebruikers",
+                "Visibility"             => "Zichtbaarheid",
+                "Write"                  => "Schrijven",
+                "UserCount"              => "Aantal gebruikersaccounts",
+                "GroupCount"             => "Aantal gebruikersgroepen"
+            ],
+            "Permissions" => [
+                "ReadAccessControlList"   => "Bepaalt of leden van de groep toegangscontrolelijsten mogen zien",
+                "UpdateAccessControlList" => "Bepaalt of leden van de groep toegangscontrolelijsten mogen bijwerken",
+                "CreateGroup"             => "Bepaalt of leden van de groep nieuwe gebruikersgroepen mogen aanmaken",
+                "UpdateGroup"             => "Bepaalt of leden van de groep gebruikersgroepen mogen bijwerken",
+                "DeleteGroup"             => "Bepaalt of leden van de groep gebruikersgroepen mogen verwijderen",
+                "CreateUser"              => "Bepaalt of leden van de groep nieuwe gebruikersaccounts mogen aanmaken",
+                "UpdatePassword"          => "Bepaalt of leden van de groep het wachtwoord van hun eigen gebruikersaccount mogen wijzigen",
+                "UpdateUser"              => "Bepaalt of leden van de groep gebruikersaccounts mogen bijwerken",
+                "DeleteUser"              => "Bepaalt of leden van de groep gebruikersaccounts mogen verwijderen"
+            ],
+            "Settings"    => [
+                "Security:MaxFailedLogins" => "Bepaalt het maximum aantal mislukte aanmeldingspogingen voordat een gebruikersaccount automatisch wordt gedeactiveerd.",
+                "Security:SessionLifeTime" => "Bepaalt de tijdspanne waarna een gebruikerssessie afloopt."
+            ]
         ]
     ];
 
@@ -188,16 +238,12 @@ final class Security extends Package implements IPackage {
      */
     private static string $Password;
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function PreInstall(\Phar $Phar, string $Path): void {
         self::$Password = \readline("System User password: ");
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
 
         Expression::Create()
@@ -295,8 +341,8 @@ final class Security extends Package implements IPackage {
                           "Delete"            => ["Type" => Type::Boolean]
                       ],
                       [
-                          "Primary"     => ["Fields" => ["ID", "AccessControlList"]],
-                          "Permissions" => ["Unique" => true, "Fields" => ["Group", "User", "Read", "Write", "Delete"]]
+                          "Primary"     => ["Fields" => ["ID"]],
+                          "Permissions" => ["Unique" => true, "Fields" => ["AccessControlList", "Group", "User"]]
                       ]
                   )
                   ->Execute();
@@ -592,7 +638,7 @@ final class Security extends Package implements IPackage {
             new User\Groups([$Everyone, $Administration])
         );
         $User->Save();
-        User::$Current = \vDesk::$User = $User;
+        User::$Current = $User;
 
         Settings::$Remote["Security"] = new Settings\Remote\Settings(
             [
@@ -607,9 +653,7 @@ final class Security extends Package implements IPackage {
 
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
 
         //Uninstall Module.

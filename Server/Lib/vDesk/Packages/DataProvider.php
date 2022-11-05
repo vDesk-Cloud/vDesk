@@ -28,15 +28,15 @@ final class DataProvider extends Package {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.0.3";
 
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
 
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing a database abstraction layer.";
 

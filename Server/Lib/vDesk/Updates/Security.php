@@ -21,13 +21,13 @@ class Security extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.2";
+    public const RequiredVersion = "1.0.3";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to vDesk-1.1.0.
+- Added compatibility to vDesk-1.2.0.
 Description;
 
     /**
@@ -35,23 +35,24 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
-            Package::Client => [
-                Package::Design => [
-                    "vDesk/Security/LoginDialog.css"
+            Package::Server => [
+                Package::Lib => [
+                    "vDesk/Security/AccessControlList.php",
+                    "vDesk/Security/User/Groups.php"
                 ],
-                Package::Lib    => [
-                    "vDesk/Security"
+                Package::Modules => [
+                    "Security.php"
                 ]
             ]
         ],
         self::Undeploy => [
-            Package::Client => [
-                Package::Design => [
-                    "vDesk/LoginDialog.css"
+            Package::Server => [
+                Package::Lib => [
+                    "vDesk/Security/AccessControlList.php",
+                    "vDesk/Security/User/Groups.php"
                 ],
-                Package::Lib    => [
-                    "vDesk/LoginDialog.js",
-                    "vDesk/Security"
+                Package::Modules => [
+                    "Security.php"
                 ]
             ]
         ]

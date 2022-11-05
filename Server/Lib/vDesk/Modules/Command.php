@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace vDesk\Modules;
 
-use vDesk\IO\Input\IProvider;
+use vDesk\IO\Input;
 use vDesk\DataProvider\Expression;
 use vDesk\Modules;
 use vDesk\Modules\Module\Command\Parameter;
@@ -18,54 +18,52 @@ use vDesk\Utils\Validate;
  * @package vDesk\Modules
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Command implements ICommand {
-    
+class Command {
+
     /**
      * The response code for successful executed Commands.
      */
     public const Successful = 0;
-    
+
     /**
      * The name of the Module of the Command.
      *
      * @var string|null
      */
     public static ?string $Module = null;
-    
+
     /**
      * The name of the Command.
      *
      * @var string|null
      */
     public static ?string $Name = null;
-    
+
     /**
      * The ticket of the Command.
      *
      * @var null|string
      */
     public static ?string $Ticket = null;
-    
+
     /**
      * The parameters of the current called Command.
      *
      * @var iterable
      */
     public static iterable $Parameters = [];
-    
+
     /**
      * Factory method that creates a new instance of the Command class holding the value passed through a specified IProvider.
      *
-     * @param \vDesk\IO\Input\IProvider $Provider The input Provider to parse the command and values of.
-     *
      * @return \vDesk\Modules\Command A Command holding the values from the specified IProvider.
      */
-    public static function Parse(IProvider $Provider): self {
-        
-        static::$Module = $Provider->ParseCommand("Module");
-        static::$Name   = $Provider->ParseCommand("Command");
-        static::$Ticket = $Provider->ParseCommand("Ticket");
-        
+    public static function Parse(): self {
+
+        static::$Module = Input::ParseCommand("Module");
+        static::$Name   = Input::ParseCommand("Command");
+        static::$Ticket = Input::ParseCommand("Ticket");
+
         $Row = Expression::Select(
             "Modules.ID",
             "Commands.ID",
@@ -81,7 +79,7 @@ class Command implements ICommand {
                          ])
                          ->Execute()
                          ->ToMap();
-        
+
         $Parameters = new Collection();
         foreach(
             Expression::Select("Name", "Type", "Optional", "Nullable")
@@ -101,20 +99,20 @@ class Command implements ICommand {
                 )
             );
         }
-        
+
         //Validate parameters.
         foreach(
             $Parameters as $Parameter
         ) {
             $Value = $Parameter->Type === "file"
-                ? $Provider->FetchFile($Parameter->Name)
-                : $Provider->ParseParameter($Parameter->Name);
-            
+                ? Input::FetchFile($Parameter->Name)
+                : Input::ParseParameter($Parameter->Name);
+
             //Check if the Parameter has been passed.
             if($Value === null && !$Parameter->Optional) {
                 throw new \ArgumentCountError("Missing value for required Parameter '{$Parameter->Name}' of Command '" . static::$Module . "::" . static::$Name . "'!");
             }
-            
+
             //Transform value.
             if($Value !== null) {
                 switch($Parameter->Type) {
@@ -143,29 +141,30 @@ class Command implements ICommand {
                         break;
                 }
             }
-            
+
             //Check if the parameter is nullable.
             if($Value === null && !$Parameter->Nullable) {
                 throw new \InvalidArgumentException("Value of Parameter '{$Parameter->Name}' of Command '" . static::$Module . "::" . static::$Name . "' cannot be null!");
             }
-            
+
             //Check if the parameter is of the correct type.
             if($Value !== null && !Validate::As($Value, $Parameter->Type)) {
                 throw new \InvalidArgumentException("Type for parameter '{$Parameter->Name}' of command '" . static::$Module . "::" . static::$Name . "' must be typeof '{$Parameter->Type}' - " . \gettype($Parameter) . " given");
             }
-            
+
             static::$Parameters[$Parameter->Name] = $Value;
         }
-        
-        
+
         return new static();
-        
+
     }
-    
+
     /**
-     * @inheritDoc
+     * Executes the Command.
+     *
+     * @return mixed The result of the executed Command.
      */
-    public function Execute() {
+    public function Execute(): mixed {
         return Modules::Call(static::$Module, static::$Name);
     }
 }

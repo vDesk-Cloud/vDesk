@@ -6,22 +6,22 @@ namespace Pages\Documentation;
 use Pages\Documentation;
 
 /**
- * Packages Documentation
+ * Operating systems Documentation Page.
  *
- * @package Pages\Tutorials
+ * @package vDesk\Documentation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class OperatingSystems extends Documentation {
     
     /**
-     * The name of the Tutorial.
+     * The name of the Page.
      *
      * @var string
      */
     public string $Name = "OperatingSystems";
     
     /**
-     * The nav label of the Tutorial
+     * The nav label of the Page.
      *
      * @var string
      */
