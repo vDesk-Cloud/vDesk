@@ -195,8 +195,7 @@ final class Configuration extends Module {
             Log::Warn(__METHOD__, User::$Current->Name . " tried to clear log without having permissions.");
             throw new UnauthorizedAccessException();
         }
-        $Stream = new FileStream(Settings::$Local["Log"]["Target"], Stream\Mode::Append);
-        $Stream->Truncate(0);
+        new FileStream(Settings::$Local["Log"]["Target"], Stream\Mode::Write | Stream\Mode::Truncate);
         return true;
     }
 

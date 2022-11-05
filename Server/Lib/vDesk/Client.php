@@ -74,7 +74,7 @@ class Client {
      * @param string $Path The path of the client html file.
      */
     public function Create(string $Path): void {
-        $File = new FileStream(($Path ?? \Client) . Path::Separator . "vDesk.html", Mode::Truncate);
+        $File = new FileStream(($Path ?? \Client) . Path::Separator . "vDesk.html", Mode::Write | Mode::Truncate);
         $File->Write($this->ToHTML());
     }
     

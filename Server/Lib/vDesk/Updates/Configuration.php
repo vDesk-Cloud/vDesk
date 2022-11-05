@@ -36,17 +36,23 @@ Description;
     public const Files = [
         self::Deploy   => [
             Package::Server => [
-                Package::Lib => [
+                Package::Lib     => [
                     "vDesk/Configuration/Settings/Local/Settings.php",
                     "vDesk/Configuration/Settings/Remote/Settings.php"
+                ],
+                Package::Modules => [
+                    "Configuration.php"
                 ]
             ]
         ],
         self::Undeploy => [
             Package::Server => [
-                Package::Lib => [
+                Package::Lib     => [
                     "vDesk/Configuration/Settings/Local/Settings.php",
                     "vDesk/Configuration/Settings/Remote/Settings.php"
+                ],
+                Package::Modules => [
+                    "Configuration.php"
                 ]
             ]
         ]
