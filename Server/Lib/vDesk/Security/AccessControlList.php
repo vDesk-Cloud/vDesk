@@ -166,6 +166,7 @@ class AccessControlList extends Collection implements ICollectionModel {
             Expression::Select("*")
                       ->From("Security.AccessControlListEntries")
                       ->Where(["AccessControlList" => $this->ID])
+                      ->OrderBy(["User" => true, "Group" => true])
             as
             $Entry
         ) {
@@ -329,39 +330,12 @@ class AccessControlList extends Collection implements ICollectionModel {
                 $Entry->Write  = true;
                 $Entry->Delete = true;
             } else {
-                //Create "System" User Entry.
-                $Entry     = Entry::FromUser();
-                $Entry->ID = Expression::Insert()
-                                       ->Into("Security.AccessControlListEntries")
-                                       ->Values([
-                                           "ID"                => null,
-                                           "AccessControlList" => $this->ID,
-                                           "Group"             => null,
-                                           "User"              => $Entry->User,
-                                           "Read"              => $Entry->Read,
-                                           "Write"             => $Entry->Write,
-                                           "Delete"            => $Entry->Delete
-                                       ])
-                                       ->ID();
-                $this->Add($Entry);
+                $this->Add(Entry::FromUser());
             }
 
             //Create "Everyone" Group Entry.
             if(!$this->Any(fn(Entry $Entry): bool => $Entry->Group->ID === Group::Everyone)) {
-                $EveryoneGroupEntry     = Entry::FromGroup();
-                $EveryoneGroupEntry->ID = Expression::Insert()
-                                                    ->Into("Security.AccessControlListEntries")
-                                                    ->Values([
-                                                        "ID"                => null,
-                                                        "AccessControlList" => $this->ID,
-                                                        "Group"             => $EveryoneGroupEntry->Group,
-                                                        "User"              => null,
-                                                        "Read"              => $EveryoneGroupEntry->Read,
-                                                        "Write"             => $EveryoneGroupEntry->Write,
-                                                        "Delete"            => $EveryoneGroupEntry->Delete
-                                                    ])
-                                                    ->ID();
-                $this->Add($EveryoneGroupEntry);
+                $this->Add(Entry::FromGroup());
             }
 
             /** @var Entry $Entry */

@@ -341,8 +341,8 @@ final class Security extends Package implements IPackage {
                           "Delete"            => ["Type" => Type::Boolean]
                       ],
                       [
-                          "Primary"     => ["Fields" => ["ID", "AccessControlList"]],
-                          "Permissions" => ["Unique" => true, "Fields" => ["Group", "User", "Read", "Write", "Delete"]]
+                          "Primary"     => ["Fields" => ["ID"]],
+                          "Permissions" => ["Unique" => true, "Fields" => ["AccessControlList", "Group", "User"]]
                       ]
                   )
                   ->Execute();
