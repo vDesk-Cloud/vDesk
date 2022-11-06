@@ -18,32 +18,32 @@ use vDesk\Struct\Extension;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Updates extends Package implements IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Updates";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.2";
-    
+    public const Version = "1.1.0";
+
     /**
      * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The description of the Package.
      */
     public const Description = "Package providing functionality for creating setups and creating, installing and uninstalling packages.";
-    
+
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Packages" => "1.0.3"];
-    
+    public const Dependencies = ["Packages" => "1.1.0"];
+
     /**
      * The files and directories of the Package.
      */
@@ -66,7 +66,7 @@ final class Updates extends Package implements IPackage {
             ]
         ]
     ];
-    
+
     /**
      * The translations of the Package.
      */
@@ -100,14 +100,27 @@ final class Updates extends Package implements IPackage {
             "Permissions" => [
                 "InstallUpdate" => "Determines whether members of the group are allowed to install Updates"
             ]
+        ],
+        "NL" => [
+            "Updates"     => [
+                "Search"          => "Zoeken naar updates",
+                "Upload"          => "Upload",
+                "Download"        => "Download",
+                "Source"          => "Bron",
+                "Updates"         => "Updates",
+                "Hash"            => "Hash",
+                "Deploy"          => "Inzetten",
+                "RequiredVersion" => "Vereiste versie"
+            ],
+            "Permissions" => [
+                "InstallUpdate" => "Bepaalt of leden van de groep updates mogen installeren"
+            ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         //Install Module.
         /** @var \Modules\Updates $Updates */
         $Updates = \vDesk\Modules::Updates();
@@ -174,41 +187,39 @@ final class Updates extends Package implements IPackage {
                 ])
             )
         );
-        
+
         $Updates->Save();
-        
+
         //Create permissions.
         /** @var \Modules\Security $Security */
         $Security = \vDesk\Modules::Security();
         $Security::CreatePermission("InstallUpdate", false);
-        
+
         Settings::$Local["Updates"] = new Settings\Local\Settings([
             "Server" => ["updates.vdesk.cloud"]
         ],
             "Updates"
         );
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
-        
+
         //Uninstall Module.
         /** @var \Modules\Packages $Updates */
         $Updates = \vDesk\Modules::Updates();
         $Updates->Delete();
-        
+
         //Delete permissions.
         /** @var \Modules\Security $Security */
         $Security = \vDesk\Modules::Security();
         $Security::DeletePermission("InstallUpdate");
-        
+
         //Delete files.
         self::Undeploy();
-        
+
     }
 }

@@ -29,37 +29,37 @@ use vDesk\Utils\Log;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Archive extends Package implements Locale\IPackage, Events\IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Archive";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.2";
-    
+    public const Version = "1.1.0";
+
     /**
      * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The description of the Package.
      */
     public const Description = "Package providing functionality for organizing files and folders.";
-    
+
     /**
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Events"   => "1.0.1",
-        "Locale"   => "1.0.3",
-        "Security" => "1.0.4",
-        "Search"   => "1.0.1"
+        "Events"   => "1.1.0",
+        "Locale"   => "1.1.0",
+        "Security" => "1.1.0",
+        "Search"   => "1.1.0"
     ];
-    
+
     /**
      * The files and directories of the Package.
      */
@@ -86,14 +86,14 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
             ]
         ]
     ];
-    
+
     /**
      * The eventlisteners of the Package.
      */
     public const Events = [
         "vDesk.Security.User.Deleted" => "/vDesk/Archive/vDesk.Security.User.Deleted.php"
     ];
-    
+
     /**
      * The translations of the Package.
      */
@@ -157,12 +157,40 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
             "Settings"    => [
                 "Archive:UploadMode" => "Defines whether files are loaded into the archive in parallel or consecutively."
             ]
+        ],
+        "NL" => [
+            "Archive"     => [
+                "AddFile"              => "Bestand toevoegen",
+                "Attributes"           => "Attributen",
+                "AttributeWindowTitle" => "Attributen van",
+                "Clipboard"            => "Klembord",
+                "CreationTime"         => "Tijd van maken",
+                "Details"              => "Details",
+                "Element"              => "Element",
+                "Entry"                => "Begin van het archief",
+                "File"                 => "Bestand",
+                "Size"                 => "Grootte",
+                "Folder"               => "Map",
+                "Module"               => "Archief",
+                "NewFolder"            => "Nieuwe map",
+                "Owner"                => "Eigenaar",
+                "PinBoard"             => "Toevoegen aan prikbord",
+                "Refresh"              => "Vernieuwen",
+                "Rename"               => "Hernoemen",
+                "FileCount"            => "Aantal bestanden",
+                "FolderCount"          => "Aantal mappen",
+                "DiskUsage"            => "Hoeveelheid gebruikte schijfruimte"
+            ],
+            "Permissions" => [
+                "ReadAttributes" => "Bepaalt of leden van de groep attributen van een archiefelement mogen zien",
+            ],
+            "Settings"    => [
+                "Archive:UploadMode" => "Bepaalt of bestanden parallel of na elkaar in het archief worden geladen."
+            ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function PreInstall(\Phar $Phar, string $Path): void {
         $Size = \ini_get("upload_max_filesize");
         if(\str_contains($Size, "K") || \str_contains($Size, "M") || (int)$Size < 1e+9) {
@@ -174,20 +202,18 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
         if((int)\ini_get("max_input_time") > -1) {
             Log::Warn(self::Name, "Package suggests setting ini value of \"max_input_time\" to -1.");
         }
-        
+
         //@todo Check if lib GD is installed.?
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         //Create database.
         Expression::Create()
                   ->Schema("Archive")
                   ->Execute();
-        
+
         //Create tables.
         Expression::Create()
                   ->Table(
@@ -235,7 +261,7 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
                       ]
                   )
                   ->Execute();
-        
+
         //Install Module.
         /** @var \Modules\Archive $Archive */
         $Archive = \vDesk\Modules::Archive();
@@ -391,12 +417,12 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
             )
         );
         $Archive->Save();
-        
+
         //Create permissions.
         /** @var \Modules\Security $Security */
         $Security = \vDesk\Modules::Security();
         $Security::CreatePermission("ReadAttributes", false);
-        
+
         //Create Archive.
         $Archive = new Element(
             null,
@@ -416,7 +442,7 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
             ])
         );
         $Archive->Save();
-        
+
         $System = new Element(
             null,
             User::$Current,
@@ -435,7 +461,7 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
             ])
         );
         $System->Save();
-        
+
         $Files                       = Directory::Create($Path . Path::Separator . self::Server . Path::Separator . "Files");
         Settings::$Local["Archive"]  = new Settings\Local\Settings(["Directory" => $Files->Path], "Archive");
         Settings::$Remote["Archive"] = new Settings\Remote\Settings(
@@ -454,22 +480,20 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
             ],
             "Archive"
         );
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
-        
+
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
-        
+
         //Uninstall Module.
         /** @var \Modules\Archive $Archive */
         $Archive = \vDesk\Modules::Archive();
         $Archive->Delete();
-        
+
         //Delete ACLs
         foreach(
             Expression::Select("AccessControlList")
@@ -480,15 +504,15 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
             $AccessControlList = new AccessControlList([], (int)$Element["AccessControlList"]);
             $AccessControlList->Delete();
         }
-        
+
         //Drop database.
         Expression::Drop()
                   ->Schema("Archive")
                   ->Execute();
-        
+
         //Delete files.
         Directory::Delete($Path . Path::Separator . self::Server . Path::Separator . "Files", true);
         self::Undeploy();
-        
+
     }
 }

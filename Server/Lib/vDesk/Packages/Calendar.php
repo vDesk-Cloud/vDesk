@@ -20,37 +20,37 @@ use vDesk\Struct\Collections\Observable\Collection;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Calendar extends Package implements Locale\IPackage, Events\IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Calendar";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.2";
-    
+    public const Version = "1.1.0";
+
     /**
      * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The description of the Package.
      */
     public const Description = "Package providing functionality for organizing events and meetings.";
-    
+
     /**
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Events"   => "1.0.1",
-        "Locale"   => "1.0.3",
-        "Security" => "1.0.4",
-        "Search"   => "1.0.1"
+        "Events"   => "1.1.0",
+        "Locale"   => "1.1.0",
+        "Security" => "1.1.0",
+        "Search"   => "1.1.0"
     ];
-    
+
     /**
      * The files and directories of the Package.
      */
@@ -77,14 +77,14 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
             ]
         ]
     ];
-    
+
     /**
      * The eventlisteners of the Package.
      */
     public const Events = [
         "vDesk.Security.User.Deleted" => "/vDesk/Calendar/vDesk.Security.User.Deleted.php"
     ];
-    
+
     /**
      * The translations of the Package.
      */
@@ -204,18 +204,74 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
                 "Year"           => "Year",
                 "EventCount"     => "Amount of events"
             ]
+        ],
+        "NL" => [
+            "Calendar" => [
+                "April"          => "April",
+                "AprilShort"     => "Apr",
+                "August"         => "Augustus",
+                "AugustShort"    => "Aug",
+                "Date"           => "Datum",
+                "Day"            => "Dag",
+                "December"       => "December",
+                "DecemberShort"  => "Dec",
+                "EditEvent"      => "Bewerk evenement",
+                "End"            => "Einde",
+                "Event"          => "Evenement",
+                "February"       => "Februari",
+                "FebruaryShort"  => "Feb",
+                "Friday"         => "Vrijdag",
+                "FridayShort"    => "Vri",
+                "FullTime"       => "Voltijds",
+                "GoTo"           => "Ga naar",
+                "GoToDate"       => "Ga naar datum",
+                "January"        => "Januari",
+                "JanuaryShort"   => "Jan",
+                "July"           => "Juli",
+                "JulyShort"      => "Jul",
+                "June"           => "Juni",
+                "JuneShort"      => "Jun",
+                "March"          => "Maart",
+                "MarchShort"     => "Mrt",
+                "May"            => "Mei",
+                "MayShort"       => "Mei",
+                "Meeting"        => "Bijeenkomst",
+                "Module"         => "Kalender",
+                "Monday"         => "Maandag",
+                "MondayShort"    => "Ma",
+                "Month"          => "Maand",
+                "NewEvent"       => "Nieuw evenement",
+                "November"       => "November",
+                "NovemberShort"  => "Nov",
+                "October"        => "Oktober",
+                "OctoberShort"   => "Okt",
+                "Saturday"       => "Zaterdag",
+                "SaturdayShort"  => "Zat",
+                "September"      => "September",
+                "SeptemberShort" => "Sep",
+                "Start"          => "Start",
+                "Sunday"         => "Zondag",
+                "SundayShort"    => "Zon",
+                "Thursday"       => "Donderdag",
+                "ThursdayShort"  => "Do",
+                "Today"          => "Vandaag",
+                "Tuesday"        => "Dinsdag",
+                "TuesdayShort"   => "Din",
+                "Wednesday"      => "Woensdag",
+                "WednesdayShort" => "Woe",
+                "Year"           => "Jaar",
+                "EventCount"     => "Aantal evenementen"
+            ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         Expression::Create()
                   ->Schema("Calendar")
                   ->Execute();
-        
+
         //Create tables.
         Expression::Create()
                   ->Table(
@@ -238,7 +294,7 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
                       ]
                   )
                   ->Execute();
-        
+
         //Install Module.
         /** @var \Modules\Calendar $Calendar */
         $Calendar = \vDesk\Modules::Calendar();
@@ -335,22 +391,20 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
             )
         );
         $Calendar->Save();
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
-        
+
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
-        
+
         //Uninstall Module.
         /** @var \Modules\Calendar $Calendar */
         $Calendar = \vDesk\Modules::Calendar();
         $Calendar->Delete();
-        
+
         //Delete ACLs
         foreach(
             Expression::Select("AccessControlList")
@@ -361,14 +415,14 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
             $AccessControlList = new AccessControlList([], (int)$Event["AccessControlList"]);
             $AccessControlList->Delete();
         }
-        
+
         //Drop database.
         Expression::Drop()
                   ->Schema("Calendar")
                   ->Execute();
-        
+
         //Delete files.
         self::Undeploy();
-        
+
     }
 }

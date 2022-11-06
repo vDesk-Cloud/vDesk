@@ -22,32 +22,35 @@ use vDesk\Utils\Log;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Events extends Package implements IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Events";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
-    
+    public const Version = "1.1.0";
+
     /**
      * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The description of the Package.
      */
     public const Description = "Package providing functionality for dispatching and listening on global events.";
-    
+
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Modules" => "1.0.1", "Configuration" => "1.0.2"];
-    
+    public const Dependencies = [
+        "Modules"       => "1.0.2",
+        "Configuration" => "1.1.0"
+    ];
+
     /**
      * The files and directories of the Package.
      */
@@ -67,7 +70,7 @@ final class Events extends Package implements IPackage {
             ]
         ]
     ];
-    
+
     /**
      * The translations of the Package.
      */
@@ -81,27 +84,28 @@ final class Events extends Package implements IPackage {
             "Settings" => [
                 "Events:Interval" => "Defines the interval in seconds at which new events are dispatched."
             ]
+        ],
+        "NL" => [
+            "Settings" => [
+                "Events:Interval" => "Bepaalt het interval in seconden waarmee nieuwe gebeurtenissen worden verzonden."
+            ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function PreInstall(\Phar $Phar, string $Path): void {
         if((int)\ini_get("max_execution_time") > 0) {
             Log::Warn(self::Name, "Package suggests setting ini value of \"max_execution_time\" to 0.");
         }
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         Expression::Create()
                   ->Schema("Events")
                   ->Execute();
-        
+
         //Create tables.
         Expression::Create()
                   ->Table(
@@ -136,7 +140,7 @@ final class Events extends Package implements IPackage {
                       ]
                   )
                   ->Execute();
-        
+
         //Install Module.
         /** @var \Modules\EventDispatcher $EventDispatcher */
         $EventDispatcher = \vDesk\Modules::EventDispatcher();
@@ -162,15 +166,13 @@ final class Events extends Package implements IPackage {
             ],
             "Events"
         );
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
-        
+
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function PostInstall(\Phar $Phar, string $Path): void {
         if(\vDesk\Modules::Installed("Archive")) {
             $System = new Element(2);
@@ -189,34 +191,31 @@ final class Events extends Package implements IPackage {
                 new AccessControlList($System->AccessControlList)
             );
             $Events->Save();
-            Settings::$Local["Events"]  = new Settings\Local\Settings(["Directory" => $Events->ID], "Events");
+            Settings::$Local["Events"] = new Settings\Local\Settings(["Directory" => $Events->ID], "Events");
             Settings::$Local["Events"]->Save();
         }
     }
-    
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
-        
+
         if(\vDesk\Modules::Installed("Archive")) {
             \vDesk\Modules::Archive()::DeleteElements([Settings::$Local["Events"]["Directory"]]);
         }
-        
+
         //Uninstall Module.
         /** @var \Modules\EventDispatcher $EventDispatcher */
         $EventDispatcher = \vDesk\Modules::EventDispatcher();
         $EventDispatcher->Delete();
-        
+
         //Drop database.
         Expression::Drop()
                   ->Schema("Events")
                   ->Execute();
-        
+
         //Delete files.
         self::Undeploy();
-        
+
     }
-    
+
 }

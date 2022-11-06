@@ -18,36 +18,36 @@ use vDesk\Struct\Extension;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Packages extends Package implements IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Packages";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.3";
-    
+    public const Version = "1.1.0";
+
     /**
      * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The description of the Package.
      */
     public const Description = "Package providing functionality for creating an un/installing packages.";
-    
+
     /**
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Events"   => "1.0.1",
-        "Locale"   => "1.0.3",
-        "Security" => "1.0.4"
+        "Events"   => "1.1.0",
+        "Locale"   => "1.1.0",
+        "Security" => "1.1.0"
     ];
-    
+
     /**
      * The files and directories of the Package.
      */
@@ -70,7 +70,7 @@ final class Packages extends Package implements IPackage {
             ]
         ]
     ];
-    
+
     /**
      * The translations of the Package.
      */
@@ -106,18 +106,32 @@ final class Packages extends Package implements IPackage {
                 "InstallPackage"   => "Determines whether members of the group are allowed to install Packages",
                 "UninstallPackage" => "Determines whether members of the group are allowed to uninstall Packages"
             ]
+        ],
+        "NL" => [
+            "Packages"    => [
+                "Install"      => "Installeer",
+                "Uninstall"    => "Verwijder",
+                "Packages"     => "Pakketten",
+                "Package"      => "Pakket",
+                "Version"      => "Versie",
+                "Dependencies" => "Afhankelijkheden",
+                "Vendor"       => "Verkoper",
+                "Description"  => "Beschrijving"
+            ],
+            "Permissions" => [
+                "InstallPackage"   => "Bepaalt of leden van de groep Pakketten mogen installeren",
+                "UninstallPackage" => "Bepaalt of leden van de groep Pakketten mogen verwijderen"
+            ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         //Install Module.
         /** @var \Modules\Packages $Packages */
         $Packages = \vDesk\Modules::Packages();
-        
+
         $Packages->Commands->Add(
             new Command(
                 null,
@@ -165,35 +179,33 @@ final class Packages extends Package implements IPackage {
             )
         );
         $Packages->Save();
-        
+
         //Create permissions.
         /** @var \Modules\Security $Security */
         $Security = \vDesk\Modules::Security();
         $Security::CreatePermission("InstallPackage", false);
         $Security::CreatePermission("UninstallPackage", false);
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
-        
+
         //Uninstall Module.
         /** @var \Modules\Packages $Packages */
         $Packages = \vDesk\Modules::Packages();
         $Packages->Delete();
-        
+
         //Delete permissions.
         /** @var \Modules\Security $Security */
         $Security = \vDesk\Modules::Security();
         $Security::DeletePermission("InstallPackage");
         $Security::DeletePermission("UninstallPackage");
-        
+
         //Delete files.
         self::Undeploy();
-        
+
     }
 }

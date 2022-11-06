@@ -25,7 +25,7 @@ final class Search extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.1.0";
 
     /**
      * The vendor of the Package.
@@ -41,8 +41,8 @@ final class Search extends Package implements IPackage {
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Modules" => "1.0.1",
-        "Locale"  => "1.0.2"
+        "Modules" => "1.0.2",
+        "Locale"  => "1.1.0"
     ];
 
     /**
@@ -107,12 +107,26 @@ final class Search extends Package implements IPackage {
                 "StrictComparison"        => "Strict value comparison",
                 "StrictComparisonTooltip" => "If set. considers only datasets which data exactly compare to the specified search values."
             ]
+        ],
+        "NL" => [
+            "Search" => [
+                "Filters"                 => "Zoekfilters",
+                "MissingAction"           => "Geen actie geassocieerd met dit zoekresultaat",
+                "MissingViewerPlugin"     => "Geen preview plugin beschikbaar",
+                "Module"                  => "Zoek",
+                "Preview"                 => "Voorbeeld",
+                "Results"                 => "Zoekresultaten",
+                "Search"                  => "Zoek",
+                "SearchField"             => "Voer zoekwaarde(n) in.",
+                "StrictAccordance"        => "Strikte overeenstemming",
+                "StrictAccordanceTooltip" => "Indien ingesteld, worden alleen datasets in aanmerking genomen waarvan de gegevens overeenstemmen met alle opgegeven zoekwaarden.",
+                "StrictComparison"        => "Strikte waardevergelijking",
+                "StrictComparisonTooltip" => "Indien ingesteld, worden alleen datasets in aanmerking genomen waarvan de gegevens precies overeenkomen met de opgegeven zoekwaarden."
+            ]
         ]
     ];
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
 
         //Install Module.
@@ -139,9 +153,7 @@ final class Search extends Package implements IPackage {
 
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
 
         //Uninstall Module.

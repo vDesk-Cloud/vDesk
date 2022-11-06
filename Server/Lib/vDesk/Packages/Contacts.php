@@ -20,37 +20,37 @@ use vDesk\Struct\Collections\Observable\Collection;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Contacts extends Package implements Locale\IPackage, Events\IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Contacts";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.2";
-    
+    public const Version = "1.1.0";
+
     /**
      * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The description of the Package.
      */
     public const Description = "Package providing functionality for organizing personal and business contacts.";
-    
+
     /**
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Events"   => "1.0.1",
-        "Locale"   => "1.0.2",
-        "Security" => "1.0.4",
-        "Search"   => "1.0.1"
+        "Events"   => "1.1.0",
+        "Locale"   => "1.1.0",
+        "Security" => "1.1.0",
+        "Search"   => "1.1.0"
     ];
-    
+
     /**
      * The files and directories of the Package.
      */
@@ -77,14 +77,14 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
             ]
         ]
     ];
-    
+
     /**
      * The eventlisteners of the Package.
      */
     public const Events = [
         "vDesk.Security.User.Deleted" => "/vDesk/Contacts/vDesk.Security.User.Deleted.php"
     ];
-    
+
     /**
      * The translations of the Package.
      */
@@ -173,20 +173,62 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
                 "DeleteContact" => "Determines whether members of the group are allowed to delete contacts",
                 "UpdateCompany" => "Determines whether members of the group are allowed to update company contacts",
                 "UpdateContact" => "Determines whether members of the group are allowed to update contacts"
-            
+
+            ]
+        ],
+        "NL" => [
+            "Contacts"    => [
+                "AddContactOption"    => "Contactoptie toevoegen.",
+                "Address"             => "Adres",
+                "Annotations"         => "Aantekeningen",
+                "City"                => "Stad",
+                "Companies"           => "Bedrijven",
+                "Company"             => "Bedrijf",
+                "CompanyContact"      => "Bedrijfscontact",
+                "Contact"             => "Contact",
+                "ContactOptions"      => "Contactopties",
+                "Country"             => "Land",
+                "DeleteContactOption" => "Optie contact verwijderen",
+                "EditCompany"         => "Bedrijfscontact bewerken",
+                "EditContact"         => "Contact bewerken",
+                "Email"               => "E-mailadres",
+                "FaxNumber"           => "Faxnummer",
+                "Forename"            => "Voornaam",
+                "Gender"              => "Aanspreektitel",
+                "GenderFemale"        => "Mvr.",
+                "GenderMale"          => "Hr.",
+                "HouseNumber"         => "Huisnummer",
+                "Module"              => "Contacten",
+                "Name"                => "Naam",
+                "NewCompany"          => "Nieuw bedrijfscontact",
+                "NewContact"          => "Nieuw contact",
+                "PhoneNumber"         => "Telefoonnummer",
+                "Street"              => "Straat",
+                "Surname"             => "Achternaam",
+                "Website"             => "Website",
+                "ZipCode"             => "Postcode",
+                "ContactCount"        => "Aantal persoonlijke contacten",
+                "CompanyCount"        => "Aantal bedrijfscontacten"
+            ],
+            "Permissions" => [
+                "CreateCompany" => "Bepaalt of leden van de groep nieuwe bedrijfscontacten mogen aanmaken",
+                "CreateContact" => "Bepaalt of leden van de groep nieuwe contacten mogen aanmaken",
+                "DeleteCompany" => "Bepaalt of leden van de groep bedrijfscontacten mogen verwijderen",
+                "DeleteContact" => "Bepaalt of leden van de groep contacten mogen verwijderen",
+                "UpdateCompany" => "Bepaalt of leden van de groep bedrijfscontacten mogen bijwerken",
+                "UpdateContact" => "Bepaalt of leden van de groep contacten mogen bijwerken"
+
             ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         Expression::Create()
                   ->Schema("Contacts")
                   ->Execute();
-        
+
         //Create tables.
         Expression::Create()
                   ->Table(
@@ -250,7 +292,7 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
                       ]
                   )
                   ->Execute();
-        
+
         //Install Module.
         /** @var \Modules\Contacts $Contacts */
         $Contacts = \vDesk\Modules::Contacts();
@@ -454,7 +496,7 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
             )
         );
         $Contacts->Save();
-        
+
         //Create permissions.
         /** @var \Modules\Security $Security */
         $Security = \vDesk\Modules::Security();
@@ -464,22 +506,20 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
         $Security::CreatePermission("CreateCompany", true);
         $Security::CreatePermission("UpdateCompany", true);
         $Security::CreatePermission("DeleteCompany", true);
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
-        
+
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
-        
+
         //Uninstall Module.
         /** @var \Modules\Contacts $Contacts */
         $Contacts = \vDesk\Modules::Contacts();
         $Contacts->Delete();
-        
+
         //Delete ACLs
         foreach(
             Expression::Select("AccessControlList")
@@ -490,7 +530,7 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
             $AccessControlList = new AccessControlList([], (int)$Contact["AccessControlList"]);
             $AccessControlList->Delete();
         }
-        
+
         //Delete permissions.
         /** @var \Modules\Security $Security */
         $Security = \vDesk\Modules::Security();
@@ -500,14 +540,14 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
         $Security::DeletePermission("CreateCompany");
         $Security::DeletePermission("UpdateCompany");
         $Security::DeletePermission("DeleteCompany");
-        
+
         //Drop database.
         Expression::Drop()
                   ->Schema("Contacts")
                   ->Execute();
-        
+
         //Delete files.
         self::Undeploy();
-        
+
     }
 }
