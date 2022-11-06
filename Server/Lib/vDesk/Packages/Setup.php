@@ -27,12 +27,12 @@ final class Setup extends Package {
     public const Version = "1.0.1";
 
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
 
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing functionality for creating and installing setups.";
 

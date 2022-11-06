@@ -6,6 +6,7 @@ namespace vDesk\Machines;
 use vDesk\Configuration\Settings;
 use vDesk\DataProvider\Expression;
 use vDesk\IO\Path;
+use vDesk\Security\User;
 use vDesk\Struct\Collections\Collection;
 use vDesk\Struct\Collections\Queue;
 use vDesk\Tasks\Task;
@@ -61,7 +62,7 @@ class Tasks extends Machine {
             $this->Add($Task);
         }
         if($this->Tasks->Count === 0) {
-            Log::Warn(__METHOD__, \vDesk::$User->Name . " tried to start Machine without any Tasks installed!");
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to start Machine without any Tasks installed!");
             $this->Stop(1);
         }
     }

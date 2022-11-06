@@ -28,65 +28,64 @@ use vDesk\Struct\Extension;
  * @property bool                        $Changed      Gets or sets a value indicating whether the Row has been changed.
  * @property bool                        $TypeChanged  Gets or sets a value indicating whether the type of the Row has been changed.
  * @package Archive/MetaInformation
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Row implements IManagedModel {
-    
+
     use Properties;
-    
+
     /**
      * The supported types of the Row.
      */
-    public const Types
-        = [
-            Type::Int,
-            Type::Float,
-            Type::String,
-            Type::Bool,
-            Extension\Type::Date,
-            Extension\Type::Time,
-            Extension\Type::DateTime,
-            Extension\Type::Enum,
-            Extension\Type::Email,
-            Extension\Type::Money,
-            Extension\Type::URL
-        ];
-    
+    public const Types = [
+        Type::Int,
+        Type::Float,
+        Type::String,
+        Type::Bool,
+        Extension\Type::Date,
+        Extension\Type::Time,
+        Extension\Type::DateTime,
+        Extension\Type::Enum,
+        Extension\Type::Email,
+        Extension\Type::Money,
+        Extension\Type::URL
+    ];
+
     /**
      * Flag indicating whether the index of the Row has been changed.
      *
      * @var bool
      */
     protected bool $IndexChanged = false;
-    
+
     /**
      * Flag indicating whether the name of the Row has been changed.
      *
      * @var bool
      */
     protected bool $NameChanged = false;
-    
+
     /**
      * Flag indicating whether the type of the Row has been changed.
      *
      * @var bool
      */
     protected bool $TypeChanged = false;
-    
+
     /**
      * Flag indicating whether the required flag of the Row has been changed.
      *
      * @var bool
      */
     protected bool $RequiredChanged = false;
-    
+
     /**
      * Flag indicating whether the validator of the Row has been changed.
      *
      * @var bool
      */
     protected bool $ValidatorChanged = false;
-    
+
     /**
      * Initializes a new instance of the Row class.
      *
@@ -99,12 +98,12 @@ class Row implements IManagedModel {
      * @param null|array|object                $Validator Initializes the Row with the specified validator.
      */
     public function __construct(
-        protected ?int $ID = null,
-        protected ?Mask $Mask = null,
-        protected ?int $Index = null,
-        protected ?string $Name = null,
-        protected ?string $Type = null,
-        protected ?bool $Required = null,
+        protected ?int              $ID = null,
+        protected ?Mask             $Mask = null,
+        protected ?int              $Index = null,
+        protected ?string           $Name = null,
+        protected ?string           $Type = null,
+        protected ?bool             $Required = null,
         protected null|array|object $Validator = null
     ) {
         $this->AddProperties([
@@ -217,20 +216,19 @@ class Row implements IManagedModel {
             ]
         ]);
     }
-    
+
     /**
      * @inheritDoc
      */
     public function ID(): ?int {
         return $this->ID;
     }
-    
+
     /**
      * Fills the Row with its values from the database.
      *
      * @return \vDesk\MetaInformation\Mask\Row The filled Row.
      * @throws \vDesk\Data\IDNullException Thrown if the Row is virtual.
-     *
      */
     public function Fill(): Row {
         if($this->ID === null) {
@@ -249,7 +247,7 @@ class Row implements IManagedModel {
         $this->Validator = $Row["Validator"] !== null ? \json_decode($Row["Validator"]) : null;
         return $this;
     }
-    
+
     /**
      * Creates a Row from a specified data view.
      *
@@ -268,7 +266,7 @@ class Row implements IManagedModel {
             $DataView["Validator"] ?? null
         );
     }
-    
+
     /**
      * Creates a data view of the Row.
      *

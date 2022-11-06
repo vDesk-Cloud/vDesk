@@ -29,19 +29,19 @@ final class Tasks extends Package implements IPackage {
     public const Version = "1.1.0";
     
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
     
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing a task dispatcher.";
     
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Machines" => "1.0.2"];
+    public const Dependencies = ["Machines" => "1.0.3"];
     
     /**
      * The files and directories of the Package.
@@ -60,10 +60,8 @@ final class Tasks extends Package implements IPackage {
     public const Machines = [
         "Tasks" => "/vDesk/Tasks/Tasks.php"
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
         //Create Tasks folder.
         $Machines = new Element(Settings::$Local["Machines"]["Directory"]);
@@ -87,10 +85,8 @@ final class Tasks extends Package implements IPackage {
         //Extract files.
         self::Deploy($Phar, $Path);
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
         //Delete files.
         self::Undeploy();

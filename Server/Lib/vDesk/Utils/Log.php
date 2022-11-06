@@ -117,7 +117,7 @@ final class Log extends StaticSingleton {
     protected static function _construct() {
         self::$Stream = new FileStream(
             Settings::$Local["Log"]->Count > 0 ? Settings::$Local["Log"]["Target"] : "php://output",
-            Mode::Append | Mode::Binary
+            Mode::Write | Mode::Append | Mode::Binary
         );
     }
     
@@ -143,7 +143,6 @@ final class Log extends StaticSingleton {
         ) {
             File::Rename($Path, "Log_" . (new \DateTime())->format("Ymdhis") . ".txt");
         }
-        self::$Stream->Close();
     }
     
 }

@@ -61,7 +61,7 @@ class Settings extends Dictionary {
      * @param string $Path The path where the Settings file will be saved to.
      */
     public function Save(string $Path = \Server . Path::Separator . "Settings"): void {
-        $File = new FileStream($Path . Path::Separator . "{$this->Domain}.php", Mode::Truncate);
+        $File = new FileStream($Path . Path::Separator . "{$this->Domain}.php", Mode::Write | Mode::Truncate);
         $File->Write("<?php" . \PHP_EOL);
         $File->Write("return [" . \PHP_EOL);
         $Values = [];
@@ -70,7 +70,6 @@ class Settings extends Dictionary {
         }
         $File->Write(\implode("," . \PHP_EOL, $Values) . \PHP_EOL);
         $File->Write("];" . \PHP_EOL);
-        $File->Close();
     }
     
     /**

@@ -19,32 +19,32 @@ use vDesk\Struct\Collections\Observable\Collection;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class PinBoard extends Package implements Locale\IPackage, Events\IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "PinBoard";
-    
+
     /**
      * The version of the Package.
      */
     public const Version = "1.0.1";
-    
+
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing functionality for organizing notes and pinning Archive elements.";
-    
+
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Archive" => "1.0.1"];
-    
+    public const Dependencies = ["Archive" => "1.1.0"];
+
     /**
      * The files and directories of the Package.
      */
@@ -71,7 +71,7 @@ final class PinBoard extends Package implements Locale\IPackage, Events\IPackage
             ]
         ]
     ];
-    
+
     /**
      * The eventlisteners of the Package.
      */
@@ -79,7 +79,7 @@ final class PinBoard extends Package implements Locale\IPackage, Events\IPackage
         "vDesk.Security.User.Deleted"   => "/vDesk/PinBoard/vDesk.Security.User.Deleted.php",
         "vDesk.Archive.Element.Deleted" => "/vDesk/PinBoard/vDesk.Archive.Element.Deleted.php"
     ];
-    
+
     /**
      * The translations of the Package.
      */
@@ -117,18 +117,33 @@ final class PinBoard extends Package implements Locale\IPackage, Events\IPackage
                 "NoteCount"       => "Amount of notes",
                 "AttachmentCount" => "Amount of attachments"
             ]
+        ],
+        "NL" => [
+            "PinBoard" => [
+                "Blue"            => "Blauw",
+                "Custom"          => "Aangepast",
+                "CustomColor"     => "Aangepaste kleur",
+                "Green"           => "Groen",
+                "Module"          => "Prikbord",
+                "NewNote"         => "Nieuwe nota",
+                "Note"            => "Nota",
+                "Notes"           => "Notities",
+                "Red"             => "Rood",
+                "White"           => "Wit",
+                "Yellow"          => "Geel",
+                "NoteCount"       => "Aantal van de notities",
+                "AttachmentCount" => "Aantal bijlagen"
+            ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         Expression::Create()
                   ->Schema("PinBoard")
                   ->Execute();
-        
+
         Expression::Create()
                   ->Table(
                       "PinBoard.Notes",
@@ -162,7 +177,7 @@ final class PinBoard extends Package implements Locale\IPackage, Events\IPackage
                       ]
                   )
                   ->Execute();
-        
+
         //Install Module.
         /** @var \Modules\PinBoard $PinBoard */
         $PinBoard = \vDesk\Modules::PinBoard();
@@ -339,29 +354,27 @@ final class PinBoard extends Package implements Locale\IPackage, Events\IPackage
             )
         );
         $PinBoard->Save();
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
-        
+
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
-        
+
         //Uninstall Module.
         /** @var \Modules\PinBoard $PinBoard */
         $PinBoard = \vDesk\Modules::PinBoard();
         $PinBoard->Delete();
-        
+
         //Drop database.
         Expression::Drop()
                   ->Schema("PinBoard")
                   ->Execute();
-        
+
         //Delete files.
         self::Undeploy();
-        
+
     }
 }

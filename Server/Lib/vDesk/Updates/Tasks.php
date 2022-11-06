@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace vDesk\Updates;
 
-use vDesk\Modules;
 use vDesk\Packages\Package;
 
 /**
@@ -60,15 +59,14 @@ Description;
 
     /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
-        //Uninstall old Machines.
-        $Package = new \vDesk\Packages\Tasks();
-        Modules::Machines()::Uninstall($Package);
+        //Remove old Task dispatcher.
+        \vDesk\Modules::Machines()::Uninstall(new self::Package, $Phar, $Path);
 
-        //Patch files.
+        //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
 
-        //Install new Machines.
-        Modules::Machines()::Install($Package);
+        //Reinstall Package.
+        \vDesk\Modules::Machines()::Install(new self::Package, $Path);
     }
 }

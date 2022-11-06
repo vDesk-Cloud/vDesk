@@ -31,82 +31,80 @@ use vDesk\Struct\Type;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Command implements IModel {
-    
+
     use Properties;
-    
+
     /**
      * Flag indicating whether the name of the Command has been changed.
      *
      * @var bool
      */
     private bool $NameChanged = false;
-    
+
     /**
      * @var bool
      */
     private bool $RequireTicketChanged = false;
-    
+
     /**
      * Flag indicating whether the binary flag of the Command has been changed.
      *
      * @var bool
      */
     private bool $BinaryChanged = false;
-    
+
     /**
      * Flag indicating whether the alias of the Command has been changed.
      *
      * @var bool
      */
     private bool $AliasChanged = false;
-    
+
     /**
      * The added Parameters of the Command.
      *
      * @var array
      */
     private array $Added = [];
-    
+
     /**
      * The deleted Parameters of the Command.
      *
      * @var array
      */
     private array $Deleted = [];
-    
+
     /**
      * Initializes a new instance of the Command class.
      *
-     * @param int|null                                             $ID                    Initializes the Command with the specified ID.
-     * @param \vDesk\Modules\Module|null                           $Module                Initializes the Command with the specified Module.
-     * @param null|string                                          $Name                  Initializes the Command with the specified command.
-     * @param bool|null                                            $RequireTicket         Initializes the Command with the specified flag indicating whether
-     *                                                                                    the Command requires a ticket.
-     * @param bool|null                                            $Binary                Initializes the Command with the specified flag indicating whether
-     *                                                                                    the Command result is binary.
-     * @param string|null                                          $Alias                 Initializes the Command with the specified alias.
-     * @param \vDesk\Struct\Collections\Observable\Collection|null $Parameters            Initializes the Command with the specified Collection of Parameters.
+     * @param int|null                                             $ID            Initializes the Command with the specified ID.
+     * @param \vDesk\Modules\Module|null                           $Module        Initializes the Command with the specified Module.
+     * @param null|string                                          $Name          Initializes the Command with the specified command.
+     * @param bool|null                                            $RequireTicket Initializes the Command with the specified flag indicating whether the Command requires a ticket.
+     * @param bool|null                                            $Binary        Initializes the Command with the specified flag indicating whether the Command result is binary.
+     * @param string|null                                          $Alias         Initializes the Command with the specified alias.
+     * @param \vDesk\Struct\Collections\Observable\Collection|null $Parameters    Initializes the Command with the specified Collection of Parameters.
      */
     public function __construct(
-        protected ?int $ID = null,
-        protected ?Module $Module = null,
-        protected ?string $Name = null,
-        protected ?bool $RequireTicket = null,
-        protected ?bool $Binary = null,
-        protected ?string $Alias = null,
+        protected ?int        $ID = null,
+        protected ?Module     $Module = null,
+        protected ?string     $Name = null,
+        protected ?bool       $RequireTicket = null,
+        protected ?bool       $Binary = null,
+        protected ?string     $Alias = null,
         protected ?Collection $Parameters = null
     ) {
         if($Parameters !== null) {
-            $this->Parameters->OnAdd[]    = function(Collection $Sender, Parameter $Parameter): void {
+            $this->Parameters->OnAdd[]    = function(Parameter $Parameter, Collection $Parameters): void {
                 if($this->ID !== null) {
-                    if($Sender->Any(fn(Parameter $Existing): bool => $Existing->Name === $Parameter->Name)) {
+                    if($Parameters->Any(fn(Parameter $Existing): bool => $Existing->Name === $Parameter->Name)) {
                         throw new \InvalidArgumentException("Parameter with name '$Parameter->Name' already exists!");
                     }
                     $this->Added[] = $Parameter;
                 }
                 $Parameter->Command = $this;
             };
-            $this->Parameters->OnDelete[] = function($Sender, Parameter $Parameter): void {
+            $this->Parameters->OnRemove[] = function(Parameter $Parameter): void {
                 if($this->ID !== null && $Parameter->ID !== null) {
                     $this->Deleted[] = $Parameter;
                 }
@@ -206,16 +204,16 @@ class Command implements IModel {
                                 );
                             }
                         }
-                        $this->Parameters->OnAdd[]    = function(Collection $Sender, Parameter $Parameter): void {
+                        $this->Parameters->OnAdd[]    = function(Parameter $Parameter, Collection $Parameters): void {
                             if($this->ID !== null) {
-                                if($Sender->Any(fn(Parameter $Existing): bool => $Existing->Name === $Parameter->Name)) {
+                                if($Parameters->Any(fn(Parameter $Existing): bool => $Existing->Name === $Parameter->Name)) {
                                     throw new \InvalidArgumentException("Parameter with name '$Parameter->Name' already exists!");
                                 }
                                 $this->Added[] = $Parameter;
                             }
                             $Parameter->Command = $this;
                         };
-                        $this->Parameters->OnDelete[] = function($Sender, Parameter $Parameter): void {
+                        $this->Parameters->OnRemove[] = function($Sender, Parameter $Parameter): void {
                             if($this->ID !== null && $Parameter->ID !== null) {
                                 $this->Deleted[] = $Parameter;
                             }
@@ -226,14 +224,12 @@ class Command implements IModel {
             ]
         ]);
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public function ID(): ?int {
         return $this->ID;
     }
-    
+
     /**
      * @inheritDoc
      * @throws \vDesk\Data\IDNullException
@@ -271,10 +267,8 @@ class Command implements IModel {
         }
         return $this;
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public function Save(): void {
         if($this->ID === null) {
             $this->ID = Expression::Insert()
@@ -311,10 +305,8 @@ class Command implements IModel {
             }
         }
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public function Delete(): void {
         if($this->ID !== null) {
             Expression::Delete()
@@ -327,10 +319,8 @@ class Command implements IModel {
                       ->Execute();
         }
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function FromDataView(mixed $DataView): IDataView {
         return new static(
             $DataView["ID"] ?? null,
@@ -342,10 +332,8 @@ class Command implements IModel {
             $DataView["Parameters"] ?? [],
         );
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public function ToDataView(bool $Reference = false): array {
         return $Reference
             ? ["ID" => $this->ID]

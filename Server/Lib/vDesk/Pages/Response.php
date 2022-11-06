@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace vDesk\Pages;
 
 use vDesk\Configuration\Settings;
-use vDesk\IO\Output\CGI;
+use vDesk\IO\FileStream;
+use vDesk\IO\Output;
+use vDesk\IO\Stream\Mode;
 
 /**
  * Class Response
@@ -12,30 +14,31 @@ use vDesk\IO\Output\CGI;
  * @package vDesk\Pages
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Response extends CGI {
-    
+class Response extends Output {
+
     /**
      * The HTTP response code of the Response.
      *
      * @var int
      */
     public static int $Code = 200;
-    
+
     /**
      * Sends data to the current output API.
      *
      * @param mixed $Data The data to send.
      */
     public static function Write(mixed $Data): void {
-        
+
+        $Stream = new FileStream("php://output", Mode::Write | Mode::Binary);
+        \header("Content-type: text/html", true, static::$Code);
+
         if($Data instanceof Page) {
-            \header("Content-type: text/html", true, static::$Code);
-            static::$Stream->Write($Data->ToDataView());
+            $Stream->Write($Data->ToDataView());
             return;
         }
-        
+
         if($Data instanceof \Throwable) {
-            \header("Content-type: text/html", true, static::$Code);
             if(Settings::$Local["Pages"]["ShowErrors"]) {
                 if(\ob_get_level() > 0) {
                     \ob_end_clean();
@@ -45,15 +48,12 @@ class Response extends CGI {
                 static::Write(Modules::Call($ErrorHandler["Module"], $ErrorHandler["Command"], $Data));
                 return;
             }
-            
-            static::$Stream->Write($Data->getMessage());
+
+            $Stream->Write($Data->getMessage());
             return;
         }
-        
-        \header("Content-type: text/html", true, static::$Code);
-        static::$Stream->Write((string)$Data);
-        
+
+        $Stream->Write((string)$Data);
+
     }
 }
-
-new Response();
