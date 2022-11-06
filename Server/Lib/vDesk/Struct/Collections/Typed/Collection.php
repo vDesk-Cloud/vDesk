@@ -286,7 +286,7 @@ class Collection implements ICollection {
 
     /** @inheritDoc */
     public function Clear(): void {
-        \array_splice($this->Elements, 0);
+        $this->Elements = [];
     }
 
     //Implementation of \vDesk\Struct\Collections\ArrayAccess.

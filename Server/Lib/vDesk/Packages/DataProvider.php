@@ -43,7 +43,7 @@ final class DataProvider extends Package {
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["vDesk" => "1.1.0"];
+    public const Dependencies = ["vDesk" => "1.1.1"];
 
     /**
      * The files and directories of the Package.

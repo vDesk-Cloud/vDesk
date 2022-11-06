@@ -14,7 +14,7 @@ use vDesk\IO\IOException;
  */
 class Provider extends \vDesk\DataProvider\AnsiSQL\Provider {
 
-    public const Reserved = ["USERS", "PUBLIC", "FILE"] + parent::Reserved;
+    public const Reserved = ["USERS", "PUBLIC", "FILE", "READ", "DELETE"] + parent::Reserved;
 
     /**
      * The default port MsSQL-servers usually use.
