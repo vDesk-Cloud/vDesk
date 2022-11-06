@@ -12,6 +12,7 @@ use vDesk\Locale\IPackage;
 use vDesk\Modules\Module\Command;
 use vDesk\Modules\Module\Command\Parameter;
 use vDesk\Security\AccessControlList;
+use vDesk\Security\User;
 use vDesk\Struct\Collections\Observable\Collection;
 use vDesk\Struct\Guid;
 
@@ -31,22 +32,22 @@ final class Machines extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.2";
+    public const Version = "1.0.3";
     
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
     
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing an OS agnostic process manager for PHP.";
     
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Archive" => "1.0.1"];
+    public const Dependencies = ["Archive" => "1.0.2"];
     
     /**
      * The files and directories of the Package.
@@ -245,7 +246,7 @@ final class Machines extends Package implements IPackage {
         $System   = new Element(2);
         $Directory = new Element(
             null,
-            \vDesk::$User,
+            User::$Current,
             $System,
             "Machines",
             Element::Folder,

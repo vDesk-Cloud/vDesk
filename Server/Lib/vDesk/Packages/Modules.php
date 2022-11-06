@@ -10,9 +10,9 @@ use vDesk\Modules\Module\Command;
 use vDesk\Struct\Collections\Observable\Collection;
 
 /**
- * Messenger Package manifest class.
+ * Modules Package manifest class.
  *
- * @package vDesk\Packages\Packages
+ * @package vDesk\Modules
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Modules extends Package {
@@ -25,22 +25,22 @@ final class Modules extends Package {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.0.2";
     
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
     
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing functionality for running Modules and inter process communication between Modules.";
     
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["DataProvider" => "1.0.0"];
+    public const Dependencies = ["DataProvider" => "1.1.0"];
     
     /**
      * The files and directories of the Package.

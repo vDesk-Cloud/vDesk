@@ -12,17 +12,17 @@ use vDesk\Events\PublicEvent;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Updated extends PublicEvent {
-    
+
     /**
      * The name of the Event.
      */
     public const Name = "vDesk.MetaInformation.Mask.Updated";
-    
+
     /**
      * @inheritdoc
      */
-    public function ToDataView() {
+    public function ToDataView(): array {
         return ["ID" => $this->Arguments->ID];
     }
-    
+
 }

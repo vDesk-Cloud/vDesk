@@ -174,7 +174,6 @@ final class DirectoryInfo extends FileSystemInfo {
             }
             yield new FileInfo($File);
         }
-        $Stream->Close();
     }
 
     /**
@@ -192,7 +191,6 @@ final class DirectoryInfo extends FileSystemInfo {
             }
             yield new DirectoryInfo($SubDirectory);
         }
-        $Stream->Close();
     }
 
     /**
@@ -207,7 +205,6 @@ final class DirectoryInfo extends FileSystemInfo {
         while(!$Stream->EndOfStream()) {
             yield Directory::Exists($Entry = $this->Path . $Separator . $Stream->Read()) ? new DirectoryInfo($Entry) : new FileInfo($Entry);
         }
-        $Stream->Close();
     }
 
 }

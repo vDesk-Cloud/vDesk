@@ -12,44 +12,43 @@ namespace vDesk\IO;
 interface IReadableStream extends IStream {
 
     /**
-     * Tells whether the current Stream supports reading.
+     * Tells whether the current IReadableStream supports reading.
      *
-     * @return bool True if the Stream supports reading; otherwise, false.
+     * @return bool True if the IReadableStream supports reading; otherwise, false.
      */
     public function CanRead(): bool;
 
     /**
-     * Reads a given amount of bytes from the Stream.
+     * Reads a given amount of bytes from the IReadableStream.
      *
      * @param int $Amount The amount of bytes to read.
      *
-     * @return string The read amount of bytes.
+     * @return null|string The read amount of bytes or null if an error occurred.
      */
-    public function Read(int $Amount = IStream::DefaultChunkSize): string;
+    public function Read(int $Amount = IStream::DefaultChunkSize): ?string;
 
     /**
-     * Reads a line from the Stream.
+     * Reads a line from the IReadableStream.
      *
-     * @return string The read line.
+     * @return null|string The read line or null if an error occurred.
      */
-    public function ReadLine(): string;
+    public function ReadLine(): ?string;
 
     /**
-     * Reads the entire content of the Stream from the current position until the end of the Stream.
+     * Reads the entire content of the IReadableStream from the current position until the end of the IReadableStream.
      *
-     * @param int $Amount The amount of bytes to read. If $Amount is set to -1, the entire content is read until the end of the Stream.
+     * @param int $Amount The amount of bytes to read. If $Amount is set to -1, the entire content is read until the end of the IReadableStream.
      * @param int $Offset The offset to start reading from. If $Offset is set to -1, reading starts from the current position of the
-     *                    Stream.
+     *                    IReadableStream.
      *
-     * @return mixed The read content.
+     * @return null|string The read content or null if an error occurred.
      */
-    public function ReadAll(int $Amount = -1, int $Offset = -1);
+    public function ReadAll(int $Amount = -1, int $Offset = -1): ?string;
 
     /**
-     * Reads a single character from the Stream.
+     * Reads a single character from the IReadableStream.
      *
-     * @return string The read character.
+     * @return null|string The read character or null if an error occurred.
      */
-    public function ReadCharacter(): string;
-
+    public function ReadCharacter(): ?string;
 }

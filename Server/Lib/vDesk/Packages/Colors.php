@@ -23,12 +23,12 @@ final class Colors extends Package implements IPackage {
     public const Version = "1.0.0";
     
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
     
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing functionality for changing the \"look&feel\" of vDesk.";
     

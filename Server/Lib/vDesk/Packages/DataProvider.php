@@ -31,19 +31,19 @@ final class DataProvider extends Package {
     public const Version = "1.1.0";
 
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
 
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing a database abstraction layer.";
 
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["vDesk" => "1.1.0"];
+    public const Dependencies = ["vDesk" => "1.1.1"];
 
     /**
      * The files and directories of the Package.

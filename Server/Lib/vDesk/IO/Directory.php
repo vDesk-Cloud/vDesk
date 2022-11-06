@@ -229,7 +229,6 @@ final class Directory {
                 $Files->Add($File);
             }
         }
-        $Stream->Close();
         return $Files;
     }
 
@@ -255,7 +254,6 @@ final class Directory {
                 $Directories->Add($SubDirectory);
             }
         }
-        $Stream->Close();
         return $Directories;
     }
 
@@ -280,7 +278,6 @@ final class Directory {
         while(!$Stream->EndOfStream()) {
             $Entries->Add($Directory . $Separator . $Stream->Read());
         }
-        $Stream->Close();
         return $Entries;
     }
 
@@ -308,7 +305,6 @@ final class Directory {
             }
             yield $File;
         }
-        $Stream->Close();
     }
 
     /**
@@ -334,7 +330,6 @@ final class Directory {
             }
             yield $SubDirectory;
         }
-        $Stream->Close();
     }
 
     /**
@@ -357,7 +352,6 @@ final class Directory {
         while(!$Stream->EndOfStream()) {
             yield $Directory . $Separator . $Stream->Read();
         }
-        $Stream->Close();
     }
 
 }

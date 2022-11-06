@@ -15,125 +15,99 @@ use vDesk\Struct\Collections\Typed\Observable\Collection;
  *
  * @property \vDesk\Contacts\Contact|null $Contact (write once) Gets or sets the Contacts of the Options.
  * @package vDesk\Contacts
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Options extends Collection implements ICollectionModel {
-    
+
     /**
      * The Type of the Options.
      */
     public const Type = Option::class;
-    
+
     /**
      * Flag indicating whether the Options has been accessed.
      *
      * @var bool
      */
     private bool $Accessed = false;
-    
+
     /**
      * The added Options of the Options.
      *
      * @var array
      */
     private array $Added = [];
-    
+
     /**
      * The deleted Options of the Options.
      *
      * @var array
      */
     private array $Deleted = [];
-    
+
     /**
      * Initializes a new instance of the Options class.
      *
-     * @param iterable             $Elements Initializes the Options with the specified set of elements.
+     * @param iterable                     $Elements Initializes the Options with the specified set of elements.
      * @param \vDesk\Contacts\Contact|null $Contact  Initializes the Options with the specified Contact.
      */
     public function __construct(iterable $Elements = [], private ?Contact $Contact = null) {
         parent::__construct($Elements);
-        $this->AddProperty(
-            "Contact",
-            [
+        $this->AddProperty("Contact", [
                 \Get => fn(): ?Contact => $Contact,
                 \Set => fn(Contact $Value) => $Contact ??= $Value
             ]
         );
-    
-        /**
-         * Listens on the 'OnAdd'-event.
-         *
-         * @param \vDesk\Contacts\Contact\Options $Sender
-         * @param \vDesk\Contacts\Contact\Option  $Option
-         *
-         * @return \vDesk\Contacts\Contact\Option
-         */
-        $this->OnAdd[] = fn(&$Sender, Option $Option): Option => $this->Added[] = $Option;
-        
-        /**
-         * Listens on the 'OnDelete'-event.
-         *
-         * @param \vDesk\Contacts\Contact\Options $Sender
-         * @param \vDesk\Contacts\Contact\Option  $Option
-         *
-         */
-        $this->OnDelete[] = function(&$Sender, Option $Option): void {
+
+        $this->OnAdd[] = fn(Option $Option): Option => $this->Added[] = $Option;
+
+        $this->OnRemove[] = function(Option $Option): void {
             //Check if the associated contact is not virtual and if the option to remove is not virtual.
             if($Option->ID !== null) {
                 $this->Deleted[] = $Option;
             }
         };
-        
+
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritdoc */
     public function Find(callable $Predicate): ?Option {
         return parent::Find($Predicate);
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritdoc */
     public function Remove($Element): Option {
         return parent::Remove($Element);
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritdoc */
     public function RemoveAt(int $Index): Option {
         return parent::RemoveAt($Index);
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritdoc */
     public function offsetGet($Index): Option {
         if($this->ID !== null && !$this->Accessed) {
             $this->Fill();
         }
         return parent::offsetGet($Index);
     }
-    
+
     /**
      * Fills the Options with its values from the database.
      *
      * @return \vDesk\Contacts\Contact\Options The filled Options.
      * @throws \vDesk\Data\IDNullException Thrown if the Event of the Options is virtual.
-     *
      */
     public function Fill(): Options {
-        
+
         if($this->Contact === null || $this->Contact->ID === null) {
             throw new IDNullException();
         }
-        
+
         // Stop/disable event dispatching.
-        $this->StopDispatch();
-        
+        $this->Dispatching(false);
+
         if($this->Count > 0) {
             $this->Clear();
         }
@@ -152,12 +126,12 @@ class Options extends Collection implements ICollectionModel {
                 )
             );
         }
-        
+
         // Start/re-enable event dispatching.
-        $this->StartDispatch();
+        $this->Dispatching(true);
         return $this;
     }
-    
+
     /**
      * Saves possible changes if a valid ID has been supplied.
      */
@@ -176,7 +150,7 @@ class Options extends Collection implements ICollectionModel {
                                        ])
                                        ->ID();
             }
-            
+
             //Update changed options.
             foreach($this->Elements as $Updated) {
                 //if changed and validate..
@@ -199,7 +173,7 @@ class Options extends Collection implements ICollectionModel {
             }
         }
     }
-    
+
     /**
      * Deletes all ContactOptions of the Options.
      */
@@ -211,7 +185,7 @@ class Options extends Collection implements ICollectionModel {
                       ->Execute();
         }
     }
-    
+
     /**
      * Creates a Options from a specified data view.
      *
@@ -228,7 +202,7 @@ class Options extends Collection implements ICollectionModel {
             })()
         );
     }
-    
+
     /**
      * Creates a data view of the Options.
      *
@@ -243,7 +217,7 @@ class Options extends Collection implements ICollectionModel {
         },
             []);
     }
-    
+
     /**
      * Gets the ID of the Options.
      *

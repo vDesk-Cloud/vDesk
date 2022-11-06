@@ -28,22 +28,22 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.3";
+    public const Version = "1.0.4";
     
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
     
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing functionality for indexing and searching for files and folders of an Archive";
     
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Archive" => "1.0.1"];
+    public const Dependencies = ["Archive" => "1.0.2"];
     
     /**
      * The files and directories of the Package.

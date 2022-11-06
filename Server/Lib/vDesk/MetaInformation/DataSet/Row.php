@@ -25,19 +25,19 @@ use vDesk\Utils\Validate;
  * @property null|mixed                      $Value         Gets or sets the value of the Row.
  * @property-read bool                       $Changed       Gets a value indicating whether the Row has been changed.
  * @package Archive/MetaInformation
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Row implements IManagedModel {
-    
+
     use Properties;
-    
+
     /**
      * Flag indicating whether the value of the Row has been changed.
      *
      * @var bool
      */
     protected bool $ValueChanged = false;
-    
+
     /**
      * Initializes a new instance of the Row class.
      *
@@ -47,10 +47,10 @@ class Row implements IManagedModel {
      * @param null                                 $Value   Initializes the Row with the specified value.
      */
     public function __construct(
-        protected ?int $ID = null,
-        protected ?DataSet $DataSet = null,
+        protected ?int      $ID = null,
+        protected ?DataSet  $DataSet = null,
         protected ?Mask\Row $Row = null,
-        protected mixed $Value = null
+        protected mixed     $Value = null
     ) {
         $this->AddProperties([
             "ID"      => [
@@ -84,7 +84,7 @@ class Row implements IManagedModel {
                         $Value = Expression::Select("Value")
                                            ->From("MetaInformation.DataSetRows")
                                            ->Where(["ID" => $this->ID])();
-                        
+
                         $this->Value = match ($this->Row->Type) {
                             Type::Int => (int)$Value,
                             Type::Float => (float)$Value,
@@ -96,14 +96,14 @@ class Row implements IManagedModel {
                     return $this->Value;
                 },
                 \Set => function($Value): void {
-                    
+
                     if(($this->Properties["Row"]->Getter)() === null) {
                         throw new InvalidOperationException("Cannot set value without specified Mask\Row");
                     }
                     if($this->Row->Required && $Value === null) {
                         throw new \InvalidArgumentException("DataSet\Row '[{$this->Row->Name}]' requires a value!");
                     }
-                    
+
                     if($Value !== null) {
                         if(
                             (
@@ -119,13 +119,13 @@ class Row implements IManagedModel {
                             throw new \TypeError("Value of DataSet\Row '{$this->Row->Name}' is invalid! {$this->Row->Type} required, " . Type::Of($Value) . " given.");
                         }
                     }
-                    
+
                     if($this->ID !== null && $this->Value !== $Value) {
                         $this->ValueChanged = true;
                     }
-                    
+
                     $this->Value = $Value;
-                    
+
                 }
             ],
             "Changed" => [
@@ -133,14 +133,14 @@ class Row implements IManagedModel {
             ]
         ]);
     }
-    
+
     /**
      * @inheritDoc
      */
     public function ID(): ?int {
         return $this->ID;
     }
-    
+
     /**
      * Fills the Row with its values from the database.
      *
@@ -167,7 +167,7 @@ class Row implements IManagedModel {
         };
         return $this;
     }
-    
+
     /**
      * Creates a Row from a specified data view.
      *
@@ -183,7 +183,7 @@ class Row implements IManagedModel {
             $DataView["Value"] ?? ""
         );
     }
-    
+
     /**
      * Creates a data view of the Row.
      *
@@ -200,5 +200,5 @@ class Row implements IManagedModel {
                 "Value" => $this->Value instanceof \DateTime ? $this->Value->format(\DateTime::ATOM) : $this->Value
             ];
     }
-    
+
 }

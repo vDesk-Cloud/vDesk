@@ -21,13 +21,13 @@ final class Configuration extends Update {
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.1";
+    public const RequiredVersion = "1.0.2";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to vDesk-1.1.0.
+- Added compatibility to vDesk-1.2.0.
 Description;
 
     /**
@@ -35,26 +35,22 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
-            Package::Client => [
-                Package::Lib => [
-                    "vDesk/Configuration/Settings.js",
-                    "vDesk/Configuration/Remote/Plugins/Log.js",
-                    "vDesk/Configuration/Remote/Plugins/Settings.js"
-                ]
-            ],
             Package::Server => [
+                Package::Lib     => [
+                    "vDesk/Configuration/Settings/Local/Settings.php",
+                    "vDesk/Configuration/Settings/Remote/Settings.php"
+                ],
                 Package::Modules => [
                     "Configuration.php"
                 ]
             ]
         ],
         self::Undeploy => [
-            Package::Lib    => [
-                "vDesk/Configuration/Settings.js",
-                "vDesk/Configuration/Remote/Plugins/Log.js",
-                "vDesk/Configuration/Remote/Plugins/Settings.js"
-            ],
             Package::Server => [
+                Package::Lib     => [
+                    "vDesk/Configuration/Settings/Local/Settings.php",
+                    "vDesk/Configuration/Settings/Remote/Settings.php"
+                ],
                 Package::Modules => [
                     "Configuration.php"
                 ]

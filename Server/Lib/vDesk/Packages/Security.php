@@ -31,15 +31,15 @@ final class Security extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.3";
+    public const Version = "1.0.4";
 
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
 
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing a group- and user based access control aswell for single access controlled entities.";
 
@@ -47,8 +47,8 @@ final class Security extends Package implements IPackage {
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Modules"       => "1.0.1",
-        "Configuration" => "1.0.2",
+        "Modules"       => "1.0.2",
+        "Configuration" => "1.0.3",
         "Events"        => "1.0.1"
     ];
 
@@ -188,16 +188,12 @@ final class Security extends Package implements IPackage {
      */
     private static string $Password;
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function PreInstall(\Phar $Phar, string $Path): void {
         self::$Password = \readline("System User password: ");
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
 
         Expression::Create()
@@ -295,8 +291,8 @@ final class Security extends Package implements IPackage {
                           "Delete"            => ["Type" => Type::Boolean]
                       ],
                       [
-                          "Primary"     => ["Fields" => ["ID", "AccessControlList"]],
-                          "Permissions" => ["Unique" => true, "Fields" => ["Group", "User", "Read", "Write", "Delete"]]
+                          "Primary"     => ["Fields" => ["ID"]],
+                          "Permissions" => ["Unique" => true, "Fields" => ["AccessControlList", "Group", "User"]]
                       ]
                   )
                   ->Execute();
@@ -592,7 +588,7 @@ final class Security extends Package implements IPackage {
             new User\Groups([$Everyone, $Administration])
         );
         $User->Save();
-        User::$Current = \vDesk::$User = $User;
+        User::$Current = $User;
 
         Settings::$Remote["Security"] = new Settings\Remote\Settings(
             [
@@ -607,9 +603,7 @@ final class Security extends Package implements IPackage {
 
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
 
         //Uninstall Module.
