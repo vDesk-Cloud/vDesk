@@ -21,7 +21,7 @@ final class DataProvider extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.2";
+    public const RequiredVersion = "1.1.0";
 
     /**
      * The description of the Update.
