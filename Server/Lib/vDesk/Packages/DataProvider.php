@@ -28,7 +28,7 @@ final class DataProvider extends Package {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.3";
+    public const Version = "1.1.0";
 
     /**
      * The vendor of the Package.
