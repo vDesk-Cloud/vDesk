@@ -66,7 +66,6 @@ class Server extends Machine {
                 $Event = Event::FromSocket($Socket);
                 if($Event->Name !== Event::Login) {
                     $Socket->Write((string)new Event(Event::Error, "Server", "Authentication required!"));
-                    $Socket->Close();
                 } else {
                     $User = Modules::Security()::Login($Event->Sender, $Event->Data);
                     $this->Clients->Add(new Client($User, $Socket));
@@ -109,7 +108,6 @@ class Server extends Machine {
                         $this->EventListeners->Remove($Listener);
                     }
 
-                    $Socket->Close();
                     Log::Warn("Relay Server", "Client \"{$Client->User->Name}\" timed out.");
                 }
             }
@@ -171,9 +169,7 @@ class Server extends Machine {
             if(!$Client->Socket->EndOfStream()) {
                 $Client->Socket->Write($Event);
             }
-            $Client->Socket->Close();
         }
-        $this->Socket->Close();
         Log::Info("Relay Server", "Shutting down.");
         parent::Stop($Code);
     }
@@ -187,7 +183,6 @@ class Server extends Machine {
         foreach($this->EventListeners->Filter(static fn(EventListener $Listener): bool => $Listener->Client === $Client) as $Listener) {
             $this->EventListeners->Remove($Listener);
         }
-        $Client->Socket->Close();
         $this->Clients->Remove($Client);
     }
 }
