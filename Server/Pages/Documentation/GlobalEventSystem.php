@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pages\Documentation;
 
-use vDesk\Pages\Cached\Page;
+use vDesk\Pages\Page;
 
 /**
  * Custom Releases Documentation Page.
