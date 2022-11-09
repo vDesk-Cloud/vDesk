@@ -8,7 +8,6 @@ use vDesk\IO\Directory;
 use vDesk\IO\FileNotFoundException;
 use vDesk\IO\Path;
 use vDesk\Modules\UnknownModuleException;
-
 use vDesk\Pages\IPackage;
 
 /**
@@ -18,37 +17,37 @@ use vDesk\Pages\IPackage;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Pages extends Package implements IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Pages";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.1.2";
-    
+    public const Version = "1.2.0";
+
     /**
      * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The description of the Package.
      */
     public const Description = "Package that provides a simple MVC-framework.";
-    
+
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Configuration" => "1.0.0"];
-    
+    public const Dependencies = ["Configuration" => "1.1.0"];
+
     /**
      * The license of the Package.
      */
     public const License = "MIT License";
-    
+
     /**
      * The license text of the Package.
      */
@@ -61,7 +60,7 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 LicenseText;
-    
+
     /**
      * The files and directories of the Package.
      */
@@ -101,12 +100,10 @@ LicenseText;
             ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         //Create Package configuration.
         Settings::$Local["Pages"] = new Settings\Local\Settings(
             [
@@ -116,11 +113,12 @@ LicenseText;
                 "Scripts"     => (Directory::Create($Path . Path::Separator . self::Server . Path::Separator . self::Scripts))->Path,
                 "Stylesheets" => (Directory::Create($Path . Path::Separator . self::Server . Path::Separator . self::Stylesheets))->Path,
                 "Images"      => (Directory::Create($Path . Path::Separator . self::Server . Path::Separator . self::Images))->Path,
+                "Cache"       => (Directory::Create($Path . Path::Separator . self::Server . Path::Separator . self::Cache))->Path,
                 "ShowErrors"  => true
             ],
             "Pages"
         );
-        
+
         //Create configuration for routes.
         Settings::$Local["Routes"] = new Settings\Local\Settings([
             "Default" => [
@@ -130,7 +128,7 @@ LicenseText;
         ],
             "Routes"
         );
-        
+
         //Create configuration for ErrorHandlers.
         Settings::$Local["ErrorHandlers"] = new Settings\Local\Settings([
             //Default ErrorHandler.
@@ -149,28 +147,26 @@ LicenseText;
         ],
             "ErrorHandlers"
         );
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
-        
+
     }
-    
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
-        
+
         //Delete files.
         self::Undeploy();
-        
-        Directory::Delete($Path . Path::Separator . self::Server . Path::Separator . self::Pages);
-        Directory::Delete($Path . Path::Separator . self::Server . Path::Separator . self::Templates);
-        Directory::Delete($Path . Path::Separator . self::Server . Path::Separator . self::Functions);
-        Directory::Delete($Path . Path::Separator . self::Server . Path::Separator . self::Scripts);
-        Directory::Delete($Path . Path::Separator . self::Server . Path::Separator . self::Stylesheets);
-        Directory::Delete($Path . Path::Separator . self::Server . Path::Separator . self::Images);
-        
+
+        Directory::Delete($Path . Path::Separator . self::Server . Path::Separator . self::Pages, true);
+        Directory::Delete($Path . Path::Separator . self::Server . Path::Separator . self::Templates, true);
+        Directory::Delete($Path . Path::Separator . self::Server . Path::Separator . self::Functions, true);
+        Directory::Delete($Path . Path::Separator . self::Server . Path::Separator . self::Scripts, true);
+        Directory::Delete($Path . Path::Separator . self::Server . Path::Separator . self::Stylesheets, true);
+        Directory::Delete($Path . Path::Separator . self::Server . Path::Separator . self::Images, true);
+        Directory::Delete($Path . Path::Separator . self::Server . Path::Separator . self::Cache, true);
+
     }
-    
+
 }

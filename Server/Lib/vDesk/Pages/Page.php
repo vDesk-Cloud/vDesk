@@ -10,6 +10,7 @@ use vDesk\Struct\Collections\Dictionary;
 /**
  * Baseclass for Pages.
  *
+ * @package vDesk\Pages
  * @author  Kerry Holz <k.holz@artforge.eu>.
  */
 class Page implements IDataView {
@@ -56,14 +57,9 @@ class Page implements IDataView {
         $this->Stylesheets = new Collection($Stylesheets);
         $this->Scripts     = new Collection($Scripts);
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public function ToDataView(): string {
-        
-        //if(static::Cached
-        
         return $this->Templates->Reduce(
             function(string $Markup, $Template): string {
                 if($Template instanceof IDataView) {
@@ -71,22 +67,18 @@ class Page implements IDataView {
                 }
                 $Values         = $this->Values->ToArray();
                 $Values["Page"] = $this;
-                return $Markup . Functions::Template($Template, $Values);
+                return $Markup . Template::Load($Template, $Values);
             },
             ""
         );
     }
     
-    /**
-     * @ignore
-     */
+    /** @ignore */
     final public function __toString(): string {
         return (string)$this->ToDataView();
     }
     
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function FromDataView(mixed $DataView): IDataView {
         return new static();
     }
