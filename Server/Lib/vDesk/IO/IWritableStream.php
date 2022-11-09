@@ -12,14 +12,14 @@ namespace vDesk\IO;
 interface IWritableStream extends IStream {
 
     /**
-     * Tells whether the current Stream supports writing.
+     * Tells whether the current IWritableStream supports writing.
      *
      * @return bool True if the Stream supports writing; otherwise, false.
      */
     public function CanWrite(): bool;
 
     /**
-     * Writes data to the Stream.
+     * Writes data to the IWritableStream.
      *
      * @param string $Data The data to write.
      *
@@ -28,7 +28,7 @@ interface IWritableStream extends IStream {
     public function Write(string $Data): int;
 
     /**
-     * Truncates the sequence of bytes to the specified size.
+     * Truncates the IWritableStream to the specified size.
      *
      * @param int $Size The size to truncate to.
      *

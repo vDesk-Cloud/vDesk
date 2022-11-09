@@ -115,43 +115,27 @@ class AccessControlList extends Collection implements ICollectionModel {
             ]
         ]);
 
-        /**
-         * Listens on the 'OnAdd'-event.
-         *
-         * @param \vDesk\Security\AccessControlList       $Sender
-         * @param \vDesk\Security\AccessControlList\Entry $Entry
-         */
-        $this->OnAdd[] = function(AccessControlList $Sender, Entry $Entry): void {
+        $this->OnAdd[] = function(Entry $Entry): void {
             //Check first if an Entry with given User- or Group-ID already exists.
             if($this->ID !== null && $Entry->ID === null) {
                 $this->Added[] = $Entry;
             }
         };
 
-        /**
-         * Listens on the 'OnDelete'-event.
-         *
-         * @param \vDesk\Security\AccessControlList       $Sender
-         * @param \vDesk\Security\AccessControlList\Entry $Entry
-         */
-        $this->OnDelete[] = function(AccessControlList $Sender, Entry $Entry): void {
+        $this->OnRemove[] = function(Entry $Entry): bool {
             //Skip mandatory Entries.
-            if(
-                ($Entry->User->ID !== null && $Entry->User->ID !== User::System)
-                || ($Entry->Group->ID !== null && $Entry->Group->ID !== Group::Everyone)
-            ) {
-                return;
+            if($Entry->User->ID === User::System || $Entry->Group->ID === Group::Everyone) {
+                return false;
             }
             //Check if the AccessControlList and Entry is not virtual.
             if($this->ID !== null && $Entry->ID !== null) {
                 $this->Deleted[] = $Entry;
             }
+            return true;
         };
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function Add($Element): void {
         if(!$this->ContainsEntry($Element)) {
             parent::Add($Element);
@@ -173,7 +157,7 @@ class AccessControlList extends Collection implements ICollectionModel {
         }
 
         // Stop/disable dispatching of events.
-        $this->StopDispatch();
+        $this->Dispatching(false);
 
         if($this->Count() > 0) {
             $this->Clear();
@@ -182,6 +166,7 @@ class AccessControlList extends Collection implements ICollectionModel {
             Expression::Select("*")
                       ->From("Security.AccessControlListEntries")
                       ->Where(["AccessControlList" => $this->ID])
+                      ->OrderBy(["User" => true, "Group" => true])
             as
             $Entry
         ) {
@@ -214,7 +199,7 @@ class AccessControlList extends Collection implements ICollectionModel {
         $this->Accessed = true;
 
         // Start/re-enable dispatching of events.
-        $this->StartDispatch();
+        $this->Dispatching(true);
         return $this;
 
     }
@@ -345,39 +330,12 @@ class AccessControlList extends Collection implements ICollectionModel {
                 $Entry->Write  = true;
                 $Entry->Delete = true;
             } else {
-                //Create "System" User Entry.
-                $Entry     = Entry::FromUser();
-                $Entry->ID = Expression::Insert()
-                                       ->Into("Security.AccessControlListEntries")
-                                       ->Values([
-                                           "ID"                => null,
-                                           "AccessControlList" => $this->ID,
-                                           "Group"             => null,
-                                           "User"              => $Entry->User,
-                                           "Read"              => $Entry->Read,
-                                           "Write"             => $Entry->Write,
-                                           "Delete"            => $Entry->Delete
-                                       ])
-                                       ->ID();
-                $this->Add($Entry);
+                $this->Add(Entry::FromUser());
             }
 
             //Create "Everyone" Group Entry.
             if(!$this->Any(fn(Entry $Entry): bool => $Entry->Group->ID === Group::Everyone)) {
-                $EveryoneGroupEntry     = Entry::FromGroup();
-                $EveryoneGroupEntry->ID = Expression::Insert()
-                                                    ->Into("Security.AccessControlListEntries")
-                                                    ->Values([
-                                                        "ID"                => null,
-                                                        "AccessControlList" => $this->ID,
-                                                        "Group"             => $EveryoneGroupEntry->Group,
-                                                        "User"              => null,
-                                                        "Read"              => $EveryoneGroupEntry->Read,
-                                                        "Write"             => $EveryoneGroupEntry->Write,
-                                                        "Delete"            => $EveryoneGroupEntry->Delete
-                                                    ])
-                                                    ->ID();
-                $this->Add($EveryoneGroupEntry);
+                $this->Add(Entry::FromGroup());
             }
 
             /** @var Entry $Entry */
@@ -530,38 +488,27 @@ class AccessControlList extends Collection implements ICollectionModel {
             ) !== null;
     }
 
-
-    /**
-     * @inheritDoc
-     */
+    /** @inheritdoc */
     public function ID(): ?int {
         return $this->ID;
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function Find(callable $Predicate): ?Entry {
         return parent::Find($Predicate);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function Remove($Element): Entry {
+    /** @inheritdoc */
+    public function Remove($Element): ?Entry {
         return parent::Remove($Element);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function RemoveAt(int $Index): Entry {
         return parent::RemoveAt($Index);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function offsetGet($Index): Entry {
         if(!$this->Accessed && $this->ID !== null) {
             $this->Fill();

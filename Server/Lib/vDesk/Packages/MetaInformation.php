@@ -19,32 +19,32 @@ use vDesk\Struct\Collections\Observable\Collection;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class MetaInformation extends Package implements Locale\IPackage, Events\IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "MetaInformation";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.3";
-    
+    public const Version = "1.1.0";
+
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing functionality for indexing and searching for files and folders of an Archive";
-    
+
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Archive" => "1.0.1"];
-    
+    public const Dependencies = ["Archive" => "1.1.0"];
+
     /**
      * The files and directories of the Package.
      */
@@ -67,14 +67,14 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
             ]
         ]
     ];
-    
+
     /**
      * The eventlisteners of the Package.
      */
     public const Events = [
         "vDesk.Archive.Element.Deleted" => "/vDesk/MetaInformation/vDesk.Archive.Element.Deleted.php"
     ];
-    
+
     /**
      * The translations of the Package.
      */
@@ -152,18 +152,53 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
                 "UpdateMask"    => "Determines whether members of the group are allowed to update metadata masks",
                 "DeleteMask"    => "Determines whether members of the group are allowed to delete metadata masks"
             ]
+        ],
+        "NL" => [
+            "MetaInformation" => [
+                "AddRow"        => "Nieuwe rij toevoegen",
+                "Boolean"       => "Booleaanse waarde",
+                "ChangeMask"    => "Wanneer u het masker wijzigt, gaan bestaande gegevens verloren. Mask wijzigen?",
+                "Currency"      => "Valuta",
+                "Date"          => "Datum",
+                "DateTime"      => "Datum en tijd",
+                "Decimal"       => "decimaal",
+                "DeleteDataSet" => "Dataset verwijderen?",
+                "DeleteMask"    => "Het verwijderen van het mask heeft tot gevolg dat alle datasets die onder dit mask zijn aangemaakt, verloren gaan. Mask verwijderen?",
+                "DeleteRow"     => "Rij verwijderen",
+                "MaskDesigner"  => "Maskontwerper",
+                "Max"           => "Max",
+                "MetaData"      => "Metadata",
+                "Min"           => "Min",
+                "Money"         => "Geld",
+                "NewMask"       => "Nieuw mask",
+                "NoDataSet"     => "Het element heeft geen metadata.",
+                "Numeric"       => "Numeriek",
+                "Pattern"       => "Patroon",
+                "Required"      => "Vereist",
+                "Steps"         => "Stappen",
+                "Text"          => "Tekst",
+                "Time"          => "Tijd",
+                "DataSetCount"  => "Aantal datasets"
+            ],
+            "Permissions"     => [
+                "ReadDataSet"   => "Bepaalt of leden van de groep metadatasets mogen zien",
+                "CreateDataSet" => "Bepaalt of leden van de groep nieuwe metadatasets mogen aanmaken",
+                "UpdateDataSet" => "Bepaalt of leden van de groep metadatasets mogen bijwerken",
+                "DeleteDataSet" => "Bepaalt of leden van de groep metadatasets mogen verwijderen",
+                "CreateMask"    => "Bepaalt of leden van de groep nieuwe metadata masks mogen aanmaken",
+                "UpdateMask"    => "Bepaalt of leden van de groep metadata masks mogen bijwerken",
+                "DeleteMask"    => "Bepaalt of leden van de groep metadata masks mogen verwijderen"
+            ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         Expression::Create()
                   ->Schema("MetaInformation")
                   ->Execute();
-        
+
         //Create tables.
         Expression::Create()
                   ->Table(
@@ -222,7 +257,7 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
                       ]
                   )
                   ->Execute();
-        
+
         //Install Module.
         /** @var \Modules\MetaInformation $MetaInformation */
         $MetaInformation = \vDesk\Modules::MetaInformation();
@@ -347,7 +382,7 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
             )
         );
         $MetaInformation->Save();
-        
+
         //Create permissions.
         /** @var \Modules\Security $Security */
         $Security = \vDesk\Modules::Security();
@@ -358,21 +393,19 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
         $Security::CreatePermission("CreateDataSet", true);
         $Security::CreatePermission("UpdateDataSet", true);
         $Security::CreatePermission("DeleteDataSet", true);
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
-        
+
         //Uninstall Module.
         /** @var \Modules\MetaInformation $MetaInformation */
         $MetaInformation = \vDesk\Modules::MetaInformation();
         $MetaInformation->Delete();
-        
+
         //Delete permissions.
         /** @var \Modules\Security $Security */
         $Security = \vDesk\Modules::Security();
@@ -383,14 +416,14 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
         $Security::DeletePermission("CreateDataSet");
         $Security::DeletePermission("UpdateDataSet");
         $Security::DeletePermission("DeleteDataSet");
-        
+
         //Drop database.
         Expression::Drop()
                   ->Schema("MetaInformation")
                   ->Execute();
-        
+
         //Delete files.
         self::Undeploy();
-        
+
     }
 }

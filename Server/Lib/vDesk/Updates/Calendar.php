@@ -21,13 +21,13 @@ final class Calendar extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.0";
+    public const RequiredVersion = "1.0.1";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to vDesk-1.1.0.
+- Added compatibility to vDesk-1.2.0.
 Description;
 
     /**
@@ -35,40 +35,22 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
-            Package::Client => [
-                Package::Lib     => [
-                    "vDesk/Calendar"
-                ],
-                Package::Modules => [
-                    "Calendar.js"
-                ]
-            ],
             Package::Server => [
-                Package::Modules => [
-                    "Calendar.php"
+                Package::Lib => [
+                    "vDesk/Calendar/Event/Participants.php"
                 ]
             ]
         ],
         self::Undeploy => [
-            Package::Client => [
-                Package::Lib     => [
-                    "vDesk/Calendar"
-                ],
-                Package::Modules => [
-                    "Calendar.js"
-                ]
-            ],
             Package::Server => [
-                Package::Modules => [
-                    "Calendar.php"
+                Package::Lib => [
+                    "vDesk/Calendar/Event/Participants.php"
                 ]
             ]
         ]
     ];
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
         //Update files.
         self::Undeploy();

@@ -12,13 +12,6 @@ namespace vDesk\Struct\Collections;
 interface ICollection extends IEnumerable, \ArrayAccess, \Iterator {
 
     /**
-     * Initializes a new instance of the ICollection class.
-     *
-     * @param iterable $Elements Initializes the ICollection with the specified set of elements.
-     */
-    public function __construct(iterable $Elements = []);
-
-    /**
      * Adds an element to the ICollection.
      *
      * @param mixed $Element The element to add.
@@ -54,8 +47,10 @@ interface ICollection extends IEnumerable, \ArrayAccess, \Iterator {
      *
      * @param mixed $Index   The index of the element to replace.
      * @param mixed $Element The new value for the element at the specified index.
+     *
+     * @return mixed The replaced element.
      */
-    public function ReplaceAt(int $Index, mixed $Element): void;
+    public function ReplaceAt(int $Index, mixed $Element): mixed;
 
     /**
      * Removes the first occurrence of a specific element from the ICollection.
@@ -92,11 +87,6 @@ interface ICollection extends IEnumerable, \ArrayAccess, \Iterator {
      * @return bool True if the element is in the ICollection, otherwise, false.
      */
     public function Contains(mixed $Element): bool;
-
-    /**
-     * Removes all elements from the ICollection.
-     */
-    public function Clear(): void;
 
     /**
      * Merges the elements of another ICollection into the ICollection.

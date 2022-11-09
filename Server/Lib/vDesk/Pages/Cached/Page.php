@@ -24,10 +24,9 @@ abstract class Page extends \vDesk\Pages\Page {
         if(File::Exists($File)) {
             return \file_get_contents($File);
         }
-        $File    = new FileStream($File, Mode::Truncate | Mode::Binary);
+        $File    = new FileStream($File, Mode::Write | Mode::Truncate | Mode::Binary);
         $Content = parent::ToDataView();
         $File->Write($Content);
-        $File->Close();
         return $Content;
     }
     
