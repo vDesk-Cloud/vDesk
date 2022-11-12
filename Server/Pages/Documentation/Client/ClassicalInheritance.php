@@ -12,21 +12,7 @@ use vDesk\Pages\Cached\Page;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class ClassicalInheritance extends Page {
-    
-    /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "ClassicalInheritance";
-    
-    /**
-     * The nav label of the Page
-     *
-     * @var string
-     */
-    public string $Description = "Classical inheritance and Interfaces";
-    
+
     /**
      * Initializes a new instance of the ClassicalInheritance Tutorial.
      *
@@ -40,6 +26,10 @@ class ClassicalInheritance extends Page {
         ?iterable $Templates = ["Documentation/Client/ClassicalInheritance"],
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
+        public string $Name = "ClassicalInheritance",
+        public string $Label = "Classical inheritance and interfaces",
+        public string $Title = "Classical inheritance and custom interfaces in JavaScript",
+        public string $Description = "Classical inheritance and interfaces"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }

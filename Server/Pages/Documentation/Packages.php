@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pages\Documentation;
 
-use vDesk\Pages\Cached\Page;
+use vDesk\Pages\Page;
 
 /**
  * Packages Documentation
@@ -12,20 +12,6 @@ use vDesk\Pages\Cached\Page;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Packages extends Page {
-    
-    /**
-     * The name of the Tutorial.
-     *
-     * @var string
-     */
-    public string $Name = "Packages";
-    
-    /**
-     * The nav label of the Tutorial
-     *
-     * @var string
-     */
-    public string $Description = "Packages";
     
     /**
      * Initializes a new instance of the Packages Page.
@@ -39,7 +25,11 @@ class Packages extends Page {
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Packages"],
         ?iterable $Stylesheets = [],
-        ?iterable $Scripts = []
+        ?iterable $Scripts = [],
+        public string $Name = "Packages",
+        public string $Label = "Packages",
+        public string $Title = "Packages",
+        public string $Description = "Packages, updates and setups",
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }

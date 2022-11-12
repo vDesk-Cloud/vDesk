@@ -24,6 +24,7 @@ use vDesk\Pages\Functions;
                     <li><a href="#PackagePreparationCleanup">Preparation&cleanup</a></li>
                     <li><a href="#CustomPackages">Custom packages</a></li>
                     <li><a href="#CustomInstallers">Custom installers</a></li>
+                    <li><a href="#PackageCreation">Creating packages</a></li>
                 </ul>
             </li>
             <li>
@@ -31,12 +32,18 @@ use vDesk\Pages\Functions;
                 <ul class="Topics">
                     <li><a href="#UpdateFormat">Format</a></li>
                     <li><a href="#UpdateManifest">Manifest</a></li>
+                    <li><a href="#UpdateCreation">Creating updates</a></li>
+                    <li><a href="#UpdateHosting">Hosting updates</a></li>
                 </ul>
             </li>
             <li>
                 <a href="#Setups">Setups</a>
                 <ul class="Topics">
                     <li><a href="#SetupFormat">Format</a></li>
+                    <li><a href="#SetupCreation">Creating setups</a></li>
+                    <ul class="Topics">
+                        <li><a href="#Exclude">Excluding packages</a></li>
+                    </ul>
                 </ul>
             </li>
         </ul>
@@ -450,6 +457,23 @@ use vDesk\Pages\Functions;
         </p>
     </aside>
     </section>
+    <section id="PackageCreation">
+        <h4>Creating packages</h4>
+        <p>
+            The creation of packages requires the <a href="<?= Functions::URL("vDesk", "Page", "Packages#Packages") ?>">Packages</a> and
+            <a href="<?= Functions::URL("vDesk", "Page", "Packages#Console") ?>">Console</a>-packages installed (these are bundled by default in the official full release).<br>
+        </p>
+        <p>
+            To create a single custom package press <code class="Inline">° / Shift + ^</code> to open the client side console
+            and enter one of the following commands:
+        </p>
+        <pre><code><span class="Console">Call -M=Packages -C=Create -Package=Archive [-Path=C:\Users, -Compression=<?= \Phar::GZ ?>]
+Call -Module=Packages -Command=Create -Package=Calendar [-Path=/home/user, -Compression=<?= \Phar::BZ2 ?>]</span></code></pre>
+        <p>
+            This will create a PHAR archive named like the specified package and bundled with the files and folders of the package at the optionally specified path on the server.<br>
+            If you omit the "Path"-parameter, the package file will be created in the systems Server directory.
+        </p>
+    </section>
     <section id="Updates">
         <h3>Updates</h3>
         <p>
@@ -621,6 +645,24 @@ use vDesk\Pages\Functions;
     
 }</code></pre>
     </section>
+    <section id="UpdateCreation">
+        <h4>Creating updates</h4>
+        <p>
+            The creation of updates requires the <a href="<?= Functions::URL("vDesk", "Page", "Packages#Updates") ?>">Updates</a> and
+            <a href="<?= Functions::URL("vDesk", "Page", "Packages#Console") ?>">Console</a>-packages installed (these are bundled by default in the official full release).<br>
+        </p>
+        <p>
+            To create a single custom update press <code class="Inline">° / Shift + ^</code> to open the client side console
+            and enter one of the following commands:
+        </p>
+        <pre><code><span class="Console">Call -M=Updates -C=Create -Update=Archive [-Path=C:\Users, -Compression=<?= \Phar::GZ ?>]
+Call -Module=Updates -Command=Create -Update=Calendar [-Path=/home/user, -Compression=<?= \Phar::BZ2 ?>]</span></code></pre>
+        <p>
+            This will create a PHAR archive named like the specified update and bundled with the files and folders of the update and its according package manifest file at the optionally specified path on
+            the server.<br>
+            If you omit the "Path"-parameter, the update file will be created in the systems Server directory.
+        </p>
+    </section>
     <section id="Setups">
         <h3 id="Setups">Setups</h3>
         <p>
@@ -654,5 +696,35 @@ use vDesk\Pages\Functions;
               |
                 --- <?= Code::BlockComment("Modules") ?> <?= Code::Comment("//Server-side modules.") ?>
     </code></pre>
+    </section>
+    <section id="SetupCreation">
+        <h4>Creating setups</h4>
+        <p>
+            The creation of setups requires the <a href="<?= Functions::URL("vDesk", "Page", "Packages#Setup") ?>">Setup</a> and
+            <a href="<?= Functions::URL("vDesk", "Page", "Packages#Console") ?>">Console</a>-packages installed (these are bundled by default in the official full release).<br>
+        </p>
+        <p>
+            To create a custom setup press <code class="Inline">° / Shift + ^</code> to open the client side console
+            and enter one of the following commands:
+        </p>
+        <pre><code><span class="Console">Call -M=Setup -C=Create [-Path=E:\Development\Setups]
+Call -Module=Setup -Command=Create [-Path=/var/www/htdocs/vDesk/Server]</span></code></pre>
+        <p>
+            This will create a "Setup.phar"-file bundled with all currently installed packages at the optionally specified path on the server.<br>
+            If you omit the "Path"-parameter, the setup file will be created in the systems Server directory.
+        </p>
+    </section>
+    <section id="Exclude">
+        <h5>Excluding packages</h5>
+        <p>
+            If you want to exclude certain packages, you can optionally provide a comma separated list of packages that won't get bundled in the setup.
+        </p>
+        <pre><code><span class="Console">Call -M=Setup -C=Create [-Path=%TargetDir%, -Exclude=Pages, Homepage, Documentation, ...]
+Call -Module=Setup -Command=Create [-Path=%TargetDir%, -Exclude=%A%, %B%, ...]</span></code></pre>
+        <p>
+            Alternatively, you can provide a JSON array of packages.
+        </p>
+        <pre><code><span class="Console">Call -M=Setup -C=Create -Exclude=["Pages", "Homepage", "Documentation", "Contacts", "Messenger"]</span></code></pre>
+
     </section>
 </article>

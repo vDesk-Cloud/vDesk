@@ -13,26 +13,16 @@ use vDesk\Pages\Cached\Page;
  */
 class Machines extends Page {
 
-    /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "Machines";
-
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Machines";
-
     /** @inheritDoc */
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Server/Machines"],
         ?iterable $Stylesheets = [],
-        ?iterable $Scripts = []
+        ?iterable $Scripts = [],
+        public string $Name = "Machines",
+        public string $Label = "Machines",
+        public string $Title = "Machines documentation",
+        public string $Description = "Machines"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }

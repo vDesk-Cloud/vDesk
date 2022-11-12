@@ -2,10 +2,15 @@
 <article>
     <header>
         <h2>
-            Global event system.
+            Events
         </h2>
         <p>
-            The execution of several commands will cause the emmitting of certain serverside events.<br>
+            This document describes the logic behind the global event system and how to dispatch and listen on events.
+        </p>
+        <p>
+            The execution of several commands will cause to emit certain serverside events.<br>
+            For example: the deletion of an Entry from the Archive will trigger a global <code class="Inline">vDesk.Archive.Element.<?= Code::Class("Deleted") ?></code>-event.
+
             Serverside events that implement the 'IGlobalEvent'-interface will occur within the serverside event-stream, which can be received through the clientside
             EventDispatcher.<br> To listen on a certain event, an eventhandler must get attached on the EventDispatcher, listening on the
             appropriate type of the event.

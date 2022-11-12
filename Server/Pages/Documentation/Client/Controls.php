@@ -12,21 +12,7 @@ use vDesk\Pages\Page;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Controls extends Page {
-    
-    /**
-     * The name of the Tutorial.
-     *
-     * @var string
-     */
-    public string $Name = "Controls";
-    
-    /**
-     * The nav label of the Tutorial
-     *
-     * @var string
-     */
-    public string $Description = "Controls";
-    
+
     /**
      * Initializes a new instance of the Controls Page.
      *
@@ -157,7 +143,11 @@ class Controls extends Page {
             "../../Client/Lib/vDesk/Controls/EditControl/DateTime",
             "../../Client/Lib/vDesk/Controls/EditControl/TimeSpan",
             "../../Client/Lib/vDesk/Controls/EditControl/Enum"
-        ]
+        ],
+        public string $Name = "Controls",
+        public string $Label = "Controls",
+        public string $Title = "Preview of vDesk's client controls",
+        public string $Description = "Controls"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }
