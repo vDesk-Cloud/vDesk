@@ -142,7 +142,8 @@ use vDesk\Pages\Functions;
             <code class="Inline">Ensure.<?= Code::Function("Property") ?>()</code> methods.
         </p>
         <p>
-            At least, source files have to use the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode">strict mode</a> and must begin with the <code class="Inline"><?= Code::String("\"use strict\"") ?><?= Code::Delimiter ?></code>-statement.
+            At least, source files have to use the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode">strict mode</a>
+            and must begin with the <code class="Inline"><?= Code::String("\"use strict\"") ?><?= Code::Delimiter ?></code>-statement.
         </p>
     </section>
     <section id="CodeBlocks">
@@ -232,7 +233,7 @@ use vDesk\Pages\Functions;
     <section id="FunctionsMethods">
         <h4>Functions/Methods</h4>
         <p>
-            Function names should describe in a short manner the logic that the desired function represents.<br>
+            Function names should describe in a short manner the logic they represent.<br>
             Keep function names "stupid simple" and follow the "DRY" principle.
         </p>
         <pre><code><?= Conventions::NotRecommended ?>
@@ -541,10 +542,10 @@ vDesk.Calendar.Event.<?= Code::Class("Editor") ?> = <?= Code::Function ?> <?= Co
             Use the square bracket syntax for array destructuring instead of the "list()" language construct.
         </p>
         <pre><code><?= Conventions::NotRecommended ?>
-<?= Code::Variable("\$Value") ?> = <?= Code::Keyword("list") ?>(<?= Code::Variable("\$Values") ?>)<?= Code::Delimiter ?>
+<?= Code::Keyword("list") ?>(<?= Code::Variable("\$A") ?>, <?= Code::Variable("\$B") ?>, <?= Code::Variable("\$C") ?>) = <?= Code::Variable("\$Values") ?><?= Code::Delimiter ?>
 </code></pre>
         <pre><code><?= Conventions::Recommended ?>
-[<?= Code::Variable("\$Value") ?>] = <?= Code::Variable("\$Values") ?><?= Code::Delimiter ?>
+[<?= Code::Variable("\$A") ?>, <?= Code::Variable("\$B") ?>, <?= Code::Variable("\$C") ?>] = <?= Code::Variable("\$Values") ?><?= Code::Delimiter ?>
 </code></pre>
     </section>
     <section id="Strings">

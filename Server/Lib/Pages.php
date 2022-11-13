@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 use vDesk\Configuration\Settings;
-use vDesk\IO\Input\CGI;
 use vDesk\Pages\Modules;
 use vDesk\Pages\Request;
 use vDesk\Pages\Response;
@@ -45,7 +44,7 @@ class Pages extends \vDesk {
      */
     public static function Run(): void {
 
-        Request::Parse(new CGI());
+        $Request = Request::Parse();
 
         /**
          * Application flow:
@@ -56,12 +55,12 @@ class Pages extends \vDesk {
          * If no matching Controller can be found, Pages tries to use a specified 'fallback'-route if the querystring omits any usable information.
          */
         try {
-            if(Request::$Ticket !== null) {
+            if($Request::$Ticket !== null) {
                 Modules::Security()::ValidateTicket();
             }
         
             //Call Module.
-            Response::Write(Modules::Call(Request::$Module, Request::$Name));
+            Response::Write(Modules::Call($Request::$Module, $Request::$Name));
             
         } catch(\vDesk\Security\TicketExpiredException $Exception) {
             \setcookie("Ticket", "null", \time() - 3600);

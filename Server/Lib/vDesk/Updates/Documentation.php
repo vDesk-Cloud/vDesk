@@ -23,7 +23,7 @@ final class Documentation extends Update {
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.1";
+    public const RequiredVersion = "1.0.2";
 
     /**
      * The description of the Update.

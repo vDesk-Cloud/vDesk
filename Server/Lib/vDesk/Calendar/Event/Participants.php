@@ -19,40 +19,40 @@ use vDesk\Struct\Collections\Typed\Observable\Collection;
  * @author  Kerry Holz <DevelopmentHero@gmail.com>
  */
 class Participants extends Collection implements ICollectionModel {
-    
+
     /**
      * The Type of the Participants.
      */
     public const Type = Participant::class;
-    
+
     /**
      * The Event of the Participants.
      *
      * @var \vDesk\Calendar\Event|null
      */
     private ?Event $Event;
-    
+
     /**
      * Flag indicating whether the Participants has been accessed.
      *
      * @var bool
      */
     private bool $Accessed = false;
-    
+
     /**
      * The added Participants of the Participants.
      *
      * @var \vDesk\Calendar\Event\Participant[]
      */
     private array $Added = [];
-    
+
     /**
      * The Event of the Participants.
      *
      * @var \vDesk\Calendar\Event\Participant[]
      */
     private array $Deleted = [];
-    
+
     /**
      * Initializes a new instance of the Participants class.
      *
@@ -69,15 +69,8 @@ class Participants extends Collection implements ICollectionModel {
                 ],
             ]);
         parent::__construct($Participants);
-        
-        /**
-         * Listens on the 'OnAdd'-event.
-         *
-         * @param \vDesk\Calendar\Event\Participants $Sender
-         * @param \vDesk\Calendar\Event\Participant  $Participant
-         */
-        $this->OnAdd[] = function(&$Sender, Participant $Participant): void {
-            //Check if entry with given user already exists.
+
+        $this->OnAdd[] = function(Participant $Participant): void {
             if(
                 $this->Event->ID !== null
                 && $Participant->ID === null
@@ -86,58 +79,42 @@ class Participants extends Collection implements ICollectionModel {
                 $this->Added[] = $Participant;
             }
         };
-        
-        /**
-         * Listens on the 'OnDelete'-event.
-         *
-         * @param \vDesk\Calendar\Event\Participants $Sender
-         * @param \vDesk\Calendar\Event\Participant  $Participant
-         */
-        $this->OnDelete[] = function(&$Sender, Participant $Participant): void {
+
+        $this->OnRemove[] = function(Participant $Participant): void {
             if($this->Event->ID !== null && $Participant->ID !== null) {
                 $this->Deleted[] = $Participant;
             }
         };
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public function ID(): ?Event {
         return $this->Event;
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritDoc */
     public function Find(callable $Predicate): ?Participant {
         return parent::Find($Predicate);
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritDoc */
     public function Remove($Element): Participant {
         return parent::Remove($Element);
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritDoc */
     public function RemoveAt(int $Index): Participant {
         return parent::RemoveAt($Index);
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritDoc */
     public function offsetGet($Index): Participant {
         if(!$this->Accessed && $this->Event->ID !== null) {
             $this->Fill();
         }
         return parent::offsetGet($Index);
     }
-    
+
     /**
      * Creates a Participants from a specified data view.
      *
@@ -154,7 +131,7 @@ class Participants extends Collection implements ICollectionModel {
             })()
         );
     }
-    
+
     /**
      * Creates a data view of the Participants.
      *
@@ -171,16 +148,16 @@ class Participants extends Collection implements ICollectionModel {
             []
         );
     }
-    
+
     /**
      * Saves possible changes if a valid ID was supplied, or creates a new database-entry if none was supplied.
      */
     public function Save(): void {
         if($this->Event->ID !== null) {
-            
+
             //Save new entries.
             foreach($this->Added as $Added) {
-                
+
                 DataProvider::Call("Calendar.AddParticipant", $this->Event->ID, $Added->User->ID, $Added->Status);
                 //Retrieve ID.
                 $Added->ID = Expression::Insert()
@@ -192,7 +169,7 @@ class Participants extends Collection implements ICollectionModel {
                                        ])
                                        ->ID();
             }
-            
+
             //Update changed Participants.
             foreach($this->Elements as $Updated) {
                 if($Updated->Changed) {
@@ -202,7 +179,7 @@ class Participants extends Collection implements ICollectionModel {
                               ->Execute();
                 }
             }
-            
+
             //Delete removed Participants.
             foreach($this->Deleted as $Deleted) {
                 Expression::Delete()
@@ -212,7 +189,7 @@ class Participants extends Collection implements ICollectionModel {
             }
         }
     }
-    
+
     /**
      * Deletes the all participants of the associated \vDesk\Calendar\Event.
      */
@@ -224,7 +201,7 @@ class Participants extends Collection implements ICollectionModel {
                       ->Execute();
         }
     }
-    
+
     /**
      * Fills the model with all values if a valid ID was supplied.
      *
@@ -233,14 +210,14 @@ class Participants extends Collection implements ICollectionModel {
      *
      */
     public function Fill(): Participants {
-        
+
         if($this->Event->ID === null) {
             throw new IDNullException();
         }
-        
+
         // Stop/disable event dispatching,
-        $this->StopDispatch();
-        
+        $this->Dispatching(false);
+
         foreach(
             Expression::Select("*")
                       ->From("Calendar.Participants")
@@ -253,13 +230,13 @@ class Participants extends Collection implements ICollectionModel {
             $Participant->Status = (int)$Row["Status"];
             $this->Add($Participant);
         }
-        
+
         $this->Accessed = true;
-        
+
         // Start/re-enable event dispatching,
-        $this->StartDispatch();
-        
+        $this->Dispatching(true);
+
         return $this;
-        
+
     }
 }

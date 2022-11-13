@@ -2,10 +2,15 @@
 <article>
     <header>
         <h2>
-            Global event system.
+            Events
         </h2>
         <p>
-            The execution of several commands will cause the emmitting of certain serverside events.<br>
+            This document describes the logic behind the global event system and how to dispatch and listen on events.
+        </p>
+        <p>
+            The execution of several commands will cause to emit certain serverside events.<br>
+            For example: the deletion of an Entry from the Archive will trigger a global <code class="Inline">vDesk.Archive.Element.<?= Code::Class("Deleted") ?></code>-event.
+
             Serverside events that implement the 'IGlobalEvent'-interface will occur within the serverside event-stream, which can be received through the clientside
             EventDispatcher.<br> To listen on a certain event, an eventhandler must get attached on the EventDispatcher, listening on the
             appropriate type of the event.
@@ -15,12 +20,12 @@
         <h3>
             Client
         </h3>
-        <p>The deletion of an Entry from the Archive for example, will trigger a global <code class="Inline">vDesk.Archive.Element.Deleted</code>-Event.<br>
+        <p>The deletion of an Entry from the Archive for example, will trigger a global<code class="Inline">vDesk.Archive.Element.<?= Code::Class("Deleted") ?></code>-event.<br>
             To receive those events, we can attach an eventlistener on the EventDispatcher in the following way:</p>
         <pre><code><?= Code\Language::JS ?>
 <?= Code::Class("vDesk") ?>.Events.<?= Code::Class("EventDispatcher") ?>.<?= Code::Function("addEventListener") ?>(<?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>, <?= Code::Variable("Event") ?> => <?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Variable("Event") ?>.<?= Code::Field("data") ?>), <?= Code::Bool("false") ?>)<?= Code::Delimiter ?></code></pre>
         <p>
-            The EventDispatcher will be available through the vDesk.Events.Dispatcher-property after the client has been started and successfully
+            The EventDispatcher will be available through the <code class="Inline">vDesk.Events.<?= Code::Class("EventDisptacher") ?></code>-property after the client has been started and successfully
             connected to a server.
         </p>
     </section>
@@ -28,10 +33,13 @@
         <h3>
             Server
         </h3>
-        
         <p>
-            Example of registering a serverside EventListener.
+            Serverside Events are scheduled over the <code class="Inline">Modules\<?= Code::Class("EventDisptacher") ?>::<?= Code::Function("Schedule") ?>()</code>-method,
+            which is embedded into the finally part of vDesk's main try/catch-statement as a soft dependency.
         </p>
+        <h4>
+            Example of registering a serverside EventListener.
+        </h4>
         <pre><code><?= Code\Language::PHP ?>
 \vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("EventDispatcher") ?>()::<?= Code::Function("AddEventListener") ?>(
     <?= Code::New ?> \vDesk\Events\<?= Code::Class("EventListener") ?>(

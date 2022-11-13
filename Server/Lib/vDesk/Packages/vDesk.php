@@ -10,7 +10,7 @@ use vDesk\Locale\IPackage;
 use vDesk\Utils\Log;
 
 /**
- * vDesk base Package class.
+ * vDesk Package manifest.
  *
  * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
@@ -25,15 +25,15 @@ final class vDesk extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.1.0";
+    public const Version = "1.3.0";
 
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
 
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "vDesk base package containing the library files of the system.";
 
@@ -229,13 +229,62 @@ final class vDesk extends Package implements IPackage {
                 "View"              => "View",
                 "Status"            => "Status"
             ]
+        ],
+        "NL" => [
+            "vDesk" => [
+                "About"             => "Over",
+                "Activate"          => "Activeren",
+                "Active"            => "Actief",
+                "Administration"    => "Administratie",
+                "Blue"              => "Blauw",
+                "Cancel"            => "Annuleren",
+                "Clear"             => "Duidelijk",
+                "Close"             => "Sluiten",
+                "Confirm"           => "Bevestigen",
+                "SelectAll"         => "Selecteer alle",
+                "Copy"              => "Kopiëren",
+                "Cut"               => "Snijden",
+                "Date"              => "Datum",
+                "Deactivate"        => "Deactiveren",
+                "Delete"            => "Verwijderen",
+                "Edit"              => "Bewerken",
+                "Green"             => "Groen",
+                "Help"              => "Help",
+                "HelpDescription"   => "Heeft u hulp nodig? Blader door de hulpcatalogus.",
+                "Hue"               => "Hue",
+                "Inactive"          => "Inactief",
+                "Language"          => "Taal",
+                "Lightness"         => "Lichtheid",
+                "Logout"            => "Uitloggen",
+                "LogoutDescription" => "Sluit vDesk af.",
+                "Maximize"          => "Maximaliseren",
+                "Minimize"          => "Minimaliseren",
+                "Module"            => "Module",
+                "Name"              => "Naam",
+                "New"               => "Nieuw",
+                "Open"              => "Open",
+                "Paste"             => "Plakken",
+                "Red"               => "Rood",
+                "Refresh"           => "Vernieuwen",
+                "Reset"             => "Resetten",
+                "ResetChanges"      => "Wijzigingen resetten",
+                "Restore"           => "Herstellen",
+                "Saturation"        => "Saturatie",
+                "Save"              => "Opslaan",
+                "SaveAndClose"      => "Opslaan en afsluiten",
+                "Selection"         => "Selectie",
+                "Title"             => "Titel",
+                "Transparency"      => "Transparantie",
+                "Type"              => "Type",
+                "Version"           => "Versie",
+                "View"              => "Bekijk",
+                "Status"            => "Status"
+            ]
         ]
     ];
 
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
 
         //Create system structure.
@@ -268,10 +317,7 @@ final class vDesk extends Package implements IPackage {
 
     }
 
-
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
         //Delete files.
         Directory::Delete($Path, true);

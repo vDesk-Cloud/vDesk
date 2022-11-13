@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pages\Documentation;
 
-use vDesk\Pages\Cached\Page;
+use vDesk\Pages\Page;
 
 /**
  * Custom Releases Documentation Page.
@@ -11,28 +11,18 @@ use vDesk\Pages\Cached\Page;
  * @package vDesk\Documentation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class GlobalEventSystem extends Page {
+class Events extends Page {
     
-    /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "GlobalEventSystem";
-    
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Global event system";
-
     /** @inheritDoc */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Documentation/GlobalEventSystem"],
+        ?iterable $Templates = ["Documentation/Events"],
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
+        public string $Name = "Events",
+        public string $Label = "Packages",
+        public string $Title = "Packages",
+        public string $Description = "Events"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }

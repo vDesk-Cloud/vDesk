@@ -21,14 +21,14 @@ final class DataProvider extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.1";
+    public const RequiredVersion = "1.1.0";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Fixed field escapement of CREATE and DROP statements.
-- Fixed missing field size indicator.
+- Added possibility for inserting rows into tables consisting only of a single identity column.
+- Added missing reserved keywords.
 Description;
 
     /**
@@ -38,24 +38,16 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk/DataProvider/AnsiSQL/Expression/Create.php",
-                    "vDesk/DataProvider/AnsiSQL/Expression/Drop.php",
-                    "vDesk/DataProvider/AnsiSQL/Expression/Functions/Distinct.php",
-                    "vDesk/DataProvider/PgSQL/Expression/Create.php",
-                    "vDesk/DataProvider/PgSQL/Expression/Alter.php",
-                    "vDesk/DataProvider/PgSQL/Expression/Table.php"
+                    "vDesk/DataProvider/MsQL/Provider.php",
+                    "vDesk/DataProvider/MsQL/Expression/Insert.php"
                 ]
             ]
         ],
         self::Undeploy => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk/DataProvider/AnsiSQL/Expression/Create.php",
-                    "vDesk/DataProvider/AnsiSQL/Expression/Drop.php",
-                    "vDesk/DataProvider/AnsiSQL/Expression/Functions/Distinct.php",
-                    "vDesk/DataProvider/PgSQL/Expression/Create.php",
-                    "vDesk/DataProvider/PgSQL/Expression/Alter.php",
-                    "vDesk/DataProvider/PgSQL/Expression/Table.php"
+                    "vDesk/DataProvider/MsQL/Provider.php",
+                    "vDesk/DataProvider/MsQL/Expression/Insert.php"
                 ]
             ]
         ]

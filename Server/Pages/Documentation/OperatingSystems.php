@@ -14,20 +14,6 @@ use Pages\Documentation;
 class OperatingSystems extends Documentation {
     
     /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "OperatingSystems";
-    
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Operating systems";
-    
-    /**
      * Initializes a new instance of the OperatingSystems Page.
      *
      * @param null|iterable $Values      Initializes the OperatingSystems Page with the specified Dictionary of values.
@@ -41,7 +27,11 @@ class OperatingSystems extends Documentation {
         ?iterable $Templates = ["Documentation/OperatingSystems"],
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
-        array $Pages = []
+        array $Pages = [],
+        public string $Name = "OperatingSystems",
+        public string $Label = "Operating systems",
+        public string $Title = "Operating systems vDesk runs on",
+        public string $Description = "Operating systems",
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts, $Pages);
     }

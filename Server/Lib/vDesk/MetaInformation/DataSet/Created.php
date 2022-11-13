@@ -12,17 +12,17 @@ use vDesk\Events\PublicEvent;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Created extends PublicEvent {
-    
+
     /**
      * The name of the Event.
      */
     public const Name = "vDesk.MetaInformation.DataSet.Created";
-    
+
     /**
      * @inheritdoc
      */
-    public function ToDataView() {
+    public function ToDataView(): array {
         return ["ID" => $this->Arguments->ID, "Element" => $this->Arguments->Element->ID, "Mask" => $this->Arguments->Mask->ID];
     }
-    
+
 }

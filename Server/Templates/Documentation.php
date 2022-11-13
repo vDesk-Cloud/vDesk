@@ -5,7 +5,7 @@ use vDesk\Pages\Functions;
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>vDesk - Virtual Desktop</title>
+    <title><?= $Page->Content?->Title ?? "vDesk - Documentation" ?></title>
     <link rel="icon" href="<?= Functions::Image("favicon.ico") ?>" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <?php foreach($Page->Stylesheets as $Stylesheet): ?>

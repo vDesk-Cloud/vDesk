@@ -12,20 +12,6 @@ namespace Pages\Documentation\Server;
 class Page extends \vDesk\Pages\Page {
 
     /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "Server";
-
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Server documentation";
-
-    /**
      * Initializes a new instance of the Server Documentation Page.
      *
      * @param null|iterable          $Values      Initializes the Server Documentation Page with the specified Dictionary of values.
@@ -43,7 +29,11 @@ class Page extends \vDesk\Pages\Page {
         ?iterable                 $Scripts = [],
         public array              $Pages = [],
         public array              $Topics = [],
-        public ?\vDesk\Pages\Page $Topic = null
+        public ?\vDesk\Pages\Page $Topic = null,
+        public string $Name = "Server",
+        public string $Label = "Server documentation",
+        public string $Title = "vDesk - Server documentation",
+        public string $Description = "Server documentation"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }
