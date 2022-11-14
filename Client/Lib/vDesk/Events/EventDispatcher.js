@@ -17,28 +17,22 @@ vDesk.Events.EventDispatcher = (function EventDispatcher() {
     let Source = null;
 
     /**
-     * Eventhandler that listens on the 'beforeunload' event.
-     * Closes the eventsource if the window is being unloaded.
-     */
-    const OnBeforeUnload = () => {
-        if(Source !== null) {
-            Source.close();
-        }
-    };
-
-    /**
      * Connects the EventDispatcher to the current connected server.
      * @name vDesk.Events.EventDispatcher#Connect
      */
     const Connect = function() {
-        //Close previous connection.
-        if(Source !== null) {
+        Source = new EventSource(
+            `${vDesk.Connection.Address}&Module=Events&Command=Stream&Ticket=${vDesk.Security.User.Current.Ticket}`);
+        Source.onerror = e => console.log(e);
+    };
+
+    /**
+     * Closes the underlying EventSource of the EventDispatcher.
+     */
+    const Disconnect = function() {
+        if(Source !== null){
             Source.close();
         }
-        Source = new EventSource(
-            `${vDesk.Connection.Address}&Module=EventDispatcher&Command=GetEvents&Ticket=${vDesk.Security.User.Current.Ticket}`);
-        window.addEventListener("beforeunload", OnBeforeUnload, true);
-        Source.onerror = e => console.log(e);
     };
 
     /**
@@ -65,12 +59,18 @@ vDesk.Events.EventDispatcher = (function EventDispatcher() {
 
     return {
         Connect:             Connect,
+        Disconnect:          Disconnect,
         addEventListener:    addEventListener,
         removeEventListener: removeEventListener
     };
 })();
 //Register as startup-routine.
-vDesk.Load.EventDispatcher = {
+vDesk.Load.Events = {
     Status: "Loading eventdispatcher",
     Load:   () => vDesk.Events.EventDispatcher.Connect()
+};
+//Register as startup-routine.
+vDesk.Unload.Events = {
+    Status: "Closing eventdispatcher",
+    Load:   () => vDesk.Events.EventDispatcher.Disconnect()
 };
