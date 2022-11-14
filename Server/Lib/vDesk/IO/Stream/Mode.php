@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace vDesk\IO\Stream;
 
 /**
- * Enumeration of specifications how the operating system should open a file.
+ * Enumeration of file access modes of Streams.
  *
  * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
@@ -12,39 +12,38 @@ namespace vDesk\IO\Stream;
 abstract class Mode {
 
     /**
-     * Open for reading only; place the file pointer at the beginning of the file.
+     * Flag for read access on Streams.
      */
-    public const Read = 0b000001;
+    public const Read = 0b0000001;
 
     /**
-     * Open for writing only; place the file pointer at the beginning of the file and truncate the file to zero length.
-     * If the file does not exist, attempt to create it.
+     * Flag for write access on Streams.
      */
-    public const Truncate = 0b000010;
+    public const Write = 0b0000010;
 
     /**
-     * Open for writing only; place the file pointer at the end of the file.
-     * If the file does not exist, attempt to create it.
-     * In this mode, {@see \vDesk\IO\IStream::Seek()} has no effect, writes are always appended.
+     * Flag for creating target files of Streams.
      */
-    public const Append = 0b000100;
+    public const Create = 0b0000100;
 
     /**
-     * Create and open for writing only; place the file pointer at the beginning of the file.
-     * If the file already exists, the {@see \vDesk\IO\IStream::Open()} call will fail by returning FALSE and generating an error of level E_WARNING.
-     * If the file does not exist, attempt to create it.
+     * Flag for creating and appending data to target files of Streams.
      */
-    public const Create = 0b001000;
+    public const Append = 0b0001000;
+
+    /**
+     * Flag for creating and truncating target files of Streams.
+     */
+    public const Truncate = 0b0010000;
+
+    /**
+     * Flag for creating and overwriting target files of Streams.
+     */
+    public const Overwrite = 0b0100000;
 
     /**
      * Binary mode. NT-Systems only.
      */
-    public const Binary = 0b010000;
-
-    /**
-     * Additional constant expression for adding full "read and write"-functionality to every mode.
-     */
-    public const Duplex = 0b100000;
+    public const Binary = 0b1000000;
 
 }
-

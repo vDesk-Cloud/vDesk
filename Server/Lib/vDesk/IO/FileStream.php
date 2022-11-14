@@ -5,149 +5,90 @@ namespace vDesk\IO;
 
 use vDesk\IO\Stream\Lock;
 use vDesk\IO\Stream\Mode;
-use vDesk\IO\Stream\Seek;
+use vDesk\IO\Stream\Readable;
+use vDesk\IO\Stream\Seekable;
+use vDesk\IO\Stream\Writable;
 use vDesk\Struct\Properties;
 
 /**
  * Provides a generic view of a sequence of bytes.
  *
- * @property-read resource $Pointer     Gets the underlying pointer of the FileStream.
- * @property-read bool     $CanSeek     Gets a value indicating whether the current FileStream supports seeking.
- * @property-read bool     $CanRead     Gets a value indicating whether the current FileStream supports reading.
- * @property-read bool     $CanWrite    Gets a value indicating whether the current FileStream supports writing.
- * @property-read int      $Position    Gets the current position of the pointer of the FileStream.
- * @property-read bool     $EndOfStream Gets a value indicating whether the current FileStream has reached its end.
+ * @property-read resource $Pointer      Gets the underlying pointer of the FileStream.
+ * @property bool          $Blocking     Gets or sets a flag indicating whether the FileStream is blocking.
+ *
  * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
 
-    use Properties;
-
-    /**
-     * The access mode of the FileStream.
-     *
-     * @var int|null
-     */
-    protected ?int $Mode;
-
-    /**
-     * The pointer of the FileStream.
-     *
-     * @var resource
-     */
-    protected $Pointer;
+    use Properties, Readable, Writable, Seekable;
 
     /**
      * Initializes a new instance of the FileStream class.
      *
-     * @param string $File Initializes the FileStream with the specified target file to read or write.
-     * @param int    $Mode Initializes the FileStream with the specified access-mode.
+     * @param null|string $File     Initializes the FileStream with the specified target file to read or write.
+     * @param int         $Mode     Initializes the FileStream with the specified access-mode.
+     * @param bool        $Blocking Initializes the FileStream with the specified flag indicating whether any operations would block.
      *
      * @throws \vDesk\IO\IOException Thrown if the FileStream couldn't be opened on the specified file.
      */
-    public function __construct(public string $File, int $Mode = Mode::Read | Mode::Duplex | Mode::Binary) {
-        $this->AddProperty("Pointer", [\Get => fn() => $this->Pointer]);
+    public function __construct(public ?string $File, public int $Mode = Mode::Read | Mode::Write | Mode::Binary, protected bool $Blocking = true) {
+        $this->AddProperties([
+            "Pointer"  => [\Get => fn() => $this->Pointer],
+            "Blocking" => [
+                \Get => fn(): bool => $this->Blocking,
+                \Set => function(bool $Value): void {
+                    $this->Blocking = $Value;
+                    \stream_set_blocking($this->Pointer, $Value);
+                }
+            ]
+        ]);
 
-        $FileMode = "";
-        if($Mode & Mode::Read) {
-            $FileMode .= "r";
-        }
-        if($Mode & Mode::Truncate) {
-            $FileMode .= "w";
-        }
-        if($Mode & Mode::Append) {
-            $FileMode .= "a";
-        }
-        if($Mode & Mode::Read && $Mode & Mode::Create) {
-            $FileMode .= "c";
-        }
-        if($Mode & Mode::Create) {
-            $FileMode .= "x";
-        }
-        if($Mode & Mode::Binary) {
-            $FileMode .= "b";
-        }
-        if($Mode & Mode::Duplex) {
-            $FileMode .= "+";
-        }
-        if($this->Pointer !== null || ($this->Pointer = @\fopen($File, $FileMode)) === false) {
-            throw new IOException("Can't open FileStream on file: \"{$File}\" with mode: \"{$FileMode}\"");
-        }
-        $this->Mode = $Mode;
-    }
+        if($File !== null) {
+            $FileMode = "";
 
-    /**
-     * Reads a given amount of bytes from the FileStream.
-     *
-     * @param int $Amount The amount of bytes to read.
-     *
-     * @return string The read amount of bytes.
-     * @throws EndOfStreamException Thrown if the Stream has reached its end.
-     */
-    public function Read(int $Amount = IStream::DefaultChunkSize): string {
-        if($this->EndOfStream()) {
-            throw new EndOfStreamException("Can not read from end of Stream.");
-        }
-        return \fread($this->Pointer, $Amount);
-    }
+            //Transform file mode bitmask into "open()" compatible string.
+            if(
+                ($Mode & Mode::Write)
+                && ($Mode & (Mode::Create | Mode::Append | Mode::Truncate | Mode::Overwrite))
+            ) {
+                //Special modes.
+                if($Mode & Mode::Create) {
+                    if(File::Exists($File)) {
+                        throw new IOException("Can't open FileStream in create mode on file \"{$File}\"! File already exists.");
+                    }
+                    $FileMode = "x";
+                } else if($Mode & Mode::Append) {
+                    $FileMode = "a";
+                } else if($Mode & Mode::Truncate) {
+                    $FileMode = "w";
+                } else if($Mode & Mode::Overwrite) {
+                    $FileMode = "c";
+                }
+                if($Mode & Mode::Read) {
+                    $FileMode .= "+";
+                }
+            } else if(($Mode & Mode::Read) || ($Mode & Mode::Write)) {
+                //Basic read/write.
+                if(!\str_starts_with($File, "php://") && !File::Exists($File)) {
+                    throw new FileNotFoundException("Can't open FileStream on file \"{$File}\"! File doesn't exist.");
+                }
+                $FileMode = "r";
+                if($Mode & Mode::Write) {
+                    $FileMode .= "+";
+                }
+            } else {
+                throw new \InvalidArgumentException("Unsupported file mode specified!");
+            }
+            if($Mode & Mode::Binary) {
+                $FileMode .= "b";
+            }
 
-    /**
-     * Reads a line from the FileStream.
-     *
-     * @return string The read line.
-     * @throws EndOfStreamException Thrown if the Stream has reached its end.
-     */
-    public function ReadLine(): string {
-        if($this->EndOfStream()) {
-            throw new EndOfStreamException("Can not read from end of Stream.");
+            $this->Pointer = @\fopen($File, $FileMode);
+            if($this->Pointer === false) {
+                throw new IOException("Can't open FileStream on file: \"{$File}\" with mode: \"{$FileMode}\"");
+            }
         }
-        return \fgets($this->Pointer);
-    }
-
-    /**
-     * Reads the entire content of the FileStream from the current position until the end of the FileStream.
-     *
-     * @param int $Amount The amount of bytes to read. If $Amount is set to -1, the entire content is read until the end of the FileStream.
-     * @param int $Offset The offset to start reading from. If $Offset is set to -1, reading starts from the current position of the
-     *                    FileStream.
-     *
-     * @return string The read content.
-     * @throws EndOfStreamException Thrown if the Stream has reached its end.
-     */
-    public function ReadAll(int $Amount = -1, int $Offset = -1): string {
-        if($this->EndOfStream()) {
-            throw new EndOfStreamException("Can not read from end of Stream.");
-        }
-        return \stream_get_contents($this->Pointer, $Amount, $Offset);
-    }
-
-    /**
-     * Reads a single character from the FileStream.
-     *
-     * @return string The read character.
-     * @throws EndOfStreamException Thrown if the Stream has reached its end.
-     */
-    public function ReadCharacter(): string {
-        if($this->EndOfStream()) {
-            throw new EndOfStreamException("Can not read from end of Stream.");
-        }
-        return \fgetc($this->Pointer);
-    }
-
-    /**
-     * Writes data to the FileStream.
-     *
-     * @param string   $Data   The data to write.
-     * @param null|int $Amount The amount of bytes to write.
-     *
-     * @return int The amount of bytes written.
-     */
-    public function Write(string $Data, ?int $Amount = null): int {
-        if($Amount === null) {
-            return \fwrite($this->Pointer, $Data);
-        }
-        return \fwrite($this->Pointer, $Data, $Amount);
     }
 
     /**
@@ -170,95 +111,28 @@ class FileStream implements IReadableStream, IWritableStream, ISeekableStream {
         return \flock($this->Pointer, Lock::Free);
     }
 
-    /**
-     * Resets the position of the internal pointer of the FileStream.
-     *
-     * @return bool True on success, false on failure.
-     */
-    public function Rewind(): bool {
-        return \rewind($this->Pointer);
-    }
-
-    /**
-     * Determines current position of the pointer of the FileStream.
-     *
-     * @return int The current byte-offset of the pointer of the FileStream.
-     */
-    public function Tell(): int {
-        return \ftell($this->Pointer);
-    }
-
-    /**
-     * Sets the current position of the pointer of the FileStream to a specified offset.
-     *
-     * @param int $Offset The offset to set the pointer to.
-     * @param int $Mode   The mode where the offset begins.
-     *
-     * @return bool True on success; otherwise, false.
-     */
-    public function Seek(int $Offset, int $Mode = Seek::Offset): bool {
-        return \fseek($this->Pointer, $Offset, $Mode) > -1;
-    }
-
-    /**
-     * Tells whether the current FileStream supports seeking.
-     * CanSeek is a convenience method that is equivalent to the value of the CanSeek property of the current instance.
-     *
-     * @return bool True if the FileStream supports seeking; otherwise, false.
-     */
+    /** @inheritDoc */
     public function CanSeek(): bool {
-        return $this->Mode !== Mode::Append;
+        return !($this->Mode & Mode::Append);
     }
 
-    /**
-     * Tells whether the current FileStream supports reading.
-     * CanRead is a convenience method that is equivalent to the value of the CanRead property of the current instance.
-     *
-     * @return bool True if the FileStream supports reading; otherwise, false.
-     */
+    /** @inheritDoc */
     public function CanRead(): bool {
-        return $this->Mode !== Mode::Truncate
-               && $this->Mode !== Mode::Append
-               && $this->Mode !== Mode::Create;
+        return (bool)($this->Mode & Mode::Read);
     }
 
-    /**
-     * Tells whether the current FileStream supports writing.
-     * CanWrite is a convenience method that is equivalent to the value of the CanWrite property of the current instance.
-     *
-     * @return bool True if the FileStream supports writing; otherwise, false.
-     */
+    /** @inheritDoc */
     public function CanWrite(): bool {
-        return $this->Mode !== Mode::Read;
+        return (bool)($this->Mode & Mode::Write);
     }
 
-    /**
-     * Tells whether the current FileStream has reached its end.
-     * EndOfStream is a convenience method that is equivalent to the value of the EndOfStream property of the current instance.
-     *
-     * @return bool True if the FileStream has reached its end; otherwise, false.
-     */
-    public function EndOfStream(): bool {
-        return \feof($this->Pointer);
-    }
-
-    /**
-     * Closes the FileStream.
-     *
-     * @return bool True on success, false on failure.
-     */
-    public function Close(): bool {
-        return \is_resource($this->Pointer) && \fclose($this->Pointer);
-    }
-
-    /**
-     * Truncates the sequence of bytes to the specified size.
-     *
-     * @param int $Size The size to truncate to.
-     *
-     * @return bool True on success; otherwise, false.
-     */
-    public function Truncate(int $Size): bool {
-        return \ftruncate($this->Pointer, $Size);
+    /** @inheritDoc */
+    public static function FromPointer($Pointer, int $Mode, bool $Blocking = true): static {
+        if(!\is_resource($Pointer)) {
+            throw new \TypeError("Argument 1 passed to " . __METHOD__ . " must be of the type resource, " . \gettype($Pointer) . " given");
+        }
+        $Stream          = new static(null, $Mode);
+        $Stream->Pointer = $Pointer;
+        return $Stream;
     }
 }

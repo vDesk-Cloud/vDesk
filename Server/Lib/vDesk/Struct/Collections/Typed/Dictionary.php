@@ -6,7 +6,6 @@ namespace vDesk\Struct\Collections\Typed;
 use vDesk\Struct\Collections\DuplicateKeyException;
 use vDesk\Struct\Collections\IDictionary;
 use vDesk\Struct\Collections\KeyNotFoundException;
-use vDesk\Struct\Collections\IEnumerable;
 use vDesk\Struct\InvalidOperationException;
 use vDesk\Struct\Properties;
 use vDesk\Struct\Type;
@@ -15,27 +14,27 @@ use vDesk\Struct\Type;
  * Represents a statically typed iterable list of key-value pairs.
  *
  * @property-read int      $Count  Gets the amount of elements in the Dictionary.
- * @property-read string[] $Keys   Gets all keys of the Dictionary
- * @property-read mixed[]  $Values Gets all values of the Dictionary
- * @package vDesk\Struct
+ * @property-read string[] $Keys   Gets all keys of the Dictionary.
+ * @property-read array    $Values Gets all values of the Dictionary.
+ * @package vDesk
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Dictionary implements IDictionary {
-    
+
     use Properties;
-    
+
     /**
      * The Type of the value of the Dictionary.
      */
     public const Type = Type::Mixed;
-    
+
     /**
      * The elements of the Dictionary.
      *
      * @var array
      */
     protected array $Elements = [];
-    
+
     /**
      * Initializes a new instance of the Dictionary class.
      *
@@ -43,21 +42,15 @@ class Dictionary implements IDictionary {
      */
     public function __construct(iterable $Elements = []) {
         $this->AddProperties([
-            "Count"  => [
-                \Get => fn(): int => \count($this->Elements)
-            ],
-            "Keys"   => [
-                \Get => fn(): array => \array_keys($this->Elements)
-            ],
-            "Values" => [
-                \Get => fn(): array => \array_values($this->Elements)
-            ]
+            "Count"  => [\Get => fn(): int => \count($this->Elements)],
+            "Keys"   => [\Get => fn(): array => \array_keys($this->Elements)],
+            "Values" => [\Get => fn(): array => \array_values($this->Elements)]
         ]);
         foreach($Elements as $Key => $Element) {
             $this->Add($Key, $Element);
         }
     }
-    
+
     /**
      * Determines whether a passed argument or returned value is of the specified value-type of the Dictionary.
      *
@@ -68,7 +61,7 @@ class Dictionary implements IDictionary {
     public static function IsValid(&$Argument): bool {
         return static::Type === Type::Of($Argument);
     }
-    
+
     /**
      * Creates a new TypeError indicating a wrong argument type.
      *
@@ -83,13 +76,10 @@ class Dictionary implements IDictionary {
             ? new \TypeError("Argument {$ArgumentPosition} passed to {$Method} must be of the type " . static::Type . ", " . Type::Of($Argument) . " given")
             : new \TypeError("Argument {$ArgumentPosition} passed to {$Method} must be an instance of " . static::Type . ", instance of " . Type::Of($Argument) . " given");
     }
-    
+
+    //Implementation of \vDesk\Struct\Collections\IDictionary.
     /**
-     * Adds an element to the Dictionary.
-     *
-     * @param string $Key     The key of the element it should be accessible.
-     * @param mixed  $Element The element to add.
-     *
+     * @inheritDoc
      * @throws \vDesk\Struct\Collections\DuplicateKeyException Thrown if an element with an equal key already exists.
      */
     public function Add(string $Key, mixed $Element): void {
@@ -101,30 +91,94 @@ class Dictionary implements IDictionary {
         }
         $this->Elements[$Key] = $Element;
     }
-    
+
     /**
-     * Changes the key associated with the specified element in the IKeyedCollection.
-     *
-     * @param mixed  $Element The element to change the key of.
-     * @param string $Key     The new key for the element.
+     * @inheritDoc
+     * @throws \vDesk\Struct\Collections\DuplicateKeyException Thrown if an element with an equal key already exists.
      */
-    public function ChangeKey(mixed $Element, string $Key): void {
+    public function Insert(string $Before, string $Key, mixed $Value): void {
+        if(!self::IsValid($Value)) {
+            throw self::TypeError(3, __METHOD__, $Value);
+        }
+        if(isset($this->Elements[$Key])) {
+            throw new DuplicateKeyException("An element with the same key '$Key' already exists.");
+        }
+        $Elements = [];
+        foreach($this->Elements as $ExistingKey => $ExistingValue) {
+            if($ExistingKey === $Before) {
+                $Elements[$Key] = $Value;
+            }
+            $Elements[$ExistingKey] = $ExistingValue;
+        }
+        $this->Elements = $Elements;
+    }
+
+    /**
+     * @inheritDoc
+     * @throws \vDesk\Struct\Collections\DuplicateKeyException Thrown if an element with an equal key already exists.
+     */
+    public function InsertAfter(string $After, string $Key, mixed $Element): void {
+        if(!self::IsValid($Element)) {
+            throw self::TypeError(3, __METHOD__, $Element);
+        }
+        if(isset($this->Elements[$Key])) {
+            throw new DuplicateKeyException("An element with the same key '$Key' already exists.");
+        }
+        $Elements = [];
+        foreach($this->Elements as $ExistingKey => $ExistingElement) {
+            $Elements[$ExistingKey] = $ExistingElement;
+            if($ExistingKey === $After) {
+                $Elements[$Key] = $Element;
+            }
+        }
+        $this->Elements = $Elements;
+    }
+
+    /** @inheritDoc */
+    public function Replace(mixed $Element, mixed $Replacement): void {
         if(!self::IsValid($Element)) {
             throw self::TypeError(1, __METHOD__, $Element);
         }
-        if(($OldKey = $this->KeyOf($Element)) !== null) {
-            $this->Elements[$Key] = $this->Elements[$OldKey];
-            unset($this->Elements[$OldKey]);
+        if(!self::IsValid($Replacement)) {
+            throw self::TypeError(2, __METHOD__, $Replacement);
+        }
+        if(($Key = $this->KeyOf($Element)) !== null) {
+            $this->Elements[$Key] = $Replacement;
         }
     }
-    
-    /**
-     * Searches for the specified element and returns the key of the first occurrence within the entire Dictionary.
-     *
-     * @param mixed $Element The element to locate in the Dictionary.
-     *
-     * @return string|null The key of the first occurrence of the element within the entire Dictionary, if found; otherwise, null.
-     */
+
+    /** @inheritDoc */
+    public function ReplaceAt(string $Key, mixed $Element): mixed {
+        if(!self::IsValid($Element)) {
+            throw self::TypeError(2, __METHOD__, $Element);
+        }
+        if(isset($this->Elements[$Key])) {
+            $Previous             = $this->Elements[$Key];
+            $this->Elements[$Key] = $Element;
+            return $Previous;
+        }
+        return null;
+    }
+
+    /** @inheritDoc */
+    public function Remove(mixed $Element): mixed {
+        if(!self::IsValid($Element)) {
+            throw self::TypeError(1, __METHOD__, $Element);
+        }
+        return $this->RemoveAt($this->KeyOf($Element) ?? "");
+    }
+
+    /** @inheritDoc */
+    public function RemoveAt(string $Key): mixed {
+        if(isset($this->Elements[$Key])) {
+            $Value = $this->Elements[$Key];
+            unset($this->Elements[$Key]);
+            return $Value;
+        }
+        return null;
+    }
+
+    /** @inheritDoc */
     public function KeyOf(mixed $Element): ?string {
         if(!self::IsValid($Element)) {
             throw self::TypeError(1, __METHOD__, $Element);
@@ -136,15 +190,41 @@ class Dictionary implements IDictionary {
         }
         return null;
     }
-    
-    /**
-     * Copies the elements of the Dictionary into an array.
-     *
-     * @param null|string $From The key in the Dictionary at which copying begins.
-     * @param null|string $To   The key in the Dictionary at which copying ends.
-     *
-     * @return array An array containing the elements of the Dictionary.
-     */
+
+    /** @inheritDoc */
+    public function ChangeKey(mixed $Element, string $Key): ?string {
+        if(!self::IsValid($Element)) {
+            throw self::TypeError(1, __METHOD__, $Element);
+        }
+        if(($OldKey = $this->KeyOf($Element)) !== null) {
+            $this->Elements[$Key] = $this->Elements[$OldKey];
+            unset($this->Elements[$OldKey]);
+            return $OldKey;
+        }
+        return null;
+    }
+
+    /** @inheritDoc */
+    public function Contains(mixed $Element): bool {
+        if(!self::IsValid($Element)) {
+            throw self::TypeError(1, __METHOD__, $Element);
+        }
+        return \in_array($Element, $this->Elements);
+    }
+
+    /** @inheritDoc */
+    public function ContainsKey(string $Key): bool {
+        return isset($this->Elements[$Key]);
+    }
+
+    /** @inheritDoc */
+    public function Merge(IDictionary $Dictionary): void {
+        foreach($Dictionary as $mKey => $mValue) {
+            $this->Add($mKey, $mValue);
+        }
+    }
+
+    /** @inheritDoc */
     public function ToArray(string $From = null, string $To = null): array {
         $FromIndex = 0;
         $ToIndex   = null;
@@ -158,313 +238,35 @@ class Dictionary implements IDictionary {
         }
         return \array_slice($this->Elements, $FromIndex ?? 0, $ToIndex ?? $this->Count, true);
     }
-    
-    /**
-     * Determines whether an element is in the Dictionary.
-     *
-     * @param mixed $Element The element to check.
-     *
-     * @return bool True if the element is in the Dictionary, otherwise, false.
-     */
-    public function Contains(mixed $Element): bool {
-        if(!self::IsValid($Element)) {
-            throw self::TypeError(1, __METHOD__, $Element);
-        }
-        return \in_array($Element, $this->Elements);
-    }
-    
-    /**
-     * Determines whether an element with the specified key is in the Dictionary.
-     *
-     * @param mixed $Key The key to check.
-     *
-     * @return bool True if an element with the specified key is in the Dictionary, otherwise, false.
-     */
-    public function ContainsKey(string $Key): bool {
-        return isset($this->Elements[$Key]);
-    }
-    
-    /**
-     * Removes all elements from the Dictionary.
-     */
-    public function Clear(): void {
-        $this->Elements = [];
-    }
-    
-    /**
-     * Merges the elements of a different {@link \vDesk\Struct\Collections\Typed\Dictionary} into the Dictionary.
-     *
-     * @param \vDesk\Struct\Collections\Typed\Dictionary $Dictionary The Dictionary to merge.
-     */
-    public function Merge(IDictionary $Dictionary): void {
-        foreach($Dictionary as $mKey => $mValue) {
-            $this->Add($mKey, $mValue);
-        }
-    }
-    
-    /**
-     * Replaces an element of the Dictionary with a different element.
-     * If the element to replace doesn't exist in the Dictionary, nothing is replaced nor added.
-     *
-     * @param mixed $Element     The old value of the element to replace.
-     * @param mixed $Replacement The element to set.
-     */
-    public function Replace(mixed $Element, mixed $Replacement): void {
-        if(!self::IsValid($Element)) {
-            throw self::TypeError(1, __METHOD__, $Element);
-        }
-        if(!self::IsValid($Replacement)) {
-            throw self::TypeError(2, __METHOD__, $Replacement);
-        }
-        if(($Key = $this->KeyOf($Element)) !== null) {
-            $this->Elements[$Key] = $Replacement;
-        }
-    }
-    
-    /**
-     * Replaces the element with the specified key of the Dictionary with a specified element.
-     *
-     * @param string $Key     The key of the element to replace.
-     * @param mixed  $Element The element to set.
-     */
-    public function ReplaceAt(string $Key, mixed $Element): void {
-        if(!self::IsValid($Element)) {
-            throw self::TypeError(2, __METHOD__, $Element);
-        }
-        if(isset($this->Elements[$Key])) {
-            $this->Elements[$Key] = $Element;
-        }
-    }
-    
-    /**
-     * Removes the specified element from the Dictionary.
-     *
-     * @param mixed $Element The element to remove.
-     *
-     * @return mixed The removed element.
-     */
-    public function Remove(mixed $Element): mixed {
-        if(!self::IsValid($Element)) {
-            throw self::TypeError(1, __METHOD__, $Element);
-        }
-        return $this->RemoveAt($this->KeyOf($Element) ?? "");
-    }
-    
-    /**
-     * Removes an element with the specified key.
-     *
-     * @param string $Key The key at which the element should be removed.
-     *
-     * @return mixed The removed element.
-     */
-    public function RemoveAt(string $Key): mixed {
-        if(isset($this->Elements[$Key])) {
-            $Value = $this->Elements[$Key];
-            unset($this->Elements[$Key]);
-            return $Value;
-        }
-        return null;
-    }
-    
-    /**
-     * Inserts an element into the Dictionary at the position of the element with the specified key.
-     *
-     * @param string $Before The key of the element of which the new element will be inserted before.
-     * @param string $Key    The key of the element to insert.
-     * @param mixed  $Value  The value to insert.
-     *
-     * @throws \vDesk\Struct\Collections\DuplicateKeyException Thrown if an element with an equal key already exists.
-     */
-    public function Insert(string $Before, string $Key, mixed $Value): void {
-        
-        if(!self::IsValid($Value)) {
-            throw self::TypeError(3, __METHOD__, $Value);
-        }
-        
-        if(isset($this->Elements[$Key])) {
-            throw new DuplicateKeyException("An element with the same key '$Key' already exists.");
-        }
-        
-        $Elements = [];
-        
-        foreach($this->Elements as $ExistingKey => $ExistingValue) {
-            if($ExistingKey === $Before) {
-                $Elements[$Key] = $Value;
-            }
-            $Elements[$ExistingKey] = $ExistingValue;
-        }
-        
-        $this->Elements = $Elements;
-        
-    }
-    
-    /**
-     * Inserts an element into the Dictionary after the position of the element with the specified key.
-     *
-     * @param string $After The key of the element of which the new element will be inserted after.
-     * @param string $Key   The key of the element to insert.
-     * @param mixed  $Value The element to insert.
-     *
-     * @throws \vDesk\Struct\Collections\DuplicateKeyException Thrown if an element with an equal key already exists.
-     */
-    public function InsertAfter(string $After, string $Key, mixed $Value): void {
-        if(!self::IsValid($Value)) {
-            throw self::TypeError(3, __METHOD__, $Value);
-        }
-        if(isset($this->Elements[$Key])) {
-            throw new DuplicateKeyException("An element with the same key '$Key' already exists.");
-        }
-        $Elements = [];
-        foreach($this->Elements as $ExistingKey => $ExistingValue) {
-            $Elements[$ExistingKey] = $ExistingValue;
-            if($ExistingKey === $After) {
-                $Elements[$Key] = $Value;
-            }
-        }
-        $this->Elements = $Elements;
-    }
-    
-    /**
-     * Sets the value of an existing key within the Dictionary.
-     *
-     * @param mixed $Key   The key of the value to set.
-     * @param mixed $Value The value to set.
-     *
-     * @see \ArrayAccess::offsetSet()
-     * @ignore
-     */
-    public function offsetSet($Key, $Value): void {
-        if($this->offsetExists($Key)) {
-            $this->ReplaceAt($Key, $Value);
-        } else {
-            $this->Add($Key, $Value);
-        }
-    }
-    
-    /**
-     *
-     * Determines whether an element with the specified key exists.
-     *
-     * @param string $Key The key to check for existence.
-     *
-     * @return bool True if the specified key exists; otherwise, false.
-     * @see \ArrayAccess::offsetExists()
-     * @ignore
-     */
-    public function offsetExists($Key): bool {
-        return isset($this->Elements[$Key]);
-    }
-    
-    /**
-     * Unsets an element and its key from the Dictionary.
-     * Note: Using 'unset()' to delete an element within the Dictionary isn't supported,
-     * use {@see \vDesk\Struct\Collections\Typed\Dictionary::RemoveAt()} instead.
-     *
-     * @param mixed $Key The key of the element to unset.
-     *
-     * @throws \vDesk\Struct\InvalidOperationException Thrown if an element is being deleted using unset($Key).
-     * @ignore
-     * @see \ArrayAccess::offsetUnset()
-     */
-    public function offsetUnset($Key): void {
-        throw new InvalidOperationException("Cannot unset element at index " . static::class . "[$Key]. Use " . static::class . "::RemoveAt($Key) instead.");
-    }
-    
-    /**
-     * Returns the element of the specified key.
-     *
-     * @param mixed $Key The string-based key of the element to get.
-     *
-     * @return mixed The element with the specified key.
-     * @throws \vDesk\Struct\Collections\KeyNotFoundException Thrown if the specified key doesn't exist.
-     *
-     * @ignore
-     *
-     * @see \ArrayAccess::offsetGet()
-     */
-    public function offsetGet($Key) {
-        if(!$this->offsetExists($Key)) {
-            throw new KeyNotFoundException("Undefined key at " . static::class . "[$Key].");
-        }
-        return $this->Elements[$Key];
-    }
-    
-    /**
-     * Rewinds the internal pointer of the Dictionary to the start.
-     *
-     * @see \Iterator::rewind()
-     * @ignore
-     */
-    public function rewind(): void {
-        \reset($this->Elements);
-    }
-    
-    /**
-     *
-     * Returns the element at the current position of the internal pointer of the Dictionary.
-     *
-     * @return mixed The element at the current position.
-     * @ignore
-     *
-     * @see \Iterator::current()
-     */
-    public function current() {
-        return \current($this->Elements);
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @see \Iterator::key()
-     * @ignore
-     */
-    public function key(): string {
-        return \key($this->Elements);
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @see \Iterator::next()
-     * @ignore
-     */
-    public function next(): void {
-        \next($this->Elements);
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @see \Iterator::valid()
-     * @ignore
-     */
-    public function valid(): bool {
-        return \key($this->Elements) !== null;
-    }
-    
-    /**
-     * Returns the amount of elements inside the Dictionary.
-     *
-     * @return int The amount of elements in the Dictionary.
-     */
+
+    //Implementation of \vDesk\Struct\Collections\IEnumerable.
+    /** @inheritDoc */
     public function Count(): int {
         return \count($this->Elements);
     }
-    
-    /**
-     * Searches for an element inside the Dictionary and returns the first element which satisfies a test provided by the
-     * specified predicate function.
-     *
-     * @param callable $Predicate A predicate function to execute on each element inside the Dictionary.
-     *
-     * @return mixed|null Returns the first matching element in the Dictionary, null if no element satisfies a test provided by the
-     *                    specified predicate function.
-     *  <code>
-     *  //Example of using a predicate function for searching the Dictionary.
-     *  $Dictionary->Find(fn(T $Value, string $Key, Dictionary $Dictionary) => $Value->ID === 12 && $Value->Name === "Foo");
-     *  //Returns the first element with $Value->ID = 12 and $Value->Name = "Foo" if exists.
-     *  </code>
-     */
+
+    /** @inheritDoc */
+    public function First(bool $Remove = false): mixed {
+        if($Remove){
+            return \array_shift($this->Elements);
+        }
+        return \reset($this->Elements) ?: null;
+    }
+
+    /** @inheritDoc */
+    public function Last(bool $Remove = false): mixed {
+        if($Remove){
+            return \array_pop($this->Elements);
+        }
+        return \end($this->Elements) ?: null;
+    }
+
+    /** @inheritDoc */
+    public function Reverse(): static {
+        return new static(\array_reverse($this->Elements, true));
+    }
+
+    /** @inheritDoc */
     public function Find(callable $Predicate): mixed {
         foreach($this as $Key => $Value) {
             if($Predicate($Value, $Key, $this)) {
@@ -473,38 +275,16 @@ class Dictionary implements IDictionary {
         }
         return null;
     }
-    
-    /**
-     * Sorts the Dictionary by value.
-     *
-     * @param callable $Predicate The function to determine the sortorder. It should return either a positive, negative or zero-value.
-     *
-     * @return bool True if the sorting was successful.
-     * <code>
-     * //Example of using callback functions for sorting the Dictionary.
-     * $Dictionary->Sort(function(T $A, T $B): int => $A->ID - $B->ID);
-     * //Sorts the Dictionary ascending by the value of the elements ID-property.
-     * </code>
-     */
-    public function Sort(callable $Predicate): bool {
-        return \usort($this->Elements, $Predicate);
+
+    /** @inheritDoc */
+    public function Sort(callable $Predicate): static {
+        $Sorted = $this->ToArray();
+        \usort($Sorted, $Predicate);
+        return new static($Sorted);
     }
-    
-    /**
-     * Returns a new Dictionary containing all elements that satisfy a test provided by the specified predicate function.
-     *
-     * @param callable $Predicate A predicate function to execute on each element inside the Dictionary.
-     *
-     * @return \vDesk\Struct\Collections\Typed\Dictionary The elements inside the Dictionary which are matching
-     *                                                                 the search criteria.
-     * @see   \vDesk\Struct\Collections\IEnumerable::Filter()
-     * <code>
-     * //Example of using callbackfunctions.
-     * $Dictionary->Filter(fn(T $Value, string $Key, Dictionary $Dictionary): bool => $Value->ID > 1 && $Value->ID < 6);
-     * //Returns all elements whose value of $Value-ID is in the range betweeen 1 and 6.
-     * </code>
-     */
-    public function Filter(callable $Predicate): IEnumerable {
+
+    /** @inheritDoc */
+    public function Filter(callable $Predicate): static {
         $Dictionary = new static();
         foreach($this as $Key => $Value) {
             if($Predicate($Value, $Key, $this)) {
@@ -513,33 +293,17 @@ class Dictionary implements IDictionary {
         }
         return $Dictionary;
     }
-    
-    /**
-     * Creates creates a new Dictionary with the results of calling a function for every element in the
-     * Dictionary.
-     *
-     * @param callable $Predicate The callback function to apply on each element.
-     *
-     * @return \vDesk\Struct\Collections\Typed\Dictionary The Dictionary holding the result of each function
-     *                                                                 call.
-     */
-    public function Map(callable $Predicate): IEnumerable {
+
+    /** @inheritDoc */
+    public function Map(callable $Predicate): static {
         $Dictionary = new static();
         foreach($this as $Key => $Value) {
             $Dictionary->Add($Key, $Predicate($Value, $Key, $this));
         }
         return $Dictionary;
     }
-    
-    /**
-     * Reduces the values of the Dictionary to a single value.
-     *
-     * @param callable $Predicate    The callback function to apply on each element inside the Dictionary.
-     * @param mixed    $InitialValue Value to use as the first argument to the first call of the $Predicate. If no initial value is
-     *                               supplied, the first element in the Dictionary will be used.
-     *
-     * @return mixed The value that results from the reduction.
-     */
+
+    /** @inheritDoc */
     public function Reduce(callable $Predicate, $InitialValue = null): mixed {
         $Accumulator = $InitialValue ?? \reset($this->Elements);
         foreach($this as $Key => $Value) {
@@ -547,14 +311,8 @@ class Dictionary implements IDictionary {
         }
         return $Accumulator;
     }
-    
-    /**
-     * Determines whether any element of a sequence satisfies a condition.
-     *
-     * @param callable $Predicate The callback function to apply on each element inside the Dictionary.
-     *
-     * @return bool True if at least one element inside the Dictionary matches the predicate.
-     */
+
+    /** @inheritDoc */
     public function Any(callable $Predicate): bool {
         foreach($this as $Key => $Value) {
             if($Predicate($Value, $Key, $this)) {
@@ -563,15 +321,8 @@ class Dictionary implements IDictionary {
         }
         return false;
     }
-    
-    /**
-     * Determines whether all elements of a sequence satisfy a condition.
-     *
-     * @param callable $Predicate A function to test each element for a condition.
-     *
-     * @return bool True if every element of the sequence passes the test in the specified predicate, or if the sequence is empty;
-     *              otherwise, false.
-     */
+
+    /** @inheritDoc */
     public function Every(callable $Predicate): bool {
         foreach($this as $Key => $Value) {
             if(!$Predicate($Value, $Key, $this)) {
@@ -580,5 +331,63 @@ class Dictionary implements IDictionary {
         }
         return true;
     }
-    
+
+    /** @inheritDoc */
+    public function Clear(): void {
+        $this->Elements = [];
+    }
+
+    //Implementation of \ArrayAccess.
+    /** @see \ArrayAccess::offsetSet() */
+    public function offsetSet($Key, $Value): void {
+        if($this->offsetExists($Key)) {
+            $this->ReplaceAt($Key, $Value);
+        } else {
+            $this->Add($Key, $Value);
+        }
+    }
+
+    /** @see \ArrayAccess::offsetExists() */
+    public function offsetExists($Key): bool {
+        return isset($this->Elements[$Key]);
+    }
+
+    /** @see \ArrayAccess::offsetUnset() */
+    public function offsetUnset($Key): void {
+        throw new InvalidOperationException("Cannot unset element at index " . static::class . "[$Key]. Use " . static::class . "::RemoveAt($Key) instead.");
+    }
+
+    /** @see \ArrayAccess::offsetGet() */
+    public function offsetGet($Key) {
+        if(!$this->offsetExists($Key)) {
+            throw new KeyNotFoundException("Undefined key at " . static::class . "[$Key].");
+        }
+        return $this->Elements[$Key];
+    }
+
+    //Implementation of \Iterator.
+    /** @see \Iterator::rewind() */
+    public function rewind(): void {
+        \reset($this->Elements);
+    }
+
+    /** @see \Iterator::current() */
+    public function current() {
+        return \current($this->Elements);
+    }
+
+    /** @see \Iterator::key() */
+    public function key(): string {
+        return \key($this->Elements);
+    }
+
+    /** @see \Iterator::next() */
+    public function next(): void {
+        \next($this->Elements);
+    }
+
+    /** @see \Iterator::valid() */
+    public function valid(): bool {
+        return \key($this->Elements) !== null;
+    }
 }

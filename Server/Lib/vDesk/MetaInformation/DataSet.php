@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace vDesk\MetaInformation;
 
 use vDesk\Archive\Element;
-use vDesk\Data\Model;
 use vDesk\DataProvider\Expression;
 use vDesk\DataProvider\MappedGetter;
 use vDesk\Data\IDNullException;
@@ -21,16 +20,15 @@ use vDesk\Struct\Extension;
  * @property \vDesk\Archive\Element      $Element Gets or sets the Element of the DataSet.
  * @property \vDesk\MetaInformation\Mask $Mask    Gets or sets the Mask of the DataSet.
  * @package vDesk/MetaInformation
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
- * @todo    Use the Element as unique identifier.
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class DataSet extends Collection implements ICollectionModel {
-    
+
     /**
      * The Type of the DataSet.
      */
     public const Type = Row::class;
-    
+
     /**
      * Initializes a new instance of the DataSet class.
      *
@@ -84,14 +82,12 @@ class DataSet extends Collection implements ICollectionModel {
             ]
         );
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritdoc */
     public function ID(): ?int {
         return $this->ID;
     }
-    
+
     /**
      * Fills the DataSet with its values from the database.
      *
@@ -103,12 +99,12 @@ class DataSet extends Collection implements ICollectionModel {
         if($this->ID === null) {
             throw new IDNullException();
         }
-        
+
         //Refresh if filled before.
         if($this->Count > 0) {
             $this->Clear();
         }
-        
+
         $DataSet       = Expression::Select("Element", "Mask")
                                    ->From("MetaInformation.DataSets")
                                    ->Where(["ID" => $this->ID])
@@ -116,7 +112,7 @@ class DataSet extends Collection implements ICollectionModel {
                                    ->ToMap();
         $this->Element = new Element((int)$DataSet["Element"]);
         $this->Mask    = (new Mask([], (int)$DataSet["Mask"]))->Fill();
-        
+
         //Get metadata.
         foreach(
             Expression::Select("ID", "Row", "Value")
@@ -125,10 +121,10 @@ class DataSet extends Collection implements ICollectionModel {
             as
             $Row
         ) {
-            
+
             $MaskRow = $this->Mask->Find(static fn(Mask\Row $MaskRow): bool => $MaskRow->ID === (int)$Row["Row"]);
             //Convert value to proper type.
-            $Value   = match ($Row["Value"]) {
+            $Value = match ($Row["Value"]) {
                 null => null,
                 default => match ($MaskRow->Type) {
                     Type::Int => (int)$Row["Value"],
@@ -138,23 +134,23 @@ class DataSet extends Collection implements ICollectionModel {
                     default => $Row["Value"]
                 }
             };
-            
+
             $this->Add(new Row((int)$Row["ID"], $this, $MaskRow, $Value));
         }
         return $this;
     }
-    
+
     /**
      * Saves possible changes if a valid ID was supplied, or creates a new database-entry if none was supplied.
      */
     public function Save(): void {
-        
+
         foreach($this->Elements as $DataSetRow) {
             if($DataSetRow->Row->Required && $DataSetRow->Value === null) {
                 throw new \InvalidArgumentException("Missing value of DataSet\\Row for required Mask\\Row '{$DataSetRow->Row->Name}' of Mask '{$this->Mask->Name}'!");
             }
         }
-        
+
         //Check if the DataSet is not virtual and a valid Mask has been set.
         if($this->ID !== null && $this->Mask !== null) {
             foreach($this->Elements as $DataSetRow) {
@@ -165,37 +161,29 @@ class DataSet extends Collection implements ICollectionModel {
                               ->Execute();
                 }
             }
-            
-        } else {
-            if(
-                $this->ID === null
-                && $this->Element !== null
-                && $this->Mask !== null
-            ) {
-                $this->ID = Expression::Insert()
-                                      ->Into("MetaInformation.DataSets")
-                                      ->Values([
-                                          "ID"      => null,
-                                          "Element" => $this->Element->ID,
-                                          "Mask"    => $this->Mask->ID
-                                      ])
-                                      ->ID();
-                
-                foreach($this->Elements as $DataSetRow) {
-                    //Retrieve ID.
-                    $DataSetRow->ID = Expression::Insert()
-                                                ->Into("MetaInformation.DataSetRows")
-                                                ->Values([
-                                                    "DataSet" => $this->ID,
-                                                    "Row"     => $DataSetRow->Row,
-                                                    "Value"   => $DataSetRow->Value
-                                                ])
-                                                ->ID();
-                }
+        } else if($this->ID === null && $this->Element !== null && $this->Mask !== null) {
+            $this->ID = Expression::Insert()
+                                  ->Into("MetaInformation.DataSets")
+                                  ->Values([
+                                      "ID"      => null,
+                                      "Element" => $this->Element->ID,
+                                      "Mask"    => $this->Mask->ID
+                                  ])
+                                  ->ID();
+            foreach($this->Elements as $DataSetRow) {
+                //Retrieve ID.
+                $DataSetRow->ID = Expression::Insert()
+                                            ->Into("MetaInformation.DataSetRows")
+                                            ->Values([
+                                                "DataSet" => $this->ID,
+                                                "Row"     => $DataSetRow->Row,
+                                                "Value"   => $DataSetRow->Value
+                                            ])
+                                            ->ID();
             }
         }
     }
-    
+
     /**
      * Deletes the DataSet and its DataRows.
      */
@@ -211,7 +199,7 @@ class DataSet extends Collection implements ICollectionModel {
                       ->Execute();
         }
     }
-    
+
     /**
      * Creates a DataSet from a specified data view.
      *
@@ -220,24 +208,14 @@ class DataSet extends Collection implements ICollectionModel {
      * @return \vDesk\MetaInformation\DataSet A DataSet created from the specified data view.
      */
     public static function FromDataView(mixed $DataView): DataSet {
-        
         $DataSet = new static(null, $DataView["ID"] ?? null);
-        
-        // Stop/disable event dispatching,
-        $DataSet->StopDispatch();
-        
         foreach($DataView["Rows"] ?? [] as $Data) {
             $DataSet->Add(Row::FromDataView($Data));
         }
-        
         $DataSet->Mask = new Mask($DataView["Mask"] ?? null);
-        
-        // Start/re-enable event dispatching,
-        $DataSet->StartDispatch();
-        
         return $DataSet;
     }
-    
+
     /**
      * Creates a data view of the DataSet.
      *
@@ -260,7 +238,7 @@ class DataSet extends Collection implements ICollectionModel {
                 )
             ];
     }
-    
+
     /**
      * Factory method that creates a new DataSet filled with the Rows according a specified Mask.
      *
@@ -272,35 +250,27 @@ class DataSet extends Collection implements ICollectionModel {
     public static function FromMask(Mask $Mask, Element $Element = null): DataSet {
         return new static(\array_map(static fn(Mask\Row $Row): Row => new Row(Row: $Row), $Mask->ToArray()), null, $Element, $Mask);
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritdoc */
     public function offsetGet($Index): Row {
         return \is_string($Index)
             ? $this->Find(static fn(Row $DataSetRow): bool => $DataSetRow->Row->Name === $Index)
             : parent::offsetGet($Index);
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritdoc */
     public function Find(callable $Predicate): ?Row {
         return parent::Find($Predicate);
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritdoc */
     public function Remove($Element): Row {
         return parent::Remove($Element);
     }
-    
-    /**
-     * @inheritdoc
-     */
+
+    /** @inheritdoc */
     public function RemoveAt(int $Index): Row {
         return parent::RemoveAt($Index);
     }
-    
+
 }

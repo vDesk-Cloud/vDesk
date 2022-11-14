@@ -171,10 +171,8 @@ final class Archive extends Module implements ISearch {
         //Save uploaded file.
         $TempFile = $File->Open();
         while(!$TempFile->EndOfStream()) {
-            $TargetFile->Write($TempFile->Read());
+            $TargetFile->Write((string)$TempFile->Read());
         }
-        $TargetFile->Close();
-        $TempFile->Close();
 
         //Create a new Element for the uploaded file.
         $Element = new Element(
@@ -444,8 +442,6 @@ final class Archive extends Module implements ISearch {
         while(!$TempFile->EndOfStream()) {
             $TargetFile->Write($TempFile->Read());
         }
-        $TargetFile->Close();
-        $TempFile->Close();
 
         //Update Element.
         $Element->Size      = File::Size($TargetDirectory . $Element->File);

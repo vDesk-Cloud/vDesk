@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace vDesk\DataProvider;
 
-use vDesk\Struct\Collections\IEnumerable;
-
 /**
  * Interface IResult
  * Represents a result-set retrieved by a SQL-data-provider.
@@ -13,10 +11,17 @@ use vDesk\Struct\Collections\IEnumerable;
  * @package vDesk\DataProvider
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-interface IResult extends IEnumerable {
+interface IResult extends \Traversable {
 
     /**
-     * Retrieves a row of the IResult as an numeric array.
+     * Returns the number of rows of the IResult.
+     *
+     * @return int The number of rows of the IResult.
+     */
+    public function Count(): int;
+
+    /**
+     * Retrieves a row of the IResult as a numeric array.
      *
      * @return string[]|null The row at the current position within the IResult; otherwise, null.
      */

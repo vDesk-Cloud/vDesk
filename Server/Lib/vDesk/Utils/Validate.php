@@ -8,23 +8,23 @@ use vDesk\Struct\Extension;
 use vDesk\Struct\Type;
 
 /**
- * Class Validate represents ...
+ * Utility class for validating values of certain types.
  *
- * @package vDesk\Utils
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Validate {
-    
+
     /**
      * Determines whether a specified value is of a specified type.
      *
-     * @param mixed  $Value     The value to validate.
-     * @param string $Type      The type of the value to validate for.
-     * @param null   $Validator Optional validator to validate the specified value against.
+     * @param mixed             $Value     The value to validate.
+     * @param string            $Type      The type of the value to validate for.
+     * @param null|array|object $Validator Optional validator to validate the specified value against.
      *
      * @return bool True if the specified value is of the specified type; otherwise, false.
      */
-    public static function As(mixed $Value, string $Type, $Validator = null): bool {
+    public static function As(mixed $Value, string $Type, array|object $Validator = null): bool {
         return match ($Type) {
             Type::Int => self::AsInt($Value)
                          && $Value >= ($Validator?->Min ?? $Validator["Min"] ?? $Value)
@@ -33,11 +33,7 @@ class Validate {
                            && $Value >= ($Validator?->Min ?? $Validator["Min"] ?? $Value)
                            && $Value <= ($Validator?->Max ?? $Validator["Max"] ?? $Value),
             Type::String => self::AsString($Value)
-                            && (
-                            $Validator === null
-                                ? true
-                                : (bool)\preg_match($Validator->Expression ?? $Validator["Expression"] ?? "/.+/", $Value)
-                            ),
+                            && ($Validator === null || (bool)\preg_match($Validator->Expression ?? $Validator["Expression"] ?? "/.+/", $Value)),
             Type::Array => self::AsArray($Value),
             Type::Object => self::AsObject($Value),
             Type::Bool => self::AsBool($Value),
@@ -54,7 +50,7 @@ class Validate {
             Extension\Type::File => $Value instanceof FileInfo,
             Extension\Type::Money => (
                                      $Validator !== null
-                                         ? \strrchr($Value, $Validator?->Currency ?? $Validator["Currency"]) ?? "€" !== false
+                                         ? \strrchr($Value, $Validator?->Currency ?? $Validator["Currency"] ?? "€") !== false
                                          : (bool)\preg_match(Expressions::Currency, $Value)
                                      )
                                      && ((float)$Value >= (float)($Validator?->Min ?? $Value))
@@ -63,10 +59,10 @@ class Validate {
             Extension\Type::Time,
             Extension\Type::DateTime => $Value instanceof \DateTime || (bool)\preg_match(Expressions::DateTimeUTC, $Value),
             Extension\Type::TimeSpan => (bool)\preg_match(Expressions::TimeSpan, $Value),
-            default => \class_exists($Type) ? $Value instanceof $Type : false
+            default => \class_exists($Type) && $Value instanceof $Type
         };
     }
-    
+
     /**
      * Determines whether a specified value is an integer.
      *
@@ -74,10 +70,10 @@ class Validate {
      *
      * @return bool True if the specified value is an integer; otherwise, false.
      */
-    public static function AsInt($Value): bool {
+    public static function AsInt(mixed $Value): bool {
         return \is_int($Value);
     }
-    
+
     /**
      * Determines whether a specified value is a floating point number.
      *
@@ -85,10 +81,10 @@ class Validate {
      *
      * @return bool True if the specified value is a floating point number; otherwise, false.
      */
-    public static function AsFloat($Value): bool {
+    public static function AsFloat(mixed $Value): bool {
         return \is_float($Value);
     }
-    
+
     /**
      * Determines whether a specified value is a string.
      *
@@ -96,10 +92,10 @@ class Validate {
      *
      * @return bool True if the specified value is a string; otherwise, false.
      */
-    public static function AsString($Value): bool {
+    public static function AsString(mixed $Value): bool {
         return \is_string($Value);
     }
-    
+
     /**
      * Determines whether a specified value is boolean.
      *
@@ -107,10 +103,10 @@ class Validate {
      *
      * @return bool True if the specified value is boolean; otherwise, false.
      */
-    public static function AsBool($Value): bool {
+    public static function AsBool(mixed $Value): bool {
         return \is_bool($Value);
     }
-    
+
     /**
      * Determines whether a specified value is an array.
      *
@@ -118,10 +114,10 @@ class Validate {
      *
      * @return bool True if the specified value is an array; otherwise, false.
      */
-    public static function AsArray($Value): bool {
+    public static function AsArray(mixed $Value): bool {
         return \is_array($Value);
     }
-    
+
     /**
      * Determines whether a specified value is an object.
      *
@@ -129,10 +125,10 @@ class Validate {
      *
      * @return bool True if the specified value is an object; otherwise, false.
      */
-    public static function AsObject($Value): bool {
+    public static function AsObject(mixed $Value): bool {
         return \is_object($Value);
     }
-    
+
     /**
      * Determines whether a specified value is iterable.
      *
@@ -140,8 +136,8 @@ class Validate {
      *
      * @return bool True if the specified value is iterable; otherwise, false.
      */
-    public static function AsIterable($Value): bool {
+    public static function AsIterable(mixed $Value): bool {
         return \is_iterable($Value);
     }
-    
+
 }

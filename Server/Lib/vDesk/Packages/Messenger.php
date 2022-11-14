@@ -18,36 +18,36 @@ use vDesk\Struct\Collections\Observable\Collection;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Messenger extends Package implements IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Messenger";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
-    
+    public const Version = "1.1.0";
+
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing private user-, group- and room based chats.";
-    
+
     /**
      * The dependencies of the Package.
      */
     public const Dependencies = [
         "Events"   => "1.0.1",
-        "Locale"   => "1.0.2",
-        "Security" => "1.0.2"
+        "Locale"   => "1.0.3",
+        "Security" => "1.0.4"
     ];
-    
+
     /**
      * The files and directories of the Package.
      */
@@ -74,7 +74,7 @@ final class Messenger extends Package implements IPackage {
             ]
         ]
     ];
-    
+
     /**
      * The translations of the Package.
      */
@@ -92,18 +92,23 @@ final class Messenger extends Package implements IPackage {
                 "MessageCount"      => "Amount of private messages",
                 "GroupMessageCount" => "Amount of group messages"
             ]
+        ],
+        "NL" => [
+            "Messenger" => [
+                "Messages"          => "Berichten",
+                "MessageCount"      => "Aantal privéberichten",
+                "GroupMessageCount" => "Aantal groepsberichten"
+            ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         Expression::Create()
                   ->Schema("Messenger")
                   ->Execute();
-        
+
         //Create tables.
         Expression::Create()
                   ->Table(
@@ -136,7 +141,7 @@ final class Messenger extends Package implements IPackage {
                       ]
                   )
                   ->Execute();
-        
+
         //Install Module.
         /** @var \Modules\Messenger $Messenger */
         $Messenger = \vDesk\Modules::Messenger();
@@ -217,28 +222,26 @@ final class Messenger extends Package implements IPackage {
             )
         );
         $Messenger->Save();
-        
+
         //Extract files.
         self::Deploy($Phar, $Path);
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
-        
+
         //Uninstall Module.
         /** @var \Modules\Messenger $Messenger */
         $Messenger = \vDesk\Modules::Messenger();
         $Messenger->Delete();
-        
+
         //Drop database.
         Expression::Drop()
                   ->Schema("Messenger")
                   ->Execute();
-        
+
         //Delete files.
         self::Undeploy();
-        
+
     }
 }

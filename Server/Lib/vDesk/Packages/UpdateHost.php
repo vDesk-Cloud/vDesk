@@ -31,22 +31,22 @@ final class UpdateHost extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.1.0";
 
     /**
-     * The name of the Package.
+     * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
 
     /**
-     * The name of the Package.
+     * The description of the Package.
      */
     public const Description = "Package providing functionality for hosting updates.";
 
     /**
      * The dependencies of the Package.
      */
-    public const Dependencies = ["Updates" => "1.0.1"];
+    public const Dependencies = ["Updates" => "1.1.0"];
 
     /**
      * The files and directories of the Package.
@@ -79,12 +79,16 @@ final class UpdateHost extends Package implements IPackage {
                 "Hosted" => "Hosted Updates",
                 "Host"   => "Host"
             ]
+        ],
+        "NL" => [
+            "UpdateHost" => [
+                "Hosted" => "Gehoste updates",
+                "Host"   => "Host"
+            ]
         ]
     ];
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
 
         Expression::Create()
@@ -182,9 +186,7 @@ final class UpdateHost extends Package implements IPackage {
         self::Deploy($Phar, $Path);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
 
         //Uninstall Module.

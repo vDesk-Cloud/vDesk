@@ -239,8 +239,7 @@ STUB
         while(!$TempFile->EndOfStream()) {
             $TargetFile->Write($TempFile->Read());
         }
-        $TargetFile->Close();
-        $TempFile->Close();
+
         //Delete temp file.
         $Update->Delete();
 

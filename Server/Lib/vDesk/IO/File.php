@@ -35,9 +35,7 @@ final class File {
     public static function Create(string $File, bool $Override = false): FileStream {
         return self::Open(
             $File,
-            $Override
-                ? Mode::Truncate | Mode::Duplex | Mode::Binary
-                : Mode::Create | Mode::Duplex | Mode::Binary
+            Mode::Read | Mode::Write | Mode::Binary | ($Override ? Mode::Truncate : Mode::Create)
         );
     }
 
@@ -52,7 +50,7 @@ final class File {
      * @throws DirectoryNotFoundException Thrown if the target directory does not exist.
      *
      */
-    public static function Open(string $File, int $Mode = Mode::Read | Mode::Binary): FileStream {
+    public static function Open(string $File, int $Mode = Mode::Read | Mode::Write | Mode::Binary): FileStream {
         // Check if the target directory exists.
         if(!Directory::Exists($TargetPath = Path::GetPath($File))) {
             throw new DirectoryNotFoundException("The directory at '$TargetPath' does not exist.");
@@ -79,7 +77,7 @@ final class File {
      * @return FileStream A FileStream pointing on the specified path with Write access.
      */
     public static function OpenWrite(string $File): FileStream {
-        return self::Open($File, Mode::Read | Mode::Create | Mode::Duplex | Mode::Binary);
+        return self::Open($File, Mode::Write | Mode::Create | Mode::Binary);
     }
 
     /**
@@ -241,8 +239,7 @@ final class File {
      * @param string $File The file to read.
      *
      * @return iterable All the lines of the file.
-     * @throws \InvalidArgumentException Thrown if the specified path contains one or more of the invalid characters defined in
-     *                                   {@see File::InvalidChars}.
+     * @throws \InvalidArgumentException Thrown if the specified path contains one or more of the invalid characters defined in {@see File::InvalidChars}.
      * @throws FileNotFoundException Thrown if the file to read does not exist.
      */
     public static function ReadLines(string $File): iterable {
@@ -260,19 +257,17 @@ final class File {
      * @param iterable $Lines The lines to write to the specified file.
      *
      * @throws FileNotFoundException Thrown if the file to write does not exist.
-     * @throws \InvalidArgumentException Thrown if the specified path contains one or more of the invalid characters defined in
-     *                                   {@see File::InvalidChars}.
+     * @throws \InvalidArgumentException Thrown if the specified path contains one or more of the invalid characters defined in {@see File::InvalidChars}.
      */
     public static function WriteLines(string $File, iterable $Lines): void {
         // Check if the file to delete exists.
         if(!self::Exists($File)) {
             throw new FileNotFoundException("The file '$File' does not exist.");
         }
-        $FileStream = new FileStream($File, Mode::Create | Mode::Duplex | Mode::Binary);
+        $FileStream = new FileStream($File, Mode::Write | Mode::Create | Mode::Binary);
         foreach($Lines as $Line) {
             $FileStream->Write($Line . \PHP_EOL);
         }
-        $FileStream->Close();
     }
 
 }
