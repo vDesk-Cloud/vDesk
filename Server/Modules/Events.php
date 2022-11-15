@@ -81,9 +81,6 @@ final class Events extends Module implements IModule {
      * @param \vDesk\Events\Event $Event The Event to dispatch.
      */
     public static function Dispatch(Event $Event): void {
-        if(!self::$Listeners->ContainsKey($Event::Name)) {
-            self::$Listeners->Add($Event::Name, new Collection());
-        }
         self::$Events->Add($Event);
     }
 
@@ -114,15 +111,15 @@ final class Events extends Module implements IModule {
     }
 
     /**
-     * Handles all dispatched events.
+     * Schedules all dispatched Events to every registered Event listener.
      */
     public static function Schedule(): void {
 
-        //Change context to systemuser.
-        User::$Current = new User(User::System);
-
         //Check if Events have occurred.
         if(self::$Events->Count > 0) {
+
+            //Change context to system User.
+            User::$Current = new User(User::System);
 
             //Load Event listeners.
             foreach(self::Listeners(Settings::$Local["Events"]["Mode"]) as $Event => $Listener) {
@@ -138,7 +135,7 @@ final class Events extends Module implements IModule {
 
                     //Pass Event to registered listeners.
                     foreach(self::$Listeners[$Event::Name] as $Listener) {
-                        if(!($Listener($Event) ?? true)) {
+                        if(!($Listener($Event->Arguments) ?? true)) {
                             break;
                         }
                     }
@@ -249,7 +246,7 @@ final class Events extends Module implements IModule {
                               [
                                   "Parent"    => Settings::$Local["Events"]["Directory"],
                                   "Extension" => "php",
-                                  \array_map(static fn(string $Name): array => ["Name" => ["LIKE" => "$Name%"]], self::$Events->Keys)
+                                  \array_map(static fn(string $Name): array => ["Name" => ["LIKE" => "$Name%"]], $Events)
                               ]
                           )
                 as $Listener

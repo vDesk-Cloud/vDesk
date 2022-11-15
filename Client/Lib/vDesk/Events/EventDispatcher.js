@@ -72,5 +72,5 @@ vDesk.Load.Events = {
 //Register as startup-routine.
 vDesk.Unload.Events = {
     Status: "Closing eventdispatcher",
-    Load:   () => vDesk.Events.EventDispatcher.Disconnect()
+    Unload:   () => vDesk.Events.EventDispatcher.Disconnect()
 };

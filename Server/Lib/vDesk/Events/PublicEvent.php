@@ -6,13 +6,10 @@ namespace vDesk\Events;
 use vDesk\DataProvider\Expression;
 
 /**
- * Represents the base-class for dispatchable public Events.
+ * Abstract base class for system-wide dispatchable public Events.
  *
- * @property-read string $Name      Gets the name of the GlobalEvent.
- * @property-read mixed  $Sender    Gets the instance of the class which raised the GlobalEvent.
- * @property-read mixed  $Arguments Gets the arguments of the GlobalEvent.
  * @package vDesk\Events
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class PublicEvent extends GlobalEvent {
     
@@ -25,7 +22,7 @@ abstract class PublicEvent extends GlobalEvent {
                   ->Values([
                       "TimeStamp " => $this->TimeStamp,
                       "Name"       => static::Name,
-                      "Data"       => $this->Arguments
+                      "Data"       => $this->ToDataView()
                   ])
                   ->Execute();
     }

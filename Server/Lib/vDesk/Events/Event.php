@@ -7,49 +7,36 @@ use vDesk\Modules;
 use vDesk\Struct\Properties;
 
 /**
- * Represents the base-class for dispatchable Events.
+ * Abstract base class for dispatchable Events.
  *
  * @property-read string $Name      Gets the name of the Event.
  * @property-read mixed  $Sender    Gets the instance of the class which raised the Event.
  * @property-read mixed  $Arguments Gets the arguments of the Event.
  * @package vDesk\Events
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Event {
-    
+
     use Properties;
-    
+
     /**
      * The name of the Event.
      */
     public const Name = "vDesk.Events.Event";
-    
+
     /**
-     * The timestamp the Event has occurred.
+     * The creation timestamp of the Event.
      *
      * @var int
      */
     protected int $TimeStamp;
-    
-    /**
-     * Initializes a new instance of the Event class.
-     *
-     * @param mixed $Arguments The arguments of the Event.
-     */
-    public function __construct(protected mixed $Arguments) {
-        $this->TimeStamp = \time();
-        $this->AddProperties([
-            "Sender"    => [\Get => fn() => $this->Sender],
-            "Arguments" => [\Get => fn() => $Arguments],
-            "TimeStamp" => [\Get => fn(): int => $this->TimeStamp]
-        ]);
-    }
-    
+
     /**
      * Dispatches the Event to the EventDispatcher.
      */
     final public function Dispatch(): void {
+        $this->TimeStamp = \time();
         Modules::EventDispatcher()::Dispatch($this);
     }
-    
+
 }
