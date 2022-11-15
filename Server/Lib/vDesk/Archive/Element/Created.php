@@ -3,29 +3,33 @@ declare(strict_types=1);
 
 namespace vDesk\Archive\Element;
 
+use vDesk\Archive\Element;
 use vDesk\Events\PublicEvent;
 
 /**
- * Represents an Event that occurs when a new {@link \vDesk\Archive\Element} has been added to the archive.
+ * Event that occurs when a new Element has been added to the Archive.
  *
  * @package vDesk\Archive
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Created extends PublicEvent {
-    
+
     /**
      * The name of the Event.
      */
     public const Name = "vDesk.Archive.Element.Created";
-    
+
     /**
-     * @inheritdoc
+     * Initializes a new instance of the Created Event.
+     *
+     * @param \vDesk\Archive\Element $Element Initializes the Event with the specified Element.
      */
-    public function ToDataView(): array {
-        return [
-            "ID"     => $this->Arguments->ID,
-            "Target" => $this->Arguments->Parent->ID
-        ];
+    public function __construct(public Element $Element) {
     }
-    
+
+    /** @inheritDoc */
+    public function ToDataView(): array {
+        return ["ID" => $this->Element->ID, "Parent" => $this->Element->Parent->ID];
+    }
+
 }
