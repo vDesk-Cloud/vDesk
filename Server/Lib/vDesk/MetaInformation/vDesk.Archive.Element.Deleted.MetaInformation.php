@@ -2,12 +2,11 @@
 
 use vDesk\Archive\Element\Deleted;
 use vDesk\DataProvider\Expression;
-use vDesk\Events\EventListener;
 
 /**
- * Eventlistener that listens on the 'vDesk.Archive.Element.Deleted'-Event and deletes eventual DataSets.
+ * Event listener that listens on the 'vDesk.Archive.Element.Deleted'-Event and deletes eventual DataSets.
  */
-return new EventListener(
+return [
     Deleted::Name,
     static function($Arguments) {
         //Check if the Element has metadata.
@@ -26,4 +25,4 @@ return new EventListener(
                       ->Execute();
         }
     }
-);
+];
