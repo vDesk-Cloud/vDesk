@@ -79,10 +79,10 @@ final class Calendar extends Package implements Locale\IPackage, Events\IPackage
     ];
 
     /**
-     * The eventlisteners of the Package.
+     * The Event listeners of the Package.
      */
     public const Events = [
-        "vDesk.Security.User.Deleted" => "/vDesk/Calendar/vDesk.Security.User.Deleted.php"
+        "/vDesk/Calendar/vDesk.Security.User.Deleted.Calendar.php"
     ];
 
     /**
