@@ -21,13 +21,13 @@ final class Calendar extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.0.1";
+    public const RequiredVersion = "1.1.0";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to vDesk-1.2.0.
+- Added compatibility to Events-1.2.0.
 Description;
 
     /**
@@ -37,14 +37,20 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk/Calendar/Event/Participants.php"
+                    "vDesk/Calendar/Event/Created.php",
+                    "vDesk/Calendar/Event/Updated.php",
+                    "vDesk/Calendar/Event/Deleted.php",
+                    "vDesk/Calendar/vDesk.Security.User.Deleted.Calendar.php"
                 ]
             ]
         ],
         self::Undeploy => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk/Calendar/Event/Participants.php"
+                    "vDesk/Calendar/Event/Created.php",
+                    "vDesk/Calendar/Event/Updated.php",
+                    "vDesk/Calendar/Event/Deleted.php",
+                    "vDesk/Calendar/vDesk.Security.User.Deleted.php"
                 ]
             ]
         ]
@@ -55,5 +61,8 @@ Description;
         //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
+
+        //Install new Event listener.
+        \vDesk\Modules::Events()::Install(new self::Package);
     }
 }
