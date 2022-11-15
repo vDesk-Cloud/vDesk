@@ -21,13 +21,14 @@ final class Messenger extends Update {
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.0";
+    public const RequiredVersion = "1.1.0";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to vDesk-1.1.0.
+- Added compatibility to Events-1.2.0.
+- Added event listener for deleting messages of deleted users.
 Description;
 
     /**
@@ -35,43 +36,31 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
-            Package::Client => [
-                Package::Lib     => [
-                    "vDesk/Messenger"
-                ],
-                Package::Modules => [
-                    "Messenger.js"
-                ]
-            ],
             Package::Server => [
-                Package::Modules => [
-                    "Messenger.php"
+                Package::Lib => [
+                    "vDesk/Messenger/Users/Message",
+                    "vDesk/Messenger/Groups/Message",
+                    "vDesk/Messenger/vDesk.Security.User.Deleted.Messenger.php"
                 ]
             ]
         ],
         self::Undeploy => [
-            Package::Client => [
-                Package::Lib     => [
-                    "vDesk/Messenger"
-                ],
-                Package::Modules => [
-                    "Messenger.js"
-                ]
-            ],
             Package::Server => [
-                Package::Modules => [
-                    "Messenger.php"
+                Package::Lib => [
+                    "vDesk/Messenger/Users/Message",
+                    "vDesk/Messenger/Groups/Message"
                 ]
             ]
         ]
     ];
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
         //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
+
+        //Install new Event listener.
+        \vDesk\Modules::Events()::Install(new self::Package);
     }
 }

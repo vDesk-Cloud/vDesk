@@ -6,7 +6,8 @@ namespace vDesk\Packages;
 use vDesk\DataProvider\Expression;
 use vDesk\DataProvider\Collation;
 use vDesk\DataProvider\Type;
-use vDesk\Locale\IPackage;
+use vDesk\Locale;
+use vDesk\Events;
 use vDesk\Modules\Module\Command;
 use vDesk\Modules\Module\Command\Parameter;
 use vDesk\Struct\Collections\Observable\Collection;
@@ -17,7 +18,7 @@ use vDesk\Struct\Collections\Observable\Collection;
  * @package vDesk\Messenger
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-final class Messenger extends Package implements IPackage {
+final class Messenger extends Package implements Events\IPackage, Locale\IPackage {
 
     /**
      * The name of the Package.
@@ -43,7 +44,7 @@ final class Messenger extends Package implements IPackage {
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Events"   => "1.0.1",
+        "Events"   => "1.2.0",
         "Locale"   => "1.0.3",
         "Security" => "1.0.4"
     ];
@@ -73,6 +74,13 @@ final class Messenger extends Package implements IPackage {
                 "vDesk/Messenger"
             ]
         ]
+    ];
+
+    /**
+     * The Event listeners of the Package.
+     */
+    public const Events = [
+        "/vDesk/Archive/vDesk.Security.User.Deleted.Archive.php"
     ];
 
     /**
