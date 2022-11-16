@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace vDesk\Updates;
 
+use vDesk\Archive\Element;
+use vDesk\Configuration\Settings;
 use vDesk\DataProvider\Expression;
 use vDesk\IO\Directory;
 use vDesk\IO\Path;
@@ -35,6 +37,8 @@ final class Events extends Update {
 - Removed EventListener class simplifying the syntax of registering listeners.
 - Fixed Event data serialization.
 
+Warning: This update will remove every registered event listener from the Archive due to breaking changes!
+These will be re-installed in the affected package's following updates.
 Description;
 
     /**
@@ -48,7 +52,7 @@ Description;
                 ]
             ],
             Package::Server => [
-                Package::Lib => [
+                Package::Lib     => [
                     "vDesk/Events/EventDispatcher.js"
                 ],
                 Package::Modules => [
@@ -63,7 +67,7 @@ Description;
                 ]
             ],
             Package::Server => [
-                Package::Lib => [
+                Package::Lib     => [
                     "vDesk/Events/EventDispatcher.js"
                 ],
                 Package::Modules => [
@@ -98,5 +102,12 @@ Description;
 
         //Create Event listener storage.
         Directory::Create($Path . Path::Separator . Package::Server . Path::Separator . "Events");
+
+        //Delete incompatible listeners.
+        \vDesk\Modules::Archive()::DeleteElements(
+            \vDesk\Modules::Archive()::GetElements(Settings::$Local["Events"]["Directory"])
+                          ->Map(fn(Element $Element): int => $Element->ID)
+                          ->ToArray()
+        );
     }
 }
