@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace vDesk\Events;
 
 use vDesk\Modules;
-use vDesk\Struct\Properties;
 
 /**
  * Abstract base class for dispatchable Events.
@@ -13,8 +12,6 @@ use vDesk\Struct\Properties;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class Event {
-
-    use Properties;
 
     /**
      * The name of the Event.
