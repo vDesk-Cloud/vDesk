@@ -10,10 +10,10 @@ use vDesk\Security\User\Deleted;
  */
 return [
     Deleted::Name,
-    static function(User $User) {
+    static function(Deleted $Event) {
         Expression::Update("Calendar.Events")
                   ->Set(["Owner" => User::System])
-                  ->Where(["Owner" => $User])
+                  ->Where(["Owner" => $Event->User])
                   ->Execute();
     }
 ];

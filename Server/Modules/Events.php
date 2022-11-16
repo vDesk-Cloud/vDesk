@@ -135,7 +135,7 @@ final class Events extends Module implements IModule {
 
                     //Pass Event to registered listeners.
                     foreach(self::$Listeners[$Event::Name] as $Listener) {
-                        if(!($Listener($Event->Arguments) ?? true)) {
+                        if(!($Listener($Event) ?? true)) {
                             break;
                         }
                     }
@@ -221,7 +221,10 @@ final class Events extends Module implements IModule {
      * @return \Generator<string,callable> A Generator that yields the registered Event listeners.
      */
     public static function Listeners(int $Mode = self::Filesystem): \Generator {
-        $Events = self::$Events->Keys;
+        $Events = self::$Events->Reduce(static function(array $Events, Event $Event): array {
+            $Events[$Event::Name] = $Event::Name;
+            return $Events;
+        }, []);
 
         //Scan file system for Event listeners.
         if($Mode & self::Filesystem) {

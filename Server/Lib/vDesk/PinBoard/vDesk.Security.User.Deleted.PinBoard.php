@@ -8,14 +8,15 @@ use vDesk\Security\User\Deleted;
  * and deletes all Notes and Attachments of the User from the PinBoard.
  */
 return [
-    Deleted::Name => static function($Arguments) {
+    Deleted::Name,
+    static function(Deleted $Event) {
         Expression::Delete()
                   ->From("PinBoard.Attachments")
-                  ->Where(["Owner" => $Arguments->ID])
+                  ->Where(["Owner" => $Event->User])
                   ->Execute();
         Expression::Delete()
                   ->From("PinBoard.Notes")
-                  ->Where(["Owner" => $Arguments->ID])
+                  ->Where(["Owner" => $Event->User])
                   ->Execute();
     }
 ];

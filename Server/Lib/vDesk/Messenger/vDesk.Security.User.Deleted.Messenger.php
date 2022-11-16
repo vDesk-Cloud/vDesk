@@ -1,7 +1,6 @@
 <?php
 
 use vDesk\DataProvider\Expression;
-use vDesk\Security\User;
 use vDesk\Security\User\Deleted;
 
 /**
@@ -10,14 +9,14 @@ use vDesk\Security\User\Deleted;
  */
 return [
     Deleted::Name,
-    static function(User $User) {
+    static function(Deleted $Event) {
         Expression::Delete()
                   ->From("Messenger.Messages")
-                  ->Where(["Sender" => $User])
+                  ->Where(["Sender" => $Event->User])
                   ->Execute();
         Expression::Delete()
                   ->From("Messenger.GroupMessages")
-                  ->Where(["Sender" => $User])
+                  ->Where(["Sender" => $Event->User])
                   ->Execute();
     }
 ];

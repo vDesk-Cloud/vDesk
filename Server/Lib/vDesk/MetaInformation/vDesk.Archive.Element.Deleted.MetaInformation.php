@@ -8,11 +8,11 @@ use vDesk\DataProvider\Expression;
  */
 return [
     Deleted::Name,
-    static function($Arguments) {
+    static function(Deleted $Event) {
         //Check if the Element has metadata.
         $Result = Expression::Select("ID")
                             ->From("MetaInformation.DataSets")
-                            ->Where(["Element" => $Arguments->ID])
+                            ->Where(["Element" => $Event->Element])
                             ->Execute();
         if($Result->Count > 0) {
             Expression::Delete()
@@ -21,7 +21,7 @@ return [
                       ->Execute();
             Expression::Delete()
                       ->From("MetaInformation.DataSets")
-                      ->Where(["Element" => $Arguments->ID])
+                      ->Where(["Element" => $Event->Element])
                       ->Execute();
         }
     }
