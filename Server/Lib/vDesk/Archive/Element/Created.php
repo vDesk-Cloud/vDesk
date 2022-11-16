@@ -28,8 +28,8 @@ class Created extends PublicEvent {
     }
 
     /** @inheritDoc */
-    public function ToDataView(): array {
-        return ["ID" => $this->Element->ID, "Parent" => $this->Element->Parent->ID];
+    public function ToDataView(): Element {
+        return $this->Element;
     }
 
 }
