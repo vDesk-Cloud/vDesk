@@ -21,13 +21,13 @@ final class PinBoard extends Update {
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.0";
+    public const RequiredVersion = "1.0.1";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to vDesk-1.1.0.
+- Added compatibility to Events-1.2.0.
 Description;
 
     /**
@@ -35,43 +35,30 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
-            Package::Client => [
-                Package::Lib     => [
-                    "vDesk/PinBoard"
-                ],
-                Package::Modules => [
-                    "PinBoard.js"
-                ]
-            ],
             Package::Server => [
-                Package::Modules => [
-                    "PinBoard.php"
+                Package::Lib => [
+                    "vDesk/PinBoard/vDesk.Archive.Element.Deleted.PinBoard.php",
+                    "vDesk/PinBoard/vDesk.Security.User.Deleted.PinBoard.php"
                 ]
             ]
         ],
         self::Undeploy => [
-            Package::Client => [
-                Package::Lib     => [
-                    "vDesk/PinBoard"
-                ],
-                Package::Modules => [
-                    "PinBoard.js"
-                ]
-            ],
             Package::Server => [
-                Package::Modules => [
-                    "PinBoard.php"
+                Package::Lib => [
+                    "vDesk/PinBoard/vDesk.Archive.Element.Deleted.php",
+                    "vDesk/PinBoard/vDesk.Security.User.Deleted.php"
                 ]
             ]
         ]
     ];
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
         //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
+
+        //Install new Event listener.
+        \vDesk\Modules::Events()::Install(new self::Package);
     }
 }

@@ -1,15 +1,14 @@
 <?php
 
 use vDesk\DataProvider\Expression;
-use vDesk\Events\EventListener;
 use vDesk\Security\User\Deleted;
 
 /**
- * Eventlistener that listens on the 'vDesk.Security.User.Deleted'-event and deletes all Notes and Attachments of the User from the PinBoard.
+ * Event listener that listens on the 'vDesk.Security.User.Deleted'-event
+ * and deletes all Notes and Attachments of the User from the PinBoard.
  */
-return new EventListener(
-    Deleted::Name,
-    static function($Arguments) {
+return [
+    Deleted::Name => static function($Arguments) {
         Expression::Delete()
                   ->From("PinBoard.Attachments")
                   ->Where(["Owner" => $Arguments->ID])
@@ -19,4 +18,4 @@ return new EventListener(
                   ->Where(["Owner" => $Arguments->ID])
                   ->Execute();
     }
-);
+];
