@@ -231,7 +231,7 @@ final class Events extends Module implements IModule {
             /** @var \vDesk\IO\FileInfo $File */
             foreach((new DirectoryInfo(Path::GetFullPath(\Server . Path::Separator . "Events")))->IterateFiles("/") as $File) {
                 foreach($Events as $Event) {
-                    if(Text::StartsWith($File->FullName, $Event)) {
+                    if(Text::StartsWith($File->Name, $Event)) {
                         [$Name, $Listener] = include $File->FullName;
                         yield $Name => $Listener;
                         break;
