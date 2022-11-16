@@ -48,12 +48,12 @@ Description;
         self::Deploy   => [
             Package::Client => [
                 Package::Lib => [
-                    "vDesk/Events/EventDispatcher.js"
+                    "vDesk/Events/Stream.js"
                 ]
             ],
             Package::Server => [
                 Package::Lib     => [
-                    "vDesk/Events/EventDispatcher.js"
+                    "vDesk/Events"
                 ],
                 Package::Modules => [
                     "Events.php"
@@ -68,7 +68,7 @@ Description;
             ],
             Package::Server => [
                 Package::Lib     => [
-                    "vDesk/Events/EventDispatcher.js"
+                    "vDesk/Events"
                 ],
                 Package::Modules => [
                     "EventDispatcher.php"
