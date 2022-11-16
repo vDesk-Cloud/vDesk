@@ -35,6 +35,11 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
+            Package::Client => [
+                Package::Modules => [
+                    "Contacts.js"
+                ]
+            ],
             Package::Server => [
                 Package::Lib => [
                     "vDesk/Contacts/Company",
@@ -46,6 +51,11 @@ Description;
             ]
         ],
         self::Undeploy => [
+            Package::Client => [
+                Package::Modules => [
+                    "Contacts.js"
+                ]
+            ],
             Package::Server => [
                 Package::Lib => [
                     "vDesk/Contacts/Company",

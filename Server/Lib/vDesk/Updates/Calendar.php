@@ -35,6 +35,11 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
+            Package::Client => [
+                Package::Modules => [
+                    "Calendar.js"
+                ]
+            ],
             Package::Server => [
                 Package::Lib => [
                     "vDesk/Calendar/Event/Created.php",
@@ -45,6 +50,11 @@ Description;
             ]
         ],
         self::Undeploy => [
+            Package::Client => [
+                Package::Modules => [
+                    "Calendar.js"
+                ]
+            ],
             Package::Server => [
                 Package::Lib => [
                     "vDesk/Calendar/Event/Created.php",

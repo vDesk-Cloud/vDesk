@@ -36,6 +36,11 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
+            Package::Client => [
+                Package::Modules => [
+                    "Messenger.js"
+                ]
+            ],
             Package::Server => [
                 Package::Lib => [
                     "vDesk/Messenger/Users/Message",
@@ -45,6 +50,11 @@ Description;
             ]
         ],
         self::Undeploy => [
+            Package::Client => [
+                Package::Modules => [
+                    "Messenger.js"
+                ]
+            ],
             Package::Server => [
                 Package::Lib => [
                     "vDesk/Messenger/Users/Message",

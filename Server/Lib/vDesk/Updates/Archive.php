@@ -35,6 +35,11 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
+            Package::Client => [
+                Package::Modules => [
+                    "Archive.js"
+                ]
+            ],
             Package::Server => [
                 Package::Lib => [
                     "vDesk/Archive/Element",
@@ -43,6 +48,11 @@ Description;
             ]
         ],
         self::Undeploy => [
+            Package::Client => [
+                Package::Modules => [
+                    "Archive.js"
+                ]
+            ],
             Package::Server => [
                 Package::Lib => [
                     "vDesk/Archive/Element",
