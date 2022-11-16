@@ -103,6 +103,10 @@ Description;
         //Create Event listener storage.
         Directory::Create($Path . Path::Separator . Package::Server . Path::Separator . "Events");
 
+        //Create new config value.
+        Settings::$Local["Events"]["Mode"] = $Events::Both;
+        Settings::$Local["Events"]->Save();
+
         //Delete incompatible listeners.
         \vDesk\Modules::Archive()::DeleteElements(
             \vDesk\Modules::Archive()::GetElements(Settings::$Local["Events"]["Directory"])

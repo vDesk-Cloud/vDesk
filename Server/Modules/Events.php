@@ -65,18 +65,19 @@ final class Events extends Module implements IModule {
     private static Dictionary $Listeners;
 
     /**
-     * Initializes a new instance of the EventDispatcher class.
+     * Initializes a new instance of the Events class.
      *
-     * @param int|null $ID Initializes the EventDispatcher with the specified ID.
+     * @param int|null $ID Initializes the Events with the specified ID.
      */
     public function __construct(?int $ID = null) {
         parent::__construct($ID);
         self::$Events    = new Collection();
         self::$Listeners = new Dictionary();
+        \register_shutdown_function(static fn() => self::Schedule());
     }
 
     /**
-     * Dispatches an Event to the registered eventlisteners of the EventDispatcher.
+     * Dispatches an Event to the Event queue of the Events module.
      *
      * @param \vDesk\Events\Event $Event The Event to dispatch.
      */
