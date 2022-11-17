@@ -28,8 +28,8 @@ class Renamed extends PublicEvent {
     }
 
     /** @inheritDoc */
-    public function ToDataView(): array {
-        return ["ID" => $this->Element->ID, "Name" => $this->Element->Name];
+    public function ToDataView(): Element {
+        return $this->Element;
     }
 
 }

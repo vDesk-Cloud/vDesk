@@ -745,7 +745,7 @@ Modules.Archive = function Archive() {
     const OnElementRenamed = Event => {
         const Element = ElementCache.Find(Number.parseInt(Event.data));
         if(Element !== null){
-            ElementCache.FetchElement(Element.ID, Renamed => Element.Name = Renamed.Name);
+            ElementCache.FetchElement(Element.ID, Renamed => Element.Name = Renamed.Name, true);
             (TreeView.Find(Element)).Element = Element;
         }
     };
