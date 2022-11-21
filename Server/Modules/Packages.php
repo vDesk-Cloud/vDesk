@@ -61,8 +61,8 @@ final class Packages extends Module {
             Log::Warn(__METHOD__, User::$Current->Name . " tried to create Package without having permissions.");
             throw new UnauthorizedAccessException();
         }
-        $Package  ??= Command::$Parameters["Package"];
-        $Packages = Package::Server . "/" . Package::Lib . "/vDesk/Packages";
+        $Package         ??= Command::$Parameters["Package"];
+        $PackageManifest = Package::Server . "/" . Package::Lib . "/vDesk/Packages/{$Package}.php";
 
         //Create Package.phar
         $Phar = (new \Phar(($Path ?? Command::$Parameters["Path"] ?? \Server) . Path::Separator . "{$Package}.phar"));
@@ -73,7 +73,7 @@ final class Packages extends Module {
             <<<STUB
 <?php
     Phar::mapPhar(__FILE__);
-    include "phar://" . __FILE__ . "/$Packages/{$Package}.php";
+    include "phar://" . __FILE__ . "/{$PackageManifest}";
     return new {$Class}();
     __HALT_COMPILER();
 STUB
@@ -84,8 +84,7 @@ STUB
         $Package::Compose($Phar);
 
         //Bundle Package manifest if not already happened by the Package itself.
-        if(!isset($Phar[$Packages])) {
-            $Phar->addEmptyDir($Packages);
+        if(!isset($Phar[$PackageManifest])) {
             $Phar->addFile(
                 \Server
                 . Path::Separator
@@ -96,7 +95,7 @@ STUB
                 . "Packages"
                 . Path::Separator
                 . $Package::Name . ".php",
-                "{$Packages}/" . $Package::Name . ".php"
+                $PackageManifest
             );
         }
 

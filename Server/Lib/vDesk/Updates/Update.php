@@ -240,13 +240,16 @@ abstract class Update implements IDataView {
                     } else if(Directory::Exists($Filepath)) {
                         $Directory = new DirectoryInfo($Filepath);
                         yield $Name => $Directory;
-                        
-                        //Resolve contents of the specified folder.
-                        foreach(new RecursiveFilesystemInfoIterator($Directory, true) as $FileSystemInfo) {
-                            $Name = Text::Replace($FileSystemInfo->FullName, Path::Separator, "/");
-                            yield (string)$Name->Substring(Text::LastIndexOf((string)$Name, $Path))
-                            =>
-                            $FileSystemInfo;
+
+                        //Check if the folder still exists (maybe deleted on uninstall).
+                        if(Directory::Exists($Filepath)) {
+                            //Resolve contents of the specified folder.
+                            foreach(new RecursiveFilesystemInfoIterator($Directory, true) as $FileSystemInfo) {
+                                $Name = Text::Replace($FileSystemInfo->FullName, Path::Separator, "/");
+                                yield (string)$Name->Substring(Text::LastIndexOf((string)$Name, $Path))
+                                =>
+                                $FileSystemInfo;
+                            }
                         }
                     }
                 }
