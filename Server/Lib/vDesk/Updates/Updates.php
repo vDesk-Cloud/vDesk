@@ -28,16 +28,20 @@ class Updates extends Update {
      */
     public const Description = <<<Description
 - Removed potential access on deleted directory.
+- Fixed automatic bundling of update manifest files.
 Description;
 
     /**
      * The files and directories of the Update.
      */
     public const Files = [
-        self::Deploy   => [
+        self::Deploy => [
             Package::Server => [
-                Package::Lib => [
+                Package::Lib     => [
                     "vDesk/Updates/Update.php"
+                ],
+                Package::Modules => [
+                    "Updates.php"
                 ]
             ]
         ]
