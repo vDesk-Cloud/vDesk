@@ -75,6 +75,6 @@ Description;
         self::Deploy($Phar, $Path);
 
         //Install new Event listener.
-        \vDesk\Modules::Events()::Install(new (self::Package));
+        \vDesk\Modules::Events()::Install(new (self::Package), $Phar, $Path);
     }
 }

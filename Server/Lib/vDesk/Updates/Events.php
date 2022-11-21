@@ -80,38 +80,35 @@ Description;
     /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
 
+        //Delete incompatible listeners.
+        $Elements = [];
+        foreach(\vDesk\Modules::Archive()::GetElements(new Element(Settings::$Local["Events"]["Directory"])) as $Element) {
+            $Elements[] = $Element->ID;
+        }
+        \vDesk\Modules::Archive()::DeleteElements($Elements);
+
+        //Rename Module and Command.
+        $ID = Expression::Select("ID")
+                        ->From("Modules.Modules")
+                        ->Where(["Name" => "EventDispatcher"])();
+        Expression::Update("Modules.Modules")
+                  ->Set(["Name" => "Events"])
+                  ->Where(["ID" => $ID])
+                  ->Execute();
+        Expression::Update("Modules.Commands")
+                  ->Set(["Name" => "Stream"])
+                  ->Where(["Module" => $ID, "Name" => "GetEvents"])
+                  ->Execute();
+
         //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
-
-        //Rename Module.
-        Expression::Update("Modules.Modules")
-                  ->Set(["Name" => "Events"])
-                  ->Where(["Name" => "EventDispatcher"])
-                  ->Execute();
-
-        //Replace Command.
-        /** @var \Modules\Events $Events */
-        $Events = \vDesk\Modules::Events()->Fill();
-        $Old    = $Events->Commands->Find(static fn(Command $Command): bool => $Command->Name === "GetElements");
-        if($Old !== null) {
-            $Events->Commands->Remove($Old);
-        }
-        $Events->Commands->Add(new Command(null, $Events, "Stream", true, false));
-        $Events->Save();
 
         //Create Event listener storage.
         Directory::Create($Path . Path::Separator . Package::Server . Path::Separator . "Events");
 
         //Create new config value.
-        Settings::$Local["Events"]["Mode"] = $Events::Both;
+        Settings::$Local["Events"]["Mode"] = \vDesk\Modules::Events()::Both;
         Settings::$Local["Events"]->Save();
-
-        //Delete incompatible listeners.
-        \vDesk\Modules::Archive()::DeleteElements(
-            \vDesk\Modules::Archive()::GetElements(Settings::$Local["Events"]["Directory"])
-                          ->Map(fn(Element $Element): int => $Element->ID)
-                          ->ToArray()
-        );
     }
 }
