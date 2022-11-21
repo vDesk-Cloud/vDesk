@@ -28,7 +28,7 @@ final class Messenger extends Package implements Events\IPackage, Locale\IPackag
     /**
      * The version of the Package.
      */
-    public const Version = "1.1.0";
+    public const Version = "1.1.1";
 
     /**
      * The vendor of the Package.

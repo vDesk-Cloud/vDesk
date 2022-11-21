@@ -35,12 +35,16 @@ Description;
     public const Files = [
         self::Deploy   => [
             Package::Server => [
-                "vDesk.php"
+                Package::Lib => [
+                    "vDesk.php"
+                ]
             ]
         ],
         self::Undeploy => [
             Package::Server => [
-                "vDesk.php"
+                Package::Lib => [
+                    "vDesk.php"
+                ]
             ]
         ]
     ];
