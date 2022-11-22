@@ -20,7 +20,7 @@ abstract class PublicEvent extends GlobalEvent {
         Expression::Insert()
                   ->Into("Events.Public")
                   ->Values([
-                      "TimeStamp " => $this->TimeStamp,
+                      "TimeStamp"  => $this->TimeStamp,
                       "Name"       => static::Name,
                       "Data"       => $this->ToDataView()
                   ])
