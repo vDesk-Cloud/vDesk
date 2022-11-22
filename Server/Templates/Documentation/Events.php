@@ -9,19 +9,61 @@
         </p>
         <p>
             The execution of several commands will cause to emit certain serverside events.<br>
-            For example: the deletion of an Entry from the Archive will trigger a global <code class="Inline">vDesk.Archive.Element.<?= Code::Class("Deleted") ?></code>-event.
+            For example: the deletion of an Entry from the Archive will trigger a global <code class="Inline">vDesk.Archive.Element.Deleted</code>-event.<br>
 
-            Serverside events that implement the 'IGlobalEvent'-interface will occur within the serverside event-stream, which can be received through the clientside
-            EventDispatcher.<br> To listen on a certain event, an eventhandler must get attached on the EventDispatcher, listening on the
-            appropriate type of the event.
+
         </p>
+        <h3>Overview</h3>
+        <ul class="Topics">
+            <li>
+                <a href="#Events">Events</a>
+                <ul class="Topics">
+                    <li><a href="#GlobalEvents">Global events</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#Setups">Event listeners</a>
+                <ul class="Topics">
+                    <li><a href="#SetupFormat">Format</a></li>
+                    <li><a href="#SetupCreation">Creating setups</a></li>
+                </ul>
+            </li>
+        </ul>
     </header>
+
+    <section>
+        <h3>
+            Events
+        </h3>
+        <p>
+            Events are small PHP classes of any structure which inherit from the <code class="Inline">vDesk\Events\<?= Code::Class("Event") ?></code>-class
+            and must implement a public "Name"-constant.
+        </p>
+        <p>
+            Global events can be received on the client by registering an event listener on the <code class="Inline">vDesk.Events.<?= Code::Class("Stream") ?></code>-facade,
+            which acts as.<br>
+            To receive those events, we can attach an eventlistener on the event stream in the following way:</p>
+        <pre><code><?= Code\Language::JS ?>
+<?= Code::Class("vDesk") ?>.Events.<?= Code::Class("Stream") ?>.<?= Code::Function("addEventListener") ?>(<?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>, <?= Code::Variable("Event") ?> => <?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Variable("Event") ?>.<?= Code::Field("data") ?>), <?= Code::Bool("false") ?>)<?= Code::Delimiter ?></code></pre>
+        <p>
+            The EventDispatcher will be available through the <code class="Inline">vDesk.Events.<?= Code::Class("EventDisptacher") ?></code>-property after the client has been started and successfully
+            connected to a server.
+        </p>
+
+        Serverside events which inherit from the <code class="Inline">vDesk\Events\<?= Code::Class("GlobalEvent") ?></code>-class will occur within the global event-stream, which can be received through the clientside
+        EventDispatcher.<br> To listen on a certain event, an eventhandler must get attached on the EventDispatcher, listening on the
+        appropriate type of the event.
+
+    </section>
+
     <section>
         <h3>
             Client
         </h3>
-        <p>The deletion of an Entry from the Archive for example, will trigger a global<code class="Inline">vDesk.Archive.Element.<?= Code::Class("Deleted") ?></code>-event.<br>
-            To receive those events, we can attach an eventlistener on the EventDispatcher in the following way:</p>
+        <p>
+            Global events can be received on the client by registering an event listener on the <code class="Inline">vDesk.Events.<?= Code::Class("Stream") ?></code>-facade,
+            which acts as.<br>
+            To receive those events, we can attach an eventlistener on the event stream in the following way:</p>
         <pre><code><?= Code\Language::JS ?>
 <?= Code::Class("vDesk") ?>.Events.<?= Code::Class("EventDispatcher") ?>.<?= Code::Function("addEventListener") ?>(<?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>, <?= Code::Variable("Event") ?> => <?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Variable("Event") ?>.<?= Code::Field("data") ?>), <?= Code::Bool("false") ?>)<?= Code::Delimiter ?></code></pre>
         <p>
@@ -72,12 +114,11 @@
 
 <?= Code::Use ?> vDesk\Events\<?= Code::Class("PublicEvent") ?><?= Code::Delimiter ?>
 
+<?= Code::Use ?> vDesk\Archive\<?= Code::Class("Element") ?><?= Code::Delimiter ?>
+
         
 <?= Code::BlockComment("/**
- * Represents an Event that occurs when a User send a Message to another User.
- *
- * @package vDesk\Messenger
- * @author  Kerry &lt;DevelopmentHero@gmail.com&gt;.
+ * Event that occurs when an Element has been deleted from the Archive.
  */") ?>
  
 <?= Code::ClassDeclaration ?> <?= Code::Class("Deleted") ?> <?= Code::Extends ?> <?= Code::Class("PublicEvent") ?> {
@@ -90,12 +131,18 @@
         
         
     <?= Code::BlockComment("/**
-     * @inheritdoc
+     * Initializes a new instance of the Deleted Event.
+     *
+     * @param \\vDesk\\Archive\\Element \$Element The deleted archive Element.
      */") ?>
         
-    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("ToDataView") ?>() {
-        <?= Code::Return ?> (<?= Code::Keyword("string") ?>)<?= Code::Variable("\$this") ?>-><?= Code::Field("Arguments") ?>-><?= Code::Field("ID") ?><?= Code::Delimiter ?>
-        
+    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("_construct") ?>(<?= Code::Public ?> <?= Code::Class("Element") ?> <?= Code::Variable("\$Element") ?>) { }
+
+    <?= Code::BlockComment("/** @inheritDoc */") ?>
+
+    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("ToDataView") ?>(): <?= Code::Class("Element") ?> {
+        <?= Code::Return ?> <?= Code::Variable("\$this") ?>-><?= Code::Field("Element") ?><?= Code::Delimiter ?>
+
     }
     
 }</code></pre>
