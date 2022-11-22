@@ -300,7 +300,7 @@ Modules.Contacts = function Contacts() {
             ContactCache.FetchContact(Number.parseInt(Event.data), Create);
         }
     };
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Contacts.Contact.Created", OnContactsContactCreated, false);
+    vDesk.Events.Stream.addEventListener("vDesk.Contacts.Contact.Created", OnContactsContactCreated, false);
 
     /**
      * Creates a new Contact.
@@ -323,7 +323,7 @@ Modules.Contacts = function Contacts() {
             ContactCache.FetchContact(Number.parseInt(Event.data), Update)
         }
     };
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Contacts.Contact.Updated", OnContactsContactUpdated, false);
+    vDesk.Events.Stream.addEventListener("vDesk.Contacts.Contact.Updated", OnContactsContactUpdated, false);
 
     /**
      * Updates a Contact.
@@ -355,7 +355,7 @@ Modules.Contacts = function Contacts() {
             Delete(Contact);
         }
     };
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Contacts.Contact.Deleted", OnContactsContactDeleted, false);
+    vDesk.Events.Stream.addEventListener("vDesk.Contacts.Contact.Deleted", OnContactsContactDeleted, false);
 
     /**
      * Deletes a Contact.
@@ -384,7 +384,7 @@ Modules.Contacts = function Contacts() {
             CompanyCache.FetchCompany(Number.parseInt(Event.data), Create);
         }
     };
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Contacts.Company.Created", OnContactsCompanyCreated, false);
+    vDesk.Events.Stream.addEventListener("vDesk.Contacts.Company.Created", OnContactsCompanyCreated, false);
 
     /**
      * Creates a new Company.
@@ -407,7 +407,7 @@ Modules.Contacts = function Contacts() {
             CompanyCache.FetchCompany(Number.parseInt(Event.data), Update)
         }
     };
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Contacts.Company.Updated", OnContactsCompanyUpdated, false);
+    vDesk.Events.Stream.addEventListener("vDesk.Contacts.Company.Updated", OnContactsCompanyUpdated, false);
 
     /**
      * Updates a Company.
@@ -439,7 +439,7 @@ Modules.Contacts = function Contacts() {
             Delete(Company);
         }
     };
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Contacts.Company.Deleted", OnContactsCompanyDeleted, false);
+    vDesk.Events.Stream.addEventListener("vDesk.Contacts.Company.Deleted", OnContactsCompanyDeleted, false);
 
     /**
      * Deletes a Company.

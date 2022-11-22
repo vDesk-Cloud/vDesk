@@ -7,20 +7,20 @@ use vDesk\Events\PublicEvent;
 use vDesk\Security\Group;
 
 /**
- * Event that occurs when a Group has been deleted.
+ * Event that occurs when a Group has been modified.
  *
  * @package vDesk\Security
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Deleted extends PublicEvent {
+class Updated extends PublicEvent {
     
     /**
      * The name of the Event.
      */
-    public const Name = "vDesk.Security.Group.Deleted";
+    public const Name = "vDesk.Security.Group.Updated";
 
     /**
-     * Initializes a new instance of the Deleted Event.
+     * Initializes a new instance of the Updated Event.
      *
      * @param \vDesk\Security\Group $Group Initializes the Event with the specified Group.
      */

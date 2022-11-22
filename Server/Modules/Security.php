@@ -234,7 +234,7 @@ final class Security extends Module {
             new User\Groups([new Group(Group::Everyone)])
         );
         $User->Save();
-        (new User\Added($User))->Dispatch();
+        (new User\Created($User))->Dispatch();
         return $User;
     }
 
@@ -428,7 +428,7 @@ final class Security extends Module {
             new Group\Permissions($Permissions ?? (array)Command::$Parameters["Permissions"])
         );
         $Group->Save();
-        (new Group\Added($Group))->Dispatch();
+        (new Group\Created($Group))->Dispatch();
         return $Group;
     }
 

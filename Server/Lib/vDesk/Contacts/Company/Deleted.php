@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace vDesk\Contacts\Company;
 
+use vDesk\Contacts\Company;
 use vDesk\Events\PublicEvent;
 
 /**
- * Represents an Event that occurs when an {@link \vDesk\Contacts\Company} has been deleted from the contacts.
+ * Event that occurs when a Company has been deleted from the Contacts.
  *
  * @package vDesk\Contacts
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Deleted extends PublicEvent {
     
@@ -17,12 +18,18 @@ class Deleted extends PublicEvent {
      * The name of the Event.
      */
     public const  Name = "vDesk.Contacts.Company.Deleted";
-    
+
     /**
-     * @inheritdoc
+     * Initializes a new instance of the Deleted Event.
+     *
+     * @param \vDesk\Contacts\Company $Company Initializes the Event with the specified Company.
      */
-    public function ToDataView() {
-        return $this->Arguments->ID;
+    public function __construct(public Company $Company) {
+    }
+
+    /** @inheritdoc */
+    public function ToDataView(): Company {
+        return $this->Company;
     }
     
 }

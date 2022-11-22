@@ -2,18 +2,17 @@
 
 use vDesk\Archive\Element\Deleted;
 use vDesk\DataProvider\Expression;
-use vDesk\Events\EventListener;
 
 /**
- * Eventlistener that listens on the 'vDesk.Archive.Element.Deleted'-Event and deletes eventual DataSets.
+ * Event listener that listens on the 'vDesk.Archive.Element.Deleted'-Event and deletes eventual DataSets.
  */
-return new EventListener(
+return [
     Deleted::Name,
-    static function($Arguments) {
+    static function(Deleted $Event) {
         //Check if the Element has metadata.
         $Result = Expression::Select("ID")
                             ->From("MetaInformation.DataSets")
-                            ->Where(["Element" => $Arguments->ID])
+                            ->Where(["Element" => $Event->Element])
                             ->Execute();
         if($Result->Count > 0) {
             Expression::Delete()
@@ -22,8 +21,8 @@ return new EventListener(
                       ->Execute();
             Expression::Delete()
                       ->From("MetaInformation.DataSets")
-                      ->Where(["Element" => $Arguments->ID])
+                      ->Where(["Element" => $Event->Element])
                       ->Execute();
         }
     }
-);
+];

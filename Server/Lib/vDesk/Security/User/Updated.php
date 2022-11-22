@@ -3,19 +3,32 @@ declare(strict_types=1);
 
 namespace vDesk\Security\User;
 
-use vDesk\Events\Event;
+use vDesk\Events\PublicEvent;
+use vDesk\Security\User;
 
 /**
- * Represents an Event that occurs when an {@link \vDesk\Security\User} has been modified.
+ * Event that occurs when an User has been modified.
  *
- * @package Security
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\Security
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Updated extends Event {
+class Updated extends PublicEvent {
     
     /**
      * The name of the Event.
      */
     public const Name = "vDesk.Security.User.Updated";
-    
+
+    /**
+     * Initializes a new instance of the Updated Event.
+     *
+     * @param \vDesk\Security\User $User Initializes the Event with the specified User.
+     */
+    public function __construct(public User $User) {
+    }
+
+    /** @inheritDoc */
+    public function ToDataView(): User {
+        return $this->User;
+    }
 }
