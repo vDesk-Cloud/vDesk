@@ -28,7 +28,7 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
     /**
      * The version of the Package.
      */
-    public const Version = "1.1.0";
+    public const Version = "1.1.1";
 
     /**
      * The vendor of the Package.
@@ -69,10 +69,10 @@ final class MetaInformation extends Package implements Locale\IPackage, Events\I
     ];
 
     /**
-     * The eventlisteners of the Package.
+     * The Event listeners of the Package.
      */
     public const Events = [
-        "vDesk.Archive.Element.Deleted" => "/vDesk/MetaInformation/vDesk.Archive.Element.Deleted.php"
+        "/vDesk/MetaInformation/vDesk.Archive.Element.Deleted.MetaInformation.php"
     ];
 
     /**

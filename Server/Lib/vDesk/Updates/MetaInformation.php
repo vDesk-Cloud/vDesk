@@ -21,13 +21,13 @@ final class MetaInformation extends Update {
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.3";
+    public const RequiredVersion = "1.1.0";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to vDesk-1.2.0.
+- Added compatibility to Events-1.2.0.
 Description;
 
     /**
@@ -37,25 +37,26 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk/MetaInformation"
+                    "/vDesk/MetaInformation/vDesk.Archive.Element.Deleted.MetaInformation.php"
                 ]
             ]
         ],
         self::Undeploy => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk/MetaInformation"
+                    "/vDesk/MetaInformation/vDesk.Archive.Element.Deleted.php"
                 ]
             ]
         ]
     ];
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
         //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
+
+        //Install new Event listener.
+        \vDesk\Modules::Events()::Install(new (self::Package), $Phar, $Path);
     }
 }

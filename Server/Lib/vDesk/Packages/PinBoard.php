@@ -28,7 +28,7 @@ final class PinBoard extends Package implements Locale\IPackage, Events\IPackage
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.1";
+    public const Version = "1.0.2";
 
     /**
      * The vendor of the Package.
@@ -73,11 +73,11 @@ final class PinBoard extends Package implements Locale\IPackage, Events\IPackage
     ];
 
     /**
-     * The eventlisteners of the Package.
+     * The Event listeners of the Package.
      */
     public const Events = [
-        "vDesk.Security.User.Deleted"   => "/vDesk/PinBoard/vDesk.Security.User.Deleted.php",
-        "vDesk.Archive.Element.Deleted" => "/vDesk/PinBoard/vDesk.Archive.Element.Deleted.php"
+        "/vDesk/PinBoard/vDesk.Security.User.Deleted.PinBoard.php",
+        "/vDesk/PinBoard/vDesk.Archive.Element.Deleted.PinBoard.php"
     ];
 
     /**

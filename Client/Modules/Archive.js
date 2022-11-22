@@ -736,7 +736,7 @@ Modules.Archive = function Archive() {
             });
         }
     };
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Archive.Element.Created", OnElementCreated, false);
+    vDesk.Events.Stream.addEventListener("vDesk.Archive.Element.Created", OnElementCreated, false);
 
     /**
      * Eventhandler that listens on the global 'vDesk.Archive.Element.Renamed' event.
@@ -745,11 +745,11 @@ Modules.Archive = function Archive() {
     const OnElementRenamed = Event => {
         const Element = ElementCache.Find(Number.parseInt(Event.data));
         if(Element !== null){
-            ElementCache.FetchElement(Element.ID, Renamed => Element.Name = Renamed.Name);
+            ElementCache.FetchElement(Element.ID, Renamed => Element.Name = Renamed.Name, true);
             (TreeView.Find(Element)).Element = Element;
         }
     };
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Archive.Element.Renamed", OnElementRenamed, false);
+    vDesk.Events.Stream.addEventListener("vDesk.Archive.Element.Renamed", OnElementRenamed, false);
 
     /**
      * Eventhandler that listens on the global 'vDesk.Archive.Element.Moved' event.
@@ -765,7 +765,7 @@ Modules.Archive = function Archive() {
         }
         TreeView.Add(Element);
     };
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Archive.Element.Moved", OnElementMoved, false);
+    vDesk.Events.Stream.addEventListener("vDesk.Archive.Element.Moved", OnElementMoved, false);
 
     /**
      * Eventhandler that listens on the global 'vDesk.Archive.Element.Deleted' event.
@@ -779,7 +779,7 @@ Modules.Archive = function Archive() {
             ElementCache.Remove(Element);
         }
     };
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Archive.Element.Deleted", OnElementDeleted, false);
+    vDesk.Events.Stream.addEventListener("vDesk.Archive.Element.Deleted", OnElementDeleted, false);
 
     /**
      * Removes the Elements and according Items of Elements whose upload has failed.
