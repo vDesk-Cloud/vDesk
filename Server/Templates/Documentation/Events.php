@@ -5,14 +5,10 @@
             Events
         </h2>
         <p>
-            This document describes the logic behind the global event system and how to dispatch and listen on events.
+            This document describes the logic behind the global event system and how to dispatch and listen on events.<br>
+            The functionality of the event system is provided by the <a href="<?= \vDesk\Pages\Functions::URL("vDesk", "Page", "Packages#Events") ?>">Events</a>-package.
         </p>
-        <p>
-            The execution of several commands will cause to emit certain serverside events.<br>
-            For example: the deletion of an Entry from the Archive will trigger a global <code class="Inline">vDesk.Archive.Element.Deleted</code>-event.<br>
 
-
-        </p>
         <h3>Overview</h3>
         <ul class="Topics">
             <li>
@@ -22,89 +18,75 @@
                 </ul>
             </li>
             <li>
-                <a href="#Setups">Event listeners</a>
+                <a href="#EventListeners">Event listeners</a>
                 <ul class="Topics">
-                    <li><a href="#SetupFormat">Format</a></li>
-                    <li><a href="#SetupCreation">Creating setups</a></li>
+                    <li><a href="#Deploy">Deploying event listeners</a></li>
                 </ul>
             </li>
         </ul>
     </header>
-
-    <section>
-        <h3>
-            Events
-        </h3>
+    <section id="Events">
+        <h3>Events</h3>
         <p>
-            Events are small PHP classes of any structure which inherit from the <code class="Inline">vDesk\Events\<?= Code::Class("Event") ?></code>-class
-            and must implement a public "Name"-constant.
+            Events are small PHP classes consisting at least of a public "Name"-constant and a protected "TimeStamp"-property and have to inherit from the abstract
+            <code class="Inline">\vDesk\Events\<?= Code::Class("Event") ?></code>-class to be recognized as such.<br>
+            Built in events usually use their namespace separated by dots as an identifier to ensure globally uniqueness.<br>
+            The timestamp will be set when dispatching the event via calling its final <code class="Inline"><?= Code::Function("Dispatch") ?>()</code>-method;
+            this will pass its instance to the <code class="Inline">\Modules\<?= Code::Class("Events") ?>::<?= Code::Function("Dispatch") ?>()</code>-method
+            adding it to the Events module's event queue for schedule.<br>
+            The module registers its <code class="Inline"><?= Code::Function("Schedule") ?>()</code>-method as a shutdown function,
+            removing the need of manually scheduling the dispatched events to the registered listeners.
         </p>
-        <p>
-            Global events can be received on the client by registering an event listener on the <code class="Inline">vDesk.Events.<?= Code::Class("Stream") ?></code>-facade,
-            which acts as.<br>
-            To receive those events, we can attach an eventlistener on the event stream in the following way:</p>
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::Class("vDesk") ?>.Events.<?= Code::Class("Stream") ?>.<?= Code::Function("addEventListener") ?>(<?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>, <?= Code::Variable("Event") ?> => <?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Variable("Event") ?>.<?= Code::Field("data") ?>), <?= Code::Bool("false") ?>)<?= Code::Delimiter ?></code></pre>
-        <p>
-            The EventDispatcher will be available through the <code class="Inline">vDesk.Events.<?= Code::Class("EventDisptacher") ?></code>-property after the client has been started and successfully
-            connected to a server.
-        </p>
-
-        Serverside events which inherit from the <code class="Inline">vDesk\Events\<?= Code::Class("GlobalEvent") ?></code>-class will occur within the global event-stream, which can be received through the clientside
-        EventDispatcher.<br> To listen on a certain event, an eventhandler must get attached on the EventDispatcher, listening on the
-        appropriate type of the event.
-
-    </section>
-
-    <section>
-        <h3>
-            Client
-        </h3>
-        <p>
-            Global events can be received on the client by registering an event listener on the <code class="Inline">vDesk.Events.<?= Code::Class("Stream") ?></code>-facade,
-            which acts as.<br>
-            To receive those events, we can attach an eventlistener on the event stream in the following way:</p>
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::Class("vDesk") ?>.Events.<?= Code::Class("EventDispatcher") ?>.<?= Code::Function("addEventListener") ?>(<?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>, <?= Code::Variable("Event") ?> => <?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Variable("Event") ?>.<?= Code::Field("data") ?>), <?= Code::Bool("false") ?>)<?= Code::Delimiter ?></code></pre>
-        <p>
-            The EventDispatcher will be available through the <code class="Inline">vDesk.Events.<?= Code::Class("EventDisptacher") ?></code>-property after the client has been started and successfully
-            connected to a server.
-        </p>
-    </section>
-    <section>
-        <h3>
-            Server
-        </h3>
-        <p>
-            Serverside Events are scheduled over the <code class="Inline">Modules\<?= Code::Class("EventDisptacher") ?>::<?= Code::Function("Schedule") ?>()</code>-method,
-            which is embedded into the finally part of vDesk's main try/catch-statement as a soft dependency.
-        </p>
-        <h4>
-            Example of registering a serverside EventListener.
-        </h4>
-        <pre><code><?= Code\Language::PHP ?>
-\vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("EventDispatcher") ?>()::<?= Code::Function("AddEventListener") ?>(
-    <?= Code::New ?> \vDesk\Events\<?= Code::Class("EventListener") ?>(
-        <?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>,
-        <?= Code::Keyword("fn") ?>(\vDesk\Events\<?= Code::Class("Event") ?> <?= Code::Variable("\$Event") ?>) => <?= Code::Class("Log") ?>::<?= Code::Function("Debug") ?>((<?= Code::Keyword("string") ?>)<?= Code::Variable("\$Event") ?>-><?= Code::Field("Arguments") ?>
-        
-    )
-)<?= Code::Delimiter ?>
-</code></pre>
-        <p>
-            Describe how archive listeners are registered<br>
-            Describe how archive listeners are registered<br>
-        </p>
+        <h5>Example of dispatching an event</h5>
         <pre><code><?= Code\Language::PHP ?>
 (<?= Code::New ?> \vDesk\Archive\Element\<?= Code::Class("Deleted") ?>(<?= Code::Variable("\$Arguments") ?>))-><?= Code::Function("Dispatch") ?>()<?= Code::Delimiter ?>
 </code></pre>
-    </section>
-    <section>
         <p>
-            Events are separated in private Events which get only dispatched to a certain User or public Events, which will be received from every current logged in User.
+            Events are split into 3 different types:
+            the basic "local" event with the described pattern and "global" events which are further separated between "public" and user specific "private" events.
         </p>
-        <h4>Example class of a public Event</h4>
-        <pre><code><?= Code::PHP ?>
+        <h5>Example of a basic event class implementation</h5>
+        <pre><code><?= Code\Language::PHP ?>
+<?= Code::ClassDeclaration ?> <?= Code::Class("CustomEvent") ?> <?= Code::Extends ?> \vDesk\Events\<?= Code::Class("Event") ?> {
+
+    <?= Code::Public ?> <?= Code::Constant ?> <?= Code::Const("Name") ?> = <?= Code::String("\"CustomEvent\"") ?><?= Code::Delimiter ?>
+
+
+    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("__construct") ?>(<?= Code::Public ?> <?= Code::Keyword("mixed") ?> <?= Code::Variable("\$Arguments") ?>) { }
+
+}</code></pre>
+    </section>
+    <section id="GlobalEvents">
+        <h4>Global events</h4>
+        <p>
+            The execution of several commands causes certain global events to be triggered;
+            for example: the deletion of an Entry from the Archive will trigger a global <code class="Inline">vDesk.Archive.Element.Deleted</code>-event.<br>
+            
+        </p>
+        <p>
+            Global events are being identified by inheriting from the abstract <code class="Inline">\vDesk\Events\<?= Code::Class("PublicEvent") ?></code>- or
+            <code class="Inline">\vDesk\Events\<?= Code::Class("PrivateEvent") ?></code>-classes, which share the <code class="Inline">\vDesk\Events\<?= Code::Class("GlobalEvent") ?></code>-class as a parent
+            that acts like a database model with reduced functionality following the dataview pattern defined by the <code class="Inline">\vDesk\Data\<?= Code::Class("IDataView") ?></code>-interface.
+        </p>
+        <p>
+            When scheduled, the event system will serialize the return value of their <code class="Inline"><?= Code::Function("ToDataView") ?>()</code>-method in the database,
+            which then can be can be received afterwards through the <code class="Inline">\Modules\<?= Code::Class("Events") ?>::<?= Code::Function("Stream") ?>()</code>-method
+            that returns a generator that periodically scans the database for new events.<br>
+            Public events are stored in the <code class="Inline"><?= Code::Const("Events") ?>.<?= Code::Field("Public") ?></code>-table,
+            while private events are stored in the <code class="Inline"><?= Code::Const("Events") ?>.<?= Code::Field("Private") ?></code>-table.
+        </p>
+        <p>
+            The scan interval is stored in the global  <code class="Inline"><?= Code::Class("Settings") ?>::<?= Code::Variable("\$Remote") ?>[<?= Code::String("\"Events\"") ?>][<?= Code::String("\"Interval\"") ?>]</code>-setting.<br>
+            Public events will be deleted at the moment of querying minus the configured interval, while private events will be deleted after they have been sent to the receiver.
+        </p>
+        <p>
+            Global events can be received on the client by registering an event listener on the <code class="Inline">vDesk.Events.<?= Code::Class("Stream") ?></code>-class,
+            which acts as a facade to its underlying <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventSource">EventSource</a>.
+        </p>
+        <pre><code><?= Code\Language::JS ?><?= Code::Class("vDesk") ?>.Events.<?= Code::Class("Stream") ?>.<?= Code::Function("addEventListener") ?>(<?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>, <?= Code::Variable("Event") ?> => <?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Variable("Event") ?>.<?= Code::Field("data") ?>), <?= Code::Bool("false") ?>)<?= Code::Delimiter ?></code></pre>
+        <h5>Example class of a public Event</h5>
+        <pre><code><?= Code\Language::PHP ?>
+<?= Code::PHP ?>
         
 <?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
 
@@ -146,8 +128,9 @@
     }
     
 }</code></pre>
-        <h4>Example class of a private Event</h4>
-        <pre><code><?= Code::PHP ?>
+        <h5>Example class of a private Event</h5>
+        <pre><code><?= Code\Language::PHP ?>
+<?= Code::PHP ?>
         
 <?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
 
@@ -159,10 +142,7 @@
 
 
 <?= Code::BlockComment("/**
- * Represents an Event that occurs when a User sends a Message to another User.
- *
- * @package vDesk\Messenger
- * @author  Kerry &lt;DevelopmentHero@gmail.com&gt;.
+ * Event that occurs when a User sends a Message to another User.
  */") ?>
  
 <?= Code::ClassDeclaration ?> <?= Code::Class("Event") ?> <?= Code::Extends ?> <?= Code::Class("PrivateEvent") ?> {
@@ -177,19 +157,82 @@
     <?= Code::BlockComment("/**
      * Initializes a new instance of the Event class.
      *
-     * @param \\vDesk\\Security\\User           \$Receiver  Initializes the Event with the specified receiver.
-     * @param \\vDesk\\Messenger\\Users\\Message \$Arguments Initializes the Event with the specified Message.
+     * @param \\vDesk\\Security\\User           \$Receiver The receiving User.
+     * @param \\vDesk\\Messenger\\Users\\Message \$Message The sent Message.
      */") ?>
      
     <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("__construct") ?>(
         <?= Code::Public ?> \vDesk\Security\<?= Code::Class("User") ?> <?= Code::Variable("\$Receiver") ?>,
-        <?= Code::Private ?> \vDesk\Messenger\Users\<?= Code::Class("Message") ?> <?= Code::Variable("\$Arguments") ?>
+        <?= Code::Private ?> \vDesk\Messenger\Users\<?= Code::Class("Message") ?> <?= Code::Variable("\$Message") ?>
                 
     ) {
-        <?= Code::Parent ?>::<?= Code::Function("__construct") ?>(<?= Code::Variable("\$Arguments") ?>)<?= Code::Delimiter ?>
+        <?= Code::Parent ?>::<?= Code::Function("__construct") ?>(<?= Code::Variable("\$Receiver") ?>)<?= Code::Delimiter ?>
         
+    }
+
+    <?= Code::BlockComment("/** @inheritDoc */") ?>
+
+    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("ToDataView") ?>(): <?= Code::Keyword("array") ?> {
+        <?= Code::Return ?> [
+            <?= Code::Variable("\$this") ?>-><?= Code::Field("Message") ?>-><?= Code::Field("ID") ?>,
+            <?= Code::Variable("\$this") ?>-><?= Code::Field("Message") ?>-><?= Code::Field("Sender") ?>-><?= Code::Field("ID") ?>,
+            <?= Code::Variable("\$this") ?>-><?= Code::Field("Message") ?>-><?= Code::Field("Recipient") ?>-><?= Code::Field("ID") ?>
+
+        ]<?= Code::Delimiter ?>
+
     }
     
 }</code></pre>
+    </section>
+    <section id="EventListeners">
+        <h3>Event listeners</h3>
+        <p>
+            The event system supports multiple ways of registering event listeners.
+            These are directly attached listeners via passing an event name and a closure to the <code class="Inline"><?= Code::Class("Events") ?>::<?= Code::Function("AddEventListener") ?>()</code>-method
+            and file based event listeners, which will be loaded and executed upon schedule.
+        </p>
+        <h5>
+            Example of registering an event listener
+        </h5>
+        <pre><code><?= Code\Language::PHP ?>
+\vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("Events") ?>()::<?= Code::Function("AddEventListener") ?>(
+    <?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>,
+    <?= Code::Keyword("fn") ?>(\vDesk\Events\<?= Code::Class("Event") ?> <?= Code::Variable("\$Event") ?>) => <?= Code::Class("Log") ?>::<?= Code::Function("Info") ?>(<?= Code::String("\"Element '") ?>{<?= Code::Variable("\$Event") ?>-><?= Code::Field("Element") ?>-><?= Code::Field("Name") ?>}<?= Code::String("' has been deleted\"") ?>)
+)<?= Code::Delimiter ?>
+</code></pre>
+        <p>
+            File based event listeners are simple PHP files which must return a tuple array of the event's name to listen on and a callback closure
+            which are stored in a "Events"-folder that is by default located in the "Server"-directory or optionally in the Archive package's "System"-directory.<br>
+            The Events package will scan on installation if the setup is bundled with the Archive package and thus asks, if the event listener files shall be stored and searched on the filesystem, in the archive or both.<br>
+            The storage mode is stored in the local  <code class="Inline"><?= Code::Class("Settings") ?>::<?= Code::Variable("\$Local") ?>[<?= Code::String("\"Events\"") ?>][<?= Code::String("\"Mode\"") ?>]</code>-setting.
+        </p>
+        <p>
+            To match an event, the listener file must contain the name of the desired event in its file name on the beginning.
+            For example: if an event is named "Security.User.Created", the filename of the event listener may be called "Security.User.Created.GreetNewUser.php".
+        </p>
+        <h5>
+            Example of an event listener file
+        </h5>
+        <pre><code><?= Code\Language::PHP ?>
+<?= Code::PHP ?>
+
+
+<?= Code::Use ?> \vDesk\Archive\Element\<?= Code::Class("Deleted") ?><?= Code::Delimiter ?>
+
+
+<?= Code::Return ?> [
+    <?= Code::Class("Deleted") ?>::<?= Code::Const("Name") ?>,
+    <?= Code::Keyword("fn") ?>(<?= Code::Class("Deleted") ?> <?= Code::Variable("\$Event") ?>) => <?= Code::Class("Log") ?>::<?= Code::Function("Info") ?>(<?= Code::String("\"Element '") ?>{<?= Code::Variable("\$Event") ?>-><?= Code::Field("Element") ?>-><?= Code::Field("Name") ?>}<?= Code::String("' has been deleted\"") ?>)
+]<?= Code::Delimiter ?>
+</code></pre>
+    </section>
+    <section id="Deploy">
+        <h4>Deploying event listeners</h4>
+        <p>
+            To deploy event listeners, the event system provides a specialized <code class="Inline">\vDesk\Events\<?= Code::Class("IPackage") ?></code>-interface.
+            Packages implementing this interface must define a public <code class="Inline"><?= Code::Const("Events") ?></code>-constant array
+            containing the event listener files to install.<br>
+            If the storage mode is set to both, the event system will prefer the Archive package over the filesystem.
+        </p>
     </section>
 </article>
