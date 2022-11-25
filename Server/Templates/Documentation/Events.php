@@ -32,7 +32,7 @@
             <code class="Inline">\vDesk\Events\<?= Code::Class("Event") ?></code>-class to be recognized as such.<br>
             Built in events usually use their namespace separated by dots as an identifier to ensure globally uniqueness.<br>
             The timestamp will be set when dispatching the event via calling its final <code class="Inline"><?= Code::Function("Dispatch") ?>()</code>-method;
-            this will pass its instance to the <code class="Inline">\Modules\<?= Code::Class("Events") ?>::<?= Code::Function("Dispatch") ?>()</code>-method
+            this will pass its instance to the <code class="Inline">\Modules\<?= Code::Class("Events") ?>::<?= Code::Function("Dispatch") ?>()</code>-method,
             adding it to the Events module's event queue for schedule.<br>
             The module registers its <code class="Inline"><?= Code::Function("Schedule") ?>()</code>-method as a shutdown function,
             removing the need of manually scheduling the dispatched events to the registered listeners.
@@ -61,16 +61,15 @@
         <p>
             The execution of several commands causes certain global events to be triggered;
             for example: the deletion of an Entry from the Archive will trigger a global <code class="Inline">vDesk.Archive.Element.Deleted</code>-event.<br>
-            
         </p>
         <p>
             Global events are being identified by inheriting from the abstract <code class="Inline">\vDesk\Events\<?= Code::Class("PublicEvent") ?></code>- or
             <code class="Inline">\vDesk\Events\<?= Code::Class("PrivateEvent") ?></code>-classes, which share the <code class="Inline">\vDesk\Events\<?= Code::Class("GlobalEvent") ?></code>-class as a parent
-            that acts like a database model with reduced functionality following the dataview pattern defined by the <code class="Inline">\vDesk\Data\<?= Code::Class("IDataView") ?></code>-interface.
+            that acts like a database model with reduced functionality following the "dataview" pattern defined by the <code class="Inline">\vDesk\Data\<?= Code::Class("IDataView") ?></code>-interface.
         </p>
         <p>
             When scheduled, the event system will serialize the return value of their <code class="Inline"><?= Code::Function("ToDataView") ?>()</code>-method in the database,
-            which then can be can be received afterwards through the <code class="Inline">\Modules\<?= Code::Class("Events") ?>::<?= Code::Function("Stream") ?>()</code>-method
+            which then can be received afterwards through the <code class="Inline">\Modules\<?= Code::Class("Events") ?>::<?= Code::Function("Stream") ?>()</code>-method
             that returns a generator that periodically scans the database for new events.<br>
             Public events are stored in the <code class="Inline"><?= Code::Const("Events") ?>.<?= Code::Field("Public") ?></code>-table,
             while private events are stored in the <code class="Inline"><?= Code::Const("Events") ?>.<?= Code::Field("Private") ?></code>-table.
@@ -189,7 +188,7 @@
         <p>
             The event system supports multiple ways of registering event listeners.
             These are directly attached listeners via passing an event name and a closure to the <code class="Inline"><?= Code::Class("Events") ?>::<?= Code::Function("AddEventListener") ?>()</code>-method
-            and file based event listeners, which will be loaded and executed upon schedule.
+            and file-based event listeners, which will be loaded and executed upon schedule.
         </p>
         <h5>
             Example of registering an event listener
@@ -201,9 +200,9 @@
 )<?= Code::Delimiter ?>
 </code></pre>
         <p>
-            File based event listeners are simple PHP files which must return a tuple array of the event's name to listen on and a callback closure
-            which are stored in a "Events"-folder that is by default located in the "Server"-directory or optionally in the Archive package's "System"-directory.<br>
-            The Events package will scan on installation if the setup is bundled with the Archive package and thus asks, if the event listener files shall be stored and searched on the filesystem, in the archive or both.<br>
+            File-based event listeners are simple PHP files which must return a tuple array of the event's name to listen on and a callback closure
+            which are stored in an "Events"-folder that is by default located in the "Server"-directory or optionally in the Archive package's "System"-directory.<br>
+            The Events package will scan on installation if the setup is bundled with the Archive package and thus asks if the event listener files shall be stored and searched on the filesystem, in the archive or both.<br>
             The storage mode is stored in the local  <code class="Inline"><?= Code::Class("Settings") ?>::<?= Code::Variable("\$Local") ?>[<?= Code::String("\"Events\"") ?>][<?= Code::String("\"Mode\"") ?>]</code>-setting.
         </p>
         <p>
@@ -232,7 +231,7 @@
             To deploy event listeners, the event system provides a specialized <code class="Inline">\vDesk\Events\<?= Code::Class("IPackage") ?></code>-interface.
             Packages implementing this interface must define a public <code class="Inline"><?= Code::Const("Events") ?></code>-constant array
             containing the event listener files to install.<br>
-            If the storage mode is set to both, the event system will prefer the Archive package over the filesystem.
+            If the storage mode is set to both, the event system will prefer the Archive package over the file system.
         </p>
     </section>
 </article>
