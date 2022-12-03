@@ -5,9 +5,10 @@ use vDesk\Pages\Functions;
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>vDesk - Virtual Desktop</title>
+    <title><?= $Page->Content?->Title ?? "vDesk - Documentation" ?></title>
     <link rel="icon" href="<?= Functions::Image("favicon.ico") ?>" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<?= $Page->Content?->Description ?? "" ?>">
 <?php foreach($Page->Stylesheets as $Stylesheet): ?>
     <link rel="stylesheet" href="<?= Functions::Stylesheet($Stylesheet) ?>">
 <?php endforeach; ?>
@@ -31,7 +32,7 @@ use vDesk\Pages\Functions;
         <nav class="Hidden">
 <?php foreach($Page->Pages as $ExistingPage): ?>
 <?php if($ExistingPage->Name !== "Index"): ?>
-            <a class="<?= $ExistingPage->Name === $Page->Content->Name ? "Current" : "" ?>" href="<?= Functions::URL("Documentation", "Topic", $ExistingPage->Name) ?>"><?= $ExistingPage->Description ?></a>
+            <a class="<?= $ExistingPage->Name === $Page->Content->Name ? "Current" : "" ?>" href="<?= Functions::URL("Documentation", "Topic", $ExistingPage->Name) ?>"><?= $ExistingPage->Label ?></a>
 <?php endif; ?>
 <?php endforeach; ?>
             <a href="https://www.github.com/vDesk-Cloud">Github</a>

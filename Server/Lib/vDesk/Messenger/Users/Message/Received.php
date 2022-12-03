@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace vDesk\Messenger\Users\Message;
 
 /**
- * Represents an Event that occurs when a {@link \vDesk\Messenger\Message} has been received.
+ * Event that occurs when a Message has been received by a User.
  *
- * @package vDesk\Messenger\Message
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @package vDesk\Messenger
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Received extends Event {
     

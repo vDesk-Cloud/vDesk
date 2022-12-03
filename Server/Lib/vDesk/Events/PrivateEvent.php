@@ -7,23 +7,19 @@ use vDesk\DataProvider\Expression;
 use vDesk\Security\User;
 
 /**
- * Represents the base-class for system-wide dispatchable private Events.
+ * Abstract base class for system-wide dispatchable private Events.
  *
- * @property-read int $Receiver Gets the ID of the receiving User of the PrivateEvent.
  * @package vDesk\Events
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 abstract class PrivateEvent extends GlobalEvent {
     
     /**
      * Initializes a new instance of the PrivateEvent class.
      *
-     * @param \vDesk\Security\User $Receiver  The User that will receive the PrivateEvent.
-     * @param mixed                $Arguments The arguments of the PrivateEvent.
+     * @param \vDesk\Security\User $Receiver  Initializes the PrivateEvent with the specified User that will receive the  Event.
      */
-    public function __construct(protected User $Receiver, protected mixed $Arguments = null) {
-        parent::__construct($Arguments);
-        $this->AddProperty("Receiver", [\Get => fn(): User => $Receiver]);
+    public function __construct(public User $Receiver) {
     }
     
     /**
@@ -36,7 +32,7 @@ abstract class PrivateEvent extends GlobalEvent {
                       "TimeStamp " => $this->TimeStamp,
                       "Receiver"   => $this->Receiver,
                       "Name"       => static::Name,
-                      "Data"       => $this->Arguments
+                      "Data"       => $this->ToDataView()
                   ])
                   ->Execute();
     }

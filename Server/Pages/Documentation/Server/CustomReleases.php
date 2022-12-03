@@ -13,26 +13,16 @@ use vDesk\Pages\Cached\Page;
  */
 class CustomReleases extends Page {
     
-    /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "CustomReleases";
-    
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Custom releases and packages";
-
     /** @inheritDoc */
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Server/CustomReleases"],
         ?iterable $Stylesheets = [],
-        ?iterable $Scripts = []
+        ?iterable $Scripts = [],
+        public string $Name = "CustomReleases",
+        public string $Label = "Custom releases and packages",
+        public string $Title = "Custom releases and packagesCustom releases and packages",
+        public string $Description = "Custom releases and packages"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }

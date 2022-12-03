@@ -14,13 +14,6 @@ use Pages\Documentation;
 class Index extends Documentation {
 
     /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "Index";
-
-    /**
      * Initializes a new instance of the Index Page.
      *
      * @param null|iterable       $Values      Initializes the Index Page with the specified Dictionary of values.
@@ -38,7 +31,11 @@ class Index extends Documentation {
         ?iterable    $Scripts = [],
         array        $Pages = [],
         public array $Client = [],
-        public array $Server = []
+        public array $Server = [],
+        public string $Name = "Index",
+        public string $Label = "Operating systems",
+        public string $Title = "vDesk - Documentation",
+        public string $Description = "Index"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts, $Pages);
     }

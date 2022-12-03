@@ -12,21 +12,7 @@ use vDesk\Pages\Cached\Page;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Pages extends Page {
-    
-    /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "Pages";
-    
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Pages";
-    
+
     /**
      * Initializes a new instance of the Pages Page.
      *
@@ -39,7 +25,11 @@ class Pages extends Page {
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Server/Pages"],
         ?iterable $Stylesheets = [],
-        ?iterable $Scripts = []
+        ?iterable $Scripts = [],
+        public string $Name = "Pages",
+        public string $Label = "Pages",
+        public string $Title = "vDesk - Documentation",
+        public string $Description = "Pages"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }

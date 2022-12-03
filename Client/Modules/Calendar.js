@@ -245,7 +245,7 @@ Modules.Calendar = function Calendar() {
             });
         }
     };
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Calendar.Event.Created", OnCalendarEventCreated, false);
+    vDesk.Events.Stream.addEventListener("vDesk.Calendar.Event.Created", OnCalendarEventCreated, false);
 
     /**
      * Eventhandler that listens on the 'update' event.
@@ -271,7 +271,7 @@ Modules.Calendar = function Calendar() {
             });
         }
     };
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Calendar.Event.Updated", OnCalendarEventUpdated, false);
+    vDesk.Events.Stream.addEventListener("vDesk.Calendar.Event.Updated", OnCalendarEventUpdated, false);
 
     /**
      * Eventhandler that listens on the 'delete' event.
@@ -297,7 +297,7 @@ Modules.Calendar = function Calendar() {
             });
         }
     };
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Calendar.Event.Deleted", OnCalendarEventDeleted, false);
+    vDesk.Events.Stream.addEventListener("vDesk.Calendar.Event.Deleted", OnCalendarEventDeleted, false);
 
     /**
      * Displays the ContextMenu of the Calendar Module.

@@ -15,20 +15,6 @@ use vDesk\Pages\Page;
 class Server extends Documentation {
 
     /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "Server";
-
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Server documentation";
-
-    /**
      * Initializes a new instance of the Client Documentation Page.
      *
      * @param null|iterable          $Values      Initializes the Server Documentation Page with the specified Dictionary of values.
@@ -46,7 +32,11 @@ class Server extends Documentation {
         ?iterable    $Scripts = [],
         array        $Pages = [],
         public array $Topics = [],
-        public ?Page $Topic = null
+        public ?Page $Topic = null,
+        public string $Name = "Server",
+        public string $Label = "Server",
+        public string $Title = "Server documentation",
+        public string $Description = "Server documentation",
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts, $Pages);
     }

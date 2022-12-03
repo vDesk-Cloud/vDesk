@@ -11,28 +11,18 @@ use vDesk\Pages\Cached\Page;
  * @package vDesk\Documentation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class GlobalEventSystem extends Page {
+class Events extends Page {
     
-    /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "GlobalEventSystem";
-    
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Global event system";
-
     /** @inheritDoc */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Documentation/GlobalEventSystem"],
+        ?iterable $Templates = ["Documentation/Events"],
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
+        public string $Name = "Events",
+        public string $Label = "Events",
+        public string $Title = "Global event system of vDesk",
+        public string $Description = "This document describes how to dispatch and listen on custom events in vDesk"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }

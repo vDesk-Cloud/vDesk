@@ -7,20 +7,20 @@ use vDesk\Events\PublicEvent;
 use vDesk\Security\Group;
 
 /**
- * Event that occurs when a Group has been deleted.
+ * Event that occurs when a new Group has been created.
  *
  * @package vDesk\Security
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Deleted extends PublicEvent {
+class Created extends PublicEvent {
     
     /**
      * The name of the Event.
      */
-    public const Name = "vDesk.Security.Group.Deleted";
+    public const Name = "vDesk.Security.Group.Created";
 
     /**
-     * Initializes a new instance of the Deleted Event.
+     * Initializes a new instance of the Created Event.
      *
      * @param \vDesk\Security\Group $Group Initializes the Event with the specified Group.
      */
@@ -28,7 +28,7 @@ class Deleted extends PublicEvent {
     }
 
     /** @inheritDoc */
-    public function ToDataView(): Group {
-        return $this->Group;
+    public function ToDataView(): array {
+        return ["ID" => $this->Group->ID, "Name" => $this->Group->Name];
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pages\Documentation;
 
-use vDesk\Pages\Cached\Page;
+use vDesk\Pages\Page;
 
 /**
  * Development Documentation Page.
@@ -12,21 +12,7 @@ use vDesk\Pages\Cached\Page;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Development extends Page {
-    
-    /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "Development";
-    
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Development";
-    
+
     /**
      * Initializes a new instance of the Development Page.
      *
@@ -39,7 +25,11 @@ class Development extends Page {
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Development"],
         ?iterable $Stylesheets = ["Documentation/Topics"],
-        ?iterable $Scripts = []
+        ?iterable $Scripts = [],
+        public string $Name = "Development",
+        public string $Label = "Development",
+        public string $Title = "Development guidelines",
+        public string $Description = "Development"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }

@@ -22,7 +22,7 @@ final class Documentation extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.2";
+    public const Version = "1.0.3";
     
     /**
      * The vendor of the Package.

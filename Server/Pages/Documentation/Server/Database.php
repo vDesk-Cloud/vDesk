@@ -13,26 +13,16 @@ use vDesk\Pages\Cached\Page;
  */
 class Database extends Page {
 
-    /**
-     * The name of the Topic.
-     *
-     * @var string
-     */
-    public string $Name = "Database";
-
-    /**
-     * The nav label of the Topic.
-     *
-     * @var string
-     */
-    public string $Description = "Database access";
-
     /** @inheritDoc */
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Server/Database"],
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
+        public string $Name = "Database",
+        public string $Label = "Database access",
+        public string $Title = "Database access in vDesk",
+        public string $Description = "Database access"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }

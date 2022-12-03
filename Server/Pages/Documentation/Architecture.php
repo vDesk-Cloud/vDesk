@@ -12,27 +12,17 @@ use vDesk\Pages\Cached\Page;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Architecture extends Page {
-    
-    /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "Architecture";
-    
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Architecture";
 
     /** @inheritDoc */
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Architecture"],
         ?iterable $Stylesheets = ["Documentation/Topics"],
-        ?iterable $Scripts = []
+        ?iterable $Scripts = [],
+        public string $Name = "Architecture",
+        public string $Label = "Architecture",
+        public string $Title = "vDesk - Documentation",
+        public string $Description = "Architecture"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }

@@ -13,20 +13,7 @@ use vDesk\Pages\Cached\Page;
  */
 class Search extends Page {
     
-    /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "Search";
-    
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Search filters and -results";
-    
+
     /**
      * Initializes a new instance of the Search Page.
      *
@@ -39,7 +26,11 @@ class Search extends Page {
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Client/Search"],
         ?iterable $Stylesheets = [],
-        ?iterable $Scripts = []
+        ?iterable $Scripts = [],
+        public string $Name = "Search",
+        public string $Label = "Search filters and -results",
+        public string $Title = "Search filters and -results",
+        public string $Description = "Search filters and -results"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }

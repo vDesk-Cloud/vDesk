@@ -280,7 +280,7 @@ main > header > nav > a:hover {
     color: lightgray;
 }
 
-.Toggle {
+header > .Toggle {
     display: none;
 }
 
@@ -389,7 +389,7 @@ aside.Fullscreen {
 
 /* Smartphone */
 @media only screen and (max-device-width: 768px) {
-    .Toggle {
+   header > .Toggle {
         display: inline !important;
         position: absolute !important;
         right: 0 !important;

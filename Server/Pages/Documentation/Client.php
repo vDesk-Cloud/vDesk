@@ -14,19 +14,6 @@ use vDesk\Pages\Page;
  */
 class Client extends Documentation {
 
-    /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "Client";
-
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Client documentation";
 
     /**
      * Initializes a new instance of the Client Documentation Page.
@@ -46,7 +33,11 @@ class Client extends Documentation {
         ?iterable    $Scripts = [],
         array        $Pages = [],
         public array $Topics = [],
-        public ?Page $Topic = null
+        public ?Page $Topic = null,
+        public string $Name = "Client",
+        public string $Label = "Client documentation",
+        public string $Title = "Client documentation",
+        public string $Description = "Client documentation"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts, $Pages);
     }

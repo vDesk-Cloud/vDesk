@@ -90,9 +90,9 @@ final class Updates extends Module {
             Log::Warn(__METHOD__, User::$Current->Name . " tried to create Update without having permissions.");
             throw new UnauthorizedAccessException();
         }
-        $Update   ??= Command::$Parameters["Update"];
-        $Packages = Package::Server . "/" . Package::Lib . "/vDesk/Packages";
-        $Updates  = Package::Server . "/" . Package::Lib . "/vDesk/Updates";
+        $Update          ??= Command::$Parameters["Update"];
+        $UpdateManifest  = Package::Server . "/" . Package::Lib . "/vDesk/Updates/{$Update}.php";
+        $PackageManifest = Package::Server . "/" . Package::Lib . "/vDesk/Packages/{$Update}.php";
 
         $UpdateClass = "\\vDesk\\Updates\\{$Update}";
         /** @var \vDesk\Updates\Update $Update */
@@ -105,13 +105,12 @@ final class Updates extends Module {
         $Phar = (new \Phar(($Path ?? Command::$Parameters["Path"] ?? \Server) . Path::Separator . $Package::Name . "[" . $Package::Version . "].phar"));
         $Phar->setSignatureAlgorithm(\Phar::SHA256);
         $Phar->startBuffering();
-        $Name = $Package::Name;
         $Phar->setStub(
             <<<STUB
 <?php
     Phar::mapPhar(__FILE__);
-    include "phar://" . __FILE__ . "/$Updates/{$Name}.php";
-    include "phar://" . __FILE__ . "/$Packages/{$Name}.php";
+    include "phar://" . __FILE__ . "/{$UpdateManifest}";
+    include "phar://" . __FILE__ . "/{$PackageManifest}";
     return [new {$UpdateClass}(), new {$PackageClass}()];
     __HALT_COMPILER();
 STUB
@@ -120,8 +119,7 @@ STUB
         $Update::Compose($Phar);
 
         //Bundle Package manifest if not already happened by the Update itself.
-        if(!isset($Phar[$Packages])) {
-            $Phar->addEmptyDir($Packages);
+        if(!isset($Phar[$PackageManifest])) {
             $Phar->addFile(
                 \Server
                 . Path::Separator
@@ -132,13 +130,12 @@ STUB
                 . "Packages"
                 . Path::Separator
                 . $Package::Name . ".php",
-                "{$Packages}/" . $Package::Name . ".php"
+                $PackageManifest
             );
         }
 
         //Bundle Update manifest if not already happened by the Update itself.
-        if(!isset($Phar[$Updates])) {
-            $Phar->addEmptyDir($Updates);
+        if(!isset($Phar[$UpdateManifest])) {
             $Phar->addFile(
                 \Server
                 . Path::Separator
@@ -149,7 +146,7 @@ STUB
                 . "Updates"
                 . Path::Separator
                 . $Package::Name . ".php",
-                "{$Updates}/" . $Package::Name . ".php"
+                $UpdateManifest
             );
         }
 

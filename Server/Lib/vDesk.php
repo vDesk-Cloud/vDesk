@@ -64,10 +64,6 @@ class vDesk {
             Output::Write(Modules::Call($Command::$Module, $Command::$Name));
         } catch(Throwable $Exception) {
             Output::Write($Exception);
-        } finally {
-            if(Modules::$Running->ContainsKey("EventDispatcher")) {
-                Modules::EventDispatcher()::Schedule();
-            }
         }
     }
 

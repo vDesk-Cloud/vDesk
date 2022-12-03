@@ -93,7 +93,7 @@ Modules.Messenger = function Messenger() {
 
                 UsersTab.Title = `${vDesk.Locale.Security.Users} (${UserChats.Chats.reduce((Amount, Chat) => Amount + Chat.Unread, 0)})`;
 
-                vDesk.Events.EventDispatcher.addEventListener(
+                vDesk.Events.Stream.addEventListener(
                     "vDesk.Messenger.Users.Message.Sent",
                     OnMessengerUsersMessageSent,
                     {once: true}
@@ -102,7 +102,7 @@ Modules.Messenger = function Messenger() {
         );
     };
 
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Messenger.Users.Message.Sent", OnMessengerUsersMessageSent, {once: true});
+    vDesk.Events.Stream.addEventListener("vDesk.Messenger.Users.Message.Sent", OnMessengerUsersMessageSent, {once: true});
 
     /**
      * Eventhandler that listens on the global 'vDesk.Messenger.Users.Message.Received' event.
@@ -119,7 +119,7 @@ Modules.Messenger = function Messenger() {
         }
     };
 
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Messenger.Users.Message.Received", OnMessengerUsersMessageReceived);
+    vDesk.Events.Stream.addEventListener("vDesk.Messenger.Users.Message.Received", OnMessengerUsersMessageReceived);
 
     /**
      * Eventhandler that listens on the global 'vDesk.Messenger.Users.Message.Read' event.
@@ -136,7 +136,7 @@ Modules.Messenger = function Messenger() {
         }
     };
 
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Messenger.Users.Message.Read", OnMessengerUsersMessageRead);
+    vDesk.Events.Stream.addEventListener("vDesk.Messenger.Users.Message.Read", OnMessengerUsersMessageRead);
 
     /**
      * Eventhandler that listens on the 'select' event.
@@ -206,7 +206,7 @@ Modules.Messenger = function Messenger() {
 
                 GroupsTab.Title = `${vDesk.Locale.Security.Groups} (${GroupChats.Chats.reduce((Amount, Chat) => Amount + Chat.Unread, 0)})`;
 
-                vDesk.Events.EventDispatcher.addEventListener(
+                vDesk.Events.Stream.addEventListener(
                     "vDesk.Messenger.Groups.Message.Sent",
                     OnMessengerGroupsMessageSent,
                     {once: true}
@@ -215,7 +215,7 @@ Modules.Messenger = function Messenger() {
         );
     };
 
-    vDesk.Events.EventDispatcher.addEventListener("vDesk.Messenger.Groups.Message.Sent", OnMessengerGroupsMessageSent, {once: true});
+    vDesk.Events.Stream.addEventListener("vDesk.Messenger.Groups.Message.Sent", OnMessengerGroupsMessageSent, {once: true});
 
     this.Content.classList.add("Messenger");
 

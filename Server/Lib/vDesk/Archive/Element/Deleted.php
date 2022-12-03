@@ -3,26 +3,33 @@ declare(strict_types=1);
 
 namespace vDesk\Archive\Element;
 
+use vDesk\Archive\Element;
 use vDesk\Events\PublicEvent;
 
 /**
- * Represents an Event that occurs when an {@link \vDesk\Archive\Element} has been deleted from the Archive.
+ * Event that occurs when an Element has been deleted from the Archive.
  *
  * @package vDesk\Archive
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Deleted extends PublicEvent {
-    
+
     /**
      * The name of the Event.
      */
     public const Name = "vDesk.Archive.Element.Deleted";
-    
+
     /**
-     * @inheritdoc
+     * Initializes a new instance of the Deleted Event.
+     *
+     * @param \vDesk\Archive\Element $Element Initializes the Event with the specified Element.
      */
-    public function ToDataView() {
-        return (string)$this->Arguments->ID;
+    public function __construct(public Element $Element) {
     }
-    
+
+    /** @inheritDoc */
+    public function ToDataView(): Element {
+        return $this->Element;
+    }
+
 }

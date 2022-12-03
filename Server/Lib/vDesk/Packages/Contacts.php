@@ -29,7 +29,7 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
     /**
      * The version of the Package.
      */
-    public const Version = "1.1.0";
+    public const Version = "1.1.1";
 
     /**
      * The vendor of the Package.
@@ -45,7 +45,7 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
      * The dependencies of the Package.
      */
     public const Dependencies = [
-        "Events"   => "1.1.0",
+        "Events"   => "1.2.0",
         "Locale"   => "1.1.0",
         "Security" => "1.1.0",
         "Search"   => "1.1.0"
@@ -79,10 +79,10 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
     ];
 
     /**
-     * The eventlisteners of the Package.
+     * The Event listeners of the Package.
      */
     public const Events = [
-        "vDesk.Security.User.Deleted" => "/vDesk/Contacts/vDesk.Security.User.Deleted.php"
+        "/vDesk/Contacts/vDesk.Security.User.Deleted.Contacts.php"
     ];
 
     /**

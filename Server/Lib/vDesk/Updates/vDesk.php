@@ -20,16 +20,13 @@ class vDesk extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.1.0";
+    public const RequiredVersion = "1.3.0";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Reworked collections.
-- Reworked streams.
-- Removed global reference to current User.
-- Simplified input-/output-API.
+- Added compatibility to Events-1.2.0.
 Description;
 
     /**
@@ -39,24 +36,14 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk.php",
-                    "vDesk/IO",
-                    "vDesk/Struct/Collections",
-                    "vDesk/Client.php",
-                    "vDesk/Utils/Log.php",
-                    "vDesk/Utils/Validate.php"
+                    "vDesk.php"
                 ]
             ]
         ],
         self::Undeploy => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk.php",
-                    "vDesk/IO",
-                    "vDesk/Struct/Collections",
-                    "vDesk/Client.php",
-                    "vDesk/Utils/Log.php",
-                    "vDesk/Utils/Validate.php"
+                    "vDesk.php"
                 ]
             ]
         ]
