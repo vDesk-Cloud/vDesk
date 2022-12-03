@@ -27,9 +27,10 @@ class Packages extends Page {
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         public string $Name = "Packages",
-        public string $Label = "Packages",
-        public string $Title = "Packages",
-        public string $Description = "Packages, updates and setups",
+        public string $Label = "Packages, updates and setups",
+        public string $Title = "Documentation of vDesk's package-, update- and setup-formats",
+        public string $Description = "This document describes how to create and install custom packages, updates and setups",
+        public array $Tags = [""]
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }

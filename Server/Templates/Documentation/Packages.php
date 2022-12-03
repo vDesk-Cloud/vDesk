@@ -8,10 +8,7 @@ use vDesk\Pages\Functions;
     <header>
         <h2>Packages, updates and setups</h2>
         <p>
-            This document describes the specifications of packages, updates and setups.
-            <br>
-            For further information about creating packages and setups, visit the <a href="<?= Functions::URL("Documentation", "Category", "Server", "Topic", "CustomReleases") ?>">Custom
-                releases</a>-tutorial.
+            This document describes the specifications of packages, updates and setups and how to create them.
         </p>
         <h3>Overview</h3>
         <ul class="Topics">
@@ -33,7 +30,6 @@ use vDesk\Pages\Functions;
                     <li><a href="#UpdateFormat">Format</a></li>
                     <li><a href="#UpdateManifest">Manifest</a></li>
                     <li><a href="#UpdateCreation">Creating updates</a></li>
-                    <li><a href="#UpdateHosting">Hosting updates</a></li>
                 </ul>
             </li>
             <li>
@@ -471,7 +467,7 @@ use vDesk\Pages\Functions;
 Call -Module=Packages -Command=Create -Package=Calendar [-Path=/home/user, -Compression=<?= \Phar::BZ2 ?>]</span></code></pre>
         <p>
             This will create a PHAR archive named like the specified package and bundled with the files and folders of the package at the optionally specified path on the server.<br>
-            If you omit the "Path"-parameter, the package file will be created in the systems Server directory.
+            If the "Path"-parameter is omitted, the package file will be created in the system's "Server"-directory.
         </p>
     </section>
     <section id="Updates">
@@ -660,7 +656,7 @@ Call -Module=Updates -Command=Create -Update=Calendar [-Path=/home/user, -Compre
         <p>
             This will create a PHAR archive named like the specified update and bundled with the files and folders of the update and its according package manifest file at the optionally specified path on
             the server.<br>
-            If you omit the "Path"-parameter, the update file will be created in the systems Server directory.
+            If the "Path"-parameter is omitted, the update file will be created in the system's "Server"-directory.
         </p>
     </section>
     <section id="Setups">
@@ -711,18 +707,18 @@ Call -Module=Updates -Command=Create -Update=Calendar [-Path=/home/user, -Compre
 Call -Module=Setup -Command=Create [-Path=/var/www/htdocs/vDesk/Server]</span></code></pre>
         <p>
             This will create a "Setup.phar"-file bundled with all currently installed packages at the optionally specified path on the server.<br>
-            If you omit the "Path"-parameter, the setup file will be created in the systems Server directory.
+            If the "Path"-parameter is omitted, the setup file will be created in the system's "Server"-directory.
         </p>
     </section>
     <section id="Exclude">
         <h5>Excluding packages</h5>
         <p>
-            If you want to exclude certain packages, you can optionally provide a comma separated list of packages that won't get bundled in the setup.
+            To exclude certain packages, a comma separated list of packages can be specified that won't get bundled in the setup.
         </p>
         <pre><code><span class="Console">Call -M=Setup -C=Create [-Path=%TargetDir%, -Exclude=Pages, Homepage, Documentation, ...]
 Call -Module=Setup -Command=Create [-Path=%TargetDir%, -Exclude=%A%, %B%, ...]</span></code></pre>
         <p>
-            Alternatively, you can provide a JSON array of packages.
+            Alternatively, a JSON array of packages can be specified.
         </p>
         <pre><code><span class="Console">Call -M=Setup -C=Create -Exclude=["Pages", "Homepage", "Documentation", "Contacts", "Messenger"]</span></code></pre>
 
