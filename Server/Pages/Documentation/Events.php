@@ -20,9 +20,9 @@ class Events extends Page {
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         public string $Name = "Events",
-        public string $Label = "Packages",
-        public string $Title = "Packages",
-        public string $Description = "Events"
+        public string $Label = "Events",
+        public string $Title = "Global event system of vDesk",
+        public string $Description = "This document describes how to dispatch and listen on custom events in vDesk"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }
