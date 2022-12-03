@@ -87,51 +87,51 @@ use vDesk\Pages\Functions;
             client- or server-side resources are stored in certain directories.
         </p>
         <pre><code>--- <?= Code::BlockComment("Package.phar") ?>
-        
-        |
-          --- <?= Code::BlockComment("Package.php") ?> <?= Code::Comment("//Package manifest class file") ?>
-          
-        |
-          --- <?= Code::BlockComment("Client") ?> <?= Code::Comment("//Client-side resources") ?>
-            
-              |
-                --- <?= Code::BlockComment("Design") ?> <?= Code::Comment("//Client-side CSS stylesheets") ?>
-                    
-                    |
-                      --- <?= Code::BlockComment("Package.css") ?> <?= Code::Comment("//Client-side package CSS stylesheet") ?>
-            
-              |
-                --- <?= Code::BlockComment("Lib") ?> <?= Code::Comment("//Client-side library files") ?>
-            
-                    |
-                      --- <?= Code::BlockComment("Package") ?> <?= Code::Comment("//Client-side package library") ?>
-            
-              |
-                --- <?= Code::BlockComment("Modules") ?> <?= Code::Comment("//Client-side modules") ?>
-                    
-                    |
-                      --- <?= Code::BlockComment("Package.js") ?> <?= Code::Comment("//Client-side package module") ?>
-            
-              |
-                --- <?= Code::BlockComment("CustomDirectory") ?> <?= Code::Comment("//Client-side custom directories/files") ?>
-            
-        |
-          --- <?= Code::BlockComment("Server") ?> <?= Code::Comment("//Server-side resources") ?>
-            
-              |
-                --- <?= Code::BlockComment("Lib") ?> <?= Code::Comment("//Server-side library files") ?>
-            
-                    |
-                      --- <?= Code::BlockComment("Package") ?> <?= Code::Comment("//Server-side package library") ?>
-            
-              |
-                --- <?= Code::BlockComment("Modules") ?> <?= Code::Comment("//Server-side modules") ?>
-                    
-                    |
-                      --- <?= Code::BlockComment("Package.php") ?> <?= Code::Comment("//Server-side package module") ?>
-            
-              |
-                --- <?= Code::BlockComment("CustomDirectory") ?> <?= Code::Comment("//Server-side custom directories/files") ?>
+
+    |
+      --- <?= Code::BlockComment("Client") ?> <?= Code::Comment("//Client-side resources") ?>
+
+          |
+            --- <?= Code::BlockComment("Design") ?> <?= Code::Comment("//Client-side CSS stylesheets") ?>
+
+                |
+                  --- <?= Code::BlockComment("Package.css") ?> <?= Code::Comment("//Client-side package CSS stylesheet") ?>
+
+          |
+            --- <?= Code::BlockComment("Lib") ?> <?= Code::Comment("//Client-side library files") ?>
+
+                |
+                  --- <?= Code::BlockComment("Package") ?> <?= Code::Comment("//Client-side package library") ?>
+
+          |
+            --- <?= Code::BlockComment("Modules") ?> <?= Code::Comment("//Client-side modules") ?>
+
+                |
+                  --- <?= Code::BlockComment("Package.js") ?> <?= Code::Comment("//Client-side package module") ?>
+
+    |
+      --- <?= Code::BlockComment("Server") ?> <?= Code::Comment("//Server-side resources") ?>
+
+          |
+            --- <?= Code::BlockComment("Lib") ?> <?= Code::Comment("//Server-side library files") ?>
+
+                |
+                  --- <?= Code::BlockComment("Package") ?> <?= Code::Comment("//Server-side package library") ?>
+
+                |
+                  --- <?= Code::BlockComment("vDesk") ?> <?= Code::Comment("//vDesk library") ?>
+
+                      |
+                        --- <?= Code::BlockComment("Packages") ?> <?= Code::Comment("//Package manifest class files") ?>
+
+                            |
+                              --- <?= Code::BlockComment("Package.php") ?> <?= Code::Comment("//Package manifest class file") ?>
+
+          |
+            --- <?= Code::BlockComment("Modules") ?> <?= Code::Comment("//Server-side modules") ?>
+
+                |
+                  --- <?= Code::BlockComment("Package.php") ?> <?= Code::Comment("//Server-side package module") ?>
     </code></pre>
         <aside class="Note">
             <h4>Note</h4>
@@ -492,61 +492,56 @@ Call -Module=Packages -Command=Create -Package=Calendar [-Path=/home/user, -Comp
         </p>
         <pre><code>--- <?= Code::BlockComment("Update.phar") ?>
         
-        |
-          --- <?= Code::BlockComment("Client") ?> <?= Code::Comment("//Updated client-side resources") ?>
-            
-              |
-                --- <?= Code::BlockComment("Design") ?> <?= Code::Comment("//Updated client-side CSS stylesheets") ?>
-                    
-                    |
-                      --- <?= Code::BlockComment("Package.css") ?> <?= Code::Comment("//Updated client-side package CSS stylesheet") ?>
-            
-              |
-                --- <?= Code::BlockComment("Lib") ?> <?= Code::Comment("//Updated client-side library files") ?>
-            
-                    |
-                      --- <?= Code::BlockComment("Package") ?> <?= Code::Comment("//Updated client-side package library") ?>
-            
-              |
-                --- <?= Code::BlockComment("Modules") ?> <?= Code::Comment("//Updated client-side modules") ?>
-                    
-                    |
-                      --- <?= Code::BlockComment("Package.js") ?> <?= Code::Comment("//Updated client-side package module") ?>
-            
-              |
-                --- <?= Code::BlockComment("CustomDirectory") ?> <?= Code::Comment("//Updated client-side custom directories/files") ?>
-            
-          --- <?= Code::BlockComment("Server") ?> <?= Code::Comment("//Updated server-side resources") ?>
-            
-              |
-                --- <?= Code::BlockComment("Lib") ?> <?= Code::Comment("//Updated server-side library files") ?>
-            
-                    |
-                      --- <?= Code::BlockComment("Package") ?> <?= Code::Comment("//Updated server-side package library") ?>
-            
-                    |
-                      --- <?= Code::BlockComment("vDesk") ?> <?= Code::Comment("//vDesk library.") ?>
-            
-                          |
-                            --- <?= Code::BlockComment("Packages") ?> <?= Code::Comment("//Package manifest class files.") ?>
-            
-                                |
-                                  --- <?= Code::BlockComment("Package.php") ?> <?= Code::Comment("//Updated target package manifest class file") ?>
-            
-                          |
-                            --- <?= Code::BlockComment("Updates") ?> <?= Code::Comment("//Updated manifest class files.") ?>
-            
-                                |
-                                  --- <?= Code::BlockComment("Update.php") ?> <?= Code::Comment("//Updated manifest class file") ?>
-            
-              |
-                --- <?= Code::BlockComment("Modules") ?> <?= Code::Comment("//Updated server-side modules") ?>
-                    
-                    |
-                      --- <?= Code::BlockComment("Package.php") ?> <?= Code::Comment("//Updated server-side package module") ?>
-            
-              |
-                --- <?= Code::BlockComment("CustomDirectory") ?> <?= Code::Comment("//Updated server-side custom directories/files") ?>
+    |
+      --- <?= Code::BlockComment("Client") ?> <?= Code::Comment("//Updated client-side resources") ?>
+
+          |
+            --- <?= Code::BlockComment("Design") ?> <?= Code::Comment("//Updated client-side CSS stylesheets") ?>
+
+                |
+                  --- <?= Code::BlockComment("Package.css") ?> <?= Code::Comment("//Updated client-side package CSS stylesheet") ?>
+
+          |
+            --- <?= Code::BlockComment("Lib") ?> <?= Code::Comment("//Updated client-side library files") ?>
+
+                |
+                  --- <?= Code::BlockComment("Package") ?> <?= Code::Comment("//Updated client-side package library") ?>
+
+          |
+            --- <?= Code::BlockComment("Modules") ?> <?= Code::Comment("//Updated client-side modules") ?>
+
+                |
+                  --- <?= Code::BlockComment("Package.js") ?> <?= Code::Comment("//Updated client-side package module") ?>
+
+    |
+      --- <?= Code::BlockComment("Server") ?> <?= Code::Comment("//Updated server-side resources") ?>
+
+          |
+            --- <?= Code::BlockComment("Lib") ?> <?= Code::Comment("//Updated server-side library files") ?>
+
+                |
+                  --- <?= Code::BlockComment("Package") ?> <?= Code::Comment("//Updated server-side package library") ?>
+
+                |
+                  --- <?= Code::BlockComment("vDesk") ?> <?= Code::Comment("//vDesk library") ?>
+
+                      |
+                        --- <?= Code::BlockComment("Packages") ?> <?= Code::Comment("//Package manifest class files") ?>
+
+                            |
+                              --- <?= Code::BlockComment("Package.php") ?> <?= Code::Comment("//Updated target package manifest class file") ?>
+
+                      |
+                        --- <?= Code::BlockComment("Updates") ?> <?= Code::Comment("//Updated manifest class files") ?>
+
+                            |
+                              --- <?= Code::BlockComment("Update.php") ?> <?= Code::Comment("//Updated manifest class file") ?>
+
+          |
+            --- <?= Code::BlockComment("Modules") ?> <?= Code::Comment("//Updated server-side modules") ?>
+
+                |
+                  --- <?= Code::BlockComment("Package.php") ?> <?= Code::Comment("//Updated server-side package module") ?>
     </code></pre>
     </section>
     <section id="UpdateManifest">
