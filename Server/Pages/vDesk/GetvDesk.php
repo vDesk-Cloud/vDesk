@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pages\vDesk;
 
-use vDesk\Pages\Cached\Page;
+use vDesk\Pages\Page;
 
 /**
  * GetvDesk Page class.
@@ -12,21 +12,7 @@ use vDesk\Pages\Cached\Page;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class GetvDesk extends Page {
-    
-    /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "GetvDesk";
-    
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Get vDesk";
-    
+
     /**
      * Initializes a new instance of the GetvDesk Page class.
      *
@@ -37,7 +23,11 @@ class GetvDesk extends Page {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["vDesk/GetvDesk"],
-        ?iterable $Stylesheets = ["vDesk/Packages", "Documentation/Stylesheet"]
+        ?iterable $Stylesheets = ["vDesk/Packages", "Documentation/Stylesheet"],
+        public string $Name = "GetvDesk",
+        public string $Label = "Get vDesk",
+        public string $Title = "Download and install vDesk, deploy and host updates",
+        public string $Description = "This document describes how to install vDesk and keeping it up to date"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets);
     }

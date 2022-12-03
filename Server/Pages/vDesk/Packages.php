@@ -12,21 +12,7 @@ use vDesk\Pages\Cached\Page;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Packages extends Page {
-    
-    /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "Packages";
-    
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Packages";
-    
+
     /**
      * Initializes a new instance of the Packages Page class.
      *
@@ -37,7 +23,11 @@ class Packages extends Page {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["vDesk/Packages"],
-        ?iterable $Stylesheets = ["vDesk/Packages"]
+        ?iterable $Stylesheets = ["vDesk/Packages"],
+        public string $Name = "Packages",
+        public string $Label = "Packages",
+        public string $Title = "Available packages of vDesk",
+        public string $Description = "This document contains a list of core and optional packages and download links"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets);
     }

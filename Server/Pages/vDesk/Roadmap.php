@@ -12,21 +12,7 @@ use Pages\vDesk;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Roadmap extends vDesk {
-    
-    /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "Roadmap";
-    
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Roadmap";
-    
+
     /**
      * Initializes a new instance of the Roadmap Page class.
      *
@@ -37,7 +23,11 @@ class Roadmap extends vDesk {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["vDesk/Roadmap"],
-        ?iterable $Stylesheets = []
+        ?iterable $Stylesheets = [],
+        public string $Name = "Roadmap",
+        public string $Label = "Roadmap",
+        public string $Title = "vDesk's roadmap of planned features",
+        public string $Description = "This document contains a roadmap of planned features or deprecations for the future"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets);
     }

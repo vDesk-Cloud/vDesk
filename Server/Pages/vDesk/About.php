@@ -12,28 +12,21 @@ use Pages\vDesk;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class About extends vDesk {
-    
-    /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "About";
-    
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "About";
-    
+
     /**
      * Initializes a new instance of the About Page class.
      *
      * @param null|iterable $Values    Initializes the About Page with the specified Dictionary of values.
      * @param null|iterable $Templates Initializes the About Page with the specified Collection of templates.
      */
-    public function __construct(?iterable $Values = [], ?iterable $Templates = ["vDesk/About"]) {
+    public function __construct(
+        ?iterable $Values = [],
+        ?iterable $Templates = ["vDesk/About"],
+        public string $Name = "About",
+        public string $Label = "About",
+        public string $Title = "What is vDesk, who's the author and how it started",
+        public string $Description = "This document explains the origins of the project and the author behind it"
+    ) {
         parent::__construct($Values, $Templates);
     }
     

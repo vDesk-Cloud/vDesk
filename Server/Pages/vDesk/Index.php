@@ -14,20 +14,6 @@ use vDesk\Pages\Cached\Page;
 class Index extends Page {
     
     /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "Index";
-    
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "vDesk Index page";
-    
-    /**
      * Initializes a new instance of the Index Page.
      *
      * @param null|iterable $Values      Initializes the Index Page with the specified Dictionary of values.
@@ -53,7 +39,11 @@ class Index extends Page {
             "vDesk/Index/Development"
         ],
         ?iterable $Scripts = ["vDesk/Index", "vDesk/SlideShow"],
-        public array $Previews = []
+        public array $Previews = [],
+        public string $Name = "Index",
+        public string $Label = "Index",
+        public string $Title = "vDesk - Virtual Desktop",
+        public string $Description = "vDesk Homepage"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }
