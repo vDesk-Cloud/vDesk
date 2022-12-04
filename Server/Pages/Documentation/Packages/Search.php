@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Pages\Documentation\Client;
+namespace Pages\Documentation\Packages;
 
 use vDesk\Pages\Cached\Page;
 
@@ -24,11 +24,11 @@ class Search extends Page {
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Documentation/Client/Search"],
+        ?iterable $Templates = ["Documentation/Packages/Search"],
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         public string $Name = "Search",
-        public string $Label = "Search filters and -results",
+        public string $Label = "Search",
         public string $Title = "Search filters and -results",
         public string $Description = "Search filters and -results"
     ) {

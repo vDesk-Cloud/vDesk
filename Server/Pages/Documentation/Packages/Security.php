@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Pages\Documentation;
+namespace Pages\Documentation\Packages;
 
 use vDesk\Pages\Cached\Page;
 
@@ -34,8 +34,8 @@ class Security extends Page {
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Documentation/Security"],
-        ?iterable $Stylesheets = ["Documentation/Topics"],
+        ?iterable $Templates = ["Documentation/Packages/Security"],
+        ?iterable $Stylesheets = ["Documentation/Packages"],
         ?iterable $Scripts = [],
         public string $Name = "Security",
         public string $Label = "Security",

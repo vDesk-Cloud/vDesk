@@ -822,7 +822,7 @@ Text<?= Code::Delimiter ?>
             and so on..
         </p>
         <p>
-            To address common differences between several RDBMs, vDesk's DataProvider ships with an <a href="<?= Functions::URL("Documentation", "Category", "Server", "Topic", "Database#Expressions") ?>">Expression</a>-library, that allows developers to "express" the operation they want
+            To address common differences between several RDBMs, vDesk's DataProvider ships with an <a href="<?= Functions::URL("Documentation", "Category", "Server", "Topic", "DataProvider#Expressions") ?>">Expression</a>-library, that allows developers to "express" the operation they want
             to perform against the database server in a fluent interface that translates the action into a query compatible to the current configured database system.
             <br>The expression library covers most oft the usual CRUD and DB/Table-manipulation functions that SQL defines.
         </p>

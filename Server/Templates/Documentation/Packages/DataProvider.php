@@ -144,9 +144,9 @@ use vDesk\Documentation\Code;
 
     <?= Code::String("\"User\"") ?>  => <?= Code::String("\"dbuser\"") ?>,
     <?= Code::String("\"Password\"") ?>  => <?= Code::String("\"dbpass\"") ?>,
-    <?= Code::Comment("//Database name, ignored while using the MySQL DataProvider.") ?>
+    <?= Code::Comment("//DataProvider name, ignored while using the MySQL DataProvider.") ?>
 
-    <?= Code::String("\"Database\"") ?>  => <?= Code::String("\"vDesk\"") ?>,
+    <?= Code::String("\"DataProvider\"") ?>  => <?= Code::String("\"vDesk\"") ?>,
     <?= Code::Comment("//Connection pooling true/false.") ?>
 
     <?= Code::String("\"Persistent\"") ?>  => <?= Code::Bool("\"false\"") ?>
@@ -1045,7 +1045,7 @@ use vDesk\Documentation\Code;
         <div style="display: flex; justify-content: space-around;">
             <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
 <?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
--><?= Code::Function("Database") ?>(<?= Code::String("\"vDesk\"") ?>)<?= Code::Delimiter ?>
+-><?= Code::Function("DataProvider") ?>(<?= Code::String("\"vDesk\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
             <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
 <?= Code::Keyword("CREATE") ?> <?= Code::Keyword("DATABASE") ?>
@@ -1152,7 +1152,7 @@ use vDesk\Documentation\Code;
         <div style="display: flex; justify-content: space-around;">
 <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
 <?= Code::Class("Expression") ?>::<?= Code::Function("Alter") ?>()
--><?= Code::Function("Database") ?>(<?= Code::String("\"vDesk\"") ?>)
+-><?= Code::Function("DataProvider") ?>(<?= Code::String("\"vDesk\"") ?>)
 -><?= Code::Function("Rename") ?>(<?= Code::String("\"Newname\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
             <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
@@ -1273,7 +1273,7 @@ use vDesk\Documentation\Code;
         <div style="display: flex; justify-content: space-around;">
             <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
 <?= Code::Class("Expression") ?>::<?= Code::Function("Drop") ?>()
--><?= Code::Function("Database") ?>(<?= Code::String("\"vDesk\"") ?>)<?= Code::Delimiter ?>
+-><?= Code::Function("DataProvider") ?>(<?= Code::String("\"vDesk\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
             <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
 <?= Code::Keyword("DROP") ?> <?= Code::Keyword("DATABASE") ?>

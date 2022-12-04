@@ -22,16 +22,16 @@ class Index extends Documentation {
      * @param null|iterable       $Scripts     Initializes the Index Page with the specified Collection of scripts.
      * @param \vDesk\Pages\Page[] $Pages       Initializes the Index Page with the specified set of Pages.
      * @param \vDesk\Pages\Page[] $Client      Initializes the Index Page with the specified set of Client Documentation Pages.
-     * @param \vDesk\Pages\Page[] $Server      Initializes the Index Page with the specified set of Server Documentation Pages.
+     * @param \vDesk\Pages\Page[] $Packages    Initializes the Index Page with the specified set of Packages Documentation Pages.
      */
     public function __construct(
-        ?iterable    $Values = [],
-        ?iterable    $Templates = ["Documentation/Index"],
-        ?iterable    $Stylesheets = [],
-        ?iterable    $Scripts = [],
-        array        $Pages = [],
+        ?iterable $Values = [],
+        ?iterable $Templates = ["Documentation/Index"],
+        ?iterable $Stylesheets = [],
+        ?iterable $Scripts = [],
+        array $Pages = [],
         public array $Client = [],
-        public array $Server = [],
+        public array $Packages = [],
         public string $Name = "Index",
         public string $Label = "Operating systems",
         public string $Title = "vDesk - Documentation",

@@ -35,12 +35,12 @@ use vDesk\Pages\Functions;
             <?php endif; ?>
         <?php endforeach; ?>
     </ul>
-    <h4>Server topics</h4>
+    <h4>Packages</h4>
     <ul>
-        <?php foreach(\vDesk\Modules::Documentation()::ServerPages() as $Topic): ?>
-            <?php if($Topic->Name !== "Index"): ?>
+        <?php foreach(\vDesk\Modules::Documentation()::Packages() as $Package): ?>
+            <?php if($Package->Name !== "Index"): ?>
                 <li>
-                    <a href="<?= Functions::URL("Documentation", "Category", "Server", "Topic", $Topic->Name) ?>"><?= $Topic->Description ?></a>
+                    <a href="<?= Functions::URL("Documentation", "Category", "Packages", "Package", $Package->Name) ?>"><?= $Package->Label ?></a>
                 </li>
             <?php endif; ?>
         <?php endforeach; ?>

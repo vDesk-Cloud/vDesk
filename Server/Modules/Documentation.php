@@ -6,7 +6,7 @@ namespace Modules;
 use Pages\Documentation\Client;
 use Pages\Documentation\Index;
 use Pages\Documentation\Server;
-use Pages\Documentation\Tutorials;
+use Pages\Documentation\Packages;
 use vDesk\Configuration\Settings;
 use vDesk\IO\DirectoryInfo;
 use vDesk\IO\FileInfo;
@@ -22,7 +22,7 @@ use vDesk\Pages\Request;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Documentation extends Module {
-    
+
     /**
      * The entry point of the Documentation Page.
      *
@@ -31,10 +31,10 @@ class Documentation extends Module {
     public static function Index(): \Pages\Documentation {
         return new \Pages\Documentation(
             Pages: static::GetPages(),
-            Content: new \Pages\Documentation\Index(Pages: static::GetPages(), Client: static::ClientPages(), Server: static::ServerPages())
+            Content: new \Pages\Documentation\Index(Pages: static::GetPages(), Client: static::ClientPages(), Packages: static::Packages())
         );
     }
-    
+
     /**
      * Gets the currently installed Documentation Pages.
      *
@@ -47,8 +47,8 @@ class Documentation extends Module {
             ->Map(static fn(string $Page): Page => new $Page())
             ->ToArray();
     }
-    
-    
+
+
     /**
      * Displays a specified Page.
      *
@@ -64,7 +64,7 @@ class Documentation extends Module {
             Content: new $Class()
         );
     }
-    
+
     /**
      * Gets the currently installed Client Documentation Pages.
      *
@@ -124,5 +124,35 @@ class Documentation extends Module {
             Topic: new $Class()
         );
     }
-    
+
+    /**
+     * Gets the currently installed Package Documentation Pages.
+     *
+     * @return array
+     */
+    public static function Packages(): array {
+        return (new DirectoryInfo(Settings::$Local["Pages"]["Pages"] . Path::Separator . "Documentation" . Path::Separator . "Packages"))
+            ->GetFiles()
+            ->Map(static fn(FileInfo $Package): string => "\\Pages\\Documentation\\Packages\\{$Package->Name}")
+            ->Map(static fn(string $Package): Page => new $Package())
+            ->ToArray();
+    }
+
+    /**
+     * Displays a specified Packages Documentation Page.
+     *
+     * @param string|null $Package The Package Documentation Page to display.
+     *
+     * @return \Pages\Documentation\Packages\Page The requested Packages Documentation Page.
+     */
+    public static function Package(string $Package = null): Packages\Page {
+        $Package ??= Request::$Parameters["Package"];
+        $Class   = "\\Pages\\Documentation\\Packages\\{$Package}";
+        return new Packages\Page(
+            Pages: static::GetPages(),
+            Packages: static::Packages(),
+            Package: new $Class()
+        );
+    }
+
 }
