@@ -198,12 +198,24 @@ use vDesk\Pages\Functions; ?>
         <p>
             The modules package provides several facades for running modules
         </p>
+        <p>
+            Invoking a module on the client
+            On the client is a proxy available that holds unique instances of client modules located in
+        </p>
         <pre><code><?= Code\Language::JS ?>
 vDesk.<?= Code::Class("Modules") ?>.<?= Code::Class("Archive") ?>.<?= Code::Function("GoToID") ?>()<?= Code::Delimiter ?>
 </code></pre>
         <h5>
            Server
         </h5>
+        <p>
+            On the server exists a similar auto-initializing singleton that uses a <code class="Inline"><?= Code::Function("__callStatic") ?>()</code>-method
+            mapping method-calls to unique instances of modules.<br>
+            The facade will load and initialize module classes automatically upon request and stores them in an internal cache dictionary.
+
+
+
+        </p>
         <pre><code><?= Code\Language::PHP ?>
 \vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("Events") ?>()::<?= Code::Function("AddEventListener") ?>(
     <?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>,
@@ -211,22 +223,16 @@ vDesk.<?= Code::Class("Modules") ?>.<?= Code::Class("Archive") ?>.<?= Code::Func
 )<?= Code::Delimiter ?>
 </code></pre>
         <p>
-            The server side facade will register a custom autoloader callback, enabling direct references to module classes.
+            The server side facade will register a custom autoloader for the <code class="Inline">Modules</code>-namespace,
+            enabling direct references to other modules.<br>
+            The facade will be automatically loaded in the callstack of the execution of a typical command,
+            however it is recommended to reference modules over the facade instead of their fully qualified classname.
         </p>
-        <h5>
-            Example of an event listener file
-        </h5>
         <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
+\vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("ModuleA") ?>()<?= Code::Delimiter ?>
 
+\Modules\<?= Code::Class("ModuleB") ?>::<?= Code::Function("SomeMethod") ?>()<?= Code::Delimiter ?>
 
-<?= Code::Use ?> \vDesk\Archive\Element\<?= Code::Class("Deleted") ?><?= Code::Delimiter ?>
-
-
-<?= Code::Return ?> [
-    <?= Code::Class("Deleted") ?>::<?= Code::Const("Name") ?>,
-    <?= Code::Keyword("fn") ?>(<?= Code::Class("Deleted") ?> <?= Code::Variable("\$Event") ?>) => <?= Code::Class("Log") ?>::<?= Code::Function("Info") ?>(<?= Code::String("\"Element '") ?>{<?= Code::Variable("\$Event") ?>-><?= Code::Field("Element") ?>-><?= Code::Field("Name") ?>}<?= Code::String("' has been deleted\"") ?>)
-]<?= Code::Delimiter ?>
 </code></pre>
     </section>
     <section id="Download">
