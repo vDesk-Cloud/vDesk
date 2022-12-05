@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Pages\Documentation;
+namespace Pages\Documentation\Packages;
 
 use vDesk\Pages\Page;
 
@@ -23,12 +23,12 @@ class Packages extends Page {
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Documentation/Packages"],
+        ?iterable $Templates = ["Documentation/Packages/Packages"],
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         public string $Name = "Packages",
         public string $Label = "Packages",
-        public string $Title = "Collection of documentation of vDesk's packages",
+        public string $Title = "Documentation of vDesk's package-, update- and setup-formats",
         public string $Description = "This document describes how to create and install custom packages, updates and setups",
         public array $Tags = [""]
     ) {

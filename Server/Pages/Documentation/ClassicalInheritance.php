@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Pages\Documentation\Client;
+namespace Pages\Documentation;
 
 use vDesk\Pages\Cached\Page;
 
@@ -23,7 +23,7 @@ class ClassicalInheritance extends Page {
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Documentation/Client/ClassicalInheritance"],
+        ?iterable $Templates = ["Documentation/ClassicalInheritance"],
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         public string $Name = "ClassicalInheritance",

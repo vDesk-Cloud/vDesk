@@ -21,7 +21,6 @@ class Index extends Documentation {
      * @param null|iterable       $Stylesheets Initializes the Index Page with the specified Collection of stylesheets.
      * @param null|iterable       $Scripts     Initializes the Index Page with the specified Collection of scripts.
      * @param \vDesk\Pages\Page[] $Pages       Initializes the Index Page with the specified set of Pages.
-     * @param \vDesk\Pages\Page[] $Client      Initializes the Index Page with the specified set of Client Documentation Pages.
      * @param \vDesk\Pages\Page[] $Packages    Initializes the Index Page with the specified set of Packages Documentation Pages.
      */
     public function __construct(
@@ -30,7 +29,6 @@ class Index extends Documentation {
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
         array $Pages = [],
-        public array $Client = [],
         public array $Packages = [],
         public string $Name = "Index",
         public string $Label = "Operating systems",

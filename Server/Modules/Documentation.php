@@ -31,7 +31,7 @@ class Documentation extends Module {
     public static function Index(): \Pages\Documentation {
         return new \Pages\Documentation(
             Pages: static::GetPages(),
-            Content: new \Pages\Documentation\Index(Pages: static::GetPages(), Client: static::ClientPages(), Packages: static::Packages())
+            Content: new \Pages\Documentation\Index(Pages: static::GetPages(), Packages: static::Packages())
         );
     }
 

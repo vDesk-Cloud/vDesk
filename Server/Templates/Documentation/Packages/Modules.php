@@ -3,7 +3,7 @@ use vDesk\Pages\Functions; ?>
 <article>
     <header>
         <h2>
-            Archive
+            Modules
         </h2>
         <p>
             This document describes the logic behind the global event system and how to dispatch and listen on events.<br>
@@ -12,28 +12,25 @@ use vDesk\Pages\Functions; ?>
 
         <h3>Overview</h3>
         <ul class="Topics">
-            <li><a href="#Archive">Introduction</a></li>
-            <li><a href="#Upload">Uploading files to the archive</a></li>
             <li>
-                <a href="#View">Viewing files</a>
+                <a href="#Modules">Modules</a>
                 <ul class="Topics">
-                    <li><a href="#CustomViewer">Custom file viewers</a></li>
+                    <li><a href="#Client">Client</a></li>
+                    <li><a href="#Server">Server</a></li>
+                    <li><a href="#Invocation">Invoking modules</a></li>
                 </ul>
             </li>
-            <li>
-                <a href="#Edit">Editing files</a>
-                <ul class="Topics">
-                    <li><a href="#CustomEditor">Custom file editors</a></li>
-                </ul>
-            </li>
-            <li><a href="#Download">Downloading files</a></li>
-            <li><a href="#ACL">Managing access of files and folders</a></li>
-            <li><a href="#Events">Events dispatched by the archive</a></li>
-            <li><a href="#Events">Managing access of files and folders</a></li>
+            <li><a href="#Commands">Commands</a></li>
+            <li><a href="#Parameters">Commands</a></li>
         </ul>
     </header>
-    <section id="Archive">
-        <h3>Archive</h3>
+    <section id="Modules">
+        <h3>Modules</h3>
+        <p>
+            The Modules package builds the foundation of vDesk's business logic.<br>
+            It implements interfaces for client-/server-modules and provides a powerful type-safe parameter API.<br>
+            Modules are what's called "Controllers" in MVC-frameworks.
+        </p>
         <p>
             Events are small PHP classes consisting at least of a public "Name"-constant and a protected "TimeStamp"-property and have to inherit from the abstract
             <code class="Inline">\vDesk\Events\<?= Code::Class("Event") ?></code>-class to be recognized as such.<br>
@@ -48,31 +45,11 @@ use vDesk\Pages\Functions; ?>
             <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Archive.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
         </aside>
     </section>
-    <section id="Upload">
-        <h4>Uploading files to the archive</h4>
+    <section id="Client">
+        <h4>Client</h4>
         <p>
-            The execution of several commands causes certain global events to be triggered;
-            for example: the deletion of an Entry from the Archive will trigger a global <code class="Inline">vDesk.Archive.Element.Deleted</code>-event.<br>
-        </p>
-        <p>
-            Global events are being identified by inheriting from the abstract <code class="Inline">\vDesk\Events\<?= Code::Class("PublicEvent") ?></code>- or
-            <code class="Inline">\vDesk\Events\<?= Code::Class("PrivateEvent") ?></code>-classes, which share the <code class="Inline">\vDesk\Events\<?= Code::Class("GlobalEvent") ?></code>-class as a parent
-            that acts like a database model with reduced functionality following the "dataview" pattern defined by the <code class="Inline">\vDesk\Data\<?= Code::Class("IDataView") ?></code>-interface.
-        </p>
-        <p>
-            When scheduled, the event system will serialize the return value of their <code class="Inline"><?= Code::Function("ToDataView") ?>()</code>-method in the database,
-            which then can be received afterwards through the <code class="Inline">\Modules\<?= Code::Class("Events") ?>::<?= Code::Function("Stream") ?>()</code>-method
-            that returns a generator that periodically scans the database for new events.<br>
-            Public events are stored in the <code class="Inline"><?= Code::Const("Events") ?>.<?= Code::Field("Public") ?></code>-table,
-            while private events are stored in the <code class="Inline"><?= Code::Const("Events") ?>.<?= Code::Field("Private") ?></code>-table.
-        </p>
-        <p>
-            The scan interval is stored in the global  <code class="Inline"><?= Code::Class("Settings") ?>::<?= Code::Variable("\$Remote") ?>[<?= Code::String("\"Events\"") ?>][<?= Code::String("\"Interval\"") ?>]</code>-setting.<br>
-            Public events will be deleted at the moment of querying minus the configured interval, while private events will be deleted after they have been sent to the receiver.
-        </p>
-        <p>
-            Global events can be received on the client by registering an event listener on the <code class="Inline">vDesk.Events.<?= Code::Class("Stream") ?></code>-class,
-            which acts as a facade to its underlying <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventSource">EventSource</a>.
+            Client Modules are javascript files located in <code class="Inline">Modules</code>-namespace
+            and must implement either the <code class="Inline">vDesk.Modules.<?= Code::Class("IModule") ?></code>-interface
         </p>
         <pre><code><?= Code\Language::JS ?><?= Code::Class("vDesk") ?>.Events.<?= Code::Class("Stream") ?>.<?= Code::Function("addEventListener") ?>(<?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>, <?= Code::Variable("Event") ?> => <?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Variable("Event") ?>.<?= Code::Field("data") ?>), <?= Code::Bool("false") ?>)<?= Code::Delimiter ?></code></pre>
         <h5>Example class of a public Event</h5>
@@ -175,12 +152,11 @@ use vDesk\Pages\Functions; ?>
     
 }</code></pre>
     </section>
-    <section id="EventListeners">
-        <h3>Event listeners</h3>
+    <section id="Server">
+        <h4>Server</h4>
         <p>
-            The event system supports multiple ways of registering event listeners.
-            These are directly attached listeners via passing an event name and a closure to the <code class="Inline"><?= Code::Class("Events") ?>::<?= Code::Function("AddEventListener") ?>()</code>-method
-            and file-based event listeners, which will be loaded and executed upon schedule.
+            Server modules are PHP files located in the <code class="Inline">Modules</code>-namespace
+            and must inherit from the <code class="Inline">\vDesk\Modules\<?= Code::Class("Module") ?></code>-class
         </p>
         <h5>
             Example of registering an event listener
@@ -217,6 +193,42 @@ use vDesk\Pages\Functions; ?>
 ]<?= Code::Delimiter ?>
 </code></pre>
     </section>
+    <section id="Invocation">
+        <h4>Invocation</h4>
+        <p>
+            The modules package provides several facades for running modules
+        </p>
+        <pre><code><?= Code\Language::JS ?>
+vDesk.<?= Code::Class("Modules") ?>.<?= Code::Class("Archive") ?>.<?= Code::Function("GoToID") ?>()<?= Code::Delimiter ?>
+</code></pre>
+        <h5>
+           Server
+        </h5>
+        <pre><code><?= Code\Language::PHP ?>
+\vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("Events") ?>()::<?= Code::Function("AddEventListener") ?>(
+    <?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>,
+    <?= Code::Keyword("fn") ?>(\vDesk\Events\<?= Code::Class("Event") ?> <?= Code::Variable("\$Event") ?>) => <?= Code::Class("Log") ?>::<?= Code::Function("Info") ?>(<?= Code::String("\"Element '") ?>{<?= Code::Variable("\$Event") ?>-><?= Code::Field("Element") ?>-><?= Code::Field("Name") ?>}<?= Code::String("' has been deleted\"") ?>)
+)<?= Code::Delimiter ?>
+</code></pre>
+        <p>
+            The server side facade will register a custom autoloader callback, enabling direct references to module classes.
+        </p>
+        <h5>
+            Example of an event listener file
+        </h5>
+        <pre><code><?= Code\Language::PHP ?>
+<?= Code::PHP ?>
+
+
+<?= Code::Use ?> \vDesk\Archive\Element\<?= Code::Class("Deleted") ?><?= Code::Delimiter ?>
+
+
+<?= Code::Return ?> [
+    <?= Code::Class("Deleted") ?>::<?= Code::Const("Name") ?>,
+    <?= Code::Keyword("fn") ?>(<?= Code::Class("Deleted") ?> <?= Code::Variable("\$Event") ?>) => <?= Code::Class("Log") ?>::<?= Code::Function("Info") ?>(<?= Code::String("\"Element '") ?>{<?= Code::Variable("\$Event") ?>-><?= Code::Field("Element") ?>-><?= Code::Field("Name") ?>}<?= Code::String("' has been deleted\"") ?>)
+]<?= Code::Delimiter ?>
+</code></pre>
+    </section>
     <section id="Download">
         <h4>Downloading files</h4>
         <p>
@@ -232,6 +244,49 @@ use vDesk\Pages\Functions; ?>
                 This may limit the maximum size of downloads to the browser's settings or available RAM on systems without swap files for example.
             </p>
         </aside>
+        <p>
+
+        </p>
+    </section>
+    <section id="Commands">
+        <h4>Commands</h4>
+        <p>
+            Commands are database mappings to methods of modules and their parameters.<br>
+            They allow the system a type-safe communication and prevent useless requests by mirroring parameter validation to the client.
+        </p>
+        <pre><code><?= Code\Language::PHP ?>
+<?= Code::Variable("\$Module") ?> = \vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("CustomModule") ?>()<?= Code::Delimiter ?>
+
+<?= Code::Variable("\$Module") ?>-><?= Code::Field("Commands") ?>-><?= Code::Function("Add") ?>(
+    <?= Code::New ?> \vDesk\Modules\Module\<?= Code::Class("Command") ?>(
+        <?= Code::Int("Name") ?>: <?= Code::String("\"CustomCommand\"") ?>,
+        <?= Code::Int("Parameters") ?>: <?= Code::New ?> \vDesk\Struct\Collections\Observable\<?= Code::Class("Collection") ?>([
+            <?= Code::New ?> \vDesk\Modules\Module\Command\<?= Code::Class("Parameter") ?>(
+                <?= Code::Int("Name") ?>: <?= Code::String("\"CustomParameter\"") ?>,
+                <?= Code::Int("Type") ?>: \vDesk\Struct\<?= Code::Class("Type") ?>::<?= Code::Const("String") ?>,
+                <?= Code::Int("Optional") ?>: <?= Code::False ?>,
+                <?= Code::Int("Nullable") ?>: <?= Code::True ?>,
+            )
+        ]),
+        <?= Code::Int("RequireTicket") ?>: <?= Code::True ?>,
+        <?= Code::Int("Binary") ?>: <?= Code::False ?>
+
+    )
+)<?= Code::Delimiter ?>
+
+<?= Code::Variable("\$Module") ?>-><?= Code::Function("Save") ?>()<?= Code::Delimiter ?>
+</code></pre>
+
+
+        <pre><code><?= Code\Language::PHP ?>
+\vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("Events") ?>()::<?= Code::Function("AddEventListener") ?>(
+    <?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>,
+    <?= Code::Keyword("fn") ?>(\vDesk\Events\<?= Code::Class("Event") ?> <?= Code::Variable("\$Event") ?>) => <?= Code::Class("Log") ?>::<?= Code::Function("Info") ?>(<?= Code::String("\"Element '") ?>{<?= Code::Variable("\$Event") ?>-><?= Code::Field("Element") ?>-><?= Code::Field("Name") ?>}<?= Code::String("' has been deleted\"") ?>)
+)<?= Code::Delimiter ?>
+</code></pre>
+            <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
+                <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Save.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
+            </aside>
         <p>
 
         </p>

@@ -30,7 +30,7 @@ class Page extends \vDesk\Pages\Page {
         public array $Pages = [],
         public array $Packages = [],
         public ?\vDesk\Pages\Page $Package = null,
-        public string $Name = "Packages",
+        public string $Name = "PackagesDocumentation",
         public string $Label = "Packages documentation",
         public string $Title = "vDesk - Packages documentation",
         public string $Description = "Packages documentation"

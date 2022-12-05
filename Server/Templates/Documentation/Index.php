@@ -20,17 +20,7 @@ use vDesk\Pages\Functions;
         <?php foreach($Page->Pages as $Page): ?>
             <?php if($Page->Name !== "Index"): ?>
                 <li>
-                    <a href="<?= Functions::URL("Documentation", "Topic", $Page->Name) ?>"><?= $Page->Description ?></a>
-                </li>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    </ul>
-    <h4>Client topics</h4>
-    <ul>
-        <?php foreach(\vDesk\Modules::Documentation()::ClientPages() as $Topic): ?>
-            <?php if($Topic->Name !== "Index"): ?>
-                <li>
-                    <a href="<?= Functions::URL("Documentation", "Category", "Client", "Topic", $Topic->Name) ?>"><?= $Topic->Description ?></a>
+                    <a href="<?= Functions::URL("Documentation", "Topic", $Page->Name) ?>"><?= $Page->Label ?></a>
                 </li>
             <?php endif; ?>
         <?php endforeach; ?>

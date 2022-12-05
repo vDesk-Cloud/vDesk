@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Pages\Documentation\Client;
+namespace Pages\Documentation;
 
 use vDesk\Pages\Page;
 
@@ -23,7 +23,7 @@ class Controls extends Page {
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Documentation/Client/Controls"],
+        ?iterable $Templates = ["Documentation/Controls"],
         ?iterable $Stylesheets = [
             "../../Client/Design/vDesk",
             "../../Client/Design/vDesk/Controls/GroupBox",

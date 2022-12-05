@@ -285,7 +285,7 @@ use vDesk\Pages\Functions;
     }
 
     <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("Schedule") ?>(<?= Code::Class("Task") ?> <?= Code::Variable("\$Task") ?>): <?= Code::Keyword("void") ?> {
-        <?= Code::Variable("\$this") ?>-><?= Code::Function("Start") ?>(<?= Code::Variable("\$Task") ?>)<?= Code::Delimiter ?>
+        <?= Code::Variable("\$this") ?>-><?= Code::Function("Add") ?>(<?= Code::Variable("\$Task") ?>)<?= Code::Delimiter ?>
 
         <?= Code::Variable("\$this") ?>-><?= Code::Field("Running") ?>-><?= Code::Function("Enqueue") ?>(<?= Code::Variable("\$Task") ?>)<?= Code::Delimiter ?>
 

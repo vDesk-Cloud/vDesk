@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace Pages\Documentation;
+namespace Pages\Documentation\Packages;
 
 use vDesk\Pages\Page;
 
 /**
- * Packages Documentation
+ * Updates Package Documentation
  *
  * @package vDesk\Documentation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
-class Packages extends Page {
+class Updates extends Page {
     
     /**
      * Initializes a new instance of the Packages Page.
@@ -23,13 +23,16 @@ class Packages extends Page {
      */
     public function __construct(
         ?iterable $Values = [],
-        ?iterable $Templates = ["Documentation/Packages"],
+        ?iterable $Templates = ["Documentation/Packages/Updates"],
         ?iterable $Stylesheets = [],
         ?iterable $Scripts = [],
-        public string $Name = "Packages",
-        public string $Label = "Packages",
-        public string $Title = "Collection of documentation of vDesk's packages",
-        public string $Description = "This document describes how to create and install custom packages, updates and setups",
+        public string $Name = "Updates",
+        public string $Label = "Updates",
+        public string $Title = "Updates package documentation",
+        public string $Description = <<<Description
+This document explains the update system of vDesk.
+It contains technical specifications on installable updates and instructions on how to check for and install updates as well as querying custom update servers.
+Description,
         public array $Tags = [""]
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);

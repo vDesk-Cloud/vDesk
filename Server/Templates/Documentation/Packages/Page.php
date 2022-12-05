@@ -1,11 +1,11 @@
 <?php
 use vDesk\Pages\Functions;
-/** @var \Pages\Documentation\Tutorials $Page */
+/** @var \Pages\Documentation\Packages $Page */
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title><?= $Page->Package?->Title ?? "Documentation of server related topics" ?></title>
+    <title><?= $Page->Package?->Title ?? "Documentation of vDesk's packages" ?></title>
     <link rel="icon" href="<?= Functions::Image("favicon.ico") ?>" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <?php foreach($Page->Stylesheets as $Stylesheet): ?>
@@ -42,7 +42,7 @@ use vDesk\Pages\Functions;
             </nav>
             <nav class="Tutorials">
 <?php foreach($Page->Packages as $Package): ?>
-<?php if($Package->Name !== "Index" && $Package->Name !== "Packages"): ?>
+<?php if($Package->Name !== "Index" && $Package->Name !== "PackagesDocumentation"): ?>
                 <a class="Tutorial <?= $Package->Name === $Page->Package->Name ? "Current" : "" ?>"
                    href="<?= Functions::URL("Documentation", "Category", "Packages", "Package", $Package->Name) ?>">
                     <?= $Package->Label ?>
