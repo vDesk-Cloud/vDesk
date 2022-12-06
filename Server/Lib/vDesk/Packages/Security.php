@@ -31,7 +31,7 @@ final class Security extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.1.1";
+    public const Version = "1.2.0";
 
     /**
      * The vendor of the Package.
@@ -276,12 +276,11 @@ final class Security extends Package implements IPackage {
                   ->Table(
                       "Security.GroupMemberships",
                       [
-                          "ID"    => ["Type" => Type::BigInt | Type::Unsigned, "Autoincrement" => true],
                           "Group" => ["Type" => Type::BigInt | Type::Unsigned],
                           "User"  => ["Type" => Type::BigInt | Type::Unsigned]
                       ],
                       [
-                          "Primary" => ["Fields" => ["ID", "Group", "User"]]
+                          "Primary" => ["Fields" => ["Group", "User"]]
                       ]
                   )
                   ->Execute();
