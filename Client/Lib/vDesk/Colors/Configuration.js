@@ -26,33 +26,67 @@ vDesk.Colors.Configuration = function Configuration() {
         }
     });
 
+
+    /**
+     * Eventhandler that listens on the 'click' event.
+     */
+    const OnUpdate = Event => {
+
+        vDesk.Colors.Apply(vDesk.Colors.Presets[Event.detail.value]);
+
+        Foreground.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].Foreground);
+        Background.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].Background);
+
+        BorderLight.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].BorderLight);
+        BorderDark.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].BorderDark);
+
+        Font.Value = vDesk.Colors.Presets[Event.detail.value].Font;
+        FontLight.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].FontLight);
+        FontDark.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].FontDark);
+        FontDisabled.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].FontDisabled);
+
+        ControlSelected.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].Control.Selected);
+        ControlHover.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].Control.Hover);
+        ControlPress.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].Control.Press);
+
+        ButtonSelected.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].Button.Selected);
+        ButtonHover.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].Button.Hover);
+        ButtonPress.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].Button.Press);
+        ButtonBackground.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].Button.Background);
+
+        TextBoxSelected.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].TextBox.Selected);
+        TextBoxError.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].TextBox.Error);
+        TextBoxDisabled.Value = Color.FromRGBAString(vDesk.Colors.Presets[Event.detail.value].TextBox.Disabled);
+
+    };
+
     /**
      * Eventhandler that listens on the 'click' event.
      */
     const OnClickResetButton = () => {
-        Foreground.Value = Color.FromRGBAString(vDesk.Colors.Default.Foreground);
-        Background.Value = Color.FromRGBAString(vDesk.Colors.Default.Background);
+        Foreground.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.Foreground);
+        Background.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.Background);
 
-        BorderLight.Value = Color.FromRGBAString(vDesk.Colors.Default.BorderLight);
-        BorderDark.Value = Color.FromRGBAString(vDesk.Colors.Default.BorderDark);
+        BorderLight.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.BorderLight);
+        BorderDark.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.BorderDark);
 
-        Font.Value = vDesk.Colors.Default.Font;
-        FontLight.Value = Color.FromRGBAString(vDesk.Colors.Default.FontLight);
-        FontDark.Value = Color.FromRGBAString(vDesk.Colors.Default.FontDark);
-        FontDisabled.Value = Color.FromRGBAString(vDesk.Colors.Default.FontDisabled);
+        Font.Value = vDesk.Colors.Presets.Light.Font;
+        FontLight.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.FontLight);
+        FontDark.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.FontDark);
+        FontDisabled.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.FontDisabled);
 
-        ControlSelected.Value = Color.FromRGBAString(vDesk.Colors.Default.Control.Selected);
-        ControlHover.Value = Color.FromRGBAString(vDesk.Colors.Default.Control.Hover);
-        ControlPress.Value = Color.FromRGBAString(vDesk.Colors.Default.Control.Press);
+        ControlSelected.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.Control.Selected);
+        ControlHover.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.Control.Hover);
+        ControlPress.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.Control.Press);
 
-        ButtonSelected.Value = Color.FromRGBAString(vDesk.Colors.Default.Button.Selected);
-        ButtonHover.Value = Color.FromRGBAString(vDesk.Colors.Default.Button.Hover);
-        ButtonPress.Value = Color.FromRGBAString(vDesk.Colors.Default.Button.Press);
-        ButtonBackground.Value = Color.FromRGBAString(vDesk.Colors.Default.Button.Background);
+        ButtonSelected.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.Button.Selected);
+        ButtonHover.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.Button.Hover);
+        ButtonPress.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.Button.Press);
+        ButtonBackground.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.Button.Background);
 
-        TextBoxSelected.Value = Color.FromRGBAString(vDesk.Colors.Default.TextBox.Selected);
-        TextBoxError.Value = Color.FromRGBAString(vDesk.Colors.Default.TextBox.Error);
-        TextBoxDisabled.Value = Color.FromRGBAString(vDesk.Colors.Default.TextBox.Disabled);
+        TextBoxSelected.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.TextBox.Selected);
+        TextBoxError.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.TextBox.Error);
+        TextBoxDisabled.Value = Color.FromRGBAString(vDesk.Colors.Presets.Light.TextBox.Disabled);
 
         vDesk.Colors.Reset();
     };
@@ -108,6 +142,19 @@ vDesk.Colors.Configuration = function Configuration() {
      * The foreground color EditControl of the Visual plugin.
      * @type {vDesk.Controls.EditControl}
      */
+    const Presets = new vDesk.Controls.EditControl(
+        `Presets:`,
+        null,
+        Extension.Type.Enum,
+        null,
+        ["Light", "Dark", "Evening", "Pastel", "H4ck3r"]
+    );
+    Presets.Control.addEventListener("update", OnUpdate);
+
+    /**
+     * The foreground color EditControl of the Visual plugin.
+     * @type {vDesk.Controls.EditControl}
+     */
     const Foreground = new vDesk.Controls.EditControl(
         `${vDesk.Locale.Colors.Foreground}:`,
         null,
@@ -155,6 +202,7 @@ vDesk.Colors.Configuration = function Configuration() {
     const General = new vDesk.Controls.GroupBox(
         vDesk.Locale.Colors.Colors,
         [
+            Presets.Control,
             Foreground.Control,
             Background.Control,
             BorderLight.Control,
@@ -335,7 +383,7 @@ vDesk.Colors.Configuration = function Configuration() {
      * @type {vDesk.Controls.GroupBox}
      */
     const Buttons = new vDesk.Controls.GroupBox(
-        vDesk.Locale.Colors.Control,
+        vDesk.Locale.Colors.Button,
         [
             ButtonSelected.Control,
             ButtonHover.Control,

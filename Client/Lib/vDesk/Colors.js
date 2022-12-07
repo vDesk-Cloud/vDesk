@@ -264,24 +264,24 @@ vDesk.Colors = (function Color() {
      */
     const Load = function() {
         //Set color.
-        vDesk.Colors.Foreground = vDesk.Configuration.Settings?.Local?.Client?.ForegroundColor ?? vDesk.Colors.Default.Foreground;
-        vDesk.Colors.Background = vDesk.Configuration.Settings?.Local?.Client?.BackgroundColor ?? vDesk.Colors.Default.Background;
-        vDesk.Colors.BorderLight = vDesk.Configuration.Settings?.Local?.Client?.BorderLightColor ?? vDesk.Colors.Default.BorderLight;
-        vDesk.Colors.BorderDark = vDesk.Configuration.Settings?.Local?.Client?.BorderDarkColor ?? vDesk.Colors.Default.BorderDark;
-        vDesk.Colors.Font = vDesk.Configuration.Settings?.Local?.Client?.Font ?? vDesk.Colors.Default.Font;
-        vDesk.Colors.FontLight = vDesk.Configuration.Settings?.Local?.Client?.FontLightColor ?? vDesk.Colors.Default.FontLight;
-        vDesk.Colors.FontDark = vDesk.Configuration.Settings?.Local?.Client?.FontDarkColor ?? vDesk.Colors.Default.FontDark;
-        vDesk.Colors.FontDisabled = vDesk.Configuration.Settings?.Local?.Client?.FontDisabledColor ?? vDesk.Colors.Default.FontDisabled;
-        vDesk.Colors.Control.Selected = vDesk.Configuration.Settings?.Local?.Client?.ControlSelectedColor ?? vDesk.Colors.Default.Control.Selected;
-        vDesk.Colors.Control.Hover = vDesk.Configuration.Settings?.Local?.Client?.ControlHoverColor ?? vDesk.Colors.Default.Control.Hover;
-        vDesk.Colors.Control.Press = vDesk.Configuration.Settings?.Local?.Client?.ControlPressColor ?? vDesk.Colors.Default.Control.Press;
-        vDesk.Colors.Button.Selected = vDesk.Configuration.Settings?.Local?.Client?.ButtonSelectedColor ?? vDesk.Colors.Default.Button.Selected;
-        vDesk.Colors.Button.Hover = vDesk.Configuration.Settings?.Local?.Client?.ButtonHoverColor ?? vDesk.Colors.Default.Button.Hover;
-        vDesk.Colors.Button.Press = vDesk.Configuration.Settings?.Local?.Client?.ButtonPressColor ?? vDesk.Colors.Default.Button.Press;
-        vDesk.Colors.Button.Background = vDesk.Configuration.Settings?.Local?.Client?.ButtonBackgroundColor ?? vDesk.Colors.Default.Button.Background;
-        vDesk.Colors.TextBox.Selected = vDesk.Configuration.Settings?.Local?.Client?.TextBoxSelectedColor ?? vDesk.Colors.Default.TextBox.Selected;
-        vDesk.Colors.TextBox.Error = vDesk.Configuration.Settings?.Local?.Client?.TextBoxErrorColor ?? vDesk.Colors.Default.TextBox.Error;
-        vDesk.Colors.TextBox.Disabled = vDesk.Configuration.Settings?.Local?.Client?.TextBoxDisabledColor ?? vDesk.Colors.Default.TextBox.Disabled;
+        vDesk.Colors.Foreground = vDesk.Configuration.Settings?.Local?.Client?.ForegroundColor ?? vDesk.Colors.Presets.Light.Foreground;
+        vDesk.Colors.Background = vDesk.Configuration.Settings?.Local?.Client?.BackgroundColor ?? vDesk.Colors.Presets.Light.Background;
+        vDesk.Colors.BorderLight = vDesk.Configuration.Settings?.Local?.Client?.BorderLightColor ?? vDesk.Colors.Presets.Light.BorderLight;
+        vDesk.Colors.BorderDark = vDesk.Configuration.Settings?.Local?.Client?.BorderDarkColor ?? vDesk.Colors.Presets.Light.BorderDark;
+        vDesk.Colors.Font = vDesk.Configuration.Settings?.Local?.Client?.Font ?? vDesk.Colors.Presets.Light.Font;
+        vDesk.Colors.FontLight = vDesk.Configuration.Settings?.Local?.Client?.FontLightColor ?? vDesk.Colors.Presets.Light.FontLight;
+        vDesk.Colors.FontDark = vDesk.Configuration.Settings?.Local?.Client?.FontDarkColor ?? vDesk.Colors.Presets.Light.FontDark;
+        vDesk.Colors.FontDisabled = vDesk.Configuration.Settings?.Local?.Client?.FontDisabledColor ?? vDesk.Colors.Presets.Light.FontDisabled;
+        vDesk.Colors.Control.Selected = vDesk.Configuration.Settings?.Local?.Client?.ControlSelectedColor ?? vDesk.Colors.Presets.Light.Control.Selected;
+        vDesk.Colors.Control.Hover = vDesk.Configuration.Settings?.Local?.Client?.ControlHoverColor ?? vDesk.Colors.Presets.Light.Control.Hover;
+        vDesk.Colors.Control.Press = vDesk.Configuration.Settings?.Local?.Client?.ControlPressColor ?? vDesk.Colors.Presets.Light.Control.Press;
+        vDesk.Colors.Button.Selected = vDesk.Configuration.Settings?.Local?.Client?.ButtonSelectedColor ?? vDesk.Colors.Presets.Light.Button.Selected;
+        vDesk.Colors.Button.Hover = vDesk.Configuration.Settings?.Local?.Client?.ButtonHoverColor ?? vDesk.Colors.Presets.Light.Button.Hover;
+        vDesk.Colors.Button.Press = vDesk.Configuration.Settings?.Local?.Client?.ButtonPressColor ?? vDesk.Colors.Presets.Light.Button.Press;
+        vDesk.Colors.Button.Background = vDesk.Configuration.Settings?.Local?.Client?.ButtonBackgroundColor ?? vDesk.Colors.Presets.Light.Button.Background;
+        vDesk.Colors.TextBox.Selected = vDesk.Configuration.Settings?.Local?.Client?.TextBoxSelectedColor ?? vDesk.Colors.Presets.Light.TextBox.Selected;
+        vDesk.Colors.TextBox.Error = vDesk.Configuration.Settings?.Local?.Client?.TextBoxErrorColor ?? vDesk.Colors.Presets.Light.TextBox.Error;
+        vDesk.Colors.TextBox.Disabled = vDesk.Configuration.Settings?.Local?.Client?.TextBoxDisabledColor ?? vDesk.Colors.Presets.Light.TextBox.Disabled;
 
         CreateRootStyle();
     };
@@ -320,25 +320,58 @@ vDesk.Colors = (function Color() {
      */
     const Reset = function() {
 
-        vDesk.Colors.Foreground = vDesk.Configuration.Settings.Local.Client.ForegroundColor = vDesk.Colors.Default.Foreground;
-        vDesk.Colors.Background = vDesk.Configuration.Settings.Local.Client.BackgroundColor = vDesk.Colors.Default.Background;
-        vDesk.Colors.BorderLight = vDesk.Configuration.Settings.Local.Client.BorderLightColor = vDesk.Colors.Default.BorderLight;
-        vDesk.Colors.BorderDark = vDesk.Configuration.Settings.Local.Client.BorderDarkColor = vDesk.Colors.Default.BorderDark;
-        vDesk.Colors.Font = vDesk.Configuration.Settings.Local.Client.Font = vDesk.Colors.Default.Font;
-        vDesk.Colors.FontLight = vDesk.Configuration.Settings.Local.Client.FontLightColor = vDesk.Colors.Default.FontLight;
-        vDesk.Colors.FontDark = vDesk.Configuration.Settings.Local.Client.FontDarkColor = vDesk.Colors.Default.FontDark;
-        vDesk.Colors.FontDisabled = vDesk.Configuration.Settings.Local.Client.FontDisabledColor = vDesk.Colors.Default.FontDisabled;
-        vDesk.Colors.Control.Selected = vDesk.Configuration.Settings.Local.Client.ControlSelectedColor = vDesk.Colors.Default.Control.Selected;
-        vDesk.Colors.Control.Hover = vDesk.Configuration.Settings.Local.Client.ControlHoverColor = vDesk.Colors.Default.Control.Hover;
-        vDesk.Colors.Control.Press = vDesk.Configuration.Settings.Local.Client.ControlPressColor = vDesk.Colors.Default.Control.Press;
-        vDesk.Colors.Button.Selected = vDesk.Configuration.Settings.Local.Client.ButtonSelectedColor = vDesk.Colors.Default.Button.Selected;
-        vDesk.Colors.Button.Hover = vDesk.Configuration.Settings.Local.Client.ButtonHoverColor = vDesk.Colors.Default.Button.Hover;
-        vDesk.Colors.Button.Press = vDesk.Configuration.Settings.Local.Client.ButtonPressColor = vDesk.Colors.Default.Button.Press;
-        vDesk.Colors.Button.Background = vDesk.Configuration.Settings.Local.Client.ButtonBackgroundColor = vDesk.Colors.Default.Button.Background;
-        vDesk.Colors.TextBox.Selected = vDesk.Configuration.Settings.Local.Client.TextBoxSelectedColor = vDesk.Colors.Default.TextBox.Selected;
-        vDesk.Colors.TextBox.Error = vDesk.Configuration.Settings.Local.Client.TextBoxErrorColor = vDesk.Colors.Default.TextBox.Error;
-        vDesk.Colors.TextBox.Disabled = vDesk.Configuration.Settings.Local.Client.TextBoxDisabledColor = vDesk.Colors.Default.TextBox.Disabled;
+        vDesk.Colors.Foreground = vDesk.Configuration.Settings.Local.Client.ForegroundColor = vDesk.Colors.Presets.Light.Foreground;
+        vDesk.Colors.Background = vDesk.Configuration.Settings.Local.Client.BackgroundColor = vDesk.Colors.Presets.Light.Background;
+        vDesk.Colors.BorderLight = vDesk.Configuration.Settings.Local.Client.BorderLightColor = vDesk.Colors.Presets.Light.BorderLight;
+        vDesk.Colors.BorderDark = vDesk.Configuration.Settings.Local.Client.BorderDarkColor = vDesk.Colors.Presets.Light.BorderDark;
+        vDesk.Colors.Font = vDesk.Configuration.Settings.Local.Client.Font = vDesk.Colors.Presets.Light.Font;
+        vDesk.Colors.FontLight = vDesk.Configuration.Settings.Local.Client.FontLightColor = vDesk.Colors.Presets.Light.FontLight;
+        vDesk.Colors.FontDark = vDesk.Configuration.Settings.Local.Client.FontDarkColor = vDesk.Colors.Presets.Light.FontDark;
+        vDesk.Colors.FontDisabled = vDesk.Configuration.Settings.Local.Client.FontDisabledColor = vDesk.Colors.Presets.Light.FontDisabled;
+        vDesk.Colors.Control.Selected = vDesk.Configuration.Settings.Local.Client.ControlSelectedColor = vDesk.Colors.Presets.Light.Control.Selected;
+        vDesk.Colors.Control.Hover = vDesk.Configuration.Settings.Local.Client.ControlHoverColor = vDesk.Colors.Presets.Light.Control.Hover;
+        vDesk.Colors.Control.Press = vDesk.Configuration.Settings.Local.Client.ControlPressColor = vDesk.Colors.Presets.Light.Control.Press;
+        vDesk.Colors.Button.Selected = vDesk.Configuration.Settings.Local.Client.ButtonSelectedColor = vDesk.Colors.Presets.Light.Button.Selected;
+        vDesk.Colors.Button.Hover = vDesk.Configuration.Settings.Local.Client.ButtonHoverColor = vDesk.Colors.Presets.Light.Button.Hover;
+        vDesk.Colors.Button.Press = vDesk.Configuration.Settings.Local.Client.ButtonPressColor = vDesk.Colors.Presets.Light.Button.Press;
+        vDesk.Colors.Button.Background = vDesk.Configuration.Settings.Local.Client.ButtonBackgroundColor = vDesk.Colors.Presets.Light.Button.Background;
+        vDesk.Colors.TextBox.Selected = vDesk.Configuration.Settings.Local.Client.TextBoxSelectedColor = vDesk.Colors.Presets.Light.TextBox.Selected;
+        vDesk.Colors.TextBox.Error = vDesk.Configuration.Settings.Local.Client.TextBoxErrorColor = vDesk.Colors.Presets.Light.TextBox.Error;
+        vDesk.Colors.TextBox.Disabled = vDesk.Configuration.Settings.Local.Client.TextBoxDisabledColor = vDesk.Colors.Presets.Light.TextBox.Disabled;
         vDesk.Configuration.Settings.Save();
+
+        CreateRootStyle();
+
+    };
+
+    /**
+     * Applies a color preset.
+     * @param {Object} Preset The color preset to apply.
+     */
+    const Apply = function(Preset) {
+
+        vDesk.Colors.Foreground = Preset?.Foreground ?? vDesk.Colors.Presets.Light.Foreground;
+        vDesk.Colors.Background = Preset?.Background ?? vDesk.Colors.Presets.Light.Background;
+        vDesk.Colors.BorderLight = Preset?.BorderLight ?? vDesk.Colors.Presets.Light.BorderLight;
+        vDesk.Colors.BorderDark = Preset?.BorderDark ?? vDesk.Colors.Presets.Light.BorderDark;
+
+        vDesk.Colors.Font = Preset?.Font ?? vDesk.Colors.Presets.Light.Font;
+        vDesk.Colors.FontLight = Preset?.FontLight ?? vDesk.Colors.Presets.Light.FontLight;
+        vDesk.Colors.FontDark = Preset?.FontDark ?? vDesk.Colors.Presets.Light.FontDark;
+        vDesk.Colors.FontDisabled = Preset?.FontDisabled ?? vDesk.Colors.Presets.Light.FontDisabled;
+
+        vDesk.Colors.Control.Selected = Preset?.Control?.Selected ?? vDesk.Colors.Presets.Light.Control.Selected;
+        vDesk.Colors.Control.Hover = Preset?.Control?.Hover ?? vDesk.Colors.Presets.Light.Control.Hover;
+        vDesk.Colors.Control.Press = Preset?.Control?.Press ?? vDesk.Colors.Presets.Light.Control.Press;
+
+        vDesk.Colors.Button.Selected = Preset?.Button?.Selected ?? vDesk.Colors.Presets.Light.Button.Selected;
+        vDesk.Colors.Button.Hover = Preset?.Button?.Hover ?? vDesk.Colors.Presets.Light.Button.Hover;
+        vDesk.Colors.Button.Press = Preset?.Button?.Press ?? vDesk.Colors.Presets.Light.Button.Press;
+        vDesk.Colors.Button.Background = Preset?.Button?.Background ?? vDesk.Colors.Presets.Light.Button.Background;
+
+        vDesk.Colors.TextBox.Selected = Preset?.TextBox?.Selected ?? vDesk.Colors.Presets.Light.TextBox.Selected;
+        vDesk.Colors.TextBox.Error = Preset?.TextBox?.Error ?? vDesk.Colors.Presets.Light.TextBox.Error;
+        vDesk.Colors.TextBox.Disabled = Preset?.TextBox?.Disabled ?? vDesk.Colors.Presets.Light.TextBox.Disabled;
 
         CreateRootStyle();
 
@@ -365,9 +398,10 @@ vDesk.Colors = (function Color() {
     document.head.appendChild(Root);
 
     return {
-        Load:    Load,
-        Save:    Save,
-        Reset:   Reset,
+        Load:  Load,
+        Save:  Save,
+        Reset: Reset,
+        Apply: Apply,
         get Foreground() {
             return ForegroundColor;
         },
@@ -523,34 +557,140 @@ vDesk.Colors = (function Color() {
             }
         },
         /**
-         * Enumeration of default colors.
+         * Enumeration of default color presets.
          * @readonly
          * @enum {String}
          */
-        Default: {
-            Foreground:   "rgba(42, 176, 237, 1)",
-            Background:   "rgba(255, 255, 255, 1)",
-            BorderLight:  "rgba(153, 153, 153, 1)",
-            BorderDark:   "rgba(0, 0, 0, 1)",
-            Font:         "Arial",
-            FontLight:    "rgba(255, 255, 255, 1)",
-            FontDark:     "rgba(0, 0, 0, 1)",
-            FontDisabled: "rgba(153, 153, 153, 1)",
-            Control:      {
-                Selected: "rgba(255, 207, 50, 1)",
-                Hover:    "rgba(42, 176, 237, 1)",
-                Press:    "rgba(70, 140, 207, 1)"
+        Presets: {
+            Light:   {
+                Foreground:   "rgba(42, 176, 237, 1)",
+                Background:   "rgba(255, 255, 255, 1)",
+                BorderLight:  "rgba(153, 153, 153, 1)",
+                BorderDark:   "rgba(0, 0, 0, 1)",
+                Font:         "Arial",
+                FontLight:    "rgba(255, 255, 255, 1)",
+                FontDark:     "rgba(0, 0, 0, 1)",
+                FontDisabled: "rgba(153, 153, 153, 1)",
+                Control:      {
+                    Selected: "rgba(255, 207, 50, 1)",
+                    Hover:    "rgba(42, 176, 237, 1)",
+                    Press:    "rgba(70, 140, 207, 1)"
+                },
+                Button:       {
+                    Selected:   "rgba(170, 170, 170, 1)",
+                    Hover:      "rgba(153, 153, 153, 1)",
+                    Press:      "rgba(119, 119, 119, 1)",
+                    Background: "rgba(219, 219, 219, 1)"
+                },
+                TextBox:      {
+                    Selected: "rgba(255, 207, 50, 1)",
+                    Error:    "rgba(255, 51, 0, 1)",
+                    Disabled: "rgba(153, 153, 153, 1)"
+                }
             },
-            Button:       {
-                Selected:   "rgba(170,170,170, 1)",
-                Hover:      "rgba(153, 153, 153, 1)",
-                Press:      "rgba(119, 119, 119, 1)",
-                Background: "rgba(219,219,219, 1)"
+            Dark:    {
+                Foreground:   "rgba(18, 143, 196, 1)",
+                Background:   "rgba(30, 30, 30, 1)",
+                BorderLight:  "rgba(150, 150, 150, 1)",
+                BorderDark:   "rgba(200, 200, 200, 1)",
+                Font:         "Arial",
+                FontLight:    "rgba(185, 210, 220, 1)",
+                FontDark:     "rgba(200, 200, 200, 1)",
+                FontDisabled: "rgba(150, 150, 150, 1)",
+                Control:      {
+                    Selected: "rgba(180, 120, 20, 1)",
+                    Hover:    "rgba(9, 79, 109, 1)",
+                    Press:    "rgba(24, 60, 93, 1)"
+                },
+                Button:       {
+                    Selected:   "rgba(170,170,170, 1)",
+                    Hover:      "rgba(153, 153, 153, 1)",
+                    Press:      "rgba(119, 119, 119, 1)",
+                    Background: "rgba(40, 40, 40, 1)"
+                },
+                TextBox:      {
+                    Selected: "rgba(255, 207, 50, 1)",
+                    Error:    "rgba(255, 51, 0, 1)",
+                    Disabled: "rgba(153, 153, 153, 1)"
+                }
             },
-            TextBox:      {
-                Selected: "rgba(255, 207, 50, 1)",
-                Error:    "rgba(255, 51, 0, 1)",
-                Disabled: "rgba(153, 153, 153, 1)"
+            Evening: {
+                Foreground:   "rgba(22, 156, 217, 1)",
+                Background:   "rgba(245, 230, 210, 1)",
+                BorderLight:  "rgba(130, 130, 130, 1)",
+                BorderDark:   "rgba(0, 0, 0, 1)",
+                Font:         "Arial",
+                FontLight:    "rgba(220, 220, 220, 1)",
+                FontDark:     "rgba(30, 30, 30, 1)",
+                FontDisabled: "rgba(130, 130, 130, 1)",
+                Control:      {
+                    Selected: "rgba(217, 195, 130, 1)",
+                    Hover:    "rgba(42, 156, 217, 1)",
+                    Press:    "rgba(70, 140, 207, 1)"
+                },
+                Button:       {
+                    Selected:   "rgba(170, 170, 170, 1)",
+                    Hover:      "rgba(153, 153, 153, 1)",
+                    Press:      "rgba(119, 119, 119, 1)",
+                    Background: "rgba(231, 225, 225, 1)"
+                },
+                TextBox:      {
+                    Selected: "rgba(255, 207, 50, 1)",
+                    Error:    "rgba(255, 51, 0, 1)",
+                    Disabled: "rgba(153, 153, 153, 1)"
+                }
+            },
+            Pastel:  {
+                Foreground:   "rgba(224, 187, 228, 1)",
+                Background:   "rgba(255, 223, 211, 1)",
+                BorderLight:  "rgba(177, 138, 188, 1)",
+                BorderDark:   "rgba(101, 55, 134, 1)",
+                Font:         "Arial",
+                FontLight:    "rgba(255, 255, 255, 1)",
+                FontDark:     "rgba(86, 4, 143, 1)",
+                FontDisabled: "rgba(224, 187, 228, 1)",
+                Control:      {
+                    Selected: "rgba(224, 187, 228, 1)",
+                    Hover:    "rgba(210, 145, 188, 1)",
+                    Press:    "rgba(149, 125, 173, 1)"
+                },
+                Button:       {
+                    Selected:   "rgba(170, 170, 170, 1)",
+                    Hover:      "rgba(153, 153, 153, 1)",
+                    Press:      "rgba(119, 119, 119, 1)",
+                    Background: "rgba(234, 205, 205, 1)"
+                },
+                TextBox:      {
+                    Selected: "rgba(255, 207, 50, 1)",
+                    Error:    "rgba(255, 51, 0, 1)",
+                    Disabled: "rgba(153, 153, 153, 1)"
+                }
+            },
+            H4ck3r:  {
+                Foreground:   "rgba(90, 250, 40, 0.7)",
+                Background:   "rgba(38, 38, 38, 0.5)",
+                BorderLight:  "rgba(80, 195, 80, 1)",
+                BorderDark:   "rgba(57, 140, 5, 1)",
+                Font:         "Courier New",
+                FontLight:    "rgba(0, 30, 0, 1)",
+                FontDark:     "rgba(116, 235, 25, 1)",
+                FontDisabled: "rgba(196, 253, 104, 1)",
+                Control:      {
+                    Selected: "rgba(46, 88, 14, 1)",
+                    Hover:    "rgba(85, 95, 0, 1)",
+                    Press:    "rgba(75, 95, 0, 1)"
+                },
+                Button:       {
+                    Selected:   "rgba(170,170,170, 1)",
+                    Hover:      "rgba(153, 153, 153, 1)",
+                    Press:      "rgba(119, 119, 119, 1)",
+                    Background: "rgba(71, 71, 71, 1)"
+                },
+                TextBox:      {
+                    Selected: "rgba(255, 207, 50, 1)",
+                    Error:    "rgba(255, 51, 0, 1)",
+                    Disabled: "rgba(153, 153, 153, 1)"
+                }
             }
         },
         Status:  "Loading Colorinformation"
