@@ -25,28 +25,28 @@ use vDesk\Struct\Type;
  * @author  Kerry Holz <DevelopmentHero@gmail.com>
  */
 class Group implements IModel {
-    
+
     use Properties;
-    
+
     /**
      * @var int The ID of the 'everyone' Group.
      */
     public const Everyone = 1;
-    
+
     /**
      *  Flag indicating whether the name of a non virtual Group has been changed.
      *
      * @var bool
      */
     private bool $NameChanged = false;
-    
+
     /**
      * The member Users of the Group.
      *
      * @var null|\vDesk\Security\Group\Users
      */
     private ?\vDesk\Security\Group\Users $Users = null;
-    
+
     /**
      * Initializes a new instance of the Group class.
      *
@@ -94,14 +94,14 @@ class Group implements IModel {
             ]
         ]);
     }
-    
+
     /**
      * @inheritDoc
      */
     public function ID(): ?int {
         return $this->ID;
     }
-    
+
     /**
      * Fills the Group with its values from the database.
      *
@@ -131,7 +131,7 @@ class Group implements IModel {
         }
         return $this;
     }
-    
+
     /**
      * Saves possible changes if a valid ID was supplied, or creates a new database-entry if none has been supplied.
      */
@@ -164,7 +164,7 @@ class Group implements IModel {
                                   ->ID();
         }
     }
-    
+
     /**
      * Deletes the Group.
      */
@@ -180,7 +180,7 @@ class Group implements IModel {
                       ->Execute();
         }
     }
-    
+
     /**
      * Creates a Group from a specified data view.
      *
@@ -195,7 +195,7 @@ class Group implements IModel {
             Permissions::FromDataView($DataView["Permissions"] ?? [])
         );
     }
-    
+
     /**
      * Creates a data view of the Group.
      *
@@ -205,12 +205,12 @@ class Group implements IModel {
      */
     public function ToDataView(bool $Reference = false): array {
         return $Reference
-            ? ["ID" => $this->ID]
+            ? ["ID" => $this->ID, "Name" => $this->Name]
             : [
                 "ID"          => $this->ID,
                 "Name"        => $this->Name,
                 "Permissions" => $this->Permissions->ToDataView()
             ];
     }
-    
+
 }

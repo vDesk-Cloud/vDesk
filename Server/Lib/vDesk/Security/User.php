@@ -8,7 +8,6 @@ use vDesk\DataProvider\MappedGetter;
 use vDesk\DataProvider\MappedSetter;
 use vDesk\Data\IDNullException;
 use vDesk\Data\IModel;
-use vDesk\Data\Model;
 use vDesk\Security\User\Permissions;
 use vDesk\Struct\Properties;
 use vDesk\Struct\Type;
@@ -25,66 +24,65 @@ use vDesk\Struct\Type;
  * @property boolean                     $Active           Gets or sets a value indicating whether the Users is active.
  * @property int                         $FailedLoginCount Gets or sets the amount of failed login-attempts of the User.
  * @property \vDesk\Security\User\Groups $Memberships      Gets or sets the {@link \vDesk\Security\Group}-memberships of the User.
- *           User.
  * @package vDesk\Security
- * @author  Kerry Holz <DevelopmentHero@gmail.com>
+ * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class User implements IModel {
-    
+
     use Properties;
-    
+
     /**
      * @var int The ID of the systemuser.
      */
     public const System = 1;
-    
+
     /**
      * Flag indicating whether the name of the User has been changed.
      *
      * @var bool
      */
     private bool $NameChanged = false;
-    
+
     /**
      * Flag indicating whether the locale of the User has been changed.
      *
      * @var bool
      */
     private bool $LocaleChanged = false;
-    
+
     /**
-     * Flag indicating whether the email of a non virtual User has been changed.
+     * Flag indicating whether the email of a non-virtual User has been changed.
      *
      * @var bool
      */
     private bool $EmailChanged = false;
-    
+
     /**
-     * Flag indicating whether the active state of a non virtual User has been changed.
+     * Flag indicating whether the active state of a non-virtual User has been changed.
      *
      * @var bool
      */
     private bool $ActiveChanged = false;
-    
+
     /**
-     * Flag indicating whether the amount of failed login attempts of a non virtual User has been changed.
+     * Flag indicating whether the amount of failed login attempts of a non-virtual User has been changed.
      *
      * @var bool
      */
     private bool $FailedLoginCountChanged = false;
-    
+
     /**
      * @var \vDesk\Security\User\Permissions
      */
     public Permissions $Permissions;
 
     /**
-     * The current logged in User.
+     * The current logged-in User.
      *
      * @var null|\vDesk\Security\User
      */
     public static ?User $Current = null;
-    
+
     /**
      * Initializes a new instance of the User class.
      *
@@ -99,17 +97,17 @@ class User implements IModel {
      * @param string|null                      $Ticket           Initializes the User with the specified session ticket.
      */
     public function __construct(
-       protected ?int $ID = null,
-       protected ?string $Name = null,
-       protected ?string $Locale = null,
-       protected ?string $Password = null,
-       protected ?string $Email = null,
-       protected ?bool $Active = null,
-       protected ?int $FailedLoginCount = null,
-       protected ?\vDesk\Security\User\Groups $Memberships = null,
-       public ?string $Ticket = null
+        protected ?int                         $ID = null,
+        protected ?string                      $Name = null,
+        protected ?string                      $Locale = null,
+        protected ?string                      $Password = null,
+        protected ?string                      $Email = null,
+        protected ?bool                        $Active = null,
+        protected ?int                         $FailedLoginCount = null,
+        protected ?\vDesk\Security\User\Groups $Memberships = null,
+        public ?string                         $Ticket = null
     ) {
-        $this->Permissions      = new Permissions($this);
+        $this->Permissions = new Permissions($this);
         $this->AddProperties([
                 "ID"               => [
                     \Get => fn(): ?int => $this->ID,
@@ -218,14 +216,14 @@ class User implements IModel {
             ]
         );
     }
-    
+
     /**
      * @inheritDoc
      */
     public function ID(): ?int {
         return $this->ID;
     }
-    
+
     /**
      * Factory method that creates an User from a specified name.
      *
@@ -235,7 +233,7 @@ class User implements IModel {
      * @return \vDesk\Security\User An User
      */
     public static function FromName(string $Name): User {
-        
+
         $User = Expression::Select(
             "ID",
             "Name",
@@ -260,7 +258,7 @@ class User implements IModel {
             new User\Groups([], new static((int)$User["ID"]))
         );
     }
-    
+
     /**
      * Factory method that creates an User from a specified name.
      *
@@ -296,7 +294,7 @@ class User implements IModel {
             $Ticket
         );
     }
-    
+
     /**
      * Fills the User with its values from the database.
      *
@@ -327,12 +325,12 @@ class User implements IModel {
         $this->Memberships      = (new User\Groups([], $this))->Fill();
         return $this;
     }
-    
+
     /**
      * Saves the model and possible changes or creates a new database-entry.
      */
     public function Save(): void {
-        
+
         //Check if the user is not virtual.
         if($this->ID !== null) {
             if(
@@ -372,7 +370,7 @@ class User implements IModel {
             $this->Memberships->Save();
         }
     }
-    
+
     /**
      * Deletes the User.
      */
@@ -392,7 +390,7 @@ class User implements IModel {
                       ->Execute();
         }
     }
-    
+
     /**
      * Creates an User from a specified data view.
      *
@@ -412,7 +410,7 @@ class User implements IModel {
             User\Groups::FromDataView($DataView["Memberships"] ?? [])
         );
     }
-    
+
     /**
      * Creates a data view of the User.
      *
@@ -422,7 +420,7 @@ class User implements IModel {
      */
     public function ToDataView(bool $Reference = false): array {
         if($Reference) {
-            return ["ID" => $this->ID];
+            return ["ID" => $this->ID, "Name" => $this->Name];
         }
         return $this->Ticket !== null
             ? [

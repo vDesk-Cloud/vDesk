@@ -11,9 +11,8 @@ use vDesk\Security\User;
 use vDesk\Struct\Collections\Typed\Observable\Collection;
 
 /**
- * Represents the {@link \vDesk\Security\Group} memberships of an {@link \vDesk\Security\User}.
+ * Class that represents a collection of Group-memberships of an User.
  *
- * @property-read int                  $Count  Gets the amount of elements in the Collection<Group>Membership.
  * @property \vDesk\Security\User|null $User   (set once) Gets or sets the ID of the belonging {@link \vDesk\Security\User} of the Groups.
  * @package vDesk\Security
  * @author  Kerry <DevelopmentHero@gmail.com>
@@ -129,37 +128,32 @@ class Groups extends Collection implements ICollectionModel {
         return parent::offsetGet($Index);
     }
 
-    /**
-     * Fills the Groups Collection with its values from the database.
-     *
-     * @return \vDesk\Security\User\Groups The filled Groups Collection.
-     * @throws \vDesk\Data\IDNullException Thrown if the User of the Groups Collection is virtual.
-     */
+    /** @inheritdoc */
     public function Fill(): Groups {
-        if($this->User === null || $this->User->ID === null) {
+        if($this->User?->ID === null) {
             throw new IDNullException();
         }
         $this->Dispatching(false);
         foreach(
-            Expression::Select("Group")
+            Expression::Select("GroupMemberships.Group", "Groups.Name")
                       ->From("Security.GroupMemberships")
+                      ->InnerJoin("Security.Groups")
+                      ->On(["GroupMemberships.Group" => "Groups.ID"])
                       ->Where(["User" => $this->User])
                       ->OrderBy(["Group" => true])
             as
             $Group
         ) {
-            $this->Add(new Group((int)$Group["Group"]));
+            $this->Add(new Group((int)$Group["Group"], $Group["Name"]));
         }
         $this->Dispatching(true);
         return $this;
     }
 
-    /**
-     * Saves possible changes if an ID of a valid {@link \vDesk\Security\User} has been supplied.
-     */
+    /** @inheritdoc */
     public function Save(): void {
         if($this->User !== null && $this->User->ID !== null && $this->Count() > 0) {
-            //Check if the "everyone" Group is in the collection, otherwise append it to the collection.
+            //Check if the "everyone" Group is in the Collection, append it otherwise.
             if(!$this->Any(static fn(Group $Group): bool => $Group->ID === Group::Everyone)) {
                 $this->Add(new Group(Group::Everyone));
             }
@@ -187,9 +181,7 @@ class Groups extends Collection implements ICollectionModel {
         }
     }
 
-    /**
-     * Deletes all {@link \vDesk\Security\Group} memberships of the associated {@link \vDesk\Security\User}.
-     */
+    /** @inheritdoc */
     public function Delete(): void {
         if($this->User !== null && $this->User->ID !== null) {
             Expression::Delete()
@@ -199,13 +191,7 @@ class Groups extends Collection implements ICollectionModel {
         }
     }
 
-    /**
-     * Creates a Groups from a specified data view.
-     *
-     * @param array $DataView The data to use to create a Groups.
-     *
-     * @return \vDesk\Security\User\Groups A Groups created from the specified data view.
-     */
+    /** @inheritdoc */
     public static function FromDataView(mixed $DataView): Groups {
         return new static(
             (static function() use ($DataView) {
@@ -216,13 +202,7 @@ class Groups extends Collection implements ICollectionModel {
         );
     }
 
-    /**
-     * Creates a data view of the Groups.
-     *
-     * @param bool $Reference Flag indicating whether the data view should represent only a reference of the Groups.
-     *
-     * @return array The data view representing the current state of the Groups.
-     */
+    /** @inheritdoc */
     public function ToDataView(bool $Reference = false): array {
         if($this->Count === 0 && $this->User !== null) {
             $this->Fill();
