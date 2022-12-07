@@ -29,12 +29,20 @@ vDesk.Security.Group.Administration = function Administration() {
     const OnSelect = Event => {
         if(Event.detail.item.Group.ID !== GroupEditor.Group.ID){
 
-            //Check if the 'newgroup' entry has been selected.
+            //Check if the "new group"-entry has been selected.
             if(Event.detail.item.Group.ID === null){
                 Reset.disabled = true;
                 Delete.disabled = true;
+                EditSave.disabled = true;
+                GroupEditor.Enabled = true;
             }else{
+                //Reset controls.
+                EditSave.disabled = false;
                 Delete.disabled = Event.detail.item.Group.ID === vDesk.Security.Group.Everyone || !vDesk.Security.User.Current.Permissions.DeleteGroup;
+                GroupEditor.Enabled = false;
+                EditSave.style.backgroundImage = `url("${vDesk.Visual.Icons.Edit}")`;
+                EditSave.textContent = vDesk.Locale.vDesk.Edit;
+                Reset.disabled = true;
             }
 
             //Display the selected Group.
@@ -66,7 +74,7 @@ vDesk.Security.Group.Administration = function Administration() {
      * @listens vDesk.Security.Group.Editor#event:create
      */
     const OnCreate = Event => {
-        GroupList.Find(Event.detail.group.ID).Group = Event.detail.group;
+        GroupList.Find(null).Group = Event.detail.group;
         vDesk.Security.Groups.push(Event.detail.group);
         Delete.disabled = !vDesk.Security.User.Current.Permissions.DeleteGroup;
         Reset.disabled = true;
@@ -177,7 +185,8 @@ vDesk.Security.Group.Administration = function Administration() {
      * The GroupList of the Administration plugin.
      * @type {vDesk.Security.GroupList}
      */
-    const GroupList = new vDesk.Security.GroupList();
+    const GroupList  = new vDesk.Security.GroupList();
+    GroupList.Control.addEventListener("select", OnSelect, false);
 
     /**
      * The GroupEditor of the Administration plugin.
@@ -185,6 +194,7 @@ vDesk.Security.Group.Administration = function Administration() {
      */
     const GroupEditor = new vDesk.Security.Group.Editor(new vDesk.Security.Group(), false);
 
+    //Fetch Groups.
     vDesk.Connection.Send(
         new vDesk.Modules.Command(
             {
@@ -201,7 +211,9 @@ vDesk.Security.Group.Administration = function Administration() {
                 GroupList.Selected = GroupList.Items[0];
                 GroupEditor.Permissions = GroupList.Selected.Group.Permissions;
                 GroupEditor.Group = GroupList.Selected.Group;
+                Delete.disabled = !vDesk.Security.User.Current.Permissions.DeleteGroup || GroupList.Selected.Group.ID === vDesk.Security.Group.Everyone;
 
+                //Check if the User is allowed to create new Groups.
                 if(vDesk.Security.User.Current.Permissions.CreateGroup){
                     GroupList.Add(
                         new vDesk.Security.GroupList.Item(

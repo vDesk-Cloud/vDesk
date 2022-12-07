@@ -82,6 +82,7 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
                 Ensure.Property(Value, Type.Boolean, "Enabled");
                 Enabled = Value && vDesk.Security.User.Current.Permissions.UpdateUser;
                 MembershipList.Enabled = Value;
+                MembershipList.Items[0].Enabled = false;
                 GroupList.Enabled = Value;
                 Left.disabled = !Value || GroupList.Selected === null;
                 Right.disabled = !Value || MembershipList.Selected === null;
@@ -99,20 +100,7 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
      * @fires vDesk.Security.User.MembershipEditor#change
      * @param {CustomEvent} Event
      */
-    const OnDropMembershipList = Event => {
-        if(!~Added.indexOf(Event.detail.item.Group) && !User.Memberships.some(Group => Group === Event.detail.item.Group.ID)){
-            Added.push(Event.detail.item.Group);
-        }
-        Event.stopPropagation();
-        GroupList.Remove(Event.detail.item);
-        GroupList.Selected = null;
-        MembershipList.Add(Event.detail.item);
-        MembershipList.Selected = Event.detail.item;
-        Left.disabled = true;
-        Right.disabled = false;
-        Changed = true;
-        new vDesk.Events.BubblingEvent("change", {sender: this}).Dispatch(GroupBox.Control);
-    };
+    const OnDropMembershipList = Event => this.Add(Event.detail.item.Group);
 
     /**
      * Eventhandler that listens on the 'drop' event.
@@ -122,7 +110,7 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
      */
     const OnDropGroupList = Event => {
         Event.stopPropagation();
-        if(!~Deleted.indexOf(Event.detail.item.Group) && User.Memberships.some(Group => Group === Event.detail.item.Group.ID)){
+        if(!~Deleted.indexOf(Event.detail.item.Group) && User.Memberships.some(Group => Group.ID === Event.detail.item.Group.ID)){
             Deleted.push(Event.detail.item.Group);
         }
         MembershipList.Remove(Event.detail.item);
@@ -165,44 +153,6 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
     };
 
     /**
-     * Eventhandler that listens on the 'click' event.
-     * @fires vDesk.Security.User.MembershipEditor#change
-     */
-    const OnClickLeft = () => {
-        const Item = GroupList.Selected;
-        GroupList.Remove(Item);
-        MembershipList.Add(Item);
-        GroupList.Selected = null;
-        MembershipList.Selected = Item;
-        if(!~Added.indexOf(Item.Group) && !User.Memberships.some(Group => Group === Item.Group.ID)){
-            Added.push(Item.Group);
-        }
-        Left.disabled = true;
-        Right.disabled = false;
-        Changed = true;
-        new vDesk.Events.BubblingEvent("change", {sender: this}).Dispatch(GroupBox.Control);
-    };
-
-    /**
-     * Eventhandler that listens on the 'click' event.
-     * @fires vDesk.Security.User.MembershipEditor#change
-     */
-    const OnClickRight = () => {
-        const Item = MembershipList.Selected;
-        MembershipList.Remove(Item);
-        GroupList.Add(Item);
-        MembershipList.Selected = null;
-        GroupList.Selected = Item;
-        if(!~Deleted.indexOf(Item.Group) && User.Memberships.some(Group => Group === Item.Group.ID)){
-            Deleted.push(Item.Group);
-        }
-        Left.disabled = false;
-        Right.disabled = true;
-        Changed = true;
-        new vDesk.Events.BubblingEvent("change", {sender: this}).Dispatch(GroupBox.Control);
-    };
-
-    /**
      * Saves all made changes on the memberships of the current edited user.
      */
     this.Save = function() {
@@ -222,7 +172,7 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
                 ),
                 Response => {
                     if(Response.Status){
-                        User.Memberships = MembershipList.Items.map(Item => Item.Group.ID);
+                        User.Memberships = MembershipList.Items.map(Item => Item.Group);
 
                         //Update the permissions of the current logged in User.
                         if(User.ID === vDesk.Security.User.Current.ID){
@@ -251,12 +201,71 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
      */
     this.Reset = () => this.User = PreviousUser;
 
+    this.Add = function(Group) {
+
+        //Check if the User is already a member of the Group.
+        if(User.Memberships.some(Membership => Membership.ID === Group.ID)){
+
+            //Check if the Group has been deleted before.
+            const Index = Deleted.findIndex(Deleted => Deleted.ID === Group.ID);
+            if(~Index){
+                Deleted.splice(Index, 1);
+            }
+        }else if(!Added.some(Added => Added.ID === Group.ID)){
+            Added.push(Group);
+        }
+
+        //Switch Item.
+        const Item = GroupList.Find(Group.ID);
+        GroupList.Remove(Item);
+        MembershipList.Add(Item);
+        GroupList.Selected = null;
+        MembershipList.Selected = Item;
+
+        Left.disabled = true;
+        Right.disabled = false;
+        Changed = true;
+        new vDesk.Events.BubblingEvent("change", {sender: this}).Dispatch(GroupBox.Control);
+    }
+
+    this.Delete = function(Group) {
+
+        //Check if the User is not a member of the Group.
+        if(!User.Memberships.some(Membership => Membership.ID === Group.ID)){
+
+            //Check if the Group has been added before.
+            const Index = Added.findIndex(Added => Added.ID === Group.ID);
+            if(~Index){
+                Added.splice(Index, 1);
+            }
+            return null;
+        }else if(!Deleted.some(Deleted => Deleted.ID === Group.ID)){
+            Deleted.push(Group);
+        }
+
+        //Switch Item.
+        const Item = MembershipList.Find(Group.ID);
+        MembershipList.Remove(Item);
+        GroupList.Add(Item);
+        MembershipList.Selected = null;
+        GroupList.Selected = Item;
+
+        Left.disabled = false;
+        Right.disabled = true;
+        Changed = true;
+        new vDesk.Events.BubblingEvent("change", {sender: this}).Dispatch(GroupBox.Control);
+    };
+
     /**
      * The Membership GroupList of the MembershipEditor.
      * @type {vDesk.Security.GroupList}
      */
     const MembershipList = new vDesk.Security.GroupList();
-    MembershipList.Control.addEventListener("drop", OnDropMembershipList, false);
+    MembershipList.Control.addEventListener("drop", Event => {
+        if(Event.detail.item !== undefined){
+            this.Add(Event.detail.item.Group)
+        }
+    }, false);
     MembershipList.Control.addEventListener("select", OnSelectMembershipList, false);
 
     /**
@@ -264,7 +273,11 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
      * @type {vDesk.Security.GroupList}
      */
     const GroupList = new vDesk.Security.GroupList([], true);
-    GroupList.Control.addEventListener("drop", OnDropGroupList, false);
+    GroupList.Control.addEventListener("drop", Event => {
+        if(Event.detail.item !== undefined){
+            this.Delete(Event.detail.item.Group)
+        }
+    }, false);
     GroupList.Control.addEventListener("select", OnSelectGroupList, false);
 
     /**
@@ -275,7 +288,7 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
     Left.className = "Button Arrow Left";
     Left.textContent = "🡰";
     Left.disabled = true;
-    Left.addEventListener("click", OnClickLeft, false);
+    Left.addEventListener("click", () => this.Add(GroupList.Selected.Group), false);
 
     /**
      * The right arrow button of the MembershipEditor.
@@ -285,7 +298,7 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
     Right.className = "Button Arrow Right";
     Right.textContent = "🡲";
     Right.disabled = true;
-    Right.addEventListener("click", OnClickRight, false);
+    Right.addEventListener("click", () => this.Delete(MembershipList.Selected.Group), false);
 
     /**
      * The ArrowButton Row of the MembershipEditor.

@@ -104,11 +104,11 @@ vDesk.Security.UserList = function UserList(Items = [], Enabled = true) {
 
     /**
      * Searches the UserList for an Item by a specified User ID.
-     * @param {Number} ID The ID of the User of the Item to find.
+     * @param {Number|null} ID The ID of the User of the Item to find.
      * @return {vDesk.Security.UserList.Item|null} The found Item; otherwise, null.
      */
     this.Find = function(ID) {
-        Ensure.Parameter(ID, Type.Number, "Item");
+        Ensure.Parameter(ID, Type.Number, "Item", true);
         return Items.find(Item => Item.User.ID === ID) ?? null;
     };
 
