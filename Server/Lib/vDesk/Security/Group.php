@@ -139,7 +139,7 @@ class Group implements IModel {
         if($this->ID !== null) {
             $Values = [];
             if($this->NameChanged) {
-                $Values = ["Name" => [$this->NameChanged => $this->Name]];
+                $Values = ["Name" => $this->Name];
             }
             foreach($this->Permissions as $Permission => $Value) {
                 $Values[$Permission] = $Value;
