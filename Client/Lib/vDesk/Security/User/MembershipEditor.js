@@ -65,7 +65,7 @@ vDesk.Security.User.MembershipEditor = function MembershipEditor(User, Enabled =
                 GroupList.Clear();
 
                 vDesk.Security.Groups.forEach(Group => {
-                    if(Value.Memberships.find(ID => ID === Group.ID) !== undefined || Group.ID === vDesk.Security.Group.Everyone){
+                    if(Value.Memberships.find(Membership => Membership.ID === Group.ID) !== undefined || Group.ID === vDesk.Security.Group.Everyone){
                         MembershipList.Add(new vDesk.Security.GroupList.Item(Group, true, Enabled && Group.ID !== vDesk.Security.Group.Everyone));
                     }else{
                         GroupList.Add(new vDesk.Security.GroupList.Item(Group, true, Enabled));
