@@ -298,8 +298,9 @@ final class Security extends Package implements IPackage {
                           "LastLogin"        => ["Type" => Type::Timestamp, "Default" => λ::CurrentTimestamp(), "Update" => λ::CurrentTimestamp()]
                       ],
                       [
-                          "Primary"  => ["Fields" => ["ID"]],
-                          "UserName" => ["Unique" => true, "Fields" => ["Name" => 255, "Email" => 255]]
+                          "Primary"   => ["Fields" => ["ID"]],
+                          "UserName"  => ["Unique" => true, "Fields" => ["Name" => 255]],
+                          "UserEmail" => ["Unique" => true, "Fields" => ["Email" => 255]]
                       ]
                   )
                   ->Execute();
