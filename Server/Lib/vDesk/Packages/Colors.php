@@ -20,7 +20,7 @@ final class Colors extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.1.0";
+    public const Version = "1.2.0";
 
     /**
      * The vendor of the Package.
@@ -61,6 +61,7 @@ final class Colors extends Package implements IPackage {
     public const Locale = [
         "DE" => [
             "Colors" => [
+                "Presets"    => "Voreinstellungen",
                 "Foreground" => "Vordergrund",
                 "Background" => "Hintergrund",
                 "Border"     => "Rahmen",
@@ -81,6 +82,7 @@ final class Colors extends Package implements IPackage {
         ],
         "EN" => [
             "Colors" => [
+                "Presets"    => "Presets",
                 "Foreground" => "Foreground",
                 "Background" => "Background",
                 "Border"     => "Border",
@@ -101,6 +103,7 @@ final class Colors extends Package implements IPackage {
         ],
         "NL" => [
             "Colors" => [
+                "Presets"    => "Voorinstellingen",
                 "Foreground" => "Voorgrond",
                 "Background" => "Achtergrond",
                 "Border"     => "Kader",

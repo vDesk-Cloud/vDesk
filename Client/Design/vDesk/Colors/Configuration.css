@@ -20,6 +20,14 @@
     margin-bottom: 2px;
 }
 
+.ColorsConfiguration > .Colors > .GroupBox > .Content > .EditControl > .Label {
+    width: calc(50% - 4px) !important;
+}
+
+.ColorsConfiguration > .Colors > .GroupBox > .Content > .EditControl > .Editor {
+    width: calc(50% - 4px) !important;
+}
+
 .ColorsConfiguration > .ConfirmReset {
     height: 30px;
     width: 100%;

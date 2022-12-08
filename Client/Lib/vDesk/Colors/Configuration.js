@@ -143,11 +143,11 @@ vDesk.Colors.Configuration = function Configuration() {
      * @type {vDesk.Controls.EditControl}
      */
     const Presets = new vDesk.Controls.EditControl(
-        `Presets:`,
+        `${vDesk.Locale.Colors.Presets}:`,
         null,
         Extension.Type.Enum,
         null,
-        ["Light", "Dark", "Evening", "Pastel", "H4ck3r"]
+        Object.keys(vDesk.Colors.Presets)
     );
     Presets.Control.addEventListener("update", OnUpdate);
 
