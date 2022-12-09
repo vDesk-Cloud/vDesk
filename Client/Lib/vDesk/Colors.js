@@ -122,6 +122,19 @@ vDesk.Colors = (function Color() {
     document.head.appendChild(FontDisabled);
 
     /**
+     * The control background color of the Client.
+     * @type {String}
+     */
+    let ControlBackgroundColor = "";
+
+    /**
+     * The control background style of the Client.
+     * @type {HTMLStyleElement}
+     */
+    const ControlBackground = document.createElement("style");
+    document.head.appendChild(ControlBackground);
+
+    /**
      * The control selected color of the Client.
      * @type {String}
      */
@@ -159,6 +172,19 @@ vDesk.Colors = (function Color() {
      */
     const ControlPress = document.createElement("style");
     document.head.appendChild(ControlPress);
+
+    /**
+     * The button background color of the Client.
+     * @type {String}
+     */
+    let ButtonBackgroundColor = "";
+
+    /**
+     * The button background style of the Client.
+     * @type {HTMLStyleElement}
+     */
+    const ButtonBackground = document.createElement("style");
+    document.head.appendChild(ButtonBackground);
 
     /**
      * The button selected color of the Client.
@@ -200,17 +226,17 @@ vDesk.Colors = (function Color() {
     document.head.appendChild(ButtonPress);
 
     /**
-     * The button background color of the Client.
+     * The textbox background color of the Client.
      * @type {String}
      */
-    let ButtonBackgroundColor = "";
+    let TextBoxBackgroundColor = "";
 
     /**
-     * The button background style of the Client.
+     * The textbox background style of the Client.
      * @type {HTMLStyleElement}
      */
-    const ButtonBackground = document.createElement("style");
-    document.head.appendChild(ButtonBackground);
+    const TextBoxBackground = document.createElement("style");
+    document.head.appendChild(TextBoxBackground);
 
     /**
      * The textbox selected color of the Client.
@@ -271,13 +297,15 @@ vDesk.Colors = (function Color() {
             this.FontLight = vDesk.Configuration.Settings?.Local?.Client?.FontLightColor ?? this.Presets.Light.FontLight;
             this.FontDark = vDesk.Configuration.Settings?.Local?.Client?.FontDarkColor ?? this.Presets.Light.FontDark;
             this.FontDisabled = vDesk.Configuration.Settings?.Local?.Client?.FontDisabledColor ?? this.Presets.Light.FontDisabled;
+            this.Control.Background = vDesk.Configuration.Settings?.Local?.Client?.ControlBackgroundColor ?? this.Presets.Light.Control.Background;
             this.Control.Selected = vDesk.Configuration.Settings?.Local?.Client?.ControlSelectedColor ?? this.Presets.Light.Control.Selected;
             this.Control.Hover = vDesk.Configuration.Settings?.Local?.Client?.ControlHoverColor ?? this.Presets.Light.Control.Hover;
             this.Control.Press = vDesk.Configuration.Settings?.Local?.Client?.ControlPressColor ?? this.Presets.Light.Control.Press;
+            this.Button.Background = vDesk.Configuration.Settings?.Local?.Client?.ButtonBackgroundColor ?? this.Presets.Light.Button.Background;
             this.Button.Selected = vDesk.Configuration.Settings?.Local?.Client?.ButtonSelectedColor ?? this.Presets.Light.Button.Selected;
             this.Button.Hover = vDesk.Configuration.Settings?.Local?.Client?.ButtonHoverColor ?? this.Presets.Light.Button.Hover;
             this.Button.Press = vDesk.Configuration.Settings?.Local?.Client?.ButtonPressColor ?? this.Presets.Light.Button.Press;
-            this.Button.Background = vDesk.Configuration.Settings?.Local?.Client?.ButtonBackgroundColor ?? this.Presets.Light.Button.Background;
+            this.TextBox.Background = vDesk.Configuration.Settings?.Local?.Client?.TextBoxBackgroundColor ?? this.Presets.Light.TextBox.Background;
             this.TextBox.Selected = vDesk.Configuration.Settings?.Local?.Client?.TextBoxSelectedColor ?? this.Presets.Light.TextBox.Selected;
             this.TextBox.Error = vDesk.Configuration.Settings?.Local?.Client?.TextBoxErrorColor ?? this.Presets.Light.TextBox.Error;
             this.TextBox.Disabled = vDesk.Configuration.Settings?.Local?.Client?.TextBoxDisabledColor ?? this.Presets.Light.TextBox.Disabled;
@@ -297,13 +325,15 @@ vDesk.Colors = (function Color() {
             this.FontLight = Preset?.FontLight ?? this.Presets.Light.FontLight;
             this.FontDark = Preset?.FontDark ?? this.Presets.Light.FontDark;
             this.FontDisabled = Preset?.FontDisabled ?? this.Presets.Light.FontDisabled;
+            this.Control.Background = Preset?.Control?.Background ?? this.Presets.Light.Control.Background;
             this.Control.Selected = Preset?.Control?.Selected ?? this.Presets.Light.Control.Selected;
             this.Control.Hover = Preset?.Control?.Hover ?? this.Presets.Light.Control.Hover;
             this.Control.Press = Preset?.Control?.Press ?? this.Presets.Light.Control.Press;
+            this.Button.Background = Preset?.Button?.Background ?? this.Presets.Light.Button.Background;
             this.Button.Selected = Preset?.Button?.Selected ?? this.Presets.Light.Button.Selected;
             this.Button.Hover = Preset?.Button?.Hover ?? this.Presets.Light.Button.Hover;
             this.Button.Press = Preset?.Button?.Press ?? this.Presets.Light.Button.Press;
-            this.Button.Background = Preset?.Button?.Background ?? this.Presets.Light.Button.Background;
+            this.TextBox.Background = Preset?.TextBox?.Background ?? this.Presets.Light.TextBox.Background;
             this.TextBox.Selected = Preset?.TextBox?.Selected ?? this.Presets.Light.TextBox.Selected;
             this.TextBox.Error = Preset?.TextBox?.Error ?? this.Presets.Light.TextBox.Error;
             this.TextBox.Disabled = Preset?.TextBox?.Disabled ?? this.Presets.Light.TextBox.Disabled;
@@ -321,13 +351,15 @@ vDesk.Colors = (function Color() {
             vDesk.Configuration.Settings.Local.Client.FontLightColor = this.FontLight;
             vDesk.Configuration.Settings.Local.Client.FontDarkColor = this.FontDark;
             vDesk.Configuration.Settings.Local.Client.FontDisabledColor = this.FontDisabled;
+            vDesk.Configuration.Settings.Local.Client.ControlBackgroundColor = this.Control.Background;
             vDesk.Configuration.Settings.Local.Client.ControlSelectedColor = this.Control.Selected;
             vDesk.Configuration.Settings.Local.Client.ControlHoverColor = this.Control.Hover;
             vDesk.Configuration.Settings.Local.Client.ControlPressColor = this.Control.Press;
+            vDesk.Configuration.Settings.Local.Client.ButtonBackgroundColor = this.Button.Background;
             vDesk.Configuration.Settings.Local.Client.ButtonSelectedColor = this.Button.Selected;
             vDesk.Configuration.Settings.Local.Client.ButtonHoverColor = this.Button.Hover;
             vDesk.Configuration.Settings.Local.Client.ButtonPressColor = this.Button.Press;
-            vDesk.Configuration.Settings.Local.Client.ButtonBackgroundColor = this.Button.Background;
+            vDesk.Configuration.Settings.Local.Client.TextBoxBackgroundColor = this.TextBox.Background;
             vDesk.Configuration.Settings.Local.Client.TextBoxSelectedColor = this.TextBox.Selected;
             vDesk.Configuration.Settings.Local.Client.TextBoxErrorColor = this.TextBox.Error;
             vDesk.Configuration.Settings.Local.Client.TextBoxDisabledColor = this.TextBox.Disabled;
@@ -346,13 +378,15 @@ vDesk.Colors = (function Color() {
             this.FontLight = vDesk.Configuration.Settings.Local.Client.FontLightColor = this.Presets.Light.FontLight;
             this.FontDark = vDesk.Configuration.Settings.Local.Client.FontDarkColor = this.Presets.Light.FontDark;
             this.FontDisabled = vDesk.Configuration.Settings.Local.Client.FontDisabledColor = this.Presets.Light.FontDisabled;
+            this.Control.Background = vDesk.Configuration.Settings.Local.Client.ControlBackgroundColor = this.Presets.Light.Control.Background;
             this.Control.Selected = vDesk.Configuration.Settings.Local.Client.ControlSelectedColor = this.Presets.Light.Control.Selected;
             this.Control.Hover = vDesk.Configuration.Settings.Local.Client.ControlHoverColor = this.Presets.Light.Control.Hover;
             this.Control.Press = vDesk.Configuration.Settings.Local.Client.ControlPressColor = this.Presets.Light.Control.Press;
+            this.Button.Background = vDesk.Configuration.Settings.Local.Client.ButtonBackgroundColor = this.Presets.Light.Button.Background;
             this.Button.Selected = vDesk.Configuration.Settings.Local.Client.ButtonSelectedColor = this.Presets.Light.Button.Selected;
             this.Button.Hover = vDesk.Configuration.Settings.Local.Client.ButtonHoverColor = this.Presets.Light.Button.Hover;
             this.Button.Press = vDesk.Configuration.Settings.Local.Client.ButtonPressColor = this.Presets.Light.Button.Press;
-            this.Button.Background = vDesk.Configuration.Settings.Local.Client.ButtonBackgroundColor = this.Presets.Light.Button.Background;
+            this.TextBox.Background = vDesk.Configuration.Settings.Local.Client.TextBoxBackgroundColor = this.Presets.Light.TextBox.Background;
             this.TextBox.Selected = vDesk.Configuration.Settings.Local.Client.TextBoxSelectedColor = this.Presets.Light.TextBox.Selected;
             this.TextBox.Error = vDesk.Configuration.Settings.Local.Client.TextBoxErrorColor = this.Presets.Light.TextBox.Error;
             this.TextBox.Disabled = vDesk.Configuration.Settings.Local.Client.TextBoxDisabledColor = this.Presets.Light.TextBox.Disabled;
@@ -372,16 +406,19 @@ vDesk.Colors = (function Color() {
     --FontLight: ${FontLightColor}; 
     --FontDark: ${FontDarkColor}; 
     --FontDisabled: ${FontDisabledColor}; 
+    --ControlBackground: ${ControlBackgroundColor};
     --ControlSelected: ${ControlSelectedColor}; 
     --ControlHover: ${ControlHoverColor}; 
     --ControlPress: ${ControlPressColor}; 
+    --ButtonBackground: ${ButtonBackgroundColor};
     --ButtonSelected: ${ButtonSelectedColor}; 
     --ButtonHover: ${ButtonHoverColor}; 
     --ButtonPress: ${ButtonPressColor};
-    --ButtonBackground: ${ButtonBackgroundColor};
+    --TextBoxBackground: ${TextBoxBackgroundColor};
     --TextBoxSelected: ${TextBoxSelectedColor};
     --TextBoxError: ${TextBoxErrorColor};
     --TextBoxDisabled: ${TextBoxDisabledColor};
+    --TextBoxBackground: ${TextBoxBackgroundColor};
 }`;
         },
         get Foreground() {
@@ -451,12 +488,21 @@ vDesk.Colors = (function Color() {
         /**
          * Enumeration of "Control(big button)"-colors.
          * @readonly
+         * @property {String} Background Gets or sets the control background color of the Client.
          * @property {String} Selected Gets or sets the selected control color of the Client.
          * @property {String} Hover Gets or sets the control hover color of the Client.
          * @property {String} Press Gets or sets the control press color of the Client.
          * @memberOf Colors
          */
         Control: {
+            get Background() {
+                return ControlBackgroundColor;
+            },
+            set Background(Value) {
+                Ensure.Property(Value, "string", "Background");
+                ControlBackgroundColor = Value;
+                ControlBackground.textContent = `.Control{ background-color: ${Value}; }`;
+            },
             get Selected() {
                 return ControlSelectedColor;
             },
@@ -485,20 +531,28 @@ vDesk.Colors = (function Color() {
         /**
          * Enumeration of "Button"-colors.
          * @readonly
+         * @property {String} Background Gets or sets the button background color of the Client.
          * @property {String} Selected Gets or sets the selected button color of the Client.
          * @property {String} Hover Gets or sets the button hover color of the Client.
          * @property {String} Press Gets or sets the button press color of the Client.
-         * @property {String} Background Gets or sets the button background color of the Client.
          * @memberOf Colors
          */
         Button: {
+            get Background() {
+                return ButtonBackgroundColor;
+            },
+            set Background(Value) {
+                Ensure.Property(Value, "string", "Background");
+                ButtonBackgroundColor = Value;
+                ButtonBackground.textContent = `.Button{ background-color: ${Value}; }`;
+            },
             get Selected() {
                 return ButtonSelectedColor;
             },
             set Selected(Value) {
                 Ensure.Property(Value, "string", "Selected");
                 ButtonSelectedColor = Value;
-                ButtonSelected.textContent = `.Button.Selected{ background-color: ${Value}; }`;
+                ButtonSelected.textContent = `.Button:active{ background-color: ${Value}; }`;
             },
             get Hover() {
                 return ButtonHoverColor;
@@ -515,32 +569,33 @@ vDesk.Colors = (function Color() {
                 Ensure.Property(Value, "string", "Press");
                 ButtonPressColor = Value;
                 ButtonPress.textContent = `.Button:active:enabled{ background-color: ${Value}; }`;
-            },
-            get Background() {
-                return ButtonBackgroundColor;
-            },
-            set Background(Value) {
-                Ensure.Property(Value, "string", "Background");
-                ButtonBackgroundColor = Value;
-                ButtonBackground.textContent = `.Button{ background-color: ${Value}; }`;
             }
         },
         /**
          * Enumeration of "TextBox"-colors.
          * @readonly
+         * @property {String} Background Gets or sets the control background color of the Client.
          * @property {String} Selected Gets or sets the selected textbox color of the Client.
          * @property {String} Error Gets or sets the error textbox color of the Client.
          * @property {String} Disabled Gets or sets the disabled textbox color of the Client.
          * @memberOf Colors
          */
         TextBox: {
+            get Background() {
+                return TextBoxBackgroundColor;
+            },
+            set Background(Value) {
+                Ensure.Property(Value, "string", "Background");
+                TextBoxBackgroundColor = Value;
+                TextBoxBackground.textContent = `.TextBox{ background-color: ${Value}; }`;
+            },
             get Selected() {
                 return TextBoxSelectedColor;
             },
             set Selected(Value) {
                 Ensure.Property(Value, "string", "Selected");
                 TextBoxSelectedColor = Value;
-                TextBoxSelected.textContent = `.TextBox.Selected{ border-color: ${Value} !important; }`;
+                TextBoxSelected.textContent = `.TextBox:focus{ border-color: ${Value} !important; }`;
 
             },
             get Error() {
@@ -558,7 +613,7 @@ vDesk.Colors = (function Color() {
             set Disabled(Value) {
                 Ensure.Property(Value, "string", "Disabled");
                 TextBoxDisabledColor = Value;
-                TextBoxDisabled.textContent = `.TextBox.Disabled{ border-color: ${Value} !important; }`;
+                TextBoxDisabled.textContent = `.TextBox:disabled{ border-color: ${Value} !important; }`;
 
             }
         },
@@ -578,20 +633,22 @@ vDesk.Colors = (function Color() {
                 FontDark:     "rgba(0, 0, 0, 1)",
                 FontDisabled: "rgba(153, 153, 153, 1)",
                 Control:      {
-                    Selected: "rgba(255, 207, 50, 1)",
-                    Hover:    "rgba(42, 176, 237, 1)",
-                    Press:    "rgba(70, 140, 207, 1)"
+                    Background: "rgba(255, 255, 255, 1)",
+                    Selected:   "rgba(255, 207, 50, 1)",
+                    Hover:      "rgba(42, 176, 237, 1)",
+                    Press:      "rgba(70, 140, 207, 1)"
                 },
                 Button:       {
+                    Background: "rgba(219, 219, 219, 1)",
                     Selected:   "rgba(170, 170, 170, 1)",
                     Hover:      "rgba(153, 153, 153, 1)",
-                    Press:      "rgba(119, 119, 119, 1)",
-                    Background: "rgba(219, 219, 219, 1)"
+                    Press:      "rgba(119, 119, 119, 1)"
                 },
                 TextBox:      {
-                    Selected: "rgba(255, 207, 50, 1)",
-                    Error:    "rgba(255, 51, 0, 1)",
-                    Disabled: "rgba(153, 153, 153, 1)"
+                    Background: "rgba(255, 255, 255, 1)",
+                    Selected:   "rgba(70, 140, 207, 1)",
+                    Error:      "rgba(255, 51, 0, 1)",
+                    Disabled:   "rgba(153, 153, 153, 1)"
                 }
             },
             Dark:      {
@@ -604,20 +661,22 @@ vDesk.Colors = (function Color() {
                 FontDark:     "rgba(190, 190, 190, 1)",
                 FontDisabled: "rgba(150, 150, 150, 1)",
                 Control:      {
-                    Selected: "rgba(180, 120, 20, 1)",
-                    Hover:    "rgba(9, 79, 109, 1)",
-                    Press:    "rgba(24, 60, 93, 1)"
+                    Background: "rgba(30, 30, 30, 1)",
+                    Selected:   "rgba(180, 120, 20, 1)",
+                    Hover:      "rgba(9, 79, 109, 1)",
+                    Press:      "rgba(24, 60, 93, 1)",
                 },
                 Button:       {
+                    Background: "rgba(71, 71, 71, 1)",
                     Selected:   "rgba(170,170,170, 1)",
                     Hover:      "rgba(153, 153, 153, 1)",
-                    Press:      "rgba(119, 119, 119, 1)",
-                    Background: "rgba(71, 71, 71, 1)"
+                    Press:      "rgba(119, 119, 119, 1)"
                 },
                 TextBox:      {
-                    Selected: "rgba(255, 207, 50, 1)",
-                    Error:    "rgba(255, 51, 0, 1)",
-                    Disabled: "rgba(153, 153, 153, 1)"
+                    Background: "rgba(50, 50, 50, 1)",
+                    Selected:   "rgba(220, 150, 50, 1)",
+                    Error:      "rgba(255, 51, 0, 1)",
+                    Disabled:   "rgba(153, 153, 153, 1)"
                 }
             },
             Evening:   {
@@ -630,9 +689,10 @@ vDesk.Colors = (function Color() {
                 FontDark:     "rgba(30, 30, 30, 1)",
                 FontDisabled: "rgba(130, 130, 130, 1)",
                 Control:      {
-                    Selected: "rgba(217, 195, 130, 1)",
-                    Hover:    "rgba(42, 156, 217, 1)",
-                    Press:    "rgba(70, 140, 207, 1)"
+                    Background: "rgba(245, 230, 210, 1)",
+                    Selected:   "rgba(217, 195, 130, 1)",
+                    Hover:      "rgba(42, 156, 217, 1)",
+                    Press:      "rgba(70, 140, 207, 1)"
                 },
                 Button:       {
                     Selected:   "rgba(170, 170, 170, 1)",
@@ -641,9 +701,10 @@ vDesk.Colors = (function Color() {
                     Background: "rgba(231, 225, 225, 1)"
                 },
                 TextBox:      {
-                    Selected: "rgba(255, 207, 50, 1)",
-                    Error:    "rgba(255, 51, 0, 1)",
-                    Disabled: "rgba(153, 153, 153, 1)"
+                    Background: "rgba(245, 230, 210, 1)",
+                    Selected:   "rgba(255, 207, 50, 1)",
+                    Error:      "rgba(255, 51, 0, 1)",
+                    Disabled:   "rgba(153, 153, 153, 1)"
                 }
             },
             Pastel:    {
@@ -656,20 +717,22 @@ vDesk.Colors = (function Color() {
                 FontDark:     "rgba(86, 4, 143, 1)",
                 FontDisabled: "rgba(200, 130, 205, 1)",
                 Control:      {
-                    Selected: "rgba(224, 187, 228, 1)",
-                    Hover:    "rgba(210, 145, 188, 1)",
-                    Press:    "rgba(149, 125, 173, 1)"
+                    Background: "rgba(234, 205, 205, 1)",
+                    Selected:   "rgba(224, 187, 228, 1)",
+                    Hover:      "rgba(210, 145, 188, 1)",
+                    Press:      "rgba(149, 125, 173, 1)"
                 },
                 Button:       {
+                    Background: "rgba(234, 205, 205, 1)",
                     Selected:   "rgba(170, 170, 170, 1)",
                     Hover:      "rgba(153, 153, 153, 1)",
-                    Press:      "rgba(119, 119, 119, 1)",
-                    Background: "rgba(234, 205, 205, 1)"
+                    Press:      "rgba(119, 119, 119, 1)"
                 },
                 TextBox:      {
-                    Selected: "rgba(255, 207, 50, 1)",
-                    Error:    "rgba(255, 51, 0, 1)",
-                    Disabled: "rgba(153, 153, 153, 1)"
+                    Background: "rgba(255, 233, 211, 1)",
+                    Selected:   "rgba(255, 207, 50, 1)",
+                    Error:      "rgba(255, 51, 0, 1)",
+                    Disabled:   "rgba(153, 153, 153, 1)"
                 }
             },
             Forest:    {
@@ -682,20 +745,22 @@ vDesk.Colors = (function Color() {
                 FontDark:     "rgba(110, 60, 0, 1)",
                 FontDisabled: "rgba(200, 130, 80, 1)",
                 Control:      {
-                    Selected: "rgba(183, 204, 163, 1)",
-                    Hover:    "rgba(212, 255, 124, 1)",
-                    Press:    "rgba(124, 204, 126, 1)"
+                    Background: "rgba(210, 230, 170, 1)",
+                    Selected:   "rgba(180, 200, 160, 1)",
+                    Hover:      "rgba(230, 240, 180, 1)",
+                    Press:      "rgba(150, 170, 120, 1)"
                 },
                 Button:       {
+                    Background: "rgba(196, 216, 172, 1)",
                     Selected:   "rgba(212, 255, 124, 1)",
                     Hover:      "rgba(135, 168, 103, 1)",
-                    Press:      "rgba(101, 133, 66, 1)",
-                    Background: "rgba(196, 216, 172, 1)"
+                    Press:      "rgba(101, 133, 66, 1)"
                 },
                 TextBox:      {
-                    Selected: "rgba(255, 207, 50, 1)",
-                    Error:    "rgba(255, 51, 0, 1)",
-                    Disabled: "rgba(153, 153, 153, 1)"
+                    Background: "rgba(230, 255, 210, 1)",
+                    Selected:   "rgba(255, 207, 50, 1)",
+                    Error:      "rgba(255, 51, 0, 1)",
+                    Disabled:   "rgba(153, 153, 153, 1)"
                 }
             },
             Sunset:    {
@@ -706,22 +771,24 @@ vDesk.Colors = (function Color() {
                 Font:         "Arial",
                 FontLight:    "rgba(150, 75, 75, 1)",
                 FontDark:     "rgba(120, 60, 0, 1)",
-                FontDisabled: "rgba(153, 153, 153, 1)",
+                FontDisabled: "rgba(133, 133, 133, 1)",
                 Control:      {
-                    Selected: "rgba(235, 170, 132, 1)",
-                    Hover:    "rgba(245, 150, 100, 1)",
-                    Press:    "rgba(255, 120, 130, 1)"
+                    Background: "rgba(232, 196, 161, 1)",
+                    Selected:   "rgba(235, 170, 132, 1)",
+                    Hover:      "rgba(245, 150, 131, 1)",
+                    Press:      "rgba(255, 120, 130, 1)"
                 },
                 Button:       {
+                    Background: "rgba(215, 230, 250, 1)",
                     Selected:   "rgba(170, 170, 170, 1)",
                     Hover:      "rgba(150, 180, 230, 1)",
-                    Press:      "rgba(120, 140, 210, 1)",
-                    Background: "rgba(215, 230, 250, 1)"
+                    Press:      "rgba(120, 140, 210, 1)"
                 },
                 TextBox:      {
-                    Selected: "rgba(255, 207, 50, 1)",
-                    Error:    "rgba(255, 51, 0, 1)",
-                    Disabled: "rgba(153, 153, 153, 1)"
+                    Background: "rgba(227, 242, 248, 1)",
+                    Selected:   "rgba(120, 200, 255, 1)",
+                    Error:      "rgba(255, 51, 0, 1)",
+                    Disabled:   "rgba(153, 153, 153, 1)"
                 }
             },
             Night:     {
@@ -734,20 +801,78 @@ vDesk.Colors = (function Color() {
                 FontDark:     "rgba(40, 40, 40, 1)",
                 FontDisabled: "rgba(190, 190, 170, 1)",
                 Control:      {
-                    Selected: "rgba(130, 140, 120, 1)",
-                    Hover:    "rgba(153, 153, 153, 1)",
-                    Press:    "rgba(119, 119, 119, 1)",
+                    Background: "rgba(100, 100, 100, 1)",
+                    Selected:   "rgba(130, 140, 120, 1)",
+                    Hover:      "rgba(153, 153, 153, 1)",
+                    Press:      "rgba(119, 119, 119, 1)"
                 },
                 Button:       {
+                    Background: "rgba(125, 130, 120, 1)",
                     Selected:   "rgba(170, 170, 170, 1)",
                     Hover:      "rgba(153, 153, 153, 1)",
-                    Press:      "rgba(119, 119, 119, 1)",
-                    Background: "rgba(125, 130, 120, 1)"
+                    Press:      "rgba(119, 119, 119, 1)"
                 },
                 TextBox:      {
-                    Selected: "rgba(255, 207, 50, 1)",
-                    Error:    "rgba(255, 51, 0, 1)",
-                    Disabled: "rgba(153, 153, 153, 1)"
+                    Background: "rgba(100, 100, 100, 1)",
+                    Selected:   "rgba(130, 140, 120, 1)",
+                    Error:      "rgba(255, 51, 0, 1)",
+                    Disabled:   "rgba(153, 153, 153, 1)"
+                }
+            },
+            Aurora:    {
+                Foreground:   "rgba(46, 16, 86, 1)",
+                Background:   "rgba(5, 0, 20, 1)",
+                BorderLight:  "rgba(86, 68, 109, 1)",
+                BorderDark:   "rgba(56, 38, 79, 1)",
+                Font:         "Arial",
+                FontLight:    "rgba(225, 190, 115, 1)",
+                FontDark:     "rgba(190, 180, 150, 1)",
+                FontDisabled: "rgba(106, 88, 129, 1)",
+                Control:      {
+                    Background: "rgba(56, 26, 96, 1)",
+                    Selected:   "rgba(105, 70, 170, 1)",
+                    Hover:      "rgba(66, 36, 106, 1)",
+                    Press:      "rgba(46, 16, 86, 1)"
+                },
+                Button:       {
+                    Background: "rgba(36, 18, 59, 1)",
+                    Selected:   "rgba(170, 170, 170, 1)",
+                    Hover:      "rgba(46, 28, 69, 1)",
+                    Press:      "rgba(26, 8, 49, 1)"
+                },
+                TextBox:      {
+                    Background: "rgba(36, 18, 59, 1)",
+                    Selected:   "rgba(70, 140, 207, 1)",
+                    Error:      "rgba(255, 51, 0, 1)",
+                    Disabled:   "rgba(86, 68, 109, 1)"
+                }
+            },
+            Sunrise:   {
+                Foreground:   "rgba(255, 245, 160, 1)",
+                Background:   "rgba(250, 250, 255, 1)",
+                BorderLight:  "rgba(150, 190, 200, 1)",
+                BorderDark:   "rgba(0, 0, 0, 1)",
+                Font:         "Arial",
+                FontLight:    "rgba(210, 150, 130, 1)",
+                FontDark:     "rgba(0, 40, 100, 1)",
+                FontDisabled: "rgba(133, 133, 133, 1)",
+                Control:      {
+                    Background: "rgba(235, 245, 255, 1)",
+                    Selected:   "rgba(220, 230, 255, 1)",
+                    Hover:      "rgba(245, 250, 255, 1)",
+                    Press:      "rgba(222, 240, 255, 1)"
+                },
+                Button:       {
+                    Background: "rgba(219, 219, 219, 1)",
+                    Selected:   "rgba(170, 170, 170, 1)",
+                    Hover:      "rgba(153, 153, 153, 1)",
+                    Press:      "rgba(119, 119, 119, 1)"
+                },
+                TextBox:      {
+                    Background: "rgba(255, 255, 255, 1)",
+                    Selected:   "rgba(70, 140, 207, 1)",
+                    Error:      "rgba(255, 51, 0, 1)",
+                    Disabled:   "rgba(153, 153, 153, 1)"
                 }
             },
             RushBCyka: {
@@ -760,20 +885,22 @@ vDesk.Colors = (function Color() {
                 FontDark:     "rgba(206, 216, 200, 1)",
                 FontDisabled: "rgba(160, 160, 160, 1)",
                 Control:      {
-                    Selected: "rgba(130, 140, 120, 1)",
-                    Hover:    "rgba(153, 153, 153, 1)",
-                    Press:    "rgba(76, 89, 69, 1)"
+                    Background: "rgba(63, 70, 56, 1)",
+                    Selected:   "rgba(130, 140, 120, 1)",
+                    Hover:      "rgba(153, 153, 153, 1)",
+                    Press:      "rgba(76, 89, 69, 1)"
                 },
                 Button:       {
+                    Background: "rgba(76, 89, 69, 1)",
                     Selected:   "rgba(170, 170, 170, 1)",
                     Hover:      "rgba(153, 153, 153, 1)",
-                    Press:      "rgba(119, 119, 119, 1)",
-                    Background: "rgba(76, 89, 69, 1)"
+                    Press:      "rgba(119, 119, 119, 1)"
                 },
                 TextBox:      {
-                    Selected: "rgba(255, 207, 50, 1)",
-                    Error:    "rgba(255, 51, 0, 1)",
-                    Disabled: "rgba(153, 153, 153, 1)"
+                    Background: "rgba(55, 60, 50, 1)",
+                    Selected:   "rgba(178, 182, 115, 1)",
+                    Error:      "rgba(255, 51, 0, 1)",
+                    Disabled:   "rgba(153, 153, 153, 1)"
                 }
             },
             H4ck3r:    {
@@ -786,20 +913,22 @@ vDesk.Colors = (function Color() {
                 FontDark:     "rgba(116, 235, 25, 1)",
                 FontDisabled: "rgba(196, 253, 104, 1)",
                 Control:      {
-                    Selected: "rgba(46, 88, 14, 1)",
-                    Hover:    "rgba(85, 95, 0, 1)",
-                    Press:    "rgba(75, 95, 0, 1)"
+                    Background: "rgba(90, 250, 40, 0.1)",
+                    Selected:   "rgba(46, 88, 14, 1)",
+                    Hover:      "rgba(85, 95, 0, 1)",
+                    Press:      "rgba(75, 95, 0, 1)"
                 },
                 Button:       {
+                    Background: "rgba(90, 250, 40, 0.3)",
                     Selected:   "rgba(170,170,170, 1)",
                     Hover:      "rgba(153, 153, 153, 1)",
-                    Press:      "rgba(119, 119, 119, 1)",
-                    Background: "rgba(71, 71, 71, 1)"
+                    Press:      "rgba(119, 119, 119, 1)"
                 },
                 TextBox:      {
-                    Selected: "rgba(255, 207, 50, 1)",
-                    Error:    "rgba(255, 51, 0, 1)",
-                    Disabled: "rgba(153, 153, 153, 1)"
+                    Background: "rgba(90, 250, 40, 0.2)",
+                    Selected:   "rgba(255, 207, 50, 1)",
+                    Error:      "rgba(255, 51, 0, 1)",
+                    Disabled:   "rgba(153, 153, 153, 1)"
                 }
             }
         },
