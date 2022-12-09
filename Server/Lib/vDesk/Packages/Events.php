@@ -66,7 +66,7 @@ final class Events extends Package implements IPackage {
         ],
         self::Server => [
             self::Modules => [
-                "EventDispatcher.php"
+                "Events.php"
             ],
             self::Lib     => [
                 "vDesk/Events"
