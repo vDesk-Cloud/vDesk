@@ -117,7 +117,7 @@ final class Events extends Package implements IPackage {
             }
             while(!\in_array($Mode, self::Modes)) {
                 $Mode = \readline("Storage mode [available = " . \implode(", ", \array_keys(self::Modes)) . "] [default = Filesystem]: ");
-                $Mode = Text::IsNullOrWhitespace($Mode) ? self::Modes["Filesystem"] : Text::ToLower($Mode);
+                $Mode = Text::IsNullOrWhitespace($Mode) ? self::Modes["Filesystem"] : \strtolower($Mode);
             }
             $Mode = match ($Mode) {
                 self::Modes["Filesystem"] => \Modules\Events::Filesystem,
