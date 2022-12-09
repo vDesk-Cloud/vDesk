@@ -38,7 +38,7 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
     /**
      * The version of the Package.
      */
-    public const Version = "1.2.0";
+    public const Version = "1.1.2";
 
     /**
      * The vendor of the Package.
@@ -309,17 +309,6 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
                 null,
                 $Archive,
                 "Download",
-                true,
-                false,
-                null,
-                new Collection([new Parameter(null, null, "ID", \vDesk\Struct\Type::Int, false, false)])
-            )
-        );
-        $Archive->Commands->Add(
-            new Command(
-                null,
-                $Archive,
-                "GetAttributes",
                 true,
                 false,
                 null,

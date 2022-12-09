@@ -21,13 +21,19 @@ final class Archive extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.1.0";
+    public const RequiredVersion = "1.1.1";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to Events-1.2.0.
+- Solved issue caused by Firefox-bugg firing "dragenter"-event twice on elements.
+- Restricted visual dragover-effects to folder elements only.
+- Removed "Background"-CSS-class from client TreeView-control.
+- Unified parameters of internal server module API.
+- Closed potential security issues due to missing permission checks on file updates, fetching metadata and folder children.
+- Removed unused "GetAttributes"-command.
+- Made names of elements unique per folder.
 Description;
 
     /**
@@ -36,27 +42,14 @@ Description;
     public const Files = [
         self::Deploy   => [
             Package::Client => [
-                Package::Modules => [
-                    "Archive.js"
+                Package::Lib => [
+                    "vDesk/Archive/TreeView.js",
+                    "vDesk/Archive/Element.js"
                 ]
             ],
             Package::Server => [
-                Package::Lib => [
-                    "vDesk/Archive/Element",
-                    "vDesk/Archive/vDesk.Security.User.Deleted.Archive.php"
-                ]
-            ]
-        ],
-        self::Undeploy => [
-            Package::Client => [
                 Package::Modules => [
-                    "Archive.js"
-                ]
-            ],
-            Package::Server => [
-                Package::Lib => [
-                    "vDesk/Archive/Element",
-                    "vDesk/Archive/vDesk.Security.User.Deleted.php"
+                    "Archive.php"
                 ]
             ]
         ]
@@ -67,8 +60,5 @@ Description;
         //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
-
-        //Install new Event listener.
-        \vDesk\Modules::Events()::Install(new (self::Package), $Phar, $Path);
     }
 }
