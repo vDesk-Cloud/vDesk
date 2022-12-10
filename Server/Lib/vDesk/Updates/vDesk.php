@@ -33,19 +33,16 @@ Description;
      * The files and directories of the Update.
      */
     public const Files = [
-        self::Deploy   => [
+        self::Deploy => [
             Package::Client => [
                 Package::Design => [
                     "vDesk/MainMenu.css",
                     "vDesk/MainMenu/Item.css",
-                    "vDesk/Controls/Calendar/Cell.css"
+                    "vDesk/Controls/Calendar/Cell.css",
+                    "vDesk/Controls/ContextMenu/Item.css",
+                    "vDesk/Controls/ContextMenu/Group.css"
                 ],
-                Package::Lib => [
-                    "vDesk.php"
-                ]
-            ],
-            Package::Server => [
-                Package::Lib => [
+                Package::Lib    => [
                     "vDesk.php"
                 ]
             ]
