@@ -29,7 +29,7 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
     /**
      * The version of the Package.
      */
-    public const Version = "1.1.1";
+    public const Version = "1.1.2";
 
     /**
      * The vendor of the Package.
@@ -173,7 +173,6 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
                 "DeleteContact" => "Determines whether members of the group are allowed to delete contacts",
                 "UpdateCompany" => "Determines whether members of the group are allowed to update company contacts",
                 "UpdateContact" => "Determines whether members of the group are allowed to update contacts"
-
             ]
         ],
         "NL" => [
@@ -217,7 +216,6 @@ final class Contacts extends Package implements Locale\IPackage, Events\IPackage
                 "DeleteContact" => "Bepaalt of leden van de groep contacten mogen verwijderen",
                 "UpdateCompany" => "Bepaalt of leden van de groep bedrijfscontacten mogen bijwerken",
                 "UpdateContact" => "Bepaalt of leden van de groep contacten mogen bijwerken"
-
             ]
         ]
     ];
