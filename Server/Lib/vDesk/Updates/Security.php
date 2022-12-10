@@ -31,7 +31,8 @@ class Security extends Update {
 - Simplified loading of users and groups.
 - Fixed MembershipEditor not displaying memberships when user is selected.
 - Implemented automatic enabling of editor-controls when the "new user/group"-items have been selected.
-- Membership Groups will be now filled additionally with their name. 
+- Membership Groups will be now filled additionally with their name.
+- Fixed bug causing ACLs not saving updated entries.
 Description;
 
     /**
@@ -56,7 +57,8 @@ Description;
                     "vDesk/Security/Group/Collection.php",
                     "vDesk/Security/User.php",
                     "vDesk/Security/User/Collection.php",
-                    "vDesk/Security/User/Groups.php"
+                    "vDesk/Security/User/Groups.php",
+                    "vDesk/Security/AccessControlList.php"
                 ],
                 Package::Modules => [
                     "Security.php"
