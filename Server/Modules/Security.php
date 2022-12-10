@@ -12,10 +12,6 @@ use vDesk\Modules\Command;
 use vDesk\Modules\Module;
 use vDesk\Security\AccessControlList;
 use vDesk\Security\AccessControlList\Entry;
-use vDesk\Security\Groups;
-use vDesk\Security\GroupsView;
-use vDesk\Security\Users;
-use vDesk\Security\UsersView;
 use vDesk\Security\Group;
 use vDesk\Security\TicketExpiredException;
 use vDesk\Security\UnauthorizedAccessException;
@@ -186,24 +182,22 @@ final class Security extends Module {
     }
 
     /**
-     * Gets all existing Users.
+     * Gets a Collection containing all existing Users.
      *
-     * @param bool $View Flag indicating whether the method should return an view of users.
-     *                   If set to true, this method returns a {@link \vDesk\Security\UsersView} instead of a full
-     *                   {@link \vDesk\Security\Users}.
+     * @param bool $View Flag indicating whether to return a view of Users.
      *
-     * @return \vDesk\Security\Users A Collection of all existing Users.
+     * @return iterable A Collection of all existing Users.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Users.
      */
-    public static function GetUsers(bool $View = null): Users {
+    public static function GetUsers(bool $View = null): iterable {
         if($View ?? Command::$Parameters["View"]) {
-            return UsersView::All();
+            return User\Collection::All()->ToDataView(true);
         }
         if(!User::$Current->Permissions["UpdateUser"]) {
             Log::Warn(__METHOD__, User::$Current->Name . " tried to view Users without having permissions.");
             throw new UnauthorizedAccessException();
         }
-        return Users::All();
+        return User\Collection::All();
     }
 
     /**
@@ -387,25 +381,22 @@ final class Security extends Module {
     }
 
     /**
-     * Gets all groups of the system.
+     * Gets a Collection containing all existing Groups.
      *
-     * @param bool $View Flag indicating whether the method should return an view of groups.
-     *                   If set to true, this method returns an {@link \vDesk\Security\GroupsView} instead of a full
-     *                   {@link \vDesk\Security\Groups}.
+     * @param bool $View Flag indicating whether to return a view of Groups.
      *
      * @return \vDesk\Security\Groups A Collection of all existing Groups.
      * @throws \vDesk\Security\UnauthorizedAccessException  Thrown if the current User doesn't have permissions to update Groups.
-     *
      */
-    public static function GetGroups(bool $View = null): Groups {
+    public static function GetGroups(bool $View = null): iterable {
         if($View ?? Command::$Parameters["View"]) {
-            return GroupsView::FetchAll();
+            return Group\Collection::All()->ToDataView(true);
         }
         if(!User::$Current->Permissions["UpdateGroup"]) {
             Log::Warn(__METHOD__, User::$Current->Name . " tried to view Groups without having permissions.");
             throw new UnauthorizedAccessException();
         }
-        return Groups::FetchAll();
+        return Group\Collection::All();
     }
 
     /**

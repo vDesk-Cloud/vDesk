@@ -92,12 +92,12 @@ vDesk.Security.GroupList = function GroupList(Items = [], Drop = false, Enabled 
                 Drop = Value;
                 Items.forEach(Item => Item.Draggable = Value);
                 if(Value){
-                    Control.addEventListener("drop", OnDrop, false);
+                    Control.addEventListener("drop", OnDrop, true);
                     Control.addEventListener("dragenter", OnDragEnter, false);
                     Control.addEventListener("dragleave", OnDragLeave, false);
                     Control.addEventListener("dragover", OnDragOver, false);
                 }else{
-                    Control.removeEventListener("drop", OnDrop, false);
+                    Control.removeEventListener("drop", OnDrop, true);
                     Control.removeEventListener("dragenter", OnDragEnter, false);
                     Control.removeEventListener("dragleave", OnDragLeave, false);
                     Control.removeEventListener("dragover", OnDragOver, false);
@@ -130,12 +130,8 @@ vDesk.Security.GroupList = function GroupList(Items = [], Drop = false, Enabled 
         Selected = Event.detail.sender;
         Selected.Selected = true;
 
-        Control.removeEventListener("select", OnSelect, true);
-        new vDesk.Events.BubblingEvent("select", {
-            sender: this,
-            item:   Event.detail.sender
-        }).Dispatch(Control);
-        Control.addEventListener("select", OnSelect, true);
+        new vDesk.Events.BubblingEvent("select", {sender: this, item: Event.detail.sender}).Dispatch(Control);
+        Control.addEventListener("select", OnSelect, {once: true, capture: true});
     };
 
     /**
@@ -171,12 +167,10 @@ vDesk.Security.GroupList = function GroupList(Items = [], Drop = false, Enabled 
         //Check if the dropped Item is not in the GroupList.
         const Item = Event.dataTransfer.getReference();
         if(!~Items.indexOf(Item)){
-            new vDesk.Events.BubblingEvent("drop", {
-                sender: this,
-                item:   Item
-            }).Dispatch(Control);
+            Control.removeEventListener("drop", OnDrop, true);
+            new vDesk.Events.BubblingEvent("drop", {sender: this, item: Item}).Dispatch(Control);
+            Control.addEventListener("drop", OnDrop, true);
         }
-        Control.addEventListener("drop", OnDrop, {once: true});
     };
 
     /**
@@ -209,8 +203,8 @@ vDesk.Security.GroupList = function GroupList(Items = [], Drop = false, Enabled 
 
     /**
      * Searches the GroupList for an Item by a specified Group ID.
-     * @param {Number} ID The ID of the Group of the Item to find.
-     * @return {vDesk.Security.GroupList.Item|Null} The found Item; otherwise, null.
+     * @param {Number|null} ID The ID of the Group of the Item to find.
+     * @return {vDesk.Security.GroupList.Item|null} The found Item; otherwise, null.
      */
     this.Find = function(ID) {
         Ensure.Parameter(ID, Type.Number, "ID", true);
@@ -255,8 +249,8 @@ vDesk.Security.GroupList = function GroupList(Items = [], Drop = false, Enabled 
      */
     const Control = document.createElement("ul");
     Control.className = "GroupList BorderLight";
-    Control.addEventListener("select", OnSelect, true);
-    Control.addEventListener("drop", OnDrop, {once: true});
+    Control.addEventListener("select", OnSelect, {once: true, capture: true});
+    Control.addEventListener("drop", OnDrop, true);
     Control.addEventListener("dragenter", OnDragEnter, false);
     Control.addEventListener("dragleave", OnDragLeave, false);
     Control.addEventListener("dragover", OnDragOver, false);

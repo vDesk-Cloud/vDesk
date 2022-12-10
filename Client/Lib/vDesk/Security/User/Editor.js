@@ -72,6 +72,7 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
                 User = Value;
                 PreviousUser = vDesk.Security.User.FromDataView(Value);
                 Name.Value = Value.Name;
+                Name.Validator = {Expression: `^${vDesk.Security.Users.filter(User => User.Name !== Value.Name).map(User => `(?!.*${User.Name.toLowerCase()}|.*${User.Name})`).join("")}.*$`};
                 Name.Enabled = Enabled && Value.ID !== vDesk.Security.User.System;
                 Password.Value = null;
                 Password.Label = Value.ID !== null
@@ -112,7 +113,7 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
     const OnUpdate = Event => {
         Event.stopPropagation();
         Changed = true;
-        new vDesk.Events.BubblingEvent("change", {sender: this}).Dispatch(Control);
+        new vDesk.Events.BubblingEvent("change", {sender: this, user: User}).Dispatch(Control);
         //Instead of spinning around just flip the valid flag. lel.
         Name.Valid = !Name.Valid;
     };
@@ -125,7 +126,7 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
         User.FailedLoginCount = 0;
         Changed = true;
         FailedLogins.textContent = `${vDesk.Locale.Security.FailedLogins}: ${User.FailedLoginCount}`;
-        new vDesk.Events.BubblingEvent("change", {sender: this}).Dispatch(Control);
+        new vDesk.Events.BubblingEvent("change", {sender: this, user: User}).Dispatch(Control);
     };
 
     /**
@@ -155,10 +156,7 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
                     if(Response.Status){
                         Changed = false;
                         this.User = vDesk.Security.User.FromDataView(Response.Data);
-                        new vDesk.Events.BubblingEvent("create", {
-                            sender: this,
-                            user:   User
-                        }).Dispatch(Control);
+                        new vDesk.Events.BubblingEvent("create", {sender: this, user: User}).Dispatch(Control);
                     }
                 }
             );
@@ -185,10 +183,7 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
                         Control.removeEventListener("update", OnUpdate, false);
                         Changed = false;
                         this.User = vDesk.Security.User.FromDataView(Response.Data);
-                        new vDesk.Events.BubblingEvent("update", {
-                            sender: this,
-                            user:   User
-                        }).Dispatch(Control);
+                        new vDesk.Events.BubblingEvent("update", {sender: this, user: User}).Dispatch(Control);
                         Control.addEventListener("update", OnUpdate, false);
                     }
                 }
@@ -213,10 +208,7 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
                 ),
                 Response => {
                     if(Response.Status){
-                        new vDesk.Events.BubblingEvent("delete", {
-                            sender: this,
-                            user:   User
-                        }).Dispatch(Control);
+                        new vDesk.Events.BubblingEvent("delete", {sender: this, user: User}).Dispatch(Control);
                     }
                 }
             );
@@ -237,10 +229,11 @@ vDesk.Security.User.Editor = function Editor(User, Enabled = false) {
         null,
         Type.String,
         User.Name,
-        {Expression: `^${vDesk.Security.Users.map(User => `(?!.*${User.Name})`).join("")}.*$`},
+        {Expression: `^${vDesk.Security.Users.filter(Current => Current.Name !== User.Name).map(User => `(?!.*${User.Name.toLowerCase()}|.*${User.Name})`).join("")}.*$`},
         true,
         Enabled && User.ID !== vDesk.Security.User.System
     );
+
 
     /**
      * The password EditControl of the Editor.
