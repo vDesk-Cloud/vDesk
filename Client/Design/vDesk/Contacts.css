@@ -22,15 +22,20 @@
     line-height: 1.8;
     font-weight: bold;
     cursor: pointer;
+    background-color: var(--ControlBackground);
 }
 
 .Contacts > .Alphabet > .Char.Selected {
-    background-color: #FFCF32 !important;
+    background-color: var(--ControlSelected);
 }
 
 .Contacts > .Alphabet > .Char:hover {
-    color: #fff;
-    background-color: #2AB0ED;
+    color: var(--FontLight);
+    background-color: var(--ControlHover);
+}
+
+.Contacts > .Alphabet > .Char:active {
+    background-color: var(--ControlPress);
 }
 
 .Contacts > .TabControl {

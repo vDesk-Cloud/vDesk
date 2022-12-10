@@ -4,5 +4,14 @@
 }
 
 .Contacts .Company.Selected {
-    background-color: #FFCF32;
+    background-color: var(--ControlSelected);
+}
+
+.Contacts .Company:hover {
+    color: var(--FontLight);
+    background-color: var(--ControlHover);
+}
+
+.Contacts .Company:active {
+    background-color: var(--ControlPress);
 }
