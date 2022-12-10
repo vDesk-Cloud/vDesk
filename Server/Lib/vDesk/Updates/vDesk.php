@@ -20,13 +20,13 @@ class vDesk extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.3.0";
+    public const RequiredVersion = "1.3.1";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to Events-1.2.0.
+- Updated CSS-classes of calendar and main-menu controls to use client colors.
 Description;
 
     /**
@@ -34,13 +34,16 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
-            Package::Server => [
+            Package::Client => [
+                Package::Design => [
+                    "vDesk/MainMenu.css",
+                    "vDesk/MainMenu/Item.css",
+                    "vDesk/Controls/Calendar/Cell.css"
+                ],
                 Package::Lib => [
                     "vDesk.php"
                 ]
-            ]
-        ],
-        self::Undeploy => [
+            ],
             Package::Server => [
                 Package::Lib => [
                     "vDesk.php"
@@ -52,7 +55,6 @@ Description;
     /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
         //Update files.
-        self::Undeploy();
         self::Deploy($Phar, $Path);
     }
 }

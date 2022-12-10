@@ -6,14 +6,18 @@
     vertical-align: baseline;
     text-align: left;
     line-height: 30px;
-    border-bottom: 1px solid #999;
+    border-bottom: 1px solid var(--BoderLight, rgba(153, 153, 153, 1));
     user-select: none;
     -moz-user-select: none;
     cursor: pointer;
 }
 
 .MainMenu > .Container > .List > .Item:hover {
-    background-color: #3BD8F7;
+    background-color: var(--ControlHover, rgba(42, 176, 237, 1));
+}
+
+.MainMenu > .Container > .List > .Item:active {
+    background-color: var(--ControlPress, rgba(70, 140, 207, 1));
 }
 
 .MainMenu > .Container > .List > .Item > .Icon {
