@@ -43,12 +43,12 @@ final class Contacts extends Module implements ISearch {
     public const FilterCompany = "Company";
 
     /**
-     * Gets the data of a Contact.
+     * Gets a filled Contact.
      *
      * @param null|int $ID The ID of the Contact.
      *
-     * @return Contact The model-representation of the Contact.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current user is not allowed to view the Contact.
+     * @return Contact A new Contact filled with database values.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have read-permissions on the Contact to get.
      */
     public static function GetContact(int $ID = null): Contact {
         $Contact = (new Contact($ID ?? Command::$Parameters["ID"]))->Fill();
@@ -77,7 +77,7 @@ final class Contacts extends Module implements ISearch {
 
     /**
      * Creates a new Contact.
-     * Triggers the {@link \vDesk\Contacts\ContactAdded}-Event for the added {@link \vDesk\Contacts\Contact}.
+     * Triggers the {@link \vDesk\Contacts\ContactAdded}-Event for the created Contact.
      *
      * @param \vDesk\Security\User|null    $Owner       The owner of the Contact to create.
      * @param int|null                     $Gender      The gender of the Contact to create.
@@ -92,7 +92,7 @@ final class Contacts extends Module implements ISearch {
      * @param \vDesk\Contacts\Company|null $Company     The Company of the Contact to create.
      * @param string|null                  $Annotations The annotations of the Contact to create.
      *
-     * @return \vDesk\Contacts\Contact The newly created Contact.
+     * @return \vDesk\Contacts\Contact The new created Contact.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to create Contacts.
      */
     public static function CreateContact(
@@ -140,25 +140,25 @@ final class Contacts extends Module implements ISearch {
     }
 
     /**
-     * Updates an existing Contact.
-     * Triggers the {@link \vDesk\Contacts\Contact\Updated}-Event for the updated {@link \vDesk\Contacts\Contact}.
+     * Updates a Contact.
+     * Triggers the {@link \vDesk\Contacts\Contact\Updated}-Event for the updated Contact.
      *
      * @param int|null                     $ID          The ID of the Contact to update.
-     * @param int|null                     $Gender      The gender of the Contact to update.
-     * @param string|null                  $Title       The title of the Contact to update.
-     * @param string|null                  $Forename    The forename of the Contact to update.
-     * @param string|null                  $Surname     The surname of the Contact to update.
-     * @param string|null                  $Street      The street of the Contact to update.
-     * @param string|null                  $HouseNumber The house number of the Contact to update.
-     * @param int|null                     $ZipCode     The zip code of the Contact to update.
-     * @param string|null                  $City        The city of the Contact to update.
-     * @param \vDesk\Locale\Country|null   $Country     The Country of the Contact to update.
-     * @param \vDesk\Contacts\Company|null $Company     The Company of the Contact to update.
-     * @param string|null                  $Annotations The annotations of the Contact to update.
+     * @param int|null                     $Gender      The new gender of the Contact to update.
+     * @param string|null                  $Title       The new title of the Contact to update.
+     * @param string|null                  $Forename    The new forename of the Contact to update.
+     * @param string|null                  $Surname     The new surname of the Contact to update.
+     * @param string|null                  $Street      The new street of the Contact to update.
+     * @param string|null                  $HouseNumber The new house number of the Contact to update.
+     * @param int|null                     $ZipCode     The new zip code of the Contact to update.
+     * @param string|null                  $City        The new city of the Contact to update.
+     * @param \vDesk\Locale\Country|null   $Country     The new Country of the Contact to update.
+     * @param \vDesk\Contacts\Company|null $Company     The new Company of the Contact to update.
+     * @param string|null                  $Annotations The new annotations of the Contact to update.
      *
      * @return \vDesk\Contacts\Contact The updated Contact.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Contacts or doesn't have
-     *                                                     write permissions on the Contact to update.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Contacts.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have write-permissions on the Contact to update.
      */
     public static function UpdateContact(
         int     $ID = null,
@@ -196,17 +196,17 @@ final class Contacts extends Module implements ISearch {
     }
 
     /**
-     * Updates the {@link \vDesk\Contacts\Contact\Option}s of a Contact.
-     * Triggers the {@link \vDesk\Contacts\Contact\Updated} Event for the updated {@link \vDesk\Contacts\Contact}.
+     * Updates the Options of a Contact.
+     * Triggers the {@link \vDesk\Contacts\Contact\Updated} Event for the updated Contact.
      *
      * @param int|null   $ID     The ID of the Contact to update the Options of.
      * @param array|null $Add    The Options to add.
      * @param array|null $Update The Options to update.
      * @param array|null $Delete The IDs of the Options to delete.
      *
-     * @return \vDesk\Contacts\Contact\Options The updated Options of the Contact.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Contacts or doesn't have
-     *                                                     write permissions on the Contact to update.
+     * @return \vDesk\Contacts\Contact\Options A Collection containing the updated Options of the Contact.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Contacts.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have write-permissions on the Contact to update.
      */
     public static function SetContactOptions(int $ID = null, array $Add = null, array $Update = null, array $Delete = null): Options {
         $Contact = new Contact($ID ?? Command::$Parameters["ID"]);
@@ -215,12 +215,10 @@ final class Contacts extends Module implements ISearch {
             Log::Warn(__METHOD__, User::$Current->Name . " tried to update the Options of a Contact without having permissions.");
             throw new UnauthorizedAccessException();
         }
+
         //Add new options.
         foreach($Add ?? Command::$Parameters["Add"] as $Added) {
-            $Option        = new Contact\Option();
-            $Option->Type  = $Added->Type;
-            $Option->Value = $Added->Value;
-            $Contact->Options->Add($Option);
+            $Contact->Options->Add(new Contact\Option(null, $Added["Type"], $Added["Value"]));
         }
 
         //Update changed options.
@@ -239,14 +237,14 @@ final class Contacts extends Module implements ISearch {
     }
 
     /**
-     * Deletes an existing Contact.
-     * Triggers the {@link \vDesk\Contacts\Contact\Deleted}-Event for the deleted {@link \vDesk\Contacts\Contact}.
+     * Deletes a Contact.
+     * Triggers the {@link \vDesk\Contacts\Contact\Deleted}-Event for the deleted Contact.
      *
      * @param null|int $ID The ID of the Contact to delete.
      *
      * @return boolean True if the Contact has been successfully deleted.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to delete Contacts or doesn't have
-     *                                                     write permissions on the Contact to delete.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to delete Contacts.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have delete-permissions on the Contact to delete.
      */
     public static function DeleteContact(int $ID = null): bool {
         $Contact = new Contact($ID ?? Command::$Parameters["ID"]);
@@ -260,11 +258,11 @@ final class Contacts extends Module implements ISearch {
     }
 
     /**
-     * Gets a Company.
+     * Gets a filled Company Contact.
      *
-     * @param null|int $ID The ID of the Company.
+     * @param null|int $ID The ID of the Company Contact.
      *
-     * @return \vDesk\Contacts\Company The model-representation of the Company.
+     * @return \vDesk\Contacts\Company A new Company Contact filled with database values.
      */
     public static function GetCompany(int $ID = null): Company {
         return (new Company($ID ?? Command::$Parameters["ID"]))->Fill();
@@ -297,22 +295,22 @@ final class Contacts extends Module implements ISearch {
     }
 
     /**
-     * Creates a new Company.
-     * Triggers the {@link \vDesk\Contacts\Company\Created}-Event for the added {@link \vDesk\Contacts\Company}.
+     * Creates a new Company Contact.
+     * Triggers the {@link \vDesk\Contacts\Company\Created}-Event for the created Company Contact.
      *
-     * @param string|null                $Name        The name of the Company to add.
-     * @param string|null                $Street      The street of the Company to add.
-     * @param string|null                $HouseNumber The house number of the Company to add.
-     * @param int|null                   $ZipCode     The zip code of the Company to add.
-     * @param string|null                $City        The city of the Company to add.
-     * @param \vDesk\Locale\Country|null $Country     The code of the Country of the Company to add.
-     * @param string|null                $PhoneNumber The phone number of the Company to add.
-     * @param string|null                $FaxNumber   The fax number of the Company to add.
-     * @param string|null                $Email       The email-address of the Company to add.
-     * @param string|null                $Website     The website of the Company to add.
+     * @param string|null                $Name        The name of the Company Contact to create.
+     * @param string|null                $Street      The street of the Company Contact to create.
+     * @param string|null                $HouseNumber The house number of the Company Contact to create.
+     * @param int|null                   $ZipCode     The zip code of the Company Contact to create.
+     * @param string|null                $City        The city of the Company Contact to create.
+     * @param \vDesk\Locale\Country|null $Country     The code of the Country of the Company Contact to create.
+     * @param string|null                $PhoneNumber The phone number of the Company Contact to create.
+     * @param string|null                $FaxNumber   The fax number of the Company Contact to create.
+     * @param string|null                $Email       The email-address of the Company Contact to create.
+     * @param string|null                $Website     The website of the Company Contact to create.
      *
-     * @return \vDesk\Contacts\Company The newly created Company.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to create Companies.
+     * @return \vDesk\Contacts\Company The new created Company Contact.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to create Company Contacts.
      */
     public static function CreateCompany(
         string  $Name = null,
@@ -349,23 +347,23 @@ final class Contacts extends Module implements ISearch {
     }
 
     /**
-     * Updates an existing Company.
-     * Triggers the {@link \vDesk\Contacts\Company\Updated}-Event for the updated {@link \vDesk\Contacts\Company}.
+     * Updates a Company Contact.
+     * Triggers the {@link \vDesk\Contacts\Company\Updated}-Event for the updated Company Contact.
      *
-     * @param int|null                   $ID          The ID of the Company to update.
-     * @param string|null                $Name        The name of the Company to update.
-     * @param string|null                $Street      The street of the Company to update.
-     * @param string|null                $HouseNumber The house number of the Company to update.
-     * @param int|null                   $ZipCode     The zip code of the Company to update.
-     * @param string|null                $City        The city of the Company to update.
-     * @param \vDesk\Locale\Country|null $Country     The code of the Country of the Company to update.
-     * @param string|null                $PhoneNumber The phone number of the Company to update.
-     * @param string|null                $FaxNumber   The fax number of the Company to update.
-     * @param string|null                $Email       The email  of the Company to update.
-     * @param string|null                $Website     The website of the Company to update.
+     * @param int|null                   $ID          The ID of the Company Contact to update.
+     * @param string|null                $Name        The new name of the Company Contact to update.
+     * @param string|null                $Street      The new street of the Company Contact to update.
+     * @param string|null                $HouseNumber The new house number of the Company Contact to update.
+     * @param int|null                   $ZipCode     The new zip code of the Company Contact to update.
+     * @param string|null                $City        The new city of the Company Contact to update.
+     * @param \vDesk\Locale\Country|null $Country     The new code of the Country of the Company Contact to update.
+     * @param string|null                $PhoneNumber The new phone number of the Company Contact to update.
+     * @param string|null                $FaxNumber   The new fax number of the Company Contact to update.
+     * @param string|null                $Email       The new email  of the Company Contact to update.
+     * @param string|null                $Website     The new website of the Company Contact to update.
      *
-     * @return \vDesk\Contacts\Company The updated Company.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Companies.
+     * @return \vDesk\Contacts\Company The updated Company Contact.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Company Contacts.
      */
     public static function UpdateCompany(
         int     $ID = null,
@@ -401,13 +399,13 @@ final class Contacts extends Module implements ISearch {
     }
 
     /**
-     * Deletes a Company.
-     * Triggers the {@link \vDesk\Contacts\CompanyDeleted}-Event for the deleted {@link \vDesk\Contacts\Company}.
+     * Deletes a Company Contact.
+     * Triggers the {@link \vDesk\Contacts\CompanyDeleted}-Event for the deleted Company Contact.
      *
-     * @param null|int $ID The ID of the Company to delete.
+     * @param null|int $ID The ID of the Company Contact to delete.
      *
-     * @return boolean True if the Company has been successfully deleted.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to delete Companies.
+     * @return boolean True if the Company Contact has been successfully deleted.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to delete Company Contacts.
      */
     public static function DeleteCompany(int $ID = null): bool {
         if(!User::$Current->Permissions["DeleteCompany"]) {
@@ -421,7 +419,7 @@ final class Contacts extends Module implements ISearch {
     }
 
     /**
-     * Searches the Contacts Module for Contacts or Companies matching a specified name.
+     * Searches the database for Contacts or Company Contacts matching a specified name.
      *
      * @param string      $Value  The name to search for.
      * @param null|string $Filter A filter to apply on the search result.
@@ -478,11 +476,7 @@ final class Contacts extends Module implements ISearch {
         return $Results;
     }
 
-    /**
-     * Gets the status information of the Contacts.
-     *
-     * @return null|array An array containing the amount of private and business Contacts.
-     */
+    /** @inheritDoc */
     public static function Status(): ?array {
         return [
             "ContactCount" => Expression::Select(Functions::Count("*"))
