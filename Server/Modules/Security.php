@@ -21,8 +21,7 @@ use vDesk\Utils\Validate;
 use vDesk\Struct\Extension;
 
 /**
- * The central security Module of vDesk.
- * Manages access to objects, administrates Users and Groups.
+ * Security Module class.
  *
  * @package vDesk\Security
  * @author  Kerry <DevelopmentHero@gmail.com>
@@ -35,8 +34,10 @@ final class Security extends Module {
      * @param string|null $User     The name or email-address of the User.
      * @param null|string $Password The password of the User.
      *
-     * @return \vDesk\Security\User The logged in User.
-     * @throws \vDesk\Security\UnauthorizedAccessException
+     * @return \vDesk\Security\User The logged-in User.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the User doesn't exist.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the password is wrong.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the User account has been disabled.
      */
     public static function Login(string $User = null, string $Password = null): User {
         $User ??= Command::$Parameters["User"];
@@ -89,8 +90,7 @@ final class Security extends Module {
         }
 
         $User->FailedLoginCount = (int)$Row["FailedLoginCount"];
-
-        $User->Memberships = new User\Groups([], $User);
+        $User->Memberships      = new User\Groups([], $User);
         $User->Permissions->Fill();
         $User->Ticket = \uniqid("", true);
 
@@ -117,10 +117,10 @@ final class Security extends Module {
     /**
      * Performs a login with a valid session ticket.
      *
-     * @param null|string $Ticket The ticket of the user to login.
+     * @param null|string $Ticket The ticket of the User to login.
      *
      * @return \vDesk\Security\User The logged-in User.
-     * @throws \vDesk\Security\UnauthorizedAccessException
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the User account has been disabled.
      */
     public static function ReLogin(string $Ticket = null): User {
         $User = User::FromTicket($Ticket ?? Command::$Ticket);
@@ -129,6 +129,7 @@ final class Security extends Module {
             throw new UnauthorizedAccessException();
         }
         $User->Permissions->Fill();
+        User::$Current ??= $User;
         return $User;
     }
 
@@ -152,7 +153,7 @@ final class Security extends Module {
     }
 
     /**
-     * Determines whether a ticket is valid.
+     * Validates a ticket and initializes a User from it for the current session.
      *
      * @param string|null $Ticket The ticket to validate.
      *
@@ -186,7 +187,7 @@ final class Security extends Module {
      *
      * @param bool $View Flag indicating whether to return a view of Users.
      *
-     * @return iterable A Collection of all existing Users.
+     * @return iterable A Collection containing all existing Users.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update Users.
      */
     public static function GetUsers(bool $View = null): iterable {
@@ -202,6 +203,7 @@ final class Security extends Module {
 
     /**
      * Creates a new User.
+     * Triggers the {@see \vDesk\Security\User\Created}-Event for the created User.
      *
      * @param string|null $Name     The name of the User.
      * @param string|null $Locale   The locale of the User.
@@ -209,10 +211,16 @@ final class Security extends Module {
      * @param string|null $Email    The email address of the User.
      * @param bool|null   $Active   Flag indicating whether the User is active.
      *
-     * @return \vDesk\Security\User The newly created user.
+     * @return \vDesk\Security\User The new created user.
      * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to create new Users.
      */
-    public static function CreateUser(string $Name = null, string $Locale = null, string $Password = null, string $Email = null, bool $Active = null): User {
+    public static function CreateUser(
+        string $Name = null,
+        string $Locale = null,
+        string $Password = null,
+        string $Email = null,
+        bool   $Active = null
+    ): User {
         if(!User::$Current->Permissions["CreateUser"]) {
             Log::Warn(__METHOD__, User::$Current->Name . " tried to create a new User without having permissions.");
             throw new UnauthorizedAccessException();
@@ -234,6 +242,7 @@ final class Security extends Module {
 
     /**
      * Updates an User.
+     * Triggers the {@see \vDesk\Security\User\Updated}-Event for the updated User.
      *
      * @param int|null    $ID               The ID of the User.
      * @param string|null $Name             The new name of the User.
@@ -279,7 +288,7 @@ final class Security extends Module {
     }
 
     /**
-     * Sets the memberships of an User to a specified set of Groups.
+     * Updates the Group-memberships of a specified User.
      *
      * @param int|null   $ID     The ID of the User to update.
      * @param int[]|null $Add    The IDs of the Groups to add.
@@ -358,7 +367,8 @@ final class Security extends Module {
     }
 
     /**
-     * Deletes an {@link \vDesk\Security\User}-account and all of its group-memberships from the system.
+     * Deletes an User and all of its Group-memberships.
+     * Triggers the {@see \vDesk\Security\User\Deleted}-Event for the deleted User.
      *
      * @param null|int $ID The ID of the User to delete.
      *
@@ -385,7 +395,7 @@ final class Security extends Module {
      *
      * @param bool $View Flag indicating whether to return a view of Groups.
      *
-     * @return \vDesk\Security\Groups A Collection of all existing Groups.
+     * @return \vDesk\Security\Group\Collection A Collection containing all existing Groups.
      * @throws \vDesk\Security\UnauthorizedAccessException  Thrown if the current User doesn't have permissions to update Groups.
      */
     public static function GetGroups(bool $View = null): iterable {
@@ -401,6 +411,7 @@ final class Security extends Module {
 
     /**
      * Creates a new Group.
+     * Triggers the {@see \vDesk\Security\Group\Created}-Event for the created Group.
      *
      * @param null|string $Name        The name of the Group.
      * @param bool[]      $Permissions The permissions of the Group.
@@ -425,6 +436,7 @@ final class Security extends Module {
 
     /**
      * Updates a Group.
+     * Triggers the {@see \vDesk\Security\Group\Updated}-Event for the updated Group.
      *
      * @param null|int    $ID          The ID of the Group to update.
      * @param null|string $Name        The new name of the Group.
@@ -444,6 +456,7 @@ final class Security extends Module {
             $Group->Permissions[$Permission] = $Value;
         }
         $Group->Save();
+        (new Group\Updated($Group))->Dispatch();
         return $Group;
     }
 
@@ -478,7 +491,7 @@ final class Security extends Module {
      */
     public static function DeletePermission(string $Name = null): bool {
         if(!User::$Current->Permissions["UpdateGroup"]) {
-            Log::Warn(__METHOD__, User::$Current->Name . " tried to create a Group Permission without having permissions.");
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to delete a Group Permission without having permissions.");
             throw new UnauthorizedAccessException();
         }
         Expression::Alter()
@@ -490,6 +503,7 @@ final class Security extends Module {
 
     /**
      * Deletes a Group.
+     * Triggers the {@see \vDesk\Security\Group\Deleted}-Event for the deleted Group.
      *
      * @param int|null $ID The ID of the Group to delete.
      *
@@ -513,8 +527,8 @@ final class Security extends Module {
      * @param int|null $ID The ID of the AccessControlList to get.
      *
      * @return \vDesk\Security\AccessControlList The requested AccessControlList.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to read AccessControlLists or doesn't have
-     *                                                     read permissions on the AccessControlList to get.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to read AccessControlLists.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have read-permissions on the AccessControlList to get.
      */
     public static function GetAccessControlList(int $ID = null): AccessControlList {
         $AccessControlList = (new AccessControlList([], $ID ?? Command::$Parameters["ID"]))->Fill(User::$Current);
@@ -529,14 +543,13 @@ final class Security extends Module {
      * Updates an AccessControlList.
      *
      * @param int|null      $ID     The ID of the AccessControlList to update.
-     *
      * @param object[]|null $Add    The Entries to add.
      * @param object[]|null $Update The Entries to update.
      * @param int[]|null    $Delete The IDs of the Entries to delete.
      *
      * @return \vDesk\Security\AccessControlList The updated AccessControlList.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update AccessControlLists or doesn't have
-     *                                                     write permissions on the AccessControlList to update.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to update AccessControlLists.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have write-permissions on the AccessControlList to update.
      */
     public static function UpdateAccessControlList(int $ID = null, array $Add = null, array $Update = null, array $Delete = null): AccessControlList {
         $AccessControlList = (new AccessControlList([], $ID ?? Command::$Parameters["ID"]))->Fill(User::$Current);
@@ -579,11 +592,7 @@ final class Security extends Module {
         return $AccessControlList;
     }
 
-    /**
-     * Gets the status information of the PinBoard.
-     *
-     * @return null|array An array containing the amount of PinBoard Notes and attached Elements.
-     */
+    /** @inheritDoc */
     public static function Status(): ?array {
         return [
             "UserCount"  => Expression::Select(Functions::Count("*"))
