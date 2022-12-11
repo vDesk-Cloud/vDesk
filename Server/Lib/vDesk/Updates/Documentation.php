@@ -29,7 +29,7 @@ final class Documentation extends Update {
      * The description of the Update.
      */
     public const Description = <<<Description
-- Extended database-access documentation.
+- Changed grouping to general topics and package documentations.
 - Updated development guidelines.
 - Refactored Tutorials to Client- and Server-directories.
 Description;
@@ -92,26 +92,21 @@ Description;
         self::Undeploy();
         self::Deploy($Phar, $Path);
 
-        //Create routes.
-        Settings::$Local["Routes"]["/Documentation/Category/Client/Topic/{Topic}"] = [
-            "Module"  => "Documentation",
-            "Command" => "ClientPage"
-        ];
-        Settings::$Local["Routes"]["/Documentation/Category/Client"]               = [
-            "Module"  => "Documentation",
-            "Command" => "ClientPages"
-        ];
-        Settings::$Local["Routes"]["/Documentation/Category/Server/Topic/{Topic}"] = [
-            "Module"  => "Documentation",
-            "Command" => "ServerPage"
-        ];
-        Settings::$Local["Routes"]["/Documentation/Category/Server"]               = [
-            "Module"  => "Documentation",
-            "Command" => "ServerPages"
-        ];
-        Settings::$Local["Routes"]["/Documentation/Topic/{Topic}"]                 = [
+        //Remove old routes.
+        foreach(Settings::$Local["Routes"] as $Route => $Command){
+            if($Command["Module"] === "Documentation") {
+                Settings::$Local["Routes"]->Remove($Route);
+            }
+        }
+
+        //Add new routes.
+        Settings::$Local["Routes"]["/Documentation/Topic/{Topic}"] = [
             "Module"  => "Documentation",
             "Command" => "Topic"
+        ];
+        Settings::$Local["Routes"]["/Documentation/Package/{Package}"] = [
+            "Module"  => "Documentation",
+            "Command" => "Package"
         ];
         Settings::$Local->Save();
     }

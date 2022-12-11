@@ -7,38 +7,38 @@ use vDesk\Configuration\Settings;
 use vDesk\Pages\IPackage;
 
 /**
- * Class Documentation
+ * Documentation Package manifest class.
  *
- * @package vDesk\Packages
+ * @package vDesk\Documentation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Documentation extends Package implements IPackage {
-    
+
     /**
      * The name of the Package.
      */
     public const Name = "Documentation";
-    
+
     /**
      * The version of the Package.
      */
-    public const Version = "1.0.3";
-    
+    public const Version = "1.1.0";
+
     /**
      * The vendor of the Package.
      */
     public const Vendor = "Kerry <DevelopmentHero@gmail.com>";
-    
+
     /**
      * The description of the Package.
      */
     public const Description = "Package that provides a documentation website.";
-    
+
     /**
      * The dependencies of the Package.
      */
     public const Dependencies = ["Pages" => "1.1.0"];
-    
+
     /**
      * The files and directories of the Package.
      */
@@ -69,44 +69,28 @@ final class Documentation extends Package implements IPackage {
             ]
         ]
     ];
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         //Create routes.
-        Settings::$Local["Routes"]["/Documentation/Category/Client/Topic/{Topic}"] = [
-            "Module"  => "Documentation",
-            "Command" => "ClientPage"
-        ];
-        Settings::$Local["Routes"]["/Documentation/Category/Client"]               = [
-            "Module"  => "Documentation",
-            "Command" => "ClientPages"
-        ];
-        Settings::$Local["Routes"]["/Documentation/Category/Server/Topic/{Topic}"] = [
-            "Module"  => "Documentation",
-            "Command" => "ServerPage"
-        ];
-        Settings::$Local["Routes"]["/Documentation/Category/Server"]               = [
-            "Module"  => "Documentation",
-            "Command" => "ServerPages"
-        ];
-        Settings::$Local["Routes"]["/Documentation/Topic/{Topic}"]                 = [
+        Settings::$Local["Routes"]["/Documentation/Topic/{Topic}"]     = [
             "Module"  => "Documentation",
             "Command" => "Topic"
         ];
-        
+        Settings::$Local["Routes"]["/Documentation/Package/{Package}"] = [
+            "Module"  => "Documentation",
+            "Command" => "Package"
+        ];
+
         //Extract files.
         self::Deploy($Phar, $Path);
-        
+
     }
-    
-    /**
-     * @inheritDoc
-     */
+
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
         self::Undeploy();
     }
-    
+
 }
