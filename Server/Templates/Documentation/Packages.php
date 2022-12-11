@@ -15,7 +15,7 @@ use vDesk\Pages\Functions;
             <?php foreach(\Modules\Documentation::Packages() as $Package): ?>
                 <?php if($Package->Name !== "PackagesDocumentation"): ?>
                     <li>
-                        <a href="<?= Functions::URL("Documentation", "Category", "Packages", "Package", $Package->Name) ?>"><?= $Package->Label ?></a>
+                        <a href="<?= Functions::URL("Documentation", "Package", $Package->Name) ?>"><?= $Package->Label ?></a>
                     </li>
                 <?php endif; ?>
             <?php endforeach; ?>

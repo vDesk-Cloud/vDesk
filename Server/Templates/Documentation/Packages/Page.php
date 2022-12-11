@@ -44,7 +44,7 @@ use vDesk\Pages\Functions;
 <?php foreach($Page->Packages as $Package): ?>
 <?php if($Package->Name !== "Index" && $Package->Name !== "PackagesDocumentation"): ?>
                 <a class="Tutorial <?= $Package->Name === $Page->Package->Name ? "Current" : "" ?>"
-                   href="<?= Functions::URL("Documentation", "Category", "Packages", "Package", $Package->Name) ?>">
+                   href="<?= Functions::URL("Documentation", "Package", $Package->Name) ?>">
                     <?= $Package->Label ?>
                 </a>
 <?php endif; ?>
