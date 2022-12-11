@@ -122,12 +122,6 @@ vDesk.Archive.Element = function Element(
      */
     let Selected = false;
 
-    /**
-     * The dragcounter indicating drag-operations for childcontrols.
-     * @type {Number}
-     */
-    let DragCounter = 0;
-
     Object.defineProperties(this, {
         Control:           {
             enumerable: true,
@@ -300,9 +294,17 @@ vDesk.Archive.Element = function Element(
      * Eventhandler that listens on the 'dragenter' event and adds hover effects.
      * @return {Boolean}
      */
-    const OnDragEnter = () => {
-        DragCounter++;
-        this.Selected = true;
+    const OnDragEnter = Event => {
+        if(Selected || Type === vDesk.Archive.Element.File) {
+            return false;
+        }
+        //https://bugzilla.mozilla.org/show_bug.cgi?id=804036
+        if(Event.target === Control){
+            Control.addEventListener("dragleave", OnDragLeave);
+            Control.classList.toggle("Selected", true);
+        }else{
+            Control.removeEventListener("dragleave", OnDragLeave);
+        }
         return false;
     };
 
@@ -310,10 +312,10 @@ vDesk.Archive.Element = function Element(
      * Eventhandler that listens on the 'drageleave' event and removes hover effects.
      * @return {Boolean}
      */
-    const OnDragLeave = () => {
-        DragCounter--;
-        if(DragCounter === 0){
-            this.Selected = false;
+    const OnDragLeave = Event => {
+        if(Event.target === Control){
+            Control.classList.toggle("Selected", false);
+            Control.removeEventListener("dragleave", OnDragLeave);
         }
         return false;
     };

@@ -66,7 +66,7 @@ final class Events extends Package implements IPackage {
         ],
         self::Server => [
             self::Modules => [
-                "EventDispatcher.php"
+                "Events.php"
             ],
             self::Lib     => [
                 "vDesk/Events"
@@ -98,12 +98,7 @@ final class Events extends Package implements IPackage {
     /**
      * The available storage modes of Event listeners.
      */
-    public const Modes = ["Filesystem", "Archive", "Both"];
-
-    /**
-     * @var string
-     */
-    private static string $Mode = "Filesystem";
+    public const Modes = ["Filesystem" => "filesystem", "Archive" => "archive", "Both" => "both"];
 
     /** @inheritDoc */
     public static function PreInstall(\Phar $Phar, string $Path): void {
@@ -114,19 +109,27 @@ final class Events extends Package implements IPackage {
         }
 
         //Check if the Archive package has been bundled.
-        if(\PHP_SAPI === "cli" && \vDesk\Modules::Installed("Archive")) {
+        if(\PHP_SAPI === "cli" && \class_exists("\\vDesk\\Packages\\Archive")) {
             $Parameters = \getopt("", ["Events.Mode", "ev.md"]);
-            $Mode       = $Parameters["Events.Mode"] ?? $Parameters["ev.md"];
-            while(!\in_array($Mode, self::Modes)){
-                $Mode = \readline("Event listener storage mode [available = " . \implode(", ", self::Modes) . "] [default = Filesystem]: ");
-                $Mode = Text::IsNullOrWhitespace($Mode) ? "Filesystem" : $Mode;
+            $Mode       = $Parameters["Events.Mode"] ?? $Parameters["ev.md"] ?? null;
+            if($Mode === null) {
+                echo "[Archive-package detected]: The Events-package supports optionally storing event listeners in the Archive.";
             }
+            while(!\in_array($Mode, self::Modes)) {
+                $Mode = \readline("Storage mode [available = " . \implode(", ", \array_keys(self::Modes)) . "] [default = Filesystem]: ");
+                $Mode = Text::IsNullOrWhitespace($Mode) ? self::Modes["Filesystem"] : \strtolower($Mode);
+            }
+            $Mode = match ($Mode) {
+                self::Modes["Filesystem"] => \Modules\Events::Filesystem,
+                self::Modes["Archive"] => \Modules\Events::Archive,
+                self::Modes["Both"] => \Modules\Events::Both
+            };
         } else {
-            self::$Mode = \vDesk\Modules::Events()::Filesystem;
+            $Mode = \Modules\Events::Filesystem;
         }
 
         //Create local config.
-        Settings::$Local["Events"] = new Settings\Local\Settings(["Mode" => self::$Mode, "Directory" => null], "Events");
+        Settings::$Local["Events"] = new Settings\Local\Settings(["Mode" => $Mode, "Directory" => null], "Events");
     }
 
     /** @inheritDoc */
@@ -203,7 +206,7 @@ final class Events extends Package implements IPackage {
     public static function PostInstall(\Phar $Phar, string $Path): void {
 
         //Check if Archive storage option is set.
-        if(self::$Mode & \vDesk\Modules::Events()::Archive) {
+        if(Settings::$Local["Events"]["Mode"] & \Modules\Events::Archive) {
             $System = new Element(2);
             $Events = new Element(
                 null,
@@ -228,11 +231,6 @@ final class Events extends Package implements IPackage {
 
     /** @inheritDoc */
     public static function Uninstall(string $Path): void {
-
-        //Delete Archive storage element.
-        if(Settings::$Local["Events"]["Directory"] & \vDesk\Modules::Events()::Archive && \vDesk\Modules::Installed("Archive")) {
-            \vDesk\Modules::Archive()::DeleteElements([Settings::$Local["Events"]["Directory"]]);
-        }
 
         //Uninstall Module.
         \vDesk\Modules::Events()->Delete();

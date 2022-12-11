@@ -39,6 +39,7 @@
  * @param {Boolean} [Enabled=false] Flag indicating whether the GroupEditor is enabled.
  * @property {HTMLDivElement} Control Gets the underlying DOM-Node.
  * @property {vDesk.Security.Group} Group Gets or sets the Group of the GroupEditor.
+ * @property {Object<Boolean>} Permissions Gets or sets the Permissions of the Group of the GroupEditor.
  * @property {Boolean} Enabled Gets or sets a value indicating whether the GroupEditor is enabled.
  * @property {Boolean} Changed Gets a value indicating whether the Group of the GroupEditor has been changed.
  * @memberOf vDesk.Security.Configuration
@@ -167,10 +168,7 @@ vDesk.Security.Group.Editor = function Editor(Group, Enabled = false) {
                         PreviousPermissions = Object.assign({}, Group.Permissions);
                         Control.removeEventListener("update", OnUpdate, false);
                         Changed = false;
-                        new vDesk.Events.BubblingEvent("update", {
-                            sender: this,
-                            group:  Group
-                        }).Dispatch(Control);
+                        new vDesk.Events.BubblingEvent("update", {sender: this, group: Group}).Dispatch(Control);
                         Control.addEventListener("update", OnUpdate, false);
                     }
                 }
@@ -192,13 +190,9 @@ vDesk.Security.Group.Editor = function Editor(Group, Enabled = false) {
                 ),
                 Response => {
                     if(Response.Status){
-                        Group.ID = Response.Data.ID;
-                        PreviousName = Group.Name;
-                        PreviousPermissions = Object.assign({}, Group.Permissions);
-                        new vDesk.Events.BubblingEvent("create", {
-                            sender: this,
-                            group:  Group
-                        }).Dispatch(Control);
+                        Changed = false;
+                        this.Group = vDesk.Security.Group.FromDataView(Response.Data);
+                        new vDesk.Events.BubblingEvent("create", {sender: this, group: Group}).Dispatch(Control);
                     }
                 }
             );
@@ -222,10 +216,7 @@ vDesk.Security.Group.Editor = function Editor(Group, Enabled = false) {
                 ),
                 Response => {
                     if(Response.Status){
-                        new vDesk.Events.BubblingEvent("delete", {
-                            sender: this,
-                            group:  Group
-                        }).Dispatch(Control);
+                        new vDesk.Events.BubblingEvent("delete", {sender: this, group: Group}).Dispatch(Control);
                     }
                 }
             );
@@ -242,10 +233,7 @@ vDesk.Security.Group.Editor = function Editor(Group, Enabled = false) {
         Event.stopPropagation();
         Group.Permissions[Event.detail.sender.Name] = Event.detail.sender.Value;
         Changed = true;
-        new vDesk.Events.BubblingEvent("change", {
-            sender: this,
-            group:  Group
-        }).Dispatch(Control);
+        new vDesk.Events.BubblingEvent("change", {sender: this, group: Group}).Dispatch(Control);
     };
 
     /**
@@ -279,10 +267,7 @@ vDesk.Security.Group.Editor = function Editor(Group, Enabled = false) {
 
         Group.Name = NameTextBox.value;
         Changed = true;
-        new vDesk.Events.BubblingEvent("change", {
-            sender: this,
-            group:  Group
-        }).Dispatch(Control);
+        new vDesk.Events.BubblingEvent("change", {sender: this, group: Group}).Dispatch(Control);
     };
 
     /**

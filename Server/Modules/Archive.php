@@ -53,12 +53,12 @@ final class Archive extends Module implements ISearch {
     public const System = 2;
 
     /**
-     * Gets an Element.
+     * Gets a filled Element.
      *
      * @param null|int $ID The ID of the Element to get.
      *
-     * @return \vDesk\Archive\Element The Element to get.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have read permissions on the Element to get.
+     * @return \vDesk\Archive\Element The filled Element.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have read-permissions on the Element to get.
      */
     public static function GetElement(int $ID = null): Element {
         $Element = (new Element($ID ?? Command::$Parameters["ID"]))->Fill();
@@ -69,15 +69,20 @@ final class Archive extends Module implements ISearch {
     }
 
     /**
-     * Returns all child Elements of a specified folder Element.
+     * Returns a Collection all readable child Elements of a specified folder Element.
      *
-     * @param null|\vDesk\Archive\Element $Parent The parent folder Element to get the child Elements of.
+     * @param null|int $ID The ID of the parent folder Element to get the child Elements of.
      *
-     * @return \vDesk\Archive\Elements A Collection of all child Elements of the specified folder Element off which the current User has read
-     *                                            permissions.
+     * @return \vDesk\Archive\Elements A Collection containing all child Elements of the specified folder Element the current User has read permissions on.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have read-permissions on the target parent Element.
      */
-    public static function GetElements(Element $Parent = null): Elements {
-        $Parent   ??= new Element(Command::$Parameters["ID"]);
+    public static function GetElements(int $ID = null): Elements {
+        $Parent = new Element($ID ?? Command::$Parameters["ID"]);
+        if(!$Parent->AccessControlList->Read) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to get child Elements without having permissions.");
+            throw new UnauthorizedAccessException();
+        }
+
         $Elements = new Elements();
         foreach(
             Expression::Select("*")
@@ -108,15 +113,15 @@ final class Archive extends Module implements ISearch {
     }
 
     /**
-     * Returns a branch of IDs from a specified destination Element starting from the Archive root Element.
+     * Returns a hierarchical branch of IDs from a specified destination Element starting from the Archive root Element.
      *
-     * @param null|\vDesk\Archive\Element $Element The destination Element to get its history branch of.
+     * @param null|int $ID The ID of the destination Element to get the branch of.
      *
-     * @return int[] IDs of the logical branch.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to read the target Element.
+     * @return int[] An array containing the IDs of a branch-hierarchy starting from the Archive to the specified Element.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have read-permissions on the target Element.
      */
-    public static function GetBranch(Element $Element = null): array {
-        $Element ??= (new Element(Command::$Parameters["ID"]))->Fill();
+    public static function GetBranch(int $ID = null): array {
+        $Element = (new Element($ID ?? Command::$Parameters["ID"]))->Fill();
         if(!$Element->AccessControlList->Read) {
             Log::Warn(__METHOD__, User::$Current->Name . " tried to fetch branch of Element without having permissions.");
             throw new UnauthorizedAccessException();
@@ -125,30 +130,29 @@ final class Archive extends Module implements ISearch {
         $Elements = [$Element->ID];
         do {
             //Check if user can view the Element.
-            if($Element->Parent->AccessControlList->Read) {
-                $Elements[] = $Element->Parent->ID;
-                $Element    = $Element->Parent;
-            } else {
+            if(!$Element->Parent->AccessControlList->Read) {
+                Log::Warn(__METHOD__, User::$Current->Name . " tried to fetch branch of Element without having permissions.");
                 throw new UnauthorizedAccessException();
             }
+            $Elements[] = $Element->Parent->ID;
+            $Element    = $Element->Parent;
         } while($Element->ID > self::Root);
         return \array_reverse($Elements);
     }
 
     /**
      * Uploads a file to the Archive.
-     * Triggers the {@link \vDesk\Archive\Element\Created}-Event for each uploaded file Element.
+     * Triggers the {@link \vDesk\Archive\Element\Created}-Event.
      *
-     * @param \vDesk\Archive\Element|null $Parent The target folder Element.
-     * @param string|null                 $Name   The name of the file to upload.
-     * @param \vDesk\IO\FileInfo|null     $File   The file to upload.
+     * @param int|null                $ID   The ID of the target folder Element.
+     * @param string|null             $Name The name of the file to upload.
+     * @param \vDesk\IO\FileInfo|null $File The file to upload.
      *
      * @return \vDesk\Archive\Element The uploaded Element.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have write permissions on the target folder Element.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have write-permissions on the target folder Element.
      */
-    public static function Upload(Element $Parent = null, string $Name = null, FileInfo $File = null): Element {
-
-        $Parent ??= new Element(Command::$Parameters["Parent"]);
+    public static function Upload(int $ID = null, string $Name = null, FileInfo $File = null): Element {
+        $Parent = new Element($ID ?? Command::$Parameters["Parent"]);
         $Name   ??= Command::$Parameters["Name"];
         $File   ??= Command::$Parameters["File"];
 
@@ -174,7 +178,7 @@ final class Archive extends Module implements ISearch {
             $TargetFile->Write((string)$TempFile->Read());
         }
 
-        //Create a new Element for the uploaded file.
+        //Create new Element.
         $Element = new Element(
             null,
             User::$Current,
@@ -189,8 +193,6 @@ final class Archive extends Module implements ISearch {
             Thumbnail::Create($TargetDirectory . $Filename),
             new AccessControlList($Parent->AccessControlList)
         );
-
-        //Save new Element.
         $Element->Save();
         (new Created($Element))->Dispatch();
         Log::Info(__METHOD__, User::$Current->Name . " uploaded [{$Element->ID}]({$Element->Name}) to [{$Parent->ID}]({$Parent->Name})");
@@ -200,14 +202,14 @@ final class Archive extends Module implements ISearch {
     /**
      * Downloads the file of a specified Element.
      *
-     * @param \vDesk\Archive\Element|null $Element The Element to download the file of.
+     * @param int|null $ID The ID of the Element to download the file of.
      *
      * @return \vDesk\IO\FileInfo A FileInfo that represents the file of the specified Element to download.
      * @throws \vDesk\Struct\InvalidOperationException Thrown if the Element to download is not a file.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have read permissions on the Element to download.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have read-permissions on the Element to download.
      */
-    public static function Download(Element $Element = null): FileInfo {
-        $Element ??= (new Element(Command::$Parameters["ID"]))->Fill();
+    public static function Download(int $ID = null): FileInfo {
+        $Element = (new Element($ID ?? Command::$Parameters["ID"]))->Fill();
         if(!$Element->AccessControlList->Read) {
             Log::Warn(__METHOD__, User::$Current->Name . " tried to download a file Element without having permissions.");
             throw new UnauthorizedAccessException();
@@ -220,45 +222,27 @@ final class Archive extends Module implements ISearch {
         $File           = new FileInfo(Settings::$Local["Archive"]["Directory"] . Path::Separator . $Element->File);
         $File->MimeType = Expression::Select("MimeType")
                                     ->From("Archive.MimeTypes")
-                                    ->Where(["Extension" => $Element->Extension])
-                                    ->Execute()
-                                    ->ToValue();
+                                    ->Where(["Extension" => $Element->Extension])();
         return $File;
-    }
-
-    /**
-     * Gets the Attributes of an Element.
-     *
-     * @param null|\vDesk\Archive\Element $Element The Element to get the Attributes of..
-     *
-     * @return \vDesk\Archive\Element The speElement of the specified Element.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have permissions to read Attributes.
-     */
-    public static function GetAttributes(Element $Element = null): Element {
-        if(!User::$Current->Permissions["ReadAttributes"]) {
-            Log::Warn(__METHOD__, User::$Current->Name . " tried to view Attributes without having permissions.");
-            throw new UnauthorizedAccessException();
-        }
-        return ($Element ?? new Element(Command::$Parameters["ID"]))->Fill();
     }
 
     /**
      * Creates a new folder Element.
      * Triggers the {@link \vDesk\Archive\Element\Created}-Event for the created folder Element.
      *
-     * @param \vDesk\Archive\Element|null $Parent The parent Element of the folder Element to create.
-     * @param string|null                 $Name   The name of the folder Element.
+     * @param int|null    $ID   The ID of the parent Element of the folder Element to create.
+     * @param string|null $Name The name of the folder Element.
      *
-     * @return \vDesk\Archive\Element The the newly created folder Element.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have write permissions on the parent Element.
-     *
+     * @return \vDesk\Archive\Element The new created folder Element.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have write-permissions on the parent Element.
      */
-    public static function CreateFolder(Element $Parent = null, string $Name = null): Element {
-        $Parent ??= new Element(Command::$Parameters["Parent"]);
+    public static function CreateFolder(int $ID = null, string $Name = null): Element {
+        $Parent = new Element($ID ?? Command::$Parameters["Parent"]);
         if(!$Parent->AccessControlList->Write) {
             Log::Warn(__METHOD__, User::$Current->Name . " tried to create a new folder Element without having permissions.");
             throw new UnauthorizedAccessException();
         }
+
         $Folder = new Element(
             null,
             User::$Current,
@@ -289,18 +273,17 @@ final class Archive extends Module implements ISearch {
      * Moves a set of Elements to a new destination folder Element.
      * Triggers the {@link \vDesk\Archive\Element\Moved}-Event for every moved Element.
      *
-     * @param null|\vDesk\Archive\Element $Target   The target folder Element.
-     * @param int[]|null                  $Elements The ID's of the Elements to move.
+     * @param null|int   $ID       The ID of the target folder Element.
+     * @param int[]|null $Elements The IDs of the Elements to move.
      *
      * @return boolean True on success.
-     * @throws \vDesk\Security\UnauthorizedAccessException
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have write-permissions on the target Element.
      */
-    public static function Move(Element $Target = null, array $Elements = null): bool {
-        $Target ??= new Element(Command::$Parameters["Target"]);
+    public static function Move(int $ID = null, array $Elements = null): bool {
+        $Target = new Element($ID ?? Command::$Parameters["Target"]);
         if(!$Target->AccessControlList->Write) {
             Log::Warn(__METHOD__, User::$Current->Name . " tried to move Elements without having permissions.");
             throw new UnauthorizedAccessException();
-
         }
 
         //Update the parent entry of the Elements.
@@ -311,8 +294,6 @@ final class Archive extends Module implements ISearch {
                 $Element->Save();
                 Log::Info(__METHOD__, User::$Current->Name . " moved [{$Element->ID}]({$Element->Name}) to [{$Target->ID}]({$Target->Name}).");
                 (new Moved($Element))->Dispatch();
-            } else {
-                continue;
             }
         }
         return true;
@@ -322,15 +303,15 @@ final class Archive extends Module implements ISearch {
      * Copies a set of Elements to a new destination folder Element.
      * Triggers the {@link \vDesk\Archive\Element\Created}-Event for each copied Element.
      *
-     * @param null|\vDesk\Archive\Element $Target   The target folder Element to copy the specified Elements into.
-     * @param int[]|null                  $Elements The IDs of the Elements to copy to the specified new parent Element.
+     * @param null|int   $ID       The ID of the target folder Element to copy the specified Elements to.
+     * @param int[]|null $Elements The IDs of the Elements to copy to the specified target Element.
      *
      * @return boolean True if the whole tree has been successfully copied.
-     * @throws \vDesk\Security\UnauthorizedAccessException
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have write-permissions on the target Element.
      * @todo Return the list of new Elements.
      */
-    public static function Copy(Element $Target = null, array $Elements = null): bool {
-        $Target ??= new Element(Command::$Parameters["Target"]);
+    public static function Copy(int $ID = null, array $Elements = null): bool {
+        $Target = new Element($ID ?? Command::$Parameters["Target"]);
         //Check if the User can write to the target folder Element.
         if(!$Target->AccessControlList->Write) {
             Log::Warn(__METHOD__, User::$Current->Name . " tried to copy Elements to [{$Target->ID}]({$Target->Name}) without having permissions.");
@@ -404,15 +385,14 @@ final class Archive extends Module implements ISearch {
      * Renames an Element.
      * Triggers the {@link \vDesk\Archive\Element\Renamed}-Event for the renamed Element.
      *
-     * @param null|\vDesk\Archive\Element $Element The Element to rename.
-     * @param null|string                 $Name    The new name of the Element.
+     * @param null|int    $ID   The ID of the Element to rename.
+     * @param null|string $Name The new name of the Element.
      *
      * @return bool True if the Element has been successfully renamed.
-     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have write permissions on the Element to rename.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have write-permissions on the Element to rename.
      */
-    public static function Rename(Element $Element = null, string $Name = null): bool {
-        $Element ??= new Element(Command::$Parameters["ID"]);
-        $Element->Fill();
+    public static function Rename(int $ID = null, string $Name = null): bool {
+        $Element = (new Element($ID ?? Command::$Parameters["ID"]))->Fill();
         if($Element->ID <= self::System || !$Element->AccessControlList->Write) {
             Log::Warn(__METHOD__, User::$Current->Name . " tried to rename Element without having permissions.");
             throw new UnauthorizedAccessException();
@@ -425,19 +405,25 @@ final class Archive extends Module implements ISearch {
     }
 
     /**
-     * Updates the file of a specified Element.
+     * Updates the file contents of a specified Element.
      *
      * @param int|null                $ID   The ID of the Element to update its file of.
      * @param \vDesk\IO\FileInfo|null $File The new file of the Element.
      *
      * @return \vDesk\Archive\Element The updated Element.
+     * @throws \vDesk\Security\UnauthorizedAccessException Thrown if the current User doesn't have write-permissions on the Element to update.
      */
     public static function UpdateFile(int $ID = null, FileInfo $File = null): Element {
-        $Element         = (new Element($ID ?? Command::$Parameters["ID"]))->Fill();
+        $Element = (new Element($ID ?? Command::$Parameters["ID"]))->Fill();
+        if(!$Element->AccessControlList->Write) {
+            Log::Warn(__METHOD__, User::$Current->Name . " tried to update file of Element without having permissions.");
+            throw new UnauthorizedAccessException();
+        }
+
         $TargetDirectory = Settings::$Local["Archive"]["Directory"] . Path::Separator;
 
         //Overwrite file.
-        $TargetFile = new FileStream($TargetDirectory . $Element->File, Mode::Truncate | Mode::Binary);
+        $TargetFile = new FileStream($TargetDirectory . $Element->File, Mode::Write | Mode::Truncate | Mode::Binary);
         $TempFile   = ($File ?? Command::$Parameters["File"])->Open();
         while(!$TempFile->EndOfStream()) {
             $TargetFile->Write($TempFile->Read());
@@ -451,22 +437,16 @@ final class Archive extends Module implements ISearch {
     }
 
     /**
-     * Deletes a set of Elements.
-     * Recursively deletes any child Elements.
-     * Triggers the {@link \vDesk\Archive\Element\Deleted}-Event for each deleted {@link \vDesk\Archive\Element}.
+     * Recursively deletes a set of Elements and their children.
+     * Triggers the {@link \vDesk\Archive\Element\Deleted}-Event for each deleted Element.
      *
      * @param int[]|null $Elements The IDs of the Elements to delete.
      *
-     * @return \vDesk\Archive\Element[] The deleted Elements.
+     * @return \vDesk\Archive\Element[] An Array containing every deleted Element.
      */
     public static function DeleteElements(array $Elements = null): array {
         $DeletedElements = new Elements();
 
-        /**
-         * @param \vDesk\Archive\Element $Element
-         *
-         * @return \Generator
-         */
         $GetChildren = static function(Element $Element) use (&$GetChildren): \Generator {
             if(!$Element->AccessControlList->Delete) {
                 return;
@@ -512,7 +492,7 @@ final class Archive extends Module implements ISearch {
      *
      * @param string|null $Filter
      *
-     * @return \vDesk\Search\Results A Collection of found Elements with a similar name.
+     * @return \vDesk\Search\Results A Collection of found Elements with a similar name to the search value.
      */
     public static function Search(string $Value, string $Filter = null): Results {
         $Results = new Results();
@@ -546,11 +526,7 @@ final class Archive extends Module implements ISearch {
         return $Results;
     }
 
-    /**
-     * Gets the status information of the Archive.
-     *
-     * @return null|array An array containing the amount of files, folders and overall diskusage.
-     */
+    /** @inheritDoc */
     public static function Status(): ?array {
         return [
             "FileCount"   => Expression::Select(Functions::Count("*"))

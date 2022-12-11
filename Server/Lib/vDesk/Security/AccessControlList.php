@@ -297,7 +297,7 @@ class AccessControlList extends Collection implements ICollectionModel {
                 if(($Updated->User->ID !== null && $Updated->User->ID !== User::System)) {
                     continue;
                 }
-                if($Updated->Changed && $Updated->User->ID) {
+                if($Updated->Changed) {
                     Expression::Update("Security.AccessControlListEntries")
                               ->Set([
                                   "Read"   => $Updated->Read,

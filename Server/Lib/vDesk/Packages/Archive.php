@@ -38,7 +38,7 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
     /**
      * The version of the Package.
      */
-    public const Version = "1.1.1";
+    public const Version = "1.1.2";
 
     /**
      * The vendor of the Package.
@@ -226,24 +226,15 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
                           "Type"              => ["Type" => Type::TinyInt | Type::Unsigned, "Size" => 2],
                           "CreationTime"      => ["Type" => Type::DateTime, "Default" => λ::CurrentTimestamp()],
                           "Guid"              => ["Type" => Type::TinyText, "Collation" => Collation::UTF8],
-                          "Extension"         => ["Type"      => Type::VarChar,
-                                                  "Size"      => 10,
-                                                  "Collation" => Collation::ASCII,
-                                                  "Nullable"  => true,
-                                                  "Default"   => null],
+                          "Extension"         => ["Type" => Type::VarChar, "Size" => 10, "Collation" => Collation::ASCII, "Nullable" => true, "Default" => null],
                           "File"              => ["Type" => Type::TinyText, "Collation" => Collation::UTF8, "Nullable" => true, "Default" => null],
                           "Size"              => ["Type" => Type::BigInt | Type::Unsigned, "Default" => 0],
-                          "Thumbnail"         => ["Type"      => Type::VarChar,
-                                                  "Size"      => 10000,
-                                                  "Collation" => Collation::ASCII,
-                                                  "Nullable"  => true,
-                                                  "Default"   => null],
+                          "Thumbnail"         => ["Type" => Type::VarChar, "Size" => 10000, "Collation" => Collation::ASCII, "Nullable" => true, "Default" => null],
                           "AccessControlList" => ["Type" => Type::BigInt | Type::Unsigned]
                       ],
                       [
-                          "Primary"        => ["Fields" => ["ID"]],
-                          "Parent"         => ["Fields" => ["Parent"]],
-                          "Eventlisteners" => ["Fields" => ["Parent", "Extension" => 3, "Name" => 186]]
+                          "Primary" => ["Fields" => ["ID"]],
+                          "Path"    => ["Unique" => true, "Fields" => ["Parent", "Name" => 186, "Extension" => 10]]
                       ]
                   )
                   ->Execute();
@@ -318,17 +309,6 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
                 null,
                 $Archive,
                 "Download",
-                true,
-                false,
-                null,
-                new Collection([new Parameter(null, null, "ID", \vDesk\Struct\Type::Int, false, false)])
-            )
-        );
-        $Archive->Commands->Add(
-            new Command(
-                null,
-                $Archive,
-                "GetAttributes",
                 true,
                 false,
                 null,

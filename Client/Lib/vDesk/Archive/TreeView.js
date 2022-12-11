@@ -124,7 +124,6 @@ vDesk.Archive.TreeView = function TreeView() {
      * @type {HTMLUListElement}
      */
     const Control = document.createElement("ul");
-    Control.className = "TreeView Background List";
+    Control.className = "TreeView List";
 
 };
-

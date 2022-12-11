@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace vDesk\Updates;
 
+use vDesk\DataProvider\Expression;
 use vDesk\Packages\Package;
 
 /**
@@ -21,13 +22,17 @@ class Security extends Update {
     /**
      * The required Package version of the Update.
      */
-    public const RequiredVersion = "1.1.0";
+    public const RequiredVersion = "1.1.1";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to Events-1.2.0.
+- Simplified loading of users and groups.
+- Fixed MembershipEditor not displaying memberships when user is selected.
+- Implemented automatic enabling of editor-controls when the "new user/group"-items have been selected.
+- Membership Groups will be now filled additionally with their name.
+- Fixed bug causing ACLs not saving updated entries.
 Description;
 
     /**
@@ -35,14 +40,25 @@ Description;
      */
     public const Files = [
         self::Deploy   => [
+            Package::Client => [
+                Package::Lib => [
+                    "vDesk/Security/GroupList.js",
+                    "vDesk/Security/Group/Administration.js",
+                    "vDesk/Security/Group/Editor.js",
+                    "vDesk/Security/UserList.js",
+                    "vDesk/Security/User/Administration.js",
+                    "vDesk/Security/User/Editor.js",
+                    "vDesk/Security/User/MembershipEditor.js"
+                ]
+            ],
             Package::Server => [
                 Package::Lib     => [
-                    "vDesk/Security/Group/Created.php",
-                    "vDesk/Security/Group/Updated.php",
-                    "vDesk/Security/Group/Deleted.php",
-                    "vDesk/Security/User/Created.php",
-                    "vDesk/Security/User/Updated.php",
-                    "vDesk/Security/User/Deleted.php"
+                    "vDesk/Security/Group.php",
+                    "vDesk/Security/Group/Collection.php",
+                    "vDesk/Security/User.php",
+                    "vDesk/Security/User/Collection.php",
+                    "vDesk/Security/User/Groups.php",
+                    "vDesk/Security/AccessControlList.php"
                 ],
                 Package::Modules => [
                     "Security.php"
@@ -51,15 +67,11 @@ Description;
         ],
         self::Undeploy => [
             Package::Server => [
-                Package::Lib     => [
-                    "vDesk/Security/Group/Added.php",
-                    "vDesk/Security/Group/Deleted.php",
-                    "vDesk/Security/User/Added.php",
-                    "vDesk/Security/User/Updated.php",
-                    "vDesk/Security/User/Deleted.php"
-                ],
-                Package::Modules => [
-                    "Security.php"
+                Package::Lib => [
+                    "vDesk/Security/Groups.php",
+                    "vDesk/Security/GroupsView.php",
+                    "vDesk/Security/Users.php",
+                    "vDesk/Security/UsersView.php"
                 ]
             ]
         ]
@@ -70,5 +82,18 @@ Description;
         //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
+
+        Expression::Drop()
+                  ->Index("UserName")
+                  ->On("Security.Users")
+                  ->Execute();
+        Expression::Create()
+                  ->Index("UserName", true)
+                  ->On("Security.Users", ["Name" => 255])
+                  ->Execute();
+        Expression::Create()
+                  ->Index("UserEmail", true)
+                  ->On("Security.Users", ["Email" => 255])
+                  ->Execute();
     }
 }

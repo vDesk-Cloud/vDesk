@@ -1,11 +1,11 @@
 /* vDesk.Controls.ContextMenu.Group */
 .ContextMenu .Item > .Group {
     position: absolute;
-    background-color: #eee;
+    background-color: var(--ButtonBackground, rgba(219,219,219, 1));
     box-shadow: 2px 2px 5px 0 rgba(51, 51, 51, 0.75);
     width: 190px;
     z-index: 300;
-    border: 1px solid #333;
+    border: 1px solid var(--BorderLight, rgba(153, 153, 153, 1));
     display: none;
     user-select: none;
 }
@@ -26,11 +26,6 @@
     margin-bottom: 100%;
 }
 
-.ContextMenu .Item > .Group:hover {
-    background: linear-gradient(to bottom, rgba(247, 251, 252, 0.35) 0%, rgba(217, 237, 242, 0.43) 40%, rgba(173, 217, 228, 0.55) 100%);
-    border-radius: 5px;
-}
-
 .ContextMenu .Item > .Group.Right {
     margin-left: 190px;
 }
@@ -46,7 +41,7 @@
 .ContextMenu .Item > .Group > .Title {
     border-left: 1px solid #bbbbbb;
     font-family: var(--Font);
-    color: var(--FontDark);
+    color: var(--FontDark, #000);
     height: 20px;
     font-size: 14px;
     display: inline-block;

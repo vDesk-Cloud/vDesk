@@ -25,7 +25,7 @@ final class vDesk extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.3.1";
+    public const Version = "1.3.2";
 
     /**
      * The vendor of the Package.
