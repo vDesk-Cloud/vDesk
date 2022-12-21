@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pages\Documentation\Packages;
 
-use vDesk\Pages\Cached\Page;
+use vDesk\Pages\Page;
 
 /**
  * Search filters and -results Documentation Page.

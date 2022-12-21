@@ -26,7 +26,7 @@ use vDesk\Pages\Functions;
     </ul>
     <h3>Packages</h3>
     <ul>
-        <?php foreach(\vDesk\Modules::Documentation()::Packages() as $Package): ?>
+        <?php foreach(\Modules\Documentation::Packages() as $Package): ?>
             <?php if($Package->Name !== "Index"): ?>
                 <li>
                     <a href="<?= Functions::URL("Documentation", "Package", $Package->Name) ?>"><?= $Package->Label ?></a>

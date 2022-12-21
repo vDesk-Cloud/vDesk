@@ -3,27 +3,26 @@ use vDesk\Documentation\Code;
 ?>
 <article>
     <header>
-        <h2>Database</h2>
+        <h2>DataProvider</h2>
         <p>
             This document describes working with databases using vDesk's "DataProvider"-facade and "Expression"-library.
         </p>
         <p>
             Any SQL source code shown in this document targets MySQL-compatible RDBM-systems.
         </p>
+        <p>
+            If you want to use this ackage in your own project or want to see output examples for Pogres- and Microsoft SQL-Servers,
+            there's a library available called <a href="https://github.com/Devel0pmentHero/Q">Q</a> which is based on the code of this package.
+        </p>
         <h3>Overview</h3>
         <ul class="Topics">
-            <li>
-                <a href="#DataProvider">DataProvider</a>
-                <ul class="Topics">
-                    <li><a href="#Configuration">Configuration</a></li>
-                    <li><a href="#Escaping">Sanitizing and escaping</a></li>
-                    <li><a href="#Statements">Executing statements</a></li>
-                    <li><a href="#DataProviderResultsets">Result sets</a></li>
-                    <li><a href="#StoredProcedures">Stored procedures</a></li>
-                    <li><a href="#PreparedStatements">Prepared statements</a></li>
-                    <li><a href="#Transactions">Transactions (wip)</a></li>
-                </ul>
-            </li>
+            <li><a href="#Configuration">Configuration</a></li>
+            <li><a href="#Escaping">Sanitizing and escaping</a></li>
+            <li><a href="#Statements">Executing statements</a></li>
+            <li><a href="#DataProviderResultsets">Result sets</a></li>
+            <li><a href="#StoredProcedures">Stored procedures</a></li>
+            <li><a href="#PreparedStatements">Prepared statements</a></li>
+            <li><a href="#Transactions">Transactions (wip)</a></li>
             <li>
                 <a href="#Expressions">Expressions</a>
                 <ul class="Topics">
