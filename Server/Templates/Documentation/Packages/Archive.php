@@ -13,6 +13,7 @@ use vDesk\Pages\Functions; ?>
         <h3>Overview</h3>
         <ul class="Topics">
             <li><a href="#Archive">Introduction</a></li>
+            <li><a href="#Navigation">Navigating</a></li>
             <li><a href="#Upload">Uploading files to the archive</a></li>
             <li>
                 <a href="#View">Viewing files</a>
@@ -28,6 +29,7 @@ use vDesk\Pages\Functions; ?>
             </li>
             <li><a href="#Download">Downloading files</a></li>
             <li><a href="#ACL">Managing access of files and folders</a></li>
+            <li><a href="#Search">Search</a></li>
             <li><a href="#Events">Events dispatched by the archive</a></li>
             <li><a href="#Events">Managing access of files and folders</a></li>
         </ul>
@@ -224,6 +226,28 @@ use vDesk\Pages\Functions; ?>
         </p>
             <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
                 <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Save.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
+            </aside>
+        <aside class="Note">
+            <h4>Note</h4>
+            <p>
+                Due to technical reasons, the file is first being downloaded into the allocated RAM of the browser and then served over a dialog for finally saving it.<br>
+                This may limit the maximum size of downloads to the browser's settings or available RAM on systems without swap files for example.
+            </p>
+        </aside>
+        <p>
+
+        </p>
+    </section>
+    <section id="Search">
+        <h4>Search</h4>
+        <p>
+            The archive package registers a search filter for performing a "LIKE"-search on the "Name"-column of the <code class="Inline"><?= Code::Const("Archive") ?>.<?= Code::Field("Elements") ?></code>-table.
+            File results can be directly viewed by clicking on the search result in the result list on the left side;
+            double-clicking will load the archive module and open the file in a new window.<br>
+
+        </p>
+            <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
+                <img src="<?= Functions::Image("Documentation","Packages", "Search", "Search.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
             </aside>
         <aside class="Note">
             <h4>Note</h4>

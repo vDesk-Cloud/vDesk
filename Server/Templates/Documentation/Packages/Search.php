@@ -13,7 +13,12 @@ use vDesk\Pages\Functions;
         <h3>Overview</h3>
         <ul class="Topics">
             <li><a href="#Introduction">Introduction</a></li>
-            <li><a href="#Filters">Custom search filters</a></li>
+            <li>
+                <a href="#Filters">Custom search filters</a>
+                <ul class="Topics">
+                    <li><a href="#Modules">Searchable modules</a></li>
+                </ul>
+            </li>
             <li><a href="#Results">Custom search results</a></li>
             <li><a href="#Search">Custom searches</a></li>
         </ul>
@@ -60,6 +65,33 @@ use vDesk\Pages\Functions;
             Custom search-filters
         </h3>
         <p>
+            The generic search provides an API for defining custom filters to search certain server-modules which provide their own kind of data as a
+            result set.<br>
+            So it is possible to search the archive for example for files and folders and/or search the Contact module for a specific contact or business-contact.
+        </p>
+        <p>
+            After submitting a search value, the system passes the value and the name of the selected filter to the filter-module's <code class="Inline"><?= Code::Class("IModule") ?>::<?= Code::Function("Search") ?>()</code>-method.
+        </p>
+        <p>
+            Every currently available and searchable module uses the SQL "LIKE"-clause for comparison, so wildcards can be used in searches;
+            however the underlying <a href="<?= Functions::URL("Documentation", "Package", "DataProvider") ?>">DataProvider</a>-package doesn't
+        </p>
+        <h5>Custom search filter provided via plugin API</h5>
+        <p style="text-align: center">
+
+        </p>
+        <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
+            <img src="<?= Functions::Image("Documentation", "Packages", "Search", "Filter.png") ?>">
+        </aside>
+    </section>
+    <section id="Modules">
+        <h4>
+            Searchable Modules
+        </h4>
+        <p>
+            To handle custom filters, the search package provides an
+            The generic search sends a list of active search filters to the server module's <code class="Inline"><?= Code::Fucntion("Search") ?>()</code>-method,
+            which then passes
             The generic search provides an API for defining custom filters to search certain server-modules which provide their own kind of data as a
             result set.<br>
             So it is possible to search the archive for example for files and folders and/or search the Contact module for a specific contact or business-contact.
@@ -149,8 +181,11 @@ use vDesk\Pages\Functions;
         <ul>
             <li>Located in the <code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Search") ?>.<?= Code::Field("Results") ?></code>-namespace</li>
             <li>Implement the <code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Search") ?>.<?= Code::Class("IResult") ?></code>-interface.</li>
-            <li>Implement a public <code class="Inline"><?= Code::Field("Name") ?></code>-property holding the name of the filter for identification.</li>
+            <li>Implement a public <code class="Inline"><?= Code::Field("Name") ?></code>-property holding the name of the result.</li>
+            <li>Implement a public <code class="Inline"><?= Code::Field("Type") ?></code>-property holding the result type for identification.</li>
             <li>Implement a public <code class="Inline"><?= Code::Field("Icon") ?></code>-property holding an ObjectURL of an icon for the filter.</li>
+            <li>Implement a public <code class="Inline"><?= Code::Field("Viewer") ?></code>-property holding an DOMNode of a preview control.</li>
+            <li>Implement a public <code class="Inline"><?= Code::Field("Open") ?></code>-property holding a callback for opening the result in it's according module.</li>
         </ul>
         <h5><u>Definition of an example search-result</u></h5>
         <pre><code><?= Language::JS ?>
@@ -162,12 +197,19 @@ use vDesk\Pages\Functions;
  * @param {SearchResult} Result The data of the returned search-result.
  * @implements {vDesk.Search.IResult}
  */") ?>
-        
-<?= Code::Class("CustomSearchResult") ?> = <?= Code::Function ?> (<?= Code::Variable("Result") ?>) {
+
+<?= Code::Variable("vDesk") ?>.<?= Code::Field("Search") ?>.<?= Code::Field("Results") ?>.<?= Code::Class("CustomSearchResult") ?> = <?= Code::Function ?> (<?= Code::Variable("Result") ?>) {
     
     <?= Code::Class("Object") ?>.<?= Code::Function("defineProperties") ?>(<?= Code::This ?>, {
         <?= Code::Field("Viewer") ?>: {
-            <?= Code::Function("get") ?>: () => <?= Code::New ?> <?= Code::Class("ViewerForCustomResult") ?>(<?= Code::Variable("Result") ?>.<?= Code::Field("Data") ?>)
+            <?= Code::Function("get") ?>: () => {
+                <?= Code::Constant ?> <?= Code::Const("Viewer") ?> = <?= Code::Variable("document") ?>.<?= Code::Function("createElement") ?>(<?= Code::String("\"p\"") ?>)<?= Code::Delimiter ?>
+
+                <?= Code::Const("Viewer") ?>.<?= Code::Field("textContent") ?> = <?= Code::Variable("Result") ?>.<?= Code::Field("Data") ?>
+
+                <?= Code::Return ?> <?= Code::Const("Viewer") ?><?= Code::Delimiter ?>
+
+            }
         },
         <?= Code::Field("Icon") ?>: {
             <?= Code::Field("value") ?>: <?= Code::Class("vDesk") ?>.<?= Code::Field("Visual") ?>.<?= Code::Field("Icons") ?>.<?= Code::Field("CustomPackage") ?>.<?= Code::Field("CustomIcon") ?>
@@ -176,6 +218,10 @@ use vDesk\Pages\Functions;
         <?= Code::Field("Name") ?>: {
             <?= Code::Field("value") ?>: <?= Code::Variable("Result") ?>.<?= Code::Field("Name") ?> ?? <?= Code::String("\"CustomResult\"") ?>
         
+        },
+        <?= Code::Field("Type") ?>: {
+            <?= Code::Field("value") ?>: <?= Code::Variable("Result") ?>.<?= Code::Field("Type") ?> ?? <?= Code::String("\"CustomResult\"") ?>
+
         },
         <?= Code::Function("Open") ?>: {
             <?= Code::Field("value") ?>: () => {
@@ -186,15 +232,11 @@ use vDesk\Pages\Functions;
     })<?= Code::Delimiter ?>
     
 }<?= Code::Delimiter ?>
+
         
 <?= Code::Comment("//Implementation of interface.") ?>
 
-<?= Code::Class("CustomSearchResult") ?>.<?= Code::Function("Implements") ?>(<?= Code::Variable("vDesk") ?>.<?= Code::Field("Search") ?>.<?= Code::Class("IResult") ?>)<?= Code::Delimiter ?>
-
-
-<?= Code::Comment("//Registration as a custom search-result.") ?>
-
-<?= Code::Variable("vDesk") ?>.<?= Code::Field("Search") ?>.<?= Code::Field("Results") ?>.<?= Code::Field("CustomSearchResult") ?> = <?= Code::Class("CustomSearchResult") ?><?= Code::Delimiter ?>
+<?= Code::Variable("vDesk") ?>.<?= Code::Field("Search") ?>.<?= Code::Field("Results") ?>.<?= Code::Class("CustomSearchResult") ?>.<?= Code::Function("Implements") ?>(<?= Code::Variable("vDesk") ?>.<?= Code::Field("Search") ?>.<?= Code::Class("IResult") ?>)<?= Code::Delimiter ?>
 </code></pre>
     </section>
     <section id="Search">
