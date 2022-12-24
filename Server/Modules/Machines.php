@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Modules;
 
-use vDesk\Archive\Element;
 use vDesk\Configuration\Settings;
 use vDesk\DataProvider\Expression;
 use vDesk\Environment\OS;
@@ -31,12 +30,7 @@ use vDesk\Utils\Log;
  */
 final class Machines extends Module implements IModule {
 
-    /**
-     * Machines constructor.
-     *
-     * @param null|int                                             $ID
-     * @param null|\vDesk\Struct\Collections\Observable\Collection $Commands
-     */
+    /** @inheritDoc */
     public function __construct(?int $ID = null, Collection $Commands = null) {
         parent::__construct($ID, $Commands);
         \vDesk::$Load[] = static fn(string $Class): string => Settings::$Local["Archive"]["Directory"]
@@ -400,7 +394,7 @@ final class Machines extends Module implements IModule {
                 );
 
                 \vDesk\Modules::Archive()::Upload(
-                    new Element(Settings::$Local["Machines"]["Directory"]),
+                    Settings::$Local["Machines"]["Directory"],
                     "{$FileInfo->Name}.{$FileInfo->Extension}",
                     $FileInfo
                 );

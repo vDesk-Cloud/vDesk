@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Modules;
 
-use vDesk\Archive\Element;
 use vDesk\Configuration\Settings;
 use vDesk\DataProvider\Expression;
 use vDesk\Events\Event;
@@ -64,13 +63,9 @@ final class Events extends Module implements IModule {
      */
     private static Dictionary $Listeners;
 
-    /**
-     * Initializes a new instance of the Events class.
-     *
-     * @param int|null $ID Initializes the Events with the specified ID.
-     */
-    public function __construct(?int $ID = null) {
-        parent::__construct($ID);
+    /** @inheritDoc */
+    public function __construct(?int $ID = null, \vDesk\Struct\Collections\Observable\Collection $Commands = null) {
+        parent::__construct($ID, $Commands);
         self::$Events    = new Collection();
         self::$Listeners = new Dictionary();
         \register_shutdown_function(static fn() => self::Schedule());
@@ -289,7 +284,7 @@ final class Events extends Module implements IModule {
                 //Prefer Archive usage over filesystem.
                 if(Settings::$Local["Events"]["Mode"] & self::Archive) {
                     \vDesk\Modules::Archive()::Upload(
-                        new Element(Settings::$Local["Events"]["Directory"]),
+                        Settings::$Local["Events"]["Directory"],
                         "{$File->Name}.{$File->Extension}",
                         $File
                     );
