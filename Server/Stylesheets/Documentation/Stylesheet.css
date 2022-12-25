@@ -341,21 +341,20 @@ main > footer {
 }
 
 aside.Image {
-    padding: 10px;
-    background-color: #999999;
-    border-radius: 5px;
 }
 
 aside > img {
     cursor: zoom-in;
-    max-width: 100%;
+    max-width: 80%;
     object-fit: contain;
+    border: 1px solid #333333;
+    box-shadow: 7px 7px 10px #333333;
 }
 
 aside.Fullscreen > img {
     cursor: zoom-out !important;
     max-height: 100%;
-
+    max-width: 100% !important;
 }
 
 aside.Fullscreen {
