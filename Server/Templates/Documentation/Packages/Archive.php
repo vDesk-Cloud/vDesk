@@ -33,6 +33,7 @@ use vDesk\Pages\Functions; ?>
                 </ul>
             </li>
             <li><a href="#Rename">Renaming files and folders</a></li>
+            <li><a href="#Attributes">Attributes</a></li>
             <li><a href="#ACL">Managing access of files and folders</a></li>
             <li><a href="#SystemFolder">System folder</a></li>
             <li><a href="#Search">Search</a></li>
@@ -93,6 +94,9 @@ use vDesk\Pages\Functions; ?>
             The execution of several commands causes certain global events to be triggered;
             for example: the deletion of an Entry from the Archive will trigger a global <code class="Inline">vDesk.Archive.Element.Deleted</code>-event.<br>
         </p>
+        <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
+            <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Navigation.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
+        </aside>
         <p>
             Multiple elements can be selected via holding down the left mouse button and drawing a selection rectangle over the target elements
             or while holding down the left "CTRL"-key and clicking on single elements.
@@ -111,6 +115,9 @@ use vDesk\Pages\Functions; ?>
             Alternatively a click on the "Add file"-button of the toolbar will open a file-dialog to upload a file to the current opened folder.<br>
             Uploading files requires the current user to have "Write"-permissions on the target folder-element.
         </p>
+        <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
+            <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Upload.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
+        </aside>
     </section>
     <section id="Download">
         <h4>Downloading files</h4>
@@ -128,67 +135,97 @@ use vDesk\Pages\Functions; ?>
                 This may limit the maximum size of downloads to the browser's settings or available RAM on systems without swap files for example.
             </p>
         </aside>
-        <p>
-
-        </p>
     </section>
     <section id="View">
         <h3>Viewing files</h3>
         <p>
-            The event system supports multiple ways of registering event listeners.
-            These are directly attached listeners via passing an event name and a closure to the <code class="Inline"><?= Code::Class("Events") ?>::<?= Code::Function("AddEventListener") ?>()</code>-method
-            and file-based event listeners, which will be loaded and executed upon schedule.
+            Files can be viewed by double clicking on them, right-clicking on them and clicking on the "Open"-item of the contextmenu and
+            by selecting them and pressing the "Enter"-button or clicking on the "Open"-button of the toolbar.
         </p>
+        <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
+            <img src="<?= Functions::Image("Documentation","Packages", "Archive", "View.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
+        </aside>
+    </section>
+    <section id="CustomViewer">
+        <h3>Custom viewers</h3>
+        <p>
+            The archive provides an API for registering JavaScript-classes as custom viewer controls.<br>
+            To be recognized as a custom viewer, the class has to meet the following requirements:
+
+            Files can be viewed by double clicking on them, right-clicking on them and clicking on the "Open"-item of the contextmenu and
+            by selecting them and pressing the "Enter"-button or clicking on the "Open"-button of the toolbar.
+        </p>
+        <ul>
+            <li>Located in the <code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Element") ?>.<?= Code::Field("View") ?></code>-namespace</li>
+            <li>Implement a <code class="Inline"><?= Code::Field("Control") ?></code>-property holding the underlying DOM-Node of the custom viewer.</li>
+            <li>Implement a static <code class="Inline"><?= Code::Field("Extensions") ?></code>-property holding the supported file-types of the custom viewer.</li>
+        </ul>
+        <h5><u>Definition of an example HTML document viewer</u></h5>
+        <pre><code><?= Code\Language::JS ?>
+<?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Element") ?>.<?= Code::Field("View") ?>.<?= Code::Class("HTML") ?> = <?= Code::Function ?>(<?= Code::Variable("Element") ?>) {
+
+    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::This ?>, <?= Code::String("\"Control\"") ?>, {<?= Code::Field("get") ?>: () => <?= Code::Const("Control") ?>})<?= Code::Delimiter ?>
+
+
+    <?= Code::Constant ?> <?= Code::Const("Control") ?> = <?= Code::Variable("document") ?>.<?= Code::Function("createElement") ?>(<?= Code::String("\"div\"") ?>)<?= Code::Delimiter ?>
+
+    <?= Code::Const("Control") ?>.<?= Code::Field("className") ?> = <?= Code::String("\"HTML\"") ?><?= Code::Delimiter ?>
+
+
+    <?= Code::Variable("vDesk") ?>.<?= Code::Field("Connection") ?>.<?= Code::Function("Send") ?>(
+        <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Modules") ?>.<?= Code::Class("Command") ?>({
+            <?= Code::Field("Module") ?>:     <?= Code::String("\"Archive\"") ?>,
+            <?= Code::Field("Command") ?>:    <?= Code::String("\"Download\"") ?>,
+            <?= Code::Field("Parameters") ?>: {<?= Code::Field("ID") ?>: <?= Code::Variable("Element") ?>.<?= Code::Field("ID") ?>},
+            <?= Code::Field("Ticket") ?>:     <?= Code::Variable("vDesk") ?>.<?= Code::Field("Security") ?>.<?= Code::Class("User") ?>.<?= Code::Field("Current") ?>.<?= Code::Field("Ticket") ?>
+
+        }),
+        <?= Code::Variable("Buffer") ?> => {
+            <?= Code::Constant ?> <?= Code::Const("Reader") ?> = <?= Code::New ?> <?= Code::Class("FileReader") ?>()<?= Code::Delimiter ?>
+
+            <?= Code::Const("Reader") ?>.<?= Code::Field("onload") ?> = () => <?= Code::Const("Control") ?>.<?= Code::Function("appendChild") ?>(<?= Code::New ?> <?= Code::Class("DomParser") ?>().<?= Code::Function("parseFromString") ?>(<?= Code::Const("Reader") ?>.<?= Code::Field("result") ?>, <?= Code::String("\"text/html\"") ?>))<?= Code::Delimiter ?>
+
+            <?= Code::Const("Reader") ?>.<?= Code::Function("readAsText") ?>(<?= Code::New ?> <?= Code::Class("Blob") ?>([<?= Code::Variable("Buffer") ?>], {<?= Code::Field("type") ?>: <?= Code::String("\"text/plain\"") ?>}))<?= Code::Delimiter ?>
+
+        },
+        <?= Code::True ?>
+
+    )<?= Code::Delimiter ?>
+
+}<?= Code::Delimiter ?>
+
+
+<?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Element") ?>.<?= Code::Field("View") ?>.<?= Code::Class("HTML") ?>.<?= Code::Field("Extensions") ?> = [
+    <?= Code::String("\"html\"") ?>,
+    <?= Code::String("\"xhtml\"") ?>
+
+]<?= Code::Delimiter ?>
+
+</code></pre>
     </section>
     <section id="Copy">
         <h3>Copy files</h3>
         <p>
-            The event system supports multiple ways of registering event listeners.
-            These are directly attached listeners via passing an event name and a closure to the <code class="Inline"><?= Code::Class("Events") ?>::<?= Code::Function("AddEventListener") ?>()</code>-method
-            and file-based event listeners, which will be loaded and executed upon schedule.
+            Elements can be copied by selecting and right-clicking on them and then clicking on the "Copy"-item of the contextmenu
+            or clicking on the "Copy"-button and clicking on the "Paste"-button in the target folder
+            or right-clicking on a target folder
+            and clicking on the "Paste"-item of the contextmenu.<br>
+            The same action can be achieved by selecting elements and pressing "CTRL+C" and "CTRL+V" in the target folder.<br>
+            This operation will require the current user to have "read"-access on the target elements and "write"-access on the destination folder.
         </p>
-        <h5>
-            Example of registering an event listener
-        </h5>
-        <pre><code><?= Code\Language::PHP ?>
-\vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("Events") ?>()::<?= Code::Function("AddEventListener") ?>(
-    <?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>,
-    <?= Code::Keyword("fn") ?>(\vDesk\Events\<?= Code::Class("Event") ?> <?= Code::Variable("\$Event") ?>) => <?= Code::Class("Log") ?>::<?= Code::Function("Info") ?>(<?= Code::String("\"Element '") ?>{<?= Code::Variable("\$Event") ?>-><?= Code::Field("Element") ?>-><?= Code::Field("Name") ?>}<?= Code::String("' has been deleted\"") ?>)
-)<?= Code::Delimiter ?>
-</code></pre>
-        <p>
-            File-based event listeners are simple PHP files which must return a tuple array of the event's name to listen on and a callback closure
-            which are stored in an "Events"-folder that is by default located in the "Server"-directory or optionally in the Archive package's "System"-directory.<br>
-            The Events package will scan on installation if the setup is bundled with the Archive package and thus asks if the event listener files shall be stored and searched on the filesystem, in the archive or both.<br>
-            The storage mode is stored in the local  <code class="Inline"><?= Code::Class("Settings") ?>::<?= Code::Variable("\$Local") ?>[<?= Code::String("\"Events\"") ?>][<?= Code::String("\"Mode\"") ?>]</code>-setting.
-        </p>
-        <p>
-            To match an event, the listener file must contain the name of the desired event in its file name on the beginning.
-            For example: if an event is named "Security.User.Created", the filename of the event listener may be called "Security.User.Created.GreetNewUser.php".
-        </p>
-        <h5>
-            Example of an event listener file
-        </h5>
-        <pre><code><?= Code\Language::PHP ?>
-                <?= Code::PHP ?>
-
-
-                <?= Code::Use ?> \vDesk\Archive\Element\<?= Code::Class("Deleted") ?><?= Code::Delimiter ?>
-
-
-                <?= Code::Return ?> [
-    <?= Code::Class("Deleted") ?>::<?= Code::Const("Name") ?>,
-    <?= Code::Keyword("fn") ?>(<?= Code::Class("Deleted") ?> <?= Code::Variable("\$Event") ?>) => <?= Code::Class("Log") ?>::<?= Code::Function("Info") ?>(<?= Code::String("\"Element '") ?>{<?= Code::Variable("\$Event") ?>-><?= Code::Field("Element") ?>-><?= Code::Field("Name") ?>}<?= Code::String("' has been deleted\"") ?>)
-]<?= Code::Delimiter ?>
-</code></pre>
+        <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
+            <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Copy.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
+        </aside>
     </section>
     <section id="Move">
         <h3>Move files and folders</h3>
         <p>
-            Files and folders can be moved by selecting and dragging them onto a target folder
-            or by clicking on the "Cut"-button while selected and clicking on the "Paste"-button in the target folder.<br>
+            Elements can be moved by selecting and dragging them onto a target folder
+            or by clicking on the "Cut"-button while selected and clicking on the "Paste"-button in the target folder
+            or right-clicking on a target folder
+            and clicking on the "Paste"-item of the contextmenu.<br>
             The same action can be achieved by selecting elements and pressing "CTRL+X" and "CTRL+V" in the target folder.<br>
-            This operation will require "write"-access on the target elements and destination folder.
+            This operation will require the current user to have "write"-access on the target elements and destination folder.
         </p>
     </section>
     <section id="Edit">
@@ -214,38 +251,32 @@ use vDesk\Pages\Functions; ?>
     <section id="Attributes">
         <h3>Attributes</h3>
         <p>
-            To manage permissions on files and folders, the archive package integrates an ACL-editor in the "Permissions"-tab of the "Attributes"-window.
-            To open the "Attributes"-window, simply right-click on an archive element and click the "Attributes"-item of the contextmenu
-            or select an element and click on the "Attributes"-button in the toolbar.
-        </p>
-        <p>
-            The "Permissions"-tab will only be displayed if the current user is a member of a group with the "ReadAccessControlList" granted.
-        </p>
-        <p>
-            The archive uses AccessControlLists from the "Security"-package for managing access on files and folders.<br>
-            To edit the permissions on an archive element, the archive package implements an ACL-editor available in the "Attributes"-window.
-            Right-click on an archive element and click the "Attributes"-item of the contextmenu
-            or select an element and click on the "Attributes"-button in the toolbar, then navigate to
+            The attributes window contains general information like the size or owner of an element, a permission editor and
+            an editor for managing <a href="<?= Functions::URL("Documentation", "Package", "MetaInformation#DataSet") ?>">DataSets</a>.
         </p>
         <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
             <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Attributes.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
+        </aside>
+        <p>
+            The Attributes window can be extended via registering a custom control in the
+            <code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Attributes") ?></code>-namespace.
+            vDesk.Archive.Attributes
+        </p>
+        <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
+            <img src="<?= Functions::Image("Documentation","Packages", "Archive", "AttributesWindow.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
         </aside>
     </section>
     <section id="ACL">
         <h3>Managing permissions on files and folders</h3>
         <p>
-            To manage permissions on files and folders, the archive package integrates an ACL-editor in the "Permissions"-tab of the "Attributes"-window.
-            To open the "Attributes"-window, simply right-click on an archive element and click the "Attributes"-item of the contextmenu
-            or select an element and click on the "Attributes"-button in the toolbar.
-        </p>
-        <p>
-            The "Permissions"-tab will only be displayed if the current user is a member of a group with the "ReadAccessControlList" granted.
-        </p>
-        <p>
-            The archive uses AccessControlLists from the "Security"-package for managing access on files and folders.<br>
-            To edit the permissions on an archive element, the archive package implements an ACL-editor available in the "Attributes"-window.
+            The archive relies on <a href="<?= Functions::URL("Documentation", "Package", "Security#ACL") ?>">AccessControlLists</a> from the <a href="<?= Functions::URL("Documentation", "Package", "Security") ?>">Security</a>-package for managing access on files and folders.<br>
+            To edit the permissions on an archive element, the archive package integrates an ACL-editor in the "Attributes"-window.
             Right-click on an archive element and click the "Attributes"-item of the contextmenu
-            or select an element and click on the "Attributes"-button in the toolbar, then navigate to
+            or select an element and click on the "Attributes"-button in the toolbar, then navigate to the "Permissions"-tab.
+        </p>
+        <p>
+            The "Permissions"-tab will only be displayed if the current user is a member of a group with the "ReadAccessControlList"-permission granted.<br>
+            Newly created folders or uploaded files will inherit their ACL from their according parent element.
         </p>
         <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
             <img src="<?= Functions::Image("Documentation","Packages", "Archive", "ACL.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
