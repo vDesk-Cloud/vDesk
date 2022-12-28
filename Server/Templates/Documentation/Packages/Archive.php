@@ -44,6 +44,8 @@ use vDesk\Pages\Functions; ?>
         <h3>Archive</h3>
         <p>
             The archive is an "explorer" like file storage
+            It supports drag&drop-operations, keyboard navigation, a clipboard for copy/paste-operations
+            and a contextmenu for conveniently using the archive with a mouse.
         </p>
         <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
             <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Archive.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
@@ -52,7 +54,7 @@ use vDesk\Pages\Functions; ?>
     <section id="Installation">
         <h4>Installation</h4>
         <p>
-            The archive package con only be installed as part of a setup.
+            The archive package doesn't require any user input while installation.
         </p>
     </section>
     <section id="Configuration">
@@ -66,7 +68,7 @@ use vDesk\Pages\Functions; ?>
                 <th>Domain</th>
                 <th>Tag</th>
                 <th>Type</th>
-                <th>Public</th>
+                <th>Visibility</th>
                 <th>Description</th>
             </tr>
             <tr>
@@ -74,15 +76,15 @@ use vDesk\Pages\Functions; ?>
                 <td>Archive</td>
                 <td>Directory</td>
                 <td>String</td>
-                <td>-</td>
-                <td>The folder where uploaded files will be saved in</td>
+                <td></td>
+                <td>The absolute path to the folder where uploaded files will be saved in.</td>
             </tr>
             <tr>
                 <td>Remote</td>
                 <td>Archive</td>
                 <td>UploadMode</td>
                 <td>Enum</td>
-                <td>x</td>
+                <td>Public</td>
                 <td>Determines whether multiple files will be upload parallel or in queue. (Currently unused)</td>
             </tr>
         </table>
@@ -91,8 +93,13 @@ use vDesk\Pages\Functions; ?>
     <section id="Navigation">
         <h4>Navigation</h4>
         <p>
-            The execution of several commands causes certain global events to be triggered;
-            for example: the deletion of an Entry from the Archive will trigger a global <code class="Inline">vDesk.Archive.Element.Deleted</code>-event.<br>
+           The archive can be used with the mouse and supports drag&drop-operations known from famous file explorers.<br>
+           Additionally, the "Arrow"-keys in combination with the "Enter"-key can be used to move the current selection and opening files or folders.
+        </p>
+        <p>
+            The archive tracks elements in a history for back- and forward-navigation.<br>
+            Navigating through the history is done by clicking on the arrow left- and right-buttons on the left in the archive header.<br>
+            Clicking on the arrow-up button will open the parent of the current opened folder.
         </p>
         <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
             <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Navigation.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
@@ -147,13 +154,13 @@ use vDesk\Pages\Functions; ?>
         </aside>
     </section>
     <section id="CustomViewer">
-        <h3>Custom viewers</h3>
+        <h4>Custom viewers</h4>
         <p>
             The archive provides an API for registering JavaScript-classes as custom viewer controls.<br>
             To be recognized as a custom viewer, the class has to meet the following requirements:
 
             Files can be viewed by double clicking on them, right-clicking on them and clicking on the "Open"-item of the contextmenu and
-            by selecting them and pressing the "Enter"-button or clicking on the "Open"-button of the toolbar.
+            by selecting them and pressing the "Enter"-key or clicking on the "Open"-button of the toolbar.
         </p>
         <ul>
             <li>Located in the <code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Element") ?>.<?= Code::Field("View") ?></code>-namespace</li>
@@ -231,9 +238,17 @@ use vDesk\Pages\Functions; ?>
     <section id="Edit">
         <h3>Edit files</h3>
         <p>
-            The event system supports multiple ways of registering event listeners.
-            These are directly attached listeners via passing an event name and a closure to the <code class="Inline"><?= Code::Class("Events") ?>::<?= Code::Function("AddEventListener") ?>()</code>-method
-            and file-based event listeners, which will be loaded and executed upon schedule.
+            Editing files is only possible by right-clicking on the target file and clicking on the "Edit"-item of the contextmenu.<br>
+            This item is only available if any editor-plugin which supports the file type has been registered
+            and if the current user has "Write"-permissions on the file.
+        </p>
+        <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
+            <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Edit.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
+        </aside>
+    </section>
+    <section id="CustomEditor">
+        <h4>Custom editors</h4>
+        <p>
         </p>
     </section>
     <section id="Rename">
