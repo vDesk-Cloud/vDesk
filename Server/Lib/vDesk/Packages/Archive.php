@@ -56,7 +56,7 @@ final class Archive extends Package implements Locale\IPackage, Events\IPackage 
     public const Dependencies = [
         "Events"   => "1.2.0",
         "Locale"   => "1.1.0",
-        "Security" => "1.1.0",
+        "Security" => "1.2.0",
         "Search"   => "1.1.0"
     ];
 
