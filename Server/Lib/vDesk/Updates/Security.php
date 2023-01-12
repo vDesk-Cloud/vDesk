@@ -83,6 +83,7 @@ Description;
         self::Undeploy();
         self::Deploy($Phar, $Path);
 
+        //Split index.
         Expression::Drop()
                   ->Index("UserName")
                   ->On("Security.Users")
@@ -94,6 +95,20 @@ Description;
         Expression::Create()
                   ->Index("UserEmail", true)
                   ->On("Security.Users", ["Email" => 255])
+                  ->Execute();
+
+        //Drop unused column.
+        Expression::Drop()
+                  ->Index("Primary")
+                  ->On("Security.GroupMemberships")
+                  ->Execute();
+        Expression::Alter()
+                  ->Table("Security.GroupMemberships")
+                  ->Drop(["ID"])
+                  ->Execute();
+        Expression::Create()
+                  ->Index("Primary")
+                  ->On("Security.GroupMemberships", ["Group", "User"])
                   ->Execute();
     }
 }

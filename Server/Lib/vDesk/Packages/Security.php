@@ -47,6 +47,7 @@ final class Security extends Package implements IPackage {
      * The dependencies of the Package.
      */
     public const Dependencies = [
+        "DataProvider"  => "1.1.1",
         "Modules"       => "1.0.2",
         "Configuration" => "1.1.0",
         "Events"        => "1.2.0"
