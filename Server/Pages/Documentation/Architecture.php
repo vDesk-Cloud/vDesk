@@ -17,7 +17,7 @@ class Architecture extends Page {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Architecture"],
-        ?iterable $Stylesheets = ["Documentation/Topics"],
+        ?iterable $Stylesheets = ["Documentation/Topics", "Documentation/Code"],
         ?iterable $Scripts = [],
         public string $Name = "Architecture",
         public string $Label = "Architecture",

@@ -105,8 +105,18 @@ use vDesk\Documentation\Code;
         <p>
             Database access in vDesk is performed through a static, auto-initializing facade which provides access to MySQL, PostgreSQL and MS SQLserver databases and escaping methods.
             <br>
-            Via simply referencing the static <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?></code>-facade, the class will automatically establish a connection to a database server if a valid map of credentials exist.
-            <br>
+            Via simply referencing the static <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?></code>-facade,
+            the class will automatically establish a connection to a database server if a valid map of credentials exist in the local configuration.
+        </p>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Basic usage of the DataProvider facade</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(1) ?>
+            <pre><code><?= Code::Variable("\$Result") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::String("\"SELECT * FROM Table\"") ?>)<?= Code::Delimiter ?>
+            </code></pre>
+        </aside>
+        <p>
             Invoking the constructor of the facade will close any previous connection and create a new DataProvider-instance according the specified parameters.
         </p>
         <aside class="Code">
@@ -121,9 +131,16 @@ use vDesk\Documentation\Code;
 
 <?= Code::New ?> \vDesk\<?= Code::Class("DataProvider") ?>(<?= Code::String("\"PgSQL\"") ?>, <?= Code::String("\"remotehost\"") ?>, <?= Code::Int("5432") ?>, ...)<?= Code::Delimiter ?>
 
-<?= Code::Variable("\$Result") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::String("\"SELECT * FROM `TableB`\"") ?>)<?= Code::Delimiter ?>
+<?= Code::Variable("\$Result") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::String("'SELECT * FROM \"TableB\"'") ?>)<?= Code::Delimiter ?>
             </code></pre>
         </aside>
+    </section>
+    <section id="Installation">
+        <h4>Installation</h4>
+        <p>
+            The DataProvider package can be silently installed via the following parameters:
+
+        </p>
     </section>
     <section id="Configuration">
         <h4>Configuration</h4>

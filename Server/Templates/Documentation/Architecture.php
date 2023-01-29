@@ -125,9 +125,12 @@ use vDesk\Pages\Functions;
         <p>
             Commands are stored in the <code class="Inline"><?= Code::Class("Modules") ?>.<?= Code::Const("Commands") ?></code>-table.
         </p>
-        <div style="display: flex; justify-content: space-around;">
-        <pre style="margin: 10px"><code><?= Language::JS ?>
-<?= Code::Variable("vDesk") ?>.<?= Code::Class("Connection") ?>.<?= Code::Function("Send") ?>(
+        <aside class="Code">
+            <?= Code\Language::JS ?>
+            <h5>Calling Commands in JavaScript</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(21) ?>
+        <pre><code><?= Code::Variable("vDesk") ?>.<?= Code::Class("Connection") ?>.<?= Code::Function("Send") ?>(
     <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Modules") ?>.<?= Code::Class("Command") ?>(
         {
             <?= Code::Field("Module") ?>:  <?= Code::String("\"Archive\"") ?>,
@@ -153,8 +156,13 @@ use vDesk\Pages\Functions;
     )
 )<?= Code::Delimiter ?>
 </code></pre>
-        <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Variable("\$ParentElement") ?> = <?= Code::New ?> \vDesk\IO\<?= Code::Class("FileInfo") ?>(<?= Code::Int("12") ?>)<?= Code::Delimiter ?>
+        </aside>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Calling Commands in PHP</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(13) ?>
+            <pre><code><?= Code::Variable("\$ParentElement") ?> = <?= Code::New ?> \vDesk\IO\<?= Code::Class("FileInfo") ?>(<?= Code::Int("12") ?>)<?= Code::Delimiter ?>
             
 <?= Code::Variable("\$File") ?> = <?= Code::New ?> \vDesk\IO\<?= Code::Class("FileInfo") ?>(<?= Code::String("\"Path\"") ?>)<?= Code::Delimiter ?>
             
@@ -173,7 +181,7 @@ use vDesk\Pages\Functions;
 
 <?= Code::Keyword("echo") ?> <?= Code::Variable("\$UploadedElement") ?>-><?= Code::Field("ID") ?><?= Code::Delimiter ?>
 </code></pre>
-        </div>
+        </aside>
     </section>
     <section id="Parameters">
         <h4>Parameters</h4>
@@ -183,8 +191,12 @@ use vDesk\Pages\Functions;
         <p>
             Parameters are stored in the <code class="Inline"><?= Code::Class("Modules") ?>.<?= Code::Const("Parameters") ?></code>-table.
         </p>
-        <pre><code><?= Language::PHP ?>
-<?= Code::Use ?> vDesk\Modules\<?= Code::Class("Command") ?><?= Code::Delimiter ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example of adding Commands to Modules</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(22) ?>
+            <pre><code><?= Code::Use ?> vDesk\Modules\<?= Code::Class("Command") ?><?= Code::Delimiter ?>
         
 <?= Code::Use ?> vDesk\Struct\Collections\<?= Code::Class("Collection") ?><?= Code::Delimiter ?>
         
@@ -211,6 +223,7 @@ use vDesk\Pages\Functions;
         
 <?= Code::Variable("\$Archive") ?>-><?= Code::Function("Save") ?>()<?= Code::Delimiter ?>
 </code></pre>
+        </aside>
     </section>
     <section id="Validation">
         <h5>Validation</h5>
@@ -333,9 +346,12 @@ use vDesk\Pages\Functions;
             If a module returns a model due to the execution of a command, the system automatically calls its
             <code class="Inline"><?= Code::Function("ToDataView") ?>()</code>-method and sends the returned value to the client.
         </p>
-        <h5>Example implementation of a Model</h5>
-        <pre><code><?= Language::PHP ?>
-<?= Code::Use ?> vDesk\Data\<?= Code::Class("IModel") ?><?= Code::Delimiter ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example implementation of a Model</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(100) ?>
+            <pre><code><?= Code::Use ?> vDesk\Data\<?= Code::Class("IModel") ?><?= Code::Delimiter ?>
 
 <?= Code::Use ?> vDesk\DataProvider\<?= Code::Class("Expression") ?><?= Code::Delimiter ?>
 
@@ -460,6 +476,7 @@ use vDesk\Pages\Functions;
     }
 }
 </code></pre>
+        </aside>
     </section>
     <section id="Controls">
         <h4>Controls</h4>
@@ -475,9 +492,12 @@ use vDesk\Pages\Functions;
         <p>
             A list of all generic controls is available under the <a href="<?= Functions::URL("Documentation", "Category", "Client", "Topic", "Controls") ?>">Controls</a> client topic.
         </p>
-        <h5>Example implementation of a control</h5>
-        <pre style="margin: 10px"><code><?= Language::JS ?>
-<?= Code::Variable("Shop") ?>.<?= Code::Class("Product") ?> = <?= Code::Function ?>(<?= Code::Variable("ID") ?>, <?= Code::Variable("Name") ?>, <?= Code::Variable("Price") ?>, <?= Code::Variable("Stock") ?>) {
+        <aside class="Code">
+            <?= Code\Language::JS ?>
+            <h5>Example implementation of a control</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(57) ?>
+        <pre><code><?= Code::Variable("Shop") ?>.<?= Code::Class("Product") ?> = <?= Code::Function ?>(<?= Code::Variable("ID") ?>, <?= Code::Variable("Name") ?>, <?= Code::Variable("Price") ?>, <?= Code::Variable("Stock") ?>) {
 
     <?= Code::Variable("Object") ?>.<?= Code::Function("defineProperties") ?>(
         <?= Code::Variable("this") ?>,
@@ -559,5 +579,6 @@ use vDesk\Pages\Functions;
 
 }<?= Code::Delimiter ?>
 </code></pre>
+        </aside>
     </section>
 </article>

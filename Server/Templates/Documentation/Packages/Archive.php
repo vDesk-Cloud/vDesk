@@ -397,7 +397,6 @@ use vDesk\Pages\Functions;
             The archive package registers a search filter for performing a "LIKE"-search on the "Name"-column of the <code class="Inline"><?= Code::Const("Archive") ?>.<?= Code::Field("Elements") ?></code>-table.
             File results can be directly viewed by clicking on the search result in the result list on the left side;
             double-clicking will load the archive module and open the file in a new window.<br>
-
         </p>
             <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
                 <img src="<?= Functions::Image("Documentation","Packages", "Search", "Search.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
