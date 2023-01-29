@@ -171,9 +171,11 @@ use vDesk\Pages\Functions;
             <li>Implement a static <code class="Inline"><?= Code::Field("Extensions") ?></code>-property holding the supported file-types of the custom viewer.</li>
         </ul>
         <aside class="Code">
-            <?= Code\Language::JS ?><h5><u>Definition of an example HTML document viewer</u></h5>
+            <?= Code\Language::JS ?>
+            <h5>Definition of an example HTML document viewer</h5>
+            <?= Code::Copy ?>
             <?= Code::Lines(27) ?>
-        <pre><code><?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Element") ?>.<?= Code::Field("View") ?>.<?= Code::Class("HTML") ?> = <?= Code::Function ?>(<?= Code::Variable("Element") ?>) {
+        <pre><code><?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Element") ?>.<?= Code::Field("View") ?>.<?= Code::Class("HTML") ?> = <?= Code::Function ?> <?= Code::Function("HTML") ?>(<?= Code::Variable("Element") ?>) {
 
     <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::This ?>, <?= Code::String("\"Control\"") ?>, {<?= Code::Field("get") ?>: () => <?= Code::Const("Control") ?>})<?= Code::Delimiter ?>
 
@@ -254,7 +256,79 @@ use vDesk\Pages\Functions;
     <section id="CustomEditor">
         <h4>Custom editors</h4>
         <p>
+            The archive provides an API for registering JavaScript-classes as custom editor controls similar to the viewer plugin API described above.<br>
+            To be recognized as a custom editor, the class has to meet the following requirements:
         </p>
+        <ul>
+            <li>Located in the <code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Element") ?>.<?= Code::Field("Edit") ?></code>-namespace</li>
+            <li>Implement a <code class="Inline"><?= Code::Field("Control") ?></code>-property holding the underlying DOM-Node of the custom editor.</li>
+            <li>Implement a static <code class="Inline"><?= Code::Field("Extensions") ?></code>-property holding the supported file-types of the custom editor.</li>
+        </ul>
+        <aside class="Code">
+            <?= Code\Language::JS ?>
+            <h5>Example implementation of a simple text editor</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(44) ?>
+            <pre><code><?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Element") ?>.<?= Code::Field("Edit") ?>.<?= Code::Class("Text") ?> = <?= Code::Function ?> <?= Code::Function("Text") ?>(<?= Code::Variable("Element") ?>) {
+
+    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::This ?>, <?= Code::String("\"Control\"") ?>, {<?= Code::Field("value") ?>: <?= Code::Variable("document") ?>.<?= Code::Function("createElement") ?>(<?= Code::String("\"textarea\"") ?>)})<?= Code::Delimiter ?>
+
+
+    <?= Code::Variable("vDesk") ?>.<?= Code::Field("Connection") ?>.<?= Code::Function("Send") ?>(
+        <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Modules") ?>.<?= Code::Class("Command") ?>({
+            <?= Code::Field("Module") ?>:     <?= Code::String("\"Archive\"") ?>,
+            <?= Code::Field("Command") ?>:    <?= Code::String("\"Download\"") ?>,
+            <?= Code::Field("Parameters") ?>: {<?= Code::Field("ID") ?>: <?= Code::Variable("Element") ?>.<?= Code::Field("ID") ?>},
+            <?= Code::Field("Ticket") ?>:     <?= Code::Variable("vDesk") ?>.<?= Code::Field("Security") ?>.<?= Code::Class("User") ?>.<?= Code::Field("Current") ?>.<?= Code::Field("Ticket") ?>
+
+        }),
+        <?= Code::Variable("Buffer") ?> => {
+            <?= Code::Constant ?> <?= Code::Const("Reader") ?> = <?= Code::New ?> <?= Code::Class("FileReader") ?>()<?= Code::Delimiter ?>
+
+            <?= Code::Const("Reader") ?>.<?= Code::Field("onload") ?> = () => <?= Code::This ?>.<?= Code::Const("Control") ?>.<?= Code::Field("value") ?> = <?= Code::Const("Reader") ?>.<?= Code::Field("result") ?><?= Code::Delimiter ?>
+
+            <?= Code::Const("Reader") ?>.<?= Code::Function("readAsText") ?>(<?= Code::New ?> <?= Code::Class("Blob") ?>([<?= Code::Variable("Buffer") ?>], {<?= Code::Field("type") ?>: <?= Code::String("\"text/plain\"") ?>}))<?= Code::Delimiter ?>
+
+        },
+        <?= Code::True ?>
+
+    )<?= Code::Delimiter ?>
+
+
+    <?= Code::Const("window") ?>.<?= Code::Field("onkeypress") ?> = <?= Code::Variable("Event") ?> => {
+        <?= Code::If ?>(<?= Code::Variable("Event") ?>.<?= Code::Field("ctrlKey") ?> && <?= Code::Variable("Event") ?>.<?= Code::Field("key") ?> === <?= Code::String("\"s\"") ?>) {
+            <?= Code::Variable("vDesk") ?>.<?= Code::Field("Connection") ?>.<?= Code::Function("Send") ?>(
+                <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Modules") ?>.<?= Code::Class("Command") ?>({
+                    <?= Code::Field("Module") ?>:     <?= Code::String("\"Archive\"") ?>,
+                    <?= Code::Field("Command") ?>:    <?= Code::String("\"UpdateFile\"") ?>,
+                    <?= Code::Field("Parameters") ?>: {
+                        <?= Code::Field("ID") ?>: <?= Code::Variable("Element") ?>.<?= Code::Field("ID") ?>,
+                        <?= Code::Field("File") ?>: <?= Code::New ?> <?= Code::Class("Blob") ?>(<?= Code::This ?>.<?= Code::Const("Control") ?>.<?= Code::Field("value") ?>, {<?= Code::Field("type") ?>: <?= Code::String("\"text/plain\"") ?>})
+                    },
+                    <?= Code::Field("Ticket") ?>:     <?= Code::Variable("vDesk") ?>.<?= Code::Field("Security") ?>.<?= Code::Class("User") ?>.<?= Code::Field("Current") ?>.<?= Code::Field("Ticket") ?>
+
+                }),
+                <?= Code::Variable("Response") ?> => <?= Code::Variable("Element") ?>.<?= Code::Field("Size") ?> = <?= Code::Variable("Response") ?>.<?= Code::Field("Data") ?>.<?= Code::Field("Size") ?>
+
+            )<?= Code::Delimiter ?>
+
+        }
+
+    }<?= Code::Delimiter ?>
+
+}<?= Code::Delimiter ?>
+
+
+<?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Element") ?>.<?= Code::Field("Edit") ?>.<?= Code::Class("Text") ?>.<?= Code::Field("Extensions") ?> = [
+    <?= Code::String("\"txt\"") ?>,
+    <?= Code::String("\"csv\"") ?>,
+    <?= Code::String("\"html\"") ?>,
+    <?= Code::String("\"xhtml\"") ?>
+
+]<?= Code::Delimiter ?>
+
+</code></pre>
+        </aside>
     </section>
     <section id="Rename">
         <h3>Rename files</h3>
