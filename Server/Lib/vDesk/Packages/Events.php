@@ -34,7 +34,7 @@ final class Events extends Package implements IPackage {
     /**
      * The version of the Package.
      */
-    public const Version = "1.2.0";
+    public const Version = "1.2.1";
 
     /**
      * The vendor of the Package.

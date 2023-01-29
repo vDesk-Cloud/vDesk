@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace vDesk\MetaInformation\Mask;
 
 use vDesk\Events\PublicEvent;
+use vDesk\MetaInformation\Mask;
 
 /**
- * Represents an Event that occurs when a new {@link \vDesk\MetaInformation\Mask} has been created.
+ * Event that occurs when a new Mask has been created.
  *
- * @package vDesk\MetaInformation\Mask
+ * @package vDesk\MetaInformation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Created extends PublicEvent {
@@ -19,10 +20,16 @@ class Created extends PublicEvent {
     public const Name = "vDesk.MetaInformation.Mask.Created";
 
     /**
-     * @inheritdoc
+     * Initializes a new instance of the Created Event.
+     *
+     * @param \vDesk\MetaInformation\Mask $Mask Initializes the Event with the specified Mask.
      */
-    public function ToDataView(): array {
-        return ["ID" => $this->Arguments->ID];
+    public function __construct(public Mask $Mask) {
+    }
+
+    /** @inheritdoc */
+    public function ToDataView(): Mask {
+        return $this->Mask;
     }
 
 }

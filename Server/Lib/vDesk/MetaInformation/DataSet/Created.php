@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace vDesk\MetaInformation\DataSet;
 
 use vDesk\Events\PublicEvent;
+use vDesk\MetaInformation\DataSet;
 
 /**
- * Represents an Event that occurs when a new {@link \vDesk\MetaInformation\DataSet} has been created.
+ * Event that occurs when a new DataSet has been created.
  *
- * @package vDesk\MetaInformation\DataSet
+ * @package vDesk\MetaInformation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Created extends PublicEvent {
@@ -19,10 +20,16 @@ class Created extends PublicEvent {
     public const Name = "vDesk.MetaInformation.DataSet.Created";
 
     /**
-     * @inheritdoc
+     * Initializes a new instance of the Created Event.
+     *
+     * @param \vDesk\MetaInformation\DataSet $DataSet Initializes the Event with the specified DataSet.
      */
+    public function __construct(public DataSet $DataSet) {
+    }
+
+    /** @inheritdoc */
     public function ToDataView(): array {
-        return ["ID" => $this->Arguments->ID, "Element" => $this->Arguments->Element->ID, "Mask" => $this->Arguments->Mask->ID];
+        return ["ID" => $this->DataSet->ID, "Element" => $this->DataSet->Element->ID, "Mask" => $this->DataSet->Mask->ID];
     }
 
 }

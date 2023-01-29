@@ -27,8 +27,7 @@ final class DataProvider extends Update {
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added possibility for inserting rows into tables consisting only of a single identity column.
-- Added missing reserved keywords.
+- Fixed creating and dropping indices from tables.
 Description;
 
     /**
@@ -38,27 +37,21 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib => [
-                    "vDesk/DataProvider/MsQL/Provider.php",
-                    "vDesk/DataProvider/MsQL/Expression/Insert.php"
-                ]
-            ]
-        ],
-        self::Undeploy => [
-            Package::Server => [
-                Package::Lib => [
-                    "vDesk/DataProvider/MsQL/Provider.php",
-                    "vDesk/DataProvider/MsQL/Expression/Insert.php"
+                    "vDesk/DataProvider/MsQL/Expression/Create.php",
+                    "vDesk/DataProvider/MsQL/Expression/Drop.php",
+                    "vDesk/DataProvider/MsQL/Expression/Functions.php",
+                    "vDesk/DataProvider/MyQL/Expression/Create.php",
+                    "vDesk/DataProvider/MyQL/Expression/Drop.php",
+                    "vDesk/DataProvider/PgQL/Expression/Create.php",
+                    "vDesk/DataProvider/PgQL/Expression/Drop.php"
                 ]
             ]
         ]
     ];
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
         //Update files.
-        self::Undeploy();
         self::Deploy($Phar, $Path);
     }
 }

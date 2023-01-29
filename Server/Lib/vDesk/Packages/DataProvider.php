@@ -28,7 +28,7 @@ final class DataProvider extends Package {
     /**
      * The version of the Package.
      */
-    public const Version = "1.1.0";
+    public const Version = "1.1.1";
 
     /**
      * The vendor of the Package.
@@ -74,9 +74,7 @@ final class DataProvider extends Package {
         "dp.pr", "dp.srv", "dp.port", "dp.u", "dp.pw", "dp.db", "dp.p"
     ];
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function PreInstall(\Phar $Phar, string $Path): void {
 
         //Skip on web install.
@@ -158,9 +156,7 @@ final class DataProvider extends Package {
 
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
 
         //Setup database for non MySQL Providers.
@@ -186,9 +182,7 @@ final class DataProvider extends Package {
 
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public static function Uninstall(string $Path): void {
 
         //Delete database of non MySQL Providers.

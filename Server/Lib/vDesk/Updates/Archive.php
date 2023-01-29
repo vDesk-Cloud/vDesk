@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace vDesk\Updates;
 
+use vDesk\DataProvider\Expression;
 use vDesk\Packages\Package;
 
 /**
@@ -40,7 +41,7 @@ Description;
      * The files and directories of the Update.
      */
     public const Files = [
-        self::Deploy   => [
+        self::Deploy => [
             Package::Client => [
                 Package::Lib => [
                     "vDesk/Archive/TreeView.js",
@@ -58,7 +59,21 @@ Description;
     /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
         //Update files.
-        self::Undeploy();
         self::Deploy($Phar, $Path);
+
+        Expression::Drop()
+                  ->Index("Parent")
+                  ->On("Archive.Elements")
+                  ->Execute();
+
+        Expression::Drop()
+                  ->Index("EventListeners")
+                  ->On("Archive.Elements")
+                  ->Execute();
+
+        Expression::Create()
+                  ->Index("Path", true)
+                  ->On("Archive.Elements", ["Parent", "Name" => 186, "Extension" => 10])
+                  ->Execute();
     }
 }

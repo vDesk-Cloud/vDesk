@@ -21,13 +21,13 @@ final class MetaInformation extends Update {
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.1.0";
+    public const RequiredVersion = "1.1.1";
 
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Added compatibility to Events-1.2.0.
+- Fixed dispatched events.
 Description;
 
     /**
@@ -37,14 +37,12 @@ Description;
         self::Deploy   => [
             Package::Server => [
                 Package::Lib => [
-                    "/vDesk/MetaInformation/vDesk.Archive.Element.Deleted.MetaInformation.php"
-                ]
-            ]
-        ],
-        self::Undeploy => [
-            Package::Server => [
-                Package::Lib => [
-                    "/vDesk/MetaInformation/vDesk.Archive.Element.Deleted.php"
+                    "/vDesk/MetaInformation/DataSet/Created.php",
+                    "/vDesk/MetaInformation/DataSet/Updated.php",
+                    "/vDesk/MetaInformation/DataSet/Deleted.php",
+                    "/vDesk/MetaInformation/Mask/Created.php",
+                    "/vDesk/MetaInformation/Mask/Updated.php",
+                    "/vDesk/MetaInformation/Mask/Deleted.php"
                 ]
             ]
         ]
@@ -53,10 +51,6 @@ Description;
     /** @inheritDoc */
     public static function Install(\Phar $Phar, string $Path): void {
         //Update files.
-        self::Undeploy();
         self::Deploy($Phar, $Path);
-
-        //Install new Event listener.
-        \vDesk\Modules::Events()::Install(new (self::Package), $Phar, $Path);
     }
 }

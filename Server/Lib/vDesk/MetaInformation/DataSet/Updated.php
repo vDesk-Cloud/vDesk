@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace vDesk\MetaInformation\DataSet;
 
 use vDesk\Events\PublicEvent;
+use vDesk\MetaInformation\DataSet;
 
 /**
- * Represents an Event that occurs when a {@link \vDesk\MetaInformation\DataSet} has been updated.
+ * Event that occurs when a DataSet has been updated.
  *
- * @package vDesk\MetaInformation\DataSet
+ * @package vDesk\MetaInformation
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Updated extends PublicEvent {
@@ -19,10 +20,16 @@ class Updated extends PublicEvent {
     public const Name = "vDesk.MetaInformation.DataSet.Updated";
 
     /**
-     * @inheritdoc
+     * Initializes a new instance of the Updated Event.
+     *
+     * @param \vDesk\MetaInformation\DataSet $DataSet Initializes the Event with the specified DataSet.
      */
-    public function ToDataView(): array {
-        return ["ID" => $this->Arguments->ID];
+    public function __construct(public DataSet $DataSet) {
+    }
+
+    /** @inheritdoc */
+    public function ToDataView(): DataSet {
+        return $this->DataSet;
     }
 
 }
