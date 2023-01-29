@@ -145,12 +145,15 @@ use vDesk\Pages\Functions;
         <?= Code\Language::JS ?>
         <h5>//Client/Lib/vDesk/Controls/ResizableBox.js</h5>
         <?= Code::Copy ?>
-        <?= Code::Lines(7) ?>
+        <?= Code::Lines(9) ?>
         <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("ResizableBox") ?>(
     <?= Code::Variable("document") ?>.<?= Code::Function("createTextNode") ?>(<?= Code::String("\"Resize me!\"") ?>),
     <?= Code::Int("100") ?>,
     <?= Code::Int("100") ?>,
-    {<?= Code::Variable("Height") ?>: {<?= Code::Variable("Min") ?>: <?= Code::Int("10") ?>, <?= Code::Variable("Max") ?>: <?= Code::Int("10") ?>}, <?= Code::Variable("Width") ?>: {<?= Code::Variable("Min") ?>: <?= Code::Int("10") ?>, <?= Code::Variable("Max") ?>: <?= Code::Int("10") ?>}}
+    {
+        <?= Code::Variable("Height") ?>: {<?= Code::Variable("Min") ?>: <?= Code::Int("10") ?>, <?= Code::Variable("Max") ?>: <?= Code::Int("10") ?>},
+        <?= Code::Variable("Width") ?>: {<?= Code::Variable("Min") ?>: <?= Code::Int("10") ?>, <?= Code::Variable("Max") ?>: <?= Code::Int("10") ?>}
+    }
 )<?= Code::Delimiter ?>
 </code></pre>
     </aside>
