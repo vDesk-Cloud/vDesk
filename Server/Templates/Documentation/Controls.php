@@ -30,6 +30,7 @@ use vDesk\Pages\Functions;
                     <li><a href="#TimePicker">TimePicker</a></li>
                     <li><a href="#DateTimePicker">DateTimePicker</a></li>
                     <li><a href="#TimeSpanPicker">TimespanPicker</a></li>
+                    <li><a href="#ColorPicker">ColorPicker</a></li>
 
                 </ul>
             </li>
@@ -90,15 +91,18 @@ use vDesk\Pages\Functions;
     <h3 id="Structuring">Structuring</h3>
 <section id="GroupBox" class="ControlPreview">
     <h4>Group Box</h4>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::Constant ?> <?= Code::Const("Text") ?> = <?= Code::Variable("document") ?>.<?= Code::Function("createElement") ?>(<?= Code::String("\"p\"") ?>)<?= Code::Delimiter ?>
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//Client/Lib/vDesk/Controls/GroupBox.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(3) ?>
+        <pre><code><?= Code::Constant ?> <?= Code::Const("Text") ?> = <?= Code::Variable("document") ?>.<?= Code::Function("createElement") ?>(<?= Code::String("\"p\"") ?>)<?= Code::Delimiter ?>
 
 <?= Code::Const("Text") ?>.<?= Code::Field("textContent") ?> = <?= Code::String("\"Lorem ipsum dolor sit amet\"") ?><?= Code::Delimiter ?>
         
 <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("GroupBox") ?>(<?= Code::String("\"Title\"") ?>, [<?= Code::Const("Text") ?>], <?= Code::True ?>)<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="GroupBoxDemo" class="Preview">
     </div>
     <script>
@@ -109,16 +113,19 @@ use vDesk\Pages\Functions;
 </section>
 <section id="FloatingBox" class="ControlPreview">
     <h4>Floating Box</h4>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("FloatingBox") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//Client/Lib/vDesk/Controls/FloatingBox.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(6) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("FloatingBox") ?>(
     <?= Code::Variable("document") ?>.<?= Code::Function("createTextNode") ?>(<?= Code::String("\"Drag me!\"") ?>),
     <?= Code::Int("10") ?>,
     <?= Code::Int("10") ?>,
     {<?= Code::Variable("Top") ?>: <?= Code::Int("10") ?>, <?= Code::Variable("Left") ?>: <?= Code::Int("10") ?>, <?= Code::Variable("Right") ?>: <?= Code::Int("10") ?>, <?= Code::Variable("Bottom") ?>: <?= Code::Int("10") ?>}
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="FloatingBoxDemo" class="Preview" style="position: relative">
     </div>
     <script>
@@ -134,16 +141,19 @@ use vDesk\Pages\Functions;
 </section>
 <section id="ResizableBox" class="ControlPreview">
     <h4>Resizable Box</h4>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("ResizableBox") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//Client/Lib/vDesk/Controls/ResizableBox.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(7) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("ResizableBox") ?>(
     <?= Code::Variable("document") ?>.<?= Code::Function("createTextNode") ?>(<?= Code::String("\"Resize me!\"") ?>),
     <?= Code::Int("100") ?>,
     <?= Code::Int("100") ?>,
     {<?= Code::Variable("Height") ?>: {<?= Code::Variable("Min") ?>: <?= Code::Int("10") ?>, <?= Code::Variable("Max") ?>: <?= Code::Int("10") ?>}, <?= Code::Variable("Width") ?>: {<?= Code::Variable("Min") ?>: <?= Code::Int("10") ?>, <?= Code::Variable("Max") ?>: <?= Code::Int("10") ?>}}
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="ResizableBoxDemo" class="Preview" style="position: relative">
     </div>
     <script>
@@ -159,9 +169,12 @@ use vDesk\Pages\Functions;
 </section>
 <section id="DynamicBox" class="ControlPreview">
     <h4>DynamicBox</h4>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("DynamicBox") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/DynamicBox.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(13) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("DynamicBox") ?>(
     <?= Code::Variable("document") ?>.<?= Code::Function("createTextNode") ?>(<?= Code::String("\"Resize me!\"") ?>),
     <?= Code::Variable("document") ?>.<?= Code::Function("createTextNode") ?>(<?= Code::String("\"Drag me!\"") ?>),
     <?= Code::Int("100") ?>,
@@ -175,7 +188,7 @@ use vDesk\Pages\Functions;
     }
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="DynamicBoxDemo" class="Preview" style="position: relative">
     </div>
     <script>
@@ -194,9 +207,12 @@ use vDesk\Pages\Functions;
 </section>
 <section id="Resizer" class="ControlPreview">
     <h4>Resizer</h4>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::Constant ?> <?= Code::Const("First") ?> <?= Code::Variable("document") ?>.<?= Code::Function("createElement") ?>(<?= Code::String("\"div\"") ?>)<?= Code::Delimiter ?>
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/Resizer.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(9) ?>
+        <pre><code><?= Code::Constant ?> <?= Code::Const("First") ?> <?= Code::Variable("document") ?>.<?= Code::Function("createElement") ?>(<?= Code::String("\"div\"") ?>)<?= Code::Delimiter ?>
 
 <?= Code::Const("First") ?>.<?= Code::Field("textContent") ?> = <?= Code::String("\"First\"") ?><?= Code::Delimiter ?>
 
@@ -211,7 +227,7 @@ use vDesk\Pages\Functions;
     
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="ResizerDemo" class="Preview" style="position: relative">
     </div>
     <script>
@@ -235,26 +251,27 @@ use vDesk\Pages\Functions;
 </section>
 <section id="TabControl" class="ControlPreview">
     <h4>TabControl</h4>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("TabControl") ?>(
-    [
-        <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("TabControl") ?>.<?= Code::Class("TabItem") ?>(
-            <?= Code::String("\"First\"") ?>,
-            <?= Code::Variable("document") ?>.<?= Code::Function("createTextNode") ?>(<?= Code::String("\"Content of 1st Tab.\"") ?>)
-        ),
-        <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("TabControl") ?>.<?= Code::Class("TabItem") ?>(
-            <?= Code::String("\"Second\"") ?>,
-            <?= Code::Variable("document") ?>.<?= Code::Function("createTextNode") ?>(<?= Code::String("\"Content of 2nd Tab.\"") ?>)
-        ),
-        <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("TabControl") ?>.<?= Code::Class("TabItem") ?>(
-            <?= Code::String("\"Third\"") ?>,
-            <?= Code::Variable("document") ?>.<?= Code::Function("createTextNode") ?>(<?= Code::String("\"Content of 3rd Tab.\"") ?>)
-        )
-    ]
-)<?= Code::Delimiter ?>
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/TabControl.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(14) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("TabControl") ?>([
+    <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("TabControl") ?>.<?= Code::Class("TabItem") ?>(
+        <?= Code::String("\"First\"") ?>,
+        <?= Code::Variable("document") ?>.<?= Code::Function("createTextNode") ?>(<?= Code::String("\"Content of 1st Tab.\"") ?>)
+    ),
+    <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("TabControl") ?>.<?= Code::Class("TabItem") ?>(
+        <?= Code::String("\"Second\"") ?>,
+        <?= Code::Variable("document") ?>.<?= Code::Function("createTextNode") ?>(<?= Code::String("\"Content of 2nd Tab.\"") ?>)
+    ),
+    <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("TabControl") ?>.<?= Code::Class("TabItem") ?>(
+        <?= Code::String("\"Third\"") ?>,
+        <?= Code::Variable("document") ?>.<?= Code::Function("createTextNode") ?>(<?= Code::String("\"Content of 3rd Tab.\"") ?>)
+    )
+])<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="TabControlDemo" class="Preview" style="position: relative">
     </div>
     <script>
@@ -271,14 +288,22 @@ use vDesk\Pages\Functions;
 </section>
 <section id="Table" class="ControlPreview">
     <h4>Table</h4>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("Table") ?>([
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/Table.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(9) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("Table") ?>([
     {<?= Code::Variable("Name") ?>: <?= Code::String("\"ID\"") ?>, <?= Code::Variable("Label") ?>: <?= Code::String("\"Article ID\"") ?>, <?= Code::Variable("Type") ?>: <?= Code::Variable("Type") ?>.<?= Code::Const("Number") ?>},
     {<?= Code::Variable("Name") ?>: <?= Code::String("\"Vendor\"") ?>, <?= Code::Variable("Label") ?>: <?= Code::String("\"Vendor\"") ?>, <?= Code::Variable("Type") ?>: <?= Code::Variable("Type") ?>.<?= Code::Const("String") ?>},
+    {<?= Code::Variable("Name") ?>: <?= Code::String("\"GPU\"") ?>, <?= Code::Variable("Label") ?>: <?= Code::String("\"Model\"") ?>, <?= Code::Variable("Type") ?>: <?= Code::Variable("Type") ?>.<?= Code::Const("String") ?>},
+    {<?= Code::Variable("Name") ?>: <?= Code::String("\"Clock\"") ?>, <?= Code::Variable("Label") ?>: <?= Code::String("\"MHz\"") ?>, <?= Code::Variable("Type") ?>: <?= Code::Variable("Type") ?>.<?= Code::Const("Number") ?>},
+    {<?= Code::Variable("Name") ?>: <?= Code::String("\"Boost\"") ?>, <?= Code::Variable("Type") ?>: <?= Code::Variable("Type") ?>.<?= Code::Const("Number") ?>},
+    {<?= Code::Variable("Name") ?>: <?= Code::String("\"TGP\"") ?>, <?= Code::Variable("Type") ?>: <?= Code::Variable("Type") ?>.<?= Code::Const("Number") ?>},
+    {<?= Code::Variable("Name") ?>: <?= Code::String("\"VRAM\"") ?>, <?= Code::Variable("Type") ?>: <?= Code::Variable("Type") ?>.<?= Code::Const("Number") ?>}
 ])<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="TableDemo" class="Preview" style="position: relative">
     </div>
     <script>
@@ -288,7 +313,7 @@ use vDesk\Pages\Functions;
                 {Name: "ID", Label: "Article ID", Type: Type.Number},
                 {Name: "Vendor", Label: "Vendor", Type: Type.String},
                 {Name: "GPU", Label: "Model", Type: Type.String},
-                {Name: "Clock", Label: "Baseclock", Type: Type.Number},
+                {Name: "Clock", Label: "MHz", Type: Type.Number},
                 {Name: "Boost", Label: "Boost", Type: Type.Number},
                 {Name: "TGP", Label: "TGP", Type: Type.Number},
                 {Name: "VRAM", Label: "VRAM", Type: Type.Number}
@@ -305,9 +330,12 @@ use vDesk\Pages\Functions;
 </section>
 <section id="Calendar" class="ControlPreview">
     <h4>Calendar</h4>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("Calendar") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/Calendar.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(6) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("Calendar") ?>(
     <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("Calendar") ?>.<?= Code::Const("Today") ?>,
     <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("Calendar") ?>.<?= Code::Const("DefaultViews") ?>,
     <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("Calendar") ?>.<?= Code::Field("View") ?>.<?= Code::Const("Month") ?>,
@@ -315,7 +343,7 @@ use vDesk\Pages\Functions;
     
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="CalendarDemo" class="Preview" style="position: relative; height: 300px">
     </div>
     <script>
@@ -332,11 +360,13 @@ use vDesk\Pages\Functions;
 <h3 id="Picker">Picker</h3>
 <section id="DatePicker" class="ControlPreview">
     <h4>DatePicker</h4>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("DatePicker") ?>(<?= Code::New ?> <?= Code::Class("Date") ?>(), <?= Code::True ?>)<?= Code::Delimiter ?>
-</code></pre>
-    </div>
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/DatePicker.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(1) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("DatePicker") ?>(<?= Code::New ?> <?= Code::Class("Date") ?>(), <?= Code::True ?>)<?= Code::Delimiter ?></code></pre>
+    </aside>
     <div id="DatePickerDemo" class="Preview">
     </div>
     <script>
@@ -345,11 +375,13 @@ use vDesk\Pages\Functions;
 </section>
 <section id="TimePicker" class="ControlPreview">
     <h4>TimePicker</h4>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("TimePicker") ?>(<?= Code::New ?> <?= Code::Class("Date") ?>(), <?= Code::True ?>)<?= Code::Delimiter ?>
-</code></pre>
-    </div>
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/TimePicker.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(1) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("TimePicker") ?>(<?= Code::New ?> <?= Code::Class("Date") ?>(), <?= Code::True ?>)<?= Code::Delimiter ?></code></pre>
+    </aside>
     <div id="TimePickerDemo" class="Preview">
     </div>
     <script>
@@ -358,11 +390,13 @@ use vDesk\Pages\Functions;
 </section>
 <section id="DateTimePicker" class="ControlPreview">
     <h4>DateTimePicker</h4>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("DateTimePicker") ?>(<?= Code::New ?> <?= Code::Class("Date") ?>(), <?= Code::True ?>)<?= Code::Delimiter ?>
-</code></pre>
-    </div>
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/DateTimePicker.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(1) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("DateTimePicker") ?>(<?= Code::New ?> <?= Code::Class("Date") ?>(), <?= Code::True ?>)<?= Code::Delimiter ?></code></pre>
+    </aside>
     <div id="DateTimePickerDemo" class="Preview">
     </div>
     <script>
@@ -371,22 +405,27 @@ use vDesk\Pages\Functions;
 </section>
 <section id="TimeSpanPicker" class="ControlPreview">
     <h4>TimeSpanPicker</h4>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("TimeSpanPicker") ?>(<?= Code::String("\"00:00:00\"") ?>, <?= Code::True ?>)<?= Code::Delimiter ?>
-</code></pre>
-    </div>
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/TimeSpanPicker.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(1) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("TimeSpanPicker") ?>(<?= Code::String("\"00:00:00\"") ?>, <?= Code::True ?>)<?= Code::Delimiter ?></code></pre>
+    </aside>
     <div id="TimeSpanPickerDemo" class="Preview">
     </div>
     <script>
         document.getElementById("TimeSpanPickerDemo").appendChild(new vDesk.Controls.TimeSpanPicker().Control);
     </script>
 </section>
-<section id="TimeSpanPicker" class="ControlPreview">
+<section id="ColorPicker" class="ControlPreview">
     <h4>ColorPicker</h4>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Media") ?>.<?= Code::Field("Drawing") ?>.<?= Code::Class("ColorPicker") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/ColorPicker.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(6) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Media") ?>.<?= Code::Field("Drawing") ?>.<?= Code::Class("ColorPicker") ?>(
     <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Media") ?>.<?= Code::Field("Drawing") ?>.<?= Code::Class("Color") ?>(<?= Code::Int("0") ?>, <?= Code::Int("0") ?>, <?= Code::Int("0") ?>),
     <?= Code::Variable("vDesk") ?>.<?= Code::Field("Media") ?>.<?= Code::Field("Drawing") ?>.<?= Code::Class("ColorPicker") ?>.<?= Code::Const("RGBA") ?>
     
@@ -396,7 +435,7 @@ use vDesk\Pages\Functions;
             
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="ColorPickerDemo" class="Preview">
     </div>
     <script>
@@ -406,15 +445,18 @@ use vDesk\Pages\Functions;
     <h3 id="Input">Input</h3>
 <section id="ToolBar" class="ControlPreview">
     <h4>ToolBar</h4>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("ToolBar") ?>([
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/ToolBar.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(14) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("ToolBar") ?>([
     <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Field("ToolBar") ?>.<?= Code::Class("Group") ?>(
         <?= Code::String("\"Hello world\"") ?>,
         [
             <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Field("ToolBar") ?>.<?= Code::Class("Item") ?>(
                 <?= Code::String("\"Lorem\"") ?>,
-                <?= Code::String("\"" . Functions::Image("vDesk", "Code.png") . "\"") ?>,
+                <?= Code::Variable("vDesk") ?>.<?= Code::Field("Visual") ?>.<?= Code::Field("Icons") ?>.<?= Code::Field("vDesk") ?>.<?= Code::Field("Code") ?>,
                 <?= Code::True ?>,
                 () => <?= Code::Function("alert") ?>(<?= Code::String("\"Lorem\"") ?>)
             ),
@@ -423,7 +465,7 @@ use vDesk\Pages\Functions;
     ),
 ])<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="ToolBarDemo" class="Preview">
     </div>
     <script>
@@ -449,9 +491,12 @@ use vDesk\Pages\Functions;
 </section>
 <section id="ContextMenu" class="ControlPreview">
     <h4>ContextMenu</h4>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("ContextMenu") ?>([
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/ContextMenu.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(22) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("ContextMenu") ?>([
     <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Field("ContextMenu") ?>.<?= Code::Class("Item") ?>(
         <?= Code::String("\"Hello World!\"") ?>,
         <?= Code::String("\"A\"") ?>,
@@ -476,7 +521,7 @@ use vDesk\Pages\Functions;
     ),
 ])<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div style="min-height: 300px; background-color: chocolate" id="ContextMenuDemo" class="Preview">
     </div>
     <script>
@@ -502,9 +547,12 @@ use vDesk\Pages\Functions;
 <section id="EditControl" class="ControlPreview">
     <h4>EditControl</h4>
     <h5>Syntax</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(9) ?>
+        <pre><code><?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::Keyword("String") ?> Label = <?= Code::String("\"\"") ?>,
     ?<?= Code::Keyword("String") ?> Tooltip = <?= Code::Null ?>,
     <?= Code::Keyword("String") ?> Type = <?= Code::Variable("Type") ?>.<?= Code::Const("String") ?>,
@@ -515,14 +563,17 @@ use vDesk\Pages\Functions;
     
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
 </section>
     <h3 id="TextInput">Text input</h3>
 <section id="String" class="ControlPreview">
     <h5>String</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/String.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(7) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Enter text:\"") ?>,
     <?= Code::String("\"This is a labelled textbox!\"") ?>,
     <?= Code::Variable("Type") ?>.<?= Code::Const("String") ?>,
@@ -530,7 +581,7 @@ use vDesk\Pages\Functions;
     {<?= Code::Variable("Min") ?>: <?= Code::Int("0") ?>, <?= Code::Variable("Max") ?>: <?= Code::Int("524288") ?>, <?= Code::Variable("Expression") ?>: <?= Code::String("\".+\"") ?> }
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlStringDemo" class="Preview">
     </div>
     <script>
@@ -546,9 +597,12 @@ use vDesk\Pages\Functions;
 </section>
 <section id="Text" class="ControlPreview">
     <h5>Text</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/Text.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(7) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Enter long text:\"") ?>,
     <?= Code::String("\"This is a multiline textbox!\"") ?>,
     <?= Code::Variable("Extension") ?>.<?= Code::Field("Type") ?>.<?= Code::Const("Text") ?>,
@@ -556,7 +610,7 @@ use vDesk\Pages\Functions;
     {<?= Code::Variable("Min") ?>: <?= Code::Int("0") ?>, <?= Code::Variable("Max") ?>: <?= Code::Int("524288") ?>}
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlTextDemo" class="Preview">
     </div>
     <script>
@@ -571,24 +625,27 @@ use vDesk\Pages\Functions;
 </section>
 <section id="Email" class="ControlPreview">
     <h5>Email</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/Email.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(7) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Enter Email address:\"") ?>,
-    <?= Code::String("\"This is a labelled textbox accepting only email addresses!\"") ?>,
+    <?= Code::String("\"This is a textbox accepting only email addresses!\"") ?>,
     <?= Code::Variable("Extension") ?>.<?= Code::Field("Type") ?>.<?= Code::Const("Email") ?>,
     <?= Code::String("\"Hello world!\"") ?>,
     {<?= Code::Variable("Min") ?>: <?= Code::Int("0") ?>, <?= Code::Variable("Max") ?>: <?= Code::Int("524288") ?>, <?= Code::Variable("Expression") ?>: <?= Code::String("\".+\"") ?> }
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlEmailDemo" class="Preview">
     </div>
     <script>
         document.getElementById("EditControlEmailDemo").appendChild(
             new vDesk.Controls.EditControl(
                 "Enter Email address:",
-                "This is a labelled textbox accepting only email addresses!",
+                "This is a textbox accepting only email addresses!",
                 Extension.Type.Email,
                 "hello@world.com"
             ).Control
@@ -597,9 +654,12 @@ use vDesk\Pages\Functions;
 </section>
 <section id="URL" class="ControlPreview">
     <h5>URL</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/URL.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(7) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Enter an URL:\"") ?>,
     <?= Code::String("\"This is a labelled textbox accepting only URLs!\"") ?>,
     <?= Code::Variable("Extension") ?>.<?= Code::Field("Type") ?>.<?= Code::Const("URL") ?>,
@@ -607,7 +667,7 @@ use vDesk\Pages\Functions;
     {<?= Code::Variable("Min") ?>: <?= Code::Int("0") ?>, <?= Code::Variable("Max") ?>: <?= Code::Int("524288") ?>, <?= Code::Variable("Expression") ?>: <?= Code::String("\".+\"") ?> }
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlURLDemo" class="Preview">
     </div>
     <script>
@@ -623,9 +683,12 @@ use vDesk\Pages\Functions;
 </section>
 <section id="Suggest" class="ControlPreview">
     <h5>Suggest</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/Suggest.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(7) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Suggest\"") ?>,
     <?= Code::String("\"This is a labelled textbox!\"") ?>,
     <?= Code::Variable("Extension") ?>.<?= Code::Field("Type") ?>.<?= Code::Const("Suggest") ?>,
@@ -633,7 +696,7 @@ use vDesk\Pages\Functions;
     {<?= Code::Variable("Min") ?>: <?= Code::Int("0") ?>, <?= Code::Variable("Max") ?>: <?= Code::Int("524288") ?>, <?= Code::Variable("Expression") ?>: <?= Code::String("\".+\"") ?> }
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlSuggestDemo" class="Preview">
     </div>
     <script>
@@ -650,9 +713,12 @@ use vDesk\Pages\Functions;
 </section>
 <section id="Password" class="ControlPreview">
     <h5>Password</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/Password.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(7) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Enter password:\"") ?>,
     <?= Code::String("\"This is a password textbox!\"") ?>,
     <?= Code::Variable("Extension") ?>.<?= Code::Field("Type") ?>.<?= Code::Const("Password") ?>,
@@ -660,7 +726,7 @@ use vDesk\Pages\Functions;
     {<?= Code::Variable("Min") ?>: <?= Code::Int("0") ?>, <?= Code::Variable("Max") ?>: <?= Code::Int("524288") ?>, <?= Code::Variable("Expression") ?>: <?= Code::String("\".+\"") ?> }
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlPasswordDemo" class="Preview">
     </div>
     <script>
@@ -675,9 +741,12 @@ use vDesk\Pages\Functions;
 </section>
 <section id="Color" class="ControlPreview">
     <h5>Color</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/Color.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(11) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Enter or choose color:\"") ?>,
     <?= Code::String("\"This is a color picker textbox!\"") ?>,
     <?= Code::Variable("Extension") ?>.<?= Code::Field("Type") ?>.<?= Code::Const("Color") ?>,
@@ -692,7 +761,7 @@ use vDesk\Pages\Functions;
     }
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlColorDemo" class="Preview">
     </div>
     <script>
@@ -708,9 +777,12 @@ use vDesk\Pages\Functions;
     <h3 id="NumericInput">Numeric input</h3>
 <section id="Number" class="ControlPreview">
     <h5>Number</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/Number.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(7) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Enter number:\"") ?>,
     <?= Code::String("\"This is a numeric textbox!\"") ?>,
     <?= Code::Variable("Type") ?>.<?= Code::Const("Number") ?>,
@@ -718,7 +790,7 @@ use vDesk\Pages\Functions;
     {<?= Code::Variable("Min") ?>: <?= Code::Int("0") ?>, <?= Code::Variable("Max") ?>: <?= Code::Variable("Number") ?>.<?= Code::Const("MAX_SAFE_INTEGER") ?>, <?= Code::Variable("Steps") ?>: <?= Code::Int("1") ?>}
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlNumberDemo" class="Preview">
     </div>
     <script>
@@ -733,9 +805,12 @@ use vDesk\Pages\Functions;
 </section>
 <section id="Range" class="ControlPreview">
     <h5>Range</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/Range.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(7) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Enter number:\"") ?>,
     <?= Code::String("\"This is a password textbox!\"") ?>,
     <?= Code::Variable("Extension") ?>.<?= Code::Field("Type") ?>.<?= Code::Const("Range") ?>,
@@ -743,7 +818,7 @@ use vDesk\Pages\Functions;
     {<?= Code::Variable("Min") ?>: <?= Code::Int("0") ?>, <?= Code::Variable("Max") ?>: <?= Code::Variable("Number") ?>.<?= Code::Const("MAX_SAFE_INTEGER") ?>, <?= Code::Variable("Steps") ?>: <?= Code::Int("1") ?>}
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlRangeDemo" class="Preview">
     </div>
     <script>
@@ -758,17 +833,26 @@ use vDesk\Pages\Functions;
 </section>
 <section id="Money" class="ControlPreview">
     <h5>Money</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/Money.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(12) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Enter amount:\"") ?>,
     <?= Code::String("\"This is a currency textbox!\"") ?>,
     <?= Code::Variable("Extension") ?>.<?= Code::Field("Type") ?>.<?= Code::Const("Money") ?>,
     <?= Code::Null ?>,
-    {<?= Code::Variable("Min") ?>: <?= Code::Int("0") ?>, <?= Code::Variable("Max") ?>: <?= Code::Variable("Number") ?>.<?= Code::Const("MAX_SAFE_INTEGER") ?>, <?= Code::Variable("Steps") ?>: <?= Code::Int("1") ?>, <?= Code::Variable("Currency") ?>: <?= Code::String("\"€\"") ?>}
+    {
+        <?= Code::Variable("Min") ?>: <?= Code::Int("0") ?>,
+        <?= Code::Variable("Max") ?>: <?= Code::Variable("Number") ?>.<?= Code::Const("MAX_SAFE_INTEGER") ?>,
+        <?= Code::Variable("Steps") ?>: <?= Code::Int("1") ?>,
+        <?= Code::Variable("Currency") ?>: <?= Code::String("\"€\"") ?>
+
+    }
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlMoneyDemo" class="Preview">
     </div>
     <script>
@@ -784,16 +868,19 @@ use vDesk\Pages\Functions;
     <h3 id="BooleanInput">Boolean input</h3>
 <section id="Boolean" class="ControlPreview">
     <h5>Boolean</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/Boolean.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(5) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Toggle value:\"") ?>,
     <?= Code::String("\"This is a bool checkbox!\"") ?>,
     <?= Code::Variable("Type") ?>.<?= Code::Const("Bool") ?>
     
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlBooleanDemo" class="Preview">
     </div>
     <script>
@@ -809,9 +896,12 @@ use vDesk\Pages\Functions;
     <h3 id="DateInput">Date input</h3>
 <section id="Date" class="ControlPreview">
     <h5>Date</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/Date.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(7) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Enter amount:\"") ?>,
     <?= Code::String("\"This is a currency textbox!\"") ?>,
     <?= Code::Variable("Extension") ?>.<?= Code::Field("Type") ?>.<?= Code::Const("Date") ?>,
@@ -819,7 +909,7 @@ use vDesk\Pages\Functions;
     {<?= Code::Variable("Min") ?>: <?= Code::New ?> <?= Code::Class("Date") ?>(), <?= Code::Variable("Max") ?>: <?= Code::New ?> <?= Code::Class("Date") ?>()}
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlDateDemo" class="Preview">
     </div>
     <script>
@@ -834,9 +924,12 @@ use vDesk\Pages\Functions;
 </section>
 <section id="Time" class="ControlPreview">
     <h5>Time</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/Time.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(7) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Enter or select time:\"") ?>,
     <?= Code::String("\"This is a timepicker textbox!\"") ?>,
     <?= Code::Variable("Extension") ?>.<?= Code::Field("Type") ?>.<?= Code::Const("Time") ?>,
@@ -844,7 +937,7 @@ use vDesk\Pages\Functions;
     {<?= Code::Variable("Min") ?>: <?= Code::New ?> <?= Code::Class("Date") ?>(), <?= Code::Variable("Max") ?>: <?= Code::New ?> <?= Code::Class("Date") ?>()}
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlTimeDemo" class="Preview">
     </div>
     <script>
@@ -859,9 +952,12 @@ use vDesk\Pages\Functions;
 </section>
 <section id="DateTime" class="ControlPreview">
     <h5>DateTime</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/DateTime.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(7) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Enter or select date & time:\"") ?>,
     <?= Code::String("\"This is a datetimepicker textbox!\"") ?>,
     <?= Code::Variable("Extension") ?>.<?= Code::Field("Type") ?>.<?= Code::Const("DateTime") ?>,
@@ -869,7 +965,7 @@ use vDesk\Pages\Functions;
     {<?= Code::Variable("Min") ?>: <?= Code::New ?> <?= Code::Class("Date") ?>(), <?= Code::Variable("Max") ?>: <?= Code::New ?> <?= Code::Class("Date") ?>()}
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlDateTimeDemo" class="Preview">
     </div>
     <script>
@@ -884,9 +980,12 @@ use vDesk\Pages\Functions;
 </section>
 <section id="TimeSpan" class="ControlPreview">
     <h5>TimeSpan</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/TimeSpan.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(7) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Enter or select timespan:\"") ?>,
     <?= Code::String("\"This is a timespanpicker textbox!\"") ?>,
     <?= Code::Variable("Extension") ?>.<?= Code::Field("Type") ?>.<?= Code::Const("TimeSpan") ?>,
@@ -894,7 +993,7 @@ use vDesk\Pages\Functions;
     {<?= Code::Variable("Min") ?>: <?= Code::New ?> <?= Code::Class("Date") ?>(), <?= Code::Variable("Max") ?>: <?= Code::New ?> <?= Code::Class("Date") ?>()}
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlTimeSpanDemo" class="Preview">
     </div>
     <script>
@@ -910,9 +1009,12 @@ use vDesk\Pages\Functions;
     <h3 id="EnumInput">Enumerated input</h3>
 <section id="Enum" class="ControlPreview">
     <h5>Enum</h5>
-    <div class="Code">
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
+    <aside class="Code">
+        <?= Code\Language::JS ?>
+        <h5>//../Controls/EditControl/Enum.js</h5>
+        <?= Code::Copy ?>
+        <?= Code::Lines(7) ?>
+        <pre><code><?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Controls") ?>.<?= Code::Class("EditControl") ?>(
     <?= Code::String("\"Enter or select timespan:\"") ?>,
     <?= Code::String("\"This is a timespanpicker textbox!\"") ?>,
     <?= Code::Variable("Extension") ?>.<?= Code::Field("Type") ?>.<?= Code::Const("Enum") ?>,
@@ -920,7 +1022,7 @@ use vDesk\Pages\Functions;
     {<?= Code::Variable("A") ?>: <?= Code::String("\"1\"") ?>, <?= Code::Variable("B") ?>: <?= Code::String("\"2\"") ?>, <?= Code::Variable("C") ?>: <?= Code::String("\"3\"") ?>}
 )<?= Code::Delimiter ?>
 </code></pre>
-    </div>
+    </aside>
     <div id="EditControlEnumDemo" class="Preview">
     </div>
     <script>

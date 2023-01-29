@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pages\Documentation;
 
-use vDesk\Pages\Page;
+use vDesk\Pages\Cached\Page;
 
 /**
  * Controls Page.
@@ -25,6 +25,7 @@ class Controls extends Page {
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Controls"],
         ?iterable $Stylesheets = [
+            "Documentation/Code",
             "../../Client/Design/vDesk",
             "../../Client/Design/vDesk/Controls/GroupBox",
             "../../Client/Design/vDesk/Controls/ResizableBox",
