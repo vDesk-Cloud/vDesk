@@ -5,17 +5,19 @@ use vDesk\Documentation\Code;
     <header>
         <h2>DataProvider</h2>
         <p>
-            This document describes working with databases using vDesk's "DataProvider"-facade and "Expression"-library.
+            This document describes how to install, configure and use vDesk's "DataProvider"-package for working with databases.
         </p>
         <p>
             Any SQL source code shown in this document targets MySQL-compatible RDBM-systems.
         </p>
         <p>
-            If you want to use this ackage in your own project or want to see output examples for Pogres- and Microsoft SQL-Servers,
+            If you want to use this package in your own project or want to see output examples for Pogres- and Microsoft SQL-Servers,
             there's a library available called <a href="https://github.com/Devel0pmentHero/Q">Q</a> which is based on the code of this package.
         </p>
         <h3>Overview</h3>
         <ul class="Topics">
+            <li><a href="#Introduction">Introduction</a></li>
+            <li><a href="#Installation">Installation</a></li>
             <li><a href="#Configuration">Configuration</a></li>
             <li><a href="#Escaping">Sanitizing and escaping</a></li>
             <li><a href="#Statements">Executing statements</a></li>
@@ -100,13 +102,18 @@ use vDesk\Documentation\Code;
         </ul>
     </header>
 <hr>
-    <section id="DataProvider">
-        <h3>DataProvider</h3>
+    <section id="Introduction">
+        <h3>Introduction</h3>
         <p>
-            Database access in vDesk is performed through a static, auto-initializing facade which provides access to MySQL, PostgreSQL and MS SQLserver databases and escaping methods.
+            The DataProvider package bundles classes for working with MySQL-, PostgreSQL- and Microsoft SQL Servers.<br>
+            It ships with static facades for easily accessing databases and injection-safe "Expression"-APIs.
+        </p>
+        <p>
+            Casual database access in vDesk is performed through a static, auto-initializing facade that  connects to a database stored in the local configuration.
             <br>
             Via simply referencing the static <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?></code>-facade,
-            the class will automatically establish a connection to a database server if a valid map of credentials exist in the local configuration.
+            the class will automatically establish a connection to a database server if a valid map of credentials exist in the local configuration
+            in the format described under the <a href="#Configuration">Configuration</a>-section below.
         </p>
         <aside class="Code">
             <?= Code\Language::PHP ?>
@@ -138,9 +145,61 @@ use vDesk\Documentation\Code;
     <section id="Installation">
         <h4>Installation</h4>
         <p>
-            The DataProvider package can be silently installed via the following parameters:
-
+            The DataProvider package can only be installed as part of a setup from the console.
         </p>
+        <p>
+            The DataProvider package accepts to following parameters for a silent deployment:
+        </p>
+        <table>
+            <tr>
+                <th>Parameter</th>
+                <th>Alias</th>
+                <th>Default</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>DataProvider.Provider</td>
+                <td>dp.pr</td>
+                <td>MySQL</td>
+                <td>The DataProvider to use, can be one of MySQL, MsSQL, PgSQL</td>
+            </tr>
+            <tr>
+                <td>DataProvider.Server</td>
+                <td>dp.srv</td>
+                <td>localhost</td>
+                <td>The address of the target database server</td>
+            </tr>
+            <tr>
+                <td>DataProvider.Port</td>
+                <td>dp.port</td>
+                <td>The default port of the selected DataProvider</td>
+                <td>The port of the target database server</td>
+            </tr>
+            <tr>
+                <td>DataProvider.User</td>
+                <td>dp.u</td>
+                <td></td>
+                <td>The name of the database user</td>
+            </tr>
+            <tr>
+                <td>DataProvider.Password</td>
+                <td>dp.pw</td>
+                <td></td>
+                <td>The password of the database user</td>
+            </tr>
+            <tr>
+                <td>DataProvider.Database</td>
+                <td>dp.db</td>
+                <td>vDesk</td>
+                <td>The target database to use</td>
+            </tr>
+            <tr>
+                <td>DataProvider.Persistent</td>
+                <td>dp.p</td>
+                <td>n</td>
+                <td>Determines whether to use connection pooling, can be Y/N</td>
+            </tr>
+        </table>
     </section>
     <section id="Configuration">
         <h4>Configuration</h4>
