@@ -75,8 +75,12 @@ use vDesk\Documentation\Code;
         <p>
             A call in the format of <code class="Inline">http://Host/vDesk/Server/Pages.php?Module=Blog&Command=CreatePost&Topic=Hello world!</code> would result into the invocation of a method with the following syntax:
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::ClassDeclaration ?> <?= Code::Class("Blog") ?> <?= Code::Extends ?> \vDesk\Modules\<?= Code::Class("Module") ?> {
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example matching Module method</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(8) ?>
+        <pre><code><?= Code::ClassDeclaration ?> <?= Code::Class("Blog") ?> <?= Code::Extends ?> \vDesk\Modules\<?= Code::Class("Module") ?> {
 
     <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("CreatePost") ?>(): <?= Code::Class("Page") ?> {
         \vDesk\Pages\<?= Code::Class("Request") ?>::<?= Code::Variable("\$Parameters") ?>[<?= Code::String("\"Topic\"") ?>]<?= Code::Delimiter ?>
@@ -86,6 +90,7 @@ use vDesk\Documentation\Code;
     }
 
 }</code></pre>
+        </aside>
     </section>
     <section id="Routes">
         <h4>Configured routes</h4>
@@ -97,10 +102,12 @@ use vDesk\Documentation\Code;
             Routes can define placeholders which will be propagated in the global <code class="Inline">\vDesk\Pages\<?= Code::Class("Request") ?>::<?= Code::Variable("\$Parameters") ?></code>-collection.<br>
             Parameters defined by placeholders or built from the querystring will overwrite any parameters in the message body of the request.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::Comment("// vDesk/Server/Settings/Routes.php") ?>
-                
-<?= Code::Return ?> [
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>// vDesk/Server/Settings/Routes.php</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(10) ?>
+        <pre><code><?= Code::Return ?> [
     <?= Code::String("\"/Blog/CreatePost/{Topic}/{Text}\"") ?> => [
         <?= Code::String("\"Module\"") ?>  => <?= Code::String("\"Blog\"") ?>,
         <?= Code::String("\"Command\"") ?> => <?= Code::String("\"CreatePost\"") ?>
@@ -113,23 +120,29 @@ use vDesk\Documentation\Code;
     ]
 ]<?= Code::Delimiter ?>
 </code></pre>
+        </aside>
         <p>
             A call in the format of <code class="Inline">http://Host/vDesk/Server/Blog/EditPost/12/Topic/Hello world!/Text here...</code> would match <br>
             a route in the format of <code class="Inline">/Blog/EditPost/{ID}/{Topic}/{Text}</code> result into the invocation of a method with the following syntax:
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::ClassDeclaration ?> <?= Code::Class("Blog") ?> <?= Code::Extends ?> <?= Code::Class("Module") ?> {
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>// vDesk/Server/Settings/Routes.php</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(9) ?>
+        <pre><code><?= Code::ClassDeclaration ?> <?= Code::Class("Blog") ?> <?= Code::Extends ?> <?= Code::Class("Module") ?> {
 
     <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("EditPost") ?>(): <?= Code::Class("Page") ?> {
         <?= Code::Class("Request") ?>::<?= Code::Variable("\$Parameters") ?>[<?= Code::String("\"ID\"") ?>]<?= Code::Delimiter ?>
                 
-                <?= Code::Class("Request") ?>::<?= Code::Variable("\$Parameters") ?>[<?= Code::String("\"Topic\"") ?>]<?= Code::Delimiter ?>
+        <?= Code::Class("Request") ?>::<?= Code::Variable("\$Parameters") ?>[<?= Code::String("\"Topic\"") ?>]<?= Code::Delimiter ?>
                 
-                <?= Code::Class("Request") ?>::<?= Code::Variable("\$Parameters") ?>[<?= Code::String("\"Text\"") ?>]<?= Code::Delimiter ?>
+        <?= Code::Class("Request") ?>::<?= Code::Variable("\$Parameters") ?>[<?= Code::String("\"Text\"") ?>]<?= Code::Delimiter ?>
         
     }
 
 }</code></pre>
+        </aside>
     </section>
     <section id="Rest">
         <h4>Rest like</h4>
@@ -141,14 +154,19 @@ use vDesk\Documentation\Code;
         <p>
             A call in the format of <code class="Inline">http://Host/vDesk/Server/Blog/CreatePost/Topic/Hello world!/</code> would result into the invocation of a method with the following syntax:
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::ClassDeclaration ?> <?= Code::Class("Blog") ?> <?= Code::Extends ?> <?= Code::Class("Module") ?> {
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>//vDesk/Server/Settings/Routes.php</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(7) ?>
+        <pre><code><?= Code::ClassDeclaration ?> <?= Code::Class("Blog") ?> <?= Code::Extends ?> <?= Code::Class("Module") ?> {
 
     <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("CreatePost") ?>(<?= Code::Keyword("string") ?> <?= Code::Variable("\$Topic") ?> = <?= Code::Null ?>, <?= Code::Keyword("string") ?> <?= Code::Variable("\$Text") ?> = <?= Code::Null ?>): <?= Code::Class("Page") ?> {
         <?= Code::Class("Request") ?>::<?= Code::Variable("\$Parameters") ?>[<?= Code::String("\"Topic\"") ?>]
     }
 
 }</code></pre>
+        </aside>
     </section>
     <section id="Modules">
         <h3>Modules</h3>
@@ -157,8 +175,12 @@ use vDesk\Documentation\Code;
             Instead of manually registering <a href="<?= Functions::URL("Documentation", "Topic", "Architecture#Commands") ?>">Commands</a>, the Pages framework provides a specialized <code class="Inline">\vDesk\Pages\<?= Code::Class("Request") ?>::<?= Code::Variable("\$Parameters") ?></code>-Dictionary that provides access to the submitted values of the querystring.
             Modules are located in the system's <code class="Inline">/vDesk/Server/Modules</code>-directory, accessible via the global <code class="Inline">\vDesk\<?= Code::Class("Modules") ?></code>-facade.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example implementation of a (Controller) Module.</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(33) ?>
+        <pre><code><?= Code::PHP ?>
 
 <?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
 
@@ -205,6 +227,7 @@ Comment) ?>
     }
 
 }</code></pre>
+        </aside>
     </section>
     <section id="Pages">
         <h3>Pages</h3>
@@ -216,8 +239,12 @@ Comment) ?>
             Pages implement the <code class="Inline">\vDesk\Data\<?= Code::Class("IDataView") ?></code>-interface and return the composed Templates as a string upon calling it's <code class="Inline"><?= Code::Class("IDataView") ?>::<?= Code::Function("ToDataView") ?>()</code>-method or casting it to a string.<br>
             Pages are located in the predefined <code class="Inline">/vDesk/Server/Pages</code>-directory, stored in the <code class="Inline">\vDesk\Configuration\<?= Code::Class("Settings") ?>::<?= Code::Variable("\$Local") ?>[<?= Code::String("\"Pages\"") ?>][<?= Code::String("\"Pages\"") ?>]</code>-setting.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::Namespace ?> Pages\MyPage<?= Code::Delimiter ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example implementation of a (Model) Page.</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(18) ?>
+        <pre><code><?= Code::Namespace ?> Pages\MyPage<?= Code::Delimiter ?>
 
 
 <?= Code::ClassDeclaration ?> <?= Code::Class("Page") ?> <?= Code::Extends ?> \vDesk\Pages\<?= Code::Class("Page") ?> {
@@ -238,6 +265,7 @@ Comment) ?>
         
     }
 }</code></pre>
+        </aside>
     </section>
     <section id="Caching">
         <h4>Caching</h4>
@@ -257,8 +285,12 @@ Comment) ?>
             If a Template is being composed as part of a Page,
             it will automatically gain access to the current Page's instance via the exported <code class="Inline"><?= Code::Variable("\$Page") ?></code> variable.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::Keyword("&lt;?php use") ?> vDesk\Pages\<?= Code::Class("Functions") ?><?= Code::Keyword("; ?>") ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example implementation of a (View) Template.</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(28) ?>
+        <pre><code><?= Code::Keyword("&lt;?php use") ?> vDesk\Pages\<?= Code::Class("Functions") ?><?= Code::Keyword("; ?>") ?>
 
 <?= Code::HTML("<!DOCTYPE html>") ?>
 
@@ -320,6 +352,7 @@ Comment) ?>
 
 <?= Code::HTML("</html>") ?>
 </code></pre>
+        </aside>
     </section>
     <section id="Composition">
         <h4>Composition</h4>
@@ -327,8 +360,12 @@ Comment) ?>
             Templates can be easily reused via using the provided "Template"-function.<br>
             The template function accepts an optional array of key-value-pairs which get exported into the local symbol table.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::HTML("<article class=") ?><?= Code::String("\"Blogpost\"") ?><?= Code::HTML(">") ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example implementation of a (View) Template.</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(13) ?>
+        <pre><code><?= Code::HTML("<article class=") ?><?= Code::String("\"Blogpost\"") ?><?= Code::HTML(">") ?>
     
     <?= Code::HTML("<header>") ?>
         
@@ -353,8 +390,13 @@ Comment) ?>
 
 <?= Code::HTML("</article>") ?>
         </code></pre>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::Keyword("&lt;?php use") ?> vDesk\Pages\<?= Code::Class("Functions") ?><?= Code::Keyword("; ?>") ?>
+        </aside>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example implementation of a (View) Template.</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(24) ?>
+        <pre><code><?= Code::Keyword("&lt;?php use") ?> vDesk\Pages\<?= Code::Class("Functions") ?><?= Code::Keyword("; ?>") ?>
 
 <?= Code::HTML("<main class=") ?><?= Code::String("\"Blog\"") ?><?= Code::HTML(">") ?>
 
@@ -395,6 +437,7 @@ Comment) ?>
     
 <?= Code::HTML("</main>") ?>
         </code></pre>
+        </aside>
     </section>
     <section id="PageComposition">
         <h4>Page based composition</h4>
@@ -402,8 +445,12 @@ Comment) ?>
             Pages can be composed by passing multiple Templates to the constructor.<br>
             Templates will be appended following the order they've been specified.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::ClassDeclaration ?> <?= Code::Class("Blog") ?> <?= Code::Extends ?> \vDesk\Modules\<?= Code::Class("Module") ?> {
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example implementation of a (View) Template.</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(26) ?>
+        <pre><code><?= Code::ClassDeclaration ?> <?= Code::Class("Blog") ?> <?= Code::Extends ?> \vDesk\Modules\<?= Code::Class("Module") ?> {
     
     <?= Code::BlockComment(<<<Comment
 /**
@@ -435,6 +482,7 @@ Comment) ?>
     }
     
 }</code></pre>
+        </aside>
     </section>
     <section id="Functions">
         <h3>Functions</h3>
@@ -446,8 +494,12 @@ Comment) ?>
             Functions can be preloaded via the <code class="Inline"><?= Code::Class("Functions") ?>::<?= Code::Function("Load") ?>()</code>-method <br>
             or referencing them through the <code class="Inline"><?= Code::Class("Functions") ?>::<?= Code::Function("__callStatic") ?>()</code>-method which internally calls the Load-method and returns a closure of the function.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::Keyword("&lt;?php ") ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example implementation of a (View) Template.</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(17) ?>
+        <pre><code><?= Code::Keyword("&lt;?php ") ?>
 
 <?= Code::Use ?> vDesk\Pages\<?= Code::Class("Functions") ?><?= Code::Delimiter ?>
 
@@ -481,6 +533,7 @@ Comment) ?>
     
 <?= Code::HTML("</main>") ?>
         </code></pre>
+        </aside>
     </section>
     <section id="PredefinedFunctions">
         <h4>Predefined Functions</h4>
@@ -515,8 +568,12 @@ Comment) ?>
         <p>
             Modules can be registered as custom error-handlers to manipulate the response by sending proper status codes and displaying specific error Pages for example taking a wrong turn or informing the visitor about an internal application crash.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::ClassDeclaration ?> <?= Code::Class("CustomErrorHandler") ?> <?= Code::Extends ?> <?= Code::Class("Module") ?> {
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example implementation of a custom Errorhandler.</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(11) ?>
+        <pre><code><?= Code::ClassDeclaration ?> <?= Code::Class("CustomErrorHandler") ?> <?= Code::Extends ?> <?= Code::Class("Module") ?> {
 
     <?= Code::Public ?> <?= Code::Static ?> <?= Code::Function ?> <?= Code::Function("Show404") ?>(\vDesk\IO\<?= Code::Class("FileNotFoundException") ?> <?= Code::Variable("\$Exception") ?>): <?= Code::Keyword("string") ?> {
         \vDesk\Pages\<?= Code::Class("Response") ?>::<?= Code::Variable("\$Code") ?> = <?= Code::Int("404") ?><?= Code::Delimiter ?>
@@ -529,16 +586,19 @@ Comment) ?>
     }
 
 }</code></pre>
+        </aside>
         <p>
             If the system encounters a <code class="Inline">\<?= Code::Class("Throwable") ?></code>, the framework will scan the <code class="Inline"><?= Code::Class("Settings") ?>::<?= Code::Variable("\$Local") ?>[<?= Code::String("\"ErrorHandlers\"") ?>]</code>-Dictionary for a matching Exception type<br>
             and passes the raised Exception to the configured Module's method.
             <br>
             If no Exception type matches, the framework uses the <code class="Inline"><?= Code::Class("Settings") ?>::<?= Code::Variable("\$Local") ?>[<?= Code::String("\"ErrorHandlers\"") ?>][<?= Code::String("\"Default\"") ?>]</code>-setting as a fallback.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::Comment("// vDesk/Server/Settings/ErrorHandlers.php") ?>
-
-<?= Code::Return ?> [
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>// vDesk/Server/Settings/ErrorHandlers.php</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(10) ?>
+        <pre><code><?= Code::Return ?> [
     <?= Code::String("\"Default\"") ?> => [
         <?= Code::String("\"Module\"") ?>  => <?= Code::String("\"Error\"") ?>,
         <?= Code::String("\"Command\"") ?> => <?= Code::String("\"Index\"") ?>
@@ -551,6 +611,7 @@ Comment) ?>
     ]
 ]<?= Code::Delimiter ?>
 </code></pre>
+        </aside>
         <p>
             The framework ships with a default error-handler that will display a custom 404-Page if an  <code class="Inline">\vDesk\Modules\<?= Code::Class("UnknownModuleException") ?></code>- or <code class="Inline">\vDesk\IO\<?= Code::Class("FileNotFoundException") ?></code>-Exception has been thrown
             and a custom 500-Page for any other type of <code class="Inline">\<?= Code::Class("Throwable") ?></code>.
@@ -565,8 +626,12 @@ Comment) ?>
             The Pages-framework delivers a specialized <code class="Inline">\vDesk\Pages\<?= Code::Class("IPackage") ?></code>-interface for custom <a href="<?= Functions::URL("Documentation", "Page", "Packages") ?>">Packages</a>,
             defining Page-files, Templates, Modules, assets and routing configuration.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example usage of the Pages\IPackage interface.</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(70) ?>
+        <pre><code><?= Code::PHP ?>
 
 <?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
 
@@ -664,5 +729,6 @@ Comment) ?>
     }
     
 }</code></pre>
+        </aside>
     </section>
 </article>

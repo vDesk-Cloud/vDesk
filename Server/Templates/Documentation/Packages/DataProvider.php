@@ -109,8 +109,12 @@ use vDesk\Documentation\Code;
             <br>
             Invoking the constructor of the facade will close any previous connection and create a new DataProvider-instance according the specified parameters.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::New ?> \vDesk\<?= Code::Class("DataProvider") ?>(<?= Code::String("\"MySQL\"") ?>, <?= Code::String("\"localhost\"") ?>, <?= Code::Int("3306") ?>, <?= Code::String("\"dbuser\"") ?>, <?= Code::String("\"dbpass\"") ?>, ...)<?= Code::Delimiter ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example of changing the current target database</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(5) ?>
+        <pre><code><?= Code::New ?> \vDesk\<?= Code::Class("DataProvider") ?>(<?= Code::String("\"MySQL\"") ?>, <?= Code::String("\"localhost\"") ?>, <?= Code::Int("3306") ?>, <?= Code::String("\"dbuser\"") ?>, <?= Code::String("\"dbpass\"") ?>, ...)<?= Code::Delimiter ?>
 
 <?= Code::Variable("\$Result") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::String("\"SELECT * FROM `TableA`\"") ?>)<?= Code::Delimiter ?>
 
@@ -119,6 +123,7 @@ use vDesk\Documentation\Code;
 
 <?= Code::Variable("\$Result") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::String("\"SELECT * FROM `TableB`\"") ?>)<?= Code::Delimiter ?>
             </code></pre>
+        </aside>
     </section>
     <section id="Configuration">
         <h4>Configuration</h4>
@@ -127,10 +132,12 @@ use vDesk\Documentation\Code;
             <br>
             The configuration values can be accessed through the global <code class="Inline"><?= Code::Class("Settings") ?>::<?= Code::Variable("\$Local") ?>[<?= Code::String("\"DataProvider\"") ?>]</code>-settings dictionary.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::Comment("//vDesk/Server/Settings/DataProvider.php") ?>
-
-<?= Code::Return ?> [
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>//vDesk/Server/Settings/DataProvider.php</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(14) ?>
+        <pre><code><?= Code::Return ?> [
     <?= Code::Comment("//DataProvider name [MySQL, PgSQL, MsSQL].") ?>
 
     <?= Code::String("\"Provider\"") ?> => <?= Code::String("\"MySQL\"") ?>,
@@ -152,15 +159,21 @@ use vDesk\Documentation\Code;
 
 ]<?= Code::Delimiter ?>
 </code></pre>
+        </aside>
     </section>
     <section id="Statements">
         <h4>Executing statements</h4>
         <p>
             Pure SQL-statements can be executed on the server via passing a string containing SQL-code to the <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>()</code>-method.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::Variable("\$Result") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::String("\"SELECT * FROM `Table`\"") ?>)<?= Code::Delimiter ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Direct execution of plain SQL strings.</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(1) ?>
+        <pre><code><?= Code::Variable("\$Result") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::String("\"SELECT * FROM `Table`\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
+        </aside>
     </section>
     <section id="Escaping">
         <h4>Sanitizing and escaping</h4>
@@ -190,8 +203,12 @@ use vDesk\Documentation\Code;
 
             <br>
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::Variable("\$Result") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::String("\"SELECT `Field` FROM `Table`\"") ?>)<?= Code::Delimiter ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example of retrieving result sets from the database.</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(7) ?>
+        <pre><code><?= Code::Variable("\$Result") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::String("\"SELECT `Field` FROM `Table`\"") ?>)<?= Code::Delimiter ?>
 
 
 <?= Code::If ?>(<?= Code::Variable("\$Result") ?>-><?= Code::Field("Count") ?> > <?= Code::Int("0") ?>) {
@@ -201,6 +218,7 @@ use vDesk\Documentation\Code;
     }
 }
 </code></pre>
+        </aside>
         <p>
             Result set streaming can be controlled via passing a boolean false as a second parameter to the <code class="Inline">\vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Execute") ?>(<?= Code::Variable("\$Statement") ?>, <?= Code::Bool("false") ?>)</code>-method,
             <br>this will disable result set buffering, so every row of any last result set has to be retrieved before executing any following statement.
@@ -219,8 +237,12 @@ use vDesk\Documentation\Code;
 
             <br>
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::ForEach ?>(
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example of calling stored procedures.</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(7) ?>
+        <pre><code><?= Code::ForEach ?>(
     \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Call") ?>(<?= Code::String("\"UnreadMessages\"") ?>, <?= Code::String("\"Username\"") ?>)
     <?= Code::Keyword("as") ?>
 
@@ -231,6 +253,7 @@ use vDesk\Documentation\Code;
 
 }
 </code></pre>
+        </aside>
     </section>
     <section id="PreparedStatements">
         <h4>Prepared statements</h4>
@@ -240,8 +263,12 @@ use vDesk\Documentation\Code;
 
             <br>
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::Variable("\$Statement") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Prepare") ?>(<?= Code::String("\"INSERT INTO Users (Name, Password) VALUES (?, ?)\"")?>)<?= Code::Delimiter ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example of using prepared statements.</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(10) ?>
+        <pre><code><?= Code::Variable("\$Statement") ?> = \vDesk\<?= Code::Class("DataProvider") ?>::<?= Code::Function("Prepare") ?>(<?= Code::String("\"INSERT INTO Users (Name, Password) VALUES (?, ?)\"")?>)<?= Code::Delimiter ?>
 
 
 <?= Code::ForEach ?>(<?= Code::Variable("\$Batch") ?> <?= Code::Keyword("as") ?> <?= Code::Variable("\$User") ?>
@@ -256,6 +283,7 @@ use vDesk\Documentation\Code;
     }
 }
 </code></pre>
+        </aside>
     </section>
     <section id="Transactions">
         <h4>Transactions</h4>
@@ -333,8 +361,12 @@ use vDesk\Documentation\Code;
             on each row of the result.
         </p>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::ForEach ?>(
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5>Example usage of Expressions</h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(9) ?>
+            <pre><code><?= Code::ForEach ?>(
     <?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"Name\"") ?>, <?= Code::String("\"Price\"") ?>)
               -><?= Code::Function("From") ?>(<?= Code::String("\"Products\"") ?>)
               -><?= Code::Function("Where") ?>([<?= Code::String("\"Price\"") ?> => [<?= Code::String("\">\"") ?> => <?= Code::Int("20.3") ?>]])
@@ -346,23 +378,34 @@ use vDesk\Documentation\Code;
     <?= Code::Keyword("echo") ?> <?= Code::String("\"Product: ") ?>{<?= Code::Variable("\$Product") ?>[<?= Code::String("\"Name\"") ?>]}<?= Code::String(", Price: ") ?>{<?= Code::Variable("\$Product") ?>[<?= Code::String("\"Price\"") ?>]}<?= Code::String("\$.\"") ?><?= Code::Delimiter ?>
 
 }</code></pre>
+            </aside>
         </div>
         <p>
             Single values can be retrieved by invoking the Expression as a function which executes it and calls the <code class="Inline">\vDesk\DataProvider\<?= Code::Class("IResult") ?>::<?= Code::Function("ToValue") ?>()</code>-method on its resultset.
         </p>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Variable("\$ID") ?> = <?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"ID\"") ?>)
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5>Invocation shorthand</h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(3) ?>
+            <pre><code><?= Code::Variable("\$ID") ?> = <?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"ID\"") ?>)
 -><?= Code::Function("From") ?>(<?= Code::String("\"Archive.Elements\"") ?>)
 -><?= Code::Function("Where") ?>([<?= Code::String("\"Name\"") ?> => <?= Code::String("\"Example\"") ?>])()<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"ID\"") ?>)
+            </aside>
+                <aside class="Code">
+                    <?= Code\Language::PHP ?>
+                    <h5>Using ToValue</h5>
+                    <?= Code::Copy ?>
+                    <?= Code::Lines(5) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"ID\"") ?>)
 -><?= Code::Function("From") ?>(<?= Code::String("\"Archive.Elements\"") ?>)
 -><?= Code::Function("Where") ?>([<?= Code::String("\"Name\"") ?> => <?= Code::String("\"Example\"") ?>])
 -><?= Code::Function("Execute") ?>()
 -><?= Code::Function("ToValue") ?>()<?= Code::Delimiter ?>
     </code></pre>
+                </aside>
         </div>
     </section>
     <section id="Functions">
@@ -378,15 +421,24 @@ use vDesk\Documentation\Code;
                     class="Inline">\vDesk\DataProvider\Expression\Functions\<?= Code::Class("Generic") ?></code>-class will be used as fallback.
         </p>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(5) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(
     <?= Code::Class("Functions") ?>::<?= Code::Function("Max") ?>(<?= Code::String("\"Size\"") ?>),
     [<?= Code::Class("λ") ?>::<?= Code::Function("Count") ?>(<?= Code::String("\"*\"") ?>), <?= Code::String("\"Amount\"") ?>]
 )
 -><?= Code::Function("From") ?>(<?= Code::String("\"Archive.Elements\"") ?>)<?= Code::Delimiter ?>
     </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("SELECT") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(5) ?>
+            <pre><code><?= Code::Keyword("SELECT") ?>
             
     <?= Code::Function("MAX") ?>(<?= Code::Field("Size") ?>),
     <?= Code::Function("COUNT") ?>(<?= Code::Field("*") ?>) <?= Code::Keyword("AS") ?> <?= Code::String("`Amount`") ?>
@@ -395,6 +447,7 @@ use vDesk\Documentation\Code;
             
     <?= Code::Class("Archive") ?>.<?= Code::Const("Elements") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
     <section id="SupportedFunctions">
@@ -474,8 +527,12 @@ use vDesk\Documentation\Code;
             <code class="Inline"><?= Code::Class("IExpression") ?>::<?= Code::Function("Where") ?>()</code>-method which accepts a map of filtering conditions.
         </p>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"*\"") ?>)
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(9) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"*\"") ?>)
 -><?= Code::Function("From") ?>(<?= Code::String("\"Archive.Elements\"") ?>)
 -><?= Code::Function("Where") ?>([
     <?= Code::String("\"ID\"") ?> => [<?= Code::String("\"IN\"") ?> => [<?= Code::Int("1") ?>, <?= Code::Int("2") ?>, <?= Code::Int("3") ?>]],
@@ -485,8 +542,13 @@ use vDesk\Documentation\Code;
     <?= Code::String("\"CreationTime\"") ?> => [<?= Code::String("\"<\"") ?> => <?= Code::Class("λ") ?>::<?= Code::Function("CurrentTimestamp") ?>()]
 ])<?= Code::Delimiter ?>
     </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("SELECT") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(14) ?>
+            <pre><code><?= Code::Keyword("SELECT") ?>
             
     <?= Code::Field("*") ?>
             
@@ -513,11 +575,16 @@ use vDesk\Documentation\Code;
 
     <?= Code::Field("CreationTime") ?> < <?= Code::Const("CURRENT_TIMESTAMP") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
         <p>Alternative conditions can be applied by passing further arrays of conditions.</p>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"*\"") ?>)
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(11) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"*\"") ?>)
 -><?= Code::Function("From") ?>(<?= Code::String("\"Archive.Elements\"") ?>)
 -><?= Code::Function("Where") ?>(
     [
@@ -529,8 +596,13 @@ use vDesk\Documentation\Code;
     ]
 )<?= Code::Delimiter ?>
     </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("SELECT") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(11) ?>
+            <pre><code><?= Code::Keyword("SELECT") ?>
 
     <?= Code::Field("*") ?>
 
@@ -551,6 +623,7 @@ use vDesk\Documentation\Code;
         
 )<?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
     <section id="Select">
@@ -562,8 +635,12 @@ use vDesk\Documentation\Code;
             DataProvider.
         </p>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"*\"") ?>)
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(8) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"*\"") ?>)
 -><?= Code::Function("From") ?>(<?= Code::String("\"Contacts.Companies\"") ?>)
 -><?= Code::Function("Where") ?>([
     <?= Code::String("\"Country\"") ?> => <?= Code::String("\"US\"") ?>,
@@ -573,8 +650,13 @@ use vDesk\Documentation\Code;
 )<?= Code::Delimiter ?>
     
     </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("SELECT") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(11) ?>
+            <pre><code><?= Code::Keyword("SELECT") ?>
 
     <?= Code::Field("*") ?>
 
@@ -594,6 +676,7 @@ use vDesk\Documentation\Code;
             
     <?= Code::Field("ZipCode") ?> <?= Code::Keyword("BETWEEN") ?> <?= Code::Int("2000") ?> <?= Code::Keyword("AND") ?> <?= Code::Int("9001") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
     <section id="Aliases">
@@ -602,16 +685,25 @@ use vDesk\Documentation\Code;
             Aliases can be applied by passing a key-value-pair of the field and alias instead.
         </p>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(6) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(
     [<?= Code::String("\"Size\"") ?> => <?= Code::String("\"Bytes\"") ?>],
     [<?= Code::String("\"CreationTime\"") ?> => <?= Code::String("\"TimeStamp\"") ?>]
 )
 -><?= Code::Function("From") ?>(<?= Code::String("\"Archive.Elements\"") ?>)
 -><?= Code::Function("Where") ?>([<?= Code::String("\"Size\"") ?> => [<?= Code::String("\">\"") ?> => <?= Code::Int("0") ?>]])<?= Code::Delimiter ?>
     </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("SELECT") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(7) ?>
+            <pre><code><?= Code::Keyword("SELECT") ?>
             
     <?= Code::Field("Size") ?> <?= Code::Keyword("AS") ?> <?= Code::String("`Bytes`") ?>,
     <?= Code::Field("CreationTime") ?> <?= Code::Keyword("AS") ?> <?= Code::String("`TimeStamp`") ?>
@@ -624,6 +716,7 @@ use vDesk\Documentation\Code;
 
     <?= Code::Field("Size") ?> > <?= Code::Int("0") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
     <section id="Joins">
@@ -637,8 +730,12 @@ use vDesk\Documentation\Code;
             filtering result sets.
         </p>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(13) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(
     <?= Code::String("\"Attachments.Owner\"") ?>,
     <?= Code::String("\"Attachments.X\"") ?>,
     <?= Code::String("\"Attachments.Y\"") ?>,
@@ -653,8 +750,13 @@ use vDesk\Documentation\Code;
 -><?= Code::Function("On") ?>([<?= Code::String("\"Elements.ID\"") ?> => <?= Code::String("\"Attachments.Element\"") ?>])
 -><?= Code::Function("Where") ?>([<?= Code::String("\"Attachments.ID\"") ?> => <?= Code::Int("12") ?>])<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("SELECT") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(16) ?>
+            <pre><code><?= Code::Keyword("SELECT") ?>
             
     <?= Code::Const("Attachments") ?>.<?= Code::Field("Owner") ?>,
     <?= Code::Const("Attachments") ?>.<?= Code::Field("X") ?>,
@@ -680,6 +782,7 @@ use vDesk\Documentation\Code;
 
     <?= Code::Const("Attachments") ?>.<?= Code::Field("ID") ?> = <?= Code::Int("12") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
         <aside class="Note">
             <h4>Note</h4>
@@ -695,8 +798,12 @@ use vDesk\Documentation\Code;
             Aliases can be applied following the table to join.
         </p>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"*\"") ?>)
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(7) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"*\"") ?>)
 -><?= Code::Function("From") ?>(<?= Code::String("\"Security.Groups\"") ?>)
 -><?= Code::Function("InnerJoin") ?>(<?= Code::String("\"Security.GroupMemberships\"") ?>, <?= Code::String("\"Memberships\"") ?>)
 -><?= Code::Function("On") ?>([
@@ -705,8 +812,13 @@ use vDesk\Documentation\Code;
     
 ])<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("SELECT") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(9) ?>
+            <pre><code><?= Code::Keyword("SELECT") ?>
 
     <?= Code::Field("*") ?>
 
@@ -723,6 +835,7 @@ use vDesk\Documentation\Code;
     <?= Code::String("Memberships") ?>.<?= Code::Field("User") ?> = <?= Code::Int("1") ?>,
     <?= Code::String("Memberships") ?>.<?= Code::Field("Group") ?> = <?= Code::Const("Groups") ?>.<?= Code::Field("ID") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
     <section id="Union">
@@ -732,9 +845,12 @@ use vDesk\Documentation\Code;
             <code class="Inline"><?= Code::Class("ISelect") ?>::<?= Code::Function("Union") ?>()</code>-method which accepts an <code class="Inline"><?= Code::Class("ISelect") ?></code>-Expression
             followed by an optional flag allowing duplicate values (UNION ALL).
         </p>
-        <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(24) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(
     [<?= Code::Class("λ") ?>::<?= Code::Function("Max") ?>(<?= Code::String("\"Read\"") ?>), <?= Code::String("\"Read\"") ?>],
     [<?= Code::Class("λ") ?>::<?= Code::Function("Max") ?>(<?= Code::String("\"Write\"") ?>), <?= Code::String("\"Write\"") ?>],
     [<?= Code::Class("λ") ?>::<?= Code::Function("Max") ?>(<?= Code::String("\"Delete\"") ?>), <?= Code::String("\"Delete\"") ?>]
@@ -762,8 +878,13 @@ use vDesk\Documentation\Code;
      
 )<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("SELECT") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(26) ?>
+            <pre><code><?= Code::Keyword("SELECT") ?>
             
     <?= Code::Function("MAX") ?>(<?= Code::Field("`Read`") ?>) <?= Code::Keyword("AS") ?> <?= Code::String("`Read`") ?>,
     <?= Code::Function("MAX") ?>(<?= Code::Field("`Write`") ?>) <?= Code::Keyword("AS") ?> <?= Code::String("`Write`") ?>,
@@ -812,7 +933,7 @@ use vDesk\Documentation\Code;
     
 ) <?= Code::Keyword("AS") ?> <?= Code::String("Permissions") ?><?= Code::Delimiter ?>
 </code></pre>
-        </div>
+            </aside>
     </section>
     <section id="Filter">
         <h5>Filtering database records</h5>
@@ -827,8 +948,12 @@ use vDesk\Documentation\Code;
             <br>or an array with a single key that defines the condition and holds the value(s) to apply.
         </p>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"*\"") ?>)
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(15) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Select") ?>(<?= Code::String("\"*\"") ?>)
 -><?= Code::Function("From") ?>(<?= Code::String("\"Accounting.Invoices\"") ?>)
 -><?= Code::Function("Where") ?>([
     <?= Code::String("\"Country\"") ?>  => <?= Code::String("\"US\"") ?>,
@@ -845,8 +970,13 @@ use vDesk\Documentation\Code;
 ])<?= Code::Delimiter ?>
 
     </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("SELECT") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(26) ?>
+            <pre><code><?= Code::Keyword("SELECT") ?>
 
     <?= Code::Field("*") ?>
 
@@ -895,9 +1025,8 @@ use vDesk\Documentation\Code;
 
     <?= Code::Field("Stock") ?> > <?= Code::Int("20") ?>
 </code></pre>
+            </aside>
         </div>
-
-
         <aside class="Note">
             <h4>Note</h4>
             <p>
@@ -915,8 +1044,12 @@ use vDesk\Documentation\Code;
             DataProvider.
         </p>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Insert") ?>()
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(6) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Insert") ?>()
 -><?= Code::Function("Into") ?>(<?= Code::String("\"Security.User\"") ?>)
 -><?= Code::Function("Values") ?>([
      <?= Code::String("\"ID\"") ?> => <?= Code::Null ?>,
@@ -924,14 +1057,20 @@ use vDesk\Documentation\Code;
      
 ])<?= Code::Delimiter ?>
     </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("INSERT INTO") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(4) ?>
+            <pre><code><?= Code::Keyword("INSERT INTO") ?>
             
     <?= Code::Class("Security") ?>.<?= Code::Const("User") ?>(<?= Code::Field("ID") ?>, <?= Code::Field("Name") ?>)
 <?= Code::Keyword("VALUES") ?>
     
     (<?= Code::Keyword("NULL") ?>, <?= Code::String("'Username'") ?>)<?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
     <section id="LastInsertID">
@@ -942,12 +1081,17 @@ use vDesk\Documentation\Code;
             Expression and retrieve the last auto generated value.
         </p>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Variable("\$ID") ?> = <?= Code::Class("Expression") ?>::<?= Code::Function("Insert") ?>()
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(4) ?>
+            <pre><code><?= Code::Variable("\$ID") ?> = <?= Code::Class("Expression") ?>::<?= Code::Function("Insert") ?>()
         -><?= Code::Function("Into") ?>(<?= Code::String("\"Table\"") ?>)
         -><?= Code::Function("Values") ?>([...])
         -><?= Code::Function("ID") ?>()<?= Code::Delimiter ?>
     </code></pre>
+            </aside>
         </div>
     </section>
     <section id="Update">
@@ -959,13 +1103,22 @@ use vDesk\Documentation\Code;
             DataProvider.
         </p>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Update") ?>(<?= Code::String("\"Archive.Elements\"") ?>)
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(3) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Update") ?>(<?= Code::String("\"Archive.Elements\"") ?>)
 -><?= Code::Function("Set") ?>([<?= Code::String("\"Size\"") ?> => <?= Code::Int("1337") ?>])
 -><?= Code::Function("Where") ?>([<?= Code::String("\"ID\"") ?> => <?= Code::Int("29") ?>])<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("Update") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(6) ?>
+            <pre><code><?= Code::Keyword("Update") ?>
 
     <?= Code::Class("Archive") ?>.<?= Code::Const("Elements") ?>
 
@@ -977,6 +1130,7 @@ use vDesk\Documentation\Code;
 
     <?= Code::Field("ID") ?> = <?= Code::Int("29") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
     <section id="ConditionalUpdate">
@@ -987,8 +1141,12 @@ use vDesk\Documentation\Code;
             The fields with a true key-value will be updated; whilst the false values will be discarded.
         </p>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Variable("\$SizeChanged") ?> = <?= Code::Bool("true") ?><?= Code::Delimiter ?>
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(11) ?>
+            <pre><code><?= Code::Variable("\$SizeChanged") ?> = <?= Code::Bool("true") ?><?= Code::Delimiter ?>
 
 <?= Code::Variable("\$ThumbnailChanged") ?> = <?= Code::Bool("false") ?><?= Code::Delimiter ?>
 
@@ -1004,6 +1162,7 @@ use vDesk\Documentation\Code;
 ])
 -><?= Code::Function("Where") ?>([<?= Code::String("\"ID\"") ?> => <?= Code::Variable("\$ID") ?>])<?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
     <section id="Delete">
@@ -1015,13 +1174,22 @@ use vDesk\Documentation\Code;
             DataProvider.
         </p>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Delete") ?>()
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(3) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Delete") ?>()
 -><?= Code::Function("From") ?>(<?= Code::String("\"Calendar.Events\"") ?>)
 -><?= Code::Function("Where") ?>([<?= Code::String("\"ID\"") ?> => <?= Code::Int("37") ?>])<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("DELETE") ?> <?= Code::Keyword("FROM") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(4) ?>
+            <pre><code><?= Code::Keyword("DELETE") ?> <?= Code::Keyword("FROM") ?>
 
     <?= Code::Class("Calendar") ?>.<?= Code::Const("Events") ?>
 
@@ -1029,6 +1197,7 @@ use vDesk\Documentation\Code;
 
     <?= Code::Field("ID") ?> = <?= Code::Int("37") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
     <section id="Create">
@@ -1042,15 +1211,25 @@ use vDesk\Documentation\Code;
     <section id="CreateDatabase">
         <h4>Database</h4>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(2) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
 -><?= Code::Function("DataProvider") ?>(<?= Code::String("\"vDesk\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("CREATE") ?> <?= Code::Keyword("DATABASE") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(2) ?>
+            <pre><code><?= Code::Keyword("CREATE") ?> <?= Code::Keyword("DATABASE") ?>
 
    <?= Code::Class("vDesk") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
 </div>
 <aside class="Note">
     <h4>Note</h4>
@@ -1069,23 +1248,36 @@ use vDesk\Documentation\Code;
     </section>
     <section id="CreateSchema">
         <h4>Schema</h4>
-<div style="display: flex; justify-content: space-around;">
-<pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
+        <div style="display: flex; justify-content: space-around;">
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(2) ?>
+                <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
 -><?= Code::Function("Schema") ?>(<?= Code::String("\"Messenger\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
-    <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("CREATE") ?> <?= Code::Keyword("SCHEMA") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(2) ?>
+                <pre><code><?= Code::Keyword("CREATE") ?> <?= Code::Keyword("SCHEMA") ?>
 
-   <?= Code::Class("Messenger") ?><?= Code::Delimiter ?>
+    <?= Code::Class("Messenger") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
     <section id="CreateTable">
         <h4>Table</h4>
-        <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(15) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
 -><?= Code::Function("Table") ?>(
     <?= Code::String("\"Messenger.Messages\"") ?>,
     [
@@ -1101,8 +1293,13 @@ use vDesk\Documentation\Code;
     ]
 )<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("CREATE") ?> <?= Code::Keyword("TABLE") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(10) ?>
+            <pre><code><?= Code::Keyword("CREATE") ?> <?= Code::Keyword("TABLE") ?>
             
     <?= Code::Class("Messenger") ?>.<?= Code::Const("Messages") ?> (
         <?= Code::Field("ID") ?> <?= Code::Keyword("BIGINT") ?> <?= Code::Keyword("UNSIGNED") ?> <?= Code::Keyword("AUTO_INCREMENT") ?> <?= Code::Keyword("NOT NULL") ?>,
@@ -1114,18 +1311,27 @@ use vDesk\Documentation\Code;
         <?= Code::Keyword("PRIMARY KEY") ?>(<?= Code::Field("ID") ?>, <?= Code::Field("Sender") ?>, <?= Code::Field("Recipient") ?>, <?= Code::Field("Status") ?>, <?= Code::Field("Date") ?>)
 )<?= Code::Delimiter ?>
 </code></pre>
-        </div>
+            </aside>
     </section>
     <section id="CreateIndex">
         <h4>Index</h4>
         <div style="display: flex; justify-content: space-around;">
-<pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(3) ?>
+                <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
 -><?= Code::Function("Index") ?>(<?= Code::String("\"PrivateMessages\"") ?>)
 -><?= Code::Function("On") ?>(<?= Code::String("\"Messenger.Messages\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("CREATE INDEX") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(4) ?>
+                <pre><code><?= Code::Keyword("CREATE INDEX") ?>
 
     <?= Code::Field("PrivateMessages") ?>
 
@@ -1133,6 +1339,7 @@ use vDesk\Documentation\Code;
 
     <?= Code::Class("Messenger") ?>.<?= Code::Const("Messages") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
     <section id="Alter">
@@ -1149,13 +1356,22 @@ use vDesk\Documentation\Code;
     <section id="AlterDatabase">
         <h4>Database</h4>
         <div style="display: flex; justify-content: space-around;">
-<pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Alter") ?>()
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(3) ?>
+                <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Alter") ?>()
 -><?= Code::Function("DataProvider") ?>(<?= Code::String("\"vDesk\"") ?>)
 -><?= Code::Function("Rename") ?>(<?= Code::String("\"Newname\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("ALTER DATABASE") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(4) ?>
+                <pre><code><?= Code::Keyword("ALTER DATABASE") ?>
 
     <?= Code::Class("vDesk") ?>
 
@@ -1163,18 +1379,28 @@ use vDesk\Documentation\Code;
 
     <?= Code::Class("Newname") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
     <section id="AlterSchema">
         <h4>Schema</h4>
         <div style="display: flex; justify-content: space-around;">
-<pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Alter") ?>()
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(3) ?>
+                <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Alter") ?>()
 -><?= Code::Function("Schema") ?>(<?= Code::String("\"Messenger\"") ?>)
 -><?= Code::Function("Rename") ?>(<?= Code::String("\"Newname\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("ALTER SCHEMA") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(4) ?>
+                <pre><code><?= Code::Keyword("ALTER SCHEMA") ?>
 
     <?= Code::Class("Messenger") ?>
 
@@ -1182,6 +1408,7 @@ use vDesk\Documentation\Code;
 
     <?= Code::Class("Newname") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
         <aside class="Note">
             <h4>Note</h4>
@@ -1197,9 +1424,12 @@ use vDesk\Documentation\Code;
     </section>
     <section id="AlterTable">
         <h4>Updating tables</h4>
-        <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Alter") ?>()
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5></h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(15) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Alter") ?>()
 -><?= Code::Function("Table") ?>(<?= Code::String("\"Messenger.Messages\"") ?>)
 -><?= Code::Function("Add") ?>(
     [<?= Code::String("\"ID\"") ?>    => [<?= Code::String("\"Type\"") ?> => <?= Code::Class("Type") ?>::<?= Code::Const("BigInt") ?> | <?= Code::Class("Type") ?>::<?= Code::Const("Unsigned") ?> , <?= Code::String("\"Autoincrement\"") ?> => <?= Code::Bool("true") ?>]],
@@ -1215,8 +1445,13 @@ use vDesk\Documentation\Code;
     [<?= Code::String("\"Conversation\"") ?>]
 )<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("ALTER TABLE") ?>
+        </aside>
+        <aside class="Code">
+            <?= Code\Language::SQL ?>
+            <h5></h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(12) ?>
+            <pre><code><?= Code::Keyword("ALTER TABLE") ?>
             
     <?= Code::Class("Messenger") ?>.<?= Code::Const("Messages") ?>
     
@@ -1231,7 +1466,7 @@ use vDesk\Documentation\Code;
 <?= Code::Keyword("DROP COLUMN") ?> <?= Code::Field("Date") ?>,
 <?= Code::Keyword("DROP INDEX") ?> <?= Code::Field("Conversation") ?><?= Code::Delimiter ?>
 </code></pre>
-        </div>
+        </aside>
         <aside class="Note">
             <h4>Note</h4>
             <p>
@@ -1248,15 +1483,25 @@ use vDesk\Documentation\Code;
     <section id="AlterIndex">
         <h4>Schema</h4>
         <div style="display: flex; justify-content: space-around;">
-<pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(2) ?>
+                <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Create") ?>()
 -><?= Code::Function("Schema") ?>(<?= Code::String("\"Messenger\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("CREATE") ?> <?= Code::Keyword("SCHEMA") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(2) ?>
+                <pre><code><?= Code::Keyword("CREATE") ?> <?= Code::Keyword("SCHEMA") ?>
 
     <?= Code::Class("Messenger") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
     <section id="Drop">
@@ -1270,55 +1515,94 @@ use vDesk\Documentation\Code;
     <section id="DropDatabase">
         <h4>Database</h4>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Drop") ?>()
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(2) ?>
+            <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Drop") ?>()
 -><?= Code::Function("DataProvider") ?>(<?= Code::String("\"vDesk\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("DROP") ?> <?= Code::Keyword("DATABASE") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(2) ?>
+            <pre><code><?= Code::Keyword("DROP") ?> <?= Code::Keyword("DATABASE") ?>
 
     <?= Code::Class("vDesk") ?><?= Code::Delimiter ?>
 </code></pre>
-</div>
+            </aside>
+        </div>
     </section>
     <section id="DropSchema">
         <h4>Schema</h4>
-<div style="display: flex; justify-content: space-around;">
-<pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Drop") ?>()
+        <div style="display: flex; justify-content: space-around;">
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(2) ?>
+                <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Drop") ?>()
 -><?= Code::Function("Schema") ?>(<?= Code::String("\"Messenger\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
-    <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("DROP") ?> <?= Code::Keyword("SCHEMA") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(2) ?>
+                <pre><code><?= Code::Keyword("DROP") ?> <?= Code::Keyword("SCHEMA") ?>
 
     <?= Code::Class("Messenger") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
     <section id="DropTable">
         <h4>Table</h4>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Drop") ?>()
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(2) ?>
+                <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Drop") ?>()
 -><?= Code::Function("Table") ?>(<?= Code::String("\"Messenger.Messages\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("DROP") ?> <?= Code::Keyword("TABLE") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(2) ?>
+                <pre><code><?= Code::Keyword("DROP") ?> <?= Code::Keyword("TABLE") ?>
             
     <?= Code::Class("Messenger") ?>.<?= Code::Const("Messages") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
     <section id="DropIndex">
         <h4>Index</h4>
         <div style="display: flex; justify-content: space-around;">
-            <pre style="margin: 10px"><code><?= Code\Language::PHP ?>
-<?= Code::Class("Expression") ?>::<?= Code::Function("Drop") ?>()
+            <aside class="Code">
+                <?= Code\Language::PHP ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(3) ?>
+                <pre><code><?= Code::Class("Expression") ?>::<?= Code::Function("Drop") ?>()
 -><?= Code::Function("Index") ?>(<?= Code::String("\"PrivateMessages\"") ?>)
 -><?= Code::Function("On") ?>(<?= Code::String("\"Messenger.Messages\"") ?>)<?= Code::Delimiter ?>
 </code></pre>
-            <pre style="margin: 10px"><code><?= Code\Language::SQL ?>
-<?= Code::Keyword("DROP INDEX") ?>
+            </aside>
+            <aside class="Code">
+                <?= Code\Language::SQL ?>
+                <h5></h5>
+                <?= Code::Copy ?>
+                <?= Code::Lines(4) ?>
+                <pre><code><?= Code::Keyword("DROP INDEX") ?>
 
     <?= Code::Field("PrivateMessages") ?>
 
@@ -1326,6 +1610,7 @@ use vDesk\Documentation\Code;
 
     <?= Code::Class("Messenger") ?>.<?= Code::Const("Messages") ?><?= Code::Delimiter ?>
 </code></pre>
+            </aside>
         </div>
     </section>
 </article>

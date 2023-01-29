@@ -154,8 +154,12 @@ use vDesk\Pages\Functions;
                 if the package requires any cleanup operations.
             </li>
         </ul>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example of a Package manifest class</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(83) ?>
+        <pre><code><?= Code::PHP ?>
 
 <?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
 
@@ -268,6 +272,7 @@ use vDesk\Pages\Functions;
     }
     
 }</code></pre>
+        </aside>
     </section>
     <section id="PackagePreparationCleanup">
         <h4>Preparation&Cleanup</h4>
@@ -279,8 +284,12 @@ use vDesk\Pages\Functions;
             Packages requiring a fully installed system or perform cleanup tasks,<br>
             must implement a public static "PostInstall"-method, that is being called, after every package and its modules has been installed.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example of a Package manifest class</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(23) ?>
+        <pre><code><?= Code::PHP ?>
 
 <?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
 
@@ -310,6 +319,7 @@ use vDesk\Pages\Functions;
     }
     
 }</code></pre>
+        </aside>
     </section>
     <section id="CustomPackages">
         <h4>Custom packages</h4>
@@ -321,8 +331,12 @@ use vDesk\Pages\Functions;
         <p>
             To be recognized as a custom package, the package manifest class must implement either one of the predefined interfaces oder provide a custom package interface.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example of a custom Package manifest class</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(45) ?>
+        <pre><code><?= Code::PHP ?>
 
 <?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
 
@@ -384,6 +398,7 @@ use vDesk\Pages\Functions;
     
     
 }</code></pre>
+        </aside>
     </section>
     <section id="CustomInstallers">
         <h4>Custom installers</h4>
@@ -394,8 +409,12 @@ use vDesk\Pages\Functions;
             To keep complexity of the package system as simple as possible, the installer has to check each passed package for a compatible package type and must resolve required constants
             before processing.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Custom installer implementation</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(21) ?>
+        <pre><code><?= Code::PHP ?>
 
 <?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
 
@@ -421,6 +440,7 @@ use vDesk\Pages\Functions;
     }
     
 }</code></pre>
+        </aside>
         <aside class="Note">
         <h4>Developer's note</h4>
         <p>

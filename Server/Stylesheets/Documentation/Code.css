@@ -1,0 +1,185 @@
+aside.Code {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: grid;
+    grid-template-columns: minmax(1rem, 3rem) auto 3rem;
+    grid-template-rows: 1.5rem auto;
+    grid-row-gap: 0.5rem;
+    background-color: #333333;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+
+aside.Code > .Language{
+    grid-column: 1;
+    grid-row: 1;
+    font-family: Arial, monospace;
+    text-shadow: 0 -1px 2px #333333, 0 1px 1px #FFFFFF;
+    color: #CCCCCC;
+    margin: 0;
+    border-bottom: 1px solid wheat;
+    object-fit: contain;
+}
+
+aside.Code > .Language > .PHP {
+    background-color: #99c;
+    border-radius: 50%;
+    padding: 1px 10px 4px 10px;
+    margin-bottom: 4px;
+}
+
+aside.Code > .Language > .JS {
+    background-color: orangered;
+    padding: 3px;
+}
+
+aside.Code > h5{
+    grid-column: 2;
+    grid-row: 1;
+    font-family: Courier New, monospace;
+    font-size: 1rem;
+    color: slategray;
+    font-weight: normal;
+    margin: 0;
+    border-bottom: 1px solid wheat;
+    padding-left: 1rem;
+}
+
+aside.Code > button{
+    cursor: pointer;
+    grid-column: 3;
+    grid-row: 1;
+    background: none;
+    color: wheat;
+    border: none;
+    border-bottom: 1px solid wheat;
+    font-size: 1.4rem;
+    line-height: 0;
+}
+aside.Code > button:active{
+    padding-top: 1px;
+}
+
+aside.Code > .Lines {
+    grid-row: 2;
+    grid-column: 1;
+    margin: 0;
+    padding: 0;
+    width: 0;
+    margin-left: 2rem;
+    color: #666666;
+    text-align: left;
+}
+aside.Code > .Lines > li {
+    height: 1rem;
+}
+
+aside.Code > pre {
+    grid-row: 2;
+    grid-column-start: 2;
+    grid-column-end: 4;
+    margin: 0;
+    padding: 0;
+}
+aside.Code > pre > code {
+    line-height: 1rem;
+}
+
+code .Recommended, code .NotRecommended, code .Language {
+    padding: 0 5px 10px 5px;
+    margin: 0 0 10px 0;
+
+}
+
+code {
+    color: whitesmoke;
+    font-family: Courier New, monospace;
+    white-space: pre-wrap;
+}
+
+code.Inline {
+    background-color: #333333;
+    padding: 1px 3px 1px 3px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+code .Class {
+    color: wheat;
+}
+
+.type {
+    color: whitesmoke;
+}
+
+code .Function,
+code .HTML {
+    color: #FFC66D;
+}
+
+code .Argument {
+}
+
+code .Variable {
+    color: #9876AA;
+}
+
+code .Const {
+    color: #A7543F;
+}
+
+code .Console {
+    color: #99ff66;
+}
+
+code .Field {
+    color: #999999;
+}
+
+code .Boolean,
+code .Bool,
+code .NULL,
+code .Null,
+code .Keyword {
+    color: orange;
+}
+
+code .Double,
+code .Float,
+code .Integer,
+code .Int {
+    color: lightblue;
+}
+
+code .String,
+code .BlockComment {
+    color: olivedrab;
+}
+
+code .Comment {
+    color: slategray;
+}
+
+.Argument.Object {
+    color: firebrick;
+}
+
+.Argument.Array {
+    color: Olive;
+}
+
+.Argument.Resource {
+    color: Orchid;
+}
+
+
+
+code .Recommended {
+    color: olivedrab;
+}
+
+code .NotRecommended {
+    color: firebrick;
+}
+

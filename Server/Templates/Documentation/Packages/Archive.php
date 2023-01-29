@@ -1,13 +1,16 @@
-<?php use vDesk\Documentation\Code;
-use vDesk\Pages\Functions; ?>
+<?php
+use vDesk\Documentation\Code;
+use vDesk\Pages\Functions;
+?>
 <article>
     <header>
         <h2>
             Archive
         </h2>
         <p>
-            This document describes the logic behind the global event system and how to dispatch and listen on events.<br>
-            The functionality of the event system is provided by the <a href="<?= Functions::URL("vDesk", "Page", "Packages#Events") ?>">Events</a>-package.
+            This document contains a technical description of the archive package
+            and tutorials of how to use it, store files, manage access or search for archive elements.<br>
+            The functionality of the archive is provided by the <a href="<?= Functions::URL("vDesk", "Page", "Packages#Archive") ?>">Archive</a>-package.
         </p>
 
         <h3>Overview</h3>
@@ -167,9 +170,10 @@ use vDesk\Pages\Functions; ?>
             <li>Implement a <code class="Inline"><?= Code::Field("Control") ?></code>-property holding the underlying DOM-Node of the custom viewer.</li>
             <li>Implement a static <code class="Inline"><?= Code::Field("Extensions") ?></code>-property holding the supported file-types of the custom viewer.</li>
         </ul>
-        <h5><u>Definition of an example HTML document viewer</u></h5>
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Element") ?>.<?= Code::Field("View") ?>.<?= Code::Class("HTML") ?> = <?= Code::Function ?>(<?= Code::Variable("Element") ?>) {
+        <aside class="Code">
+            <?= Code\Language::JS ?><h5><u>Definition of an example HTML document viewer</u></h5>
+            <?= Code::Lines(27) ?>
+        <pre><code><?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Element") ?>.<?= Code::Field("View") ?>.<?= Code::Class("HTML") ?> = <?= Code::Function ?>(<?= Code::Variable("Element") ?>) {
 
     <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::This ?>, <?= Code::String("\"Control\"") ?>, {<?= Code::Field("get") ?>: () => <?= Code::Const("Control") ?>})<?= Code::Delimiter ?>
 
@@ -209,6 +213,7 @@ use vDesk\Pages\Functions; ?>
 ]<?= Code::Delimiter ?>
 
 </code></pre>
+        </aside>
     </section>
     <section id="Copy">
         <h3>Copy files</h3>

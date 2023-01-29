@@ -45,9 +45,12 @@
             Events are split into 3 different types:
             the basic "local" event with the described pattern and "global" events which are further separated between "public" and user specific "private" events.
         </p>
-        <h5>Example of a basic event class implementation</h5>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::ClassDeclaration ?> <?= Code::Class("CustomEvent") ?> <?= Code::Extends ?> \vDesk\Events\<?= Code::Class("Event") ?> {
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example of a basic event class implementation</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(7) ?>
+        <pre><code><?= Code::ClassDeclaration ?> <?= Code::Class("CustomEvent") ?> <?= Code::Extends ?> \vDesk\Events\<?= Code::Class("Event") ?> {
 
     <?= Code::Public ?> <?= Code::Constant ?> <?= Code::Const("Name") ?> = <?= Code::String("\"CustomEvent\"") ?><?= Code::Delimiter ?>
 
@@ -83,9 +86,13 @@
             which acts as a facade to its underlying <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventSource">EventSource</a>.
         </p>
         <pre><code><?= Code\Language::JS ?><?= Code::Class("vDesk") ?>.Events.<?= Code::Class("Stream") ?>.<?= Code::Function("addEventListener") ?>(<?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>, <?= Code::Variable("Event") ?> => <?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Variable("Event") ?>.<?= Code::Field("data") ?>), <?= Code::Bool("false") ?>)<?= Code::Delimiter ?></code></pre>
-        <h5>Example class of a public Event</h5>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
+
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example class of a public Event</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(31) ?>
+        <pre><code><?= Code::PHP ?>
         
 <?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
 
@@ -127,9 +134,13 @@
     }
     
 }</code></pre>
-        <h5>Example class of a private Event</h5>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
+        </aside>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example class of a private Event</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(40) ?>
+        <pre><code><?= Code::PHP ?>
         
 <?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
 
@@ -182,6 +193,7 @@
     }
     
 }</code></pre>
+        </aside>
     </section>
     <section id="EventListeners">
         <h3>Event listeners</h3>
@@ -190,15 +202,17 @@
             These are directly attached listeners via passing an event name and a closure to the <code class="Inline"><?= Code::Class("Events") ?>::<?= Code::Function("AddEventListener") ?>()</code>-method
             and file-based event listeners, which will be loaded and executed upon schedule.
         </p>
-        <h5>
-            Example of registering an event listener
-        </h5>
-        <pre><code><?= Code\Language::PHP ?>
-\vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("Events") ?>()::<?= Code::Function("AddEventListener") ?>(
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example of registering an event listener</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(4) ?>
+        <pre><code>\vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("Events") ?>()::<?= Code::Function("AddEventListener") ?>(
     <?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>,
     <?= Code::Keyword("fn") ?>(\vDesk\Events\<?= Code::Class("Event") ?> <?= Code::Variable("\$Event") ?>) => <?= Code::Class("Log") ?>::<?= Code::Function("Info") ?>(<?= Code::String("\"Element '") ?>{<?= Code::Variable("\$Event") ?>-><?= Code::Field("Element") ?>-><?= Code::Field("Name") ?>}<?= Code::String("' has been deleted\"") ?>)
 )<?= Code::Delimiter ?>
 </code></pre>
+        </aside>
         <p>
             File-based event listeners are simple PHP files which must return a tuple array of the event's name to listen on and a callback closure
             which are stored in an "Events"-folder that is by default located in the "Server"-directory or optionally in the Archive package's "System"-directory.<br>
@@ -209,11 +223,12 @@
             To match an event, the listener file must contain the name of the desired event in its file name on the beginning.
             For example: if an event is named "Security.User.Created", the filename of the event listener may be called "Security.User.Created.GreetNewUser.php".
         </p>
-        <h5>
-            Example of an event listener file
-        </h5>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example of an event listener file</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(8) ?>
+        <pre><code><?= Code::PHP ?>
 
 
 <?= Code::Use ?> \vDesk\Archive\Element\<?= Code::Class("Deleted") ?><?= Code::Delimiter ?>
@@ -224,6 +239,7 @@
     <?= Code::Keyword("fn") ?>(<?= Code::Class("Deleted") ?> <?= Code::Variable("\$Event") ?>) => <?= Code::Class("Log") ?>::<?= Code::Function("Info") ?>(<?= Code::String("\"Element '") ?>{<?= Code::Variable("\$Event") ?>-><?= Code::Field("Element") ?>-><?= Code::Field("Name") ?>}<?= Code::String("' has been deleted\"") ?>)
 ]<?= Code::Delimiter ?>
 </code></pre>
+        </aside>
     </section>
     <section id="Deploy">
         <h4>Deploying event listeners</h4>

@@ -125,9 +125,12 @@ use vDesk\Pages\Functions;
             <li>Implement a public <code class="Inline"><?= Code::Field("Icon") ?></code>-property holding an ObjectURL of an icon for the filter.</li>
             <li>Implement a public <code class="Inline"><?= Code::Field("Title") ?></code>-property holding a display-name of the filter.</li>
         </ul>
-        <h5><u>Definition of an example search-filter</u></h5>
-        <pre><code><?= Language::JS ?>
-<?= Code::BlockComment("\"use strict\"") ?><?= Code::Delimiter ?>
+        <aside class="Code">
+            <?= Code\Language::JS ?>
+            <h5>Example implementation of a custom search-filter</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(24) ?>
+        <pre><code><?= Code::BlockComment("\"use strict\"") ?><?= Code::Delimiter ?>
         
         
 <?= Code::BlockComment("/**
@@ -160,6 +163,7 @@ use vDesk\Pages\Functions;
 
 <?= Code::Variable("vDesk") ?>.<?= Code::Field("Search") ?>.<?= Code::Field("Filters") ?>.<?= Code::Field("Contacts") ?> = <?= Code::Variable("vDesk") ?>.<?= Code::Field("Contacts") ?>.<?= Code::Field("Contact") ?>.<?= Code::Field("Search") ?>.<?= Code::Class("Filter") ?><?= Code::Delimiter ?>
 </code></pre>
+        </aside>
     </section>
     <section id="Results">
         <h4>Custom search-results</h4>
@@ -187,9 +191,12 @@ use vDesk\Pages\Functions;
             <li>Implement a public <code class="Inline"><?= Code::Field("Viewer") ?></code>-property holding an DOMNode of a preview control.</li>
             <li>Implement a public <code class="Inline"><?= Code::Field("Open") ?></code>-property holding a callback for opening the result in it's according module.</li>
         </ul>
-        <h5><u>Definition of an example search-result</u></h5>
-        <pre><code><?= Language::JS ?>
-<?= Code::BlockComment("\"use strict\"") ?><?= Code::Delimiter ?>
+        <aside class="Code">
+            <?= Code\Language::JS ?>
+            <h5>Example implementation of a custom search-result</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(36) ?>
+        <pre><code><?= Code::BlockComment("\"use strict\"") ?><?= Code::Delimiter ?>
         
         
 <?= Code::BlockComment("/**
@@ -238,6 +245,7 @@ use vDesk\Pages\Functions;
 
 <?= Code::Variable("vDesk") ?>.<?= Code::Field("Search") ?>.<?= Code::Field("Results") ?>.<?= Code::Class("CustomSearchResult") ?>.<?= Code::Function("Implements") ?>(<?= Code::Variable("vDesk") ?>.<?= Code::Field("Search") ?>.<?= Code::Class("IResult") ?>)<?= Code::Delimiter ?>
 </code></pre>
+        </aside>
     </section>
     <section id="Search">
         <h3>Custom search</h3>

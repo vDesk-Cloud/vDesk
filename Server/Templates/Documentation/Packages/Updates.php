@@ -132,8 +132,12 @@ use vDesk\Pages\Functions;
             <li>(Optionally)Declaring a <code class="Inline"><?= Code::Public ?> <?= Code::Const("Files") ?></code>-constant holding the resources to deploy/overwrite and/or delete of the update.</li>
             <li>Implementing a <code class="Inline"><?= Code::Public ?> <?= Code::Static ?> <?= Code::Function("Install") ?>()</code>-method.</li>
         </ul>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example implementation of a custom Update manifest class</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(57) ?>
+        <pre><code><?= Code::PHP ?>
 
 <?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
 
@@ -209,6 +213,7 @@ use vDesk\Pages\Functions;
     }
     
 }</code></pre>
+        </aside>
     </section>
     <section id="Create">
         <h4>Creating updates</h4>

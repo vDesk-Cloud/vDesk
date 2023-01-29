@@ -25,7 +25,7 @@ class Page extends \vDesk\Pages\Page {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["Documentation/Packages/Page"],
-        ?iterable $Stylesheets = ["Documentation/Stylesheet", "Documentation/Packages"],
+        ?iterable $Stylesheets = ["Documentation/Stylesheet", "Documentation/Packages", "Documentation/Code"],
         ?iterable $Scripts = [],
         public array $Pages = [],
         public array $Packages = [],

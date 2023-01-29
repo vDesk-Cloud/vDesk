@@ -83,9 +83,12 @@ use vDesk\Pages\Functions;
             Machines are simple classes which must provide at least an abstract <code class="Inline"><?= Code::Function("Run") ?>()</code>-method, that acts as the payload in a main-loop.
             <br>Custom implementations must be located in the <code class="Inline">\vDesk\Machines</code>-namespace and inherit from the abstract <code class="Inline">\vDesk\Machines\<?= Code::Class("Machine") ?></code>-class.
         </p>
-        <h4>Basic Machine implementation</h4>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Basic Machine implementation</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(12) ?>
+        <pre><code><?= Code::PHP ?>
 
 
 <?= Code::Namespace ?> vDesk\Machines<?= Code::Delimiter ?>
@@ -101,6 +104,7 @@ use vDesk\Pages\Functions;
     }
 
 }</code></pre>
+        </aside>
         <aside class="Note">
             <h4>Note</h4>
             <p>
@@ -121,9 +125,12 @@ use vDesk\Pages\Functions;
                 calling this method will delete the database entry of the Machine and exit the current PHP process with the specified stop code.
             </p>
         </aside>
-        <h4>Machine stub skeleton</h4>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Machine stub skeleton</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(28) ?>
+        <pre><code><?= Code::PHP ?>
 
 <?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
 
@@ -155,13 +162,17 @@ use vDesk\Pages\Functions;
     }
 
 }</code></pre>
-
+        </aside>
     </section>
     <section id="LanguageLevels">
         <h4>Example Machine</h4>
         <p>The following code represents an example implementation of the Machine-pattern as used in the Tasks-Package.</p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::Namespace ?> vDesk\Machines<?= Code::Delimiter ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example Machine</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(113) ?>
+        <pre><code><?= Code::Namespace ?> vDesk\Machines<?= Code::Delimiter ?>
 
 
 <?= Code::Use ?> \vDesk\Configuration\<?= Code::Class("Settings") ?><?= Code::Delimiter ?>
@@ -323,7 +334,7 @@ use vDesk\Pages\Functions;
 
 }
 </code></pre>
-
+        </aside>
     </section>
     <section id="Deployment">
         <h4>Deploying Machines</h4>
@@ -334,8 +345,12 @@ use vDesk\Pages\Functions;
         <p>
             Alternatively Machines can be manually deployed via importing the class file into the <code class="Inline">Archive/System/Machines</code>-directory.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::Namespace ?> vDesk\Packages<?= Code::Delimiter ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example Package implementation</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(9) ?>
+        <pre><code><?= Code::Namespace ?> vDesk\Packages<?= Code::Delimiter ?>
 
 
 <?= Code::ClassDeclaration ?> <?= Code::Class("CustomPackage") ?> <?= Code::Extends ?> <?= Code::Class("Package") ?> <?= Code::Implements ?> \vDesk\Machines\<?= Code::Class("IPackage") ?>{
@@ -347,5 +362,6 @@ use vDesk\Pages\Functions;
 
 
 }</code></pre>
+        </aside>
     </section>
 </article>
