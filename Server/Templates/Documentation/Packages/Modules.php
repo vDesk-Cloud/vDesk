@@ -48,106 +48,43 @@ use vDesk\Pages\Functions; ?>
             Client Modules are javascript files located in <code class="Inline">Modules</code>-namespace
             and must implement either the <code class="Inline">vDesk.Modules.<?= Code::Class("IModule") ?></code>-interface
         </p>
-        <pre><code><?= Code\Language::JS ?><?= Code::Class("vDesk") ?>.Events.<?= Code::Class("Stream") ?>.<?= Code::Function("addEventListener") ?>(<?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>, <?= Code::Variable("Event") ?> => <?= Code::Class("console") ?>.<?= Code::Function("log") ?>(<?= Code::Variable("Event") ?>.<?= Code::Field("data") ?>), <?= Code::Bool("false") ?>)<?= Code::Delimiter ?></code></pre>
-        <h5>Example class of a public Event</h5>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
-        
-<?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
+        <aside class="Code">
+            <?= Code\Language::JS ?>
+            <h5>//vDesk/Client/Modules/CustomModule.js</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(25) ?>
+        <pre><code><?= Code::String("\"use strict\"") ?><?= Code::Delimiter ?>
+
+<?= Code::Variable("Modules") ?>.<?= Code::Class("CustomModule") ?> = <?= Code::Function ?> <?= Code::Function("CustomModule") ?>() {
+
+    <?= Code::Variable("Object") ?>.<?= Code::Function("defineProperties") ?>(<?= Code::This ?>, {
+        <?= Code::Field("Control") ?>: {<?= Code::Field("value") ?>: <?= Code::Const("Control") ?>},
+        <?= Code::Field("Name") ?>: {<?= Code::Field("value") ?>: <?= Code::String("\"CustomModule\"") ?>},
+        <?= Code::Field("Title") ?>: {<?= Code::Field("value") ?>: <?= Code::String("\"Display Name\"") ?>},
+        <?= Code::Field("Icon") ?>: {<?= Code::Field("value") ?>: <?= Code::Variable("vDesk") ?>.<?= Code::Field("Visual") ?>.<?= Code::Class("Icons") ?>.<?= Code::Const("CustomModule") ?>},
+    })<?= Code::Delimiter ?>
 
 
-<?= Code::Namespace ?> vDesk\Archive\Element<?= Code::Delimiter ?>
-
-
-<?= Code::Use ?> vDesk\Events\<?= Code::Class("PublicEvent") ?><?= Code::Delimiter ?>
-
-<?= Code::Use ?> vDesk\Archive\<?= Code::Class("Element") ?><?= Code::Delimiter ?>
-
-        
-<?= Code::BlockComment("/**
- * Event that occurs when an Element has been deleted from the Archive.
- */") ?>
- 
-<?= Code::ClassDeclaration ?> <?= Code::Class("Deleted") ?> <?= Code::Extends ?> <?= Code::Class("PublicEvent") ?> {
-    
     <?= Code::BlockComment("/**
-     * The name of the Event.
+     * Called when the Module is being loaded (click on the module list on the left side)
      */") ?>
-        
-    <?= Code::Public ?> <?= Code::Constant ?> <?= Code::Const("Name") ?> = <?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?><?= Code::Delimiter ?>
-        
-        
+
+    <?= Code::This ?>.<?= Code::Function("Load") ?> = <?= Code::Function ?>() {
+
+    }<?= Code::Delimiter ?>
+
+
     <?= Code::BlockComment("/**
-     * Initializes a new instance of the Deleted Event.
-     *
-     * @param \\vDesk\\Archive\\Element \$Element The deleted archive Element.
+     * Called before another Module is loaded.
      */") ?>
-        
-    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("_construct") ?>(<?= Code::Public ?> <?= Code::Class("Element") ?> <?= Code::Variable("\$Element") ?>) { }
 
-    <?= Code::BlockComment("/** @inheritDoc */") ?>
+    <?= Code::This ?>.<?= Code::Function("Unload") ?> = <?= Code::Function ?>() {
 
-    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("ToDataView") ?>(): <?= Code::Class("Element") ?> {
-        <?= Code::Return ?> <?= Code::Variable("\$this") ?>-><?= Code::Field("Element") ?><?= Code::Delimiter ?>
-
-    }
-    
-}</code></pre>
-        <h5>Example class of a private Event</h5>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
-        
-<?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
+    }<?= Code::Delimiter ?>
 
 
-<?= Code::Namespace ?> vDesk\Messenger\Users\Message<?= Code::Delimiter ?>
-
-
-<?= Code::Use ?> vDesk\Events\<?= Code::Class("PrivateEvent") ?><?= Code::Delimiter ?>
-
-
-<?= Code::BlockComment("/**
- * Event that occurs when a User sends a Message to another User.
- */") ?>
- 
-<?= Code::ClassDeclaration ?> <?= Code::Class("Event") ?> <?= Code::Extends ?> <?= Code::Class("PrivateEvent") ?> {
-    
-    <?= Code::BlockComment("/**
-     * The name of the Event.
-     */") ?>
-     
-    <?= Code::Public ?> <?= Code::Constant ?> <?= Code::Const("Name") ?> = <?= Code::String("\"vDesk.Messenger.Users.Message.Sent\"") ?><?= Code::Delimiter ?>
-    
-    
-    <?= Code::BlockComment("/**
-     * Initializes a new instance of the Event class.
-     *
-     * @param \\vDesk\\Security\\User           \$Receiver The receiving User.
-     * @param \\vDesk\\Messenger\\Users\\Message \$Message The sent Message.
-     */") ?>
-     
-    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("__construct") ?>(
-        <?= Code::Public ?> \vDesk\Security\<?= Code::Class("User") ?> <?= Code::Variable("\$Receiver") ?>,
-        <?= Code::Private ?> \vDesk\Messenger\Users\<?= Code::Class("Message") ?> <?= Code::Variable("\$Message") ?>
-                
-    ) {
-        <?= Code::Parent ?>::<?= Code::Function("__construct") ?>(<?= Code::Variable("\$Receiver") ?>)<?= Code::Delimiter ?>
-        
-    }
-
-    <?= Code::BlockComment("/** @inheritDoc */") ?>
-
-    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("ToDataView") ?>(): <?= Code::Keyword("array") ?> {
-        <?= Code::Return ?> [
-            <?= Code::Variable("\$this") ?>-><?= Code::Field("Message") ?>-><?= Code::Field("ID") ?>,
-            <?= Code::Variable("\$this") ?>-><?= Code::Field("Message") ?>-><?= Code::Field("Sender") ?>-><?= Code::Field("ID") ?>,
-            <?= Code::Variable("\$this") ?>-><?= Code::Field("Message") ?>-><?= Code::Field("Recipient") ?>-><?= Code::Field("ID") ?>
-
-        ]<?= Code::Delimiter ?>
-
-    }
-    
-}</code></pre>
+}<?= Code::Delimiter ?>
+</code></pre>
     </section>
     <section id="Server">
         <h4>Server</h4>
@@ -156,9 +93,12 @@ use vDesk\Pages\Functions; ?>
             and must inherit from the <code class="Inline">\vDesk\Modules\<?= Code::Class("Module") ?></code>-class to be recognized as such.<br>
             Modules are stored in the <code class="Inline"><?= Code::Const("Modules") ?>.<?= Code::Field("Modules") ?></code>-table.
         </p>
-        <h5>Example class of a public Event</h5>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::PHP ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>//vDesk/Server/Modules/CustomModule.php</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(18) ?>
+        <pre><code><?= Code::PHP ?>
 
 <?= Code::Declare ?>(strict_types=<?= Code::Int("1") ?>)<?= Code::Delimiter ?>
 
@@ -167,7 +107,7 @@ use vDesk\Pages\Functions; ?>
 
 
 <?= Code::BlockComment("/**
- * Event that occurs when an Element has been deleted from the Archive.
+ * Custom Module implementation.
  */") ?>
 
 <?= Code::ClassDeclaration ?> <?= Code::Class("CustomModule") ?> <?= Code::Extends ?> \vDesk\Modules\<?= Code::Class("Module") ?> {
@@ -191,9 +131,14 @@ use vDesk\Pages\Functions; ?>
             Invoking a module on the client
             On the client is a proxy available that holds unique instances of client modules located in
         </p>
-        <pre><code><?= Code\Language::JS ?>
-vDesk.<?= Code::Class("Modules") ?>.<?= Code::Class("Archive") ?>.<?= Code::Function("GoToID") ?>()<?= Code::Delimiter ?>
+        <aside class="Code">
+            <?= Code\Language::JS ?>
+            <h5>Calling Modules on the client</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(1) ?>
+        <pre><code><?= Code::Class("Modules") ?>.<?= Code::Class("Archive") ?>.<?= Code::Function("GoToID") ?>()<?= Code::Delimiter ?>
 </code></pre>
+        </aside>
         <h5>
            Server
         </h5>
@@ -205,24 +150,33 @@ vDesk.<?= Code::Class("Modules") ?>.<?= Code::Class("Archive") ?>.<?= Code::Func
 
 
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-\vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("Events") ?>()::<?= Code::Function("AddEventListener") ?>(
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Calling Modules on the server</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(4) ?>
+        <pre><code>\vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("Events") ?>()::<?= Code::Function("AddEventListener") ?>(
     <?= Code::String("\"vDesk.Archive.Element.Deleted\"") ?>,
     <?= Code::Keyword("fn") ?>(\vDesk\Events\<?= Code::Class("Event") ?> <?= Code::Variable("\$Event") ?>) => <?= Code::Class("Log") ?>::<?= Code::Function("Info") ?>(<?= Code::String("\"Element '") ?>{<?= Code::Variable("\$Event") ?>-><?= Code::Field("Element") ?>-><?= Code::Field("Name") ?>}<?= Code::String("' has been deleted\"") ?>)
 )<?= Code::Delimiter ?>
 </code></pre>
+        </aside>
         <p>
             The server side facade will register a custom autoloader for the <code class="Inline">Modules</code>-namespace,
             enabling direct references to other modules.<br>
             The facade will be automatically loaded in the callstack of the execution of a typical command,
             however it is recommended to reference modules over the facade instead of their fully qualified classname.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-\vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("ModuleA") ?>()<?= Code::Delimiter ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Invocation shorthand</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(2) ?>
+            <pre><code>\vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("ModuleA") ?>()<?= Code::Delimiter ?>
 
 \Modules\<?= Code::Class("ModuleB") ?>::<?= Code::Function("SomeMethod") ?>()<?= Code::Delimiter ?>
-
 </code></pre>
+        </aside>
     </section>
     <section id="Commands">
         <h4>Commands</h4>
@@ -230,8 +184,12 @@ vDesk.<?= Code::Class("Modules") ?>.<?= Code::Class("Archive") ?>.<?= Code::Func
             Commands are database mappings to methods of modules and their parameters.<br>
             They allow the system a type-safe communication and prevent useless requests by mirroring parameter validation to the client.
         </p>
-        <pre><code><?= Code\Language::PHP ?>
-<?= Code::Variable("\$Module") ?> = \vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("CustomModule") ?>()<?= Code::Delimiter ?>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example of adding a Command with Parameters to a custom Module</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(17) ?>
+        <pre><code><?= Code::Variable("\$Module") ?> = \vDesk\<?= Code::Class("Modules") ?>::<?= Code::Function("CustomModule") ?>()<?= Code::Delimiter ?>
 
 <?= Code::Variable("\$Module") ?>-><?= Code::Field("Commands") ?>-><?= Code::Function("Add") ?>(
     <?= Code::New ?> \vDesk\Modules\Module\<?= Code::Class("Command") ?>(
@@ -252,6 +210,7 @@ vDesk.<?= Code::Class("Modules") ?>.<?= Code::Class("Archive") ?>.<?= Code::Func
 
 <?= Code::Variable("\$Module") ?>-><?= Code::Function("Save") ?>()<?= Code::Delimiter ?>
 </code></pre>
+        </aside>
     </section>
     <section id="Parameters">
         <h4>Parameters</h4>
