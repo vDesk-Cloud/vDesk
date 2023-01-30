@@ -1,10 +1,6 @@
 <?php
-
 use vDesk\Documentation\Code;
 use vDesk\Pages\Functions;
-
-//@todo Add download links to package phars.
-
 ?>
 <article class="GetvDesk">
     <header>
@@ -20,12 +16,12 @@ use vDesk\Pages\Functions;
         </p>
         <h4>Standard release</h4>
         <ul class="Downloads">
-            <li>GitHub.com <a href="https://www.github.com/vDesk-Cloud/vDesk/releases/Setup.phar" download>Setup.phar</a></li>
+            <li>GitHub.com <a href="https://github.com/vDesk-Cloud/vDesk/releases/download/Current/Setup.phar" download>Setup.phar</a></li>
             <li>vDesk.cloud <a href="<?= Functions::URL("Downloads", "Setup.phar") ?>" download>Setup.phar</a></li>
         </ul>
         <h4>Development bundle</h4>
         <ul class="Downloads">
-            <li>GitHub.com <a href="https://www.github.com/vDesk-Cloud/vDesk/releases/Setup-Dev.phar" download>Setup-Dev.phar</a></li>
+            <li>GitHub.com <a href="https://github.com/vDesk-Cloud/vDesk/releases/download/Current/Setup-Dev.phar" download>Setup-Dev.phar</a></li>
             <li>vDesk.cloud <a href="<?= Functions::URL("Downloads", "Setup-Dev.phar") ?>" download>Setup-Dev.phar</a></li>
         </ul>
         <p>The development bundle contains every package existing within the repository</p>
@@ -69,6 +65,10 @@ use vDesk\Pages\Functions;
             Depending on the bundled packages of the current release,<br>
             there may be any packages that require further user-input like asking for the database-credentials or initial password of the system user for example.
         </p>
+        <h4>Silent installation</h4>
+        <p>
+
+        </p>
     </section>
     <section id="Packages">
         <h3>Installation of packages</h3>
@@ -78,21 +78,49 @@ use vDesk\Pages\Functions;
         <p>
             To install a package, open the main menu by clicking in the top left corner on the button labeled "vDesk".<br>
             Open the "Administration"-dialog and navigate to the "Packages"-tab.<br>
-            Click on "Install Package" and select the package file to install.<br>
+            Click on the "Install"-button and select the package file to install.<br>
+            After submitting a package file a messagebox will display if the package could be successfully installed or any occurred exceptions.
             The package will then appear in the list of installed packages.
         </p>
         <section style="text-align: center">
             <aside onclick="this.classList.toggle('Fullscreen')">
-                <img src="<?= Functions::Image("vDesk", "Packages.png") ?>">
+                <img src="<?= Functions::Image("vDesk", "Packages.png") ?>"
+                     alt=""
+                     title=""
+                >
             </aside>
         </section>
         <p>
-            To uninstall a package, simply select the package you want to remove in the list of installed packages and click on "Uninstall Package".<br>
+            To uninstall a package, simply select the package you want to remove in the list of installed packages and click on the "Uninstall"-button.<br>
             <b>Note:</b> Performing this operation will uninstall every package depending on the package to remove.
         </p>
     </section>
     <section id="Updates">
         <h3>Updating packages</h3>
+        <p>
+            vDesk ships with an update system that allows the user to keep running installations on the newest state as well as hosting and installing custom updates.
+        </p>
+        <p>
+            To update a running installation, open the main menu by clicking in the top left corner on the button labeled "vDesk".<br>
+            Open the "Administration"-dialog and navigate to the "Updates"-tab.
+        </p>
+        <p>
+            By clicking on the "Search for Updates"-button, the updater will query all potential update servers registered in the local configuration file <code class="Inline">%InstallDir%/Server/Settings/Updates.php</code>.<br>
+            As per default, the update endpoint located under "updates.vdesk.cloud" will be already registered in the configuration file.
+        </p>
+        <p>
+            By clicking the "Install"-button, the selected update will then be downloaded and installed.<br>
+            Afterwards, if the update has been successfully installed, the selected entry gets removed from the list of available updates.<br>
+            Alternatively, updates can be uploaded and installed manually from local files via clicking on the "Deploy"-button and selecting any potential update files.
+        </p>
+        <section style="text-align: center">
+            <aside onclick="this.classList.toggle('Fullscreen')">
+                <img src="<?= Functions::Image("vDesk", "Updates.png") ?>">
+            </aside>
+        </section>
+    </section>
+    <section id="HostingUpdates">
+        <h3>Hosting updates</h3>
         <p>
             vDesk ships with an update system that allows the user to keep running installations on the newest state as well as hosting and installing custom updates.
         </p>

@@ -75,10 +75,8 @@
     <div class="Resources Box SlideIn Left Paused" style="animation-delay: 1.1s">
         <h2><img src="<?= Functions::Image("vDesk", "Performance.png") ?>"> Small resource footprint</h2>
         <p>
-            vDesk is an entirely handcrafted project that comes without any dependencies to third-party libraries or frameworks.
-        </p>
-        <p>
-            Every single line of code is handcrafted, which implies a small footprint of resource usage<br> (It even runs on a Raspberry Pi 2B without any problems).
+            v<span style="color: #2AB0ED">D</span>esk is an entirely handcrafted project that comes without any dependencies to third-party libraries or frameworks, which results in a low resource footprint.<br>
+            (Runs smooth on an old Raspberry Pi 2B)
         </p>
     </div>
 </section>

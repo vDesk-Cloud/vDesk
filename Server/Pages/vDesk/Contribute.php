@@ -14,20 +14,6 @@ use vDesk\Pages\Cached\Page;
 class Contribute extends Page {
     
     /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "Contribute";
-    
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Contribute";
-    
-    /**
      * Initializes a new instance of the Contribute Page.
      *
      * @param null|iterable $Values      Initializes the Contribute Page with the specified Dictionary of values.
@@ -37,7 +23,11 @@ class Contribute extends Page {
     public function __construct(
         ?iterable $Values = [],
         ?iterable $Templates = ["vDesk/Contribute"],
-        ?iterable $Stylesheets = ["Documentation/Stylesheet"]
+        ?iterable $Stylesheets = ["Documentation/Stylesheet"],
+        public string $Name = "Contribute",
+        public string $Label = "Contribute",
+        public string $Title = "Contribute to vDesk",
+        public string $Description = "This document describes how to setup a development environment"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets);
     }

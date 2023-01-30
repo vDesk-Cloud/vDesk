@@ -13,82 +13,70 @@ use vDesk\Pages\IPackage;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 final class Homepage extends Update {
-    
+
     /**
      * The Package of the Update.
      */
     public const Package = \vDesk\Packages\Homepage::class;
-    
+
     /**
      * The required version of the Update.
      */
-    public const RequiredVersion = "1.0.0";
-    
+    public const RequiredVersion = "1.0.1";
+
     /**
      * The description of the Update.
      */
     public const Description = <<<Description
-- Implemented support for handheld devices.
+- Updated roadmap.
+- Fixed typo on Packages page.
+- Fixed fullscreen display of images.
 Description;
-    
+
     /**
      * The files and directories of the Update.
      */
     public const Files = [
         self::Deploy   => [
             Package::Server => [
-                Package::Modules      => [
-                    "vDesk.php"
-                ],
-                IPackage::Pages       => [
-                    "vDesk.php",
-                    "vDesk"
-                ],
                 IPackage::Templates   => [
-                    "vDesk.php",
-                    "vDesk"
+                    "vDesk/GetvDesk.php",
+                    "vDesk/Packages.php",
+                    "vDesk/Roadmap.php"
                 ],
                 IPackage::Stylesheets => [
-                    "vDesk"
+                    "vDesk/Stylesheet.css"
                 ],
-                IPackage::Scripts     => [
-                    "vDesk/Index.js",
-                    "vDesk/Contact.js"
+                IPackage::Images      => [
+                    "vDesk/Installation.png"
                 ]
             ]
         ],
         self::Undeploy => [
             Package::Server => [
-                Package::Modules      => [
-                    "vDesk.php"
-                ],
-                IPackage::Pages       => [
-                    "vDesk.php",
-                    "vDesk"
-                ],
                 IPackage::Templates   => [
-                    "vDesk.php",
-                    "vDesk"
+                    "vDesk/GetvDesk.php",
+                    "vDesk/Packages.php",
+                    "vDesk/Roadmap.php"
                 ],
                 IPackage::Stylesheets => [
-                    "vDesk"
+                    "vDesk/Stylesheet.css"
                 ],
-                IPackage::Scripts     => [
-                    "vDesk/Index.js",
-                    "vDesk/Contact.js"
+                IPackage::Images      => [
+                    "vDesk/Installation.png"
                 ]
             ]
         ]
     ];
-    
+
     /**
      * @inheritDoc
      */
     public static function Install(\Phar $Phar, string $Path): void {
-        
+
         //Update files.
         self::Undeploy();
         self::Deploy($Phar, $Path);
-        
+
     }
 }

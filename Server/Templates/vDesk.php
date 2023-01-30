@@ -5,9 +5,10 @@ use vDesk\Pages\Functions;
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>vDesk - Virtual Desktop</title>
+    <title><?= $Page->Content?->Title ?? "vDesk - Virtual Desktop" ?></title>
     <link rel="icon" href="<?= Functions::Image("favicon.ico") ?>" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<?= $Page->Content?->Description ?? "" ?>">
 <?php foreach($Page->Stylesheets as $Stylesheet): ?>
     <link rel="stylesheet" href="<?= Functions::Stylesheet($Stylesheet) ?>">
 <?php endforeach; ?>
@@ -29,7 +30,7 @@ use vDesk\Pages\Functions;
         <nav class="Hidden">
 <?php foreach($Page->Pages as $ExistingPage): ?>
 <?php if($ExistingPage->Name !== "Index"): ?>
-            <a class="<?= $ExistingPage->Name === $Page->Content->Name ? "Current" : "" ?>" href="<?= Functions::URL("vDesk", "Page", $ExistingPage->Name) ?>"><?= $ExistingPage->Description ?></a>
+            <a class="<?= $ExistingPage->Name === $Page->Content->Name ? "Current" : "" ?>" href="<?= Functions::URL("vDesk", "Page", $ExistingPage->Name) ?>"><?= $ExistingPage->Label ?></a>
 <?php endif; ?>
 <?php endforeach; ?>
             <a href="<?= Functions::URL("Documentation", "Index") ?>">Documentation</a>
@@ -38,7 +39,7 @@ use vDesk\Pages\Functions;
     </header>
     <?= $Page->Content ?>
     <footer>
-        Copyright © 2020 Kerry Holz
+        Copyright © 2022 Kerry Holz
         <aside>This website uses icons from <a target="_blank" href="https://www.icons8.com">icons8.com</a></aside>
     </footer>
 </main>

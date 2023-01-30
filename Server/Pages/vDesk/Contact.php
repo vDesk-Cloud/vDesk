@@ -12,21 +12,7 @@ use Pages\vDesk;
  * @author  Kerry <DevelopmentHero@gmail.com>
  */
 class Contact extends vDesk {
-    
-    /**
-     * The name of the Page.
-     *
-     * @var string
-     */
-    public string $Name = "Contact";
-    
-    /**
-     * The nav label of the Page.
-     *
-     * @var string
-     */
-    public string $Description = "Contact";
-    
+
     /**
      * Initializes a new instance of the Contact Page class.
      *
@@ -67,7 +53,11 @@ class Contact extends vDesk {
             "../../Client/Lib/vDesk/Controls/EditControl/Suggest",
             "../../Client/Lib/vDesk/Controls/SuggestionTextBox",
             "vDesk/Contact"
-        ]
+        ],
+        public string $Name = "Contact",
+        public string $Label = "Contact",
+        public string $Title = "Download and install vDesk, deploy and host updates",
+        public string $Description = "This document describes how to install vDesk and keeping it up to date"
     ) {
         parent::__construct($Values, $Templates, $Stylesheets, $Scripts);
     }
