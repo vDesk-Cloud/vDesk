@@ -18,6 +18,7 @@ use vDesk\Pages\Functions; ?>
                 <ul class="Topics">
                     <li><a href="#LocalClient">Client</a></li>
                     <li><a href="#LocalServer">Server</a></li>
+                    <li><a href="#LocalManagement">Managing the local configuration</a></li>
                 </ul>
             </li>
             <li>
@@ -25,6 +26,7 @@ use vDesk\Pages\Functions; ?>
                 <ul class="Topics">
                     <li><a href="#RemoteClient">Client</a></li>
                     <li><a href="#RemoteServer">Server</a></li>
+                    <li><a href="#RemoteManagement">Managing the remote configuration</a></li>
                 </ul>
             </li>
         </ul>
@@ -67,29 +69,58 @@ use vDesk\Pages\Functions; ?>
         <p>
             Server
         </p>
-            <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
-                <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Save.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
-            </aside>
-        <aside class="Note">
-            <h4>Note</h4>
-            <p>
-                Due to technical reasons, the file is first being downloaded into the allocated RAM of the browser and then served over a dialog for finally saving it.<br>
-                This may limit the maximum size of downloads to the browser's settings or available RAM on systems without swap files for example.
-            </p>
-        </aside>
-    </section>
-    <section id="View">
-        <h3>Viewing files</h3>
         <p>
-            Files can be viewed by double clicking on them, right-clicking on them and clicking on the "Open"-item of the contextmenu and
-            by selecting them and pressing the "Enter"-button or clicking on the "Open"-button of the toolbar.
+            The configuration is located in the <code class="Inline">%installdir%/Server/Settings/DataProvider.php</code>-file and will be created filled with user input while installation.
+            <br>
+            The configuration values can be accessed through the global <code class="Inline"><?= Code::Class("Settings") ?>::<?= Code::Variable("\$Local") ?>[<?= Code::String("\"DataProvider\"") ?>]</code>-settings dictionary.
         </p>
-        <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
-            <img src="<?= Functions::Image("Documentation","Packages", "Archive", "View.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>//vDesk/Server/Settings/DataProvider.php</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(14) ?>
+            <pre><code><?= Code::Return ?> [
+    <?= Code::Comment("//DataProvider name [MySQL, PgSQL, MsSQL].") ?>
+
+    <?= Code::String("\"Provider\"") ?> => <?= Code::String("\"MySQL\"") ?>,
+    <?= Code::Comment("//Server name or address.") ?>
+
+    <?= Code::String("\"Server\"") ?>  => <?= Code::String("\"localhost\"") ?>,
+    <?= Code::Comment("//Server port, defaults to the standard port of the specified target server if set to null.") ?>
+
+    <?= Code::String("\"Port\"") ?> => <?= Code::Int("3306") ?>
+
+    <?= Code::String("\"User\"") ?>  => <?= Code::String("\"dbuser\"") ?>,
+    <?= Code::String("\"Password\"") ?>  => <?= Code::String("\"dbpass\"") ?>,
+    <?= Code::Comment("//DataProvider name, ignored while using the MySQL DataProvider.") ?>
+
+    <?= Code::String("\"DataProvider\"") ?>  => <?= Code::String("\"vDesk\"") ?>,
+    <?= Code::Comment("//Connection pooling true/false.") ?>
+
+    <?= Code::String("\"Persistent\"") ?>  => <?= Code::Bool("\"false\"") ?>
+
+]<?= Code::Delimiter ?>
+</code></pre>
         </aside>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Creating local config</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(6) ?>
+            <pre><code><?= Code::Class("Settings") ?>::<?= Code::Variable("\$Local") ?>[<?= Code::String("\"CustomSettings\"") ?>] = <?= Code::New ?> Settings\Local\<?= Code::Class("Settings") ?>(
+    [<?= Code::String("\"A\"") ?> => <?= Code::Int("1") ?>, <?= Code::String("\"B\"") ?> => <?= Code::Int("2") ?>, <?= Code::String("\"C\"") ?> => <?= Code::Int("3") ?>],
+    <?= Code::String("\"CustomSettings\"") ?>
+
+)<?= Code::Delimiter ?>
+
+
+<?= Code::Class("Settings") ?>::<?= Code::Variable("\$Local") ?>[<?= Code::String("\"CustomSettings\"") ?>]-><?= Code::Function("Save") ?>()<?= Code::Delimiter ?>
+</code></pre>
+        </aside>
+        <h5></h5>
     </section>
-    <section id="CustomViewer">
-        <h4>Custom viewers</h4>
+    <section id="Remote">
+        <h3>Remote</h3>
         <p>
             The archive provides an API for registering JavaScript-classes as custom viewer controls.<br>
             To be recognized as a custom viewer, the class has to meet the following requirements:
@@ -97,166 +128,118 @@ use vDesk\Pages\Functions; ?>
             Files can be viewed by double clicking on them, right-clicking on them and clicking on the "Open"-item of the contextmenu and
             by selecting them and pressing the "Enter"-key or clicking on the "Open"-button of the toolbar.
         </p>
-        <ul>
-            <li>Located in the <code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Element") ?>.<?= Code::Field("View") ?></code>-namespace</li>
-            <li>Implement a <code class="Inline"><?= Code::Field("Control") ?></code>-property holding the underlying DOM-Node of the custom viewer.</li>
-            <li>Implement a static <code class="Inline"><?= Code::Field("Extensions") ?></code>-property holding the supported file-types of the custom viewer.</li>
-        </ul>
-        <h5><u>Definition of an example HTML document viewer</u></h5>
-        <pre><code><?= Code\Language::JS ?>
-<?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Element") ?>.<?= Code::Field("View") ?>.<?= Code::Class("HTML") ?> = <?= Code::Function ?>(<?= Code::Variable("Element") ?>) {
+        <table>
+            <tr>
+                <th>Type</th>
+                <th>Alias</th>
+                <th>Possible validators</th>
+            </tr>
+            <tr>
+                <td>Int</td>
+                <td><code class="Inline">\vDesk\Struct\<?= Code::Class("Type") ?>::<?= Code::Const("Int") ?></code></td>
+                <td>String</td>
+            </tr>
+            <tr>
+                <td>Float</td>
+                <td><code class="Inline">\vDesk\Struct\<?= Code::Class("Type") ?>::<?= Code::Const("Float") ?></code></td>
+                <td>String</td>
+            </tr>
+            <tr>
+                <td>String</td>
+                <td><code class="Inline">\vDesk\Struct\<?= Code::Class("Type") ?>::<?= Code::Const("String") ?></code></td>
+                <td>String</td>
+            </tr>
+            <tr>
+                <td>Boolean</td>
+                <td><code class="Inline">\vDesk\Struct\<?= Code::Class("Type") ?>::<?= Code::Const("Bool") ?></code></td>
+                <td>String</td>
+            </tr>
+            <tr>
+                <td>Enum</td>
+                <td><code class="Inline">\vDesk\Struct\Extension\<?= Code::Class("Type") ?>::<?= Code::Const("Enum") ?></code></td>
+                <td>String</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><code class="Inline">\vDesk\Struct\Extension\<?= Code::Class("Type") ?>::<?= Code::Const("Email") ?></code></td>
+                <td>String</td>
+            </tr>
+            <tr>
+                <td>URL</td>
+                <td><code class="Inline">\vDesk\Struct\Extension\<?= Code::Class("Type") ?>::<?= Code::Const("URL") ?></code></td>
+                <td>String</td>
+            </tr>
+            <tr>
+                <td>Color</td>
+                <td><code class="Inline">\vDesk\Struct\Extension\<?= Code::Class("Type") ?>::<?= Code::Const("Color") ?></code></td>
+                <td>String</td>
+            </tr>
+            <tr>
+                <td>TimeSpan</td>
+                <td><code class="Inline">\vDesk\Struct\Extension\<?= Code::Class("Type") ?>::<?= Code::Const("TimeSpan") ?></code></td>
+                <td>String</td>
+            </tr>
+            <tr>
+                <td>DateTime</td>
+                <td><code class="Inline">\<?= Code::Class("DateTime") ?>::<?= Code::Keyword("class") ?></code></td>
+                <td>String</td>
+            </tr>
+        </table>
+    </section>
+    <section id="RemoteClient">
+        <h4>Client</h4>
+        <p>
+            Client
+        </p>
+        <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
+            <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Upload.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
+        </aside>
+    </section>
+    <section id="RemoteServer">
+        <h4>Server</h4>
+        <p>
+            Server
+        </p>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Creating local config</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(6) ?>
+            <pre><code><?= Code::Class("Settings") ?>::<?= Code::Variable("\$Remote") ?>[<?= Code::String("\"CustomSettings\"") ?>] = <?= Code::New ?> Settings\Remote\<?= Code::Class("Settings") ?>(
+    [
+        <?= Code::String("\"A\"") ?> => <?= Code::New ?> Settings\Remote\<?= Code::Class("Setting") ?>(
+            <?= Code::Int("Tag") ?>: <?= Code::String("\"A\"") ?>,
+            <?= Code::Int("Value") ?>: <?= Code::String("\"A\"") ?>,
+            <?= Code::Int("Type") ?>: \vDesk\Struct\<?= Code::Class("Type") ?>::<?= Code::Const("String") ?>,
+            <?= Code::Int("Nullable") ?>: <?= Code::False ?>,
+            <?= Code::Int("Public") ?>: <?= Code::True ?>,
+            <?= Code::Int("Validator") ?>: [<?= Code::String("\"Pattern\"") ?> => <?= Code::String("\"[A-Za-z0-9]\"") ?>, <?= Code::String("\"Min\"") ?> => <?= Code::Int("10") ?>, <?= Code::String("\"Max\"") ?> => <?= Code::Int("20") ?>]
+        ),
+        <?= Code::String("\"B\"") ?> => <?= Code::New ?> Settings\Remote\<?= Code::Class("Setting") ?>(
+            <?= Code::String("\"A\"") ?>,
+            <?= Code::String("\"A\"") ?>,
+            \vDesk\Struct\<?= Code::Class("Type") ?>::<?= Code::Const("Int") ?>,
+            <?= Code::False ?>,
+            <?= Code::True ?>,
+            [<?= Code::String("\"Min\"") ?> => <?= Code::Int("0") ?>, <?= Code::String("\"Max\"") ?> => <?= Code::Int("256") ?>]]
+        ),
+        <?= Code::String("\"C\"") ?> => <?= Code::New ?> Settings\Remote\<?= Code::Class("Setting") ?>(
+            <?= Code::String("\"C\"") ?>,
+            <?= Code::String("\"C\"") ?>,
+            \vDesk\Struct\Extension\<?= Code::Class("Type") ?>::<?= Code::Const("Enum") ?>,
+            <?= Code::False ?>,
+            <?= Code::True ?>,
+            [<?= Code::String("\"A\"") ?>, <?= Code::String("\"B\"") ?>, <?= Code::String("\"C\"") ?>]
+        ),
+        <?= Code::String("\"C\"") ?> => <?= Code::Int("3") ?>
 
-    <?= Code::Class("Object") ?>.<?= Code::Function("defineProperty") ?>(<?= Code::This ?>, <?= Code::String("\"Control\"") ?>, {<?= Code::Field("get") ?>: () => <?= Code::Const("Control") ?>})<?= Code::Delimiter ?>
+    ],
+    <?= Code::String("\"CustomSettings\"") ?>
+
+)<?= Code::Delimiter ?>
 
 
-    <?= Code::Constant ?> <?= Code::Const("Control") ?> = <?= Code::Variable("document") ?>.<?= Code::Function("createElement") ?>(<?= Code::String("\"div\"") ?>)<?= Code::Delimiter ?>
-
-    <?= Code::Const("Control") ?>.<?= Code::Field("className") ?> = <?= Code::String("\"HTML\"") ?><?= Code::Delimiter ?>
-
-
-    <?= Code::Variable("vDesk") ?>.<?= Code::Field("Connection") ?>.<?= Code::Function("Send") ?>(
-        <?= Code::New ?> <?= Code::Variable("vDesk") ?>.<?= Code::Field("Modules") ?>.<?= Code::Class("Command") ?>({
-            <?= Code::Field("Module") ?>:     <?= Code::String("\"Archive\"") ?>,
-            <?= Code::Field("Command") ?>:    <?= Code::String("\"Download\"") ?>,
-            <?= Code::Field("Parameters") ?>: {<?= Code::Field("ID") ?>: <?= Code::Variable("Element") ?>.<?= Code::Field("ID") ?>},
-            <?= Code::Field("Ticket") ?>:     <?= Code::Variable("vDesk") ?>.<?= Code::Field("Security") ?>.<?= Code::Class("User") ?>.<?= Code::Field("Current") ?>.<?= Code::Field("Ticket") ?>
-
-        }),
-        <?= Code::Variable("Buffer") ?> => {
-            <?= Code::Constant ?> <?= Code::Const("Reader") ?> = <?= Code::New ?> <?= Code::Class("FileReader") ?>()<?= Code::Delimiter ?>
-
-            <?= Code::Const("Reader") ?>.<?= Code::Field("onload") ?> = () => <?= Code::Const("Control") ?>.<?= Code::Function("appendChild") ?>(<?= Code::New ?> <?= Code::Class("DomParser") ?>().<?= Code::Function("parseFromString") ?>(<?= Code::Const("Reader") ?>.<?= Code::Field("result") ?>, <?= Code::String("\"text/html\"") ?>))<?= Code::Delimiter ?>
-
-            <?= Code::Const("Reader") ?>.<?= Code::Function("readAsText") ?>(<?= Code::New ?> <?= Code::Class("Blob") ?>([<?= Code::Variable("Buffer") ?>], {<?= Code::Field("type") ?>: <?= Code::String("\"text/plain\"") ?>}))<?= Code::Delimiter ?>
-
-        },
-        <?= Code::True ?>
-
-    )<?= Code::Delimiter ?>
-
-}<?= Code::Delimiter ?>
-
-
-<?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Element") ?>.<?= Code::Field("View") ?>.<?= Code::Class("HTML") ?>.<?= Code::Field("Extensions") ?> = [
-    <?= Code::String("\"html\"") ?>,
-    <?= Code::String("\"xhtml\"") ?>
-
-]<?= Code::Delimiter ?>
-
+<?= Code::Class("Settings") ?>::<?= Code::Variable("\$Remote") ?>[<?= Code::String("\"CustomSettings\"") ?>]-><?= Code::Function("Save") ?>()<?= Code::Delimiter ?>
 </code></pre>
-    </section>
-    <section id="Copy">
-        <h3>Copy files</h3>
-        <p>
-            Elements can be copied by selecting and right-clicking on them and then clicking on the "Copy"-item of the contextmenu
-            or clicking on the "Copy"-button and clicking on the "Paste"-button in the target folder
-            or right-clicking on a target folder
-            and clicking on the "Paste"-item of the contextmenu.<br>
-            The same action can be achieved by selecting elements and pressing "CTRL+C" and "CTRL+V" in the target folder.<br>
-            This operation will require the current user to have "read"-access on the target elements and "write"-access on the destination folder.
-        </p>
-        <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
-            <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Copy.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
-        </aside>
-    </section>
-    <section id="Move">
-        <h3>Move files and folders</h3>
-        <p>
-            Elements can be moved by selecting and dragging them onto a target folder
-            or by clicking on the "Cut"-button while selected and clicking on the "Paste"-button in the target folder
-            or right-clicking on a target folder
-            and clicking on the "Paste"-item of the contextmenu.<br>
-            The same action can be achieved by selecting elements and pressing "CTRL+X" and "CTRL+V" in the target folder.<br>
-            This operation will require the current user to have "write"-access on the target elements and destination folder.
-        </p>
-    </section>
-    <section id="Edit">
-        <h3>Edit files</h3>
-        <p>
-            Editing files is only possible by right-clicking on the target file and clicking on the "Edit"-item of the contextmenu.<br>
-            This item is only available if any editor-plugin which supports the file type has been registered
-            and if the current user has "Write"-permissions on the file.
-        </p>
-        <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
-            <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Edit.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
-        </aside>
-    </section>
-    <section id="CustomEditor">
-        <h4>Custom editors</h4>
-        <p>
-        </p>
-    </section>
-    <section id="Rename">
-        <h3>Rename files</h3>
-        <p>
-            Files and folders can be renamed via right-clicking on them to open the contextmenu and clicking on the "Rename"-item.<br>
-            This will make the name-label of the desired element editable and saves any changes when a click occurred outside the element
-            or the enter-button has been pressed.<br>
-            Renaming elements requires the current user to have "Write"-permissions on the desired element.
-        </p>
-        <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
-            <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Rename.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
-        </aside>
-    </section>
-    <section id="Attributes">
-        <h3>Attributes</h3>
-        <p>
-            The attributes window contains general information like the size or owner of an element, a permission editor and
-            an editor for managing <a href="<?= Functions::URL("Documentation", "Package", "MetaInformation#DataSet") ?>">DataSets</a>.
-        </p>
-        <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
-            <img src="<?= Functions::Image("Documentation","Packages", "Archive", "Attributes.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
-        </aside>
-        <p>
-            The Attributes window can be extended via registering a custom control in the
-            <code class="Inline"><?= Code::Variable("vDesk") ?>.<?= Code::Field("Archive") ?>.<?= Code::Field("Attributes") ?></code>-namespace.
-            vDesk.Archive.Attributes
-        </p>
-        <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
-            <img src="<?= Functions::Image("Documentation","Packages", "Archive", "AttributesWindow.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
-        </aside>
-    </section>
-    <section id="ACL">
-        <h3>Managing permissions on files and folders</h3>
-        <p>
-            The archive relies on <a href="<?= Functions::URL("Documentation", "Package", "Security#ACL") ?>">AccessControlLists</a> from the <a href="<?= Functions::URL("Documentation", "Package", "Security") ?>">Security</a>-package for managing access on files and folders.<br>
-            To edit the permissions on an archive element, the archive package integrates an ACL-editor in the "Attributes"-window.
-            Right-click on an archive element and click the "Attributes"-item of the contextmenu
-            or select an element and click on the "Attributes"-button in the toolbar, then navigate to the "Permissions"-tab.
-        </p>
-        <p>
-            The "Permissions"-tab will only be displayed if the current user is a member of a group with the "ReadAccessControlList"-permission granted.<br>
-            Newly created folders or uploaded files will inherit their ACL from their according parent element.
-        </p>
-        <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
-            <img src="<?= Functions::Image("Documentation","Packages", "Archive", "ACL.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
-        </aside>
-    </section>
-    <section id="SystemFolder">
-        <h4>System folder</h4>
-        <p>
-            The archive creates while installation a folder called "System" where package related files should be stored in;
-            as used for example by the <a href="<?= Functions::URL("Documentation", "Package", "Events") ?>">Events</a>-
-            or <a href="<?= Functions::URL("Documentation", "Package", "Machines") ?>">Machines</a>-packages.<br>
-            This folder's ID is hardcoded to the value of the
-            <code class="Inline">\Modules\<?= Code::Class("Archive") ?>::<?= Code::Const("System") ?></code>-constant,
-            cannot be deleted
-            and is only visible to the "System"-user and member of the "Administration"-group by default.
-        </p>
-            <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
-                <img src="<?= Functions::Image("Documentation","Packages", "Archive", "SystemFolder.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
-            </aside>
-    </section>
-    <section id="Search">
-        <h4>Search</h4>
-        <p>
-            The archive package registers a search filter for performing a "LIKE"-search on the "Name"-column of the <code class="Inline"><?= Code::Const("Archive") ?>.<?= Code::Field("Elements") ?></code>-table.
-            File results can be directly viewed by clicking on the search result in the result list on the left side;
-            double-clicking will load the archive module and open the file in a new window.<br>
-
-        </p>
-            <aside class="Image" onclick="this.classList.toggle('Fullscreen')" style="text-align: center">
-                <img src="<?= Functions::Image("Documentation","Packages", "Search", "Search.png") ?>" alt="Image showing the context menu of the archive while downloading a file">
-            </aside>
     </section>
 </article>

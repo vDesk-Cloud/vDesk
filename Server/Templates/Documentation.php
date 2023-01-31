@@ -7,6 +7,7 @@ use vDesk\Pages\Functions;
 <head>
     <title><?= $Page->Content?->Title ?? "vDesk - Documentation" ?></title>
     <link rel="icon" href="<?= Functions::Image("favicon.ico") ?>" type="image/x-icon">
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="<?= $Page->Content?->Description ?? "" ?>">
 <?php foreach($Page->Stylesheets as $Stylesheet): ?>

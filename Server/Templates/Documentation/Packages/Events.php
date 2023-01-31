@@ -11,6 +11,9 @@
 
         <h3>Overview</h3>
         <ul class="Topics">
+            <li><a href="#Introduction">Introduction</a></li>
+            <li><a href="#Installation">Installation</a></li>
+            <li><a href="#Configuration">Configuration</a></li>
             <li>
                 <a href="#Events">Events</a>
                 <ul class="Topics">
@@ -25,6 +28,40 @@
             </li>
         </ul>
     </header>
+    <section id="Introduction">
+        <h3>Introduction</h3>
+        <p>
+            Events are small PHP classes consisting at least of a public "Name"-constant and a protected "TimeStamp"-property and have to inherit from the abstract
+            <code class="Inline">\vDesk\Events\<?= Code::Class("Event") ?></code>-class to be recognized as such.<br>
+            Built in events usually use their namespace separated by dots as an identifier to ensure globally uniqueness.<br>
+            The timestamp will be set when dispatching the event via calling its final <code class="Inline"><?= Code::Function("Dispatch") ?>()</code>-method;
+            this will pass its instance to the <code class="Inline">\Modules\<?= Code::Class("Events") ?>::<?= Code::Function("Dispatch") ?>()</code>-method,
+            adding it to the Events module's event queue for schedule.<br>
+            The module registers its <code class="Inline"><?= Code::Function("Schedule") ?>()</code>-method as a shutdown function,
+            removing the need of manually scheduling the dispatched events to the registered listeners.
+        </p>
+        <h5>Example of dispatching an event</h5>
+        <pre><code><?= Code\Language::PHP ?>
+(<?= Code::New ?> \vDesk\Archive\Element\<?= Code::Class("Deleted") ?>(<?= Code::Variable("\$Arguments") ?>))-><?= Code::Function("Dispatch") ?>()<?= Code::Delimiter ?>
+</code></pre>
+        <p>
+            Events are split into 3 different types:
+            the basic "local" event with the described pattern and "global" events which are further separated between "public" and user specific "private" events.
+        </p>
+        <aside class="Code">
+            <?= Code\Language::PHP ?>
+            <h5>Example of a basic event class implementation</h5>
+            <?= Code::Copy ?>
+            <?= Code::Lines(7) ?>
+        <pre><code><?= Code::ClassDeclaration ?> <?= Code::Class("CustomEvent") ?> <?= Code::Extends ?> \vDesk\Events\<?= Code::Class("Event") ?> {
+
+    <?= Code::Public ?> <?= Code::Constant ?> <?= Code::Const("Name") ?> = <?= Code::String("\"CustomEvent\"") ?><?= Code::Delimiter ?>
+
+
+    <?= Code::Public ?> <?= Code::Function ?> <?= Code::Function("__construct") ?>(<?= Code::Public ?> <?= Code::Keyword("mixed") ?> <?= Code::Variable("\$Arguments") ?>) { }
+
+}</code></pre>
+    </section>
     <section id="Events">
         <h3>Events</h3>
         <p>

@@ -12,9 +12,8 @@ use vDesk\Pages\Functions; ?>
 
         <h3>Overview</h3>
         <ul class="Topics">
-            <li>
-                <a href="#Modules">Modules</a>
-                <ul class="Topics">
+            <li><a href="#Introduction">Introduction</a></li>
+            <li><a href="#Installation">Installation</a></li>
                     <li><a href="#Client">Client</a></li>
                     <li>
                         <a href="#Server">Server</a>
@@ -23,14 +22,25 @@ use vDesk\Pages\Functions; ?>
                         </ul>
                     </li>
                     <li><a href="#Invocation">Invoking modules</a></li>
-                </ul>
-            </li>
             <li><a href="#Commands">Commands</a></li>
-            <li><a href="#Parameters">Commands</a></li>
+            <li><a href="#Parameters">Parameters</a></li>
         </ul>
     </header>
-    <section id="Modules">
-        <h3>Modules</h3>
+    <section id="Introduction">
+        <h3>Introduction</h3>
+        <p>
+            The Modules package builds the foundation of vDesk's business logic.<br>
+            It implements interfaces for client-/server-modules and provides a powerful type-safe parameter API.<br>
+            Modules are what's called "Controllers" in MVC-frameworks.
+        </p>
+        <p>
+            Modules are what's called "Controllers" in a typical MVC-framework, except that they are actual "Models" themself in vDesk
+            - this enables request-validation before executing a Command ("Action"); even preventing the submission of malicious requests
+            by mirroring the commands and their parameters to the client for pre-validation.
+        </p>
+    </section>
+    <section id="Installation">
+        <h4>Installation</h4>
         <p>
             The Modules package builds the foundation of vDesk's business logic.<br>
             It implements interfaces for client-/server-modules and provides a powerful type-safe parameter API.<br>
@@ -52,16 +62,26 @@ use vDesk\Pages\Functions; ?>
             <?= Code\Language::JS ?>
             <h5>//vDesk/Client/Modules/CustomModule.js</h5>
             <?= Code::Copy ?>
-            <?= Code::Lines(25) ?>
+            <?= Code::Lines(30) ?>
         <pre><code><?= Code::String("\"use strict\"") ?><?= Code::Delimiter ?>
-
+<?= Code::BlockComment("/**
+ * Called when the Module is being loaded (click on the module list on the left side)
+ */") ?>
 <?= Code::Variable("Modules") ?>.<?= Code::Class("CustomModule") ?> = <?= Code::Function ?> <?= Code::Function("CustomModule") ?>() {
 
     <?= Code::Variable("Object") ?>.<?= Code::Function("defineProperties") ?>(<?= Code::This ?>, {
+        <?= Code::Comment("//The DOM-Node of the Module. Gets mounted into the \"WorkSpace\"-control of the client.") ?>
+
         <?= Code::Field("Control") ?>: {<?= Code::Field("value") ?>: <?= Code::Const("Control") ?>},
+        <?= Code::Comment("//Identification name") ?>
+
         <?= Code::Field("Name") ?>: {<?= Code::Field("value") ?>: <?= Code::String("\"CustomModule\"") ?>},
-        <?= Code::Field("Title") ?>: {<?= Code::Field("value") ?>: <?= Code::String("\"Display Name\"") ?>},
-        <?= Code::Field("Icon") ?>: {<?= Code::Field("value") ?>: <?= Code::Variable("vDesk") ?>.<?= Code::Field("Visual") ?>.<?= Code::Class("Icons") ?>.<?= Code::Const("CustomModule") ?>},
+        <?= Code::Comment("//Display name") ?>
+
+        <?= Code::Field("Title") ?>: {<?= Code::Field("value") ?>: <?= Code::Variable("vDesk") ?>.<?= Code::Field("Locale") ?>.<?= Code::Class("CustomModule") ?>.<?= Code::Const("Title") ?>},
+        <?= Code::Comment("//An ObjectURL to the icon image to use in the buttons of the Module-list.") ?>
+
+        <?= Code::Field("Icon") ?>: {<?= Code::Field("value") ?>: <?= Code::Variable("vDesk") ?>.<?= Code::Field("Visual") ?>.<?= Code::Class("Icons") ?>.<?= Code::Const("CustomModule") ?>}
     })<?= Code::Delimiter ?>
 
 

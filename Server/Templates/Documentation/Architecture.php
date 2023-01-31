@@ -67,7 +67,7 @@ use vDesk\Pages\Functions;
             <li>Modules fetch required Models from the server and represents them as their according ViewModel</li>
             <li>Modules and/or ViewModels handling user-interaction</li>
             <li>Execute certain Command/s against the server</li>
-            <li>Send command-payload through XMLHttpRequest</li>
+            <li>Send command-payload through <a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest">XMLHttpRequest</a></li>
             <li>Process response and update ViewModel/s.</li>
         </ol>
     </section>
