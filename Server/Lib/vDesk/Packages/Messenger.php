@@ -80,7 +80,7 @@ final class Messenger extends Package implements Events\IPackage, Locale\IPackag
      * The Event listeners of the Package.
      */
     public const Events = [
-        "/vDesk/Archive/vDesk.Security.User.Deleted.Messenger.php"
+        "/vDesk/Messenger/vDesk.Security.User.Deleted.Messenger.php"
     ];
 
     /**
